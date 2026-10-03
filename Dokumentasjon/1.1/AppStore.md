@@ -73,17 +73,17 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
 • Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
-• Harmoni: se hele harmonien i valgt fargerom med verdier eller tonenavn, med grunnfargen tydelig merket.
+• Harmoni: se hele harmonier i valgt fargerom med verdier eller tonenavn, med grunnfarger tydelig merket.
 • LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 – for bygg og interiør.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
 • Egne ICC-profiler og fargebiblioteker samles på ett sted, importeres i én operasjon og kan slettes fra appen.
-• Palettene for hånden på store iPader: flytt farger dit du trenger dem med dra og slipp.
+• Paletter for hånden på store iPader: flytt farger dit du trenger dem med dra og slipp.
 • Farger du plukker fra kamera og bilder, tas vare på til du bestemmer deg for å lagre dem.
 • Raskere arbeid med paletter: bruk en farge direkte, og vurder, kontroller kontrast og skriv ut hele paletter.
 • Angre overalt, også med ⌘Z på tastatur.
 • Paneler kan legges sammen og flyttes, og verdier kan skjules og sorteres – oppsettet synkroniseres.
 • Bedre paletter fra verdiord: bygget etter harmoniprinsipper med lesbar kontrast.
-• Vurderingen av en palett viser hva den bygger på.
+• Vurderinger av paletter viser hva de bygger på.
 • Gradienter i paletter, og «Kopier til» for gradienter: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS og SwiftUI.
 • Skriv ut en palett på A4 – fargeflater i CIELab med navn og verdier – eller lagre den som PDF.
 ```
@@ -93,7 +93,7 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 ```
 Kolorist er et fargeverktøy for designere og arkitekter på iPhone, iPad og Mac. Bygg paletter på tvers av fargerom, med perseptuelt jevne overganger, kontrastsjekk, simulering av fargesyn, ICC-profiler og egne fargebiblioteker – og få fargene inn i verktøyene du allerede bruker.
 
-ALLE FARGEROMMENE
+ALLE FARGEROM
 • Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst ICC-profil
 • Varsel når fargen er utenfor fargeområdet – farger kartlegges inn i fargerommet uten å klippes
@@ -117,8 +117,8 @@ OVERGANGER, TONER OG HARMONIER
 TILGJENGELIGHET OG FARGESYN
 • WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk, og «Rett opp» som justerer fargen til den består
 • Flatekontrast med LRV (lysrefleksjonsverdi) etter BS 8300 og NS 11001 – for dører, vegger, gulv og skilt
-• Kontrastmatrise og vurdering av hele paletten
-• Se paletten med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
+• Kontrastmatrise og vurdering av hele paletter
+• Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
 • Kamera med fargesynsfilter: se omgivelsene slik de kan oppleves med hvert avvik
 
 PLUKK FARGER
@@ -129,20 +129,20 @@ PLUKK FARGER
 
 APPLE INTELLIGENCE PÅ ENHETEN
 • Fra verdiord til palett – «trygg, varm, nordisk» – forankret i en kunnskapsbase med over hundre fargebegreper
-• Palettene bygges etter harmoniprinsipper – lik valør eller metning, aksentfarge, lys eller mørk bakgrunn – med lesbar kontrast
+• Paletter bygges etter harmoniprinsipper – lik valør eller metning, aksentfarge, lys eller mørk bakgrunn – med lesbar kontrast
 • Beskriv en farge og se den i Studio
-• Juster med fritekst, navngi farger og få en vurdering av paletten
-Alt kjøres på enheten. Uten Apple Intelligence lages palettene direkte fra kunnskapsbasen.
+• Juster med fritekst, navngi farger og få vurdering av paletter
+Alt kjøres på enheten. Uten Apple Intelligence lages paletter direkte fra kunnskapsbasen.
 
 KOPIER TIL OG EKSPORT
 • «Kopier til» designverktøy, layout-, bilde- og presentasjonsprogrammer – i formatet hvert program tar imot
 • Dra fargeprøver rett inn i andre programmer på Mac
 • Eksport til ASE- og ACO-fargeprøver, Design Tokens (DTCG), SVG, CSS, GPL, SwiftUI og hex
-• Fargene eksporteres i formatet de er lagret i – for eksempel som CMYK
-• Skriv ut paletten på A4: fargeflater i CIELab med navn og verdier
+• Farger eksporteres i formatet de er lagret i – for eksempel som CMYK
+• Skriv ut paletter på A4: fargeflater i CIELab med navn og verdier
 
 PALETTER OG ICLOUD
-Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser via din egen, private iCloud. På store iPader i liggende format ligger palettene i en kolonne ved siden av verktøyene, og farger kan dras rett inn i fargevalgene. Angre overalt, også med ⌘Z.
+Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser via din egen, private iCloud. På store iPader har du paletter for hånden mens du jobber, og flytter farger dit du trenger dem. Angre det du gjør, også med ⌘Z.
 
 SIRI OG SNARVEIER
 Lag palett fra verdiord, beskriv en farge, lag overgang, konverter farge og sjekk kontrast.
@@ -254,7 +254,7 @@ COPY TO AND EXPORT
 • Print the palette on A4: CIELab swatches with names and values
 
 PALETTES AND ICLOUD
-Collect colours and gradients in palettes, save single colours and whole gradients, and sync through your own private iCloud. On large iPads in landscape your palettes sit in a column beside the tools, and colours can be dragged straight onto colour wells. Undo everywhere, including ⌘Z.
+Collect colours and gradients in palettes, save single colours and whole gradients, and sync through your own private iCloud. On large iPads your palettes are at hand while you work, and you move colours where you need them. Undo what you do, including with ⌘Z.
 
 SIRI AND SHORTCUTS
 Create a palette from value words, describe a colour, create a gradient, convert a colour and check contrast.
@@ -297,11 +297,11 @@ Bygg paletter i OKLCH, CMYK med ICC-profiler og Munsell, kontroller kontrast og 
 ```
 Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og utnytter Mac-vinduet bedre.
 
-• Palettene for hånden: i et bredt vindu har du palettene ved siden av verktøyene hele tiden.
-• Dra og slipp: flytt farger fra palettene dit du jobber – og hent farger inn fra systemets fargepanel og andre programmer.
+• Paletter for hånden: i et bredt vindu har du paletter ved siden av verktøyene hele tiden.
+• Dra og slipp: flytt farger fra paletter dit du jobber – og hent farger inn fra systemets fargepanel og andre programmer.
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
 • Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
-• Harmoni: se hele harmonien i valgt fargerom med verdier eller tonenavn, med grunnfargen tydelig merket.
+• Harmoni: se hele harmonier i valgt fargerom med verdier eller tonenavn, med grunnfarger tydelig merket.
 • LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 – for bygg og interiør.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
 • Egne ICC-profiler og fargebiblioteker samles på ett sted, importeres i én operasjon og kan slettes fra appen.
@@ -323,12 +323,12 @@ Kolorist er et fargeverktøy for designere og arkitekter på Mac – og på iPho
 PLUKK OG DRA
 • Skjermpipette som plukker farger fra hvor som helst på skjermen
 • Dra fargeprøver inn i andre programmer og fargebrønner – og dra farger inn fra dem
-• Palettene for hånden i et bredt vindu
+• Paletter for hånden i et bredt vindu
 • Bilder, med dominerende farger
 • Kamera, også iPhone som kamera, med lysfelt på skjermen som lyskilde
 • Kopier aktiv farge som OKLCH med ⌥⌘C, lim inn en farge med ⌥⌘V, og angre med ⌘Z
 
-ALLE FARGEROMMENE
+ALLE FARGEROM
 • Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst ICC-profil
 • Varsel når fargen er utenfor fargeområdet – farger kartlegges inn i fargerommet uten å klippes
@@ -339,7 +339,7 @@ ALLE FARGEROMMENE
 FARGEBIBLIOTEKER OG ICC-PROFILER
 • Importer egne fargekart i ASE, ACO eller ACB (Adobe Color Book) med navngitte toner
 • Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene
-• Bruk profilene som er installert på Macen, etter mappe
+• Bruk profiler som er installert på Macen, etter mappe
 • Importer egne .icc- og .icm-profiler
 • Alt samles på ett sted og følger med til iPhone og iPad via iCloud Drive
 • Konverter mellom profiler og sammenlign gjengivelseshensiktene med ΔE2000
@@ -353,22 +353,22 @@ OVERGANGER, TONER OG HARMONIER
 TILGJENGELIGHET OG FARGESYN
 • WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk, og «Rett opp» som justerer fargen til den består
 • Flatekontrast med LRV (lysrefleksjonsverdi) etter BS 8300 og NS 11001 – for dører, vegger, gulv og skilt
-• Kontrastmatrise og vurdering av hele paletten
-• Se paletten med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
+• Kontrastmatrise og vurdering av hele paletter
+• Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
 • Kamera med fargesynsfilter: se omgivelsene slik de kan oppleves med hvert avvik
 
 APPLE INTELLIGENCE PÅ MACEN
 • Fra verdiord til palett – «trygg, varm, nordisk» – forankret i en kunnskapsbase med over hundre fargebegreper
-• Palettene bygges etter harmoniprinsipper – lik valør eller metning, aksentfarge, lys eller mørk bakgrunn – med lesbar kontrast
+• Paletter bygges etter harmoniprinsipper – lik valør eller metning, aksentfarge, lys eller mørk bakgrunn – med lesbar kontrast
 • Beskriv en farge og se den i Studio
-• Juster med fritekst, navngi farger og få en vurdering av paletten
-Alt kjøres lokalt. Uten Apple Intelligence lages palettene direkte fra kunnskapsbasen.
+• Juster med fritekst, navngi farger og få vurdering av paletter
+Alt kjøres lokalt. Uten Apple Intelligence lages paletter direkte fra kunnskapsbasen.
 
 KOPIER TIL OG EKSPORT
 • «Kopier til» designverktøy, layout-, bilde- og presentasjonsprogrammer – i formatet hvert program tar imot
 • Eksport til ASE- og ACO-fargeprøver, Design Tokens (DTCG), SVG, CSS, GPL, SwiftUI og hex
-• Fargene eksporteres i formatet de er lagret i – for eksempel som CMYK
-• Skriv ut paletten på A4: fargeflater i CIELab med navn og verdier
+• Farger eksporteres i formatet de er lagret i – for eksempel som CMYK
+• Skriv ut paletter på A4: fargeflater i CIELab med navn og verdier
 
 PALETTER OG ICLOUD
 Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser med iPhone og iPad via din egen, private iCloud.

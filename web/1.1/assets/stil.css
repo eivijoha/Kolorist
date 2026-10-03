@@ -19,6 +19,8 @@
   --knapp-tekst: #ffffff;
   --merke-bg: #ece8fb;
   --merke-tekst: #3a2c99;
+  --nytt-bg: #dcf2e3;
+  --nytt-tekst: #17602f;
   --advarsel-bg: #fff4d6;
   --advarsel-kant: #d9a400;
 
@@ -69,6 +71,8 @@
     --knapp-tekst: #141317;
     --merke-bg: #2e2850;
     --merke-tekst: #d6cfff;
+    --nytt-bg: #1d3a28;
+    --nytt-tekst: #9be3b2;
     --advarsel-bg: #3a2f10;
     --advarsel-kant: #c99a1a;
     --skygge: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.3);
@@ -431,6 +435,21 @@ main {
   color: var(--merke-tekst);
   font-size: 0.85rem;
   font-weight: 600;
+}
+
+/* «Nytt i 1.1»: liten merkelapp etter funksjoner som er nye i denne versjonen */
+.nytt {
+  display: inline-block;
+  margin-left: 0.35em;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--nytt-bg);
+  color: var(--nytt-tekst);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  vertical-align: 0.1em;
 }
 
 /* Plattform som ikke er ute ennå (f.eks. Mac før godkjenning) */
