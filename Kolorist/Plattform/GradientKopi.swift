@@ -254,13 +254,15 @@ enum Gradientgrafikk {
         let navn = g.navn.isEmpty ? "" : "// \(g.navn)\n"
         switch g.form {
         case .radiell:
-            return "\(navn)RadialGradient(\n    stops: [\n\(stopp)\n    ],\n    center: .center, startRadius: 0, endRadius: 240\n)"
+            return "\(navn)RadialGradient(\n    stops: [\n\(stopp)\n    ],\n    center: .center, startRadius: 0, endRadius: \(Int((hypot(flate.width, flate.height) / 2).rounded()))\n)"
         case .konisk:
             return "\(navn)AngularGradient(\n    stops: [\n\(stopp)\n    ],\n    center: .center, angle: .degrees(\(Int(g.vinkel.rounded())) - 90)\n)"
         case .lineær:
             let a = g.vinkel * .pi / 180
-            let start = "UnitPoint(x: \(String(format: "%.3f", 0.5 - sin(a) / 2)), y: \(String(format: "%.3f", 0.5 + cos(a) / 2)))"
-            let slutt = "UnitPoint(x: \(String(format: "%.3f", 0.5 + sin(a) / 2)), y: \(String(format: "%.3f", 0.5 - cos(a) / 2)))"
+            // Som CSS: gradientlinjen når hjørnene (halv lengde (|sin| + |cos|) / 2 i en kvadratisk ramme).
+            let h = (abs(sin(a)) + abs(cos(a))) / 2
+            let start = "UnitPoint(x: \(String(format: "%.3f", 0.5 - sin(a) * h)), y: \(String(format: "%.3f", 0.5 + cos(a) * h)))"
+            let slutt = "UnitPoint(x: \(String(format: "%.3f", 0.5 + sin(a) * h)), y: \(String(format: "%.3f", 0.5 - cos(a) * h)))"
             return "\(navn)LinearGradient(\n    stops: [\n\(stopp)\n    ],\n    startPoint: \(start), endPoint: \(slutt)\n)"
         }
     }

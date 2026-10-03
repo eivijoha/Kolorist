@@ -3,6 +3,17 @@ import Testing
 
 @Suite("Munsell")
 struct MunsellTests {
+    /// Høy kroma: kroma senkes i Munsell-rommet til fargen kan vises, så kulør og valør beholdes.
+    @Test func høyKromaBeholderKuløren() throws {
+        for (kulør, valør) in [(75.0, 9.0), (25.0, 2.0), (5.0, 5.0)] {   // 5PB 9/24, 5Y 2/24, 5R 5/24
+            let f = try #require(Farge.innenforMunsell(Munsell(kulør: kulør, valør: valør, kroma: 24), gamut: .displayP3))
+            #expect(f.erIDisplayP3)
+            let m = f.munsell
+            #expect(abs(m.kulør - kulør) < 2.5, "kulør \(m.kulør) for \(kulør)")
+            #expect(abs(m.valør - valør) < 0.3)
+        }
+    }
+
     /// Herings motfargesirkel: unik gul ligger på 0°, og motfargen (180°) er unik blå; rød ↔ grønn.
     @Test func heringsMotfarger() throws {
         let gul = Farge(hex: "#FFD300")!, blå = Farge(hex: "#0087BD")!, rød = Farge(hex: "#C40233")!

@@ -151,9 +151,13 @@ nonisolated enum PalettPDF {
         }, releaseInfo: { info in
             if let info { Unmanaged<Stoppboks>.fromOpaque(info).release() }
         })
-        let boks = Unmanaged.passRetained(Stoppboks(stopp)).toOpaque()
-        return CGFunction(info: boks, domainDimension: 1, domain: [0, 1], rangeDimension: 3,
-                          range: [0, 100, -128, 127, -128, 127], callbacks: &tilbakekall)
+        let boks = Unmanaged.passRetained(Stoppboks(stopp))
+        guard let funksjon = CGFunction(info: boks.toOpaque(), domainDimension: 1, domain: [0, 1], rangeDimension: 3,
+                                        range: [0, 100, -128, 127, -128, 127], callbacks: &tilbakekall) else {
+            boks.release()   // releaseInfo kalles bare når funksjonen ble laget
+            return nil
+        }
+        return funksjon
     }
 
     // MARK: - Tekst

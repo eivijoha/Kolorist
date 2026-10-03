@@ -148,7 +148,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             var m = grunn.munsell
             m.kulør = avrundet(v) / 3.6
             // Valør og kroma beholdes; kroma senkes bare der kuløren ikke når så høyt i renotasjonsdataene.
-            return Farge.innenforMunsell(m, alfa: grunn.alfa)?.gamutKartlagt(til: gamut) ?? grunn
+            return Farge.innenforMunsell(m, alfa: grunn.alfa, gamut: gamut) ?? grunn
         }
     }
 
@@ -170,7 +170,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             // Ekte Munsell-farger med grunnfargens valør og kroma (kroma senket der kuløren ikke når så høyt).
             var m = grunn.munsell
             m.kulør = avrundet(vinkel) / 3.6
-            return Farge.innenforMunsell(m)?.gamutKartlagt(til: .displayP3) ?? grunn
+            return Farge.innenforMunsell(m, gamut: .displayP3) ?? grunn
         }
     }
 }

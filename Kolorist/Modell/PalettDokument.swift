@@ -23,10 +23,13 @@ final class PalettDokument {
         self.init(navn: palett.navn, farger: palett.farger)
     }
 
+    /// Fargene i rekkefølge. Farger som ikke kan leses (fra en nyere versjon), beholdes urørt ved lagring
+    /// (se `TolerantListe`), så en eldre versjon ikke sletter dem fra alle enhetene.
     var farger: [PalettFarge] {
-        get { (try? JSONDecoder().decode([PalettFarge].self, from: fargeData)) ?? [] }
+        get { TolerantListe.les(fargeData) }
         set {
-            fargeData = (try? JSONEncoder().encode(newValue)) ?? Data()
+            guard let data = TolerantListe.skriv(newValue, beholdUkjenteFra: fargeData) else { return }
+            fargeData = data
             endret = .now
         }
     }
@@ -36,12 +39,12 @@ final class PalettDokument {
     /// Gradienter i paletten (fra 1.1). Eget felt, så eldre versjoner som ikke kjenner det, lar det være i fred.
     private var gradientData: Data = Data()
 
-    /// Gradientene i rekkefølge. Leses tolerant: én gradient som ikke kan leses (fra en nyere versjon),
-    /// hoppes over i stedet for at hele lista blir tom – og dermed overskrevet ved neste endring.
+    /// Gradientene i rekkefølge, lest og skrevet som `farger` (ukjente gradienter beholdes).
     var gradienter: [PalettGradient] {
-        get { ((try? JSONDecoder().decode([Tolerant<PalettGradient>].self, from: gradientData)) ?? []).compactMap(\.verdi) }
+        get { TolerantListe.les(gradientData) }
         set {
-            gradientData = (try? JSONEncoder().encode(newValue)) ?? Data()
+            guard let data = TolerantListe.skriv(newValue, beholdUkjenteFra: gradientData) else { return }
+            gradientData = data
             endret = .now
         }
     }
@@ -70,12 +73,6 @@ nonisolated struct PalettGradient: Codable, Hashable, Identifiable, Sendable {
     var id = UUID()
     var navn: String
     var oppsett: Gradientoppsett
-}
-
-/// Dekoder et element og gir `nil` i stedet for å feile (for lister som skal tåle ukjente elementer).
-nonisolated struct Tolerant<T: Decodable>: Decodable {
-    let verdi: T?
-    init(from decoder: Decoder) throws { verdi = try? T(from: decoder) }
 }
 
 /// Innstillingene som definerer en gradient i Overgang: endepunkter, antall toner og

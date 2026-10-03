@@ -136,6 +136,8 @@ struct PalettKolonne: View {
             } else if !p.farger.isEmpty {
                 // Store biblioteker vises som en stripe til de foldes ut.
                 PalettStripe(farger: p.farger.prefix(40).map(\.farge)).frame(height: 14)
+            } else if let g = p.gradienter.first {
+                GradientStripe(oppsett: g.oppsett).frame(height: 14)
             }
         }
         .padding(.vertical, 2)

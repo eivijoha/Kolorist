@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CEC03C9B307174DC00640659 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CEC03C9A307174DC00640659 /* PrivacyInfo.xcprivacy */; };
 		FA0000000000000000000011 /* FargeKjerne in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000021 /* FargeKjerne */; };
 		FA0000000000000000000012 /* FargeKI in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000022 /* FargeKI */; };
 		FA0000000000000000000013 /* App-ikon.icon in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000033 /* App-ikon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CEC03C9A307174DC00640659 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Kolorist/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		FA0000000000000000000031 /* Kolorist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kolorist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA0000000000000000000032 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA0000000000000000000033 /* App-ikon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "App-ikon.icon"; sourceTree = "<group>"; };
@@ -44,7 +42,6 @@
 		FA0000000000000000000061 = {
 			isa = PBXGroup;
 			children = (
-				CEC03C9A307174DC00640659 /* PrivacyInfo.xcprivacy */,
 				FA0000000000000000000033 /* App-ikon.icon */,
 				FA0000000000000000000041 /* Kolorist */,
 				FA0000000000000000000063 /* Konfigurasjon */,
@@ -138,7 +135,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEC03C9B307174DC00640659 /* PrivacyInfo.xcprivacy in Resources */,
 				FA0000000000000000000013 /* App-ikon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

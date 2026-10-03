@@ -1001,6 +1001,16 @@
         }
       }
     },
+    "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag in the wheel to change the base colour’s hue, or tap the centre to start from a saved colour. Chroma and value apply to the whole harmony."
+          }
+        }
+      }
+    },
     "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien.": {
       "localizations": {
         "en": {
@@ -1251,22 +1261,22 @@
         }
       }
     },
-    "Fargene i paletten slettes også. Dette kan ikke angres.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The palette's colours are deleted too. This can't be undone."
-          }
-        }
-      }
-    },
     "Fargene låses til tonene i %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Colours are locked to the tones in %@"
+          }
+        }
+      }
+    },
+    "Fargene og gradientene i paletten slettes også. Dette kan ikke angres.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colours and gradients in the palette are deleted too. This cannot be undone."
           }
         }
       }
@@ -1769,16 +1779,16 @@
     },
     "Gradient fra %@ til %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Gradient fra %1$@ til %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Gradient from %1$@ to %2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gradient fra %1$@ til %2$@"
           }
         }
       }

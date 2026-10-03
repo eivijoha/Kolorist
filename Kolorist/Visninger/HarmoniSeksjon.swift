@@ -60,7 +60,7 @@ struct HarmoniSeksjon: View {
             var m = f.munsell
             if let lyshet { m.valør = lyshet * 10 }
             if let metning { m.kroma = metning * Self.munsellMaksKroma }
-            return Farge.innenforMunsell(m, alfa: f.alfa) ?? f
+            return Farge.innenforMunsell(m, alfa: f.alfa, gamut: gamut) ?? f
         }
         if sirkel == .hsl || sirkel == .ryb {
             var h = f.hsl
@@ -86,7 +86,7 @@ struct HarmoniSeksjon: View {
         if brukerMunsell {
             // Ekte Munsell-farger på hvert trinn, med gjeldende valør og kroma (senket der kuløren ikke når så høyt).
             let munsell = Munsell(kulør: sirkel.avrundet(vinkel) / 3.6, valør: l * 10, kroma: m * Self.munsellMaksKroma)
-            return (Farge.innenforMunsell(munsell) ?? grunnfarge).gamutKartlagt(til: gamut)
+            return Farge.innenforMunsell(munsell, gamut: gamut) ?? grunnfarge.gamutKartlagt(til: gamut)
         }
         let f = sirkel.farge(grunnfarge, vinkel: vinkel, gamut: gamut)
         if sirkel == .hsl || sirkel == .ryb {
@@ -128,7 +128,7 @@ struct HarmoniSeksjon: View {
             var g = grunnfarge.munsell
             g.valør = l * 10
             g.kroma = m * Self.munsellMaksKroma
-            return (Farge.innenforMunsell(g) ?? grunnfarge).gamutKartlagt(til: gamut)
+            return Farge.innenforMunsell(g, gamut: gamut) ?? grunnfarge.gamutKartlagt(til: gamut)
         }
         if brukerHSL {
             var h = grunnfarge.hsl
@@ -252,7 +252,9 @@ struct HarmoniSeksjon: View {
             Text("Fargeharmonier")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text(sirkel.forklaring + " " + String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien."))
+                Text(sirkel.forklaring + " " + (brukerMunsell
+                    ? String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.")
+                    : String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien.")))
                 MetodeHenvisning(.harmonier, .oklab, .cieLab)
             }
         }
@@ -262,9 +264,10 @@ struct HarmoniSeksjon: View {
                       contentType: sirkeleksport?.type ?? .data,
                       defaultFilename: sirkeleksport?.navn) { _ in }
         #endif
+        // Ikke onDisappear: radene i et Form fjernes og lages på nytt ved rulling. Studio viser harmonien i
+        // fargeflaten bare i Harmoni-modus, så gamle verdier gjør ikke noe.
         .onAppear { vis(farger, grunnIndeks) }
         .onChange(of: farger) { _, nye in vis(nye, grunnIndeks) }
-        .onDisappear { vis([], nil) }
         // Gliderne betyr noe annet i HSL enn i OKLCH; start på nytt ved bytte av sirkel.
         .onChange(of: sirkel) { _, _ in metning = nil; lyshet = nil }
         // Primærfargen (grunnfargen med gjeldende metning/lyshet) blir aktiv farge, så den vises i

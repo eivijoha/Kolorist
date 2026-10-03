@@ -179,19 +179,36 @@ public extension Farge {
         self.init(xyz: XYZ(x: xyz.x, y: xyz.y, z: xyz.z), alfa: alfa)
     }
 
-    /// Fargen for notasjonen, med kroma senket til renotasjonsdataene når kuløren ikke når så høyt ved
-    /// denne valøren. `nil` bare for valør utenfor tabellen.
-    static func innenforMunsell(_ m: Munsell, alfa: Double = 1) -> Farge? {
-        var n = m
-        while true {
-            if let f = Farge(munsell: n, alfa: alfa) { return f }
-            guard n.kroma > 0 else { return nil }
-            n.kroma = max(0, n.kroma - 1)
+    /// Fargen for notasjonen innenfor `gamut`. Kroma senkes i Munsell-rommet (binærsøk) til fargen både finnes i
+    /// renotasjonsdataene og kan vises – kuløren og valøren beholdes. (Tabellen ekstrapolerer forbi siste kroma, så
+    /// høy kroma gir ellers imaginære farger, og gamut-kartlegging i OKLCH ville flyttet Munsell-kuløren.)
+    /// `nil` bare når valøren er utenfor tabellen.
+    static func innenforMunsell(_ m: Munsell, alfa: Double = 1, gamut: Gamut = .displayP3) -> Farge? {
+        func farge(kroma: Double) -> Farge? {
+            var n = m
+            n.kroma = kroma
+            guard let f = Farge(munsell: n, alfa: alfa), f.erInnenfor(gamut) else { return nil }
+            return f
         }
+        if let f = farge(kroma: m.kroma) { return f }
+        var lav = 0.0, høy = m.kroma
+        var beste = farge(kroma: 0)
+        for _ in 0..<8 {   // 24 / 2⁸ ≈ 0,1 kroma
+            let midt = (lav + høy) / 2
+            if let f = farge(kroma: midt) { beste = f; lav = midt } else { høy = midt }
+        }
+        return beste ?? Farge(munsell: Munsell(kulør: m.kulør, valør: m.valør, kroma: 0), alfa: alfa)?.gamutKartlagt(til: gamut)
     }
 
     /// Nærmeste Munsell-notasjon: valør fra luminansen, kulør og kroma ved iterasjon mot renotasjonsdataene.
     var munsell: Munsell {
+        if let m = MunsellBuffer.delt.hent(self) { return m }
+        let m = beregnetMunsell
+        MunsellBuffer.delt.lagre(m, for: self)
+        return m
+    }
+
+    private var beregnetMunsell: Munsell {
         let xyzD65 = xyz
         let c = MunsellTabell.d65TilC * Vektor3(xyzD65.x, xyzD65.y, xyzD65.z)
         let valør = Munsell.valør(forLuminans: c.y)
@@ -238,5 +255,22 @@ public extension Farge {
             if d < minst { minst = d; beste = h }
         }
         return beste
+    }
+}
+
+/// Mellomlager for `Farge.munsell`: løsningen er iterativ, og visningene spør om samme farge mange ganger
+/// per tegning (sirkel, glidere, harmonifarger).
+private final class MunsellBuffer: @unchecked Sendable {
+    static let delt = MunsellBuffer()
+    private let lås = NSLock()
+    private var verdier: [Farge: Munsell] = [:]
+
+    func hent(_ f: Farge) -> Munsell? { lås.withLock { verdier[f] } }
+
+    func lagre(_ m: Munsell, for f: Farge) {
+        lås.withLock {
+            if verdier.count > 512 { verdier.removeAll(keepingCapacity: true) }
+            verdier[f] = m
+        }
     }
 }

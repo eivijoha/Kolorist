@@ -143,7 +143,7 @@ struct PalettListe: View {
                     }
                 }
             } message: {
-                Text("Fargene i paletten slettes også. Dette kan ikke angres.")
+                Text("Fargene og gradientene i paletten slettes også. Dette kan ikke angres.")
             }
             .navigationDestination(for: Valg.self) { v in
                 Group {
@@ -379,6 +379,8 @@ struct PalettRad: View {
     var velg: (Farge) -> Void = { _ in }
 
     var body: some View {
+        // Gradientene dekodes fra JSON; les dem én gang per tegning.
+        let gradienter = dokument.gradienter
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn).font(.headline)
@@ -396,10 +398,10 @@ struct PalettRad: View {
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
                     }
                     // Gradienter som bredere brikker etter fargene.
-                    ForEach(dokument.gradienter) { g in
+                    ForEach(gradienter) { g in
                         GradientStripe(oppsett: g.oppsett).frame(width: 64, height: 36)
                     }
-                    if dokument.farger.isEmpty && dokument.gradienter.isEmpty {
+                    if dokument.farger.isEmpty && gradienter.isEmpty {
                         Text("Slipp farger her").font(.caption).foregroundStyle(Color.sekundærTekst)
                     }
                 }
@@ -515,7 +517,8 @@ struct PalettDetalj: View {
             flytt(farger, til: dokument, i: kontekst)
         }
         // ⌘P skriver ut denne paletten.
-        .focusedSceneValue(\.palettutskrift, Palettutskrift(id: dokument.id, navn: dokument.navn) { PalettUtskrift.skrivUt(dokument) })
+        .focusedSceneValue(\.palettutskrift, dokument.farger.isEmpty && dokument.gradienter.isEmpty ? nil
+            : Palettutskrift(id: dokument.id, navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn) { PalettUtskrift.skrivUt(dokument) })
         .toolbar {
             if !iKolonne {
                 ToolbarItemGroup { handlinger }
