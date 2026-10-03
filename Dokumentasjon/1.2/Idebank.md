@@ -5,14 +5,14 @@ Eivind prioriterte (2026-10-03):
 1. **Kompensere plukkede farger for lysforholdene** (hovedsak).
 2. **Lagrede lysmiljøer** – «se denne fargen i [lagret lysmiljø]» (sekundært).
 
-**IT8-referansekort** (Eivind har et; må være refleksivt IT8.7/2 / ISO 12641, med referansefil i CGATS-format):
-- Karakterisere iPhone-kameraet én gang under godt lys → deretter holder et gråkort på stedet (nivå B blir presist).
-- Gråskalaen gir kameraets tonekurve → nøyaktig linearisering av kamerabildet.
-- Presisjonsmodus med kortet i bildet (full korreksjon for lys + kamera, typisk snitt-ΔE00 ≈ 2 eller lavere).
+**Fargereferansekort med 24 felt** (Eivind har et ColorChecker-kort; i tekster uten merkenavn). Referanseverdiene
+følger ikke med (rettigheter) – brukeren importerer sin egen CGATS-fil:
+- Karakterisere iPhone-kameraet én gang under godt lys → deretter holder et gråkort på stedet.
+- Den nøytrale raden gir kameraets tonekurve, hvitpunkt og lux.
+- Presisjonsmodus med kortet i bildet (kortet er lite og raskt å bruke på stedet), typisk snitt-ΔE00 ≈ 2–3.
 - Lysmiljøer kan lagre hele korreksjonen, ikke bare Kelvin og lux.
-- Dokumentert nøyaktighet («snitt ΔE00 1,6, maks 3,9»), og et grovt varsel om lys med dårlig fargegjengivelse.
-- Krever: import av CGATS-referansefil (via «Mine fargerom»), hjørnemarkering eller Vision-gjenkjenning og
-  perspektivretting, jevnt lys uten gjenskinn.
+- Dokumentert nøyaktighet («snitt ΔE00 x, maks y»), og et grovt varsel om lys med dårlig fargegjengivelse.
+- Senere: større kort (IT8.7/2) med samme CGATS-import.
 
 Øvrige muligheter som skal tas opp igjen senere:
 

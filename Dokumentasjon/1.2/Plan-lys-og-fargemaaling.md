@@ -1,8 +1,8 @@
 # Plan for 1.2: lys og fargemåling
 
 Mål: Kolorist skal kunne gi **fargen til selve flaten**, uavhengig av lyset den ble plukket i, og vise hvordan farger
-og paletter **oppleves i et bestemt lysmiljø**. Med et IT8-referansekort blir målingene sporbare og nøyaktigheten
-dokumentert – et steg mot et profesjonelt verktøy for designere, arkitekter og interiørarkitekter.
+og paletter **oppleves i et bestemt lysmiljø**. Med et fargereferansekort blir målingene sporbare og nøyaktigheten
+dokumentert med et fargereferansekort – et steg mot et profesjonelt verktøy for designere, arkitekter og interiørarkitekter.
 
 Bakgrunn og øvrige ideer: `Idebank.md`. Arkitekturen drøftes for seg (se «Spørsmål til arkitekturdrøftingen»).
 
@@ -21,12 +21,12 @@ Tre nivåer, valgt etter hva brukeren har tilgjengelig:
 |---|---|---|---|
 | **A. Automatisk** | Ingenting | Leser kameraets estimat av lyset (Kelvin og tint) og gjør kromatisk tilpasning til standardlys | Fjerner tydelige fargestikk; ΔE00 typisk 4–8 |
 | **B. Gråkort / hvitt ark** | Trykker på referansen i bildet | Hvitpunkt og eksponering fra referansen; med kamerakarakterisering (1.3) også riktig tonekurve | ΔE00 typisk 2–4 (med karakterisering) |
-| **C. IT8 i bildet** | Har IT8-kortet i bildet | Full korreksjon for akkurat dette lyset og dette kameraet | ΔE00 snitt ≈ 2 eller lavere |
+| **C. Referansekort i bildet** | Har fargereferansekortet (24 felt) i bildet | Full korreksjon for akkurat dette lyset og dette kameraet | ΔE00 snitt ≈ 2–3 |
 
 Plukkede farger får to verdier: **slik den så ut** og **fargen selv** (kompensert), og brukeren kan veksle mellom dem.
 Lysforholdene (Kelvin, tint, lux, nivå, referanse) lagres sammen med fargen.
 
-**Estimert LRV for eksisterende flater:** med gråkort eller IT8 får lysheten absolutt mening, og Kolorist kan gi et
+**Estimert LRV for eksisterende flater:** med gråkort eller referansekort får lysheten absolutt mening, og Kolorist kan gi et
 estimat av lysrefleksjonsverdien – nyttig for arkitekter som skal vurdere eksisterende dører, vegger og gulv.
 
 ### 1.2 Lagrede lysmiljøer (sekundært)
@@ -34,7 +34,7 @@ estimat av lysrefleksjonsverdien – nyttig for arkitekter som skal vurdere eksi
 Et **lysmiljø** beskriver lyset et sted: «Stua om kvelden», «Kontor, nordvindu», «Butikken».
 
 - **Innhold:** navn, hvitpunkt (xy / Kelvin og tint), lysstyrke (lux), dato, valgfritt miniatyrbilde og – når det er
-  målt med IT8 – korreksjonen for det lyset. Ingen posisjon.
+  målt med referansekort – korreksjonen for det lyset. Ingen posisjon.
 - **Kilder:** målt med kameraet (biprodukt av 1.1), standardlys (glødelampe/CIE A 2856 K, LED 2700/3000/4000 K, D50,
   D65, typisk lysrør) eller lagt inn manuelt (Kelvin og lux).
 - **«Se i lys: [lysmiljø]»** i Studio, paletter, harmonier og overganger: fargene vises slik de oppleves i det lyset,
@@ -43,30 +43,32 @@ Et **lysmiljø** beskriver lyset et sted: «Stua om kvelden», «Kontor, nordvin
 - **Side om side:** samme palett i to–tre lysmiljøer.
 - **Hovedscenario:** plukk en flis i butikken (1.1 fjerner butikklyset) → se den i lagret «Stua om kvelden» (1.2).
 
-### 1.3 IT8-referansekort (pro)
+### 1.3 Fargereferansekort med 24 felt (pro)
 
-Kortet er refleksivt **IT8.7/2 (ISO 12641)** med referansefil i **CGATS**-format (Lab eller XYZ per felt, D50/2°).
+Eivind har et **ColorChecker-kort med 24 felt** (6 × 4: 18 fargefelt og en nøytral rad fra hvitt til sort). I
+brukerrettede tekster skrives «fargereferansekort» uten merkenavn. Importen bygger på det åpne **CGATS**-formatet, så
+større kort (f.eks. IT8.7/2) kan støttes senere med samme kode.
 
-**Rettigheter:** referansefilen (måleverdier per batch) tilhører leverandøren og kan ikke distribueres. Kolorist
-følger samme prinsipp som for fargebiblioteker: **ingen referansedata følger med appen eller ligger i kodelageret** –
-brukeren importerer sin egen fil. Koden kjenner bare formatet (CGATS.17) og kortets oppsett (felt A01–L22 og gråskala
-GS00–GS23, verdier i Lab/XYZ for D50/2°). Enhetstester bruker **syntetiske** filer med samme struktur og kjent fasit.
-Den ekte filen brukes bare lokalt under testing på enhet (mappen `Lokalt/`, som er utelatt fra git).
+**Rettigheter:** referanseverdiene tilhører leverandøren. Kolorist følger samme prinsipp som for fargebiblioteker:
+**ingen referansedata følger med appen eller ligger i kodelageret** – brukeren importerer sin egen fil. Koden kjenner
+bare formatet og kortets oppsett. Enhetstester bruker **syntetiske** filer med samme struktur og kjent fasit; den
+ekte filen brukes bare lokalt under testing på enhet (mappen `Lokalt/`, som er utelatt fra git).
 
-1. **Importere referansefilen** under «Mine fargerom» (samme flyt som ICC-profiler og fargebiblioteker; formatet
+1. **Importere referanseverdiene** under «Mine fargerom» (samme flyt som ICC-profiler og fargebiblioteker; formatet
    gjenkjennes på innholdet).
-2. **Karakterisere kameraet én gang:** fotografer kortet i jevnt, godt lys. Kolorist finner feltene, sammenligner med
-   referansen og beregner kameraets **tonekurve** (fra gråskalaen) og en **fargekorreksjon** fra kamerafarge til XYZ.
+2. **Karakterisere kameraet én gang** i jevnt, godt lys: den nøytrale raden gir kameraets **tonekurve** og hvitpunkt,
+   og de 24 feltene gir en **fargekorreksjon** fra kamerafarge til XYZ. Med 24 felt holdes korreksjonen enkel
+   (3 × 3-matrise etter linearisering, eventuelt rot-polynomisk av lav orden) så den ikke tilpasses bare kortets felt.
    Lagres per enhetsmodell og kamera (vidvinkel/ultravid/tele har ulik respons).
-3. **Presisjonsmodus:** kortet i bildet på stedet gir korreksjon for det aktuelle lyset (nivå C), og kan lagres som
-   lysmiljø.
-4. **Dokumentert nøyaktighet:** etter hver karakterisering/måling vises «snitt ΔE00 x, maks y» mot kortets kjente felt,
-   og hvilke felt som avviker mest. Store gjenstående avvik gir et varsel om at lyset gjengir farger dårlig (ikke CRI,
-   men en nyttig indikator).
+3. **Presisjonsmodus på stedet:** kortet er lite og har store felt, så det er raskt å ha med i bildet. Gir korreksjon
+   for det aktuelle lyset (nivå C), **lux** fra den nøytrale raden (kjent refleksjon), og kan lagres som lysmiljø.
+4. **Dokumentert nøyaktighet:** etter hver karakterisering/måling vises «snitt ΔE00 x, maks y» mot kortets felt
+   (helst kryssvalidert: hvert felt vurdert med en korreksjon beregnet uten det). Store gjenstående avvik gir et varsel
+   om at lyset gjengir farger dårlig (ikke CRI, men en nyttig indikator).
 
-**Fotografering:** kortet fyller en stor del av bildet, lys fra siden (ca. 45°) uten gjenskinn, låst eksponering og
-hvitbalanse. Feltene finnes ved at brukeren markerer de fire hjørnene (alternativt automatisk med Vision), og bildet
-rettes ut før gjennomsnittet i midten av hvert felt leses.
+**Fotografering:** kortet midt i bildet, lys fra siden (ca. 45°) uten gjenskinn, låst eksponering og hvitbalanse.
+Feltene finnes ved at brukeren markerer de fire hjørnene (alternativt automatisk med Vision – rutenettet 6 × 4 er
+lett å finne), og bildet rettes ut før gjennomsnittet i midten av hvert felt leses.
 
 ---
 
@@ -77,8 +79,8 @@ rettes ut før gjennomsnittet i midten av hvert felt leses.
 | Lysets hvitpunkt fra kameraet | AVFoundation: hvitbalanseforsterkning → Kelvin og tint | Apple, AVCaptureDevice |
 | Kromatisk tilpasning | CAT16 (og Bradford, som brukes i dag for D65↔D50) | Li mfl. 2017 |
 | Fargeutseende i lysmiljø | CAM16 med visningsforhold (hvitpunkt, adapterende luminans fra lux, omgivelse) | Li mfl. 2017; CIE 248:2022 |
-| Kamerakarakterisering | Linearisering fra gråskala + rot-polynomisk regresjon (eksponeringsuavhengig) til XYZ | Finlayson mfl. 2015 |
-| Referansedata | CGATS.17-tekstformat; IT8.7/2 / ISO 12641 | ISO, ANSI |
+| Kamerakarakterisering | Linearisering fra den nøytrale raden + 3 × 3-matrise / rot-polynomisk regresjon av lav orden til XYZ | Finlayson mfl. 2015 |
+| Referansedata | CGATS.17-tekstformat (gjelder også større kort som IT8.7/2 / ISO 12641) | ANSI, ISO |
 | Lux fra eksponering | Eksponeringsverdi fra blender, lukkertid og ISO, med referanse av kjent refleksjon | ISO 2720 (lysmåling) |
 | Nøyaktighet | ΔE2000 mot referansefeltene | CIE 142 |
 
@@ -89,7 +91,7 @@ Alle beregninger kjøres på enheten. Kamerabilder lagres ikke (unntatt valgfrie
 ## 3. Brukerflyter (skisse)
 
 - **Utplukk › kamera:** knappen «Lys» viser målt Kelvin, tint og lux, og velger nivå: *Automatisk* / *Kalibrer mot
-  hvitt eller grått* (trykk på referansen) / *IT8 i bildet*. Statuslinje: «Kompensert for ≈ 3200 K · ≈ 450 lx».
+  hvitt eller grått* (trykk på referansen) / *Referansekort i bildet*. Statuslinje: «Kompensert for ≈ 3200 K · ≈ 450 lx».
   «Lagre som lysmiljø …».
 - **Plukkede farger og paletter:** en farge målt med kompensasjon viser et lite lysmerke; detaljer viser begge verdier
   og lysforholdene.
@@ -120,11 +122,11 @@ Tekstene i appen og markedsføringen beskriver hva man oppnår (se tekstreglene)
 | **0. Forarbeid** | Prototyp: les hvitbalanse, eksponering og (Pro)RAW på Burgund; mål stabilitet | Notat om hva kameraet faktisk gir |
 | **1. Fargevitenskap i FargeKjerne** | CAT16, CAM16 med visningsforhold, standardlys, lux-estimat, CGATS-leser, regresjon og linearisering | Testdekning mot publiserte testverdier |
 | **2. Kompensasjon i kameraet** | Nivå B (gråkort/hvitt), deretter A (automatisk); to verdier og lysforhold på plukkede farger | Utplukk med «Lys» |
-| **3. IT8** | Import av referansefil, hjørnemarkering og utretting, karakterisering, presisjonsmodus, nøyaktighetsrapport | Veiviser og rapport |
+| **3. Referansekort** | Import av referanseverdier (CGATS), hjørnemarkering og utretting, karakterisering, presisjonsmodus, lux, nøyaktighetsrapport | Veiviser og rapport |
 | **4. Lysmiljøer** | Datamodell og synk, standardlys, lagre målt lys, «Se i lys», side om side | Lysmiljøer i Studio og paletter |
 | **5. Ferdigstilling** | Metoder og kilder, tekster, web 1.2, skjermbilder, App Store | 1.2 klar |
 
-Rekkefølgen kan justeres: lysmiljøer med standardlys (fase 4) kan komme før IT8 (fase 3) hvis vi vil vise noe tidlig.
+Rekkefølgen kan justeres: lysmiljøer med standardlys (fase 4) kan komme før referansekortet (fase 3) hvis vi vil vise noe tidlig.
 
 ---
 
@@ -132,8 +134,8 @@ Rekkefølgen kan justeres: lysmiljøer med standardlys (fase 4) kan komme før I
 
 - **Enhetstester:** CAT16/CAM16 mot publiserte eksempelverdier; CGATS-lesing; regresjon på syntetiske data med kjent
   fasit; rundtur for linearisering.
-- **Målinger med IT8 på Burgund** under minst tre lys: dagslys, varm LED (≈ 2700 K) og kald LED/lysrør (≈ 4000 K).
-- **Mål:** nivå C snitt ΔE00 ≤ 2,5; nivå B (med karakterisering) snitt ΔE00 ≤ 4; nivå A merkbart bedre enn
+- **Målinger med referansekortet på Burgund** under minst tre lys: dagslys, varm LED (≈ 2700 K) og kald LED/lysrør (≈ 4000 K).
+- **Mål:** nivå C snitt ΔE00 ≤ 3 (kryssvalidert); nivå B (med karakterisering) snitt ΔE00 ≤ 4; nivå A merkbart bedre enn
   ukompensert. Lux innenfor ±20 % av en lysmåler med gråkort.
 - **Brukertest:** flis i butikk → «Se i lys» hjemme; vurder om resultatet oppleves troverdig.
 
