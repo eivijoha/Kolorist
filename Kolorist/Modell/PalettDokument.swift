@@ -32,6 +32,19 @@ final class PalettDokument {
     }
 
     var palett: Palett { Palett(id: id, navn: navn, farger: farger) }
+
+    /// Gradienter i paletten (fra 1.1). Eget felt, så eldre versjoner som ikke kjenner det, lar det være i fred.
+    private var gradientData: Data = Data()
+
+    /// Gradientene i rekkefølge. Leses tolerant: én gradient som ikke kan leses (fra en nyere versjon),
+    /// hoppes over i stedet for at hele lista blir tom – og dermed overskrevet ved neste endring.
+    var gradienter: [PalettGradient] {
+        get { ((try? JSONDecoder().decode([Tolerant<PalettGradient>].self, from: gradientData)) ?? []).compactMap(\.verdi) }
+        set {
+            gradientData = (try? JSONEncoder().encode(newValue)) ?? Data()
+            endret = .now
+        }
+    }
 }
 
 /// En enkeltfarge lagret uten palett («Enkeltfarger»).
@@ -50,6 +63,19 @@ final class LagretFarge {
         get { (try? JSONDecoder().decode(PalettFarge.self, from: data)) ?? PalettFarge(id: id, farge: Farge(lineærR: 0, g: 0, b: 0)) }
         set { data = (try? JSONEncoder().encode(newValue)) ?? Data() }
     }
+}
+
+/// En gradient i en palett: navn og oppsettet fra Overgang.
+nonisolated struct PalettGradient: Codable, Hashable, Identifiable, Sendable {
+    var id = UUID()
+    var navn: String
+    var oppsett: Gradientoppsett
+}
+
+/// Dekoder et element og gir `nil` i stedet for å feile (for lister som skal tåle ukjente elementer).
+nonisolated struct Tolerant<T: Decodable>: Decodable {
+    let verdi: T?
+    init(from decoder: Decoder) throws { verdi = try? T(from: decoder) }
 }
 
 /// Innstillingene som definerer en gradient i Overgang: endepunkter, antall toner og

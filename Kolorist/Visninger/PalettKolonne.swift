@@ -124,10 +124,14 @@ struct PalettKolonne: View {
             }
             .buttonStyle(.plain)
             if åpen {
-                if p.farger.isEmpty {
+                if p.farger.isEmpty && p.gradienter.isEmpty {
                     Text("Slipp farger her").font(.caption).foregroundStyle(Color.sekundærTekst)
                 } else {
                     fargerutenett(p.farger, fra: p)
+                    ForEach(p.gradienter) { g in
+                        GradientStripe(oppsett: g.oppsett).frame(height: 20)
+                            .onTapGesture { arbeidsbenk.åpne(g.oppsett) }
+                    }
                 }
             } else if !p.farger.isEmpty {
                 // Store biblioteker vises som en stripe til de foldes ut.
@@ -141,8 +145,8 @@ struct PalettKolonne: View {
                 .disabled(p.farger.isEmpty)
             Button("Kontrastmatrise", systemImage: "square.grid.3x3.fill") { matrise = p }
                 .disabled(p.farger.count < 2)
-            Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p.palett) }
-                .disabled(p.farger.isEmpty)
+            Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
+                .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
         }
         .accessibilityElement(children: .contain)
     }

@@ -374,7 +374,7 @@ struct UtskriftKommando: Commands {
     var body: some Commands {
         CommandGroup(replacing: .printItem) {
             Button(utskrift.map { String(localized: "Skriv ut «\($0.navn)» …") } ?? String(localized: "Skriv ut …")) {
-                if let utskrift { PalettUtskrift.skrivUt(utskrift.palett()) }
+                utskrift?.skrivUt()
             }
             .keyboardShortcut("p", modifiers: .command)
             .disabled(utskrift == nil)

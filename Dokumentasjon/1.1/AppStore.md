@@ -84,6 +84,7 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 • Paneler kan legges sammen og flyttes, og verdier kan skjules og sorteres – oppsettet synkroniseres.
 • Bedre paletter fra verdiord: bygget etter harmoniprinsipper med lesbar kontrast.
 • Vurderingen av en palett viser hva den bygger på.
+• Gradienter i paletter, og «Kopier til» for gradienter: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS og SwiftUI.
 • Skriv ut en palett på A4 – fargeflater i CIELab med navn og verdier – eller lagre den som PDF.
 • «Sammenlign» heter nå «Forskjell».
 ```
@@ -142,7 +143,7 @@ KOPIER TIL OG EKSPORT
 • Skriv ut paletten på A4: fargeflater i CIELab med navn og verdier
 
 PALETTER OG ICLOUD
-Samle farger i paletter, lagre enkeltfarger og hele gradienter, og synkroniser via din egen, private iCloud. På store iPader i liggende format ligger palettene i en kolonne ved siden av verktøyene, og farger kan dras rett inn i fargevalgene. Angre overalt, også med ⌘Z.
+Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser via din egen, private iCloud. På store iPader i liggende format ligger palettene i en kolonne ved siden av verktøyene, og farger kan dras rett inn i fargevalgene. Angre overalt, også med ⌘Z.
 
 SIRI OG SNARVEIER
 Lag palett fra verdiord, beskriv en farge, lag overgang, konverter farge og sjekk kontrast.
@@ -196,6 +197,7 @@ Kolorist 1.1 reaches more disciplines – including architecture and interiors �
 • Panels can be collapsed and reordered, and values hidden and sorted – the layout syncs.
 • Better palettes from value words: built on harmony principles with legible contrast.
 • A palette critique now shows what it is based on.
+• Gradients in palettes, and “Copy to” for gradients: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS and SwiftUI.
 • Print a palette on A4 – CIELab swatches with names and values – or save it as a PDF.
 • “Compare” is now called “Difference”.
 ```
@@ -254,7 +256,7 @@ COPY TO AND EXPORT
 • Print the palette on A4: CIELab swatches with names and values
 
 PALETTES AND ICLOUD
-Collect colours in palettes, save single colours and whole gradients, and sync through your own private iCloud. On large iPads in landscape your palettes sit in a column beside the tools, and colours can be dragged straight onto colour wells. Undo everywhere, including ⌘Z.
+Collect colours and gradients in palettes, save single colours and whole gradients, and sync through your own private iCloud. On large iPads in landscape your palettes sit in a column beside the tools, and colours can be dragged straight onto colour wells. Undo everywhere, including ⌘Z.
 
 SIRI AND SHORTCUTS
 Create a palette from value words, describe a colour, create a gradient, convert a colour and check contrast.
@@ -304,6 +306,7 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 • Plukkede farger fra kamera, bilder og skjermpipetten samles øverst i Paletter til du lagrer dem.
 • Kamera: målepunktet følger pekeren, og et klikk fanger fargen der.
 • Angre (⌘Z) overalt.
+• Gradienter i paletter, og «Kopier til» for gradienter: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS og SwiftUI.
 • Skriv ut en palett (⌘P) på A4 – fargeflater i CIELab med navn og verdier – eller arkiver den som PDF.
 • Klikk på en farge i palettoversikten for å velge den. Høyreklikk på en palett for vurdering og kontrastmatrise.
 • Paneler kan legges sammen og flyttes, og verdier kan skjules og sorteres – oppsettet synkroniseres.
@@ -367,7 +370,7 @@ KOPIER TIL OG EKSPORT
 • Skriv ut paletten på A4: fargeflater i CIELab med navn og verdier
 
 PALETTER OG ICLOUD
-Samle farger i paletter, lagre enkeltfarger og hele gradienter, og synkroniser med iPhone og iPad via din egen, private iCloud.
+Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser med iPhone og iPad via din egen, private iCloud.
 
 SIRI OG SNARVEIER
 Lag palett fra verdiord, beskriv en farge, lag overgang, konverter farge og sjekk kontrast.
@@ -413,6 +416,7 @@ Kolorist 1.1 reaches more disciplines – including architecture and interiors �
 • Colours picked from the camera, photos and the screen eyedropper gather at the top of Palettes until you save them.
 • Camera: the sampling point follows the pointer, and a click captures the colour there.
 • Undo (⌘Z) everywhere.
+• Gradients in palettes, and “Copy to” for gradients: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS and SwiftUI.
 • Print a palette (⌘P) on A4 – CIELab swatches with names and values – or save it as a PDF.
 • Click a colour in the palette overview to select it. Right-click a palette for a critique and contrast matrix.
 • Panels can be collapsed and reordered, and values hidden and sorted – the layout syncs.
@@ -431,7 +435,7 @@ PICK AND DRAG
 • Your palettes stay on the right in a wide window
 • Photos, with dominant colours
 • Camera, including iPhone as a camera, with an on-screen light panel
-• Copy as OKLCH with ⌥⌘C, paste with ⌥⌘V, undo with ⌘Z
+• OKLCH with ⌥⌘C, paste with ⌥⌘V, undo with ⌘Z
 
 EVERY COLOUR SPACE
 • Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
@@ -476,7 +480,7 @@ COPY TO AND EXPORT
 • Print the palette on A4: CIELab swatches with names and values
 
 PALETTES AND ICLOUD
-Collect colours in palettes, save single colours and whole gradients, and sync with iPhone and iPad through your own private iCloud.
+Collect colours and gradients in palettes, save single colours and whole gradients, and sync with iPhone and iPad through your own private iCloud.
 
 SIRI AND SHORTCUTS
 Create a palette from value words, describe a colour, create a gradient, convert a colour and check contrast.
@@ -547,6 +551,7 @@ NEW IN 1.1 – HOW TO TEST
 • LRV: Assess › Contrast › Surfaces (LRV).
 • Palette column: on a 13-inch iPad in landscape, or on a Mac with a window at least 1300 points wide. Drag a colour from the column onto From or To in Gradient.
 • Undo: ⌘Z (Edit › Undo) after changing a colour or editing a palette.
+• Gradients: in Gradient, use More › Add gradient to palette, or Copy gradient to … (Figma, Adobe apps, iWork, CSS, SwiftUI).
 • Print: open a palette › Print … (or ⌘P on Mac), or Export › PDF with swatches (A4).
 
 CAMERA
@@ -578,7 +583,7 @@ Contact: eivind.johansen@ntnu.no
 - [ ] Ny versjon opprettet i App Store Connect for både iOS og macOS (1.1), med «Nytt i denne versjonen» fra over.
 - [ ] Nøkkelord og beskrivelse oppdatert (nye: Munsell, LRV, fargebiblioteker).
 - [x] Skjermbilder for iPhone, iPad og Mac på norsk og engelsk (se 3d).
-- [ ] CloudKit-skjemaet: ingen nye modellfelt i 1.1, så produksjonsskjemaet trenger ikke ny utrulling.
+- [ ] **CloudKit-skjemaet må rulles ut til produksjon**: 1.1 har et nytt felt på paletter (`gradientData`, gradienter i paletter). Kjør appen i Debug mot iCloud så feltet opprettes i utviklingsskjemaet, og velg så CloudKit Console › Deploy Schema Changes. Ellers synkroniserer ikke gradientene i TestFlight- og App Store-bygg. Eldre versjoner (1.0) ignorerer feltet.
 - [ ] Notes for App Review byttet til teksten over.
 - [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) med begrunnelse `CA92.1` for `UserDefaults` – finnes fortsatt ikke i prosjektet.
 - [ ] `ITSAppUsesNonExemptEncryption = NO` – står fortsatt ikke i Info.plist eller byggeinnstillingene.

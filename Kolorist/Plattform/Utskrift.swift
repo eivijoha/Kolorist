@@ -11,7 +11,7 @@ import AppKit
 /// Utskrift og PDF av paletter (A4). Fargerommet ved siden av fargens egen modell er det som er valgt
 /// under «Vis også» i Studio – en ICC-profil eller et fargebibliotek (nærmeste tone).
 enum PalettUtskrift {
-    static func pdf(for palett: Palett) -> Data {
+    static func pdf(for palett: Palett, gradienter: [PalettGradient] = []) -> Data {
         let innstillinger = UserDefaults.standard
         let id = innstillinger.string(forKey: "visOgsåProfil") ?? ICCProfil.sRGB.id
         let hensikt = innstillinger.string(forKey: "gjengivelseshensikt").flatMap(Gjengivelseshensikt.init(rawValue:))
@@ -46,7 +46,17 @@ enum PalettUtskrift {
         let dato = Date.now.formatted(date: .long, time: .omitted)
         let undertittel = String(localized: "Kolorist · \(dato) · Fargeflater i CIELab (D50) · \(rom)")
         let tittel = palett.navn.isEmpty ? String(localized: "Uten navn") : palett.navn
-        return PalettPDF.lag(tittel: tittel, undertittel: undertittel, felt: felt) { side, av in
+        let gradientfelt = gradienter.map { g -> PalettPDF.Gradientfelt in
+            let fra = g.oppsett.fra.cieLab, til = g.oppsett.til.cieLab
+            let lab = { (l: CIELab) in String(format: "L* %.2f   a* %.2f   b* %.2f", l.l, l.a, l.b) }
+            return PalettPDF.Gradientfelt(
+                navn: g.navn.isEmpty ? nil : g.navn,
+                stopp: Overgang.toner(fra: g.oppsett.fra, til: g.oppsett.til, antall: 24).map(\.cieLab),
+                rader: [(String(localized: "Fra"), "\(g.oppsett.fra.hex())   ·   CIELab \(lab(fra))"),
+                        (String(localized: "Til"), "\(g.oppsett.til.hex())   ·   CIELab \(lab(til))"),
+                        (String(localized: "Overgang"), String(localized: "OKLab, \(g.oppsett.antall) toner"))])
+        }
+        return PalettPDF.lag(tittel: tittel, undertittel: undertittel, felt: felt, gradienter: gradientfelt) { side, av in
             String(localized: "Side \(side) av \(av)")
         }
     }
@@ -67,9 +77,13 @@ enum PalettUtskrift {
         return farge.erInnenfor(profil, hensikt: hensikt) ? tekst : String(localized: "\(tekst) (utenfor gamut)")
     }
 
+    /// PDF og utskrift av en lagret palett, med gradientene.
+    static func pdf(for dokument: PalettDokument) -> Data { pdf(for: dokument.palett, gradienter: dokument.gradienter) }
+    static func skrivUt(_ dokument: PalettDokument) { skrivUt(dokument.palett, gradienter: dokument.gradienter) }
+
     /// Systemets utskriftsdialog for PDF-en (på Mac også med «Arkiver som PDF»).
-    static func skrivUt(_ palett: Palett) {
-        let data = pdf(for: palett)
+    static func skrivUt(_ palett: Palett, gradienter: [PalettGradient] = []) {
+        let data = pdf(for: palett, gradienter: gradienter)
         let jobb = palett.navn.isEmpty ? String(localized: "Palett") : palett.navn
         #if canImport(UIKit)
         let info = UIPrintInfo(dictionary: nil)
@@ -108,7 +122,7 @@ enum PalettUtskrift {
 struct Palettutskrift: Equatable {
     let id: UUID
     let navn: String
-    let palett: () -> Palett
+    let skrivUt: () -> Void
 
     static func == (a: Palettutskrift, b: Palettutskrift) -> Bool { a.id == b.id && a.navn == b.navn }
 }

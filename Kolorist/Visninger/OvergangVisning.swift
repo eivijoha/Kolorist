@@ -159,7 +159,9 @@ struct OvergangVisning: View {
                 }
             }
 
-            CSSGradientSeksjon(start: start, slutt: slutt, toner: toner, lagret: gradientLagret) {
+            CSSGradientSeksjon(start: start, slutt: slutt, toner: toner,
+                               oppsett: Gradientoppsett(fra: start, til: slutt, antall: antall, trinn: arbeidsbenk.lyshetstrinn),
+                               lagret: gradientLagret) {
                 gradientnavn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
                 navngirGradient = true
             }
@@ -188,6 +190,8 @@ struct CSSGradientSeksjon: View {
     let start: Farge
     let slutt: Farge
     let toner: [Farge]
+    /// Hele oppsettet (endepunkter, antall toner, lysere/mørkere), til «Legg gradienten i palett».
+    let oppsett: Gradientoppsett
     /// Viser en hake i «+»-knappen rett etter lagring.
     var lagret = false
     /// «+» i hjørnet av gradienten: lagre hele gradienten under «Gradienter» i Paletter.
@@ -258,6 +262,8 @@ struct CSSGradientSeksjon: View {
                                       tittel: "Kopier gradient til")
                 Spacer()
                 Menu("Mer") {
+                    LeggGradientIPalettMeny(oppsett: oppsett, navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"))
+                    Divider()
                     Button("Kopier bare moderne verdi") { Utklippstavle.kopierTekst(gradient.moderne) }
                     Button("Kopier bare reserve (sRGB)") { Utklippstavle.kopierTekst(gradient.reserve) }
                 }

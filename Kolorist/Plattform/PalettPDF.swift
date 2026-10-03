@@ -16,6 +16,17 @@ nonisolated enum PalettPDF {
         var rader: [(String, String)]
     }
 
+    /// En gradient: stopp langs OKLab-overgangen (i CIELab), navn og tekstlinjer under stripen.
+    struct Gradientfelt: Sendable {
+        var navn: String?
+        var stopp: [CIELab]
+        var rader: [(String, String)]
+    }
+
+    /// En rad på siden: tre fargeflater, eller én gradient i full bredde.
+    private enum Rad { case farger(Int), gradient(Int) }
+    private static let gradienthøyde: CGFloat = 44
+
     /// A4 i punkter (210 × 297 mm).
     static let side = CGRect(x: 0, y: 0, width: 595.28, height: 841.89)
     private static let marg: CGFloat = 42
@@ -25,7 +36,8 @@ nonisolated enum PalettPDF {
     private static let radavstand: CGFloat = 22
     private static let flatehøyde: CGFloat = 80
 
-    static func lag(tittel: String, undertittel: String, felt: [Felt], sidetekst: (Int, Int) -> String) -> Data {
+    static func lag(tittel: String, undertittel: String, felt: [Felt], gradienter: [Gradientfelt] = [],
+                    sidetekst: (Int, Int) -> String) -> Data {
         let data = NSMutableData()
         guard let mottaker = CGDataConsumer(data: data as CFMutableData) else { return Data() }
         var boks = side
@@ -35,17 +47,27 @@ nonisolated enum PalettPDF {
         let bredde = (side.width - 2 * marg - CGFloat(kolonner - 1) * mellomrom) / CGFloat(kolonner)
         let tekster = felt.map { tekst(for: $0) }
         let teksthøyder = tekster.map { høyde(av: $0, bredde: bredde) }
+        let fullBredde = side.width - 2 * marg
+        let gradienttekster = gradienter.map { tekst(for: Felt(lab: CIELab(l: 0, a: 0, b: 0), navn: $0.navn, rader: $0.rader)) }
+        let gradienthøyder = gradienttekster.map { høyde(av: $0, bredde: fullBredde) }
 
         // Første gjennomgang: hvilke rader havner på hvilken side.
         let toppFørste = marg + 30 + 16 + 22   // tittel, undertittel og luft
         let toppNeste = marg + 24
         let bunn = side.height - marg - 14     // plass til sidetall
-        var sider: [[(rad: Int, y: CGFloat)]] = [[]]
+        var sider: [[(rad: Rad, y: CGFloat)]] = [[]]
         var y = toppFørste
         let antallRader = (felt.count + kolonner - 1) / kolonner
-        for rad in 0..<antallRader {
-            let indekser = (rad * kolonner)..<min(felt.count, (rad + 1) * kolonner)
-            let radhøyde = flatehøyde + 6 + (indekser.map { teksthøyder[$0] }.max() ?? 0)
+        let rader: [Rad] = (0..<antallRader).map { .farger($0) } + gradienter.indices.map { .gradient($0) }
+        for rad in rader {
+            let radhøyde: CGFloat
+            switch rad {
+            case .farger(let r):
+                let indekser = (r * kolonner)..<min(felt.count, (r + 1) * kolonner)
+                radhøyde = flatehøyde + 6 + (indekser.map { teksthøyder[$0] }.max() ?? 0)
+            case .gradient(let i):
+                radhøyde = gradienthøyde + 6 + gradienthøyder[i]
+            }
             if y + radhøyde > bunn, !(sider.last?.isEmpty ?? true) {
                 sider.append([])
                 y = toppNeste
@@ -63,7 +85,11 @@ nonisolated enum PalettPDF {
             } else {
                 tegn(tittel, font: font(11, fet: true), farge: 0, i: ctx, x: marg, topp: marg, bredde: side.width - 2 * marg)
             }
-            for (rad, topp) in rader {
+            for (radtype, topp) in rader {
+                guard case .farger(let rad) = radtype else {
+                    if case .gradient(let i) = radtype { tegnGradient(gradienter[i], tekst: gradienttekster[i], i: ctx, lab: lab, topp: topp) }
+                    continue
+                }
                 for kolonne in 0..<kolonner {
                     let i = rad * kolonner + kolonne
                     guard i < felt.count else { break }
@@ -88,6 +114,46 @@ nonisolated enum PalettPDF {
         }
         ctx.closePDF()
         return data as Data
+    }
+
+    /// Gradientstripe i full bredde, fylt i CIELab med tette stopp langs OKLab-overgangen, med tekst under.
+    private static func tegnGradient(_ g: Gradientfelt, tekst: NSAttributedString, i ctx: CGContext, lab: CGColorSpace?, topp: CGFloat) {
+        let rekt = CGRect(x: marg, y: side.height - topp - gradienthøyde, width: side.width - 2 * marg, height: gradienthøyde)
+        // CGGradient tar ikke imot Lab; en aksial skyggelegging med egen funksjon gjør det (PDF type 2).
+        if let lab, g.stopp.count >= 2, let funksjon = labfunksjon(g.stopp),
+           let skygge = CGShading(axialSpace: lab, start: CGPoint(x: rekt.minX, y: rekt.midY), end: CGPoint(x: rekt.maxX, y: rekt.midY),
+                                  function: funksjon, extendStart: false, extendEnd: false) {
+            ctx.saveGState()
+            ctx.clip(to: rekt)
+            ctx.drawShading(skygge)
+            ctx.restoreGState()
+        }
+        ctx.setStrokeColor(gray: 0, alpha: 0.18)
+        ctx.setLineWidth(0.5)
+        ctx.stroke(rekt.insetBy(dx: 0.25, dy: 0.25))
+        tegn(tekst, i: ctx, x: marg, topp: topp + gradienthøyde + 6, bredde: side.width - 2 * marg)
+    }
+
+    /// Stoppene som CGFunction: t (0…1) → L*, a*, b*, lineært mellom de tette stoppene langs OKLab-overgangen.
+    private final class Stoppboks { let stopp: [CIELab]; init(_ s: [CIELab]) { stopp = s } }
+
+    private static func labfunksjon(_ stopp: [CIELab]) -> CGFunction? {
+        var tilbakekall = CGFunctionCallbacks(version: 0, evaluate: { info, inn, ut in
+            guard let info else { return }
+            let s = Unmanaged<Stoppboks>.fromOpaque(info).takeUnretainedValue().stopp
+            let n = s.count - 1
+            let x = min(max(Double(inn[0]), 0), 1) * Double(n)
+            let i = min(Int(x), n - 1), f = x - Double(i)
+            let a = s[i], b = s[i + 1]
+            ut[0] = CGFloat(a.l + (b.l - a.l) * f)
+            ut[1] = CGFloat(a.a + (b.a - a.a) * f)
+            ut[2] = CGFloat(a.b + (b.b - a.b) * f)
+        }, releaseInfo: { info in
+            if let info { Unmanaged<Stoppboks>.fromOpaque(info).release() }
+        })
+        let boks = Unmanaged.passRetained(Stoppboks(stopp)).toOpaque()
+        return CGFunction(info: boks, domainDimension: 1, domain: [0, 1], rangeDimension: 3,
+                          range: [0, 100, -128, 127, -128, 127], callbacks: &tilbakekall)
     }
 
     // MARK: - Tekst

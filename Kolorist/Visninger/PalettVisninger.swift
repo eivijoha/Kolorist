@@ -86,8 +86,8 @@ struct PalettListe: View {
                                         .disabled(p.farger.isEmpty)
                                     Button("Kontrastmatrise", systemImage: "square.grid.3x3.fill") { matrise = p }
                                         .disabled(p.farger.count < 2)
-                                    Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p.palett) }
-                                        .disabled(p.farger.isEmpty)
+                                    Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
+                                        .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
                                     Divider()
                                     Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
                                     KopierTilMeny(farger: p.farger, navn: p.navn)
@@ -395,7 +395,11 @@ struct PalettRad: View {
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
                     }
-                    if dokument.farger.isEmpty {
+                    // Gradienter som bredere brikker etter fargene.
+                    ForEach(dokument.gradienter) { g in
+                        GradientStripe(oppsett: g.oppsett).frame(width: 64, height: 36)
+                    }
+                    if dokument.farger.isEmpty && dokument.gradienter.isEmpty {
                         Text("Slipp farger her").font(.caption).foregroundStyle(Color.sekundærTekst)
                     }
                 }
@@ -499,6 +503,8 @@ struct PalettDetalj: View {
                 }
             }
             .padding()
+            // Gradienter i paletten, under fargene.
+            PalettGradientListe(dokument: dokument)
         }
         // Navnet står i tittelfeltet; navigasjonslinjen viser det ikke i tillegg.
         .navigationTitle("")
@@ -509,7 +515,7 @@ struct PalettDetalj: View {
             flytt(farger, til: dokument, i: kontekst)
         }
         // ⌘P skriver ut denne paletten.
-        .focusedSceneValue(\.palettutskrift, Palettutskrift(id: dokument.id, navn: dokument.navn) { dokument.palett })
+        .focusedSceneValue(\.palettutskrift, Palettutskrift(id: dokument.id, navn: dokument.navn) { PalettUtskrift.skrivUt(dokument) })
         .toolbar {
             if !iKolonne {
                 ToolbarItemGroup { handlinger }
@@ -558,15 +564,15 @@ struct PalettDetalj: View {
         }
         .disabled(dokument.farger.isEmpty || kiArbeider)
         .help("Vurder paletten")
-        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(dokument.palett) }
-            .disabled(dokument.farger.isEmpty)
+        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(dokument) }
+            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
             .help("Skriv ut paletten (A4, fargeflater i CIELab)")
         Menu("Eksporter", systemImage: "square.and.arrow.up") {
             ForEach(Eksportformat.allCases) { f in
                 Button(f.navn) { eksport = (f.data(for: dokument.palett), "\(eksportnavn).\(f.filendelse)") }
             }
-            Button("PDF med fargeflater (A4)") { eksport = (PalettUtskrift.pdf(for: dokument.palett), "\(eksportnavn).pdf") }
-                .disabled(dokument.farger.isEmpty)
+            Button("PDF med fargeflater (A4)") { eksport = (PalettUtskrift.pdf(for: dokument), "\(eksportnavn).pdf") }
+                .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
             Divider()
             Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
             Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
@@ -899,6 +905,11 @@ struct Utviklerlinje: View {
 
     @State private var visMetoder = false
 
+    static var nettside: URL {
+        Bundle.main.preferredLocalizations.first?.hasPrefix("en") == true
+            ? URL(string: "https://kolorist.no/en/")! : URL(string: "https://kolorist.no/")!
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(appnavn) er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.")
@@ -906,6 +917,9 @@ struct Utviklerlinje: View {
             Button("Metoder og kilder", systemImage: "books.vertical") { visMetoder = true }
                 .buttonStyle(.borderless)
                 .padding(.top, 6)
+            // Nettsiden på appens språk.
+            Link(destination: Self.nettside) { Label("kolorist.no", systemImage: "safari") }
+                .buttonStyle(.borderless)
         }
         .sheet(isPresented: $visMetoder) { MetoderArk() }
         .font(.footnote)

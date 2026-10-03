@@ -29,7 +29,9 @@ enum Skjermbildemodus {
             let alle = ((try? kontekst.fetch(FetchDescriptor<PalettDokument>())) ?? []).flatMap(\.farger)
             let samlet = Palett(navn: "Eksempelpaletter", farger: alle + alle.prefix(4))
             let url = FileManager.default.temporaryDirectory.appending(path: navn)
-            try? PalettUtskrift.pdf(for: samlet).write(to: url)
+            let g = PalettGradient(navn: "Skumring", oppsett: Gradientoppsett(fra: Farge(hex: "#1F3A4D")!, til: Farge(hex: "#F29E6D")!,
+                                                                             antall: 7, trinn: Lyshetstrinn()))
+            try? PalettUtskrift.pdf(for: samlet, gradienter: [g, g]).write(to: url)
             print("PDF:", url.path)
         }
         // `-gradientkopi YES`: skriv gradienten i alle kopiformatene til tmp-mappen (test).
@@ -64,6 +66,11 @@ enum Skjermbildemodus {
             let p = PalettDokument(navn: engelsk ? en : nb,
                                    farger: hex.map { PalettFarge(farge: Farge(hex: $0)!, opphav: .manuell) })
             p.opprettet = nå.addingTimeInterval(Double(i - 10) * 60)
+            if i == 2 {   // «Nordisk kyst» får en gradient, så gradienter i paletter vises
+                p.gradienter = [PalettGradient(navn: engelsk ? "Coast at dusk" : "Kyst i skumring",
+                                               oppsett: Gradientoppsett(fra: Farge(hex: "#1F3A4D")!, til: Farge(hex: "#C8553D")!,
+                                                                        antall: 7, trinn: Lyshetstrinn()))]
+            }
             kontekst.insert(p)
         }
         for (i, hex) in ["#C4553B", "#2E5E8C", "#E8B04A"].enumerated() {

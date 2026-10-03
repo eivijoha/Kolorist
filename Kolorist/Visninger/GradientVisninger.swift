@@ -36,6 +36,7 @@ struct GradientSeksjon: View {
                             GradientKopierTilMeny(gradient: Gradientkopi(farger: [oppsett.fra, oppsett.til], navn: g.navn))
                             KopierTilMeny(farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) }, navn: g.navn,
                                           tittel: "Kopier tonene til")
+                            LeggGradientIPalettMeny(oppsett: oppsett, navn: g.navn)
                             Button("Lagre farger som palett …", systemImage: "swatchpalette") { somPalett = g }
                             Button("Slett gradient", systemImage: "trash", role: .destructive) { slettes = g }
                         }

@@ -1767,6 +1767,22 @@
         }
       }
     },
+    "Gradient fra %@ til %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gradient fra %1$@ til %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gradient from %1$@ to %2$@"
+          }
+        }
+      }
+    },
     "Gradienten lagres under «Gradienter» i Paletter og kan åpnes igjen her.": {
       "localizations": {
         "en": {
@@ -3107,6 +3123,16 @@
         }
       }
     },
+    "Legg gradienten i palett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add gradient to palette"
+          }
+        }
+      }
+    },
     "Legg harmonien i palett": {
       "localizations": {
         "en": {
@@ -3633,6 +3659,16 @@
         }
       }
     },
+    "Ny palett med gradienten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New palette with the gradient"
+          }
+        }
+      }
+    },
     "Ny palett …": {
       "localizations": {
         "en": {
@@ -3719,6 +3755,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "OKLab and OKLCH"
+          }
+        }
+      }
+    },
+    "OKLab, %lld toner": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OKLab, %lld tones"
           }
         }
       }
@@ -5369,6 +5415,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "not passed"
+          }
+        }
+      }
+    },
+    "kolorist.no": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kolorist.no"
           }
         }
       }
