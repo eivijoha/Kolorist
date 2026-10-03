@@ -72,7 +72,7 @@ final class Arbeidsbenk {
         }
     }
 
-    /// «Begrens nye farger til …»: alle nye og redigerte farger holdes innenfor valgt ICC-profil.
+    /// «Begrens farger til …»: alle nye og redigerte farger holdes innenfor valgt ICC-profil.
     var begrensAktiv = UserDefaults.standard.bool(forKey: "kunSRGB") {
         didSet {
             UserDefaults.standard.set(begrensAktiv, forKey: "kunSRGB")
@@ -86,12 +86,13 @@ final class Arbeidsbenk {
     }
 
     /// Fargebiblioteket som er valgt under «Vis også» (i stedet for en ICC-profil). Settes av Studio.
+    /// Et valgt bibliotek begrenser alltid fargene – uavhengig av «Begrens farger til …».
     var begrensBibliotek: Fargebibliotek? {
-        didSet { if begrensAktiv { aktivFarge = begrens(aktivFarge) } }
+        didSet { if begrensBibliotek != nil { aktivFarge = begrens(aktivFarge) } }
     }
 
     var begrensning: ICCProfil? { begrensAktiv && begrensBibliotek == nil ? begrensProfil : nil }
-    var bibliotekbegrensning: Fargebibliotek? { begrensAktiv ? begrensBibliotek : nil }
+    var bibliotekbegrensning: Fargebibliotek? { begrensBibliotek }
 
     /// Grov gamut for beregninger i kjernen; den nøyaktige begrensningen gjøres av `begrens`.
     var gamut: Gamut { begrensAktiv && begrensBibliotek == nil && begrensProfil.id == ICCProfil.sRGB.id ? .sRGB : .displayP3 }

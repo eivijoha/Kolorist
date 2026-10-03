@@ -10,6 +10,8 @@ struct HarmoniSeksjon: View {
     var begrens: (Farge) -> Farge = { $0 }
     var velg: (Farge) -> Void
     var lagre: ([PalettFarge], String) -> Void
+    /// Melder harmoniens farger og grunnfargens plass, så Studio kan vise dem i fargeflaten øverst.
+    var vis: ([Farge], Int?) -> Void = { _, _ in }
 
     @Environment(\.modelContext) private var kontekst
     @AppStorage("harmoni") private var harmoni: Harmoni = .splittKomplementær
@@ -38,7 +40,8 @@ struct HarmoniSeksjon: View {
     /// ellers ble ujevnt fordelt.
     private var vinkler: [Double] {
         let basis = sirkel.vinkel(for: grunnfarge)
-        return harmoni.forskyvninger(antall: antall, vinkel: harmoni.harVinkel ? vinkel : nil).map { basis + $0 }
+        // Grunnfargen står der den er; de andre på sirkelens trinn (Munsell: 2,5 kulør), som fargene.
+        return harmoni.forskyvninger(antall: antall, vinkel: harmoni.harVinkel ? vinkel : nil).map { $0 == 0 ? basis : sirkel.avrundet(basis + $0) }
     }
 
     /// Plassen til grunnfargen blant fargene (i midten for analog).
@@ -52,6 +55,13 @@ struct HarmoniSeksjon: View {
 
     private func juster(_ f: Farge) -> Farge {
         guard metning != nil || lyshet != nil else { return f }
+        if brukerMunsell {
+            // Munsell: gliderne er valør og kroma, og fargene er ekte Munsell-farger.
+            var m = f.munsell
+            if let lyshet { m.valør = lyshet * 10 }
+            if let metning { m.kroma = metning * Self.munsellMaksKroma }
+            return Farge.innenforMunsell(m, alfa: f.alfa) ?? f
+        }
         if sirkel == .hsl || sirkel == .ryb {
             var h = f.hsl
             if let metning { h.s = metning }
@@ -72,8 +82,13 @@ struct HarmoniSeksjon: View {
 
     /// Fargen i ringen ved en vinkel, med gjeldende metning og lyshet (grunnfargens når gliderne ikke er rørt).
     private func ringfarge(vinkel: Double) -> Farge {
-        let f = sirkel.farge(grunnfarge, vinkel: vinkel, gamut: gamut)
         let m = metning ?? grunnMetning, l = lyshet ?? grunnLyshet
+        if brukerMunsell {
+            // Ekte Munsell-farger på hvert trinn, med gjeldende valør og kroma (senket der kuløren ikke når så høyt).
+            let munsell = Munsell(kulør: sirkel.avrundet(vinkel) / 3.6, valør: l * 10, kroma: m * Self.munsellMaksKroma)
+            return (Farge.innenforMunsell(munsell) ?? grunnfarge).gamutKartlagt(til: gamut)
+        }
+        let f = sirkel.farge(grunnfarge, vinkel: vinkel, gamut: gamut)
         if sirkel == .hsl || sirkel == .ryb {
             var h = f.hsl
             h.s = m
@@ -95,11 +110,26 @@ struct HarmoniSeksjon: View {
 
     /// Grunnfargens egne verdier, som gliderne starter på.
     private var brukerHSL: Bool { sirkel == .hsl || sirkel == .ryb }
-    private var grunnMetning: Double { brukerHSL ? grunnfarge.hsl.s : relativMetning(grunnfarge) }
-    private var grunnLyshet: Double { brukerHSL ? grunnfarge.hsl.l : grunnfarge.okLCH.l }
+    /// Munsell-sirkelen: «Metning» er Munsell-kroma (0–24) og «Lyshet» er valør (0–10).
+    private var brukerMunsell: Bool { sirkel == .munsell }
+    private static let munsellMaksKroma = 24.0
+    private var grunnMetning: Double {
+        if brukerMunsell { return min(grunnfarge.munsell.kroma / Self.munsellMaksKroma, 1) }
+        return brukerHSL ? grunnfarge.hsl.s : relativMetning(grunnfarge)
+    }
+    private var grunnLyshet: Double {
+        if brukerMunsell { return grunnfarge.munsell.valør / 10 }
+        return brukerHSL ? grunnfarge.hsl.l : grunnfarge.okLCH.l
+    }
 
     /// Grunnfargen med gitt metning og lyshet (samme regler som harmonien).
     private func grunnfarge(metning m: Double, lyshet l: Double) -> Farge {
+        if brukerMunsell {
+            var g = grunnfarge.munsell
+            g.valør = l * 10
+            g.kroma = m * Self.munsellMaksKroma
+            return (Farge.innenforMunsell(g) ?? grunnfarge).gamutKartlagt(til: gamut)
+        }
         if brukerHSL {
             var h = grunnfarge.hsl
             h.s = m
@@ -121,6 +151,10 @@ struct HarmoniSeksjon: View {
 
     private func glider(_ tittel: LocalizedStringKey, verdi: Binding<Double?>, grunn: Double, metningsakse: Bool) -> some View {
         let gjeldende = verdi.wrappedValue ?? grunn
+        // Munsell viser egne tall (kroma og valør); de andre sirklene prosent.
+        let tekst: String = brukerMunsell
+            ? (metningsakse ? String(format: "%.0f", gjeldende * Self.munsellMaksKroma) : String(format: "%.1f", gjeldende * 10))
+            : gjeldende.formatted(.percent.precision(.fractionLength(0)))
         return HStack(spacing: 10) {
             Text(tittel).lineLimit(1).minimumScaleFactor(0.8).frame(width: 96, alignment: .leading)
             FargeGlider(verdi: Binding(get: { gjeldende }, set: { ny in
@@ -133,9 +167,9 @@ struct HarmoniSeksjon: View {
                         spor: spor(metningsakse: metningsakse),
                         gjeldende: grunnfarge(metning: metning ?? grunnMetning, lyshet: lyshet ?? grunnLyshet).swiftUI,
                         tittel: Text(tittel),
-                        verdiTekst: gjeldende.formatted(.percent.precision(.fractionLength(0))),
+                        verdiTekst: tekst,
                         stegForTilgjengelighet: 0.05)
-            Text(verdi.wrappedValue ?? grunn, format: .percent.precision(.fractionLength(0)))
+            Text(tekst)
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(Color.sekundærTekst)
                 .frame(width: 48, alignment: .trailing)
@@ -202,8 +236,8 @@ struct HarmoniSeksjon: View {
                 Button("PDF (Display P3)") { eksporterSirkel(svg: false) }
             }
             #endif
-            glider("Metning", verdi: $metning, grunn: grunnMetning, metningsakse: true)
-            glider("Lyshet", verdi: $lyshet, grunn: grunnLyshet, metningsakse: false)
+            glider(brukerMunsell ? "Kroma" : "Metning", verdi: $metning, grunn: grunnMetning, metningsakse: true)
+            glider(brukerMunsell ? "Valør" : "Lyshet", verdi: $lyshet, grunn: grunnLyshet, metningsakse: false)
             if metning != nil || lyshet != nil {
                 Button("Tilbakestill til grunnfargen", systemImage: "arrow.uturn.backward") {
                     metning = nil
@@ -228,6 +262,9 @@ struct HarmoniSeksjon: View {
                       contentType: sirkeleksport?.type ?? .data,
                       defaultFilename: sirkeleksport?.navn) { _ in }
         #endif
+        .onAppear { vis(farger, grunnIndeks) }
+        .onChange(of: farger) { _, nye in vis(nye, grunnIndeks) }
+        .onDisappear { vis([], nil) }
         // Gliderne betyr noe annet i HSL enn i OKLCH; start på nytt ved bytte av sirkel.
         .onChange(of: sirkel) { _, _ in metning = nil; lyshet = nil }
         // Primærfargen (grunnfargen med gjeldende metning/lyshet) blir aktiv farge, så den vises i
@@ -260,12 +297,24 @@ struct Fargesirkelvisning: View {
             let senter = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
             Canvas { ctx, _ in
                 let r = side / 2
-                let segmenter = 120
-                for i in 0..<segmenter {
-                    let a0 = Double(i) / Double(segmenter) * 360, a1 = Double(i + 1) / Double(segmenter) * 360
-                    var sti = Path()
-                    sti.addArc(center: senter, radius: r * 0.8, startAngle: .degrees(a0 - 90), endAngle: .degrees(a1 - 89.5), clockwise: false)
-                    ctx.stroke(sti, with: .color((ringfarge?(a0) ?? sirkel.ringfarge(vinkel: a0, grunn: grunnfarge)).swiftUI), lineWidth: r * 0.3)
+                if let trinn = sirkel.trinn {
+                    // Trinnvis sirkel (Munsell): ett felt per kulør, sentrert på kuløren, med en smal fuge.
+                    let antallTrinn = Int((360 / trinn).rounded())
+                    for i in 0..<antallTrinn {
+                        let midt = Double(i) * trinn
+                        var sti = Path()
+                        sti.addArc(center: senter, radius: r * 0.8, startAngle: .degrees(midt - trinn / 2 - 90 + 0.5),
+                                   endAngle: .degrees(midt + trinn / 2 - 90 - 0.5), clockwise: false)
+                        ctx.stroke(sti, with: .color((ringfarge?(midt) ?? sirkel.ringfarge(vinkel: midt, grunn: grunnfarge)).swiftUI), lineWidth: r * 0.3)
+                    }
+                } else {
+                    let segmenter = 120
+                    for i in 0..<segmenter {
+                        let a0 = Double(i) / Double(segmenter) * 360, a1 = Double(i + 1) / Double(segmenter) * 360
+                        var sti = Path()
+                        sti.addArc(center: senter, radius: r * 0.8, startAngle: .degrees(a0 - 90), endAngle: .degrees(a1 - 89.5), clockwise: false)
+                        ctx.stroke(sti, with: .color((ringfarge?(a0) ?? sirkel.ringfarge(vinkel: a0, grunn: grunnfarge)).swiftUI), lineWidth: r * 0.3)
+                    }
                 }
                 for i in farger.indices.reversed() {
                     let f = farger[i]

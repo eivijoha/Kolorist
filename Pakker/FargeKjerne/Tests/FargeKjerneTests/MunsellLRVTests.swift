@@ -3,6 +3,16 @@ import Testing
 
 @Suite("Munsell")
 struct MunsellTests {
+    /// Munsell-sirkelen: komplementærfargen til 5Y er 5PB (Munsells egne par), og vinkelen går rundt.
+    @Test func munsellsirkelensKomplementær() throws {
+        let gul = try #require(Farge(munsell: Munsell(kulør: 25, valør: 8, kroma: 8)))   // 5Y 8/8
+        let vinkel = Fargesirkel.munsell.vinkel(for: gul)
+        #expect(abs(vinkel - 90) < 1.5)
+        let motsatt = Fargesirkel.munsell.farge(gul, vinkel: vinkel + 180).munsell
+        #expect(abs(motsatt.kulør - 75) < 1.5)        // 5PB
+        #expect(abs(motsatt.valør - 8) < 0.2)         // valøren holdes
+    }
+
     @Test func notasjonLesesOgSkrives() throws {
         let m = try #require(Munsell("5R 4/14"))
         #expect(m.kulør == 5 && m.valør == 4 && m.kroma == 14)

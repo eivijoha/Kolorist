@@ -11,6 +11,9 @@ struct FargeEditor: View {
     @State private var lagreNavn = ""
     @State private var beskriver = false
     @State private var visMineFargerom = false
+    /// Harmoniens farger (Harmoni-modus), vist i fargeflaten øverst, og grunnfargens plass blant dem.
+    @State private var harmonifarger: [Farge] = []
+    @State private var harmoniGrunn: Int?
     @State private var tonerMål = false
     @Environment(\.modelContext) private var kontekst
     @AppStorage("studioModus") private var modus: Modus = .farge
@@ -80,12 +83,25 @@ struct FargeEditor: View {
     private func fargepanel(_ farge: Farge, bred: Bool) -> some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         VStack(spacing: 0) {
-            Fargeflate(farge: farge, modell: arbeidsbenk.modell, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
-                       kobletVerdier: kobletProfil.map { arbeidsbenk.profilverdier(for: $0) ?? farge.komponenter(i: $0, hensikt: hensikt) ?? [] },
-                       renCMYK: renCMYK,
-                       stablet: bred,
-                       lagre: { lagreEnkeltfarger([$0], i: kontekst) },
-                       leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+            Group {
+                if modus == .harmoni, !harmonifarger.isEmpty {
+                    // Harmoni: alle fargene i «Vis også»-rommet, med grunnfargen merket.
+                    HarmoniFlate(farger: harmonifarger, grunnIndeks: harmoniGrunn, profil: visOgsåProfil,
+                                 fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
+                                 romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
+                                 stablet: bred,
+                                 velg: { arbeidsbenk.aktivFarge = $0 },
+                                 lagre: { lagreEnkeltfarger([$0], i: kontekst) },
+                                 leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+                } else {
+                    Fargeflate(farge: farge, modell: arbeidsbenk.modell, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
+                               kobletVerdier: kobletProfil.map { arbeidsbenk.profilverdier(for: $0) ?? farge.komponenter(i: $0, hensikt: hensikt) ?? [] },
+                               renCMYK: renCMYK,
+                               stablet: bred,
+                               lagre: { lagreEnkeltfarger([$0], i: kontekst) },
+                               leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+                }
+            }
                 // Smal visning: fast høyde øverst. Bred visning: fyller høyden til venstre.
                 .frame(height: bred ? nil : 140)
                 .frame(maxHeight: bred ? .infinity : nil)
@@ -170,10 +186,12 @@ struct FargeEditor: View {
             case .toner: tonerModus(farge)
             case .harmoni:
                 HarmoniSeksjon(grunnfarge: farge, gamut: arbeidsbenk.gamut, begrens: arbeidsbenk.begrens,
-                               velg: { arbeidsbenk.aktivFarge = $0 }) { farger, navn in
-                    lagreFarger = farger
-                    lagreNavn = navn
-                }
+                               velg: { arbeidsbenk.aktivFarge = $0 },
+                               lagre: { farger, navn in
+                                   lagreFarger = farger
+                                   lagreNavn = navn
+                               },
+                               vis: { harmonifarger = $0; harmoniGrunn = $1 })
             }
         }
         .formStyle(.grouped)
@@ -776,7 +794,12 @@ struct VisOgsåMeny: View {
     var body: some View {
         Menu {
             // Innstillinger for valgt profil øverst, så «Mine fargerom …» og (Mac) installerte profiler, så listene.
-            Toggle("Begrens nye farger til \(valgtNavn)", isOn: $begrens)
+            if let b = bibliotek.fargebibliotek(id: valgtID) {
+                // Et fargebibliotek begrenser alltid: farger, toner og harmonier låses til tonene.
+                Text("Fargene låses til tonene i \(b.navn)")
+            } else {
+                Toggle("Begrens farger til \(valgtNavn)", isOn: $begrens)
+            }
             if bibliotek.profil(id: valgtID)?.modell == .cmyk {
                 // UCR/GCR: færrest mulig trykkfarger, med det grå innslaget flyttet til sort, så lenge
                 // fargen holder seg innenfor 1 ΔE00 av profilens egen separasjon.

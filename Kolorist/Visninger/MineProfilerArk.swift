@@ -60,7 +60,7 @@ struct MineProfilerArk: View {
                                 #endif
                         }
                         // Forklaring som rad, ikke fotnote: fotnoter i en liste kortes av på Mac.
-                        Text("Velges under «Vis også» i Studio: høyre halvdel viser nærmeste tone i biblioteket, og «Begrens nye farger» låser farger, toner og harmonier til bibliotekets toner.")
+                        Text("Velges under «Vis også» i Studio. Da låses farger, toner og harmonier til bibliotekets toner, og fargeflaten viser tonenavnene.")
                             .forklaring()
                     } header: {
                         Text("Fargebiblioteker")

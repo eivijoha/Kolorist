@@ -179,6 +179,17 @@ public extension Farge {
         self.init(xyz: XYZ(x: xyz.x, y: xyz.y, z: xyz.z), alfa: alfa)
     }
 
+    /// Fargen for notasjonen, med kroma senket til renotasjonsdataene når kuløren ikke når så høyt ved
+    /// denne valøren. `nil` bare for valør utenfor tabellen.
+    static func innenforMunsell(_ m: Munsell, alfa: Double = 1) -> Farge? {
+        var n = m
+        while true {
+            if let f = Farge(munsell: n, alfa: alfa) { return f }
+            guard n.kroma > 0 else { return nil }
+            n.kroma = max(0, n.kroma - 1)
+        }
+    }
+
     /// Nærmeste Munsell-notasjon: valør fra luminansen, kulør og kroma ved iterasjon mot renotasjonsdataene.
     var munsell: Munsell {
         let xyzD65 = xyz

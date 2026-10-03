@@ -681,12 +681,12 @@
         }
       }
     },
-    "Begrens nye farger til %@": {
+    "Begrens farger til %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Limit new colours to %@"
+            "value": "Limit colours to %@"
           }
         }
       }
@@ -1261,6 +1261,16 @@
         }
       }
     },
+    "Fargene låses til tonene i %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colours are locked to the tones in %@"
+          }
+        }
+      }
+    },
     "Fargepar som er tydelig ulike med normalt syn, men blir vanskelige å skille med protan-, deutan- eller tritanavvik eller akromatopsi (ΔE2000 under 10).": {
       "localizations": {
         "en": {
@@ -1797,6 +1807,16 @@
         }
       }
     },
+    "Grunnfarge: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base colour: %@"
+          }
+        }
+      }
+    },
     "Grunnlag for vurderingen": {
       "localizations": {
         "en": {
@@ -1843,6 +1863,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Harmony"
+          }
+        }
+      }
+    },
+    "Harmonien i %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The harmony in %@"
           }
         }
       }
@@ -2581,6 +2611,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Requirement"
+          }
+        }
+      }
+    },
+    "Kroma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chroma"
           }
         }
       }
@@ -4833,6 +4873,16 @@
         }
       }
     },
+    "Utenfor gamut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Out of gamut"
+          }
+        }
+      }
+    },
     "Utenfor gamut · ΔE00 %@": {
       "localizations": {
         "en": {
@@ -4899,6 +4949,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Options for picked colours"
+          }
+        }
+      }
+    },
+    "Valør": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value"
           }
         }
       }
@@ -4983,12 +5043,12 @@
         }
       }
     },
-    "Velges under «Vis også» i Studio: høyre halvdel viser nærmeste tone i biblioteket, og «Begrens nye farger» låser farger, toner og harmonier til bibliotekets toner.": {
+    "Velges under «Vis også» i Studio. Da låses farger, toner og harmonier til bibliotekets toner, og fargeflaten viser tonenavnene.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chosen under “Also show” in Studio: the right half shows the nearest tone in the library, and “Limit new colours” locks colours, tones and harmonies to the library’s tones."
+            "value": "Chosen under “Also show” in Studio. Colours, tones and harmonies are then locked to the library’s tones, and the colour surface shows the tone names."
           }
         }
       }

@@ -67,6 +67,9 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
     case hsl
     /// RYB – kunstnersirkelen (Itten): rød ↔ grønn, gul ↔ fiolett, blå ↔ oransje.
     case ryb
+    /// Munsell: ti hovedkulører (R, YR, Y, GY, G, BG, B, PB, P, RP) i like store opplevde steg, fra
+    /// renotasjonsdataene. Komplementærparene følger Munsell (5R ↔ 5BG, 5Y ↔ 5PB), ikke Lab-vinkelen.
+    case munsell
 
     public var id: String { rawValue }
 
@@ -76,6 +79,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .cieLCH: String(localized: "CIE LCH (Lab)", bundle: .module)
         case .hsl: String(localized: "HSL (RGB-skjerm)", bundle: .module)
         case .ryb: String(localized: "RYB (kunstnersirkel)", bundle: .module)
+        case .munsell: "Munsell"
         }
     }
 
@@ -85,7 +89,18 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .cieLCH: String(localized: "Lab-basert sirkel, som i Photoshop og fargemåling. Lyshet og kroma holdes fast.", bundle: .module)
         case .hsl: String(localized: "Den tradisjonelle RGB-sirkelen fra skjermverden. Blå er komplementær til gul.", bundle: .module)
         case .ryb: String(localized: "Kunstnersirkelen med rød, gul og blå som primærfarger. Blå er komplementær til oransje.", bundle: .module)
+        case .munsell: String(localized: "Munsells sirkel med ti hovedkulører i like store opplevde steg, mye brukt i arkitektur og fargelære. Valør og kroma holdes fast; gul er komplementær til purpurblå.", bundle: .module)
         }
+    }
+
+    /// Faste kulørsteg i grader, eller `nil` for en sammenhengende sirkel. Munsell brukes i steg på 2,5
+    /// (40 kulører rundt, 9°), som i Munsells fargekart – da får fargene gyldige notasjoner som 7.5PB.
+    public var trinn: Double? { self == .munsell ? 9 : nil }
+
+    /// Vinkelen rundet til nærmeste trinn (uendret for sammenhengende sirkler).
+    public func avrundet(_ vinkel: Double) -> Double {
+        guard let trinn else { return vinkel }
+        return Harmoni.normaliser((vinkel / trinn).rounded() * trinn)
     }
 
     /// Fargens vinkel i denne sirkelen (grader).
@@ -95,6 +110,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .cieLCH: farge.cieLCH.h
         case .hsl: farge.hsl.h
         case .ryb: RYB.fraRGBKulør(farge.hsl.h)
+        case .munsell: farge.munsell.kulør * 3.6
         }
     }
 
@@ -118,6 +134,11 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             var hsl = grunn.hsl
             hsl.h = RYB.tilRGBKulør(v)
             return Farge(hsl: hsl, alfa: grunn.alfa)
+        case .munsell:
+            var m = grunn.munsell
+            m.kulør = avrundet(v) / 3.6
+            // Valør og kroma beholdes; kroma senkes bare der kuløren ikke når så høyt i renotasjonsdataene.
+            return Farge.innenforMunsell(m, alfa: grunn.alfa)?.gamutKartlagt(til: gamut) ?? grunn
         }
     }
 
@@ -132,6 +153,11 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             return Farge(cieLCH: CIELCH(l: g.l, c: max(g.c, 30), h: vinkel)).gamutKartlagt(til: .displayP3)
         case .hsl: return Farge(hsl: HSL(h: vinkel, s: 0.85, l: 0.55))
         case .ryb: return Farge(hsl: HSL(h: RYB.tilRGBKulør(vinkel), s: 0.85, l: 0.55))
+        case .munsell:
+            // Ekte Munsell-farger med grunnfargens valør og kroma (kroma senket der kuløren ikke når så høyt).
+            var m = grunn.munsell
+            m.kulør = avrundet(vinkel) / 3.6
+            return Farge.innenforMunsell(m)?.gamutKartlagt(til: .displayP3) ?? grunn
         }
     }
 }
