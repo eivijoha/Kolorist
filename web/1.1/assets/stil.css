@@ -624,6 +624,114 @@ main {
   text-align: center;
 }
 
+/* ---------- Karusell (Mac-skjermbilder) ---------- */
+
+.skjermbilder-tittel {
+  margin: 1.5rem 0 0;
+  font-size: 1rem;
+  color: var(--tekst-dempet);
+}
+
+/* Uten skript: sidelengs rull, som iPhone-bildene */
+.karusell-bilder {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(18rem, 85%);
+  gap: 1rem;
+  overflow-x: auto;
+  list-style: none;
+  padding: 0.25rem 0.25rem 1rem;
+  margin: 1rem -0.25rem 0;
+  scroll-snap-type: x mandatory;
+}
+
+.karusell-bilder > li {
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.skjermbilde.mac img {
+  border-radius: 12px;
+}
+
+/* Med skript: bildene stables og fader rolig over i hverandre */
+.karusell.i-gang .karusell-bilder {
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.karusell.i-gang .karusell-bilder > li {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.4s ease, visibility 0s linear 1.4s;
+}
+
+.karusell.i-gang .karusell-bilder > li.vist {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1.4s ease, visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .karusell.i-gang .karusell-bilder > li,
+  .karusell.i-gang .karusell-bilder > li.vist {
+    transition: none;
+  }
+}
+
+.karusell-kontroller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.karusell-pause {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: 1px solid var(--kant);
+  border-radius: 999px;
+  background: var(--flate);
+  color: var(--tekst);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.karusell-prikk {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.karusell-prikk::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--kant);
+}
+
+.karusell-prikk[aria-current="true"]::after {
+  background: var(--lenke);
+}
+
+.karusell-pause:focus-visible,
+.karusell-prikk:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+}
+
 /* ---------- Seksjoner og bokser ---------- */
 
 .seksjon {

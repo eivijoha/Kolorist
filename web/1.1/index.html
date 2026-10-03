@@ -16,7 +16,7 @@
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/stil.css?v=2">
+  <link rel="stylesheet" href="assets/stil.css?v=3">
   <link rel="canonical" href="https://kolorist.no/">
   <link rel="alternate" hreflang="nb" href="https://kolorist.no/">
   <link rel="alternate" hreflang="en" href="https://kolorist.no/en/">
@@ -226,7 +226,7 @@
 
     <section class="seksjon" aria-labelledby="skjermbilder">
       <h2 id="skjermbilder">Skjermbilder</h2>
-      <!-- Plassholdere: bytt ut assets/skjermbilde-*.png med ekte skjermbilder (1206 × 2622) med samme filnavn, og juster alt-tekstene. -->
+      <h3 class="skjermbilder-tittel">iPhone</h3>
       <ul class="skjermbilder" tabindex="0" aria-label="Skjermbilder – rull sidelengs">
         <li>
           <figure class="skjermbilde">
@@ -259,6 +259,41 @@
           </figure>
         </li>
       </ul>
+      <h3 class="skjermbilder-tittel">Mac</h3>
+      <div class="karusell" data-karusell data-pause="Pause" data-spill="Spill av" data-bilde="Vis bilde" aria-roledescription="karusell" aria-label="Skjermbilder fra Mac">
+        <ul class="karusell-bilder">
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="assets/mac/skjermbilde-studio.png" alt="Studio på Mac med fargen i OKLCH og Generisk CMYK, verdiene, og palettene og de plukkede fargene ved siden av" width="1920" height="1200" loading="lazy">
+            <figcaption>Studio</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="assets/mac/skjermbilde-harmoni.png" alt="Harmoni på Mac: fem farger jevnt fordelt på fargesirkelen" width="1920" height="1200" loading="lazy">
+            <figcaption>Harmoni</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="assets/mac/skjermbilde-overgang.png" alt="Overgang på Mac i like perseptuelle steg, med lysere og mørkere rader" width="1920" height="1200" loading="lazy">
+            <figcaption>Overgang</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="assets/mac/skjermbilde-kontrast.png" alt="Kontrast på Mac: tekst og grafikk etter WCAG 2.2 og flater etter LRV" width="1920" height="1200" loading="lazy">
+            <figcaption>Kontrast</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="assets/mac/skjermbilde-fargesyn.png" alt="Fargesyn på Mac: paletten med fire typer fargesynsavvik og vanskelige fargepar" width="1920" height="1200" loading="lazy">
+            <figcaption>Fargesyn</figcaption>
+          </figure>
+        </li>
+        </ul>
+      </div>
     </section>
 
     <section class="seksjon lesetekst" aria-labelledby="personvern">
@@ -286,5 +321,6 @@
       <p>© 2026 Eivind Arnstein Johansen. Apple, iPhone, iPad, Mac, iCloud, Siri og Apple Intelligence er varemerker for Apple Inc.</p>
     </div>
   </footer>
+  <script src="assets/karusell.js?v=1" defer></script>
 </body>
 </html>

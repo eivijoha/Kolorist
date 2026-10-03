@@ -16,7 +16,7 @@
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/stil.css?v=2">
+  <link rel="stylesheet" href="../assets/stil.css?v=3">
   <link rel="canonical" href="https://kolorist.no/en/">
   <link rel="alternate" hreflang="nb" href="https://kolorist.no/">
   <link rel="alternate" hreflang="en" href="https://kolorist.no/en/">
@@ -227,6 +227,7 @@
     <section class="seksjon" aria-labelledby="skjermbilder">
       <h2 id="skjermbilder">Screenshots</h2>
       <!-- Engelske skjermbilder ligger i assets/en/ (samme som Dokumentasjon/Skjermbilder/en/). -->
+      <h3 class="skjermbilder-tittel">iPhone</h3>
       <ul class="skjermbilder" tabindex="0" aria-label="Screenshots – scroll sideways">
         <li>
           <figure class="skjermbilde">
@@ -259,6 +260,41 @@
           </figure>
         </li>
       </ul>
+      <h3 class="skjermbilder-tittel">Mac</h3>
+      <div class="karusell" data-karusell data-pause="Pause" data-spill="Play" data-bilde="Show image" aria-roledescription="carousel" aria-label="Screenshots from Mac">
+        <ul class="karusell-bilder">
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="../assets/en/mac/skjermbilde-studio.png" alt="Studio on Mac with the colour in OKLCH and Generic CMYK, its values, and the palettes and picked colours beside it" width="1920" height="1200" loading="lazy">
+            <figcaption>Studio</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="../assets/en/mac/skjermbilde-harmoni.png" alt="Harmony on Mac: five colours evenly distributed on the colour wheel" width="1920" height="1200" loading="lazy">
+            <figcaption>Harmony</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="../assets/en/mac/skjermbilde-overgang.png" alt="Gradient on Mac in equal perceptual steps, with lighter and darker rows" width="1920" height="1200" loading="lazy">
+            <figcaption>Gradient</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="../assets/en/mac/skjermbilde-kontrast.png" alt="Contrast on Mac: text and graphics to WCAG 2.2 and surfaces by LRV" width="1920" height="1200" loading="lazy">
+            <figcaption>Contrast</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="../assets/en/mac/skjermbilde-fargesyn.png" alt="Colour vision on Mac: the palette with four types of colour vision deficiency and hard-to-tell pairs" width="1920" height="1200" loading="lazy">
+            <figcaption>Colour vision</figcaption>
+          </figure>
+        </li>
+        </ul>
+      </div>
     </section>
 
     <section class="seksjon lesetekst" aria-labelledby="personvern">
@@ -286,5 +322,6 @@
       <p>© 2026 Eivind Arnstein Johansen. Apple, iPhone, iPad, Mac, iCloud, Siri and Apple Intelligence are trademarks of Apple Inc.</p>
     </div>
   </footer>
+  <script src="../assets/karusell.js?v=1" defer></script>
 </body>
 </html>
