@@ -280,7 +280,8 @@ colour,color,palette,picker,OKLCH,CMYK,ICC,Munsell,LRV,contrast,WCAG,gradient,ey
 
 **Mac-versjonen slippes rett som 1.1** (1.0 for Mac ble trukket før publisering). Den er dermed første versjon på Mac,
 og App Store Connect viser ikke feltet «Nytt i denne versjonen» – bruk bare reklametekst, beskrivelse og nøkkelord under.
-«Nytt i denne versjonen» for Mac står igjen til en senere versjon.
+Alt som er nytt i 1.1, står derfor også i Mac-beskrivelsen under. «Nytt i denne versjonen» for Mac står igjen til en
+senere versjon.
 
 macOS har egen versjonsside i App Store Connect, med egen reklametekst, beskrivelse, nøkkelord, «Nytt i denne versjonen»
 og skjermbilder. Navn og undertittel er felles (App-informasjon), og iPad deler tekst med iPhone. Support- og
@@ -325,13 +326,14 @@ PLUKK OG DRA
 • Dra fargeprøver inn i andre programmer og fargebrønner – og dra farger inn fra dem
 • Paletter for hånden i et bredt vindu
 • Bilder, med dominerende farger
-• Kamera, også iPhone som kamera, med lysfelt på skjermen som lyskilde
+• Kamera, også iPhone som kamera, med lysfelt på skjermen – målepunktet følger pekeren
+• Farger du plukker, tas vare på til du lagrer dem
 • Kopier aktiv farge som OKLCH med ⌥⌘C, lim inn en farge med ⌥⌘V, og angre med ⌘Z
 
 ALLE FARGEROM
 • Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst ICC-profil
-• Varsel når fargen er utenfor fargeområdet – farger kartlegges inn i fargerommet uten å klippes
+• Varsel utenfor fargeområdet – farger kartlegges, aldri klippes
 • Angi CMYK eller RGB direkte i en valgt ICC-profil
 • Rene CMYK-verdier: grått innslag flyttes til sort (UCR/GCR)
 • Feltet for fargeverdi forstår hex, CSS-farger, Munsell-notasjon og vanlige beskrivelser som «dyp havblå»
@@ -342,42 +344,43 @@ FARGEBIBLIOTEKER OG ICC-PROFILER
 • Bruk profiler som er installert på Macen, etter mappe
 • Importer egne .icc- og .icm-profiler
 • Alt samles på ett sted og følger med til iPhone og iPad via iCloud Drive
-• Konverter mellom profiler og sammenlign gjengivelseshensiktene med ΔE2000
+• Konverter mellom profiler med valgfri gjengivelseshensikt
 
 OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
 • CSS-gradient i oklab med sRGB-reserve – lineær, radiell eller konisk
 • Toneskalaer fra 50 til 950
 • Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB
+• Se hele harmonier i valgt fargerom eller fargebibliotek, med grunnfargen merket
 
 TILGJENGELIGHET OG FARGESYN
-• WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk, og «Rett opp» som justerer fargen til den består
-• Flatekontrast med LRV (lysrefleksjonsverdi) etter BS 8300 og NS 11001 – for dører, vegger, gulv og skilt
+• WCAG 2.2-kontrast (AA og AAA), med «Rett opp» til fargen består
+• Flatekontrast med LRV (lysrefleksjonsverdi) etter BS 8300 og NS 11001 – for bygg og interiør
 • Kontrastmatrise og vurdering av hele paletter
 • Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
-• Kamera med fargesynsfilter: se omgivelsene slik de kan oppleves med hvert avvik
+• Kamera med fargesynsfilter
 
 APPLE INTELLIGENCE PÅ MACEN
 • Fra verdiord til palett – «trygg, varm, nordisk» – forankret i en kunnskapsbase med over hundre fargebegreper
-• Paletter bygges etter harmoniprinsipper – lik valør eller metning, aksentfarge, lys eller mørk bakgrunn – med lesbar kontrast
+• Paletter bygges etter harmoniprinsipper med lesbar kontrast
 • Beskriv en farge og se den i Studio
 • Juster med fritekst, navngi farger og få vurdering av paletter
 Alt kjøres lokalt. Uten Apple Intelligence lages paletter direkte fra kunnskapsbasen.
 
 KOPIER TIL OG EKSPORT
-• «Kopier til» designverktøy, layout-, bilde- og presentasjonsprogrammer – i formatet hvert program tar imot
+• «Kopier til» designverktøy, layout-, bilde- og presentasjonsprogrammer – i formatet hvert program tar imot, også gradienter
 • Eksport til ASE- og ACO-fargeprøver, Design Tokens (DTCG), SVG, CSS, GPL, SwiftUI og hex
 • Farger eksporteres i formatet de er lagret i – for eksempel som CMYK
-• Skriv ut paletter på A4: fargeflater i CIELab med navn og verdier
+• Skriv ut paletter (⌘P) på A4 – fargeflater i CIELab med navn og verdier – eller arkiver som PDF
 
 PALETTER OG ICLOUD
-Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser med iPhone og iPad via din egen, private iCloud.
+Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser med iPhone og iPad via din egen, private iCloud. Tilpass visningen til arbeidet ditt.
 
 SIRI OG SNARVEIER
 Lag palett fra verdiord, beskriv en farge, lag overgang, konverter farge og sjekk kontrast.
 
 ÅPENT OM METODENE
-Hver del av appen viser hvilke metoder den bygger på – OKLab, CSS Color 4, CIEDE2000, WCAG, LRV, Munsell, simulering av fargesyn og ICC – med kilde og forklaring.
+Hver del av appen viser metodene den bygger på, med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -434,13 +437,14 @@ PICK AND DRAG
 • Drag swatches into other apps and colour wells – and drag colours in from them
 • Your palettes at hand in a wide window
 • Photos, with dominant colours
-• Camera, including iPhone as a camera, with an on-screen light panel
+• Camera, including iPhone as a camera, with an on-screen light panel – the sampling point follows the pointer
+• Colours you pick are kept until you save them
 • OKLCH with ⌥⌘C, paste with ⌥⌘V, undo with ⌘Z
 
 EVERY COLOUR SPACE
 • Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK or any ICC profile
-• Out-of-gamut warnings – colours are gamut-mapped, never clipped
+• Out-of-gamut warnings – mapped, never clipped
 • Enter CMYK or RGB directly in a chosen ICC profile
 • Clean CMYK values: grey components move to black (UCR/GCR)
 • The colour field understands hex, CSS colours, Munsell notation and plain descriptions like “deep ocean blue”
@@ -451,42 +455,43 @@ COLOUR LIBRARIES AND ICC PROFILES
 • Use the profiles installed on your Mac, by folder
 • Import your own .icc and .icm profiles
 • All gathered in one place, synced to iPhone and iPad through iCloud Drive
-• Convert between profiles and compare rendering intents with ΔE2000
+• Convert between profiles with a chosen rendering intent
 
 GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • CSS gradients in oklab with an sRGB fallback – linear, radial or conic
 • Tone scales from 50 to 950
 • Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel
+• See the whole harmony in the chosen colour space or colour library, with the base colour marked
 
 ACCESSIBILITY AND COLOUR VISION
-• WCAG 2.2 contrast: AA and AAA, large text and graphics, and auto-fix that adjusts the colour until it passes
-• Surface contrast with LRV (light reflectance value) to BS 8300 and NS 11001 – for doors, walls, floors and signage
-• Contrast matrix and critique of the whole palette
-• See the palette with protan, deutan and tritan deficiencies and achromatopsia – and which colours become hard to tell apart
-• Camera with a colour vision filter: see your surroundings as they may appear with each deficiency
+• WCAG 2.2 contrast (AA and AAA), with auto-fix until the colour passes
+• Surface contrast with LRV (light reflectance value) to BS 8300 and NS 11001 – for buildings and interiors
+• Contrast matrix and critique of whole palettes
+• See palettes with protan, deutan and tritan deficiencies and achromatopsia – and which colours become hard to tell apart
+• Camera with a colour vision filter
 
 APPLE INTELLIGENCE ON YOUR MAC
 • From value words to a palette – “calm, warm, Nordic” – grounded in a knowledge base of more than a hundred colour concepts
-• Palettes are built on harmony principles – equal value or saturation, an accent colour, a light or dark background – with legible contrast
+• Palettes are built on harmony principles with legible contrast
 • Describe a colour and see it in Studio
 • Adjust with free text, name colours and get a critique of your palette
 Everything runs locally. Without Apple Intelligence, palettes are built straight from the knowledge base.
 
 COPY TO AND EXPORT
-• “Copy to” design tools, layout, photo and presentation apps – in the format each app accepts
+• “Copy to” design tools, layout, photo and presentation apps – in the format each app accepts, gradients too
 • Export to ASE, ACO, Design Tokens (DTCG), SVG, CSS, GPL, SwiftUI and hex
 • Colours are exported in the format they were saved in – for example as CMYK
-• Print the palette on A4: CIELab swatches with names and values
+• Print palettes (⌘P) on A4 – CIELab swatches with names and values – or save as PDF
 
 PALETTES AND ICLOUD
-Collect colours and gradients in palettes, save single colours and whole gradients, and sync with iPhone and iPad through your own private iCloud.
+Collect colours and gradients in palettes, save single colours and whole gradients, and sync with iPhone and iPad through your own private iCloud. Tailor the view to your work.
 
 SIRI AND SHORTCUTS
 Create a palette from value words, describe a colour, create a gradient, convert a colour and check contrast.
 
 OPEN ABOUT METHODS
-Every part of the app shows the methods it builds on – OKLab, CSS Color 4, CIEDE2000, WCAG, LRV, Munsell, colour vision simulation and ICC – with source and explanation.
+Every part of the app shows the methods it builds on, with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
