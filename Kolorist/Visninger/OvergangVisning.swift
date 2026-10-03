@@ -44,7 +44,7 @@ struct OvergangVisning: View {
                 }
             }
             KopierTilMeny(farger: toner.map { PalettFarge(farge: $0, opphav: .overgang) },
-                          navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"))
+                          navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"), tittel: "Kopier tonene til")
         } label: {
             Image(systemName: "plus.square")
                 .font(.body.weight(.semibold))
@@ -253,6 +253,9 @@ struct CSSGradientSeksjon: View {
                     kopiert = true
                     Task { try? await Task.sleep(for: .seconds(1.5)); kopiert = false }
                 }
+                GradientKopierTilMeny(gradient: Gradientkopi(farger: trinnvis ? toner : [start, slutt], form: form, vinkel: vinkel,
+                                                             trinnvis: trinnvis, navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())")),
+                                      tittel: "Kopier gradient til")
                 Spacer()
                 Menu("Mer") {
                     Button("Kopier bare moderne verdi") { Utklippstavle.kopierTekst(gradient.moderne) }

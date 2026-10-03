@@ -2555,6 +2555,16 @@
         }
       }
     },
+    "Kopier gradient til": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy gradient to"
+          }
+        }
+      }
+    },
     "Kopier hex": {
       "localizations": {
         "en": {
@@ -2581,6 +2591,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copy to"
+          }
+        }
+      }
+    },
+    "Kopier tonene til": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy tones to"
           }
         }
       }
@@ -4355,6 +4375,16 @@
         }
       }
     },
+    "Som form med gradientfyll (SVG)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a shape with gradient fill (SVG)"
+          }
+        }
+      }
+    },
     "Som former (SVG)": {
       "localizations": {
         "en": {
@@ -4371,6 +4401,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "As shape layer (PDF), plus hex for the colour picker"
+          }
+        }
+      }
+    },
+    "Som formlag eller bilde (PDF/PNG)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a shape layer or image (PDF/PNG)"
+          }
+        }
+      }
+    },
+    "Som gradient med Display P3-stopp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a gradient with Display P3 stops"
+          }
+        }
+      }
+    },
+    "Som gradient med OKLab og reserve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a gradient with OKLab and fallback"
           }
         }
       }
@@ -4401,6 +4461,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "As vector shapes (PDF), with colour space and ICC"
+          }
+        }
+      }
+    },
+    "Som vektorgradient (PDF) i Display P3": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a vector gradient (PDF) in Display P3"
           }
         }
       }

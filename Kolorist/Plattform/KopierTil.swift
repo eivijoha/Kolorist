@@ -65,9 +65,10 @@ enum Kopimål: String, CaseIterable, Identifiable {
 struct KopierTilMeny: View {
     let farger: [PalettFarge]
     var navn: String = ""
+    var tittel: LocalizedStringKey = "Kopier til"
 
     var body: some View {
-        Menu("Kopier til", systemImage: "arrow.up.doc.on.clipboard") {
+        Menu(tittel, systemImage: "arrow.up.doc.on.clipboard") {
             ForEach(Kopimål.allCases) { mål in
                 Button {
                     Utklippstavle.kopier(farger, navn: navn, til: mål)

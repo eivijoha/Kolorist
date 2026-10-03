@@ -298,14 +298,14 @@ struct Fargesirkelvisning: View {
             Canvas { ctx, _ in
                 let r = side / 2
                 if let trinn = sirkel.trinn {
-                    // Trinnvis sirkel (Munsell): ett felt per kulør, sentrert på kuløren. Feltene ligger kant i kant
-                    // (litt overlapp, som i den sammenhengende ringen) – fuger gir ujevne linjer på lavoppløste skjermer.
+                    // Trinnvis sirkel (Munsell): ett felt per kulør, sentrert på kuløren, med en smal fuge mellom
+                    // feltene som i Munsells fargekart.
                     let antallTrinn = Int((360 / trinn).rounded())
                     for i in 0..<antallTrinn {
                         let midt = Double(i) * trinn
                         var sti = Path()
-                        sti.addArc(center: senter, radius: r * 0.8, startAngle: .degrees(midt - trinn / 2 - 90),
-                                   endAngle: .degrees(midt + trinn / 2 - 89.5), clockwise: false)
+                        sti.addArc(center: senter, radius: r * 0.8, startAngle: .degrees(midt - trinn / 2 - 90 + 0.6),
+                                   endAngle: .degrees(midt + trinn / 2 - 90 - 0.6), clockwise: false)
                         ctx.stroke(sti, with: .color((ringfarge?(midt) ?? sirkel.ringfarge(vinkel: midt, grunn: grunnfarge)).swiftUI), lineWidth: r * 0.3)
                     }
                 } else {

@@ -32,6 +32,17 @@ enum Skjermbildemodus {
             try? PalettUtskrift.pdf(for: samlet).write(to: url)
             print("PDF:", url.path)
         }
+        // `-gradientkopi YES`: skriv gradienten i alle kopiformatene til tmp-mappen (test).
+        if UserDefaults.standard.bool(forKey: "gradientkopi") {
+            let g = Gradientkopi(farger: [Farge(hex: "#1B3A6B")!, Farge(hex: "#F2B84B")!], vinkel: 135, navn: "Test")
+            let tmp = FileManager.default.temporaryDirectory
+            try? Data(Gradientgrafikk.svg(g).utf8).write(to: tmp.appending(path: "gradient.svg"))
+            try? Gradientgrafikk.pdf(g).write(to: tmp.appending(path: "gradient.pdf"))
+            try? Gradientgrafikk.png(g)?.write(to: tmp.appending(path: "gradient.png"))
+            try? Data(Gradientgrafikk.swiftUI(g).utf8).write(to: tmp.appending(path: "gradient.swift.txt"))
+            var r = g; r.form = .radiell
+            try? Gradientgrafikk.pdf(r).write(to: tmp.appending(path: "gradient-radiell.pdf"))
+        }
         // `-bibliotekfil <sti>`: importer et fargebibliotek (til test i simulatoren, der dokumentvelgeren ikke virker).
         if let sti = UserDefaults.standard.string(forKey: "bibliotekfil") {
             _ = try? ProfilBibliotek.delt.importerBibliotek(fra: URL(fileURLWithPath: sti))
