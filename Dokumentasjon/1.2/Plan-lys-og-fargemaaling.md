@@ -84,6 +84,42 @@ i `Lokalt/`; kontrollert mot publiserte Lab-verdier, snitt ΔE00 1,1). Spektra i
 Feltene finnes ved at brukeren markerer de fire hjørnene (alternativt automatisk med Vision – rutenettet 6 × 4 er
 lett å finne), og bildet rettes ut før gjennomsnittet i midten av hvert felt leses.
 
+### 1.4 Referansekort og -formater: så fleksibelt som mulig
+
+Utgangspunktet er alltid **en fysisk, visuell referanse med tilhørende verdier**. Kolorist skal ta imot så mange
+formater og kortoppsett som mulig, og la brukeren bekrefte at verdiene stemmer med kortet før de brukes. Ingen
+referansedata følger med appen; brukeren importerer sine egne filer (samme prinsipp som fargebiblioteker).
+
+**Formater (gjenkjennes på innholdet, som ved import av fargebiblioteker):**
+
+| Format | Typisk kilde | Innhold |
+|---|---|---|
+| **CGATS.17 / IT8-tekst** (`.txt`, `.cie`, `.it8`, `.ti3`) | Leverandørers referansefiler, måleprogramvare, Argyll CMS | Lab, XYZ, spektral (`SPECTRAL_NM…`), feltnavn |
+| **CxF3** (Color Exchange Format, ISO 17972, XML) | Måleinstrumenter og profileringsprogramvare | Spektral, Lab, navn, ofte oppsett |
+| **CSV/TSV med overskrift** | Regneark, eksport fra programvare | Navn + Lab/XYZ eller spektrale kolonner |
+| **Tabell uten overskrift** (som ccStudio sin spektralfil) | Programvare for kamerakalibrering | Tolkes ut fra antall rader og kolonner (se under) |
+| **ASE / ACO / ACB** | Fargebiblioteker som allerede kan importeres | Lab/RGB/CMYK med navn – kan brukes som verdier for et kort |
+| **Argyll `.cht`** | Argyll CMS | Kortets oppsett og feltposisjoner (for gjenkjenning) |
+| **Ett felt med kjent verdi** | Gråkort (f.eks. 18 %), hvitt ark | Refleksjon eller Lab for nivå B |
+
+**Verdityper**, i prioritert rekkefølge: spektral refleksjon (best – fasit i ethvert lys) → XYZ → Lab (med lys og
+observatør; standard D50/2° når filen ikke sier noe) → Munsell-notasjon (regnes om) → RGB (bare med kjent fargerom,
+og med varsel om lavere verdi som referanse).
+
+**Tolkning av tabeller uten overskrift:** antall verdier per rad avgjør typen – 3 (Lab eller XYZ, brukeren velger),
+31 (400–700 nm/10), 36 (380–730 nm/10), 41 (380–780 nm/10), 81 (380–780 nm/5) eller annen lengde med oppgitt start
+og steg. Antall rader avgjør oppsettet (24 → 6 × 4, 48, 140 → 14 × 10, osv.).
+
+**Oppsett:** rader × kolonner, rekkefølge (radvis/kolonnevis, startpunkt, speilet/rotert), feltnavn og hvilke felt som
+er nøytrale (gråskala). Vanlige oppsett tilbys som forslag ut fra antall felt (beskrevet med antall og rutenett, uten
+merkenavn: «24 felt (6 × 4)», «140 felt (14 × 10)», «IT8.7/2 (ISO 12641)»); andre defineres i importen.
+
+**Bekreftelse før bruk:** importen viser en forhåndsvisning av kortet med fargene regnet ut fra verdiene (og navn ved
+trykk), så brukeren kan sammenligne med det fysiske kortet og rette rekkefølge eller orientering. Tolkningen lagres
+sammen med originalfilen, slik at alle enhetene leser den likt.
+
+**Karakteristikk i Metoder og kilder:** hvilke formater og verdityper som støttes, og hvordan spektra regnes om.
+
 ---
 
 ## 2. Metoder (dokumenteres i «Metoder og kilder»)
@@ -94,7 +130,7 @@ lett å finne), og bildet rettes ut før gjennomsnittet i midten av hvert felt l
 | Kromatisk tilpasning | CAT16 (og Bradford, som brukes i dag for D65↔D50) | Li mfl. 2017 |
 | Fargeutseende i lysmiljø | CAM16 med visningsforhold (hvitpunkt, adapterende luminans fra lux, omgivelse) | Li mfl. 2017; CIE 248:2022 |
 | Kamerakarakterisering | Linearisering fra den nøytrale raden + 3 × 3-matrise / rot-polynomisk regresjon av lav orden til XYZ | Finlayson mfl. 2015 |
-| Referansedata | CGATS.17-tekstformat (gjelder også større kort som IT8.7/2 / ISO 12641) | ANSI, ISO |
+| Referansedata | CGATS.17-tekstformat (også IT8.7/2 / ISO 12641), CxF3 (ISO 17972), CSV/TSV, Argyll `.cht` | ANSI, ISO, Argyll CMS |
 | Lux fra eksponering | Eksponeringsverdi fra blender, lukkertid og ISO, med referanse av kjent refleksjon | ISO 2720 (lysmåling) |
 | Nøyaktighet | ΔE2000 mot referansefeltene | CIE 142 |
 | Fra spekter til farge | Refleksjon × lysets spekter × CIE 1931 2°-observatøren (CIE 15) | CIE 15:2018 |
@@ -138,7 +174,7 @@ Tekstene i appen og markedsføringen beskriver hva man oppnår (se tekstreglene)
 | **0. Forarbeid** | Prototyp: les hvitbalanse, eksponering og (Pro)RAW på Burgund; mål stabilitet | Notat om hva kameraet faktisk gir |
 | **1. Fargevitenskap i FargeKjerne** | CAT16, CAM16 med visningsforhold, standardlys, lux-estimat, CGATS-leser, regresjon og linearisering | Testdekning mot publiserte testverdier |
 | **2. Kompensasjon i kameraet** | Nivå B (gråkort/hvitt), deretter A (automatisk); to verdier og lysforhold på plukkede farger | Utplukk med «Lys» |
-| **3. Referansekort** | Import av referanseverdier (CGATS), hjørnemarkering og utretting, karakterisering, presisjonsmodus, lux, nøyaktighetsrapport | Veiviser og rapport |
+| **3. Referansekort** | Import med formatgjenkjenning og forhåndsvisning (1.4), hjørnemarkering og utretting, karakterisering, presisjonsmodus, lux, nøyaktighetsrapport | Veiviser og rapport |
 | **4. Lysmiljøer** | Datamodell og synk, standardlys, lagre målt lys, «Se i lys», side om side | Lysmiljøer i Studio og paletter |
 | **5. Ferdigstilling** | Metoder og kilder, tekster, web 1.2, skjermbilder, App Store | 1.2 klar |
 
@@ -175,13 +211,16 @@ Rekkefølgen kan justeres: lysmiljøer med standardlys (fase 4) kan komme før r
 1. **Ny modul i pakken?** F.eks. `FargeMåling` (CAT16/CAM16, CGATS, regresjon, lysmiljø-beregninger) atskilt fra
    `FargeKjerne`, eller som del av den.
 2. **Kamerarørledningen:** dele `KameraFargeplukker` i opptak, måling (låsing, RAW, statistikk over felt) og plukking.
-3. **Datamodell og synk:**
+3. **Referansekort som generell modell** (i pakken): kort = oppsett (rutenett, rekkefølge, nøytrale felt) + felt med
+   verdi (spektrum | XYZ | Lab med lys/observatør) + kilde (fil og tolkning). Én import med formatgjenkjenning
+   (CGATS, CxF3, CSV/TSV, tabell uten overskrift, ASE/ACO/ACB, `.cht`), uavhengig av kamera og visning.
+4. **Datamodell og synk:**
    - `Lysmiljø` og `Kamerakarakterisering` som nye SwiftData-modeller (karakterisering per enhetsmodell og kamera –
      synkroniseres eller holdes lokalt?).
    - Lysforhold per plukket farge: lagres **i et eget felt på paletten** (slik gradienter fikk `gradientData`), ikke
      inne i `PalettFarge` – ellers fjerner 1.1 dem når en farge lagres på nytt fra en eldre enhet.
-4. **Hvor «Se i lys» bor:** én felles visningstransformasjon (som «Vis som») som Studio, paletter, harmonier og
+5. **Hvor «Se i lys» bor:** én felles visningstransformasjon (som «Vis som») som Studio, paletter, harmonier og
    utskrift bruker, i stedet for logikk spredt i hver visning.
-5. **Utskrift/PDF:** skal lysforhold og «sett i lysmiljø» kunne skrives ut (f.eks. side om side i CIELab)?
-6. **Ytelse:** CAM16 for mange farger og ringen i fargesirkelen – mellomlagring som for Munsell.
-7. **Personvern:** miniatyrbilder og eventuelle stedsnavn – hva lagres og synkroniseres.
+6. **Utskrift/PDF:** skal lysforhold og «sett i lysmiljø» kunne skrives ut (f.eks. side om side i CIELab)?
+7. **Ytelse:** CAM16 for mange farger og ringen i fargesirkelen – mellomlagring som for Munsell.
+8. **Personvern:** miniatyrbilder og eventuelle stedsnavn – hva lagres og synkroniseres.
