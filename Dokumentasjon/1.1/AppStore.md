@@ -280,6 +280,10 @@ colour,color,palette,picker,OKLCH,CMYK,ICC,Munsell,LRV,contrast,WCAG,gradient,ey
 
 ## 3b. Mac-versjonen (macOS) – norsk (bokmål)
 
+**Mac-versjonen slippes rett som 1.1** (1.0 for Mac ble trukket før publisering). Den er dermed første versjon på Mac,
+og App Store Connect viser ikke feltet «Nytt i denne versjonen» – bruk bare reklametekst, beskrivelse og nøkkelord under.
+«Nytt i denne versjonen» for Mac står igjen til en senere versjon.
+
 macOS har egen versjonsside i App Store Connect, med egen reklametekst, beskrivelse, nøkkelord, «Nytt i denne versjonen»
 og skjermbilder. Navn og undertittel er felles (App-informasjon), og iPad deler tekst med iPhone. Support- og
 markedsførings-URL er de samme som for iOS.
