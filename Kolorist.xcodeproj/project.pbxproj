@@ -209,7 +209,7 @@
 				CODE_SIGN_ENTITLEMENTS = Konfigurasjon/Kolorist.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Konfigurasjon/Kolorist-mac.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 7YT4MT7S7U;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -258,7 +258,7 @@
 				CODE_SIGN_ENTITLEMENTS = Konfigurasjon/Kolorist.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Konfigurasjon/Kolorist-mac.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 7YT4MT7S7U;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;

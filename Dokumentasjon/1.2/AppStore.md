@@ -1,15 +1,11 @@
-# App Store Connect og App Review – Kolorist 1.1
+# App Store Connect og App Review – Kolorist 1.2 (arbeidsutkast)
 
-*Sendt inn: tekstene står slik de ble lagt inn i App Store Connect for 1.1. Endringer til neste versjon samles i `Dokumentasjon/1.2/AppStore.md`.*
+Utgangspunktet er tekstene for 1.1 (`Dokumentasjon/1.1/AppStore.md`). Endringer som skal med til 1.2:
 
-Tekster klare til å lime inn for versjon 1.1. Én app-post med universelt kjøp for iPhone, iPad og Mac (samme bundle-ID
-`no.engenett.Kolorist`, plattformene iOS og macOS i samme post). Primærspråk: norsk (bokmål), i tillegg engelsk.
-Tegngrensene står i parentes, og alle tekstene er innenfor. Tekstene og skjermbildene for 1.0 ligger uendret i
-`Dokumentasjon/1.0/`.
-
-Nytt i 1.1 i forhold til 1.0-tekstene: «Nytt i denne versjonen» for iOS og macOS, Munsell, LRV, fargebiblioteker,
-palettkolonne, dra og slipp, plukkede farger, angre og tilpasning av paneler – og «colour» også i de engelske
-overskriftene.
+- [x] Beskrivelsen (iOS, nb/en): «sammenlign gjengivelseshensiktene med ΔE2000» → «undersøk fargeforskjell med ΔE2000»
+      / «compare rendering intents with ΔE2000» → «investigate colour difference with ΔE2000». (Nettsiden er allerede rettet.)
+- [ ] «Nytt i denne versjonen» for 1.2 – skrives når innholdet i 1.2 er klart. Mac får nå et eget «Nytt»-felt.
+- [ ] Skjermbilder – tas på nytt hvis grensesnittet endres.
 
 ---
 
@@ -108,7 +104,7 @@ FARGEBIBLIOTEKER OG ICC-PROFILER
 • Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene
 • Importer egne .icc- og .icm-profiler
 • Alt samles på ett sted og følger med til de andre enhetene dine via iCloud Drive
-• Konverter mellom profiler og sammenlign gjengivelseshensiktene med ΔE2000
+• Konverter mellom profiler, og undersøk fargeforskjell med ΔE2000
 
 OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
@@ -220,7 +216,7 @@ COLOUR LIBRARIES AND ICC PROFILES
 • Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names
 • Import your own .icc and .icm profiles
 • Everything is gathered in one place and follows you to your other devices through iCloud Drive
-• Convert between profiles and compare rendering intents with ΔE2000
+• Convert between profiles, and investigate colour difference with ΔE2000
 
 GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows

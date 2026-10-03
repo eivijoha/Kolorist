@@ -4,3 +4,6 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 .swiftpm/
+
+# Lokale filer som ikke skal i kodelageret (f.eks. rettighetsbelagte referansedata for IT8)
+Lokalt/

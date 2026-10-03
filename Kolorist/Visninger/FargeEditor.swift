@@ -854,7 +854,7 @@ struct VisOgsåMeny: View {
             HStack(spacing: 4) {
                 // Eksplisitte farger: menyetiketter tones ellers i aksentfarge, og «sekundær» av
                 // aksenten ga bare 1,9:1 kontrast.
-                Text("Vis også:").foregroundStyle(Color.sekundærTekst).fixedSize()
+                Text("Vis som:").foregroundStyle(Color.sekundærTekst).fixedSize()
                 // Lange profilnavn kortes ned i stedet for å presse panelet utenfor skjermen.
                 Text(valgtNavn).lineLimit(1).truncationMode(.tail).foregroundStyle(Color.accentColor)
                 Image(systemName: "chevron.down").font(.caption.weight(.semibold)).foregroundStyle(Color.accentColor)

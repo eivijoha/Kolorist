@@ -13,7 +13,18 @@ struct HarmoniSeksjon: View {
     /// Melder harmoniens farger og grunnfargens plass, så Studio kan vise dem i fargeflaten øverst.
     var vis: ([Farge], Int?) -> Void = { _, _ in }
 
-    @Environment(\.modelContext) private var kontekst
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var bredde
+    #endif
+
+    /// iPhone: 220 pt. iPad (vanlig bredde) og Mac: 320 pt.
+    private var sirkelhøyde: CGFloat {
+        #if os(iOS)
+        bredde == .regular ? 320 : 220
+        #else
+        320
+        #endif
+    }
     @AppStorage("harmoni") private var harmoni: Harmoni = .splittKomplementær
     @AppStorage("harmoniAntall") private var antall = 3
     @AppStorage("harmoniVinkel") private var vinkel = 30.0
@@ -197,24 +208,6 @@ struct HarmoniSeksjon: View {
                 ForEach(Fargesirkel.allCases) { Text($0.navn).tag($0) }
             }
 
-            // Fargeprøvene over fargesirkelen, så resultatet sees før detaljene.
-            HStack(spacing: 4) {
-                ForEach(Array(farger.enumerated()), id: \.offset) { i, farge in
-                    FargeRute(farge: farge, visTekst: false, hjørne: 6,
-                              lagre: { lagreEnkeltfarger([PalettFarge(farge: $0)], i: kontekst) },
-                              leggIPalett: { lagre([PalettFarge(farge: $0)], "") },
-                              valgBoble: true)
-                        .frame(height: 44)
-                        .overlay {
-                            // Rammen markerer harmoniens grunnfarge, også når metning/lyshet er justert.
-                            if råfarger.indices.contains(i), råfarger[i] == grunnfarge {
-                                RoundedRectangle(cornerRadius: 6).strokeBorder(.primary, lineWidth: 2)
-                            }
-                        }
-                        .onTapGesture { velg(farge) }
-                }
-            }
-
             // Ringen og midten tegnes med gjeldende metning og lyshet, så gliderne under virker direkte på sirkelen.
             Fargesirkelvisning(grunnfarge: grunnfarge, farger: farger, sirkel: sirkel, vinkler: vinkler, grunnIndeks: grunnIndeks,
                                velg: velg, ringfarge: { ringfarge(vinkel: $0) }, midtfarge: juster(grunnfarge).gamutKartlagt(til: gamut),
@@ -227,7 +220,8 @@ struct HarmoniSeksjon: View {
                         velg(f)
                     }
                 }
-                .frame(height: 220)
+                // Fargene vises i fargeflaten øverst i Studio; sirkelen får plassen. Større på iPad og Mac.
+                .frame(height: sirkelhøyde)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
             #if SIRKELEKSPORT

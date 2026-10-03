@@ -35,7 +35,7 @@ struct MineProfilerArk: View {
             List {
                 if bibliotek.importerte.isEmpty && bibliotek.fargebiblioteker.isEmpty {
                     ContentUnavailableView("Ingen egne fargerom", systemImage: "doc.badge.plus",
-                                           description: Text("Importer ICC-profiler eller fargebiblioteker nedenfor. De vises under «Vis også» i Studio."))
+                                           description: Text("Importer ICC-profiler eller fargebiblioteker nedenfor. De vises under «Vis som» i Studio."))
                 }
                 if !bibliotek.importerte.isEmpty {
                     Section("ICC-profiler") {
@@ -60,7 +60,7 @@ struct MineProfilerArk: View {
                                 #endif
                         }
                         // Forklaring som rad, ikke fotnote: fotnoter i en liste kortes av på Mac.
-                        Text("Velges under «Vis også» i Studio. Da låses farger, toner og harmonier til bibliotekets toner, og fargeflaten viser tonenavnene.")
+                        Text("Velges under «Vis som» i Studio. Da låses farger, toner og harmonier til bibliotekets toner, og fargeflaten viser tonenavnene.")
                             .forklaring()
                     } header: {
                         Text("Fargebiblioteker")
