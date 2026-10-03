@@ -63,7 +63,8 @@ struct HarmoniFlate: View {
             let oppsett = stablet ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
             oppsett {
                 ForEach(Array(motparter.enumerated()), id: \.offset) { i, m in
-                    flate(m, original: farger[i], erGrunn: i == grunnIndeks, visTekst: visTekst, kompakt: kompakt)
+                    flate(m, original: farger[i], erGrunn: i == grunnIndeks, visTekst: visTekst, kompakt: kompakt,
+                          hjørner: hjørner(indeks: i, antall: motparter.count))
                 }
             }
         }
@@ -82,14 +83,25 @@ struct HarmoniFlate: View {
         .accessibilityLabel(String(localized: "Harmonien i \(romnavn)"))
     }
 
-    private func flate(_ m: Motpart, original: Farge, erGrunn: Bool, visTekst: Bool, kompakt: Bool) -> some View {
+    /// Avrundede hjørner for flaten på plass `indeks`: flatene ligger i en form med avrundede øvre hjørner (20 pt),
+    /// så rammen rundt grunnfargen må følge de samme hjørnene for ikke å bli kuttet.
+    private func hjørner(indeks: Int, antall: Int) -> (venstre: CGFloat, høyre: CGFloat) {
+        let r: CGFloat = 20
+        if stablet { return indeks == 0 ? (r, r) : (0, 0) }
+        return (indeks == 0 ? r : 0, indeks == antall - 1 ? r : 0)
+    }
+
+    private func flate(_ m: Motpart, original: Farge, erGrunn: Bool, visTekst: Bool, kompakt: Bool,
+                       hjørner: (venstre: CGFloat, høyre: CGFloat)) -> some View {
         let tekstfarge = m.farge.farge.lesbarTekstfarge.swiftUI
         return FargeRute(farge: m.farge.farge, visTekst: false, hjørne: 0, visMerke: false,
                          lagre: { _ in lagre(m.farge) }, leggIPalett: { _ in leggIPalett(m.farge) }, palettFarge: m.farge,
                          ekstraMeny: AnyView(Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(m.tekst) }))
             .overlay {
                 if erGrunn {
-                    Rectangle().strokeBorder(tekstfarge, lineWidth: 3).allowsHitTesting(false)
+                    UnevenRoundedRectangle(topLeadingRadius: hjørner.venstre, topTrailingRadius: hjørner.høyre, style: .continuous)
+                        .strokeBorder(tekstfarge, lineWidth: 3)
+                        .allowsHitTesting(false)
                 }
             }
             .overlay(alignment: .bottomLeading) {
