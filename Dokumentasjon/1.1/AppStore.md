@@ -583,7 +583,7 @@ Contact: eivind.johansen@ntnu.no
 - [ ] Ny versjon opprettet i App Store Connect for både iOS og macOS (1.1), med «Nytt i denne versjonen» fra over.
 - [ ] Nøkkelord og beskrivelse oppdatert (nye: Munsell, LRV, fargebiblioteker).
 - [x] Skjermbilder for iPhone, iPad og Mac på norsk og engelsk (se 3d).
-- [ ] **CloudKit-skjemaet må rulles ut til produksjon**: 1.1 har et nytt felt på paletter (`gradientData`, gradienter i paletter). Kjør appen i Debug mot iCloud så feltet opprettes i utviklingsskjemaet, og velg så CloudKit Console › Deploy Schema Changes. Ellers synkroniserer ikke gradientene i TestFlight- og App Store-bygg. Eldre versjoner (1.0) ignorerer feltet.
+- [x] CloudKit-skjemaet er rullet ut til produksjon (3.10.2026): nytt felt `CD_gradientData` på paletter, og Core Datas `…_ckAsset`- og `CD_moveReceipt`-felt (lagt inn med `initializeCloudKitSchema`, som også dekker store paletter som synkroniseres som asset). Eldre versjoner (1.0) ignorerer feltene.
 - [ ] Notes for App Review byttet til teksten over.
 - [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) med begrunnelse `CA92.1` for `UserDefaults` – finnes fortsatt ikke i prosjektet.
 - [ ] `ITSAppUsesNonExemptEncryption = NO` – står fortsatt ikke i Info.plist eller byggeinnstillingene.
