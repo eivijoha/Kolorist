@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CEC03C9B307174DC00640659 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CEC03C9A307174DC00640659 /* PrivacyInfo.xcprivacy */; };
 		FA0000000000000000000011 /* FargeKjerne in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000021 /* FargeKjerne */; };
 		FA0000000000000000000012 /* FargeKI in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000022 /* FargeKI */; };
 		FA0000000000000000000013 /* App-ikon.icon in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000033 /* App-ikon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CEC03C9A307174DC00640659 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Kolorist/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		FA0000000000000000000031 /* Kolorist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kolorist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA0000000000000000000032 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA0000000000000000000033 /* App-ikon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "App-ikon.icon"; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 		FA0000000000000000000061 = {
 			isa = PBXGroup;
 			children = (
+				CEC03C9A307174DC00640659 /* PrivacyInfo.xcprivacy */,
 				FA0000000000000000000033 /* App-ikon.icon */,
 				FA0000000000000000000041 /* Kolorist */,
 				FA0000000000000000000063 /* Konfigurasjon */,
@@ -135,6 +138,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEC03C9B307174DC00640659 /* PrivacyInfo.xcprivacy in Resources */,
 				FA0000000000000000000013 /* App-ikon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,7 +213,7 @@
 				CODE_SIGN_ENTITLEMENTS = Konfigurasjon/Kolorist.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Konfigurasjon/Kolorist-mac.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 7YT4MT7S7U;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -220,6 +224,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Konfigurasjon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kolorist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kolorist bruker kameraet til å plukke farger fra omgivelsene dine og til å vise dem slik de ser ut med fargesynsavvik.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Eivind Arnstein Johansen";
@@ -233,7 +238,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = no.engenett.Kolorist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -257,7 +262,7 @@
 				CODE_SIGN_ENTITLEMENTS = Konfigurasjon/Kolorist.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Konfigurasjon/Kolorist-mac.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 7YT4MT7S7U;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -268,6 +273,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Konfigurasjon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kolorist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kolorist bruker kameraet til å plukke farger fra omgivelsene dine og til å vise dem slik de ser ut med fargesynsavvik.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Eivind Arnstein Johansen";
@@ -281,7 +287,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = no.engenett.Kolorist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
