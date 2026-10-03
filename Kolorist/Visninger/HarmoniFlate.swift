@@ -58,10 +58,12 @@ struct HarmoniFlate: View {
             let flatebredde = stablet ? geo.size.width : geo.size.width / CGFloat(antall)
             let flatehøyde = stablet ? geo.size.height / CGFloat(antall) : geo.size.height
             let visTekst = flatebredde >= 58 && flatehøyde >= 44
+            // Smale flater (iPhone med mange farger): bare stjerne og varselsymbol, ikke ordene ved siden av.
+            let kompakt = flatebredde < 110
             let oppsett = stablet ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
             oppsett {
                 ForEach(Array(motparter.enumerated()), id: \.offset) { i, m in
-                    flate(m, original: farger[i], erGrunn: i == grunnIndeks, visTekst: visTekst)
+                    flate(m, original: farger[i], erGrunn: i == grunnIndeks, visTekst: visTekst, kompakt: kompakt)
                 }
             }
         }
@@ -80,7 +82,7 @@ struct HarmoniFlate: View {
         .accessibilityLabel(String(localized: "Harmonien i \(romnavn)"))
     }
 
-    private func flate(_ m: Motpart, original: Farge, erGrunn: Bool, visTekst: Bool) -> some View {
+    private func flate(_ m: Motpart, original: Farge, erGrunn: Bool, visTekst: Bool, kompakt: Bool) -> some View {
         let tekstfarge = m.farge.farge.lesbarTekstfarge.swiftUI
         return FargeRute(farge: m.farge.farge, visTekst: false, hjørne: 0, visMerke: false,
                          lagre: { _ in lagre(m.farge) }, leggIPalett: { _ in leggIPalett(m.farge) }, palettFarge: m.farge,
@@ -93,7 +95,7 @@ struct HarmoniFlate: View {
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 2) {
                     if erGrunn {
-                        if visTekst {
+                        if visTekst && !kompakt {
                             Label("Grunnfarge", systemImage: "star.fill").font(.caption2.weight(.bold))
                         } else {
                             Image(systemName: "star.fill").font(.caption2.weight(.bold))
@@ -102,7 +104,11 @@ struct HarmoniFlate: View {
                     if visTekst {
                         Text(m.tekst).font(.caption2.monospaced()).lineLimit(3).minimumScaleFactor(0.6)
                         if let merknad = m.merknad {
-                            Label(merknad, systemImage: "exclamationmark.triangle.fill").font(.caption2).lineLimit(1).minimumScaleFactor(0.7)
+                            if kompakt {
+                                Image(systemName: "exclamationmark.triangle.fill").font(.caption2)
+                            } else {
+                                Label(merknad, systemImage: "exclamationmark.triangle.fill").font(.caption2).lineLimit(1).minimumScaleFactor(0.7)
+                            }
                         }
                     }
                 }
