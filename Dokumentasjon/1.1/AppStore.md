@@ -106,7 +106,7 @@ FARGEBIBLIOTEKER OG ICC-PROFILER
 • Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene
 • Importer egne .icc- og .icm-profiler
 • Alt samles på ett sted og følger med til de andre enhetene dine via iCloud Drive
-• Konverter mellom profiler og sammenlign gjengivelseshensiktene med ΔE2000
+• Konverter mellom profiler, og undersøk fargeforskjell med ΔE2000
 
 OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
@@ -218,7 +218,7 @@ COLOUR LIBRARIES AND ICC PROFILES
 • Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names
 • Import your own .icc and .icm profiles
 • Everything is gathered in one place and follows you to your other devices through iCloud Drive
-• Convert between profiles and compare rendering intents with ΔE2000
+• Convert between profiles, and investigate colour difference with ΔE2000
 
 GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
