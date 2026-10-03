@@ -11,7 +11,7 @@ struct HarmoniFlate: View {
     let profil: ICCProfil
     var fargebibliotek: Fargebibliotek? = nil
     var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
-    /// Navnet på fargerommet slik det vises i «Vis også».
+    /// Navnet på fargerommet slik det vises i «Vis også» (står i menyen under flaten; her bare for VoiceOver).
     let romnavn: String
     /// Flatene under hverandre (bred visning) i stedet for side ved side.
     var stablet = false
@@ -67,16 +67,6 @@ struct HarmoniFlate: View {
                           hjørner: hjørner(indeks: i, antall: motparter.count))
                 }
             }
-        }
-        .overlay(alignment: .topLeading) {
-            // Fargerommet flatene er vist i – én gang for hele harmonien.
-            Text(romnavn)
-                .font(.caption2.weight(.semibold))
-                .lineLimit(1)
-                .padding(.horizontal, 8).padding(.vertical, 3)
-                .background(.regularMaterial, in: Capsule())
-                .padding(8)
-                .allowsHitTesting(false)
         }
         .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
         .accessibilityElement(children: .contain)

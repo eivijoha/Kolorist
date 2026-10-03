@@ -2093,12 +2093,12 @@
         }
       }
     },
-    "Importer ICC-profiler eller fargebiblioteker nedenfor. De vises under «Vis også» i Studio.": {
+    "Importer ICC-profiler eller fargebiblioteker nedenfor. De vises under «Vis som» i Studio.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Import ICC profiles or colour libraries below. They appear under “Also show” in Studio."
+            "value": "Import ICC profiles or colour libraries below. They appear under “Show as” in Studio."
           }
         }
       }
@@ -5169,12 +5169,12 @@
         }
       }
     },
-    "Velges under «Vis også» i Studio. Da låses farger, toner og harmonier til bibliotekets toner, og fargeflaten viser tonenavnene.": {
+    "Velges under «Vis som» i Studio. Da låses farger, toner og harmonier til bibliotekets toner, og fargeflaten viser tonenavnene.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chosen under “Also show” in Studio. Colours, tones and harmonies are then locked to the library’s tones, and the colour surface shows the tone names."
+            "value": "Chosen under “Show as” in Studio. Colours, tones and harmonies are then locked to the library’s tones, and the colour surface shows the tone names."
           }
         }
       }
@@ -5289,16 +5289,6 @@
         }
       }
     },
-    "Vis også:": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Also show:"
-          }
-        }
-      }
-    },
     "Vis paletter": {
       "localizations": {
         "en": {
@@ -5315,6 +5305,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show the palette column"
+          }
+        }
+      }
+    },
+    "Vis som:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show as:"
           }
         }
       }

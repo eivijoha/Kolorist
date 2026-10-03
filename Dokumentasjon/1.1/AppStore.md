@@ -524,9 +524,8 @@ plukkede farger. Alle er tatt fra et Debug-bygg med `-skjermbilde YES` (se `Kolo
 eget lager i minnet med eksempelpaletter på appens språk og standardoppsett for paneler, så egne paletter og
 innstillinger ikke kommer med. Overgang er tatt med `-overgangFra "#1B3A6B" -overgangTil "#F2B84B" -overgangAntall 7`,
 Mac-bildene i tillegg med `-testmaalinger YES`.
-Harmoni-bildene (2-harmoni) er tatt fra grenen `versjon-1.2`, der rammen rundt grunnfargen følger fargeflatens
-avrundede hjørner; i build 4 av 1.1 kuttes rammen litt i hjørnet. Mac-bildene er tatt med `-kunSRGB NO`, så
-grunnfargen er den samme som på iPhone og iPad.
+Studio- og Harmoni-bildene er tatt på nytt for build 5 («Vis som», harmonien i fargeflaten, større fargesirkel
+på iPad og Mac). Mac-bildene er tatt med `-kunSRGB NO`, så grunnfargen er den samme som på iPhone og iPad.
 
 ## 4. App Review Information
 
@@ -547,14 +546,14 @@ NO ACCOUNT NEEDED
 All features work without signing in. There is no account, no server of our own, no analytics, no ads and no in-app purchases. Palettes sync through the user's private iCloud database (CloudKit) when the device is signed in to iCloud; without iCloud everything is stored on device.
 
 WHERE TO FIND THE MAIN FEATURES
-• Studio (first tab): edit the active colour in OKLCH, Lab, Munsell, RGB, CMYK etc. "Also show" picks a second colour space, an ICC profile or a colour library shown side by side. Colour | Tones | Harmony switches between editing, tone scales and harmonies.
+• Studio (first tab): edit the active colour in OKLCH, Lab, Munsell, RGB, CMYK etc. "Show as" picks a second colour space, an ICC profile or a colour library shown side by side. Colour | Tones | Harmony switches between editing, tone scales and harmonies.
 • Palettes: tap + to create a palette, either empty or "New palette from value words (AI)". Tap a colour to select it; tap a palette's title to open it. Touch and hold (right-click on Mac) a palette for "Critique the palette" and "Contrast matrix", or a colour for "Copy to" (Figma, Adobe apps, Pages/Keynote/Numbers, CSS, SwiftUI) and other actions.
 • Gradient: perceptual gradients between two colours, with lighter/darker rows and CSS export.
 • Pick: camera, photos and (on Mac) a screen eyedropper. Picked colours appear at the top of Palettes, marked "Not saved".
 • Assess: Contrast (WCAG text contrast and LRV surface contrast), Difference (ΔE2000) and Colour vision (simulation of colour vision deficiencies). The camera button next to each deficiency opens the camera with that filter.
 
 NEW IN 1.1 – HOW TO TEST
-• Colour libraries: export any palette as ASE (open a palette › Export › ASE), then import that file under Studio › Also show › My colour spaces … › Import. Choose the library under "Also show" to see the nearest named tone.
+• Colour libraries: export any palette as ASE (open a palette › Export › ASE), then import that file under Studio › Show as › My colour spaces … › Import. Choose the library under "Show as" to see the nearest named tone.
 • Munsell: Studio › Colour model › Munsell.
 • LRV: Assess › Contrast › Surfaces (LRV).
 • Palette column: on a 13-inch iPad in landscape, or on a Mac with a window at least 1300 points wide. Drag a colour from the column onto From or To in Gradient.
@@ -587,7 +586,7 @@ Contact: eivind.johansen@ntnu.no
 ## 5. Før du sender inn
 
 - [ ] Nettsiden for 1.1 (`web/1.1/`) er publisert på kolorist.no.
-- [x] `MARKETING_VERSION` er `1.1`. `CURRENT_PROJECT_VERSION` (nå `3`) økes for hver opplasting.
+- [x] `MARKETING_VERSION` er `1.1`. `CURRENT_PROJECT_VERSION` (nå `5`) økes for hver opplasting.
 - [ ] Ny versjon opprettet i App Store Connect for både iOS og macOS (1.1), med «Nytt i denne versjonen» fra over.
 - [ ] Nøkkelord og beskrivelse oppdatert (nye: Munsell, LRV, fargebiblioteker).
 - [x] Skjermbilder for iPhone, iPad og Mac på norsk og engelsk (se 3d).
