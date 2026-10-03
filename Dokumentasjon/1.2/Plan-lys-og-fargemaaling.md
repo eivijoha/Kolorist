@@ -47,6 +47,12 @@ Et **lysmiljø** beskriver lyset et sted: «Stua om kvelden», «Kontor, nordvin
 
 Kortet er refleksivt **IT8.7/2 (ISO 12641)** med referansefil i **CGATS**-format (Lab eller XYZ per felt, D50/2°).
 
+**Rettigheter:** referansefilen (måleverdier per batch) tilhører leverandøren og kan ikke distribueres. Kolorist
+følger samme prinsipp som for fargebiblioteker: **ingen referansedata følger med appen eller ligger i kodelageret** –
+brukeren importerer sin egen fil. Koden kjenner bare formatet (CGATS.17) og kortets oppsett (felt A01–L22 og gråskala
+GS00–GS23, verdier i Lab/XYZ for D50/2°). Enhetstester bruker **syntetiske** filer med samme struktur og kjent fasit.
+Den ekte filen brukes bare lokalt under testing på enhet (mappen `Lokalt/`, som er utelatt fra git).
+
 1. **Importere referansefilen** under «Mine fargerom» (samme flyt som ICC-profiler og fargebiblioteker; formatet
    gjenkjennes på innholdet).
 2. **Karakterisere kameraet én gang:** fotografer kortet i jevnt, godt lys. Kolorist finner feltene, sammenligner med
