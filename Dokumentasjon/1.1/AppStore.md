@@ -524,6 +524,9 @@ plukkede farger. Alle er tatt fra et Debug-bygg med `-skjermbilde YES` (se `Kolo
 eget lager i minnet med eksempelpaletter på appens språk og standardoppsett for paneler, så egne paletter og
 innstillinger ikke kommer med. Overgang er tatt med `-overgangFra "#1B3A6B" -overgangTil "#F2B84B" -overgangAntall 7`,
 Mac-bildene i tillegg med `-testmaalinger YES`.
+Harmoni-bildene (2-harmoni) er tatt fra grenen `versjon-1.2`, der rammen rundt grunnfargen følger fargeflatens
+avrundede hjørner; i build 4 av 1.1 kuttes rammen litt i hjørnet. Mac-bildene er tatt med `-kunSRGB NO`, så
+grunnfargen er den samme som på iPhone og iPad.
 
 ## 4. App Review Information
 
