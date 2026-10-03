@@ -252,6 +252,8 @@ extension FargeEditor {
             case .fargemodell: modellpanel(farge)
             case .verdier: verdipanel(farge)
             case .fargestyring: ICCSeksjon(farge: $arbeidsbenk.aktivFarge, profilID: $visOgsåID, visMineFargerom: $visMineFargerom)
+            case .lys:
+                SeILysPanel(farge: farge) { lagreNavn = ""; lagreFarger = [PalettFarge(farge: $0, opphav: .manuell)] }
             default: EmptyView()
             }
         }

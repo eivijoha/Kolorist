@@ -1,0 +1,358 @@
+{
+  "sourceLanguage": "nb",
+  "strings": {
+    "Dagslys": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daylight"
+          }
+        }
+      }
+    },
+    "Dagslys %lld K": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daylight %lld K"
+          }
+        }
+      }
+    },
+    "Dagslys D50": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daylight D50"
+          }
+        }
+      }
+    },
+    "Dagslys D65": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daylight D65"
+          }
+        }
+      }
+    },
+    "Eget hvitpunkt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom white point"
+          }
+        }
+      }
+    },
+    "Fant ingen referanseverdier i filen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No reference values found in the file."
+          }
+        }
+      }
+    },
+    "Filen har ingen felt med verdier.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file has no patches with values."
+          }
+        }
+      }
+    },
+    "Glødelampe (A)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incandescent (A)"
+          }
+        }
+      }
+    },
+    "Glødelys %lld K": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incandescent %lld K"
+          }
+        }
+      }
+    },
+    "Glødelys eller halogen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incandescent or halogen"
+          }
+        }
+      }
+    },
+    "Gråkort %lld %%": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grey card %lld %%"
+          }
+        }
+      }
+    },
+    "LED, RGB (RGB1)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, RGB (RGB1)"
+          }
+        }
+      }
+    },
+    "LED, blandet (BH1)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, hybrid (BH1)"
+          }
+        }
+      }
+    },
+    "LED, fiolett-pumpet (V1)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, violet-pumped (V1)"
+          }
+        }
+      }
+    },
+    "LED, fiolett-pumpet (V2)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, violet-pumped (V2)"
+          }
+        }
+      }
+    },
+    "LED, kaldhvit 5000 K (B4)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, cool white 5000 K (B4)"
+          }
+        }
+      }
+    },
+    "LED, kaldhvit 6500 K (B5)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, cool white 6500 K (B5)"
+          }
+        }
+      }
+    },
+    "LED, nøytral 4000 K (B3)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, neutral 4000 K (B3)"
+          }
+        }
+      }
+    },
+    "LED, varmhvit 2700 K (B1)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, warm white 2700 K (B1)"
+          }
+        }
+      }
+    },
+    "LED, varmhvit 3000 K (B2)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LED, warm white 3000 K (B2)"
+          }
+        }
+      }
+    },
+    "Levende lys": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Candlelight"
+          }
+        }
+      }
+    },
+    "Lys %lld K": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light %lld K"
+          }
+        }
+      }
+    },
+    "Lys med grønnstikk (lysrør eller billig LED)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light with a green cast (fluorescent or low-quality LED)"
+          }
+        }
+      }
+    },
+    "Lys med rødlilla stikk": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light with a magenta cast"
+          }
+        }
+      }
+    },
+    "Lysrør, bredbånd (FL7)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fluorescent, broadband (FL7)"
+          }
+        }
+      }
+    },
+    "Lysrør, kaldhvitt (FL2)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fluorescent, cool white (FL2)"
+          }
+        }
+      }
+    },
+    "Lysrør, trebånd (FL11)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fluorescent, triband (FL11)"
+          }
+        }
+      }
+    },
+    "Målt spekter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured spectrum"
+          }
+        }
+      }
+    },
+    "Nøytralt kunstlys": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neutral artificial light"
+          }
+        }
+      }
+    },
+    "Overskyet eller skygge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overcast or shade"
+          }
+        }
+      }
+    },
+    "Ukjent lys": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown light"
+          }
+        }
+      }
+    },
+    "Varmhvitt LED- eller sparelys": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm white LED or compact fluorescent"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

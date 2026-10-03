@@ -1,6 +1,7 @@
 @preconcurrency import AVFoundation
 import CoreImage
 import FargeKjerne
+import FargeMaaling
 import SwiftUI
 
 /// Leser fargen i et valgt punkt i kamerabildet fortløpende (iPhone, iPad og Mac via
@@ -8,10 +9,24 @@ import SwiftUI
 ///
 /// Fargen er et gjennomsnitt av et lite felt for å dempe støy. Kamerabufferens
 /// fargerom (sRGB eller Display P3) leses fra bufferens metadata.
-/// NB: automatisk hvitbalanse påvirker resultatet – lås av hvitbalanse er planlagt.
+/// Automatisk hvitbalanse påvirker resultatet. Med lyskompensasjon låses hvitbalansen (iPhone/iPad) til dagslys,
+/// og Kolorist kompenserer selv for lyset (`Lyskompensasjon`).
 @Observable
 final class KameraFargeplukker {
+    /// Fargen i målpunktet, kompensert for lyset når kompensasjon er slått på.
     private(set) var gjeldende: Farge?
+    /// Fargen slik kameraet så den.
+    private(set) var rå: Farge?
+    /// Kompensasjon for lyset (nil = fargene slik kameraet ser dem).
+    private(set) var kompensasjon: Lyskompensasjon?
+    /// Neste trykk i bildet registrerer et gråkort i stedet for å fange en farge.
+    private(set) var venterPåGråkort = false
+    @ObservationIgnored private var gråkortRefleksjon = 0.18
+    /// Lyset slik kameraet anslår det: fra hvitbalansen (før låsing) og eksponeringen, eller fra et kort.
+    private(set) var lysmåling: Lysmåling?
+    @ObservationIgnored private var sistLysmåling = Date.distantPast
+    /// Kalles når et stillbilde (for referansekortet) er tatt.
+    @ObservationIgnored private var vedStillbilde: ((CGImage) -> Void)?
     private(set) var tilgangNektet = false
     /// Markørens plassering i forhåndsvisningen (SwiftUI-punkter); nil = midten.
     private(set) var markør: CGPoint?
@@ -68,9 +83,12 @@ final class KameraFargeplukker {
         }
         if !erKonfigurert { konfigurer() }
         leser.vedFarge = { [weak self] farge, erFangst in
+            Task { @MainActor in self?.mottatt(farge, erFangst: erFangst) }
+        }
+        leser.vedStillbilde = { [weak self] bilde in
             Task { @MainActor in
-                self?.gjeldende = farge
-                if erFangst { self?.vedFangst?(farge) }
+                self?.vedStillbilde?(bilde)
+                self?.vedStillbilde = nil
             }
         }
         leser.vedFiltrertBilde = { [weak self] bilde in
@@ -112,6 +130,152 @@ final class KameraFargeplukker {
         }
         lyktPå = på
     }
+
+    // MARK: Lyskompensasjon
+
+    private func mottatt(_ farge: Farge, erFangst: Bool) {
+        rå = farge
+        if erFangst && venterPåGråkort {
+            registrerGråkort(farge)
+            return
+        }
+        gjeldende = kompensasjon?.kompensert(farge) ?? farge
+        if erFangst { vedFangst?(gjeldende ?? farge) }
+        if kompensasjon == nil, Date.now.timeIntervalSince(sistLysmåling) > 1 {
+            sistLysmåling = .now
+            lysmåling = målLysFraKamera()
+        }
+    }
+
+    /// Kompenserer for en valgt lyskilde, eller for lyset kameraet måler nå (`nil`).
+    func kompenser(for lys: Lyskilde?) {
+        venterPåGråkort = false
+        #if os(iOS)
+        let målt = lys ?? målLysFraKamera().map { Lyskilde.hvitpunkt(x: Kolorimetri.xy(kelvin: $0.kelvin, duv: $0.duv).x,
+                                                                     y: Kolorimetri.xy(kelvin: $0.kelvin, duv: $0.duv).y) }
+        guard let målt else { return }
+        låsHvitbalanseTilDagslys()
+        kompensasjon = .hvitpunkt(målt)
+        if let t = målt.fargetemperatur {
+            lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: lysmåling?.lux, metode: .kamera)
+        }
+        #endif
+    }
+
+    /// Neste trykk i bildet er på et grått eller hvitt kort med kjent refleksjon.
+    func ventPåGråkort(refleksjon: Double) {
+        gråkortRefleksjon = refleksjon
+        venterPåGråkort = true
+        #if os(iOS)
+        låsHvitbalanseTilDagslys()
+        #endif
+    }
+
+    private func registrerGråkort(_ målt: Farge) {
+        venterPåGråkort = false
+        låsEksponering()
+        let komp = Lyskompensasjon.gråkort(målt: målt, refleksjon: gråkortRefleksjon)
+        kompensasjon = komp
+        if let t = komp.fargetemperatur {
+            lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: luxFraKort(målt, refleksjon: gråkortRefleksjon),
+                                  metode: .gråkort)
+        }
+        gjeldende = komp.kompensert(målt)
+    }
+
+    /// Bruker en karakterisering fra et referansekort i samme lys.
+    func bruk(_ karakterisering: Kamerakarakterisering, måling: Lysmåling?) {
+        venterPåGråkort = false
+        kompensasjon = .referansekort(karakterisering)
+        if let måling { lysmåling = måling }
+    }
+
+    func slåAvKompensasjon() {
+        kompensasjon = nil
+        venterPåGråkort = false
+        låsOpp()
+    }
+
+    /// Låser hvitbalanse og eksponering og tar et stillbilde av hele bildet (for referansekortet).
+    func taStillbilde(_ ferdig: @escaping (CGImage) -> Void) {
+        #if os(iOS)
+        låsHvitbalanseTilDagslys()
+        #endif
+        låsEksponering()
+        vedStillbilde = ferdig
+        leser.taStillbilde()
+    }
+
+    /// Lyset fra kameraets automatiske hvitbalanse og eksponering (iPhone/iPad). Lux anslås som om motivet i
+    /// snitt er midtgrått – grovt.
+    private func målLysFraKamera() -> Lysmåling? {
+        #if os(iOS)
+        guard let enhet, enhet.whiteBalanceMode != .locked else { return lysmåling }
+        let g = Self.begrenset(enhet.deviceWhiteBalanceGains, enhet: enhet)
+        let c = enhet.chromaticityValues(for: g)
+        guard let t = Kolorimetri.fargetemperatur(x: Double(c.x), y: Double(c.y)) else { return nil }
+        let l = Eksponeringsmåling.luminans(lineærVerdi: 0.18, blender: Double(enhet.lensAperture),
+                                            lukkertid: CMTimeGetSeconds(enhet.exposureDuration), iso: Double(enhet.iso))
+        return Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: Eksponeringsmåling.lux(luminans: l, refleksjon: 0.18),
+                         metode: .kamera)
+        #else
+        return nil
+        #endif
+    }
+
+    private func luxFraKort(_ målt: Farge, refleksjon: Double) -> Double? {
+        #if os(iOS)
+        guard let enhet else { return nil }
+        let l = Eksponeringsmåling.luminans(lineærVerdi: målt.xyz.y, blender: Double(enhet.lensAperture),
+                                            lukkertid: CMTimeGetSeconds(enhet.exposureDuration), iso: Double(enhet.iso))
+        return Eksponeringsmåling.lux(luminans: l, refleksjon: refleksjon)
+        #else
+        return nil
+        #endif
+    }
+
+    #if os(iOS)
+    private static func begrenset(_ g: AVCaptureDevice.WhiteBalanceGains, enhet: AVCaptureDevice) -> AVCaptureDevice.WhiteBalanceGains {
+        let maks = enhet.maxWhiteBalanceGain
+        return .init(redGain: min(max(g.redGain, 1), maks), greenGain: min(max(g.greenGain, 1), maks),
+                     blueGain: min(max(g.blueGain, 1), maks))
+    }
+
+    /// Låser hvitbalansen til D65, så bildet viser lysets farge og Kolorist kan kompensere selv.
+    private func låsHvitbalanseTilDagslys() {
+        guard let enhet, enhet.isWhiteBalanceModeSupported(.locked) else { return }
+        kø.async {
+            guard (try? enhet.lockForConfiguration()) != nil else { return }
+            defer { enhet.unlockForConfiguration() }
+            let d65 = enhet.deviceWhiteBalanceGains(for: .init(x: 0.3127, y: 0.3290))
+            enhet.setWhiteBalanceModeLocked(with: Self.begrenset(d65, enhet: enhet))
+        }
+    }
+    #endif
+
+    private func låsEksponering() {
+        guard let enhet, enhet.isExposureModeSupported(.locked) else { return }
+        kø.async {
+            guard (try? enhet.lockForConfiguration()) != nil else { return }
+            enhet.exposureMode = .locked
+            enhet.unlockForConfiguration()
+        }
+    }
+
+    private func låsOpp() {
+        guard let enhet else { return }
+        kø.async {
+            guard (try? enhet.lockForConfiguration()) != nil else { return }
+            defer { enhet.unlockForConfiguration() }
+            #if os(iOS)
+            if enhet.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) { enhet.whiteBalanceMode = .continuousAutoWhiteBalance }
+            #endif
+            if enhet.isExposureModeSupported(.continuousAutoExposure) { enhet.exposureMode = .continuousAutoExposure }
+        }
+    }
+
+    /// Kameraets navn, for å knytte en karakterisering til det.
+    var kameranavn: String { enhet?.localizedName ?? String(localized: "Kamera") }
 
     func stopp() {
         if lyktPå { settLykt(på: false) }
@@ -190,7 +354,7 @@ final class KameraFargeplukker {
                 enhet.focusPointOfInterest = punkt
                 if enhet.isFocusModeSupported(.continuousAutoFocus) { enhet.focusMode = .continuousAutoFocus }
             }
-            if enhet.isExposurePointOfInterestSupported {
+            if enhet.isExposurePointOfInterestSupported && enhet.exposureMode != .locked {
                 enhet.exposurePointOfInterest = punkt
                 if enhet.isExposureModeSupported(.continuousAutoExposure) { enhet.exposureMode = .continuousAutoExposure }
             }
@@ -254,6 +418,8 @@ final class KameraFargeplukker {
 nonisolated private final class BufferLeser: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, @unchecked Sendable {
     var vedFarge: (@Sendable (Farge, Bool) -> Void)?
     var vedFiltrertBilde: (@Sendable (CGImage) -> Void)?
+    var vedStillbilde: (@Sendable (CGImage) -> Void)?
+    private var ønskerStillbilde = false
     private var sist = Date.distantPast
     private var filter: [[Double]]?
     private var sistFiltrert = Date.distantPast
@@ -305,7 +471,26 @@ nonisolated private final class BufferLeser: NSObject, AVCaptureVideoDataOutputS
         }
     }
 
+    func taStillbilde() { lås.withLock { ønskerStillbilde = true } }
+
+    /// Hele bildet, orientert som forhåndsvisningen, i bufferens fargerom.
+    private func stillbilde(_ buffer: CVPixelBuffer, orientering: CGImagePropertyOrientation) {
+        let bilde = CIImage(cvPixelBuffer: buffer).oriented(orientering)
+        let primærer = CVBufferCopyAttachment(buffer, kCVImageBufferColorPrimariesKey, nil) as? String
+        let rom = primærer == (kCVImageBufferColorPrimaries_P3_D65 as String) ? utRom : CGColorSpace(name: CGColorSpace.sRGB)!
+        if let cg = ciKontekst.createCGImage(bilde, from: bilde.extent, format: .RGBA8, colorSpace: rom) {
+            vedStillbilde?(cg)
+        }
+    }
+
     nonisolated func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        let (stillbilde, stillOrientering) = lås.withLock { () -> (Bool, CGImagePropertyOrientation) in
+            defer { ønskerStillbilde = false }
+            return (ønskerStillbilde, orientering)
+        }
+        if stillbilde, let buffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+            self.stillbilde(buffer, orientering: stillOrientering)
+        }
         let (matrise, orientering) = lås.withLock { () -> ([[Double]]?, CGImagePropertyOrientation) in
             guard let filter, Date.now.timeIntervalSince(sistFiltrert) >= 0.05 else { return (nil, .up) }
             sistFiltrert = .now

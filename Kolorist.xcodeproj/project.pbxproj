@@ -10,6 +10,7 @@
 		FA0000000000000000000011 /* FargeKjerne in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000021 /* FargeKjerne */; };
 		FA0000000000000000000012 /* FargeKI in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000022 /* FargeKI */; };
 		FA0000000000000000000013 /* App-ikon.icon in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000033 /* App-ikon.icon */; };
+		FA0000000000000000000014 /* FargeMaaling in Frameworks */ = {isa = PBXBuildFile; productRef = FA0000000000000000000023 /* FargeMaaling */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 			files = (
 				FA0000000000000000000011 /* FargeKjerne in Frameworks */,
 				FA0000000000000000000012 /* FargeKI in Frameworks */,
+				FA0000000000000000000014 /* FargeMaaling in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				FA0000000000000000000021 /* FargeKjerne */,
 				FA0000000000000000000022 /* FargeKI */,
+				FA0000000000000000000023 /* FargeMaaling */,
 			);
 			productName = Kolorist;
 			productReference = FA0000000000000000000031 /* Kolorist.app */;
@@ -337,6 +340,10 @@
 		FA0000000000000000000022 /* FargeKI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FargeKI;
+		};
+		FA0000000000000000000023 /* FargeMaaling */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FargeMaaling;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

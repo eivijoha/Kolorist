@@ -4,7 +4,8 @@ import SwiftUI
 /// Vises per seksjon («Metode: …») og samlet under «Metoder og kilder», så brukeren alltid kan se
 /// hva tallene og fargene bygger på – også hva som er utviklet for appen og hva som er etablert fag.
 enum Metode: String, CaseIterable, Identifiable {
-    case oklab, cssColor4, cieLab, ciede2000, wcag, lrv, munsell, machado, icc, renCMYK, harmonier, kunnskapsbase
+    case oklab, cssColor4, cieLab, ciede2000, wcag, lrv, munsell, machado, icc, renCMYK, harmonier, kunnskapsbase,
+         cam16, kolorimetri, kamerakarakterisering
 
     var id: String { rawValue }
 
@@ -23,6 +24,9 @@ enum Metode: String, CaseIterable, Identifiable {
         case .renCMYK: String(localized: "UCR/GCR")
         case .harmonier: String(localized: "Fargesirkler")
         case .kunnskapsbase: String(localized: "Kunnskapsbase")
+        case .cam16: "CAM16"
+        case .kolorimetri: String(localized: "CIE-kolorimetri")
+        case .kamerakarakterisering: String(localized: "Kamerakarakterisering")
         }
     }
 
@@ -40,6 +44,9 @@ enum Metode: String, CaseIterable, Identifiable {
         case .renCMYK: String(localized: "Rene CMYK-verdier (UCR/GCR)")
         case .harmonier: String(localized: "Fargesirkler og harmonier")
         case .kunnskapsbase: String(localized: "Fargesemantikk og KI")
+        case .cam16: String(localized: "CAM16 og CAT16 – fargeinntrykk i ulikt lys")
+        case .kolorimetri: String(localized: "Spektre, lyskilder og fargetemperatur")
+        case .kamerakarakterisering: String(localized: "Kamerakarakterisering med referansekort")
         }
     }
 
@@ -58,6 +65,9 @@ enum Metode: String, CaseIterable, Identifiable {
         case .renCMYK: String(localized: "Etablert trykkteknikk; søket er utviklet for Kolorist")
         case .harmonier: String(localized: "Klassisk fargelære (Johannes Itten for RYB); avbildningene er utviklet for Kolorist")
         case .kunnskapsbase: String(localized: "Utviklet for Kolorist; språkmodell fra Apple (Foundation Models)")
+        case .cam16: "C. Li, Z. Li, Z. Wang mfl.: «Comprehensive color solutions: CAM16, CAT16, and CAM16-UCS», Color Research & Application 42(6), 2017"
+        case .kolorimetri: "CIE 15:2018 Colorimetry; Y. Ohno: «Practical use and calculation of CCT and Duv», LEUKOS 10(1), 2014; S. A. Burns: «Numerical methods for smoothest reflectance reconstruction», Color Research & Application 45(1), 2020"
+        case .kamerakarakterisering: "G. D. Finlayson, M. Mackiewicz, A. Hurlbert: «Color correction using root-polynomial regression», IEEE TIP 24(5), 2015; ISO 17321-1"
         }
     }
 
@@ -85,6 +95,12 @@ enum Metode: String, CaseIterable, Identifiable {
             String(localized: "Felles grått innslag i C, M og Y flyttes til sort, og Kolorist søker etter separasjonen med færrest trykkfarger som holder seg innenfor 1 ΔE00 av profilens egen separasjon.")
         case .harmonier:
             String(localized: "Komplementær, split-komplementær, analog og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL eller RYB. RYB-sirkelen er en stykkevis lineær avbildning til RGB-kulør laget for appen.")
+        case .cam16:
+            String(localized: "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme inntrykk. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).")
+        case .kolorimetri:
+            String(localized: "Lyskilder beskrives med spektre fra CIE (dagslysserien, standardlys A, lysrør og LED-typer) eller som sortlegemer. Korrelert fargetemperatur og avstand fra Plancks kurve (Duv) regnes etter Ohno. Fargegjengivelse anslås fra referansekortets spektre, sammenlignet med et referanselys med samme fargetemperatur; tallet er skalert så det ligger nær Ra, men er ikke en offisiell fargegjengivelsesindeks.")
+        case .kamerakarakterisering:
+            String(localized: "Med et referansekort i bildet tilpasser Kolorist en tonekurve per kanal fra de grå feltene og deretter en matrise eller et rotpolynom fra kamerafarger til fasiten i dagslys. Nøyaktigheten oppgis som snitt og maks ΔE00, kryssvalidert: hvert felt forutsies av en modell tilpasset uten det. Referanseverdiene for kortet følger ikke med appen; du importerer dem selv.")
         case .kunnskapsbase:
             String(localized: "Paletter fra verdiord og «Beskriv en farge» bygger på en kunnskapsbase med fargebegreper laget for appen. Språkmodellen på enheten tolker ordene og velger kulørfamilier og uttrykk. Selve paletten komponeres deretter etter faste regler i OKLCH: harmoniprinsipp, lik valør eller lik metning, én aksent, lys eller mørk bakgrunn og tekst med minst 7:1 kontrast. Tekst om fargebetydning er konvensjoner, ikke vitenskapelige fakta.")
         }
@@ -101,6 +117,9 @@ enum Metode: String, CaseIterable, Identifiable {
         case .munsell: URL(string: "https://doi.org/10.1364/JOSA.33.000385")
         case .machado: URL(string: "https://doi.org/10.1109/TVCG.2009.113")
         case .icc: URL(string: "https://www.color.org/specification/ICC.1-2022-05.pdf")
+        case .cam16: URL(string: "https://doi.org/10.1002/col.22131")
+        case .kolorimetri: URL(string: "https://cie.co.at/publications/colorimetry-4th-edition")
+        case .kamerakarakterisering: URL(string: "https://doi.org/10.1109/TIP.2015.2405336")
         case .renCMYK, .harmonier, .kunnskapsbase: nil
         }
     }

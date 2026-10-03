@@ -17,14 +17,14 @@ final class Panelinnstillinger {
 
         var paneler: [Panel] {
             switch self {
-            case .studioFarge: [.fargemodell, .verdier, .fargestyring]
+            case .studioFarge: [.fargemodell, .verdier, .fargestyring, .lys]
             case .kontrast: [.wcag, .lrv]
             }
         }
     }
 
     enum Panel: String, CaseIterable, Identifiable {
-        case fargemodell, verdier, fargestyring, wcag, lrv
+        case fargemodell, verdier, fargestyring, lys, wcag, lrv
         var id: String { rawValue }
 
         var navn: String {
@@ -32,6 +32,7 @@ final class Panelinnstillinger {
             case .fargemodell: String(localized: "Fargemodell")
             case .verdier: String(localized: "Verdier")
             case .fargestyring: String(localized: "Fargestyring (ICC)")
+            case .lys: String(localized: "Se i lys")
             case .wcag: String(localized: "Tekst og grafikk (WCAG 2.2)")
             case .lrv: String(localized: "Flater (LRV)")
             }

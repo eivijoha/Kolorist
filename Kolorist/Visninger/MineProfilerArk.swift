@@ -1,5 +1,6 @@
 import CoreGraphics
 import FargeKjerne
+import FargeMaaling
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -20,6 +21,10 @@ struct MineProfilerArk: View {
     @State private var slettes: Sletting?
     /// Én importknapp for alle formatene: typen avgjøres av filinnholdet (`importerFil(fra:)`).
     @State private var importerer = false
+    /// Importknappen under «Referansekort» bruker samme filvelger; dette avgjør hva filene leses som.
+    @State private var importererKort = false
+    @State private var lys = Lysbibliotek.delt
+    @State private var visKort: Referansekort?
     /// Filer dras over arket (Mac, og iPad).
     @State private var slippMål = false
     @State private var feil: String?
@@ -67,7 +72,20 @@ struct MineProfilerArk: View {
                     }
                 }
                 Section {
-                    Button("Importer …", systemImage: "square.and.arrow.down") { importerer = true }
+                    ForEach(lys.referansekort) { kort in
+                        Button { visKort = kort } label: { kortrad(kort) }
+                            .buttonStyle(.plain)
+                            .swipeActions { Button("Slett", systemImage: "trash", role: .destructive) { lys.slett(kort) } }
+                            .contextMenu { Button("Slett", systemImage: "trash", role: .destructive) { lys.slett(kort) } }
+                    }
+                    Button("Importer referanseverdier …", systemImage: "square.grid.3x2") { importererKort = true; importerer = true }
+                    Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk og et anslag av lyset. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.")
+                        .forklaring()
+                } header: {
+                    Text("Referansekort")
+                }
+                Section {
+                    Button("Importer …", systemImage: "square.and.arrow.down") { importererKort = false; importerer = true }
                     VStack(alignment: .leading, spacing: 6) {
                         #if os(macOS)
                         Text("Du kan også dra filer hit.")
@@ -114,8 +132,12 @@ struct MineProfilerArk: View {
                 }
             }
             .fileImporter(isPresented: $importerer, allowedContentTypes: Self.importtyper, allowsMultipleSelection: true) { resultat in
-                do { importer(try resultat.get()) } catch { feil = error.localizedDescription }
+                do {
+                    let urler = try resultat.get()
+                    if importererKort { importerKort(urler) } else { importer(urler) }
+                } catch { feil = error.localizedDescription }
             }
+            .sheet(item: $visKort) { ReferansekortDetalj(kort: $0) }
             // Slipp filer på arket (Finder på Mac, Filer på iPad).
             .dropDestination(for: URL.self) { urler, _ in
                 let filer = urler.filter(\.isFileURL)
@@ -143,13 +165,51 @@ struct MineProfilerArk: View {
         #endif
     }
 
-    /// Importerer filene som finnes gyldige; de andre samles i én feilmelding.
+    /// Importerer filene som finnes gyldige; de andre samles i én feilmelding. Tekst- og XML-filer som slippes
+    /// på arket, leses som referanseverdier.
     private func importer(_ urler: [URL]) {
         var feilmeldinger: [String] = []
         for url in urler {
+            if Self.kortendelser.contains(url.pathExtension.lowercased()) {
+                importerKort([url])
+                continue
+            }
             do { try bibliotek.importerFil(fra: url) } catch { feilmeldinger.append(error.localizedDescription) }
         }
         if !feilmeldinger.isEmpty { feil = feilmeldinger.joined(separator: "\n") }
+    }
+
+    static let kortendelser: Set<String> = ["txt", "csv", "tsv", "cgats", "it8", "ti1", "ti3", "cxf", "xml"]
+
+    private func importerKort(_ urler: [URL]) {
+        var feilmeldinger: [String] = []
+        for url in urler {
+            let tilgang = url.startAccessingSecurityScopedResource()
+            defer { if tilgang { url.stopAccessingSecurityScopedResource() } }
+            do {
+                let kort = try Referanseimport.les(Data(contentsOf: url), filnavn: url.lastPathComponent)
+                lys.leggTil(kort)
+                visKort = kort
+            } catch {
+                feilmeldinger.append("\(url.lastPathComponent): \(error.localizedDescription)")
+            }
+        }
+        if !feilmeldinger.isEmpty { feil = feilmeldinger.joined(separator: "\n") }
+    }
+
+    private func kortrad(_ kort: Referansekort) -> some View {
+        HStack(spacing: 12) {
+            PalettStripe(farger: kort.felt.prefix(12).map(\.verdi.farge)).frame(width: 56, height: 28).clipShape(RoundedRectangle(cornerRadius: 6))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(kort.navn).lineLimit(2)
+                Text(String(localized: "\(kort.felt.count) felt") + (kort.harSpektre ? " · " + String(localized: "spektre") : ""))
+                    .font(.caption)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
+            Spacer()
+            Image(systemName: "chevron.right").font(.caption).foregroundStyle(Color.tertiærTekst)
+        }
+        .contentShape(Rectangle())
     }
 
     private func rad(_ profil: ICCProfil) -> some View {

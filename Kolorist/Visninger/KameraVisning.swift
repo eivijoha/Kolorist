@@ -1,4 +1,5 @@
 import FargeKjerne
+import FargeMaaling
 import SwiftData
 import SwiftUI
 
@@ -16,6 +17,10 @@ struct KameraVisning: View {
     @Environment(\.modelContext) private var kontekst
     /// Slukk lykt/lysfelt når en farge er fanget (lyset trengs bare under målingen).
     @AppStorage("slukkLysEtterFangst") private var slukkEtterFangst = true
+    /// Referansekort som skal kalibreres mot, og stillbildet av det.
+    @State private var kalibrerMed: Referansekort?
+    @State private var kortbilde: CGImage?
+    @State private var lagreLysmiljø: Lysmiljø?
 
     @ViewBuilder private var kameraflate: some View {
         #if os(iOS)
@@ -24,13 +29,15 @@ struct KameraVisning: View {
             vedTrykk: { enhet, visning in plukker.plukk(enhetspunkt: enhet, visningspunkt: visning) },
             vedKnip: { skala, begynner in plukker.knip(skala, begynner: begynner) },
             vedDobbelttrykk: { plukker.settZoom(1) },
+            vedOrientering: { plukker.settVisningsorientering(vinkel: $0, speilet: $1) }
         )
         #else
         // Mac: målpunktet følger pekeren, og et klikk fanger fargen der.
         KameraForhåndsvisning(
             økt: plukker.økt,
             vedTrykk: { enhet, visning in plukker.plukk(enhetspunkt: enhet, visningspunkt: visning) },
-            vedSveve: { enhet, visning in plukker.sikt(enhetspunkt: enhet, visningspunkt: visning) }
+            vedSveve: { enhet, visning in plukker.sikt(enhetspunkt: enhet, visningspunkt: visning) },
+            vedOrientering: { plukker.settVisningsorientering(vinkel: $0, speilet: $1) }
         )
         #endif
     }
@@ -57,6 +64,7 @@ struct KameraVisning: View {
                     }
                 }
                 .overlay(alignment: .topTrailing) { ZoomMerke(plukker: plukker) }
+                .overlay(alignment: .topLeading) { LysmålingMerke(plukker: plukker) }
                 .onChange(of: geo.size) { plukker.tilbakestillMarkør() }
             }
             .clipped()
@@ -91,6 +99,7 @@ struct KameraVisning: View {
         .toolbar {
             ToolbarItemGroup {
                 LyskildeKnapper(plukker: plukker, slukkEtterFangst: $slukkEtterFangst)
+                LyskompensasjonMeny(plukker: plukker, kalibrerMed: $kalibrerMed, lagreLysmiljø: $lagreLysmiljø)
                 Button("Legg alle i palett", systemImage: "square.and.arrow.down.on.square") {
                     lagre = arbeidsbenk.målinger.map { PalettFarge(farge: $0, opphav: .kamera) }
                 }
@@ -99,6 +108,30 @@ struct KameraVisning: View {
         }
         .sheet(isPresented: Binding(get: { lagre != nil }, set: { if !$0 { lagre = nil } })) {
             VelgPalettArk(farger: lagre ?? [], foreslåttNavn: String(localized: "Kamera"))
+        }
+        // Referansekort: ta et stillbilde (med låst hvitbalanse og eksponering) og plasser hjørnene i et ark.
+        .onChange(of: kalibrerMed) { _, kort in
+            guard kort != nil else { return }
+            plukker.taStillbilde { kortbilde = $0 }
+        }
+        .sheet(isPresented: Binding(get: { kortbilde != nil && kalibrerMed != nil },
+                                    set: { if !$0 {
+                                        kortbilde = nil; kalibrerMed = nil
+                                        // Avbrutt: lås opp hvitbalanse og eksponering igjen.
+                                        if plukker.kompensasjon == nil { plukker.slåAvKompensasjon() }
+                                    } })) {
+            if let kort = kalibrerMed, let bilde = kortbilde {
+                KortkalibreringArk(kort: kort, bilde: bilde) { karakterisering, måling in
+                    plukker.bruk(karakterisering, måling: måling)
+                    Lysbibliotek.delt.lagre(karakterisering, for: kort, kamera: plukker.kameranavn)
+                }
+            }
+        }
+        .sheet(item: $lagreLysmiljø) { miljø in
+            LysmiljøRedigering(miljø: miljø) { lagret in
+                Lysbibliotek.delt.lagre(lagret)
+                Lysbibliotek.delt.valgtLysmiljø = lagret.id
+            }
         }
         // Pause kameraet mens arket er åpent, så det ikke konkurrerer med trykk i arket.
         .onChange(of: lagre != nil) { _, åpent in

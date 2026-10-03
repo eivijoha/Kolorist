@@ -63,6 +63,48 @@
         }
       }
     },
+    "%@ / %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ / %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ / %@"
+          }
+        }
+      }
+    },
+    "%@ K": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ K"
+          }
+        }
+      }
+    },
+    "%@ K, Duv %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ K, Duv %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ K, Duv %@"
+          }
+        }
+      }
+    },
     "%@ er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.": {
       "localizations": {
         "en": {
@@ -85,6 +127,16 @@
           "stringUnit": {
             "state": "new",
             "value": "%1$@ fargesirkel med %2$lld markerte kulører"
+          }
+        }
+      }
+    },
+    "%@ lx": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ lx"
           }
         }
       }
@@ -377,6 +429,22 @@
         }
       }
     },
+    "%lld (%lld × %lld)": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld (%2$lld × %3$lld)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld (%lld × %lld)"
+          }
+        }
+      }
+    },
     "%lld farger": {
       "localizations": {
         "en": {
@@ -395,6 +463,16 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "%lld felt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld patches"
           }
         }
       }
@@ -691,6 +769,26 @@
         }
       }
     },
+    "Belysningsstyrke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Illuminance"
+          }
+        }
+      }
+    },
+    "Beregn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculate"
+          }
+        }
+      }
+    },
     "Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse.": {
       "localizations": {
         "en": {
@@ -757,6 +855,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use"
+          }
+        }
+      }
+    },
+    "Bruk kortet under Utplukk › Lys › Med referansekort: hold kortet i samme lys som fargene, og plasser hjørnene i bildet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use the card under Pick › Light › With reference card: hold the card in the same light as the colours and place the corners in the image."
           }
         }
       }
@@ -851,6 +959,26 @@
         }
       }
     },
+    "CAM16 og CAT16 – fargeinntrykk i ulikt lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CAM16 and CAT16 – colour appearance in different light"
+          }
+        }
+      }
+    },
+    "CIE-kolorimetri": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CIE colorimetry"
+          }
+        }
+      }
+    },
     "CIEDE2000 (ΔE00)": {
       "localizations": {
         "en": {
@@ -931,6 +1059,26 @@
         }
       }
     },
+    "Dagslys inne": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daylight indoors"
+          }
+        }
+      }
+    },
+    "Dato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
     "Delvis avvik (anomal trikromasi). 100 % er fullstendig avvik.": {
       "localizations": {
         "en": {
@@ -1001,6 +1149,16 @@
         }
       }
     },
+    "Dra hjørnene 1–4 til kortets hjørner, med de grå feltene langs den nederste kanten. De små prikkene viser fasiten og skal ligge på riktig felt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag corners 1–4 to the corners of the card, with the grey patches along the bottom edge. The small dots show the reference values and should sit on the right patch."
+          }
+        }
+      }
+    },
     "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.": {
       "localizations": {
         "en": {
@@ -1031,6 +1189,26 @@
         }
       }
     },
+    "Egen fargetemperatur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom colour temperature"
+          }
+        }
+      }
+    },
+    "Eksempler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Examples"
+          }
+        }
+      }
+    },
     "Eksisterende paletter": {
       "localizations": {
         "en": {
@@ -1057,6 +1235,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Export and copy"
+          }
+        }
+      }
+    },
+    "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme inntrykk. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light and dim light makes colours less colourful. Finally it shows the screen colour that gives the same appearance. Light compensation uses CAT16 with full adaptation to daylight (D65)."
           }
         }
       }
@@ -1231,6 +1419,16 @@
         }
       }
     },
+    "Fargegjengivelse (anslått)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour rendering (estimated)"
+          }
+        }
+      }
+    },
     "Fargeharmonier": {
       "localizations": {
         "en": {
@@ -1381,6 +1579,16 @@
         }
       }
     },
+    "Fargeskift i lyset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour shift in the light"
+          }
+        }
+      }
+    },
     "Fargestyring (ICC)": {
       "localizations": {
         "en": {
@@ -1401,12 +1609,32 @@
         }
       }
     },
+    "Fargetemperatur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour temperature"
+          }
+        }
+      }
+    },
     "Felles grått innslag i C, M og Y flyttes til sort, og Kolorist søker etter separasjonen med færrest trykkfarger som holder seg innenfor 1 ΔE00 av profilens egen separasjon.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The common grey component of C, M and Y is moved to black, and Kolorist searches for the separation with the fewest inks that stays within 1 ΔE00 of the profile’s own separation."
+          }
+        }
+      }
+    },
+    "Felt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patches"
           }
         }
       }
@@ -1427,6 +1655,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Done renaming"
+          }
+        }
+      }
+    },
+    "Fil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File"
           }
         }
       }
@@ -1507,6 +1745,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Move to"
+          }
+        }
+      }
+    },
+    "For en lyskilde": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For a light source"
+          }
+        }
+      }
+    },
+    "For lyset kameraet måler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For the light the camera measures"
           }
         }
       }
@@ -1853,6 +2111,26 @@
         }
       }
     },
+    "Grå felt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grey patches"
+          }
+        }
+      }
+    },
+    "Gråkort 18 %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grey card 18 %"
+          }
+        }
+      }
+    },
     "Gråtone": {
       "localizations": {
         "en": {
@@ -1963,6 +2241,16 @@
         }
       }
     },
+    "Hjørne %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corner %lld"
+          }
+        }
+      }
+    },
     "Hopp over": {
       "localizations": {
         "en": {
@@ -2013,6 +2301,16 @@
         }
       }
     },
+    "Hvitt kort 90 %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "White card 90 %"
+          }
+        }
+      }
+    },
     "Hvitt, flyttbart lysfelt på skjermen som lyskilde for kameraet": {
       "localizations": {
         "en": {
@@ -2029,6 +2327,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "What does the colour look like?"
+          }
+        }
+      }
+    },
+    "Høyre prøve viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The right swatch shows the colour with the full colour cast of the light, as a photo with daylight white balance would show it. The colour shift is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable."
+          }
+        }
+      }
+    },
+    "Høyre prøve viser fargen slik den oppleves i lysmiljøet: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The right swatch shows the colour as it appears in the light environment: the eye adapts almost completely to the colour of the light, and dim light makes colours less colourful. The colour shift is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable."
           }
         }
       }
@@ -2099,6 +2417,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Import ICC profiles or colour libraries below. They appear under “Show as” in Studio."
+          }
+        }
+      }
+    },
+    "Importer referanseverdier …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import reference values …"
           }
         }
       }
@@ -2333,6 +2661,26 @@
         }
       }
     },
+    "Kamerakarakterisering": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera characterisation"
+          }
+        }
+      }
+    },
+    "Kamerakarakterisering med referansekort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera characterisation with a reference card"
+          }
+        }
+      }
+    },
     "Kilde": {
       "localizations": {
         "en": {
@@ -2399,12 +2747,42 @@
         }
       }
     },
+    "Kompenser fargene for lyset de ble fotografert i": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compensate the colours for the light they were photographed in"
+          }
+        }
+      }
+    },
+    "Kompenser til dagslys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compensate to daylight"
+          }
+        }
+      }
+    },
     "Komplementær, split-komplementær, analog og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL eller RYB. RYB-sirkelen er en stykkevis lineær avbildning til RGB-kulør laget for appen.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Complementary, split-complementary, analogous and even distributions are computed as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL or RYB. The RYB wheel is a piecewise linear mapping to RGB hue made for the app."
+          }
+        }
+      }
+    },
+    "Kontor med LED": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Office with LED"
           }
         }
       }
@@ -2647,6 +3025,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copied"
+          }
+        }
+      }
+    },
+    "Kortet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The card"
           }
         }
       }
@@ -2981,6 +3369,26 @@
         }
       }
     },
+    "Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer kan også måles med kameraet under Utplukk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the light where the colours will be used – the living room, the office, the shop – and see the colours in it. Light environments can also be measured with the camera under Pick."
+          }
+        }
+      }
+    },
+    "Lagre lyset som lysmiljø …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the light as a light environment …"
+          }
+        }
+      }
+    },
     "Lagre med lysere og mørkere toner …": {
       "localizations": {
         "en": {
@@ -3283,6 +3691,16 @@
         }
       }
     },
+    "Lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
     "Lysere og mørkere": {
       "localizations": {
         "en": {
@@ -3335,6 +3753,16 @@
         }
       }
     },
+    "Lyset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The light"
+          }
+        }
+      }
+    },
     "Lyshet": {
       "localizations": {
         "en": {
@@ -3355,12 +3783,82 @@
         }
       }
     },
+    "Lyskilde": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light source"
+          }
+        }
+      }
+    },
+    "Lyskilder beskrives med spektre fra CIE (dagslysserien, standardlys A, lysrør og LED-typer) eller som sortlegemer. Korrelert fargetemperatur og avstand fra Plancks kurve (Duv) regnes etter Ohno. Fargegjengivelse anslås fra referansekortets spektre, sammenlignet med et referanselys med samme fargetemperatur; tallet er skalert så det ligger nær Ra, men er ikke en offisiell fargegjengivelsesindeks.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light sources are described by CIE spectra (the daylight series, illuminant A, fluorescent and LED types) or as blackbodies. Correlated colour temperature and distance from the Planckian locus (Duv) are calculated after Ohno. Colour rendering is estimated from the reference card’s spectra, compared with a reference light of the same colour temperature; the figure is scaled to lie close to Ra, but is not an official colour rendering index."
+          }
+        }
+      }
+    },
+    "Lysmiljø": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light environment"
+          }
+        }
+      }
+    },
+    "Lysmiljøer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light environments"
+          }
+        }
+      }
+    },
+    "Lysmiljøer …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light environments …"
+          }
+        }
+      }
+    },
     "Lysrefleksjonsverdi og luminanskontrast": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Light reflectance value and luminance contrast"
+          }
+        }
+      }
+    },
+    "Lysrør": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fluorescent tubes"
+          }
+        }
+      }
+    },
+    "Lystype": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type of light"
           }
         }
       }
@@ -3375,6 +3873,16 @@
         }
       }
     },
+    "Maks ΔE00": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max ΔE00"
+          }
+        }
+      }
+    },
     "Maskinen": {
       "localizations": {
         "en": {
@@ -3385,12 +3893,72 @@
         }
       }
     },
+    "Matrise 3 × 3": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 × 3 matrix"
+          }
+        }
+      }
+    },
+    "Med et referansekort i bildet tilpasser Kolorist en tonekurve per kanal fra de grå feltene og deretter en matrise eller et rotpolynom fra kamerafarger til fasiten i dagslys. Nøyaktigheten oppgis som snitt og maks ΔE00, kryssvalidert: hvert felt forutsies av en modell tilpasset uten det. Referanseverdiene for kortet følger ikke med appen; du importerer dem selv.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With a reference card in the image, Kolorist fits a tone curve per channel from the grey patches and then a matrix or root polynomial from camera colours to the reference values in daylight. Accuracy is given as mean and maximum ΔE00, cross-validated: each patch is predicted by a model fitted without it. The reference values for the card are not included with the app; you import them yourself."
+          }
+        }
+      }
+    },
+    "Med gråkort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With grey card"
+          }
+        }
+      }
+    },
     "Med lysere og mørkere rader": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "With lighter and darker rows"
+          }
+        }
+      }
+    },
+    "Med referansekort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With reference card"
+          }
+        }
+      }
+    },
+    "Med referansekort (importer verdiene under Mine fargerom)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With reference card (import the values under My colour spaces)"
+          }
+        }
+      }
+    },
+    "Med spektre kan fasiten regnes ut i ethvert lys. Feltene vises slik de ser ut i valgt lys når øyet har tilpasset seg delvis.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With spectra, the reference values can be calculated in any light. The patches are shown as they look in the chosen light when the eye has partly adapted."
           }
         }
       }
@@ -3517,6 +4085,26 @@
         }
       }
     },
+    "Mine lysmiljøer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My light environments"
+          }
+        }
+      }
+    },
+    "Modell": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model"
+          }
+        }
+      }
+    },
     "Moderne nettlesere bruker OKLab og viser nøyaktig samme overgang som her. Eldre nettlesere får tette sRGB-stopp som etterligner den.": {
       "localizations": {
         "en": {
@@ -3563,6 +4151,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Destination profile"
+          }
+        }
+      }
+    },
+    "Målt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured"
+          }
+        }
+      }
+    },
+    "Målt lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured light"
           }
         }
       }
@@ -3719,12 +4327,32 @@
         }
       }
     },
+    "Nytt lysmiljø": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New light environment"
+          }
+        }
+      }
+    },
     "Nærmeste tone · ΔE00 %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Nearest tone · ΔE00 %@"
+          }
+        }
+      }
+    },
+    "Nøyaktighet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accuracy"
           }
         }
       }
@@ -3851,6 +4479,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gradient tones"
+          }
+        }
+      }
+    },
+    "Overskyet ute": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overcast outdoors"
           }
         }
       }
@@ -3995,6 +4633,16 @@
         }
       }
     },
+    "Plasser hjørnene på nytt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place the corners again"
+          }
+        }
+      }
+    },
     "Plukk en farge fra hvor som helst på skjermen": {
       "localizations": {
         "en": {
@@ -4035,6 +4683,16 @@
         }
       }
     },
+    "På skjermen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On screen"
+          }
+        }
+      }
+    },
     "På, %lld prosent": {
       "localizations": {
         "en": {
@@ -4061,6 +4719,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "The framed row is the gradient itself. Rows above are lighter, rows below darker."
+          }
+        }
+      }
+    },
+    "Referansekort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reference cards"
+          }
+        }
+      }
+    },
+    "Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk og et anslag av lyset. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reference cards with known values give accurate light compensation in Pick and an estimate of the light. The values are not included with the app; import the file that belongs to your card: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV or a table of Lab, XYZ or spectral values. Spectra give the reference values in any light."
           }
         }
       }
@@ -4135,12 +4813,42 @@
         }
       }
     },
+    "Roter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotate"
+          }
+        }
+      }
+    },
+    "Rotpolynom": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Root polynomial"
+          }
+        }
+      }
+    },
     "Samklang": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Cohesion"
+          }
+        }
+      }
+    },
+    "Se i lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See in light"
           }
         }
       }
@@ -4197,6 +4905,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour vision deficiency simulation"
+          }
+        }
+      }
+    },
+    "Siste kalibrering": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latest calibration"
           }
         }
       }
@@ -4381,6 +5099,16 @@
         }
       }
     },
+    "Slik øyet ser det": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As the eye sees it"
+          }
+        }
+      }
+    },
     "Slipp farger her": {
       "localizations": {
         "en": {
@@ -4411,6 +5139,26 @@
         }
       }
     },
+    "Snitt / maks ΔE00": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mean / max ΔE00"
+          }
+        }
+      }
+    },
+    "Snitt ΔE00": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mean ΔE00"
+          }
+        }
+      }
+    },
     "Som Color-konstanter": {
       "localizations": {
         "en": {
@@ -4427,6 +5175,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "As single colour"
+          }
+        }
+      }
+    },
+    "Som et foto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a photo"
           }
         }
       }
@@ -4491,6 +5249,16 @@
         }
       }
     },
+    "Som kameraet ser fargene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As the camera sees the colours"
+          }
+        }
+      }
+    },
     "Som variabler": {
       "localizations": {
         "en": {
@@ -4537,6 +5305,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Black"
+          }
+        }
+      }
+    },
+    "Speil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mirror"
+          }
+        }
+      }
+    },
+    "Spektre, lyskilder og fargetemperatur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spectra, light sources and colour temperature"
           }
         }
       }
@@ -4621,6 +5409,16 @@
         }
       }
     },
+    "Stue om kvelden": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Living room in the evening"
+          }
+        }
+      }
+    },
     "Styrker": {
       "localizations": {
         "en": {
@@ -4647,6 +5445,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "System"
+          }
+        }
+      }
+    },
+    "Tallene er kryssvalidert: hvert felt er forutsagt av en modell tilpasset uten det. Under 3 er godt for et telefonkamera. Kompensasjonen gjelder dette lyset og dette kameraet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The figures are cross-validated: each patch is predicted by a model fitted without it. Below 3 is good for a phone camera. The compensation applies to this light and this camera."
           }
         }
       }
@@ -4737,6 +5545,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tests two colours against the WCAG 2.2 contrast requirements for text and graphics."
+          }
+        }
+      }
+    },
+    "Tidspunkt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
           }
         }
       }
@@ -4923,12 +5741,32 @@
         }
       }
     },
+    "Trykk på kortet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the card"
+          }
+        }
+      }
+    },
     "Type": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Type"
+          }
+        }
+      }
+    },
+    "Typisk 50–150 lx i en stue om kvelden, 500 lx på et kontor og over 10 000 lx ute på dagtid.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Typically 50–150 lx in a living room in the evening, 500 lx in an office and over 10,000 lx outdoors during the day."
           }
         }
       }
@@ -4949,6 +5787,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "UCR/GCR"
+          }
+        }
+      }
+    },
+    "Under 4000 K regnes lyset som glødelys (sortlegeme), over som dagslys. Lysrør og LED har ujevne spektre som kan endre enkelte farger mer enn fargetemperaturen tilsier.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below 4000 K the light is treated as incandescent (blackbody), above as daylight. Fluorescent and LED lights have uneven spectra that can change some colours more than the colour temperature suggests."
           }
         }
       }
@@ -5099,6 +5947,16 @@
         }
       }
     },
+    "Varmhvit LED": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm white LED"
+          }
+        }
+      }
+    },
     "Velg": {
       "localizations": {
         "en": {
@@ -5179,6 +6037,16 @@
         }
       }
     },
+    "Verdiene er målt i ett lys (CIELab D50). I andre lys brukes kromatisk tilpasning.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The values are measured in one light (CIELab D50). In other light, chromatic adaptation is used."
+          }
+        }
+      }
+    },
     "Verdier": {
       "localizations": {
         "en": {
@@ -5255,6 +6123,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Angle"
+          }
+        }
+      }
+    },
+    "Vis": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show"
           }
         }
       }
@@ -5419,6 +6297,16 @@
         }
       }
     },
+    "gråkort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "grey card"
+          }
+        }
+      }
+    },
     "ikke bestått": {
       "localizations": {
         "en": {
@@ -5439,12 +6327,42 @@
         }
       }
     },
+    "kompensert": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "compensated"
+          }
+        }
+      }
+    },
+    "referansekort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "reference card"
+          }
+        }
+      }
+    },
     "sRGB-hex som #2F7FD8 eller 2F7FD8; CSS-farger som oklch(…) og rgb(…) går også.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "sRGB hex such as #2F7FD8 or 2F7FD8; CSS colours such as oklch(…) and rgb(…) also work."
+          }
+        }
+      }
+    },
+    "spektre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "spectra"
           }
         }
       }
@@ -5525,6 +6443,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opens the gradient in Gradient"
+          }
+        }
+      }
+    },
+    "Øverst i hvert felt: fasiten i dagslys. Nederst: kamerafargen etter kompensasjon.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top of each patch: the reference value in daylight. Bottom: the camera colour after compensation."
           }
         }
       }
@@ -5637,6 +6565,32 @@
           "stringUnit": {
             "state": "translated",
             "value": "Δh (hue, degrees)"
+          }
+        }
+      }
+    },
+    "≈ %@ K": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %@ K"
+          }
+        }
+      }
+    },
+    "≈ %@ K · %@ lx": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "≈ %1$@ K · %2$@ lx"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %@ K · %@ lx"
           }
         }
       }

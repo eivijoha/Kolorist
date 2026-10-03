@@ -25,6 +25,9 @@ følger ikke med (rettigheter) – brukeren importerer sin egen CGATS-fil:
 - **Fargetemperatur som verdi** for hvite og nesten hvite farger (lysdesign, «varme» og «kalde» hvite).
 - **Lysstyrkens effekt på fargeinntrykk** (Hunt- og Stevens-effekten, CAM16) – inngår delvis i lagrede lysmiljøer.
 - **Eksterne fargemålere** for det kameraet ikke kan måle: fargegjengivelse (CRI) og metameri (spektralmåling).
+- **Telefonen som kolorimeter for skjermer og projektorer** (kanskje egen app): vise testfelt på skjermen/projektoren
+  og måle med kameraet. Gir bare relative målinger (hvitpunkt, gråbalanse, ensartethet, grov gamma), ikke presis
+  profilering – kameraets spektralfølsomhet avviker fra CIE-observatøren. Egen app eller senere modul.
 
 Tekniske forutsetninger: iOS gir ikke tilgang til omgivelseslyssensoren; kameraet (AVFoundation) gir
 hvitbalanse (Kelvin og tint) og eksponering. Mac med innebygd kamera gir ikke hvitbalansedata.

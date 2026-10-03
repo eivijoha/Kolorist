@@ -8,6 +8,7 @@ let package = Package(
     products: [
         .library(name: "FargeKjerne", targets: ["FargeKjerne"]),
         .library(name: "FargeKI", targets: ["FargeKI"]),
+        .library(name: "FargeMaaling", targets: ["FargeMaaling"]),
     ],
     targets: [
         // Ren fargematematikk, paletter og eksport. Ingen UI-avhengigheter.
@@ -15,8 +16,11 @@ let package = Package(
         // Verdiord → fargeforslag (Foundation Models på enheten + leksikon-reserve).
         .target(name: "FargeKI", dependencies: ["FargeKjerne"],
                 resources: [.process("Localizable.xcstrings"), .process("Fargesemantikk.json")]),
+        // Lys og fargemåling: spektre, fargetemperatur, CAM16, lysmiljøer, referansekort og kamerakarakterisering.
+        .target(name: "FargeMaaling", dependencies: ["FargeKjerne"], resources: [.process("Localizable.xcstrings"), .process("CIEData.json")]),
         // Utviklerverktøy for å prøve KI-promptene mot modellen på Macen: `swift run kiprove`.
         .executableTarget(name: "kiprove", dependencies: ["FargeKjerne", "FargeKI"], path: "Sources/KIProve"),
         .testTarget(name: "FargeKjerneTests", dependencies: ["FargeKjerne", "FargeKI"]),
+        .testTarget(name: "FargeMaalingTests", dependencies: ["FargeMaaling", "FargeKjerne"]),
     ]
 )
