@@ -73,20 +73,19 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
 • Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
-• Harmoni: alle fargene vises øverst i valgt fargerom med verdier eller tonenavn, og grunnfargen er merket.
-• LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 under Vurdering › Kontrast.
+• Harmoni: se hele harmonien i valgt fargerom med verdier eller tonenavn, med grunnfargen tydelig merket.
+• LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 – for bygg og interiør.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
-• «Mine fargerom» samler ICC-profiler og fargebiblioteker – og alt kan slettes fra appen.
-• Palettkolonne på store iPader i liggende format: dra farger rett inn i fargevalg som Fra og Til i Overgang.
-• Plukkede farger fra kamera og bilder samles øverst i Paletter til du lagrer dem.
-• Trykk på en farge i palettoversikten for å velge den. Trykk og hold på en palett for vurdering og kontrastmatrise.
+• Egne ICC-profiler og fargebiblioteker samles på ett sted, importeres i én operasjon og kan slettes fra appen.
+• Palettene for hånden på store iPader: flytt farger dit du trenger dem med dra og slipp.
+• Farger du plukker fra kamera og bilder, tas vare på til du bestemmer deg for å lagre dem.
+• Raskere arbeid med paletter: bruk en farge direkte, og vurder, kontroller kontrast og skriv ut hele paletter.
 • Angre overalt, også med ⌘Z på tastatur.
 • Paneler kan legges sammen og flyttes, og verdier kan skjules og sorteres – oppsettet synkroniseres.
 • Bedre paletter fra verdiord: bygget etter harmoniprinsipper med lesbar kontrast.
 • Vurderingen av en palett viser hva den bygger på.
 • Gradienter i paletter, og «Kopier til» for gradienter: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS og SwiftUI.
 • Skriv ut en palett på A4 – fargeflater i CIELab med navn og verdier – eller lagre den som PDF.
-• «Sammenlign» heter nå «Forskjell».
 ```
 
 **Beskrivelse (4000)**
@@ -106,7 +105,7 @@ FARGEBIBLIOTEKER OG ICC-PROFILER
 • Importer egne fargekart i ASE, ACO eller ACB (Adobe Color Book) med navngitte toner
 • Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene
 • Importer egne .icc- og .icm-profiler
-• Alt samles under «Mine fargerom» og følger med til de andre enhetene dine via iCloud Drive
+• Alt samles på ett sted og følger med til de andre enhetene dine via iCloud Drive
 • Konverter mellom profiler og sammenlign gjengivelseshensiktene med ΔE2000
 
 OVERGANGER, TONER OG HARMONIER
@@ -125,7 +124,7 @@ TILGJENGELIGHET OG FARGESYN
 PLUKK FARGER
 • Kamera med zoom, makrofokus og lykt
 • Bilder, med dominerende farger
-• Plukkede farger samles øverst i Paletter til du lagrer dem
+• Farger du plukker, tas vare på til du lagrer dem
 • Skjermpipette på Mac
 
 APPLE INTELLIGENCE PÅ ENHETEN
@@ -186,20 +185,19 @@ Kolorist 1.1 reaches more disciplines – including architecture and interiors �
 
 • Colour libraries: import your own colour charts in ASE, ACO or ACB with named tones. Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names.
 • Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell and Hering colour wheels for harmonies.
-• Harmony: every colour is shown at the top in the chosen colour space with values or tone names, and the base colour is marked.
-• LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 under Assess › Contrast.
+• Harmony: see the whole harmony in the chosen colour space with values or tone names, with the base colour clearly marked.
+• LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 – for buildings and interiors.
 • Rec. 2020 and ProPhoto RGB as built-in colour spaces.
-• “My colour spaces” gathers ICC profiles and colour libraries – and everything can be deleted in the app.
-• Palette column on large iPads in landscape: drag colours straight onto colour wells such as From and To in Gradient.
-• Colours picked from the camera and photos gather at the top of Palettes until you save them.
-• Tap a colour in the palette overview to select it. Touch and hold a palette for a critique and contrast matrix.
+• Your own ICC profiles and colour libraries are gathered in one place, imported in one step and can be deleted in the app.
+• Palettes at hand on large iPads: move colours where you need them with drag and drop.
+• Colours you pick from the camera and photos are kept until you decide to save them.
+• Faster work with palettes: use a colour directly, and critique, check contrast and print whole palettes.
 • Undo everywhere, including ⌘Z on a keyboard.
 • Panels can be collapsed and reordered, and values hidden and sorted – the layout syncs.
 • Better palettes from value words: built on harmony principles with legible contrast.
 • A palette critique now shows what it is based on.
 • Gradients in palettes, and “Copy to” for gradients: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS and SwiftUI.
 • Print a palette on A4 – CIELab swatches with names and values – or save it as a PDF.
-• “Compare” is now called “Difference”.
 ```
 
 **Description (4000)**
@@ -219,7 +217,7 @@ COLOUR LIBRARIES AND ICC PROFILES
 • Import your own colour charts in ASE, ACO or ACB (Adobe Color Book) with named tones
 • Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names
 • Import your own .icc and .icm profiles
-• Everything is gathered under “My colour spaces” and follows you to your other devices through iCloud Drive
+• Everything is gathered in one place and follows you to your other devices through iCloud Drive
 • Convert between profiles and compare rendering intents with ΔE2000
 
 GRADIENTS, TONES AND HARMONIES
@@ -238,7 +236,7 @@ ACCESSIBILITY AND COLOUR VISION
 PICK COLOURS
 • Camera with zoom, macro focus and torch
 • Photos, with dominant colours
-• Picked colours gather at the top of Palettes until you save them
+• Colours you pick are kept until you save them
 • Screen eyedropper on Mac
 
 APPLE INTELLIGENCE ON DEVICE
@@ -299,23 +297,22 @@ Bygg paletter i OKLCH, CMYK med ICC-profiler og Munsell, kontroller kontrast og 
 ```
 Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og utnytter Mac-vinduet bedre.
 
-• Paletter fast til høyre: når vinduet er bredt nok, ligger palettene ved siden av alle verktøyene. Gjøres vinduet smalt, flytter de tilbake i sidefeltet.
-• Dra og slipp: dra farger fra palettene rett inn i fargevalg som Fra og Til i Overgang, i tonerekka og på andre paletter – og dra farger inn fra fargepanelet og fargebrønner i andre programmer.
+• Palettene for hånden: i et bredt vindu har du palettene ved siden av verktøyene hele tiden.
+• Dra og slipp: flytt farger fra palettene dit du jobber – og hent farger inn fra systemets fargepanel og andre programmer.
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
 • Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
-• Harmoni: alle fargene vises øverst i valgt fargerom med verdier eller tonenavn, og grunnfargen er merket.
-• LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 under Vurdering › Kontrast.
+• Harmoni: se hele harmonien i valgt fargerom med verdier eller tonenavn, med grunnfargen tydelig merket.
+• LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 – for bygg og interiør.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
-• «Mine fargerom» samler ICC-profiler og fargebiblioteker – og alt kan slettes fra appen.
-• Plukkede farger fra kamera, bilder og skjermpipetten samles øverst i Paletter til du lagrer dem.
+• Egne ICC-profiler og fargebiblioteker samles på ett sted, importeres i én operasjon og kan slettes fra appen.
+• Farger du plukker fra kamera, bilder og skjermen, tas vare på til du bestemmer deg for å lagre dem.
 • Kamera: målepunktet følger pekeren, og et klikk fanger fargen der.
 • Angre (⌘Z) overalt.
 • Gradienter i paletter, og «Kopier til» for gradienter: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS og SwiftUI.
 • Skriv ut en palett (⌘P) på A4 – fargeflater i CIELab med navn og verdier – eller arkiver den som PDF.
-• Klikk på en farge i palettoversikten for å velge den. Høyreklikk på en palett for vurdering og kontrastmatrise.
+• Raskere arbeid med paletter: bruk en farge direkte, og vurder, kontroller kontrast og skriv ut hele paletter.
 • Paneler kan legges sammen og flyttes, og verdier kan skjules og sorteres – oppsettet synkroniseres.
 • Bedre paletter fra verdiord: bygget etter harmoniprinsipper med lesbar kontrast.
-• «Sammenlign» heter nå «Forskjell».
 ```
 
 **Beskrivelse (4000)**
@@ -326,7 +323,7 @@ Kolorist er et fargeverktøy for designere og arkitekter på Mac – og på iPho
 PLUKK OG DRA
 • Skjermpipette som plukker farger fra hvor som helst på skjermen
 • Dra fargeprøver inn i andre programmer og fargebrønner – og dra farger inn fra dem
-• Palettene ligger fast til høyre i et bredt vindu
+• Palettene for hånden i et bredt vindu
 • Bilder, med dominerende farger
 • Kamera, også iPhone som kamera, med lysfelt på skjermen som lyskilde
 • Kopier aktiv farge som OKLCH med ⌥⌘C, lim inn en farge med ⌥⌘V, og angre med ⌘Z
@@ -344,7 +341,7 @@ FARGEBIBLIOTEKER OG ICC-PROFILER
 • Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene
 • Bruk profilene som er installert på Macen, etter mappe
 • Importer egne .icc- og .icm-profiler
-• Alt samles under «Mine fargerom» og følger med til iPhone og iPad via iCloud Drive
+• Alt samles på ett sted og følger med til iPhone og iPad via iCloud Drive
 • Konverter mellom profiler og sammenlign gjengivelseshensiktene med ΔE2000
 
 OVERGANGER, TONER OG HARMONIER
@@ -409,23 +406,22 @@ Build palettes in OKLCH, CMYK with ICC profiles and Munsell, check contrast and 
 ```
 Kolorist 1.1 reaches more disciplines – including architecture and interiors – and makes better use of the Mac window.
 
-• Palettes on the right: when the window is wide enough, your palettes sit beside every tool. Make the window narrow and they move back into the sidebar.
-• Drag and drop: drag colours from your palettes straight onto colour wells such as From and To in Gradient, onto the tone row and onto other palettes – and drag colours in from the colour panel and colour wells in other apps.
+• Palettes at hand: in a wide window your palettes stay beside the tools all the time.
+• Drag and drop: move colours from your palettes to where you work – and bring colours in from the system colour panel and other apps.
 • Colour libraries: import your own colour charts in ASE, ACO or ACB with named tones. Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names.
 • Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell and Hering colour wheels for harmonies.
-• Harmony: every colour is shown at the top in the chosen colour space with values or tone names, and the base colour is marked.
-• LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 under Assess › Contrast.
+• Harmony: see the whole harmony in the chosen colour space with values or tone names, with the base colour clearly marked.
+• LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 – for buildings and interiors.
 • Rec. 2020 and ProPhoto RGB as built-in colour spaces.
-• “My colour spaces” gathers ICC profiles and colour libraries – and everything can be deleted in the app.
-• Colours picked from the camera, photos and the screen eyedropper gather at the top of Palettes until you save them.
+• Your own ICC profiles and colour libraries are gathered in one place, imported in one step and can be deleted in the app.
+• Colours you pick from the camera, photos and the screen are kept until you decide to save them.
 • Camera: the sampling point follows the pointer, and a click captures the colour there.
 • Undo (⌘Z) everywhere.
 • Gradients in palettes, and “Copy to” for gradients: Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS and SwiftUI.
 • Print a palette (⌘P) on A4 – CIELab swatches with names and values – or save it as a PDF.
-• Click a colour in the palette overview to select it. Right-click a palette for a critique and contrast matrix.
+• Faster work with palettes: use a colour directly, and critique, check contrast and print whole palettes.
 • Panels can be collapsed and reordered, and values hidden and sorted – the layout syncs.
 • Better palettes from value words: built on harmony principles with legible contrast.
-• “Compare” is now called “Difference”.
 ```
 
 **Description (4000)**
@@ -436,7 +432,7 @@ Kolorist is a colour tool for designers and architects on Mac – and on iPhone 
 PICK AND DRAG
 • Screen eyedropper that picks colours from anywhere on screen
 • Drag swatches into other apps and colour wells – and drag colours in from them
-• Your palettes stay on the right in a wide window
+• Your palettes at hand in a wide window
 • Photos, with dominant colours
 • Camera, including iPhone as a camera, with an on-screen light panel
 • OKLCH with ⌥⌘C, paste with ⌥⌘V, undo with ⌘Z
@@ -454,7 +450,7 @@ COLOUR LIBRARIES AND ICC PROFILES
 • Colours are locked to the library’s tones, and Studio shows the tone names
 • Use the profiles installed on your Mac, by folder
 • Import your own .icc and .icm profiles
-• All gathered under “My colour spaces”, synced to iPhone and iPad through iCloud Drive
+• All gathered in one place, synced to iPhone and iPad through iCloud Drive
 • Convert between profiles and compare rendering intents with ΔE2000
 
 GRADIENTS, TONES AND HARMONIES
