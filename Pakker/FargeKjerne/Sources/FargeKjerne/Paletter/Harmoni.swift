@@ -70,6 +70,9 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
     /// Munsell: ti hovedkulører (R, YR, Y, GY, G, BG, B, PB, P, RP) i like store opplevde steg, fra
     /// renotasjonsdataene. Komplementærparene følger Munsell (5R ↔ 5BG, 5Y ↔ 5PB), ikke Lab-vinkelen.
     case munsell
+    /// Herings motfargesirkel: de fire elementærfargene gul, rød, blå og grønn i hver sin kvart (0°, 90°,
+    /// 180°, 270°), så gul ↔ blå og rød ↔ grønn er motfarger. Kulørene mellom dem interpoleres i OKLCH.
+    case hering
 
     public var id: String { rawValue }
 
@@ -80,6 +83,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .hsl: String(localized: "HSL (RGB-skjerm)", bundle: .module)
         case .ryb: String(localized: "RYB (kunstnersirkel)", bundle: .module)
         case .munsell: "Munsell"
+        case .hering: String(localized: "Hering (motfarger)", bundle: .module)
         }
     }
 
@@ -89,6 +93,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .cieLCH: String(localized: "Lab-basert sirkel, som i Photoshop og fargemåling. Lyshet og kroma holdes fast.", bundle: .module)
         case .hsl: String(localized: "Den tradisjonelle RGB-sirkelen fra skjermverden. Blå er komplementær til gul.", bundle: .module)
         case .ryb: String(localized: "Kunstnersirkelen med rød, gul og blå som primærfarger. Blå er komplementær til oransje.", bundle: .module)
+        case .hering: String(localized: "Herings motfargesirkel med de fire elementærfargene gul, rød, blå og grønn i hver sin kvart. Gul er komplementær til blå og rød til grønn. Lyshet og metning holdes fast.", bundle: .module)
         case .munsell: String(localized: "Munsells sirkel med ti hovedkulører i like store opplevde steg, mye brukt i arkitektur og fargelære. Valør og kroma holdes fast; gul er komplementær til purpurblå.", bundle: .module)
         }
     }
@@ -111,6 +116,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .hsl: farge.hsl.h
         case .ryb: RYB.fraRGBKulør(farge.hsl.h)
         case .munsell: farge.munsell.kulør * 3.6
+        case .hering: Hering.vinkel(forOKLCHKulør: farge.okLCH.h)
         }
     }
 
@@ -134,6 +140,10 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             var hsl = grunn.hsl
             hsl.h = RYB.tilRGBKulør(v)
             return Farge(hsl: hsl, alfa: grunn.alfa)
+        case .hering:
+            var lch = grunn.okLCH
+            lch.h = Hering.okLCHKulør(forVinkel: v)
+            return Farge(okLCH: lch, alfa: grunn.alfa).gamutKartlagt(til: gamut)
         case .munsell:
             var m = grunn.munsell
             m.kulør = avrundet(v) / 3.6
@@ -153,6 +163,9 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             return Farge(cieLCH: CIELCH(l: g.l, c: max(g.c, 30), h: vinkel)).gamutKartlagt(til: .displayP3)
         case .hsl: return Farge(hsl: HSL(h: vinkel, s: 0.85, l: 0.55))
         case .ryb: return Farge(hsl: HSL(h: RYB.tilRGBKulør(vinkel), s: 0.85, l: 0.55))
+        case .hering:
+            let g = grunn.okLCH
+            return Farge(okLCH: OKLCH(l: g.l, c: max(g.c, 0.08), h: Hering.okLCHKulør(forVinkel: vinkel))).gamutKartlagt(til: .displayP3)
         case .munsell:
             // Ekte Munsell-farger med grunnfargens valør og kroma (kroma senket der kuløren ikke når så høyt).
             var m = grunn.munsell
@@ -165,6 +178,46 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
 /// Stykkevis lineær avbildning mellom RYB-kunstnersirkelen og RGB/HSL-kulør.
 /// Ankerpunkter (RYB → RGB): rød 0→0, oransje 60→35, gul 120→60, grønn 180→120,
 /// blå 240→225, fiolett 300→275.
+/// Avbildning mellom Herings motfargesirkel og OKLCH-kulør. Elementærfargene (unike kulører) er omtrentlige
+/// verdier fra litteraturen om unik gul, rød, blå og grønn, regnet om til OKLCH. Mellom dem er avbildningen lineær,
+/// og OKLCH-kuløren synker hele veien rundt (gul → oransje → rød → purpur → blå → turkis → grønn → gul).
+public enum Hering {
+    /// OKLCH-kulør for unik gul, rød, blå og grønn – i den rekkefølgen, på 0°, 90°, 180° og 270°.
+    static let elementærfarger: [Double] = ["#FFD300", "#C40233", "#0087BD", "#009F6B"].map { Farge(hex: $0)!.okLCH.h }
+
+    /// Ankerpunkter (sirkelvinkel, «utrullet» OKLCH-kulør) – kuløren trekkes fra 360 der det trengs, så den synker.
+    private static let anker: [(vinkel: Double, kulør: Double)] = {
+        var kulører: [Double] = []
+        for h in elementærfarger + [elementærfarger[0]] {
+            var k = h
+            while let forrige = kulører.last, k >= forrige { k -= 360 }
+            kulører.append(k)
+        }
+        return kulører.enumerated().map { (Double($0.offset) * 90, $0.element) }
+    }()
+
+    public static func okLCHKulør(forVinkel vinkel: Double) -> Double {
+        let v = Harmoni.normaliser(vinkel)
+        for (a, b) in zip(anker, anker.dropFirst()) where v >= a.vinkel && v <= b.vinkel {
+            return Harmoni.normaliser(a.kulør + (v - a.vinkel) / 90 * (b.kulør - a.kulør))
+        }
+        return elementærfarger[0]
+    }
+
+    public static func vinkel(forOKLCHKulør kulør: Double) -> Double {
+        // Finn segmentet der kuløren ligger (den synker fra a til b, med samme utrulling).
+        for (a, b) in zip(anker, anker.dropFirst()) {
+            var k = kulør
+            while k > a.kulør { k -= 360 }
+            while k < b.kulør { k += 360 }
+            if k <= a.kulør && k >= b.kulør {
+                return Harmoni.normaliser(a.vinkel + (a.kulør - k) / (a.kulør - b.kulør) * 90)
+            }
+        }
+        return 0
+    }
+}
+
 public enum RYB {
     static let anker: [(ryb: Double, rgb: Double)] = [(0, 0), (60, 35), (120, 60), (180, 120), (240, 225), (300, 275), (360, 360)]
 

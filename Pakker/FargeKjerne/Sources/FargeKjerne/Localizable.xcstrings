@@ -297,6 +297,26 @@
         }
       }
     },
+    "Hering (motfarger)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hering (opponent colours)"
+          }
+        }
+      }
+    },
+    "Herings motfargesirkel med de fire elementærfargene gul, rød, blå og grønn i hver sin kvart. Gul er komplementær til blå og rød til grønn. Lyshet og metning holdes fast.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hering’s opponent-colour wheel with the four unique hues yellow, red, blue and green, one in each quarter. Yellow is complementary to blue and red to green. Lightness and saturation are kept."
+          }
+        }
+      }
+    },
     "Hex-liste (.txt)": {
       "localizations": {
         "en": {

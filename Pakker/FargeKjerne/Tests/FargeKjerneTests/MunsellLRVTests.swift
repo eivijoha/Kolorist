@@ -3,6 +3,20 @@ import Testing
 
 @Suite("Munsell")
 struct MunsellTests {
+    /// Herings motfargesirkel: unik gul ligger på 0°, og motfargen (180°) er unik blå; rød ↔ grønn.
+    @Test func heringsMotfarger() throws {
+        let gul = Farge(hex: "#FFD300")!, blå = Farge(hex: "#0087BD")!, rød = Farge(hex: "#C40233")!
+        #expect(abs(Fargesirkel.hering.vinkel(for: gul)) < 0.5 || abs(Fargesirkel.hering.vinkel(for: gul) - 360) < 0.5)
+        #expect(abs(Fargesirkel.hering.vinkel(for: blå) - 180) < 0.5)
+        #expect(abs(Fargesirkel.hering.vinkel(for: rød) - 90) < 0.5)
+        #expect(abs(Hering.okLCHKulør(forVinkel: 180) - blå.okLCH.h) < 0.01)
+        #expect(abs(Hering.okLCHKulør(forVinkel: 270) - Farge(hex: "#009F6B")!.okLCH.h) < 0.01)
+        // Rundtur vinkel → kulør → vinkel
+        for v in stride(from: 0.0, to: 360, by: 15) {
+            #expect(abs(Hering.vinkel(forOKLCHKulør: Hering.okLCHKulør(forVinkel: v)) - v) < 0.01)
+        }
+    }
+
     /// Munsell-sirkelen: komplementærfargen til 5Y er 5PB (Munsells egne par), og vinkelen går rundt.
     @Test func munsellsirkelensKomplementær() throws {
         let gul = try #require(Farge(munsell: Munsell(kulør: 25, valør: 8, kroma: 8)))   // 5Y 8/8

@@ -72,7 +72,7 @@ Bygg paletter i OKLCH, CMYK med ICC-profiler og Munsell, kontroller kontrast og 
 Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og gjør det raskere å jobbe med paletter.
 
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
-• Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells fargesirkel for harmonier.
+• Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
 • Harmoni: alle fargene vises øverst i valgt fargerom med verdier eller tonenavn, og grunnfargen er merket.
 • LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 under Vurdering › Kontrast.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
@@ -112,7 +112,7 @@ OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
 • CSS-gradient i oklab med sRGB-reserve – lineær, radiell eller konisk
 • Toneskalaer fra 50 til 950
-• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, HSL eller RYB
+• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB
 
 TILGJENGELIGHET OG FARGESYN
 • WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk, og «Rett opp» som justerer fargen til den består
@@ -184,7 +184,7 @@ Build palettes in OKLCH, CMYK with ICC profiles and Munsell, check for contrast 
 Kolorist 1.1 reaches more disciplines – including architecture and interiors – and makes working with palettes faster.
 
 • Colour libraries: import your own colour charts in ASE, ACO or ACB with named tones. Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names.
-• Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell colour wheel for harmonies.
+• Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell and Hering colour wheels for harmonies.
 • Harmony: every colour is shown at the top in the chosen colour space with values or tone names, and the base colour is marked.
 • LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 under Assess › Contrast.
 • Rec. 2020 and ProPhoto RGB as built-in colour spaces.
@@ -224,7 +224,7 @@ GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • CSS gradients in oklab with an sRGB fallback – linear, radial or conic
 • Tone scales from 50 to 950
-• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, HSL or RYB colour wheel
+• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel
 
 ACCESSIBILITY AND COLOUR VISION
 • WCAG 2.2 contrast: AA and AAA, large text and graphics, and auto-fix that adjusts the colour until it passes
@@ -296,7 +296,7 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 • Paletter fast til høyre: når vinduet er bredt nok, ligger palettene ved siden av alle verktøyene. Gjøres vinduet smalt, flytter de tilbake i sidefeltet.
 • Dra og slipp: dra farger fra palettene rett inn i fargevalg som Fra og Til i Overgang, i tonerekka og på andre paletter – og dra farger inn fra fargepanelet og fargebrønner i andre programmer.
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
-• Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells fargesirkel for harmonier.
+• Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
 • Harmoni: alle fargene vises øverst i valgt fargerom med verdier eller tonenavn, og grunnfargen er merket.
 • LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 under Vurdering › Kontrast.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
@@ -344,7 +344,7 @@ OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
 • CSS-gradient i oklab med sRGB-reserve – lineær, radiell eller konisk
 • Toneskalaer fra 50 til 950
-• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, HSL eller RYB
+• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB
 
 TILGJENGELIGHET OG FARGESYN
 • WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk, og «Rett opp» som justerer fargen til den består
@@ -405,7 +405,7 @@ Kolorist 1.1 reaches more disciplines – including architecture and interiors �
 • Palettes on the right: when the window is wide enough, your palettes sit beside every tool. Make the window narrow and they move back into the sidebar.
 • Drag and drop: drag colours from your palettes straight onto colour wells such as From and To in Gradient, onto the tone row and onto other palettes – and drag colours in from the colour panel and colour wells in other apps.
 • Colour libraries: import your own colour charts in ASE, ACO or ACB with named tones. Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names.
-• Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell colour wheel for harmonies.
+• Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell and Hering colour wheels for harmonies.
 • Harmony: every colour is shown at the top in the chosen colour space with values or tone names, and the base colour is marked.
 • LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 under Assess › Contrast.
 • Rec. 2020 and ProPhoto RGB as built-in colour spaces.
@@ -453,7 +453,7 @@ GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • CSS gradients in oklab with an sRGB fallback – linear, radial or conic
 • Tone scales from 50 to 950
-• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, HSL or RYB colour wheel
+• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel
 
 ACCESSIBILITY AND COLOUR VISION
 • WCAG 2.2 contrast: AA and AAA, large text and graphics, and auto-fix that adjusts the colour until it passes

@@ -39,7 +39,8 @@ struct HarmoniTests {
 
     @Test(arguments: Fargesirkel.allCases)
     func sirkelVinkelRundtur(_ sirkel: Fargesirkel) {
-        let f = Farge(hex: "#7A2E8F")!
+        // Middels mettet, så fargen holder seg innenfor P3 på hele sirkelen og testen måler sirkelen, ikke gamut.
+        let f = Farge(hex: "#7A4E8F")!
         let flyttet = sirkel.farge(f, vinkel: sirkel.vinkel(for: f) + 90)
         let tilbake = sirkel.farge(flyttet, vinkel: sirkel.vinkel(for: flyttet) - 90)
         #expect(tilbake.deltaE2000(til: f) < 3, "\(sirkel)")
