@@ -66,6 +66,20 @@ ekte filen brukes bare lokalt under testing på enhet (mappen `Lokalt/`, som er 
    (helst kryssvalidert: hvert felt vurdert med en korreksjon beregnet uten det). Store gjenstående avvik gir et varsel
    om at lyset gjengir farger dårlig (ikke CRI, men en nyttig indikator).
 
+**Spektrale referansedata** (Eivind har spektral refleksjon for kortets 24 felt, 380–730 nm i steg på 10 nm, lokalt
+i `Lokalt/`; kontrollert mot publiserte Lab-verdier, snitt ΔE00 1,1). Spektra i stedet for bare Lab gir mer:
+
+- **Fasit i ethvert lys,** ikke bare D50: hva hvert felt *skal* være under målt eller valgt lys (dagslysserien,
+  glødelampe, typiske LED- og lysrørspektra). Korreksjonen og nøyaktighetsrapporten kan da regnes i det aktuelle lyset.
+- **Identifisere lystypen:** sammenligne kameraets svar på de 24 feltene med forventet svar under kandidatspektra og
+  velge det som passer best – f.eks. «trolig LED, ≈ 3000 K» eller «trolig glødelampe». Fra et identifisert spekter kan
+  et **estimat av fargegjengivelse** (CRI Ra / TM-30) regnes ut. Presenteres som estimat, ikke måling.
+- **Metameri for kortets felt** mellom to lysmiljøer, som illustrasjon av hvor mye lyset kan endre farger.
+- **Lysmiljøer med spekter:** standardlys og identifiserte lys kan lagres som spekter, ikke bare hvitpunkt, slik at
+  «Se i lys» kan bli mer nøyaktig der spekteret er kjent.
+- Import: CGATS med spektrale kolonner (`SPECTRAL_NM380` …) i tillegg til Lab/XYZ. Testdata i kodelageret er
+  syntetiske eller fra offentlig tilgjengelige spektra – ikke avledet av den rettighetsbelagte filen.
+
 **Fotografering:** kortet midt i bildet, lys fra siden (ca. 45°) uten gjenskinn, låst eksponering og hvitbalanse.
 Feltene finnes ved at brukeren markerer de fire hjørnene (alternativt automatisk med Vision – rutenettet 6 × 4 er
 lett å finne), og bildet rettes ut før gjennomsnittet i midten av hvert felt leses.
@@ -83,6 +97,8 @@ lett å finne), og bildet rettes ut før gjennomsnittet i midten av hvert felt l
 | Referansedata | CGATS.17-tekstformat (gjelder også større kort som IT8.7/2 / ISO 12641) | ANSI, ISO |
 | Lux fra eksponering | Eksponeringsverdi fra blender, lukkertid og ISO, med referanse av kjent refleksjon | ISO 2720 (lysmåling) |
 | Nøyaktighet | ΔE2000 mot referansefeltene | CIE 142 |
+| Fra spekter til farge | Refleksjon × lysets spekter × CIE 1931 2°-observatøren (CIE 15) | CIE 15:2018 |
+| Lystype og fargegjengivelse | Tilpasning mot kandidatspektra; CRI Ra / TM-30 fra identifisert spekter | CIE 13.3; IES TM-30 |
 
 Alle beregninger kjøres på enheten. Kamerabilder lagres ikke (unntatt valgfrie miniatyrer i lysmiljøer).
 
