@@ -157,6 +157,13 @@ designprogrammet og ville ha *fargen* i Kolorist – ikke selve objektet. Lim in
 - Figur med gradient → gradienten i Overgang (eller stoppene som palett).
 - Ta med det programmet oppgir: fargenavn (fargeprøve/swatch), fargerom (P3, sRGB, CMYK) og ev. dekkfarge, så
   verdien tolkes riktig og ikke klippes.
+- **Kildefargerom der det er mulig:** verdiene betyr noe bare sammen med profilen de er laget i. Les profilen fra
+  utklippet når den finnes – ICC-profil i PDF-en (`/ICCBased`, `/OutputIntent`), `color_space` i iWork-JSON-en,
+  fargeprofil i bilder – og tolk fargen gjennom den. Ukjente eller nye profiler kan legges i «Mine fargerom», og
+  fargen kan vises med kildeprofilen som «Vis som». Finnes ingen profil, antas programmets standard (sRGB for SVG/CSS,
+  dokumentets arbeidsrom ellers) og det vises tydelig at kildefargerommet er antatt.
+- Henger direkte sammen med «CMYK-profil som kildeprofil» over: CMYK fra InDesign/Illustrator må tolkes i
+  dokumentets CMYK-profil (FOGRA, GRACoL …), ikke i en tilfeldig standard.
 
 **Utklippsformatene vi kjenner fra arbeidet med «Kopier til» (1.2)**
 - **Pages/Keynote/Numbers (og trolig Freeform):** `com.apple.apps.content-language.canvas-object-1.0` – JSON med
