@@ -68,3 +68,40 @@ Gjenbruk fra Studieblikk (`SharedFolderStore`):
 - `isConflictedCopyFilename` og hopp over symlenker; utvid med Google Drives «(1)»-kopier.
 - Én «Koble til»-funksjon og én statusmodell (`OneDriveStatus`/`kobleTilMappe`).
 - Ikke aktuelt: FSEvents-overvåking (bare macOS), Teams-stier og treveis-fletting.
+
+## Lenker til andre Kolorist-brukere, med visning på kolorist.no (vurdert 2026-10-04)
+
+Eivind ønsker å dele enkeltfarger, paletter, harmonier, gradienter m.m. som lenker. Vurdert, ikke implementert.
+
+**Anbefaling: universelle lenker `https://kolorist.no/l#…` med en statisk visningsside.**
+- Innholdet ligger etter `#` og sendes aldri til nettstedet. Ingen server, ingen lagring, personvernet uendret.
+- Har mottakeren appen (iPhone, iPad, Mac), åpner systemet lenken rett i Kolorist; siden lastes ikke.
+- Uten appen – også på Windows – viser siden fargene i nettleseren. I innebygde nettlesere (Teams, Outlook) har siden
+  «Åpne i Kolorist» (`kolorist://`) og Apples appbanner med lenken som argument.
+- `kolorist://` i tillegg, for Snarveier og innebygde nettlesere.
+
+**Hva som deles:** enkeltfarger (navn og fargemodell, også CMYK i profil), paletter (med gradienter), harmonier
+(oppsett, så mottakeren kan jobbe videre), overganger (endepunkter, antall, lysere/mørkere), lysmiljøer og
+kontrastpar. Ikke referansekort (referanseverdiene er rettighetsbelagt).
+
+**Visningssiden** (én HTML-side med lite skript, ~20–40 kB, ingen avhengigheter – ikke en web-app):
+- Viser farger (hex, OKLCH, CIELab, egen modell), paletter som rutenett, gradienter som CSS i OKLab, harmonier og
+  kontrastpar med WCAG-tall. Lysmiljøer bare som parametre (K, lux) – «Se i lys» krever spektre og CAM16.
+- Munsell- og CMYK-verdier ligger ferdig utregnet i lenken som tekst, så siden ikke trenger egen fargevitenskap.
+- «Kopier som hex/CSS». Filnedlasting overlates til delingsmappa (unngå to implementasjoner av formatene).
+
+**Forutsetninger og risiko**
+- `/.well-known/apple-app-site-association` på kolorist.no (JSON, uten omdirigering – sjekk at one.com leverer
+  `.well-known` riktig) og Associated Domains (`applinks:kolorist.no`) i appen.
+- Ett lenkeformat med versjonsnummer, lest av både Swift og JavaScript: felles testlenker som begge sjekkes mot
+  (som `WindowsSamsvarTests` i Studieblikk). Bare bakoverkompatible endringer.
+- Lenker kan lages av hvem som helst: navn settes inn som tekst (aldri HTML), grenser for antall farger og lengde,
+  og appen lagrer aldri automatisk – mottaksark med forhåndsvisning og «Legg til» / «Åpne i Studio» / «Avbryt».
+- Lengde: ~600–800 tegn for ti farger; over ~64 farger er delingsmappa bedre.
+- iOS kan huske «Åpne i Safari», og universelle lenker utløses ikke når adressen limes inn i adressefeltet –
+  visningssiden fanger begge.
+
+**Omfang:** appen (lenkeformat, delingsknapper, mottaksark) er det største; visningssiden og AASA-fila er små;
+felles testlenker binder dem sammen.
+
+Ikke aktuelt (Eivind): QR-kode og serverløsninger.
