@@ -75,7 +75,7 @@ struct MineProfilerArk: View {
                     Section {
                         ForEach(Filamentfarger.biblioteker) { b in innebygdRad(b) }
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Filamentfarger for 3D-print fra FilamentColors.xyz: \(om.antall) prøver fra mange produsenter, \(om.målt) av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz.")
+                            Text("Filamentfarger for 3D-print fra FilamentColors.xyz: \(om.antall) prøver fra mange produsenter, \(om.målt) av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Farger lenker til prøver hos FilamentColors.xyz.")
                             Text("Dataene er lisensiert under CC BY 4.0. Kolorist har valgt ut opplysninger og regnet om fargene (uttrekk \(om.hentet)) og er ikke tilknyttet FilamentColors.xyz.")
                             HStack(spacing: 16) {
                                 if let lenke = om.kildelenke { Link("FilamentColors.xyz", destination: lenke) }

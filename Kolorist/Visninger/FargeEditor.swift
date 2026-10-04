@@ -24,6 +24,10 @@ struct FargeEditor: View {
     @AppStorage("renCMYK") private var renCMYK = false
     /// Sirkelen valgt i Harmoni (samme lagring som HarmoniSeksjon), for verdiene i harmoniflaten.
     @AppStorage("harmoniSirkel") private var harmonisirkel: Fargesirkel = .okLCH
+    @AppStorage("harmoni") private var harmonitype: Harmoni = .splittKomplementær
+    @AppStorage("harmoniAntall") private var harmoniAntall = 3
+    @AppStorage("harmoniVinkel") private var harmoniVinkel = 30.0
+    @AppStorage("harmoniLyshetsrekkefølge") private var harmoniLyshetsrekkefølge: Lyshetsrekkefølge = .lik
     @Environment(ProfilBibliotek.self) private var bibliotek
 
     private var modusvelger: some View {
@@ -99,6 +103,15 @@ struct FargeEditor: View {
                                  velg: { arbeidsbenk.aktivFarge = $0 },
                                  lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                                  leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+                        .overlay(alignment: .topTrailing) {
+                            let toner = tonevarianter(farge).map { PalettFarge(farge: $0, opphav: .toneskala) }
+                            let navn = String(localized: "Toner \(farge.hex())")
+                            RekkeMeny(farger: toner, navn: navn,
+                                      lagreSomPalett: { lagreNavn = navn; lagreFarger = toner },
+                                      lenketittel: "Del tonene som lenke",
+                                      lenke: { Lenkedeling.palett(navn: navn, farger: toner, gradienter: []) },
+                                      tekstfarge: (toner.last?.farge ?? farge).lesbarTekstfarge.swiftUI)
+                        }
                 } else if modus == .harmoni, !harmonifarger.isEmpty {
                     // Harmoni: alle fargene i «Vis også»-rommet, med grunnfargen merket.
                     HarmoniFlate(farger: harmonifarger, grunnIndeks: harmoniGrunn, profil: visOgsåProfil,
@@ -109,6 +122,17 @@ struct FargeEditor: View {
                                  velg: { arbeidsbenk.aktivFarge = $0 },
                                  lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                                  leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+                        .overlay(alignment: .topTrailing) {
+                            let farger = harmonifarger
+                            let (h, s, a, v, o, i) = (harmonitype, harmonisirkel, harmoniAntall, harmoniVinkel, harmoniLyshetsrekkefølge, harmoniGrunn)
+                            let grunn = i.flatMap { farger.indices.contains($0) ? farger[$0] : nil } ?? farge
+                            RekkeMeny(farger: farger.map { PalettFarge(farge: $0) }, navn: h.navn,
+                                      lagreSomPalett: { lagreNavn = h.navn; lagreFarger = farger.map { PalettFarge(farge: $0) } },
+                                      lenketittel: "Del harmonien som lenke",
+                                      lenke: { Lenkedeling.harmoni(h, sirkel: s, grunn: grunn, farger: farger, antall: a, vinkel: v,
+                                                                   lyshetsrekkefølge: o, grunnIndeks: i) },
+                                      tekstfarge: (farger.last ?? farge).lesbarTekstfarge.swiftUI)
+                        }
                 } else {
                     Fargeflate(farge: farge, modell: arbeidsbenk.modell, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                                kobletVerdier: kobletProfil.map { arbeidsbenk.profilverdier(for: $0) ?? farge.komponenter(i: $0, hensikt: hensikt) ?? [] },
@@ -353,7 +377,7 @@ extension FargeEditor {
             Text("Lysere og mørkere")
         }.foregroundStyle(Color.sekundærTekst) } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tonene vises i feltene øverst, med grunnfargen merket. Trykk på en tone for å gjøre den til aktiv farge, eller trykk og hold for å lagre den.")
+                Text("Tonene vises i feltene øverst, med grunnfargen merket. Trykk på en tone for å gjøre den til aktiv farge, eller trykk og hold (høyreklikk på Mac) for å lagre, kopiere eller dele den. + øverst gjelder hele rekken.")
                 MetodeHenvisning(.oklab, .cssColor4)
             }
         }

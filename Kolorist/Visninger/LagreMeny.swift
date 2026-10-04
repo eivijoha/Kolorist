@@ -44,3 +44,42 @@ struct LagreMeny: View {
         .accessibilityLabel(lagret ? String(localized: "Lagret") : String(localized: "Lagre og del farge"))
     }
 }
+
+/// «+» for en hel rekke farger øverst (toner, harmoni, overgang): lagre som palett, dele som lenke, kopiere alle som
+/// hex og kopiere til andre programmer – alt rett i menyen.
+struct RekkeMeny: View {
+    let farger: [PalettFarge]
+    let navn: String
+    var lagreSomPalett: () -> Void
+    /// Flere lagringsvalg (f.eks. «Lagre med lysere og mørkere toner»).
+    var flereLagringsvalg: AnyView? = nil
+    var lenketittel: LocalizedStringKey = "Del som lenke"
+    let lenke: @Sendable () -> DeltInnhold
+    var tekstfarge: Color = .primary
+
+    var body: some View {
+        Menu {
+            Section {
+                Button("Lagre som palett …", systemImage: "swatchpalette", action: lagreSomPalett)
+                if let flereLagringsvalg { flereLagringsvalg }
+            }
+            Section {
+                DelSomLenke(navn: navn, tittel: lenketittel, innhold: lenke)
+                Button("Kopier alle som hex", systemImage: "number") {
+                    Utklippstavle.kopierTekst(farger.map { $0.farge.hex() }.joined(separator: "\n"))
+                }
+            }
+            KopierTilMeny(farger: farger, navn: navn, inline: true)
+        } label: {
+            Image(systemName: "plus.square")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(tekstfarge)
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
+        .menuOrder(.fixed)
+        .accessibilityLabel(String(localized: "Lagre eller del alle fargene"))
+    }
+}

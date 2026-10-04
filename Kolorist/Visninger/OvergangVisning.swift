@@ -45,30 +45,19 @@ struct OvergangVisning: View {
     /// «+» i øvre høyre hjørne av feltene: lagre, kopiere eller dele hele overgangen. Hver tone har sine egne valg
     /// i trykk og hold-menyen (høyreklikk på Mac).
     private var lagremeny: some View {
-        Menu {
-            Button("Lagre tonene som palett …", systemImage: "swatchpalette") {
-                somPalett = toner.map { PalettFarge(farge: $0, opphav: .overgang) }
-            }
-            if rader.count > 1 {
-                Button("Lagre med lysere og mørkere toner …", systemImage: "square.grid.3x3") {
-                    somPalett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
-                }
-            }
-            KopierTilMeny(farger: toner.map { PalettFarge(farge: $0, opphav: .overgang) },
-                          navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"), tittel: "Kopier tonene til")
-            let oppsett = Gradientoppsett(fra: start, til: slutt, antall: antall, trinn: arbeidsbenk.lyshetstrinn)
-            let navn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
-            DelSomLenke(navn: navn, tittel: "Del overgangen som lenke") { Lenkedeling.gradient(oppsett, navn: navn) }
-        } label: {
-            Image(systemName: "plus.square")
-                .font(.body.weight(.semibold))
-                .foregroundStyle((toner.last ?? slutt).lesbarTekstfarge.swiftUI)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .menuIndicator(.hidden)
-        .accessibilityLabel(String(localized: "Lagre eller del alle tonene"))
+        let farger = toner.map { PalettFarge(farge: $0, opphav: .overgang) }
+        let navn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
+        let oppsett = Gradientoppsett(fra: start, til: slutt, antall: antall, trinn: arbeidsbenk.lyshetstrinn)
+        return RekkeMeny(farger: farger, navn: navn,
+                         lagreSomPalett: { somPalett = farger },
+                         flereLagringsvalg: rader.count > 1 ? AnyView(
+                             Button("Lagre med lysere og mørkere toner …", systemImage: "square.grid.3x3") {
+                                 somPalett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
+                             }) : nil,
+                         lenketittel: "Del overgangen som lenke",
+                         // Tonene i trinn og selve gradienten, så mottakeren ser begge.
+                         lenke: { Lenkedeling.palett(navn: navn, farger: farger, gradienter: [PalettGradient(navn: navn, oppsett: oppsett)]) },
+                         tekstfarge: (toner.last ?? slutt).lesbarTekstfarge.swiftUI)
     }
 
     private func lagreGradient() {
