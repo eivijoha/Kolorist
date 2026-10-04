@@ -224,6 +224,7 @@
 				INFOPLIST_FILE = Konfigurasjon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kolorist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kolorist bruker kameraet til å plukke farger fra omgivelsene dine, måle lyset og vise omgivelsene slik de ser ut med fargesynsavvik.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Eivind Arnstein Johansen";
@@ -273,6 +274,7 @@
 				INFOPLIST_FILE = Konfigurasjon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kolorist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Kolorist bruker kameraet til å plukke farger fra omgivelsene dine, måle lyset og vise omgivelsene slik de ser ut med fargesynsavvik.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Eivind Arnstein Johansen";

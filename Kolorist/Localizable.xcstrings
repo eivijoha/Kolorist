@@ -3297,16 +3297,6 @@
         }
       }
     },
-    "Kolorist skriver palettene som filer til mappa og holder dem oppdatert. På iPhone og iPad gir iCloud Drive og «På min iPhone» fast tilgang til en mappe; mange andre tjenester (som OneDrive og Jottacloud) tillater det ikke og vises grået ut. Bruk da «Eksporter paletter til en mappe» under, eller del en mappe i iCloud Drive med kolleger. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kolorist writes your palettes as files to the folder and keeps them up to date. On iPhone and iPad, iCloud Drive and “On My iPhone” give lasting access to a folder; many other services (such as OneDrive and Jottacloud) don’t allow it and appear greyed out. Use “Export palettes to a folder” below instead, or share a folder in iCloud Drive with colleagues. The service’s own app uploads the files – Kolorist sends nothing itself."
-          }
-        }
-      }
-    },
     "Kolorist · %@ · Fargeflater i CIELab (D50) · %@": {
       "localizations": {
         "en": {
@@ -7109,6 +7099,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a folder in OneDrive, Google Drive, Dropbox, iCloud Drive or another service. Kolorist writes your palettes there as files, so they can be opened on Windows and other computers. The service’s own app uploads the files – Kolorist sends nothing itself."
+          }
+        }
+      }
+    },
+    "Velg en mappe i OneDrive, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer og holder dem oppdatert, så de kan åpnes på Windows og andre maskiner. Vises en tjeneste grået ut, gir den ikke fast tilgang til mapper på iPhone og iPad – bruk da «Eksporter paletter til en mappe» under. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a folder in OneDrive, iCloud Drive or another service in Files. Kolorist writes your palettes there as files and keeps them up to date, so they can be opened on Windows and other computers. If a service appears greyed out, it doesn’t give lasting access to folders on iPhone and iPad – use “Export palettes to a folder” below instead. The service’s own app uploads the files – Kolorist sends nothing itself."
           }
         }
       }

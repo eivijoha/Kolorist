@@ -41,7 +41,7 @@ struct DelingsmappeArk: View {
                     #if os(macOS)
                     Text("Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
                     #else
-                    Text("Kolorist skriver palettene som filer til mappa og holder dem oppdatert. På iPhone og iPad gir iCloud Drive og «På min iPhone» fast tilgang til en mappe; mange andre tjenester (som OneDrive og Jottacloud) tillater det ikke og vises grået ut. Bruk da «Eksporter paletter til en mappe» under, eller del en mappe i iCloud Drive med kolleger. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
+                    Text("Velg en mappe i OneDrive, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer og holder dem oppdatert, så de kan åpnes på Windows og andre maskiner. Vises en tjeneste grået ut, gir den ikke fast tilgang til mapper på iPhone og iPad – bruk da «Eksporter paletter til en mappe» under. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
                     #endif
                 }
 
