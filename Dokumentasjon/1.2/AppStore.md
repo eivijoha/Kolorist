@@ -29,7 +29,7 @@ Utgangspunktet er tekstene for 1.1 (`Dokumentasjon/1.1/AppStore.md`). Endringer 
 Kolorist 1.2 tar lyset med i regnestykket.
 
 • Se i lys: se farger og hele paletter slik de oppleves i lyset der de skal brukes – egne lysmiljøer eller standard betraktningsforhold for grafisk vurdering, arbeidsplasser, skoler og museer.
-• Farger slik de egentlig er: kompenser farger du plukker for lyset de ble fotografert i – også i bilder.
+• Farger slik de egentlig er (beta): kompenser farger du plukker for lyset de ble fotografert i, med gråkort eller referansekort – også i bilder.
 • Gråkort og referansekort: få riktig farge og lyshet, og mål fargetemperatur og belysningsstyrke. Kalibrer kameraet én gang med et referansekort – deretter holder et gråkort, også i et annet lys.
 • Vurdering i lys: farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED.
 • LRV og luminanskontrast i valgt lys, for bygg og interiør.
@@ -46,7 +46,7 @@ Kolorist 1.2 tar lyset med i regnestykket.
 Kolorist 1.2 brings light into the equation.
 
 • See in light: see colours and whole palettes as they appear in the light where they will be used – your own viewing conditions or standard viewing conditions for graphic arts, workplaces, schools and museums.
-• Colours as they really are: compensate the colours you pick for the light they were photographed in – in photos too.
+• Colours as they really are (beta): compensate the colours you pick for the light they were photographed in, with a grey card or reference card – in photos too.
 • Grey cards and reference cards: get the right colour and lightness, and measure colour temperature and illuminance. Calibrate the camera once with a reference card – after that a grey card is enough, even in different light.
 • Critique in light: colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting.
 • LRV and luminance contrast in the chosen light, for buildings and interiors.
@@ -63,22 +63,22 @@ Mac-versjonen gikk rett til 1.1. For 1.2 gjelder samme punkter, men lysmåling s
 
 ```
 • Se farger og paletter i lysmiljøene du har målt på iPhone – de synkroniseres via iCloud.
-• Med iPhone som kamera (Continuity) kan fargene kompenseres med gråkort eller referansekort.
+• Med iPhone som kamera (Continuity) kan fargene kompenseres med gråkort eller referansekort (beta).
 ```
 ```
 • See colours and palettes in the viewing conditions you measured on iPhone – they sync through iCloud.
-• With iPhone as the camera (Continuity), colours can be compensated with a grey card or reference card.
+• With iPhone as the camera (Continuity), colours can be compensated with a grey card or reference card (beta).
 ```
 
 ### Utkast: avsnitt til beskrivelsen
 
 ```
 LYS OG FARGEMÅLING
-Se farger og paletter slik de oppleves i lyset der de skal brukes. Kompenser farger du plukker for lyset, og bruk et gråkort eller et referansekort for riktig farge og lyshet, fargetemperatur og belysningsstyrke.
+Se farger og paletter slik de oppleves i lyset der de skal brukes. Kompenser farger du plukker for lyset (beta), og bruk et gråkort eller et referansekort for riktig farge og lyshet, fargetemperatur og belysningsstyrke.
 ```
 ```
 LIGHT AND COLOUR MEASUREMENT
-See colours and palettes as they appear in the light where they will be used. Compensate the colours you pick for the light, and use a grey card or reference card for the right colour and lightness, colour temperature and illuminance.
+See colours and palettes as they appear in the light where they will be used. Compensate the colours you pick for the light (beta), and use a grey card or reference card for the right colour and lightness, colour temperature and illuminance.
 ```
 
 ---
@@ -93,7 +93,7 @@ See colours and palettes as they appear in the light where they will be used. Co
 | Primærkategori | Grafikk og design (Graphics & Design) |
 | Sekundærkategori | Produktivitet (Productivity) |
 | Opphavsrett | `2026 Eivind Arnstein Johansen` |
-| Innholdsrettigheter | Nei, appen inneholder ikke, viser ikke og gir ikke tilgang til innhold fra tredjeparter |
+| Innholdsrettigheter | Fra 1.2: **Ja** – filamentfarger fra FilamentColors.xyz under CC BY 4.0, kreditert i appen og på kolorist.no (til og med 1.1: nei) |
 | Aldersgrense | Svar «Nei/Ingen» på alt i spørreskjemaet → 4+. Ingen nettleser, ingen brukerinnhold som deles, ingen kjøp i appen. |
 | Pris | Velg selv (gratis eller betalt). Ingen kjøp i appen. |
 | Lisensavtale | Apples standard EULA |
