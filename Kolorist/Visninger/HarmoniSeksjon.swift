@@ -29,6 +29,7 @@ struct HarmoniSeksjon: View {
     @AppStorage("harmoniAntall") private var antall = 3
     @AppStorage("harmoniVinkel") private var vinkel = 30.0
     @AppStorage("harmoniSirkel") private var sirkel: Fargesirkel = .okLCH
+    @AppStorage("harmoniLyshetsrekkefølge") private var lyshetsrekkefølge: Lyshetsrekkefølge = .lik
 
     /// Felles metning og lyshet for hele harmonien (0…1), som i HSL. `nil` = følg hver farge.
     /// Med HSL- og RYB-sirkelen er det HSL-metning og -lyshet; ellers OKLCH-lyshet og metning som andel av
@@ -61,7 +62,20 @@ struct HarmoniSeksjon: View {
     }
 
     private var farger: [Farge] {
-        råfarger.map { begrens(juster($0).gamutKartlagt(til: gamut)) }
+        let justert = råfarger.map(juster)
+        var ordnet = lyshetsrekkefølge.anvendt(på: justert, grunn: juster(grunnfarge), gamut: gamut)
+        if brukerMunsell {
+            // Munsell: bare valøren flyttes, i bokas trinn; kroma som i resten av harmonien.
+            ordnet = zip(justert, ordnet).map { før, etter in
+                guard før != etter else { return før }
+                var m = før.munsell
+                m.valør = Munsell.avrundetValør(etter.munsell.valør)
+                var f = munsellfarge(m) ?? etter
+                f.alfa = før.alfa
+                return f
+            }
+        }
+        return ordnet.map { begrens($0.gamutKartlagt(til: gamut)) }
     }
 
     private func juster(_ f: Farge) -> Farge {
@@ -205,15 +219,27 @@ struct HarmoniSeksjon: View {
         }
     }
 
+    private var lyshetsforklaring: String {
+        switch lyshetsrekkefølge {
+        case .lik: ""
+        case .naturlig: " " + String(localized: "Naturlig lyshetsrekkefølge: gule farger blir lysere og blå og fiolette mørkere, som i naturen – det oppleves ofte som harmonisk.")
+        case .omvendt: " " + String(localized: "Omvendt lyshetsrekkefølge: gule farger blir mørkere og blå og fiolette lysere – det gir bevisst spenning.")
+        }
+    }
+
     var body: some View {
         Section {
             Picker("Harmoni", selection: $harmoni) {
                 ForEach(Harmoni.allCases) { Text($0.navn).tag($0) }
             }
-            .onChange(of: harmoni) { _, ny in if ny.harVinkel { vinkel = ny.standardVinkel } }
+            .onChange(of: harmoni) { _, ny in
+                if ny.harVinkel { vinkel = ny.standardVinkel }
+                antall = min(max(antall, ny.antallOmråde.lowerBound), ny.antallOmråde.upperBound)
+            }
 
             if harmoni.harAntall {
-                Stepper("Antall farger: \(antall)", value: $antall, in: harmoni == .jevn ? 2...12 : 2...9)
+                Stepper(harmoni == .analogMedAksent ? "Analoge farger: \(antall)" : "Antall farger: \(antall)",
+                        value: $antall, in: harmoni.antallOmråde)
             }
             if harmoni.harVinkel {
                 HStack {
@@ -250,6 +276,9 @@ struct HarmoniSeksjon: View {
             #endif
             glider(brukerMunsell ? "Kroma" : "Metning", verdi: $metning, grunn: grunnMetning, metningsakse: true)
             glider(brukerMunsell ? "Valør" : "Lyshet", verdi: $lyshet, grunn: grunnLyshet, metningsakse: false)
+            Picker(brukerMunsell ? "Valørrekkefølge" : "Lyshetsrekkefølge", selection: $lyshetsrekkefølge) {
+                ForEach(Lyshetsrekkefølge.allCases) { Text($0.navn).tag($0) }
+            }
             if metning != nil || lyshet != nil {
                 Button("Tilbakestill til grunnfargen", systemImage: "arrow.uturn.backward") {
                     metning = nil
@@ -266,7 +295,8 @@ struct HarmoniSeksjon: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(sirkel.forklaring + " " + (brukerMunsell
                     ? String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.")
-                    : String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien.")))
+                    : String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien."))
+                    + lyshetsforklaring)
                 MetodeHenvisning(.harmonier, .oklab, .cieLab)
             }
         }

@@ -31,3 +31,13 @@ følger ikke med (rettigheter) – brukeren importerer sin egen CGATS-fil:
 
 Tekniske forutsetninger: iOS gir ikke tilgang til omgivelseslyssensoren; kameraet (AVFoundation) gir
 hvitbalanse (Kelvin og tint) og eksponering. Mac med innebygd kamera gir ikke hvitbalansedata.
+
+## Harmonier (2026-10-04)
+
+Tatt inn i 1.2: triade og kvadrat som egne harmonier, analog med komplementær aksent, og naturlig/omvendt
+lyshetsrekkefølge. Lagt hit for senere:
+
+- **Harmonipoeng etter Ou og Luo (2006)** i Vurdering: en modell fra observatørforsøk som anslår hvor harmonisk
+  to- og tre-fargekombinasjoner oppleves, ut fra lyshet, kroma og kulør i CIELab. Egen oppføring under Metoder.
+- **Harmonisering etter kulørmaler** (Matsuda; Cohen-Or mfl. 2006): dytt en eksisterende palett – for eksempel
+  plukket med kameraet – til nærmeste harmonimal med minst mulig endring.

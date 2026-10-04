@@ -63,7 +63,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .machado: "G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009"
         case .icc: "International Color Consortium (ICC.1); Apple ColorSync via Core Graphics"
         case .renCMYK: String(localized: "Etablert trykkteknikk; søket er utviklet for Kolorist")
-        case .harmonier: String(localized: "Klassisk fargelære (Johannes Itten for RYB); avbildningene er utviklet for Kolorist")
+        case .harmonier: String(localized: "Klassisk fargelære (Johannes Itten for RYB); D. B. Judd og G. Wyszecki: «Color in Business, Science, and Industry» (naturlig fargeorden); avbildningene er utviklet for Kolorist")
         case .kunnskapsbase: String(localized: "Utviklet for Kolorist; språkmodell fra Apple (Foundation Models)")
         case .cam16: "C. Li, Z. Li, Z. Wang mfl.: «Comprehensive color solutions: CAM16, CAT16, and CAM16-UCS», Color Research & Application 42(6), 2017"
         case .kolorimetri: "CIE 15:2018 Colorimetry; Y. Ohno: «Practical use and calculation of CCT and Duv», LEUKOS 10(1), 2014; S. A. Burns: «Numerical methods for smoothest reflectance reconstruction», Color Research & Application 45(1), 2020"
@@ -94,7 +94,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .renCMYK:
             String(localized: "Felles grått innslag i C, M og Y flyttes til sort, og Kolorist søker etter separasjonen med færrest trykkfarger som holder seg innenfor 1 ΔE00 av profilens egen separasjon.")
         case .harmonier:
-            String(localized: "Komplementær, split-komplementær, analog og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell eller Herings motfargesirkel. Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB- og Hering-sirklene er stykkevis lineære avbildninger laget for appen.")
+            String(localized: "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell eller Herings motfargesirkel. Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB- og Hering-sirklene er stykkevis lineære avbildninger laget for appen. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.")
         case .cam16:
             String(localized: "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).")
         case .kolorimetri:

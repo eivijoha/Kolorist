@@ -24,6 +24,17 @@ public extension Farge {
         return lav
     }
 
+    /// OKLCH-lysheten der kuløren når høyest kroma innenfor `gamut` (toppunktet): kulørens «egen» lyshet –
+    /// høy for gult, lav for blått og fiolett.
+    static func toppunktLyshet(kulør: Double, i gamut: Gamut) -> Double {
+        var lav = 0.02, høy = 0.99
+        for _ in 0..<28 {
+            let a = lav + (høy - lav) / 3, b = høy - (høy - lav) / 3
+            if maksKroma(lyshet: a, kulør: kulør, i: gamut) < maksKroma(lyshet: b, kulør: kulør, i: gamut) { lav = a } else { høy = b }
+        }
+        return (lav + høy) / 2
+    }
+
     func erInnenfor(_ gamut: Gamut) -> Bool {
         switch gamut {
         case .sRGB: erISRGB

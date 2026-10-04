@@ -77,6 +77,16 @@
         }
       }
     },
+    "Analog med aksent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analogous with accent"
+          }
+        }
+      }
+    },
     "Består ikke": {
       "localizations": {
         "en": {
@@ -437,12 +447,32 @@
         }
       }
     },
+    "Kvadrat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Square"
+          }
+        }
+      }
+    },
     "Lab-basert sirkel, som i Photoshop og fargemåling. Lyshet og kroma holdes fast.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Lab-based wheel, as in Photoshop and colour measurement. Lightness and chroma are kept fixed."
+          }
+        }
+      }
+    },
+    "Lik": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equal"
           }
         }
       }
@@ -557,6 +587,16 @@
         }
       }
     },
+    "Naturlig": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Natural"
+          }
+        }
+      }
+    },
     "OKLCH (perseptuell)": {
       "localizations": {
         "en": {
@@ -603,6 +643,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "About 6% of men and 0.4% of women"
+          }
+        }
+      }
+    },
+    "Omvendt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reversed"
           }
         }
       }
@@ -773,6 +823,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text AAA"
+          }
+        }
+      }
+    },
+    "Triade": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triad"
           }
         }
       }

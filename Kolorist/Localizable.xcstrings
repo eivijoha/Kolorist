@@ -711,6 +711,16 @@
         }
       }
     },
+    "Analoge farger: %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analogous colours: %lld"
+          }
+        }
+      }
+    },
     "Andre": {
       "localizations": {
         "en": {
@@ -2913,6 +2923,16 @@
         }
       }
     },
+    "Klassisk fargelære (Johannes Itten for RYB); D. B. Judd og G. Wyszecki: «Color in Business, Science, and Industry» (naturlig fargeorden); avbildningene er utviklet for Kolorist": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classical colour theory (Johannes Itten for RYB); D. B. Judd and G. Wyszecki: “Color in Business, Science, and Industry” (natural colour order); the mappings were developed for Kolorist"
+          }
+        }
+      }
+    },
     "Klassisk fargelære (Johannes Itten for RYB); avbildningene er utviklet for Kolorist": {
       "localizations": {
         "en": {
@@ -2995,6 +3015,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compensated with reference card"
+          }
+        }
+      }
+    },
+    "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell eller Herings motfargesirkel. Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB- og Hering-sirklene er stykkevis lineære avbildninger laget for appen. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distribution are calculated as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell or Hering’s opponent-colour wheel. With Munsell, real Munsell colours in the book’s steps are used (hue 2.5, value 1, chroma 2). The RYB and Hering wheels are piecewise linear mappings made for the app. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift."
           }
         }
       }
@@ -4085,6 +4115,16 @@
         }
       }
     },
+    "Lyshetsrekkefølge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lightness order"
+          }
+        }
+      }
+    },
     "Lyskilde": {
       "localizations": {
         "en": {
@@ -4519,6 +4559,16 @@
         }
       }
     },
+    "Naturlig lyshetsrekkefølge: gule farger blir lysere og blå og fiolette mørkere, som i naturen – det oppleves ofte som harmonisk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Natural lightness order: yellow colours become lighter and blue and violet ones darker, as in nature – this is often perceived as harmonious."
+          }
+        }
+      }
+    },
     "Navn": {
       "localizations": {
         "en": {
@@ -4725,6 +4775,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "OKLab, %lld tones"
+          }
+        }
+      }
+    },
+    "Omvendt lyshetsrekkefølge: gule farger blir mørkere og blå og fiolette lysere – det gir bevisst spenning.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reversed lightness order: yellow colours become darker and blue and violet ones lighter – this creates deliberate tension."
           }
         }
       }
@@ -6405,6 +6465,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Value"
+          }
+        }
+      }
+    },
+    "Valørrekkefølge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value order"
           }
         }
       }

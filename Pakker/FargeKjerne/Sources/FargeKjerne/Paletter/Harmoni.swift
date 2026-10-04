@@ -8,10 +8,16 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
     case splittKomplementær
     /// Naboer på samme side av sirkelen, med `vinkel` mellom hver.
     case analog
-    /// `antall` farger jevnt fordelt rundt sirkelen (3 = triade, 4 = tetrade, 5 = pentade …).
-    case jevn
+    /// En analog gruppe (`antall` farger, `vinkel` mellom hver) og grunnfargens komplementærfarge som aksent.
+    case analogMedAksent
+    /// Tre farger jevnt fordelt (0°, 120°, 240°).
+    case triade
+    /// Fire farger jevnt fordelt (0°, 90°, 180°, 270°).
+    case kvadrat
     /// To komplementærpar (rektangel): 0°, vinkel, 180°, 180° + vinkel.
     case dobbeltKomplementær
+    /// `antall` farger jevnt fordelt rundt sirkelen (5 = pentade …).
+    case jevn
 
     public var id: String { rawValue }
 
@@ -20,20 +26,33 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
         case .komplementær: String(localized: "Komplementær", bundle: .module)
         case .splittKomplementær: String(localized: "Split-komplementær", bundle: .module)
         case .analog: String(localized: "Analog", bundle: .module)
-        case .jevn: String(localized: "Jevn fordeling", bundle: .module)
+        case .analogMedAksent: String(localized: "Analog med aksent", bundle: .module)
+        case .triade: String(localized: "Triade", bundle: .module)
+        case .kvadrat: String(localized: "Kvadrat", bundle: .module)
         case .dobbeltKomplementær: String(localized: "Dobbelt komplementær", bundle: .module)
+        case .jevn: String(localized: "Jevn fordeling", bundle: .module)
         }
     }
 
-    /// Om harmonien bruker valgfritt antall farger.
-    public var harAntall: Bool { self == .jevn || self == .analog }
+    /// Om harmonien bruker valgfritt antall farger (for analog med aksent: antall i den analoge gruppen).
+    public var harAntall: Bool { self == .jevn || self == .analog || self == .analogMedAksent }
     /// Om harmonien bruker en valgfri vinkel.
-    public var harVinkel: Bool { self == .splittKomplementær || self == .analog || self == .dobbeltKomplementær }
+    public var harVinkel: Bool {
+        self == .splittKomplementær || self == .analog || self == .analogMedAksent || self == .dobbeltKomplementær
+    }
+
+    /// Tillatt antall farger (se `harAntall`).
+    public var antallOmråde: ClosedRange<Int> {
+        switch self {
+        case .jevn: 2...12
+        case .analogMedAksent: 2...5
+        default: 2...9
+        }
+    }
 
     public var standardVinkel: Double {
         switch self {
-        case .splittKomplementær: 30
-        case .analog: 30
+        case .splittKomplementær, .analog, .analogMedAksent: 30
         case .dobbeltKomplementær: 60
         default: 0
         }
@@ -46,13 +65,60 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
         case .komplementær: return [0, 180]
         case .splittKomplementær: return [0, 180 - v, 180 + v]
         case .dobbeltKomplementær: return [0, v, 180, 180 + v]
-        case .jevn:
-            let n = max(antall, 2)
-            return (0..<n).map { Double($0) * 360 / Double(n) }
-        case .analog:
-            // Symmetrisk rundt grunnfargen: -v, 0, +v (og videre utover for flere farger).
-            let n = max(antall, 2)
-            return (0..<n).map { (Double($0) - Double(n - 1) / 2) * v }
+        case .triade: return Self.jevnt(3)
+        case .kvadrat: return Self.jevnt(4)
+        case .jevn: return Self.jevnt(antall)
+        case .analog: return Self.analog(antall, v)
+        case .analogMedAksent: return Self.analog(antall, v) + [180]
+        }
+    }
+
+    private static func jevnt(_ antall: Int) -> [Double] {
+        let n = max(antall, 2)
+        return (0..<n).map { Double($0) * 360 / Double(n) }
+    }
+
+    /// Symmetrisk rundt grunnfargen: -v, 0, +v (og videre utover for flere farger).
+    private static func analog(_ antall: Int, _ v: Double) -> [Double] {
+        let n = max(antall, 2)
+        return (0..<n).map { (Double($0) - Double(n - 1) / 2) * v }
+    }
+}
+
+/// Lysheten i en harmoni. Med lik lyshet veier fargene likt; med naturlig rekkefølge følger lysheten kulørenes
+/// egen lyshet slik vi kjenner den fra naturen – gult lysest, blått og fiolett mørkest (Judds prinsipp om
+/// naturlig fargeorden) – noe som ofte oppleves som harmonisk. Omvendt rekkefølge gir bevisst spenning.
+public enum Lyshetsrekkefølge: String, CaseIterable, Codable, Sendable, Identifiable {
+    case lik, naturlig, omvendt
+
+    public var id: String { rawValue }
+
+    public var navn: String {
+        switch self {
+        case .lik: String(localized: "Lik", bundle: .module)
+        case .naturlig: String(localized: "Naturlig", bundle: .module)
+        case .omvendt: String(localized: "Omvendt", bundle: .module)
+        }
+    }
+
+    /// Hvor mye av forskjellen i kulørenes egen lyshet som overføres (1 = hele, som de mest mettede fargene).
+    static let styrke = 0.6
+
+    /// Fargene med lysheten forskjøvet etter kulør, relativt til grunnfargens kulør: farger med grunnfargens kulør
+    /// står urørt, også når grunnfargen selv ikke er med (analog med partall). Metningen beholdes som andel av det
+    /// gamut tillater ved den nye lysheten.
+    public func anvendt(på farger: [Farge], grunn: Farge, gamut: Gamut = .displayP3) -> [Farge] {
+        guard self != .lik else { return farger }
+        let retning = self == .naturlig ? 1.0 : -1.0
+        let grunnKulørL = Farge.toppunktLyshet(kulør: grunn.okLCH.h, i: gamut)
+        return farger.map { f in
+            let lch = f.okLCH
+            let forskyvning = retning * Self.styrke * (Farge.toppunktLyshet(kulør: lch.h, i: gamut) - grunnKulørL)
+            guard abs(forskyvning) > 0.001 else { return f }
+            let maks = Farge.maksKroma(lyshet: lch.l, kulør: lch.h, i: gamut)
+            let andel = maks > 0 ? min(lch.c / maks, 1) : 0
+            let l = min(max(lch.l + forskyvning, 0.15), 0.97)
+            return Farge(okLCH: OKLCH(l: l, c: andel * Farge.maksKroma(lyshet: l, kulør: lch.h, i: gamut), h: lch.h), alfa: f.alfa)
         }
     }
 }

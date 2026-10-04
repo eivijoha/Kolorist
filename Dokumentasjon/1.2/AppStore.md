@@ -23,6 +23,7 @@ Kolorist 1.2 tar lyset med i regnestykket.
 • Gråkort og referansekort: få riktig farge og lyshet, og mål fargetemperatur og belysningsstyrke. Kalibrer kameraet én gang med et referansekort – deretter holder et gråkort, også i et annet lys.
 • Vurdering i lys: farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED.
 • LRV og luminanskontrast i valgt lys, for bygg og interiør.
+• Nye harmonier: analog med komplementær aksent, triade og kvadrat – og naturlig lyshetsrekkefølge, der gule farger blir lysere og blå mørkere, som i naturen.
 • Munsell i trinnene fra Munsell-boka, og verdiene fra fargesirkelen for hver farge i harmonier.
 ```
 
@@ -36,6 +37,7 @@ Kolorist 1.2 brings light into the equation.
 • Grey cards and reference cards: get the right colour and lightness, and measure colour temperature and illuminance. Calibrate the camera once with a reference card – after that a grey card is enough, even in different light.
 • Critique in light: colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting.
 • LRV and luminance contrast in the chosen light, for buildings and interiors.
+• New harmonies: analogous with a complementary accent, triad and square – and natural lightness order, where yellows become lighter and blues darker, as in nature.
 • Munsell in the steps of the Munsell book, and the colour-wheel values for each colour in harmonies.
 ```
 
@@ -166,7 +168,7 @@ OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
 • CSS-gradient i oklab med sRGB-reserve – lineær, radiell eller konisk
 • Toneskalaer fra 50 til 950
-• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB
+• Komplementær, split-komplementær, analog med eller uten aksent, triade, kvadrat og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB – med naturlig lyshetsrekkefølge om du vil
 
 TILGJENGELIGHET OG FARGESYN
 • WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk, og «Rett opp» som justerer fargen til den består
@@ -278,7 +280,7 @@ GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • CSS gradients in oklab with an sRGB fallback – linear, radial or conic
 • Tone scales from 50 to 950
-• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel
+• Complementary, split complementary, analogous with or without an accent, triad, square and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel – with natural lightness order if you like
 
 ACCESSIBILITY AND COLOUR VISION
 • WCAG 2.2 contrast: AA and AAA, large text and graphics, and auto-fix that adjusts the colour until it passes
@@ -404,7 +406,7 @@ OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
 • CSS-gradient i oklab med sRGB-reserve – lineær, radiell eller konisk
 • Toneskalaer fra 50 til 950
-• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB
+• Komplementær, split-komplementær, analog med eller uten aksent, triade, kvadrat og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB – med naturlig lyshetsrekkefølge om du vil
 • Se hele harmonier i valgt fargerom eller fargebibliotek, med grunnfargen merket
 
 TILGJENGELIGHET OG FARGESYN
@@ -515,7 +517,7 @@ GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • CSS gradients in oklab with an sRGB fallback – linear, radial or conic
 • Tone scales from 50 to 950
-• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel
+• Complementary, split complementary, analogous with or without an accent, triad, square and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel – with natural lightness order if you like
 • See the whole harmony in the chosen colour space or colour library, with the base colour marked
 
 ACCESSIBILITY AND COLOUR VISION

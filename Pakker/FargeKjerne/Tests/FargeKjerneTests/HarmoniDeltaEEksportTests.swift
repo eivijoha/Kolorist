@@ -12,6 +12,9 @@ struct HarmoniTests {
         #expect(Harmoni.jevn.forskyvninger(antall: 5) == [0, 72, 144, 216, 288])
         #expect(Harmoni.analog.forskyvninger(antall: 3, vinkel: 20) == [-20, 0, 20])
         #expect(Harmoni.dobbeltKomplementær.forskyvninger(vinkel: 60) == [0, 60, 180, 240])
+        #expect(Harmoni.triade.forskyvninger() == [0, 120, 240])
+        #expect(Harmoni.kvadrat.forskyvninger() == [0, 90, 180, 270])
+        #expect(Harmoni.analogMedAksent.forskyvninger(antall: 3, vinkel: 20) == [-20, 0, 20, 180])
     }
 
     @Test(arguments: [3, 4, 5, 7])
@@ -44,6 +47,18 @@ struct HarmoniTests {
         let flyttet = sirkel.farge(f, vinkel: sirkel.vinkel(for: f) + 90)
         let tilbake = sirkel.farge(flyttet, vinkel: sirkel.vinkel(for: flyttet) - 90)
         #expect(tilbake.deltaE2000(til: f) < 3, "\(sirkel)")
+    }
+
+    /// Naturlig rekkefølge: gult lysere og blått mørkere enn grunnfargen; omvendt snur det. Grunnfargen står urørt.
+    @Test func naturligLyshetsrekkefølge() {
+        let grunn = Farge(okLCH: OKLCH(l: 0.65, c: 0.12, h: 30))   // rødlig
+        let gul = Farge(okLCH: OKLCH(l: 0.65, c: 0.12, h: 100)), blå = Farge(okLCH: OKLCH(l: 0.65, c: 0.12, h: 265))
+        let naturlig = Lyshetsrekkefølge.naturlig.anvendt(på: [grunn, gul, blå], grunn: grunn)
+        #expect(naturlig[0] == grunn)
+        #expect(naturlig[1].okLCH.l > 0.7 && naturlig[2].okLCH.l < 0.6)
+        let omvendt = Lyshetsrekkefølge.omvendt.anvendt(på: [grunn, gul, blå], grunn: grunn)
+        #expect(omvendt[1].okLCH.l < 0.6 && omvendt[2].okLCH.l > 0.7)
+        #expect(Lyshetsrekkefølge.lik.anvendt(på: [grunn, gul], grunn: grunn) == [grunn, gul])
     }
 
     @Test func komplementærIHSL() {
