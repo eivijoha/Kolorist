@@ -35,6 +35,8 @@ struct OvergangVisning: View {
     @AppStorage("visOgsåProfil") private var visOgsåID = ICCProfil.sRGB.id
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     @State private var visMineFargerom = false
+    /// Endepunktene da dra-bevegelsen på lyshetsstigen startet.
+    @State private var lyshetsutgangspunkt: (Farge, Farge)?
 
     private var visOgsåProfil: ICCProfil { bibliotek.profil(id: visOgsåID) ?? .sRGB }
     private var visOgsåBibliotek: Fargebibliotek? { bibliotek.fargebibliotek(id: visOgsåID) }
@@ -151,7 +153,14 @@ struct OvergangVisning: View {
             }
             // Forklaringen regnes fra midterste tone i overgangen.
             LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn,
-                                   grunnlyshet: toner.isEmpty ? 0.6 : toner[toner.count / 2].okLCH.l)
+                                   grunnlyshet: toner.isEmpty ? 0.6 : toner[toner.count / 2].okLCH.l,
+                                   grunnfarger: [start, slutt]) { endring, ferdig in
+                // Begge endepunktene flyttes like mye, så hele overgangen og radene blir lysere eller mørkere.
+                let (fra, til) = lyshetsutgangspunkt ?? (start, slutt)
+                lyshetsutgangspunkt = ferdig ? nil : (fra, til)
+                start = fra.medOKLCHLyshet(fra.okLCH.l + endring, gamut: arbeidsbenk.gamut)
+                slutt = til.medOKLCHLyshet(til.okLCH.l + endring, gamut: arbeidsbenk.gamut)
+            }
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 if rader.count > 1 {

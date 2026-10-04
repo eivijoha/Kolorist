@@ -11,6 +11,8 @@ struct FargeEditor: View {
     @State private var lagreNavn = ""
     @State private var beskriver = false
     @State private var visMineFargerom = false
+    /// Aktiv farge da dra-bevegelsen på lyshetsstigen startet (Toner).
+    @State private var lyshetsutgangspunkt: Farge?
     /// Harmoniens farger (Harmoni-modus), vist i fargeflaten øverst, og grunnfargens plass blant dem.
     @State private var harmonifarger: [Farge] = []
     @State private var harmoniGrunn: Int?
@@ -340,7 +342,12 @@ extension FargeEditor {
             }
         }
         Section {
-            LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn, grunnlyshet: farge.okLCH.l)
+            LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn, grunnlyshet: farge.okLCH.l, grunnfarger: [farge]) { endring, ferdig in
+                // Fargen fra dra-starten beholdes, så kroma ikke slites ned av gamut-kartlegging underveis.
+                let utgangspunkt = lyshetsutgangspunkt ?? farge
+                lyshetsutgangspunkt = ferdig ? nil : utgangspunkt
+                arbeidsbenk.aktivFarge = utgangspunkt.medOKLCHLyshet(utgangspunkt.okLCH.l + endring, gamut: arbeidsbenk.gamut)
+            }
             Button("Legg raden i palett", systemImage: "plus.square.on.square") {
                 lagreNavn = String(localized: "Lysere og mørkere \(farge.hex())")
                 lagreFarger = tonevarianter(farge).map { PalettFarge(farge: $0, opphav: .toneskala) }
@@ -540,6 +547,11 @@ struct LyshetstrinnKontroller: View {
     @Binding var trinn: Lyshetstrinn
     /// OKLCH-lysheten skalaen regnes fra (grunnfargen).
     var grunnlyshet: Double = 0.6
+    /// Grunnfargen(e), vist som en sirkel på stigen – to grunnfarger (Overgang: Fra og Til) som hver sin halvdel.
+    /// Med `forskyv` kan sirkelen dras for å gjøre hele rekken lysere eller mørkere: (endring i OKLCH-lyshet siden
+    /// dra-bevegelsen startet, om bevegelsen er ferdig).
+    var grunnfarger: [Farge] = []
+    var forskyv: ((Double, Bool) -> Void)? = nil
 
     private let område: ClosedRange<Double> = 0.01...0.2
 
@@ -555,8 +567,9 @@ struct LyshetstrinnKontroller: View {
     }
 
     var body: some View {
-        Lyshetsstige(lysheter: trinn.lysheter(fra: grunnlyshet), grunnindeks: trinn.antallLysere)
-            .frame(height: 34)
+        Lyshetsstige(lysheter: trinn.lysheter(fra: grunnlyshet), grunnindeks: trinn.antallLysere,
+                     grunnfarger: grunnfarger, forskyv: forskyv)
+            .frame(height: grunnfarger.isEmpty ? 34 : 44)
             .padding(.vertical, 2)
         Stepper("Lysere: \(trinn.antallLysere) steg", value: $trinn.antallLysere, in: 0...8)
         Stepper("Mørkere: \(trinn.antallMørkere) steg", value: $trinn.antallMørkere, in: 0...8)
@@ -588,6 +601,22 @@ struct LyshetstrinnKontroller: View {
 private struct Lyshetsstige: View {
     let lysheter: [Double]
     let grunnindeks: Int
+    var grunnfarger: [Farge] = []
+    var forskyv: ((Double, Bool) -> Void)? = nil
+
+    /// Sirkelen: én farge, eller venstre og høyre halvdel for to.
+    private var sirkelfyll: LinearGradient {
+        let a = grunnfarger.first?.swiftUI ?? .clear, b = grunnfarger.last?.swiftUI ?? .clear
+        return LinearGradient(stops: [.init(color: a, location: 0), .init(color: a, location: 0.5),
+                                      .init(color: b, location: 0.5), .init(color: b, location: 1)],
+                              startPoint: .leading, endPoint: .trailing)
+    }
+
+    /// Kanten: grunnfargenes lesbare tekstfarge når de er enige, ellers primærfargen.
+    private var sirkelkant: Color {
+        let kanter = Set(grunnfarger.map(\.lesbarTekstfarge))
+        return kanter.count == 1 ? kanter.first!.swiftUI : .primary
+    }
 
     /// Tall som får plass uten å overlappe: grunnfargen alltid, så utover fra den.
     private func synligeEtiketter(bredde: CGFloat) -> Set<Int> {
@@ -616,19 +645,47 @@ private struct Lyshetsstige: View {
                         Capsule()
                             .fill(erGrunn ? Color.accentColor : Color.primary)
                             .frame(width: erGrunn ? 3 : 2, height: 16)
+                            .opacity(erGrunn && !grunnfarger.isEmpty ? 0 : 1)
                         Text(Int((l * 100).rounded()), format: .number)
                             .font(.caption2.monospacedDigit())
                             .foregroundStyle(erGrunn ? Color.primary : Color.sekundærTekst)
                             .fixedSize()
                             .opacity(synlige.contains(i) ? 1 : 0)
                     }
-                    .position(x: x, y: 16)
+                    // Litt lavere med grunnfarge-sirkelen, så tallet under den synes.
+                    .position(x: x, y: grunnfarger.isEmpty ? 16 : 20)
+                }
+                if !grunnfarger.isEmpty, lysheter.indices.contains(grunnindeks) {
+                    // Grunnfargen som sirkel med samme kant som grunnfargen i Harmoni; dras for å flytte lysheten.
+                    Circle()
+                        .fill(sirkelfyll)
+                        // 1 pt tynnere enn i Harmoni: sirkelen er mindre her.
+                        .overlay(Circle().strokeBorder(sirkelkant, lineWidth: 3))
+                        .frame(width: 22, height: 22)
+                        .contentShape(Circle().inset(by: -11))
+                        // Over tallet for grunnlysheten, som står synlig under sirkelen.
+                        .position(x: min(max(lysheter[grunnindeks], 0), 1) * b, y: 11)
+                        .gesture(DragGesture(minimumDistance: 1)
+                            .onChanged { forskyv?(Double($0.translation.width / max(b, 1)), false) }
+                            .onEnded { forskyv?(Double($0.translation.width / max(b, 1)), true) })
+                        .allowsHitTesting(forskyv != nil)
                 }
             }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Lyshet for tonene")
         .accessibilityValue(lysheter.map { String(Int(($0 * 100).rounded())) }.joined(separator: ", "))
+        .accessibilityAdjustableAction { retning in
+            forskyv?(retning == .increment ? 0.02 : -0.02, true)
+        }
+    }
+}
+
+extension Farge {
+    /// Samme kulør og kroma i OKLCH med en annen lyshet, innenfor gamut.
+    func medOKLCHLyshet(_ l: Double, gamut: Gamut) -> Farge {
+        let lch = okLCH
+        return Farge(okLCH: OKLCH(l: min(max(l, 0), 1), c: lch.c, h: lch.h), alfa: alfa).gamutKartlagt(til: gamut)
     }
 }
 
