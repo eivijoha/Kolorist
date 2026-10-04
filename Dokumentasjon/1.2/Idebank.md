@@ -41,3 +41,18 @@ lyshetsrekkefølge. Lagt hit for senere:
   to- og tre-fargekombinasjoner oppleves, ut fra lyshet, kroma og kulør i CIELab. Egen oppføring under Metoder.
 - **Harmonisering etter kulørmaler** (Matsuda; Cohen-Or mfl. 2006): dytt en eksisterende palett – for eksempel
   plukket med kameraet – til nærmeste harmonimal med minst mulig endring.
+
+## Samspill med Windows fra iPhone/iPad (i kø, 2026-10-04)
+
+Mange samarbeidspartnere (særlig i arkitektur) sitter på Windows. Palettene ligger i SwiftData/CloudKit og er ikke
+lesbare utenfor Apple-enheter; ICC-profiler og fargekart ligger allerede som filer i appens iCloud Drive-mappe.
+
+- **Paletter speilet som filer i iCloud Drive** (ASE, CSV og A4-PDF per palett, oppdatert ved endring): nås fra
+  Windows med iCloud for Windows eller iCloud.com, uten egen server. Størst nytte for minst arbeid.
+- **Spesifikasjon som CSV/Excel**: navn, hex, sRGB, CIELab D50, Munsell, CMYK og LRV per farge – til fargeskjema og
+  romskjema i beskrivelser og tilbud.
+- **Fargebøker for CAD/BIM** (XML-baserte fargebøker som kan lastes inn i vanlige tegneprogrammer på Windows), så
+  paletten kan brukes direkte i tegningene.
+- **Deling til filtjenester**: sikre at eksport går via delingsarket/Filer, så OneDrive, Teams og e-post fungerer like
+  godt som AirDrop.
+- Senere, større: en enkel nettvisning av egne paletter via CloudKit JS (innlogging med Apple-ID, ingen egen server).
