@@ -69,7 +69,8 @@ struct LagretFargeArk: View {
     @Query(sort: \LagretFarge.opprettet, order: .reverse) private var enkeltfarger: [LagretFarge]
     @Query(sort: \PalettDokument.opprettet, order: .reverse) private var paletter: [PalettDokument]
 
-    private let rutenett = [GridItem(.adaptive(minimum: 52), spacing: 8)]
+    // Toppjustert: farger uten navn står på linje med fargene som har navn under seg.
+    private let rutenett = [GridItem(.adaptive(minimum: 52), spacing: 8, alignment: .top)]
     /// Kjent verdi skrevet inn: hex (sRGB), eller annen CSS-farge.
     @State private var hexTekst = ""
     private var tolket: Farge? { Fargetolk.tolk(hexTekst.trimmingCharacters(in: .whitespaces)) }
