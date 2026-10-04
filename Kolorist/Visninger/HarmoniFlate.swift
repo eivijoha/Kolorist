@@ -13,8 +13,9 @@ struct HarmoniFlate: View {
     var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     /// Navnet på fargerommet slik det vises i «Vis også» (står i menyen under flaten; her bare for VoiceOver).
     let romnavn: String
-    /// Fargesirkelen harmonien er laget på; hvert felt viser også fargens plass i den («5R 4/14», «RYB 210°» …).
-    var sirkel: Fargesirkel? = nil
+    /// Ekstra verdi øverst i hvert felt: fargens plass i harmoniens fargesirkel («5R 4/14», «RYB 210°» …), eller
+    /// fargen i Studios fargemodell (Overgang, Toner).
+    var verditekst: ((Farge) -> String)? = nil
     /// Flatene under hverandre (bred visning) i stedet for side ved side.
     var stablet = false
     /// Ramme rundt grunnfargens flate (Harmoni). Uten ramme merkes den bare med stjernen (Toner).
@@ -67,7 +68,7 @@ struct HarmoniFlate: View {
             let oppsett = stablet ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
             oppsett {
                 ForEach(Array(motparter.enumerated()), id: \.offset) { i, m in
-                    flate(m, original: farger[i], sirkeltekst: sirkel?.verditekst(for: farger[i]),
+                    flate(m, original: farger[i], sirkeltekst: verditekst?(farger[i]),
                           erGrunn: i == grunnIndeks, visTekst: visTekst, kompakt: kompakt,
                           hjørner: hjørner(indeks: i, antall: motparter.count))
                 }

@@ -7,6 +7,8 @@ import SwiftUI
 struct FargeValgRad: View {
     let tittel: String
     @Binding var farge: Farge
+    /// Verdien som vises under tittelen (hex, eller fargen i en fargemodell).
+    var verditekst: (Farge) -> String = { $0.hex() }
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var visVelger = false
     @State private var målrettet = false
@@ -22,7 +24,7 @@ struct FargeValgRad: View {
             .accessibilityLabel("\(tittel): \(farge.hex()). Velg fra lagrede farger")
             VStack(alignment: .leading, spacing: 1) {
                 Text(tittel).font(.caption).foregroundStyle(Color.sekundærTekst)
-                Text(farge.hex()).font(.callout.monospaced())
+                Text(verditekst(farge)).font(.callout.monospaced()).lineLimit(1).minimumScaleFactor(0.7)
             }
             Spacer()
             Button("Velg") { visVelger = true }

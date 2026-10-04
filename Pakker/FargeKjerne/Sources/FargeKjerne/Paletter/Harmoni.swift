@@ -112,19 +112,12 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
     /// «OKLCH 59% 0.156 254°», «LCH 55 48 254°», «HSL 254° 60% 52%», «RYB 210°» eller «70% gul, 30% rød» (Hering).
     /// Prosent skrives inntil tallet, som i fargefeltene ellers.
     public func verditekst(for farge: Farge) -> String {
-        func n(_ v: Double, _ d: Int = 0) -> String { String(format: "%.\(d)f", v) }
         switch self {
-        case .munsell: return farge.munsell.notasjon
-        case .okLCH:
-            let l = farge.okLCH
-            return "OKLCH \(n(l.l * 100))% \(n(l.c, 3)) \(n(l.c < 0.002 ? 0 : l.h))°"
-        case .cieLCH:
-            let l = farge.cieLCH
-            return "LCH \(n(l.l)) \(n(l.c)) \(n(l.c < 0.5 ? 0 : l.h))°"
-        case .hsl:
-            let h = farge.hsl
-            return "HSL \(n(h.h))° \(n(h.s * 100))% \(n(h.l * 100))%"
-        case .ryb: return "RYB \(n(vinkel(for: farge)))°"
+        case .munsell: return Fargemodell.munsell.kortTekst(for: farge)
+        case .okLCH: return Fargemodell.okLCH.kortTekst(for: farge)
+        case .cieLCH: return Fargemodell.cieLCH.kortTekst(for: farge)
+        case .hsl: return Fargemodell.hsl.kortTekst(for: farge)
+        case .ryb: return "RYB \(String(format: "%.0f", vinkel(for: farge)))°"
         case .hering: return Hering.sammensetning(vinkel: vinkel(for: farge))
         }
     }

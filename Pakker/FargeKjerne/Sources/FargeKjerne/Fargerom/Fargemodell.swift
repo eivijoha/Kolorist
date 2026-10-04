@@ -89,6 +89,40 @@ public enum Fargemodell: String, CaseIterable, Codable, Sendable, Identifiable {
         }
     }
 
+    /// Kort tekst for smale fargefelt: modellnavn og verdier, med prosent inntil tallet – «OKLCH 59% 0.156 254°»,
+    /// «Lab 55 −3 −45», «HSL 254° 60% 52%», «CMYK 78/41/0/0%», «5PB 5/14» (Munsell).
+    public func kortTekst(for f: Farge) -> String {
+        func n(_ v: Double, _ d: Int = 0) -> String { String(format: "%.\(d)f", v) }
+        func kulør(_ c: Double, _ h: Double, grense: Double) -> String { n(c < grense ? 0 : h) }
+        switch self {
+        case .okLCH:
+            let l = f.okLCH
+            return "OKLCH \(n(l.l * 100))% \(n(l.c, 3)) \(kulør(l.c, l.h, grense: 0.002))°"
+        case .okLab:
+            let l = f.okLab
+            return "OKLab \(n(l.l * 100))% \(n(l.a, 3)) \(n(l.b, 3))"
+        case .cieLCH:
+            let l = f.cieLCH
+            return "LCH \(n(l.l)) \(n(l.c)) \(kulør(l.c, l.h, grense: 0.5))°"
+        case .cieLab:
+            let l = f.cieLab
+            return "Lab \(n(l.l)) \(n(l.a)) \(n(l.b))"
+        case .hsb:
+            let v = verdier(for: f)
+            return "HSB \(n(v[0]))° \(n(v[1] * 100))% \(n(v[2] * 100))%"
+        case .hsl:
+            let h = f.hsl
+            return "HSL \(n(h.h))° \(n(h.s * 100))% \(n(h.l * 100))%"
+        case .rgb: return f.hex()
+        case .displayP3:
+            let p = f.displayP3
+            return "P3 \(n(p.r, 3)) \(n(p.g, 3)) \(n(p.b, 3))"
+        case .cmyk:
+            return "CMYK " + verdier(for: f).prefix(4).map { n($0 * 100) }.joined(separator: "/") + "%"
+        case .munsell: return f.munsell.notasjon
+        }
+    }
+
     /// Tekst etter CSS Color 4 der det finnes en CSS-syntaks, ellers en lesbar notasjon.
     public func tekst(for f: Farge) -> String {
         let v = verdier(for: f)

@@ -21,6 +21,15 @@ struct SirkelverdierTests {
         #expect(Fargesirkel.cieLCH.verditekst(for: Farge(hex: "#808080")!).hasSuffix(" 0°"))
     }
 
+    @Test func kortTekstPerModell() {
+        let f = Farge(hex: "#2F7FD8")!
+        #expect(Fargemodell.okLCH.kortTekst(for: f) == "OKLCH 59% 0.156 254°")
+        #expect(Fargemodell.rgb.kortTekst(for: f) == "#2F7FD8")
+        #expect(Fargemodell.cmyk.kortTekst(for: f).hasPrefix("CMYK ") && Fargemodell.cmyk.kortTekst(for: f).hasSuffix("%"))
+        #expect(Fargemodell.munsell.kortTekst(for: f) == f.munsell.notasjon)
+        #expect(Fargesirkel.okLCH.verditekst(for: f) == Fargemodell.okLCH.kortTekst(for: f))
+    }
+
     /// Uavhengig av språk (testene kan kjøre på engelsk).
     @Test func heringSammensetning() {
         #expect(!Hering.sammensetning(vinkel: 0).contains("%"))

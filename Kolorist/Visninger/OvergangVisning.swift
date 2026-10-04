@@ -92,14 +92,23 @@ struct OvergangVisning: View {
         return VStack(spacing: 0) {
             HarmoniFlate(farger: toner, grunnIndeks: nil, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                          romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
+                         verditekst: arbeidsbenk.modell.kortTekst,
                          velg: { arbeidsbenk.aktivFarge = $0 },
                          lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                          leggIPalett: { leggIPalett = [$0] })
                 .frame(height: 140)
                 .overlay(alignment: .topTrailing) { lagremeny }
             HStack {
-                Spacer(minLength: 0)
+                // Fargemodellen deles med Studio.
+                Picker("Fargemodell", selection: $arbeidsbenk.modell) {
+                    ForEach(Fargemodell.redigerbare) { Text($0.navn).tag($0) }
+                }
+                .pickerStyle(.menu)
+                .labelsHidden()
+                .fixedSize()
+                Spacer(minLength: 8)
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom)
+                    .layoutPriority(1)
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)
@@ -166,8 +175,10 @@ struct OvergangVisning: View {
         overgangsflate
         Form {
             Seksjon("Endepunkter") {
-                FargeValgRad(tittel: String(localized: "Fra"), farge: Binding(get: { start }, set: { start = $0 }))
-                FargeValgRad(tittel: String(localized: "Til"), farge: Binding(get: { slutt }, set: { slutt = $0 }))
+                FargeValgRad(tittel: String(localized: "Fra"), farge: Binding(get: { start }, set: { start = $0 }),
+                             verditekst: arbeidsbenk.modell.kortTekst)
+                FargeValgRad(tittel: String(localized: "Til"), farge: Binding(get: { slutt }, set: { slutt = $0 }),
+                             verditekst: arbeidsbenk.modell.kortTekst)
                 Button("Bytt om", systemImage: "arrow.left.arrow.right") {
                     let a = start
                     start = slutt
