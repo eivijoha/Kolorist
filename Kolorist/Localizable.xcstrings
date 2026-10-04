@@ -3049,6 +3049,16 @@
         }
       }
     },
+    "InDesign-utklipp med gradienter (.idms)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "InDesign snippet with gradients (.idms)"
+          }
+        }
+      }
+    },
     "Ingen egne fargerom": {
       "localizations": {
         "en": {
@@ -6433,6 +6443,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "As Colour constants"
+          }
+        }
+      }
+    },
+    "Som bilde (PDF). Redigerbar gradient: «Lagre som …» › InDesign-utklipp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As an image (PDF). Editable gradient: “Save as …” › InDesign snippet"
           }
         }
       }

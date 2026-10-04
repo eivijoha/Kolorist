@@ -11,6 +11,7 @@ struct GradientSeksjon: View {
     @State private var nyttNavn = ""
     @State private var slettes: LagretGradient?
     @State private var somPalett: LagretGradient?
+    @State private var lagresSom: LagretGradient?
 
     var body: some View {
         Listeseksjon("gradienter", tittel: "Gradienter") {
@@ -40,6 +41,7 @@ struct GradientSeksjon: View {
                                 let navn = g.navn
                                 DelSomLenke(navn: navn) { Lenkedeling.gradient(oppsett, navn: navn) }
                                 Button("Lagre farger som palett …", systemImage: "swatchpalette") { somPalett = g }
+                            Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = g }
                                 Button("Slett gradient", systemImage: "trash", role: .destructive) { slettes = g }
                             }
                     }
@@ -65,6 +67,12 @@ struct GradientSeksjon: View {
             #else
             Text("Rist for å angre.")
             #endif
+        }
+        .sheet(item: $lagresSom) { g in
+            if let oppsett = g.oppsett {
+                LagreSomArk(innhold: Lagringsinnhold(navn: g.navn, farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) },
+                                                     gradienter: [PalettGradient(navn: g.navn, oppsett: oppsett)]))
+            }
         }
         .sheet(item: $somPalett) { g in
             VelgPalettArk(farger: (g.oppsett?.rader ?? []).flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) },

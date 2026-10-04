@@ -7,12 +7,24 @@ import AppKit
 
 /// Formatene i «Lagre som», gruppert etter hvor filene skal brukes.
 enum Lagringsformat: String, CaseIterable, Identifiable {
-    case ase, aco, figmaVariabler, tokensStudio, css, designTokens, swiftUI, gpl, svg, hexListe, pdf
+    case ase, aco, indesign, figmaVariabler, tokensStudio, css, designTokens, swiftUI, gpl, svg, hexListe, pdf
 
     var id: String { rawValue }
     var eksportformat: Eksportformat? { Eksportformat(rawValue: rawValue) }
-    var navn: String { eksportformat?.navn ?? String(localized: "PDF med fargeflater (A4)") }
-    var filendelse: String { eksportformat?.filendelse ?? "pdf" }
+    var navn: String {
+        switch self {
+        case .indesign: String(localized: "InDesign-utklipp med gradienter (.idms)")
+        case .pdf: String(localized: "PDF med fargeflater (A4)")
+        default: eksportformat?.navn ?? rawValue
+        }
+    }
+    var filendelse: String {
+        switch self {
+        case .indesign: "idms"
+        case .pdf: "pdf"
+        default: eksportformat?.filendelse ?? rawValue
+        }
+    }
 
     enum Gruppe: CaseIterable, Identifiable {
         case adobe, figma, nett, apple, åpne, andre, utskrift
@@ -33,7 +45,7 @@ enum Lagringsformat: String, CaseIterable, Identifiable {
 
     var gruppe: Gruppe {
         switch self {
-        case .ase, .aco: .adobe
+        case .ase, .aco, .indesign: .adobe
         case .figmaVariabler, .tokensStudio: .figma
         case .css, .designTokens: .nett
         case .swiftUI: .apple
@@ -144,7 +156,17 @@ struct LagreSomArk: View {
             try FileManager.default.createDirectory(at: mappe, withIntermediateDirectories: true)
             return try Lagringsformat.allCases.filter { valg.formater.contains($0) }.map { f in
                 let url = mappe.appendingPathComponent("\(filnavn).\(f.filendelse)")
-                let data = f.eksportformat?.data(for: palett) ?? PalettUtskrift.pdf(for: palett, gradienter: innhold.gradienter)
+                let data: Data
+                switch f {
+                case .pdf: data = PalettUtskrift.pdf(for: palett, gradienter: innhold.gradienter)
+                case .indesign:
+                    // Fargene som fargeprøver og ruter, gradientene som ekte gradienter (dra inn eller plasser i InDesign).
+                    let gradienter = innhold.gradienter.map {
+                        IDMSEksport.Gradient(navn: $0.navn, stopp: Gradientstopp.forenklet(gjennom: [$0.oppsett.fra, $0.oppsett.til]))
+                    }
+                    data = Data(IDMSEksport.snippet(farger: innhold.farger, gradienter: gradienter).utf8)
+                default: data = f.eksportformat?.data(for: palett) ?? Data()
+                }
                 try data.write(to: url, options: .atomic)
                 return url
             }

@@ -65,7 +65,8 @@ enum Gradientmål: String, CaseIterable, Identifiable {
     var forklaring: String {
         switch self {
         case .figma, .sketchAffinity: String(localized: "Som form med gradientfyll (SVG)")
-        case .illustrator, .indesign: String(localized: "Som redigerbar gradient (PDF) i sRGB")
+        case .illustrator: String(localized: "Som redigerbar gradient (PDF) i sRGB")
+        case .indesign: String(localized: "Som bilde (PDF). Redigerbar gradient: «Lagre som …» › InDesign-utklipp")
         case .photoshop: String(localized: "Som formlag eller bilde (PDF/PNG)")
         case .iWork: String(localized: "Som vektorbilde (PDF) med riktige farger")
         case .css: String(localized: "Som gradient med OKLab og reserve")
