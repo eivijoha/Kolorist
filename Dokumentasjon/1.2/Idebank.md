@@ -133,3 +133,14 @@ Lab er D65/10° (fra kildekoden deres). Senere:
 - OpenPrintTag (NFC på spolen): lese fargen rett fra spolen med iPhone – sjekk hvordan fargen er kodet i spesifikasjonen.
 - Vurder å publisere det bearbeidede uttrekket åpent på kolorist.no (CC BY 4.0), for åpenhet og fordi CC BY 4.0
   ikke tillater tekniske begrensninger som hindrer bruken av dataene.
+
+## Til 1.3: CMYK-profil som kildeprofil (2026-10-04)
+
+I dag kan en CMYK-profil bare være målprofil («Vis som» / fargestyring), ikke kilde. Når farger redigeres i CMYK-modellen,
+bør vi også der kunne velge kildeprofilen – CMYK-verdiene betyr noe bare i en bestemt trykkprosess (FOGRA, GRACoL,
+avispapir …).
+
+- Velg kildeprofil for CMYK-verdier, og regn dem om til Kolorists kanoniske farge gjennom profilen.
+- Da kan en CMYK-profils papirhvitt (hvitpunktet) gjengis i en annen ICC-profils fargerom med absolutt kolorimetrisk
+  gjengivelse – for eksempel hvordan avispapiret ser ut på skjermen eller i en annen trykkprofil.
+- Henger sammen med «rene CMYK-verdier» og fargekart i CMYK: verdiene må tolkes i samme profil som de er laget i.
