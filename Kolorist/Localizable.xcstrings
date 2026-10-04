@@ -1286,16 +1286,6 @@
         }
       }
     },
-    "Del paletter som filer i en mappe, for eksempel i OneDrive": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share palettes as files in a folder, for example in OneDrive"
-          }
-        }
-      }
-    },
     "Del palettfilene …": {
       "localizations": {
         "en": {
@@ -1342,16 +1332,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sharing folder"
-          }
-        }
-      }
-    },
-    "Delingsmappe …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sharing folder …"
           }
         }
       }

@@ -64,12 +64,7 @@ struct PalettListe: View {
                     HStack {
                         Text("Paletter").font(.title3.weight(.semibold))
                         Spacer()
-                        if iKolonne {
-                            Button("Delingsmappe …", systemImage: "folder") { visDelingsmappe = true }
-                                .labelStyle(.iconOnly).buttonStyle(.borderless)
-                                .help("Del paletter som filer i en mappe, for eksempel i OneDrive")
-                            nyPalettMeny.labelStyle(.iconOnly).menuIndicator(.hidden).fixedSize()
-                        }
+                        if iKolonne { nyPalettMeny.labelStyle(.iconOnly).menuIndicator(.hidden).fixedSize() }
                     }
                     .padding(.top, 8)
                     if paletter.isEmpty {
@@ -126,11 +121,7 @@ struct PalettListe: View {
             .background(Color(white: 0.5).opacity(0.06))
             .navigationTitle("Paletter")
             .toolbar {
-                if !iKolonne {
-                    Button("Delingsmappe …", systemImage: "folder") { visDelingsmappe = true }
-                        .help("Del paletter som filer i en mappe, for eksempel i OneDrive")
-                    nyPalettMeny
-                }
+                if !iKolonne { nyPalettMeny }
             }
             .sheet(isPresented: $visDelingsmappe) { DelingsmappeArk() }
             .sheet(isPresented: $visVerdiord) {
