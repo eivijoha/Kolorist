@@ -76,9 +76,12 @@ public struct Fargekilde: Hashable, Codable, Sendable {
     public var td: Double?
     /// Navnet på kilden («FilamentColors.xyz»).
     public var kildenavn: String?
+    /// Fra et fargebibliotek brukeren har importert (kan være rettighetsbelagt): navn og verdier fra biblioteket
+    /// deles ikke i lenker (se `Delingsvern`).
+    public var importert: Bool?
 
     public init(produsent: String? = nil, navn: String? = nil, materiale: String? = nil, lenke: URL? = nil,
-                målt: Bool? = nil, td: Double? = nil, kildenavn: String? = nil) {
+                målt: Bool? = nil, td: Double? = nil, kildenavn: String? = nil, importert: Bool? = nil) {
         self.produsent = produsent
         self.navn = navn
         self.materiale = materiale
@@ -86,6 +89,7 @@ public struct Fargekilde: Hashable, Codable, Sendable {
         self.målt = målt
         self.td = td
         self.kildenavn = kildenavn
+        self.importert = importert
     }
 }
 

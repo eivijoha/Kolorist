@@ -12,7 +12,12 @@ public struct Fargebibliotek: Sendable, Hashable, Identifiable {
     public init(data: Data, filnavn: String) throws {
         let palett = try Bibliotekimport.les(data, filnavn: filnavn)
         self.navn = palett.navn
-        self.farger = palett.farger
+        // Tonene merkes som importerte, så navn og verdier fra biblioteket ikke deles i lenker.
+        self.farger = palett.farger.map { pf in
+            var pf = pf
+            if pf.kilde == nil { pf.kilde = Fargekilde(kildenavn: palett.navn, importert: true) }
+            return pf
+        }
         self.id = "bib:" + SHA256.hash(data: data).prefix(12).map { String(format: "%02x", $0) }.joined()
     }
 

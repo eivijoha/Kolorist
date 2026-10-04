@@ -1696,12 +1696,12 @@
         }
       }
     },
-    "Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne.": {
+    "Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne. Navn og verdier fra bibliotekene du importerer, tas ikke med når du deler farger som lenke.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Colour libraries: .ase (Adobe Swatch Exchange), .aco (Photoshop swatches) and .acb (Adobe Color Book) – colour charts with named tones. Kolorist includes no colour charts from colour systems; you import your own."
+            "value": "Colour libraries: .ase (Adobe Swatch Exchange), .aco (Photoshop swatches) and .acb (Adobe Color Book) – colour charts with named tones. Kolorist includes no colour charts from colour systems; you import your own. Names and values from the libraries you import are left out when you share colours as a link."
           }
         }
       }
@@ -2011,16 +2011,16 @@
     },
     "Filamentfarger for 3D-print fra FilamentColors.xyz: %lld prøver fra mange produsenter, %lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz.": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Filamentfarger for 3D-print fra FilamentColors.xyz: %1$lld prøver fra mange produsenter, %2$lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz."
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Filament colours for 3D printing from FilamentColors.xyz: %1$lld samples from many manufacturers, %2$lld of them measured with a colorimeter. The rest are estimated from photos and marked as such. Each colour links to the sample at FilamentColors.xyz."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Filamentfarger for 3D-print fra FilamentColors.xyz: %1$lld prøver fra mange produsenter, %2$lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz."
           }
         }
       }

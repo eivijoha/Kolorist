@@ -95,7 +95,7 @@ struct MineProfilerArk: View {
                         Text("Du kan også dra filer hit.")
                         #endif
                         Text("ICC-profiler: .icc og .icm – for eksempel trykkprofilen fra trykkeriet (FOGRA, GRACoL) eller en skjermprofil.")
-                        Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne.")
+                        Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne. Navn og verdier fra bibliotekene du importerer, tas ikke med når du deler farger som lenke.")
                         Text(bibliotek.brukerICloud
                              ? "Filene ligger i iCloud Drive › Kolorist › Profiler og synkroniseres mellom enhetene dine."
                              : "Filene lagres på denne enheten (iCloud Drive er ikke tilgjengelig).")

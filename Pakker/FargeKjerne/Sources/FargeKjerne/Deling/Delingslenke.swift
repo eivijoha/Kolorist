@@ -241,7 +241,9 @@ public struct DeltFarge: Codable, Equatable, Sendable {
         hex = String(farge.hex().dropFirst())
     }
 
+    /// En lagret farge i en lenke. Navn og verdier fra importerte fargebiblioteker tas ikke med (`Delingsvern`).
     public init(_ pf: PalettFarge) {
+        let pf = Delingsvern.renset(pf)
         self.init(pf.farge, navn: pf.navn, representasjon: pf.representasjon)
         kilde = pf.kilde.map(DeltKilde.init)
     }

@@ -13,7 +13,10 @@ final class ProfilBibliotek {
     static let delt = ProfilBibliotek()
     private(set) var importerte: [ICCProfil] = []
     /// Importerte fargebiblioteker (ASE/ACO/ACB) i samme mappe som profilene, så de følger med via iCloud Drive.
-    private(set) var fargebiblioteker: [Fargebibliotek] = []
+    private(set) var fargebiblioteker: [Fargebibliotek] = [] {
+        // Tonenavnene, så farger lagret fra bibliotekene ikke deles med navn i lenker (Delingsvern).
+        didSet { Delingsvern.oppdater(tonenavn: fargebiblioteker.flatMap { $0.farger.map(\.navn) }) }
+    }
     /// Om profilene synkroniseres via iCloud Drive.
     private(set) var brukerICloud = false
 
