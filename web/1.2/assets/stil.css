@@ -1291,10 +1291,23 @@ thead th {
 
 /* ---------- Delte lenker (/l) ---------- */
 
+.delt-oversikt {
+  display: flex;
+  height: 4.5rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+  margin: 0.5rem 0 1.25rem;
+}
+
+.delt-oversikt span {
+  flex: 1;
+}
+
 .delt-farger {
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr));
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.75rem), 1fr));
   list-style: none;
   padding: 0;
   margin: 1rem 0 0;
@@ -1323,9 +1336,20 @@ thead th {
 .delt-verdier {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.15rem 0.6rem;
+  gap: 0.15rem 0.5rem;
   margin: 0 0 0.6rem;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+}
+
+@media (min-width: 40rem) {
+  .delt-farger {
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+  }
+
+  .delt-verdier {
+    font-size: 0.85rem;
+  }
 }
 
 .delt-verdier dt {

@@ -257,6 +257,16 @@
         }
       }
     },
+    "Filament: alle typer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filament: all types"
+          }
+        }
+      }
+    },
     "Filament: andre materialer": {
       "localizations": {
         "en": {

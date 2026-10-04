@@ -7,8 +7,10 @@ struct FilamentfargerTests {
     @Test func uttrekketLastes() throws {
         let om = try #require(Filamentfarger.om)
         let biblioteker = Filamentfarger.biblioteker
-        #expect(biblioteker.count == 5)
-        #expect(biblioteker.reduce(0) { $0 + $1.farger.count } == om.antall)
+        #expect(biblioteker.count == 6)
+        #expect(biblioteker.first?.id == "bib:filament-alle")
+        #expect(biblioteker.first?.farger.count == om.antall)
+        #expect(biblioteker.dropFirst().reduce(0) { $0 + $1.farger.count } == om.antall)
         #expect(om.lisens == "CC BY 4.0")
         #expect(Set(biblioteker.map(\.id)).count == biblioteker.count)
         #expect(biblioteker.allSatisfy { Fargebibliotek.erBibliotekID($0.id) })
@@ -22,7 +24,7 @@ struct FilamentfargerTests {
             #expect(kilde.produsent?.isEmpty == false && kilde.materiale?.isEmpty == false)
             #expect(kilde.målt != nil)
         }
-        let målt = Filamentfarger.biblioteker.flatMap(\.farger).filter { $0.kilde?.målt == true }.count
+        let målt = Filamentfarger.biblioteker.dropFirst().flatMap(\.farger).filter { $0.kilde?.målt == true }.count
         #expect(målt == Filamentfarger.om?.målt)
     }
 

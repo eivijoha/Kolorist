@@ -47,6 +47,7 @@ public enum Filamentfarger {
 
     static func gruppenavn(_ id: String) -> String {
         switch id {
+        case "alle": String(localized: "Filament: alle typer", bundle: .module)
         case "pla": String(localized: "Filament: PLA", bundle: .module)
         case "petg": String(localized: "Filament: PETG", bundle: .module)
         case "abs-asa": String(localized: "Filament: ABS og ASA", bundle: .module)
@@ -57,7 +58,7 @@ public enum Filamentfarger {
 
     private static let innhold: (biblioteker: [Fargebibliotek], om: Om?) = last()
 
-    /// Ett bibliotek per materialgruppe.
+    /// «Alle typer» (beste treff uansett materiale) først, så ett bibliotek per materialgruppe.
     public static var biblioteker: [Fargebibliotek] { innhold.biblioteker }
     public static var om: Om? { innhold.om }
 
@@ -76,11 +77,14 @@ public enum Filamentfarger {
             perGruppe[gruppe, default: []].append(PalettFarge(navn: "\(p.p) \(p.n) (\(p.m))", farge: farge,
                                                               opphav: .bibliotek, kilde: kilde))
         }
-        let biblioteker = grupper.compactMap { g -> Fargebibliotek? in
+        let sortert = { (farger: [PalettFarge]) in farger.sorted { $0.navn.localizedStandardCompare($1.navn) == .orderedAscending } }
+        let perMateriale = grupper.compactMap { g -> Fargebibliotek? in
             guard let farger = perGruppe[g.id], !farger.isEmpty else { return nil }
-            return Fargebibliotek(id: "bib:filament-\(g.id)", navn: gruppenavn(g.id),
-                                  farger: farger.sorted { $0.navn.localizedStandardCompare($1.navn) == .orderedAscending })
+            return Fargebibliotek(id: "bib:filament-\(g.id)", navn: gruppenavn(g.id), farger: sortert(farger))
         }
+        // Alle typer: nærmeste filament uansett materiale.
+        let alle = Fargebibliotek(id: "bib:filament-alle", navn: gruppenavn("alle"), farger: sortert(perGruppe.values.flatMap { $0 }))
+        let biblioteker = alle.farger.isEmpty ? perMateriale : [alle] + perMateriale
         let om = Om(kilde: fil.kilde, kildelenke: URL(string: fil.kildelenke), lisens: fil.lisens,
                     lisenslenke: URL(string: fil.lisenslenke), hentet: fil.hentet, antall: fil.prøver.count,
                     målt: fil.prøver.filter { $0.lab != nil }.count)

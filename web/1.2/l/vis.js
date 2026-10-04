@@ -282,6 +282,18 @@
       : T[d.slag];
     document.title = `${tittel.textContent} – ${T.delt}`;
 
+    if (d.farger.length > 1) {
+      // Hele paletten under ett, før kortene med verdier.
+      const stripe = lag("div", "delt-oversikt");
+      stripe.setAttribute("aria-hidden", "true");
+      for (const f of d.farger) {
+        const felt = lag("span");
+        felt.style.background = hex(f) || "#808080";
+        felt.style.background = css(f);
+        stripe.append(felt);
+      }
+      innhold.append(stripe);
+    }
     if (d.farger.length) {
       const liste = lag("ul", "delt-farger");
       d.farger.forEach((f) => liste.append(fargekort(f)));
