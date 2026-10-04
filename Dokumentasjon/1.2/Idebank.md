@@ -174,3 +174,25 @@ Kolorist på iPhone eller iPad.
 **Vurdering:** Verdien er størst om lenker deles mye til folk uten appen, og kopiering rett inn i designverktøy er det
 som skiller den fra visningssiden. Alternativet er å la visningssiden få «Last ned ASE» og «Kopier som …» – billigere,
 og virker også på Mac og Windows. Mulig rekkefølge: først visningssiden, App Clip etterpå hvis lenkene brukes mye.
+
+**Eivinds vinkel (2026-10-04): App Clip som smakebit – la folk se verdien av appen.** Det endrer vurderingen: målet er
+ikke å vise lenkede farger, men å la noen prøve det Kolorist gjør bedre enn andre, på sekunder og uten installasjon.
+
+- *Innganger:* delingslenker (den som får en palett, ser den i appen med en gang), appbanneret på kolorist.no («Prøv»
+  rett fra nettsiden – da blir nettsiden selv en inngang, ikke bare lenkene), og Meldinger. (QR- og NFC-koder er mulig
+  for App Clips, men ikke aktuelt – se over.)
+- *Innhold – én kort oppgave, ikke hele appen:* åpne en farge eller palett og
+  - se den i OKLCH, Munsell og CMYK side om side,
+  - se harmonier rundt den,
+  - sjekke kontrast mot hvitt/sort,
+  - se den i et par lysmiljøer,
+  - kopiere til designprogram.
+  Uten lenke: start med en eksempelfarge eller plukk en farge med kameraet.
+- *Vei videre:* Apples overlegg for å hente full app (SKOverlay), og fargene følger med over til appen.
+- *Pass på:* Apple beskriver App Clips som raske, avgrensede oppgaver – en ren prøveversjon kan få avslag. «Se og bruk
+  en farge du har fått eller plukket» er en oppgave og passer; sjekk retningslinjene (App Review 2.5.16 og HIG for App
+  Clips) før vi bestemmer omfang. Størrelsesgrensen avgjør hvor mye av Studio som kan være med.
+- *Mac:* App Clips finnes ikke på Mac; der er appen selv inngangen.
+
+Vurdering etter denne vinkelen: App Clip er verdt å prioritere i 1.3 – foran utvidelser av visningssiden – hvis vi
+klarer å holde den liten og oppgaveformet.
