@@ -160,6 +160,13 @@ struct LysmiljøSeksjon: View {
 
     private var mine: some View {
         PanelSeksjon(panel: .mineLysmiljøer) {
+            // Først måten å legge til på, så de egne lysmiljøene.
+            #if os(iOS)
+            Button("Mål lyset med kameraet …", systemImage: "camera.metering.center.weighted", action: målLys)
+            #endif
+            Button("Nytt lysmiljø", systemImage: "plus") {
+                redigerer = Lysmiljø(navn: String(localized: "Nytt lysmiljø"), lyskilde: .sortlegeme(kelvin: 3000), lux: 300)
+            }
             ForEach(bibliotek.lysmiljøer) { miljø in
                 HStack {
                     Button { redigerer = miljø } label: { rad(miljø) }
@@ -168,12 +175,6 @@ struct LysmiljøSeksjon: View {
                 }
                 .swipeActions { Button("Slett", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) } }
                 .contextMenu { Button("Slett", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) } }
-            }
-            #if os(iOS)
-            Button("Mål lyset med kameraet …", systemImage: "camera.metering.center.weighted", action: målLys)
-            #endif
-            Button("Nytt lysmiljø", systemImage: "plus") {
-                redigerer = Lysmiljø(navn: String(localized: "Nytt lysmiljø"), lyskilde: .sortlegeme(kelvin: 3000), lux: 300)
             }
         } fot: {
             #if os(macOS)
