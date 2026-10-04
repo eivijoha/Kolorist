@@ -2009,12 +2009,12 @@
         }
       }
     },
-    "Filamentfargene kommer fra FilamentColors.xyz, som skriver ut prøver av filament fra mange produsenter og måler dem med kolorimeter (CHNSpec DS-220). Verdiene er CIELab under D65 med 10°-observatør, slik det står i kildekoden deres. Kolorist regner Lab om til XYZ med D65-hvitpunktet for 10° og tilpasser til 2° med Bradford; forskjellen mellom observatørene kan ikke regnes om nøyaktig uten spektre, men er liten. Eldre prøver uten måling har en farge fra et fotografi og er merket som anslått. Farger lenker til prøver hos FilamentColors.xyz, med bilder og mer om filamenter. Uttrekket følger med appen og oppdateres med nye versjoner; appen henter ingenting fra nettet. Bilder, kjøpslenker og koblinger til andre fargesystemer er ikke tatt med. Farger varierer mellom produksjonspartier og etter overflate, så se på en fysisk prøve før du bestemmer deg.": {
+    "Filamentfargene kommer fra FilamentColors.xyz, som skriver ut prøver av filament fra mange produsenter og måler dem med kolorimeter (CHNSpec DS-220). Verdiene er CIELab under D65 med 10°-observatør, slik det står i kildekoden deres. Kolorist regner Lab om til XYZ med D65-hvitpunktet for 10° og tilpasser til 2° med Bradford; forskjellen mellom observatørene kan ikke regnes om nøyaktig uten spektre, men er liten. Eldre prøver uten måling har en farge fra et fotografi og er merket som anslått. Hver farge lenker til prøven hos FilamentColors.xyz, der du finner bilder og mer om filamentet. Uttrekket følger med appen og oppdateres med nye versjoner; appen henter ingenting fra nettet. Bilder, kjøpslenker og koblinger til andre fargesystemer er ikke tatt med. Farger varierer mellom produksjonspartier og etter overflate, så se på en fysisk prøve før du bestemmer deg.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The filament colours come from FilamentColors.xyz, which prints samples of filament from many manufacturers and measures them with a colorimeter (CHNSpec DS-220). The values are CIELab under D65 with the 10° observer, as stated in their source code. Kolorist converts Lab to XYZ with the D65 white point for 10° and adapts to 2° with Bradford; the difference between the observers can’t be converted exactly without spectra, but it is small. Older samples without a measurement have a colour from a photograph and are marked as estimated. Colours link to samples at FilamentColors.xyz, with photos and more about filaments. The extract ships with the app and is updated with new versions; the app fetches nothing from the internet. Photos, purchase links and links to other colour systems are not included. Colours vary between production batches and with surface finish, so look at a physical sample before you decide."
+            "value": "The filament colours come from FilamentColors.xyz, which prints samples of filament from many manufacturers and measures them with a colorimeter (CHNSpec DS-220). The values are CIELab under D65 with the 10° observer, as stated in their source code. Kolorist converts Lab to XYZ with the D65 white point for 10° and adapts to 2° with Bradford; the difference between the observers can’t be converted exactly without spectra, but it is small. Older samples without a measurement have a colour from a photograph and are marked as estimated. Each colour links to the sample at FilamentColors.xyz, where you’ll find photos and more about the filament. The extract ships with the app and is updated with new versions; the app fetches nothing from the internet. Photos, purchase links and links to other colour systems are not included. Colours vary between production batches and with surface finish, so look at a physical sample before you decide."
           }
         }
       }
@@ -2029,18 +2029,18 @@
         }
       }
     },
-    "Filamentfarger for 3D-print fra FilamentColors.xyz: %lld prøver fra mange produsenter, %lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Farger lenker til prøver hos FilamentColors.xyz.": {
+    "Filamentfarger for 3D-print fra FilamentColors.xyz: %lld prøver fra mange produsenter, %lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz.": {
       "localizations": {
         "nb": {
           "stringUnit": {
             "state": "new",
-            "value": "Filamentfarger for 3D-print fra FilamentColors.xyz: %1$lld prøver fra mange produsenter, %2$lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Farger lenker til prøver hos FilamentColors.xyz."
+            "value": "Filamentfarger for 3D-print fra FilamentColors.xyz: %1$lld prøver fra mange produsenter, %2$lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Filament colours for 3D printing from FilamentColors.xyz: %1$lld samples from many manufacturers, %2$lld of them measured with a colorimeter. The rest are estimated from photos and marked as such. Colours link to samples at FilamentColors.xyz."
+            "value": "Filament colours for 3D printing from FilamentColors.xyz: %1$lld samples from many manufacturers, %2$lld of them measured with a colorimeter. The rest are estimated from photos and marked as such. Each colour links to the sample at FilamentColors.xyz."
           }
         }
       }
