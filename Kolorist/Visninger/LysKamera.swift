@@ -1,3 +1,4 @@
+import AVFoundation
 import FargeKjerne
 import FargeMaaling
 import SwiftUI
@@ -68,6 +69,10 @@ struct LysmålingMerke: View {
         if plukker.venterPåGråkort {
             Label("Trykk på kortet", systemImage: "hand.tap")
                 .merke()
+        } else if plukker.lysmåling == nil, let komp = plukker.kompensasjon {
+            // Mac med Continuity-kamera: kompensert, men uten lysmåling.
+            Label(komp.erReferansekort ? "Kompensert med referansekort" : "Kompensert med gråkort", systemImage: "sun.max.fill")
+                .merke()
         } else if let m = plukker.lysmåling {
             HStack(spacing: 6) {
                 Image(systemName: plukker.kompensasjon == nil ? "sun.max" : "sun.max.fill")
@@ -92,6 +97,35 @@ struct LysmålingMerke: View {
         return deler.joined(separator: " · ")
     }
 }
+
+extension Lyskompensasjon {
+    var erReferansekort: Bool { if case .referansekort = self { true } else { false } }
+}
+
+#if os(macOS)
+/// Kameravalg på Mac: innebygd kamera, eksterne kameraer og Continuity-kamera (iPhone).
+struct KameraMeny: View {
+    let plukker: KameraFargeplukker
+
+    var body: some View {
+        if plukker.kameraer.count > 1 {
+            Menu {
+                ForEach(plukker.kameraer, id: \.uniqueID) { kamera in
+                    Button {
+                        plukker.velg(kamera: kamera)
+                    } label: {
+                        if kamera.uniqueID == plukker.kameraID { Label(kamera.localizedName, systemImage: "checkmark") }
+                        else { Text(kamera.localizedName) }
+                    }
+                }
+            } label: {
+                Label("Kamera", systemImage: "web.camera")
+            }
+            .help("Velg kamera. Med iPhone som kamera (Continuity) kan fargene kompenseres for lyset med gråkort eller referansekort.")
+        }
+    }
+}
+#endif
 
 private extension View {
     func merke() -> some View {
@@ -269,8 +303,10 @@ struct KortkalibreringArk: View {
         let modell: Kamerakarakterisering.Modell = kort.felt.count >= 18 ? .rotpolynom : .matrise
         guard let k = Kamerakarakterisering.tilpass(kamera: målt, referanse: kort, modell: modell)
                 ?? Kamerakarakterisering.tilpass(kamera: målt, referanse: kort, modell: .matrise) else { return }
-        // Lyset: kameraets farge for de grå feltene (hvitbalansen er låst til dagslys under opptaket).
+        // Lyset: kameraets farge for de grå feltene (hvitbalansen er låst til dagslys under opptaket). På Mac er bildet
+        // allerede hvitbalansert, så lyset kan ikke anslås.
         var måling: Lysmåling?
+        #if os(iOS)
         let p = Kolorimetri.xy(k.kameraHvit)
         if let t = Kolorimetri.fargetemperatur(x: p.x, y: p.y) {
             var gjengivelse: Double?
@@ -281,6 +317,7 @@ struct KortkalibreringArk: View {
             }
             måling = Lysmåling(kelvin: t.kelvin, duv: t.duv, fargegjengivelse: gjengivelse, metode: .referansekort)
         }
+        #endif
         resultat = Resultat(karakterisering: k, målt: målt, måling: måling)
     }
 
@@ -346,7 +383,7 @@ struct ReferansekortDetalj: View {
                 Section {
                     Group {
                         #if os(macOS)
-                        Text("Bruk kortet på iPhone eller iPad under Utplukk › Lys › Med referansekort. Kortet synkroniseres via iCloud.")
+                        Text("Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lysmiljøer med Kolorist på iPhone, så kommer de hit via iCloud.")
                         #else
                         Text("Bruk kortet under Utplukk › Lys › Med referansekort: hold kortet i samme lys som fargene, og plasser hjørnene i bildet.")
                         #endif

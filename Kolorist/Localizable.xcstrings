@@ -859,12 +859,12 @@
         }
       }
     },
-    "Bruk kortet på iPhone eller iPad under Utplukk › Lys › Med referansekort. Kortet synkroniseres via iCloud.": {
+    "Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lysmiljøer med Kolorist på iPhone, så kommer de hit via iCloud.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use the card on iPhone or iPad under Pick › Light › With reference card. The card syncs via iCloud."
+            "value": "Use the card under Pick › Light › With reference card, with iPhone as the camera (Continuity). The light cannot be measured from the Mac; measure light environments with Kolorist on iPhone and they arrive here via iCloud."
           }
         }
       }
@@ -2773,6 +2773,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compensate to daylight"
+          }
+        }
+      }
+    },
+    "Kompensert med gråkort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compensated with grey card"
+          }
+        }
+      }
+    },
+    "Kompensert med referansekort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compensated with reference card"
           }
         }
       }
@@ -4763,12 +4783,12 @@
         }
       }
     },
-    "Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk på iPhone og iPad, og synkroniseres dit via iCloud. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.": {
+    "Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk – på iPhone og iPad, og på Mac med iPhone som kamera (Continuity) – og synkroniseres mellom enhetene. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reference cards with known values give accurate light compensation in Pick on iPhone and iPad, and sync there via iCloud. The values are not included with the app; import the file that belongs to your card: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV or a table of Lab, XYZ or spectral values. Spectra give the reference values in any light."
+            "value": "Reference cards with known values give accurate light compensation in Pick – on iPhone and iPad, and on Mac with iPhone as the camera (Continuity) – and sync between your devices. The values are not included with the app; import the file that belongs to your card: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV or a table of Lab, XYZ or spectral values. Spectra give the reference values in any light."
           }
         }
       }
@@ -6053,6 +6073,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose base colour from saved colours"
+          }
+        }
+      }
+    },
+    "Velg kamera. Med iPhone som kamera (Continuity) kan fargene kompenseres for lyset med gråkort eller referansekort.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a camera. With iPhone as the camera (Continuity), the colours can be compensated for the light with a grey card or reference card."
           }
         }
       }

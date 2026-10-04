@@ -80,7 +80,7 @@ struct MineProfilerArk: View {
                     }
                     Button("Importer referanseverdier …", systemImage: "square.grid.3x2") { importererKort = true; importerer = true }
                     #if os(macOS)
-                    Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk på iPhone og iPad, og synkroniseres dit via iCloud. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.")
+                    Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk – på iPhone og iPad, og på Mac med iPhone som kamera (Continuity) – og synkroniseres mellom enhetene. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.")
                         .forklaring()
                     #else
                     Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk og et anslag av lyset. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.")

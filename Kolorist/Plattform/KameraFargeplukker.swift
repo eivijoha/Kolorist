@@ -82,6 +82,9 @@ final class KameraFargeplukker {
             return
         }
         if !erKonfigurert { konfigurer() }
+        #if os(macOS)
+        følgTilkoblinger()
+        #endif
         leser.vedFarge = { [weak self] farge, erFangst in
             Task { @MainActor in self?.mottatt(farge, erFangst: erFangst) }
         }
@@ -168,6 +171,8 @@ final class KameraFargeplukker {
         venterPåGråkort = true
         #if os(iOS)
         låsHvitbalanseTilDagslys()
+        #else
+        låsGjeldendeHvitbalanse()
         #endif
     }
 
@@ -176,10 +181,15 @@ final class KameraFargeplukker {
         låsEksponering()
         let komp = Lyskompensasjon.gråkort(målt: målt, refleksjon: gråkortRefleksjon)
         kompensasjon = komp
+        #if os(macOS)
+        // macOS gir ikke hvitbalanse eller eksponering, og bildet er allerede hvitbalansert: ingen lysmåling.
+        lysmåling = nil
+        #else
         if let t = komp.fargetemperatur {
             lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: luxFraKort(målt, refleksjon: gråkortRefleksjon),
                                   metode: .gråkort)
         }
+        #endif
         gjeldende = komp.kompensert(målt)
     }
 
@@ -200,6 +210,8 @@ final class KameraFargeplukker {
     func taStillbilde(_ ferdig: @escaping (CGImage) -> Void) {
         #if os(iOS)
         låsHvitbalanseTilDagslys()
+        #else
+        låsGjeldendeHvitbalanse()
         #endif
         låsEksponering()
         vedStillbilde = ferdig
@@ -253,6 +265,18 @@ final class KameraFargeplukker {
     }
     #endif
 
+    #if os(macOS)
+    /// Mac: hvitbalansen kan bare låses der den er (ikke settes til dagslys), så den ikke endrer seg etter kortet.
+    private func låsGjeldendeHvitbalanse() {
+        guard let enhet, enhet.isWhiteBalanceModeSupported(.locked) else { return }
+        kø.async {
+            guard (try? enhet.lockForConfiguration()) != nil else { return }
+            enhet.whiteBalanceMode = .locked
+            enhet.unlockForConfiguration()
+        }
+    }
+    #endif
+
     private func låsEksponering() {
         guard let enhet, enhet.isExposureModeSupported(.locked) else { return }
         kø.async {
@@ -267,9 +291,7 @@ final class KameraFargeplukker {
         kø.async {
             guard (try? enhet.lockForConfiguration()) != nil else { return }
             defer { enhet.unlockForConfiguration() }
-            #if os(iOS)
             if enhet.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) { enhet.whiteBalanceMode = .continuousAutoWhiteBalance }
-            #endif
             if enhet.isExposureModeSupported(.continuousAutoExposure) { enhet.exposureMode = .continuousAutoExposure }
         }
     }
@@ -292,8 +314,62 @@ final class KameraFargeplukker {
         for type in typer {
             if let enhet = søk.devices.first(where: { $0.deviceType == type }) { return enhet }
         }
+        #else
+        // Mac: Continuity-kameraet (iPhone) foretrekkes når det er tilkoblet.
+        if let iphone = mackameraer().first(where: { $0.deviceType == .continuityCamera }) { return iphone }
         #endif
         return AVCaptureDevice.default(for: .video)
+    }
+
+    #if os(macOS)
+    static func mackameraer() -> [AVCaptureDevice] {
+        AVCaptureDevice.DiscoverySession(deviceTypes: [.continuityCamera, .builtInWideAngleCamera, .external],
+                                         mediaType: .video, position: .unspecified).devices
+    }
+
+    /// Kameraene brukeren kan velge mellom på Mac.
+    private(set) var kameraer: [AVCaptureDevice] = []
+    @ObservationIgnored private var tilkoblingsobservatører: [NSObjectProtocol] = []
+
+    /// Oppdaterer listen når et kamera (f.eks. en iPhone) kobles til eller fra.
+    private func følgTilkoblinger() {
+        guard tilkoblingsobservatører.isEmpty else { return }
+        kameraer = Self.mackameraer()
+        for navn in [AVCaptureDevice.wasConnectedNotification, AVCaptureDevice.wasDisconnectedNotification] {
+            tilkoblingsobservatører.append(NotificationCenter.default.addObserver(forName: navn, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.kameraer = Self.mackameraer() }
+            })
+        }
+    }
+
+    /// Bytter kamera (Mac).
+    func velg(kamera ny: AVCaptureDevice) {
+        guard ny.uniqueID != enhet?.uniqueID, let inn = try? AVCaptureDeviceInput(device: ny) else { return }
+        slåAvKompensasjon()
+        økt.beginConfiguration()
+        økt.inputs.forEach(økt.removeInput)
+        if økt.canAddInput(inn) { økt.addInput(inn) }
+        økt.commitConfiguration()
+        grunnZoom = Self.stillInnFokus(ny)
+        enhet = ny
+        harLykt = ny.hasTorch
+        oppdaterKamerainfo()
+    }
+    #endif
+
+    /// Om kameraet er en iPhone (eget kamera på iPhone/iPad, eller Continuity-kamera på Mac). Lyskompensasjon med
+    /// kort tilbys bare da.
+    private(set) var erIPhoneKamera = false
+    /// Kameraet som er i bruk (for valget på Mac).
+    private(set) var kameraID: String?
+
+    private func oppdaterKamerainfo() {
+        kameraID = enhet?.uniqueID
+        #if os(iOS)
+        erIPhoneKamera = true
+        #else
+        erIPhoneKamera = enhet?.deviceType == .continuityCamera
+        #endif
     }
 
     /// Kontinuerlig autofokus med vekt på korte avstander, og kontinuerlig eksponering.
@@ -402,6 +478,7 @@ final class KameraFargeplukker {
         økt.addInput(inn)
         self.enhet = enhet
         harLykt = enhet.hasTorch
+        oppdaterKamerainfo()
         let ut = AVCaptureVideoDataOutput()
         ut.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
         ut.alwaysDiscardsLateVideoFrames = true

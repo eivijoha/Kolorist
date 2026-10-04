@@ -33,8 +33,12 @@ gjort, så det kan godtas eller endres.
 
 9. **Hvitbalanse**: Ved kompensasjon låses hvitbalansen til D65 (iPhone/iPad), og Kolorist kompenserer selv.
    *Avklart 2026-10-04:* På Mac er visning det viktige – «Se i lys» med eksempler og lysmiljøer lagret på iOS
-   (synkronisert via iCloud). Lys-menyen og lysmålingen i Utplukk vises bare på iPhone og iPad. Referansekort kan
-   fortsatt importeres på Mac (filen ligger ofte der) og synkroniseres til iOS.
+   (synkronisert via iCloud). Referansekort kan importeres på Mac og synkroniseres til iOS.
+   *Continuity-kamera (2026-10-04):* Med iPhone som kamera på Mac vises Lys-menyen med gråkort og referansekort
+   (kameravalg i verktøylinjen; iPhone foretrekkes når den er tilkoblet). macOS gir ikke tilgang til hvitbalanse,
+   ISO eller lukkertid (`API_UNAVAILABLE(macos)`), og bildet kommer ferdig hvitbalansert. Derfor låses bare gjeldende
+   hvitbalanse og eksponering, og kompensasjonen retter restfargestikk og lyshet – men **lyset kan ikke måles**
+   (ingen Kelvin, lux eller fargegjengivelse) fra Macen. Lysmiljøer måles med Kolorist på iPhone. Godt nok?
 10. **«For lyset kameraet måler»** bruker kromatisiteten fra kameraets automatiske hvitbalanse (før låsing) og
     CAT16. Resultatet ligner det kameraet gjør selv, men med vist fargetemperatur og konsekvent metode. Nyttig,
     eller forvirrende ved siden av «Som kameraet ser fargene»?
