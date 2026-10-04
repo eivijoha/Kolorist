@@ -2,7 +2,8 @@ import FargeKjerne
 import FargeMaaling
 import SwiftUI
 
-/// «Se i lys»: den aktive fargen slik den oppleves i et lysmiljø, ved siden av fargen på skjermen.
+/// «Se i lys»: den aktive fargen på skjermen og slik den oppleves i lysmiljøene brukeren har merket for visning
+/// (ett om ingen er merket).
 struct SeILysPanel: View {
     let farge: Farge
     var leggIPalett: ((Farge) -> Void)? = nil
@@ -12,41 +13,30 @@ struct SeILysPanel: View {
     @AppStorage("seILys.somFoto") private var somFoto = false
 
     var body: some View {
-        let miljø = bibliotek.gjeldendeLysmiljø
-        let sett = somFoto ? miljø.somFoto(farge) : miljø.sett(farge)
-        let skift = miljø.fargeskift(farge)
+        let miljøer = bibliotek.visteLysmiljøer.isEmpty ? [bibliotek.gjeldendeLysmiljø] : bibliotek.visteLysmiljøer
         PanelSeksjon(panel: .lys) {
-            LysmiljøVelger(valgt: Binding(get: { miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
             Picker("Vis", selection: $somFoto) {
                 Text("Slik øyet ser det").tag(false)
                 Text("Som et foto").tag(true)
             }
             .pickerStyle(.segmented)
-            HStack(spacing: 8) {
-                prøve(farge, tittel: Text("På skjermen"))
-                prøve(sett, tittel: Text(miljø.navn))
+            // Fargen på skjermen står alltid i feltet øverst; her bare lysmiljøene, to i bredden på iPhone og
+            // flere på iPad og Mac.
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12, alignment: .top)], spacing: 14) {
+                ForEach(miljøer) { prøve($0) }
             }
             .padding(.vertical, 4)
-            LabeledContent("Lys") {
-                Text(Lysbeskrivelse.tekst(miljø))
-                    .monospacedDigit()
-            }
-            if miljø.harUjevntSpekter {
-                Label("Lysrør og LED har ujevne spektre. Fargens spekter er anslått, så en ekte flate med samme farge på skjermen kan endre seg annerledes i dette lyset (metameri).", systemImage: "info.circle")
+            if miljøer.contains(where: \.harUjevntSpekter) {
+                Label("Lysrør og LED har ujevne spektre. Fargens spekter er anslått, så en ekte flate med samme farge på skjermen kan endre seg annerledes i slikt lys (metameri).", systemImage: "info.circle")
                     .font(.footnote)
                     .foregroundStyle(Color.sekundærTekst)
             }
-            LabeledContent("Fargeskift i lyset") {
-                Text("ΔE00 \(skift, format: .number.precision(.fractionLength(1)))")
-                    .monospacedDigit()
-                    .foregroundStyle(skift >= 3 ? Color.advarsel : Color.primary)
-            }
-            Button("Lysmiljøer …", systemImage: "lightbulb.2") { visMiljøer = true }
+            Button("Velg lysmiljøer …", systemImage: "lightbulb.2") { visMiljøer = true }
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 Text(somFoto
-                     ? "Høyre prøve viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig."
-                     : "Høyre prøve viser fargen slik den oppleves i lysmiljøet: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig.")
+                     ? "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig."
+                     : "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig.")
                     .foregroundStyle(Color.sekundærTekst)
                 MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
             }
@@ -54,14 +44,20 @@ struct SeILysPanel: View {
         .sheet(isPresented: $visMiljøer) { LysmiljøArk() }
     }
 
-    private func prøve(_ f: Farge, tittel: Text) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            FargeRute(farge: f, visTekst: false, hjørne: 8, leggIPalett: leggIPalett, valgBoble: true)
+    /// Én prøve: fargen i lyset, navnet på lyset, lyset (K og lx) og fargeskiftet.
+    private func prøve(_ miljø: Lysmiljø) -> some View {
+        let skift = miljø.fargeskift(farge)
+        return VStack(alignment: .leading, spacing: 4) {
+            FargeRute(farge: somFoto ? miljø.somFoto(farge) : miljø.sett(farge), visTekst: false, hjørne: 8,
+                      leggIPalett: leggIPalett, valgBoble: true)
                 .frame(height: 64)
-            tittel.font(.caption).foregroundStyle(Color.sekundærTekst).lineLimit(1)
-            Text(f.hex()).font(.caption.monospaced()).foregroundStyle(Color.sekundærTekst)
+            Text(miljø.navn).font(.callout).lineLimit(2, reservesSpace: true)
+            Text(Lysbeskrivelse.tekst(miljø)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
+            Text("ΔE00 \(skift, format: .number.precision(.fractionLength(1)))")
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(skift >= 3 ? Color.advarsel : Color.sekundærTekst)
         }
-        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -98,7 +94,10 @@ struct LysmiljøArk: View {
             List {
                 Section {
                     ForEach(bibliotek.lysmiljøer) { miljø in
-                        Button { redigerer = miljø } label: { rad(miljø) }
+                        HStack {
+                            Button { redigerer = miljø } label: { rad(miljø) }
+                            visningsmerke(miljø)
+                        }
                             .swipeActions { Button("Slett", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) } }
                             .contextMenu { Button("Slett", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) } }
                     }
@@ -109,23 +108,46 @@ struct LysmiljøArk: View {
                     Text("Mine lysmiljøer")
                 } footer: {
                     #if os(macOS)
-                    Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud.")
+                    Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud. Merk dem som skal vises samtidig i «Se i lys».")
                     #else
-                    Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer kan også måles med kameraet under Utplukk.")
+                    Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer kan også måles med kameraet under Utplukk. Merk dem som skal vises samtidig i «Se i lys».")
                     #endif
                 }
-                Section {
-                    ForEach(Lysbibliotek.standarder) { miljø in
-                        Button { bibliotek.valgtLysmiljø = miljø.id; lukk() } label: { rad(miljø) }
+                if !bibliotek.synligeEksempler.isEmpty {
+                    Section {
+                        ForEach(bibliotek.synligeEksempler) { innebygdRad($0) }
+                    } header: {
+                        Text("Eksempler")
+                    } footer: {
+                        #if os(macOS)
+                        Text("Skjul eksempler og standarder du ikke bruker med øyet til høyre på raden.")
+                        #else
+                        Text("Sveip eller trykk og hold for å skjule eksempler og standarder du ikke bruker.")
+                        #endif
                     }
-                } header: {
-                    Text("Standarder")
-                } footer: {
-                    Text("Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.")
                 }
-                Section("Eksempler") {
-                    ForEach(Lysbibliotek.innebygde) { miljø in
-                        Button { bibliotek.valgtLysmiljø = miljø.id; lukk() } label: { rad(miljø) }
+                if !bibliotek.synligeStandarder.isEmpty {
+                    Section {
+                        ForEach(bibliotek.synligeStandarder) { innebygdRad($0) }
+                    } header: {
+                        Text("Standarder")
+                    } footer: {
+                        Text("Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.")
+                    }
+                }
+                if !bibliotek.skjulteLysmiljøer.isEmpty {
+                    Section {
+                        ForEach(bibliotek.skjulteLysmiljøer) { miljø in
+                            HStack {
+                                rad(miljø).opacity(0.6)
+                                Button("Vis") { withAnimation { bibliotek.settSkjult(miljø, false) } }
+                                    .buttonStyle(.borderless)
+                            }
+                        }
+                    } header: {
+                        Text("Skjulte")
+                    } footer: {
+                        Text("Skjulte lysmiljøer vises ikke i valgene for lysmiljø og i vurderingen av paletter.")
                     }
                 }
             }
@@ -146,6 +168,24 @@ struct LysmiljøArk: View {
         #endif
     }
 
+    /// Et eksempel eller en standard: trykk for å velge; kan skjules (sveip eller trykk og hold, knapp på Mac).
+    private func innebygdRad(_ miljø: Lysmiljø) -> some View {
+        let skjul = { withAnimation { bibliotek.settSkjult(miljø, true) } }
+        return HStack {
+            // Trykk merker lysmiljøet for visning i «Se i lys» (eller fjerner merket).
+            Button { withAnimation { bibliotek.veksleVist(miljø) } } label: { rad(miljø) }
+            visningsmerke(miljø)
+            #if os(macOS)
+            Button("Skjul", systemImage: "eye.slash", action: skjul)
+                .labelStyle(.iconOnly)
+                .buttonStyle(.borderless)
+                .help("Skjul lysmiljøet")
+            #endif
+        }
+        .swipeActions { Button("Skjul", systemImage: "eye.slash", action: skjul).tint(.gray) }
+        .contextMenu { Button("Skjul", systemImage: "eye.slash", action: skjul) }
+    }
+
     private func rad(_ miljø: Lysmiljø) -> some View {
         HStack {
             Circle()
@@ -158,8 +198,21 @@ struct LysmiljøArk: View {
                     .font(.caption).foregroundStyle(Color.sekundærTekst)
             }
             Spacer()
-            if bibliotek.valgtLysmiljø == miljø.id { Image(systemName: "checkmark").foregroundStyle(.tint) }
         }
+        .contentShape(Rectangle())
+    }
+
+    /// Merket for visning i «Se i lys»: sirkel med hake når lysmiljøet vises.
+    private func visningsmerke(_ miljø: Lysmiljø) -> some View {
+        let vist = bibliotek.erVist(miljø)
+        return Button { withAnimation { bibliotek.veksleVist(miljø) } } label: {
+            Image(systemName: vist ? "checkmark.circle.fill" : "circle")
+                .font(.title3)
+                .foregroundStyle(vist ? Color.accentColor : Color.sekundærTekst)
+        }
+        .buttonStyle(.borderless)
+        .accessibilityLabel(vist ? String(localized: "Vises i Se i lys") : String(localized: "Vis i Se i lys"))
+        .help(vist ? "Fjern fra «Se i lys»" : "Vis i «Se i lys»")
     }
 }
 

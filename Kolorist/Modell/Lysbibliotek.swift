@@ -18,6 +18,10 @@ final class Lysbibliotek {
     /// karakterisering som beskriver kameraet, ikke lyset, så et gråkort holder i nytt lys. Gjelder bare med
     /// hvitbalansen låst til dagslys (iPhone/iPad). Synkroniseres, men brukes bare på samme enhetsmodell.
     private(set) var kameraprofiler: [String: LagretKarakterisering] = [:]
+    /// Eksempler og standarder brukeren har skjult fra velgerne.
+    private(set) var skjulte: Set<UUID> = []
+    /// Lysmiljøene «Se i lys» i Studio viser samtidig, i den rekkefølgen de ble merket.
+    private(set) var viste: [UUID] = []
     /// Lysmiljøet «Se i lys» viser (id fra `alleLysmiljøer`).
     var valgtLysmiljø: UUID? {
         didSet { UserDefaults.standard.set(valgtLysmiljø?.uuidString, forKey: Nøkkel.valgt) }
@@ -70,12 +74,41 @@ final class Lysbibliotek {
     /// Et utvalg typiske lys for vurderingen av paletter: varmt kveldslys, varmhvit LED, lysrør og museumslys.
     static let typiske = [stueOmKvelden, varmhvitLED, lysrør, museumLysfølsomme]
 
-    var alleLysmiljøer: [Lysmiljø] { lysmiljøer + Self.standarder + Self.innebygde }
+    var alleLysmiljøer: [Lysmiljø] { lysmiljøer + Self.innebygde + Self.standarder }
 
-    func erInnebygd(_ miljø: Lysmiljø) -> Bool { (Self.standarder + Self.innebygde).contains { $0.id == miljø.id } }
+    func erInnebygd(_ miljø: Lysmiljø) -> Bool { (Self.innebygde + Self.standarder).contains { $0.id == miljø.id } }
+
+    // MARK: Skjulte eksempler og standarder
+
+    var synligeEksempler: [Lysmiljø] { Self.innebygde.filter { !skjulte.contains($0.id) } }
+    var synligeStandarder: [Lysmiljø] { Self.standarder.filter { !skjulte.contains($0.id) } }
+    var skjulteLysmiljøer: [Lysmiljø] { (Self.innebygde + Self.standarder).filter { skjulte.contains($0.id) } }
+    /// Lysmiljøene som kan velges: egne, så synlige eksempler, så synlige standarder.
+    var valgbare: [Lysmiljø] { lysmiljøer + synligeEksempler + synligeStandarder }
+    /// De typiske lysene for palettvurderingen, uten dem brukeren har skjult.
+    var synligeTypiske: [Lysmiljø] { Self.typiske.filter { !skjulte.contains($0.id) } }
+
+    func settSkjult(_ miljø: Lysmiljø, _ skjult: Bool) {
+        guard erInnebygd(miljø) else { return }
+        if skjult { skjulte.insert(miljø.id) } else { skjulte.remove(miljø.id) }
+        skriv()
+    }
+
+    /// Merkede lysmiljøer som kan vises (ikke skjulte eller slettede), i rekkefølgen de ble merket.
+    var visteLysmiljøer: [Lysmiljø] {
+        let valgbare = self.valgbare
+        return viste.compactMap { id in valgbare.first { $0.id == id } }
+    }
+
+    func erVist(_ miljø: Lysmiljø) -> Bool { viste.contains(miljø.id) }
+
+    func veksleVist(_ miljø: Lysmiljø) {
+        if let i = viste.firstIndex(of: miljø.id) { viste.remove(at: i) } else { viste.append(miljø.id) }
+        skriv()
+    }
 
     var gjeldendeLysmiljø: Lysmiljø {
-        alleLysmiljøer.first { $0.id == valgtLysmiljø } ?? Self.stueOmKvelden
+        valgbare.first { $0.id == valgtLysmiljø } ?? valgbare.first ?? Self.stueOmKvelden
     }
 
     private let lager = SkyLager.delt
@@ -84,12 +117,18 @@ final class Lysbibliotek {
         static let kort = "lys.referansekort"
         static let karakteriseringer = "lys.karakteriseringer"
         static let kameraprofiler = "lys.kameraprofiler"
+        static let skjulte = "lys.skjulte"
+        static let viste = "lys.viste"
         static let valgt = "lys.valgtMiljø"
     }
 
     private init() {
         valgtLysmiljø = UserDefaults.standard.string(forKey: Nøkkel.valgt).flatMap(UUID.init(uuidString:))
-        guard !lager.skjermbildemodus else { return }
+        guard !lager.skjermbildemodus else {
+            // Skjermbilder: noen typiske lys vist samtidig i «Se i lys».
+            viste = [Self.stueOmKvelden.id, Self.varmhvitLED.id, Self.lysrør.id, Self.standarder[2].id]
+            return
+        }
         last()
         lager.vedEndring { [weak self] in self?.last() }
     }
@@ -164,6 +203,8 @@ final class Lysbibliotek {
         referansekort = les(Nøkkel.kort, som: [Referansekort].self) ?? []
         karakteriseringer = les(Nøkkel.karakteriseringer, som: [UUID: LagretKarakterisering].self) ?? [:]
         kameraprofiler = les(Nøkkel.kameraprofiler, som: [String: LagretKarakterisering].self) ?? [:]
+        skjulte = les(Nøkkel.skjulte, som: Set<UUID>.self) ?? []
+        viste = les(Nøkkel.viste, som: [UUID].self) ?? []
     }
 
     private func skriv() {
@@ -173,6 +214,8 @@ final class Lysbibliotek {
             (Nøkkel.kort, try? koder.encode(referansekort)),
             (Nøkkel.karakteriseringer, try? koder.encode(karakteriseringer)),
             (Nøkkel.kameraprofiler, try? koder.encode(kameraprofiler)),
+            (Nøkkel.skjulte, try? koder.encode(skjulte)),
+            (Nøkkel.viste, try? koder.encode(viste)),
         ]
         lager.skriv(verdier.compactMap { nøkkel, data in
             guard let data, !ulesbare.contains(nøkkel) else { return nil }

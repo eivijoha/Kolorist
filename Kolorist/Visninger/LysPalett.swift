@@ -18,11 +18,15 @@ struct LysmiljøVelger: View {
                     ForEach(bibliotek.lysmiljøer) { Text($0.navn).tag(Optional($0.id)) }
                 }
             }
-            Section("Standarder") {
-                ForEach(Lysbibliotek.standarder) { Text($0.navn).tag(Optional($0.id)) }
+            if !bibliotek.synligeEksempler.isEmpty {
+                Section("Eksempler") {
+                    ForEach(bibliotek.synligeEksempler) { Text($0.navn).tag(Optional($0.id)) }
+                }
             }
-            Section("Eksempler") {
-                ForEach(Lysbibliotek.innebygde) { Text($0.navn).tag(Optional($0.id)) }
+            if !bibliotek.synligeStandarder.isEmpty {
+                Section("Standarder") {
+                    ForEach(bibliotek.synligeStandarder) { Text($0.navn).tag(Optional($0.id)) }
+                }
             }
         }
     }
@@ -119,7 +123,7 @@ struct LysVurderingSeksjon: View {
     @State private var bibliotek = Lysbibliotek.delt
 
     /// Egne lysmiljøer og et utvalg typiske.
-    private var miljøer: [Lysmiljø] { bibliotek.lysmiljøer + Lysbibliotek.typiske }
+    private var miljøer: [Lysmiljø] { bibliotek.lysmiljøer + bibliotek.synligeTypiske }
 
     var body: some View {
         let ff = farger.map(\.farge)
