@@ -15,7 +15,8 @@
   const en = !/^(nb|no|nn)\b/.test((navigator.language || "nb").toLowerCase());
   const T = en ? {
     hopp: "Skip to main content", laster: "Opening …", haAppen: "Do you have Kolorist?",
-    haAppenTekst: "Open the link in the app to save, edit and build on it.", aapne: "Open in Kolorist",
+    haAppenTekst: "Open the link in the app to save, edit and build on it.",
+    aapne: (en1) => en1 ? "Open the colour in the Kolorist app" : "Open the colours in the Kolorist app",
     lastNed: "Download for iPhone, iPad and Mac",
     personvern: "The colours are in the link itself. Kolorist.no doesn’t know what is shared.",
     farge: "Colour", palett: "Palette", gradient: "Gradient", harmoni: "Harmony", farger: (n) => n === 1 ? "1 colour" : `${n} colours`,
@@ -27,7 +28,8 @@
     sirkel: "Colour wheel", delt: "Shared from Kolorist", toner: (n) => `${n} tones`,
   } : {
     hopp: "Hopp til hovedinnhold", laster: "Åpner …", haAppen: "Har du Kolorist?",
-    haAppenTekst: "Åpne lenken i appen for å lagre, endre og bygge videre.", aapne: "Åpne i Kolorist",
+    haAppenTekst: "Åpne lenken i appen for å lagre, endre og bygge videre.",
+    aapne: (en1) => en1 ? "Åpne fargen i Kolorist-appen" : "Åpne fargene i Kolorist-appen",
     lastNed: "Last ned for iPhone, iPad og Mac",
     personvern: "Fargene ligger i selve lenken. Kolorist.no får ikke vite hva som deles.",
     farge: "Farge", palett: "Palett", gradient: "Gradient", harmoni: "Harmoni", farger: (n) => n === 1 ? "1 farge" : `${n} farger`,
@@ -276,9 +278,15 @@
       seksjon.append(knapperad([[T.kopierCSS, `background: ${gradientCSS(g)};`]]));
       innhold.append(seksjon);
     }
-    const handlinger = document.getElementById("handlinger");
-    handlinger.hidden = false;
-    document.getElementById("aapne").href = `kolorist://l${location.hash}`;
+    // «Åpne i appen» øverst og nederst; universelle lenker åpner appen direkte, dette er for innebygde nettlesere.
+    const enFarge = d.slag === "farge";
+    for (const id of ["aapneTopp", "aapne"]) {
+      const a = document.getElementById(id);
+      a.href = `kolorist://l${location.hash}`;
+      a.textContent = T.aapne(enFarge);
+    }
+    document.getElementById("topphandling").hidden = false;
+    document.getElementById("handlinger").hidden = false;
   }
 
   function visFeil(tittelTekst, tekstInnhold) {
@@ -291,7 +299,7 @@
   async function start() {
     if (en) {
       document.documentElement.lang = "en";
-      document.querySelectorAll("[data-t]").forEach((el) => { if (T[el.dataset.t]) el.textContent = T[el.dataset.t]; });
+      document.querySelectorAll("[data-t]").forEach((el) => { if (typeof T[el.dataset.t] === "string") el.textContent = T[el.dataset.t]; });
       document.querySelectorAll("[data-href-en]").forEach((el) => { el.href = el.dataset.hrefEn; });
     }
     const fragment = location.hash.slice(1);

@@ -12,7 +12,7 @@
   <title>Delt fra Kolorist</title>
   <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="stil.css?v=1">
-  <script src="vis.js?v=1" defer></script>
+  <script src="vis.js?v=2" defer></script>
 </head>
 <body>
   <a class="hopp" href="#hovedinnhold" data-t="hopp">Hopp til hovedinnhold</a>
@@ -31,6 +31,9 @@
     <header class="sidetopp">
       <p class="overtittel" id="slag"></p>
       <h1 id="tittel" data-t="laster">Åpner …</h1>
+      <div class="handlinger" id="topphandling" hidden>
+        <a class="knapp" id="aapneTopp" href="#">Åpne fargene i Kolorist-appen</a>
+      </div>
     </header>
 
     <div id="innhold"></div>
@@ -40,7 +43,7 @@
         <h2 data-t="haAppen">Har du Kolorist?</h2>
         <p data-t="haAppenTekst">Åpne lenken i appen for å lagre, endre og bygge videre.</p>
         <div class="handlinger">
-          <a class="knapp" id="aapne" href="#" data-t="aapne">Åpne i Kolorist</a>
+          <a class="knapp" id="aapne" href="#">Åpne fargene i Kolorist-appen</a>
           <a class="knapp knapp-sekundaer" href="https://apps.apple.com/app/kolorist-fargepaletter/id6818636272" data-t="lastNed">Last ned for iPhone, iPad og Mac</a>
         </div>
       </div>
