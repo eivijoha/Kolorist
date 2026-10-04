@@ -10,6 +10,7 @@ struct LysVurdering: View {
     /// Som et foto: lysets fulle fargestikk, uten øyets tilpasning.
     @AppStorage("seILys.somFoto") private var somFoto = false
     @State private var leggIPalett: [PalettFarge]?
+    @State private var måler = false
 
     var body: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
@@ -22,7 +23,7 @@ struct LysVurdering: View {
             // Panelene i brukerens rekkefølge, sammenleggbare (Panelinnstillinger, synkronisert).
             ForEach(Panelinnstillinger.delt.paneler(for: .lys)) { panel in
                 if panel == .fargeILys { fargeseksjon(farge, miljøer, $arbeidsbenk.aktivFarge) }
-                else { LysmiljøSeksjon(panel: panel) }
+                else { LysmiljøSeksjon(panel: panel) { måler = true } }
             }
             TilpassKnapp(skjerm: .lys)
         }
@@ -31,6 +32,9 @@ struct LysVurdering: View {
         .sheet(isPresented: Binding(get: { leggIPalett != nil }, set: { if !$0 { leggIPalett = nil } })) {
             VelgPalettArk(farger: leggIPalett ?? [])
         }
+        #if os(iOS)
+        .fullScreenCover(isPresented: $måler) { LysmålingArk() }
+        #endif
     }
 
     /// Stort felt øverst, som i Forskjell: fargen på skjermen (trykk for å endre) og i det primære lysmiljøet (trykk for

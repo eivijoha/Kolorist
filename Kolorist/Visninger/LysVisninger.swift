@@ -106,9 +106,11 @@ enum Lysbeskrivelse {
 /// eller skjulte. Haken til høyre merker lysmiljøene fargen vises i øverst.
 struct LysmiljøSeksjon: View {
     let panel: Panelinnstillinger.Panel
+    /// Åpner målearket. Det presenteres fra Lys-fanen, ikke fra seksjonen: ark fra en seksjon i en liste kan lukkes
+    /// når lista tegnes på nytt.
+    var målLys: () -> Void = {}
     @State private var bibliotek = Lysbibliotek.delt
     @State private var redigerer: Lysmiljø?
-    @State private var måler = false
 
     var body: some View {
         switch panel {
@@ -168,7 +170,7 @@ struct LysmiljøSeksjon: View {
                 .contextMenu { Button("Slett", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) } }
             }
             #if os(iOS)
-            Button("Mål lyset med kameraet …", systemImage: "camera.metering.center.weighted") { måler = true }
+            Button("Mål lyset med kameraet …", systemImage: "camera.metering.center.weighted", action: målLys)
             #endif
             Button("Nytt lysmiljø", systemImage: "plus") {
                 redigerer = Lysmiljø(navn: String(localized: "Nytt lysmiljø"), lyskilde: .sortlegeme(kelvin: 3000), lux: 300)
@@ -189,9 +191,6 @@ struct LysmiljøSeksjon: View {
                 if nytt && !bibliotek.erVist(lagret) { bibliotek.veksleVist(lagret) }
             }
         }
-        #if os(iOS)
-        .fullScreenCover(isPresented: $måler) { LysmålingArk() }
-        #endif
     }
 
     /// Et eksempel eller en standard: trykk for å velge; kan skjules (sveip eller trykk og hold, knapp på Mac).
