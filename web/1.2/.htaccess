@@ -1,0 +1,7 @@
+# Sidene mellomlagres bare kort, så endringer vises med en gang (Varnish holdt ellers gamle sider i opptil en time).
+# Bilder, skript og stilark har versjonsnummer i adressen og kan ligge lenger.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=300"
+  </FilesMatch>
+</IfModule>
