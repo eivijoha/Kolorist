@@ -115,16 +115,6 @@
         }
       }
     },
-    "%@ er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ is developed by Eivind Arnstein Johansen – Department of Design, NTNU."
-          }
-        }
-      }
-    },
     "%@ fargesirkel med %lld markerte kulører": {
       "localizations": {
         "en": {
@@ -1826,6 +1816,16 @@
         }
       }
     },
+    "Fargepaletter for designere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour palettes for designers"
+          }
+        }
+      }
+    },
     "Fargepar som er tydelig ulike med normalt syn, men blir vanskelige å skille med protan-, deutan- eller tritanavvik eller akromatopsi (ΔE2000 under 10).": {
       "localizations": {
         "en": {
@@ -3185,6 +3185,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Installed on this Mac"
+          }
+        }
+      }
+    },
+    "Institutt for design, NTNU": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Department of Design, NTNU"
           }
         }
       }
@@ -7285,6 +7295,16 @@
         }
       }
     },
+    "Utviklet av Eivind Arnstein Johansen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developed by Eivind Arnstein Johansen"
+          }
+        }
+      }
+    },
     "Utviklet for Kolorist; språkmodell fra Apple (Foundation Models)": {
       "localizations": {
         "en": {
@@ -7571,6 +7591,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Version %@"
+          }
+        }
+      }
+    },
+    "Versjon %@ (%@)": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Versjon %1$@ (%2$@)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %1$@ (%2$@)"
           }
         }
       }

@@ -992,22 +992,92 @@ struct Utviklerlinje: View {
             ? URL(string: "https://kolorist.no/en/")! : URL(string: "https://kolorist.no/")!
     }
 
+    private var bygg: String {
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String) ?? ""
+    }
+
+    /// Minste høyde for radene: 44 pt på berøringsskjerm (HIG), lavere på Mac.
+    private var radhøyde: CGFloat {
+        #if os(macOS)
+        32
+        #else
+        44
+        #endif
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("\(appnavn) er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.")
-            if !versjon.isEmpty { Text("Versjon \(versjon)") }
-            Button("Metoder og kilder", systemImage: "books.vertical") { visMetoder = true }
-                .buttonStyle(.borderless)
-                .padding(.top, 6)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 14) {
+                Image("Appikon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 13.5, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 13.5, style: .continuous).strokeBorder(.separator, lineWidth: 0.5))
+                    .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(appnavn).font(.headline)
+                    Text("Fargepaletter for designere").font(.subheadline).foregroundStyle(Color.sekundærTekst)
+                    if !versjon.isEmpty {
+                        Text(bygg.isEmpty ? String(localized: "Versjon \(versjon)") : String(localized: "Versjon \(versjon) (\(bygg))"))
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(Color.sekundærTekst)
+                    }
+                }
+            }
+            .padding(.bottom, 12)
+            .accessibilityElement(children: .combine)
+
+            Divider()
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Utviklet av Eivind Arnstein Johansen").font(.subheadline)
+                Text("Institutt for design, NTNU").font(.caption).foregroundStyle(Color.sekundærTekst)
+            }
+            .padding(.vertical, 10)
+            .accessibilityElement(children: .combine)
+
+            Divider()
+            Button { visMetoder = true } label: {
+                rad(Label("Metoder og kilder", systemImage: "books.vertical"), tegn: "chevron.right")
+            }
+            .buttonStyle(.plain)
+            Divider()
             // Nettsiden på appens språk.
-            Link(destination: Self.nettside) { Label("kolorist.no", systemImage: "safari") }
-                .buttonStyle(.borderless)
+            Link(destination: Self.nettside) {
+                rad(Label("kolorist.no", systemImage: "safari"), tegn: "arrow.up.right")
+            }
+            .buttonStyle(.plain)
         }
+        .padding(.horizontal, 14)
+        .padding(.top, 14)
+        .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .sheet(isPresented: $visMetoder) { MetoderArk() }
-        .font(.footnote)
-        .foregroundStyle(Color.sekundærTekst)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: 560, alignment: .leading)
         .padding(.top, 4)
+    }
+
+    /// En hel rad som kan trykkes, minst 44 pt høy på iPhone og iPad.
+    private func rad(_ etikett: Label<Text, Image>, tegn: String) -> some View {
+        HStack {
+            // Ikonene i fast bredde, så tekstene står på linje.
+            etikett.labelStyle(Ikonkolonne()).foregroundStyle(.tint)
+            Spacer()
+            Image(systemName: tegn).font(.footnote.weight(.semibold)).foregroundStyle(Color.tertiærTekst)
+        }
+        .font(.subheadline)
+        .frame(maxWidth: .infinity, minHeight: radhøyde, alignment: .leading)
+        .contentShape(Rectangle())
+    }
+}
+
+/// Etikett med ikonet i en kolonne med fast bredde, så teksten i flere rader under hverandre står på linje.
+private struct Ikonkolonne: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 10) {
+            configuration.icon.frame(width: 24)
+            configuration.title
+        }
     }
 }
 
