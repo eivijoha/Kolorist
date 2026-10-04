@@ -53,6 +53,16 @@
         }
       }
     },
+    "%@ (beta)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (beta)"
+          }
+        }
+      }
+    },
     "%@ (utenfor gamut)": {
       "localizations": {
         "en": {
@@ -3375,22 +3385,22 @@
         }
       }
     },
-    "Kompensert med gråkort": {
+    "Kompensert med gråkort · beta": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Compensated with grey card"
+            "value": "Compensated with grey card · beta"
           }
         }
       }
     },
-    "Kompensert med referansekort": {
+    "Kompensert med referansekort · beta": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Compensated with reference card"
+            "value": "Compensated with reference card · beta"
           }
         }
       }
@@ -4801,22 +4811,22 @@
         }
       }
     },
-    "Med gråkort": {
+    "Med gråkort (beta)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "With grey card"
+            "value": "With grey card (beta)"
           }
         }
       }
     },
-    "Med gråkort og kameraprofil": {
+    "Med gråkort og kameraprofil (beta)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "With grey card and camera profile"
+            "value": "With grey card and camera profile (beta)"
           }
         }
       }
@@ -4831,12 +4841,12 @@
         }
       }
     },
-    "Med referansekort": {
+    "Med referansekort (beta)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "With reference card"
+            "value": "With reference card (beta)"
           }
         }
       }
@@ -7801,6 +7811,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "passed"
+          }
+        }
+      }
+    },
+    "beta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "beta"
           }
         }
       }

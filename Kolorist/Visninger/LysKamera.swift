@@ -19,13 +19,14 @@ struct LyskompensasjonValg: View {
     var body: some View {
         // Fargene normaliseres bare med et kort i lyset: kameraets egen lysmåling (hvitbalansen) er for grov til det.
         Button(avTekst, systemImage: erAktiv ? "" : "checkmark", action: slåAv)
-        Section(medKameraprofil ? "Med gråkort og kameraprofil" : "Med gråkort") {
+        // Beta: kompensasjonen med kort er ikke ferdig testet.
+        Section(medKameraprofil ? "Med gråkort og kameraprofil (beta)" : "Med gråkort (beta)") {
             Button("Gråkort 18 %") { gråkort(0.18) }
             Button("Hvitt kort 90 %") { gråkort(0.9) }
             Button("Eget kort …", action: egetKort)
             if let glemKameraprofil { Button("Glem kameraprofilen", systemImage: "trash", role: .destructive, action: glemKameraprofil) }
         }
-        Section("Med referansekort") {
+        Section("Med referansekort (beta)") {
             if bibliotek.referansekort.isEmpty {
                 // Referanseverdiene følger ikke med appen; brukeren importerer dem under Mine fargerom.
                 Button("Importer verdiene under Mine fargerom", systemImage: "square.grid.3x2") {}.disabled(true)
@@ -115,7 +116,7 @@ struct LysmålingMerke: View {
             .merke()
             .accessibilityElement(children: .combine)
         } else if let kompensasjon {
-            Label(kompensasjon.erReferansekort ? "Kompensert med referansekort" : "Kompensert med gråkort", systemImage: "sun.max.fill")
+            Label(kompensasjon.erReferansekort ? "Kompensert med referansekort · beta" : "Kompensert med gråkort · beta", systemImage: "sun.max.fill")
                 .merke()
         }
     }
@@ -135,6 +136,7 @@ struct LysmålingMerke: View {
                 else { deler.append(String(localized: "gråkort")) }
             case .referansekort: deler.append(String(localized: "referansekort"))
             }
+            deler.append(String(localized: "beta"))
         }
         return deler.joined(separator: " · ")
     }
@@ -214,7 +216,7 @@ struct KortkalibreringArk: View {
             Group {
                 if let resultat { resultatvisning(resultat) } else { plassering }
             }
-            .navigationTitle(kort.navn)
+            .navigationTitle(String(localized: "\(kort.navn) (beta)"))
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
