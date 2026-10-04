@@ -146,6 +146,14 @@ struct FargeEditor: View {
                 .frame(height: bred ? nil : 140)
                 .frame(maxHeight: bred ? .infinity : nil)
             HStack {
+                #if os(macOS)
+                // Skjermpipette (hele skjermen), først i raden. På iPhone/iPad brukes Utplukk-fanen.
+                PipetteKnapp {
+                    arbeidsbenk.aktivFarge = $0
+                    arbeidsbenk.registrerMåling($0)
+                }
+                .labelStyle(.iconOnly)
+                #endif
                 TextField("Hex, CSS eller beskrivelse", text: $hexTekst)
                     .font(.body.monospaced())
                     .frame(minWidth: 96)
@@ -169,14 +177,6 @@ struct FargeEditor: View {
                 // Menyen får plass først; profilnavnet kortes ned når feltet ellers ville blitt for smalt.
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: farge, visMineFargerom: $visMineFargerom)
                     .layoutPriority(1)
-                #if os(macOS)
-                // Skjermpipette (hele skjermen). På iPhone/iPad brukes Utplukk-fanen.
-                PipetteKnapp {
-                    arbeidsbenk.aktivFarge = $0
-                    arbeidsbenk.registrerMåling($0)
-                }
-                .labelStyle(.iconOnly)
-                #endif
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)
