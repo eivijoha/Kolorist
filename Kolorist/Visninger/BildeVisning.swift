@@ -11,11 +11,13 @@ import UniformTypeIdentifiers
 struct UtplukkVisning: View {
     enum Kilde: Hashable { case kamera, bilde }
     @State private var kilde: Kilde = .kamera
+    /// Kameraet eies her, så kameravalget (Mac) kan stå i verktøylinjen ved siden av Kamera/Bilde.
+    @State private var plukker = KameraFargeplukker()
 
     var body: some View {
         Group {
             switch kilde {
-            case .kamera: KameraVisning()
+            case .kamera: KameraVisning(plukker: plukker)
             case .bilde: BildeVisning()
             }
         }
@@ -26,12 +28,18 @@ struct UtplukkVisning: View {
         #endif
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Picker("Kilde", selection: $kilde) {
-                    Label("Kamera", systemImage: "camera").tag(Kilde.kamera)
-                    Label("Bilde", systemImage: "photo").tag(Kilde.bilde)
+                HStack(spacing: 12) {
+                    #if os(macOS)
+                    // Kameravalget (innebygd, eksterne og iPhone som Continuity-kamera) til venstre for Kamera/Bilde.
+                    if kilde == .kamera { KameraMeny(plukker: plukker) }
+                    #endif
+                    Picker("Kilde", selection: $kilde) {
+                        Label("Kamera", systemImage: "camera").tag(Kilde.kamera)
+                        Label("Bilde", systemImage: "photo").tag(Kilde.bilde)
+                    }
+                    .pickerStyle(.segmented)
+                    .fixedSize()
                 }
-                .pickerStyle(.segmented)
-                .fixedSize()
             }
         }
     }

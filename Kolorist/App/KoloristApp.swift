@@ -102,6 +102,35 @@ final class Arbeidsbenk {
     }
 
     var begrensning: ICCProfil? { begrensAktiv && begrensBibliotek == nil ? begrensProfil : nil }
+
+    /// Aktiv farge slik «Vis som» viser den – det som legges til med «Legg til»-feltet i paletter: nærmeste tone i et
+    /// fargebibliotek (f.eks. filament, med produsent, navn og lenke), fargen gjengitt i en ICC-profil med verdiene
+    /// der, eller fargen som den er (sRGB).
+    var aktivFargeSomVistSom: PalettFarge {
+        let farge = aktivFarge
+        let hensikt = UserDefaults.standard.string(forKey: "gjengivelseshensikt").flatMap(Gjengivelseshensikt.init(rawValue:))
+            ?? .relativKolorimetrisk
+        // Søket i et stort bibliotek (filament: over 2 200 toner) gjøres bare når fargen eller «Vis som» endres.
+        let nøkkel = "\(farge.hex(medAlfa: true))|\(begrensBibliotek?.id ?? begrensProfil.id)|\(hensikt.rawValue)"
+        if let lagret = vistSomMellomlager, lagret.nøkkel == nøkkel { return lagret.farge }
+        let resultat = beregnSomVistSom(farge, hensikt: hensikt)
+        vistSomMellomlager = (nøkkel, resultat)
+        return resultat
+    }
+    @ObservationIgnored private var vistSomMellomlager: (nøkkel: String, farge: PalettFarge)?
+
+    private func beregnSomVistSom(_ farge: Farge, hensikt: Gjengivelseshensikt) -> PalettFarge {
+        if let bibliotek = begrensBibliotek, let n = bibliotek.nærmeste(til: farge) {
+            return PalettFarge(navn: n.tone.navn, farge: n.tone.farge, opphav: .bibliotek,
+                               representasjon: n.tone.representasjon, kilde: n.tone.kilde)
+        }
+        let profil = begrensProfil
+        guard profil.id != ICCProfil.sRGB.id else { return PalettFarge(farge: farge) }
+        guard let k = farge.komponenter(i: profil, hensikt: hensikt),
+              let gjengitt = Farge(komponenter: k, i: profil, alfa: farge.alfa) else { return PalettFarge(farge: farge) }
+        return PalettFarge(farge: gjengitt, representasjon: Fargerepresentasjon(
+            rom: .icc(id: profil.id, navn: profil.navn), verdier: k, tekst: profil.formatert(k)))
+    }
     var bibliotekbegrensning: Fargebibliotek? { begrensBibliotek }
 
     /// Grov gamut for beregninger i kjernen; den nøyaktige begrensningen gjøres av `begrens`.

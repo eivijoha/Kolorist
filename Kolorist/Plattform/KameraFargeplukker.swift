@@ -310,13 +310,22 @@ final class KameraFargeplukker {
             if let enhet = søk.devices.first(where: { $0.deviceType == type }) { return enhet }
         }
         #else
-        // Mac: Continuity-kameraet (iPhone) foretrekkes når det er tilkoblet.
-        if let iphone = mackameraer().first(where: { $0.deviceType == .continuityCamera }) { return iphone }
+        // Mac: kameraet brukeren sist valgte, hvis det er tilkoblet; ellers Continuity-kameraet (iPhone), som kan måle
+        // lys og kompensere med kort; ellers systemets foretrukne kamera.
+        let kameraer = mackameraer()
+        if let id = UserDefaults.standard.string(forKey: valgtKameraNøkkel), let valgt = kameraer.first(where: { $0.uniqueID == id }) {
+            return valgt
+        }
+        if let iphone = kameraer.first(where: { $0.deviceType == .continuityCamera }) { return iphone }
+        if let foretrukket = AVCaptureDevice.systemPreferredCamera { return foretrukket }
         #endif
         return AVCaptureDevice.default(for: .video)
     }
 
     #if os(macOS)
+    /// Kameraet brukeren har valgt i menyen (huskes mellom oppstarter).
+    private static let valgtKameraNøkkel = "utplukk.valgtKamera"
+
     static func mackameraer() -> [AVCaptureDevice] {
         AVCaptureDevice.DiscoverySession(deviceTypes: [.continuityCamera, .builtInWideAngleCamera, .external],
                                          mediaType: .video, position: .unspecified).devices
@@ -332,13 +341,31 @@ final class KameraFargeplukker {
         kameraer = Self.mackameraer()
         for navn in [AVCaptureDevice.wasConnectedNotification, AVCaptureDevice.wasDisconnectedNotification] {
             tilkoblingsobservatører.append(NotificationCenter.default.addObserver(forName: navn, object: nil, queue: .main) { [weak self] _ in
-                MainActor.assumeIsolated { self?.kameraer = Self.mackameraer() }
+                MainActor.assumeIsolated { self?.kameratilkobling() }
             })
         }
     }
 
-    /// Bytter kamera (Mac).
+    /// Et kamera er koblet til eller fra. Et iPhone-kamera (Continuity) dukker ofte opp noen sekunder etter at Utplukk
+    /// er åpnet: da byttes det til, med mindre brukeren har valgt et annet kamera. Forsvinner kameraet som er i bruk,
+    /// velges det beste av de gjenværende.
+    private func kameratilkobling() {
+        kameraer = Self.mackameraer()
+        let valgtID = UserDefaults.standard.string(forKey: Self.valgtKameraNøkkel)
+        let iBrukFinnes = kameraer.contains { $0.uniqueID == enhet?.uniqueID }
+        let brukerValgteDette = valgtID != nil && valgtID == enhet?.uniqueID
+        if !iBrukFinnes || !brukerValgteDette, let beste = Self.velgKamera(), beste.uniqueID != enhet?.uniqueID {
+            bytt(til: beste)
+        }
+    }
+
+    /// Bytter kamera fra menyen (Mac), og husker valget.
     func velg(kamera ny: AVCaptureDevice) {
+        UserDefaults.standard.set(ny.uniqueID, forKey: Self.valgtKameraNøkkel)
+        bytt(til: ny)
+    }
+
+    private func bytt(til ny: AVCaptureDevice) {
         guard ny.uniqueID != enhet?.uniqueID, let inn = try? AVCaptureDeviceInput(device: ny) else { return }
         slåAvKompensasjon()
         økt.beginConfiguration()

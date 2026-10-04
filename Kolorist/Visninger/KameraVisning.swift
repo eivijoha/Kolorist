@@ -12,7 +12,7 @@ struct KameraVisning: View {
         #endif
     }
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
-    @State private var plukker = KameraFargeplukker()
+    @State var plukker = KameraFargeplukker()
     @State private var lagre: [PalettFarge]?
     @Environment(\.modelContext) private var kontekst
     /// Slukk lykt/lysfelt når en farge er fanget (lyset trengs bare under målingen).
@@ -105,9 +105,6 @@ struct KameraVisning: View {
         .toolbar {
             ToolbarItemGroup {
                 LyskildeKnapper(plukker: plukker, slukkEtterFangst: $slukkEtterFangst)
-                #if os(macOS)
-                KameraMeny(plukker: plukker)
-                #endif
                 if plukker.erIPhoneKamera {
                     LyskompensasjonMeny(plukker: plukker, kalibrerMed: $kalibrerMed, lagreLysmiljø: $lagreLysmiljø)
                 }

@@ -306,8 +306,8 @@ struct EnkeltfargerRad: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     // Nyeste først, så den nye fargen havner der feltet står.
-                    LeggTilFelt(farge: arbeidsbenk.aktivFarge, hjørne: 6, visTekst: false) {
-                        kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.aktivFarge)], i: kontekst) }
+                    LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn, hjørne: 6, visTekst: false) {
+                        kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([arbeidsbenk.aktivFargeSomVistSom], i: kontekst) }
                     }
                     .frame(width: 44, height: 44)
                     ForEach(farger.prefix(60)) { pf in
@@ -342,8 +342,8 @@ struct EnkeltfargerVisning: View {
         ScrollView {
             LazyVGrid(columns: rutenett, spacing: 10) {
                 // Nyeste først, så den nye fargen havner der feltet står.
-                LeggTilFelt(farge: arbeidsbenk.aktivFarge) {
-                    kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.aktivFarge)], i: kontekst) }
+                LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn) {
+                    kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([arbeidsbenk.aktivFargeSomVistSom], i: kontekst) }
                 }
                 .aspectRatio(1, contentMode: .fit)
                 ForEach(lagrede) { lagret in
@@ -433,8 +433,8 @@ struct PalettRad: View {
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
                     }
-                    LeggTilFelt(farge: arbeidsbenk.aktivFarge, hjørne: 6, visTekst: false) {
-                        kontekst.angresteg("Legg til farge") { dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge)) }
+                    LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn, hjørne: 6, visTekst: false) {
+                        kontekst.angresteg("Legg til farge") { dokument.farger.append(arbeidsbenk.aktivFargeSomVistSom.kopi) }
                     }
                     .frame(width: 44, height: 44)
                     // Gradienter som bredere brikker etter fargene.
@@ -476,6 +476,8 @@ struct PalettDetalj: View {
     @State private var kiArbeider = false
     @State private var kiFeil: String?
     @State private var navngisPalettfarge: PalettFarge?
+    @State private var slettSpørsmål = false
+    @Environment(\.dismiss) private var lukkPalett
     /// I palettkolonnen på Mac: handlingene ligger i en rad under tittelen, ikke i vinduets verktøylinje.
     @Environment(\.iPalettkolonne) private var iKolonne
     @State private var redigererNavn = false
@@ -565,8 +567,8 @@ struct PalettDetalj: View {
                                 if !iKolonne { arbeidsbenk.valgtFane = .studio }
                             }
                     }
-                    LeggTilFelt(farge: arbeidsbenk.aktivFarge) {
-                        kontekst.angresteg("Legg til farge") { dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge)) }
+                    LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn) {
+                        kontekst.angresteg("Legg til farge") { dokument.farger.append(arbeidsbenk.aktivFargeSomVistSom.kopi) }
                     }
                     .aspectRatio(1, contentMode: .fit)
                 }
@@ -612,6 +614,24 @@ struct PalettDetalj: View {
             }
         }
         .sheet(item: $vurdering) { VurderingArk(vurdering: $0, farger: dokument.farger) }
+        .confirmationDialog("Slette «\(dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn)»?",
+                            isPresented: $slettSpørsmål, titleVisibility: .visible) {
+            Button("Slett palett", role: .destructive) {
+                // Lukk paletten først, så visningen ikke tegnes for en slettet palett.
+                let dokument = dokument
+                lukkPalett()
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(350))
+                    kontekst.angresteg("Slett palett") { kontekst.delete(dokument) }
+                }
+            }
+        } message: {
+            #if os(macOS)
+            Text("Fargene og gradientene i paletten slettes også. Du kan angre med ⌘Z.")
+            #else
+            Text("Fargene og gradientene i paletten slettes også. Rist for å angre.")
+            #endif
+        }
         .alert("KI", isPresented: Binding(get: { kiFeil != nil }, set: { if !$0 { kiFeil = nil } })) {
             Button("OK") {}
         } message: { Text(kiFeil ?? "") }
@@ -659,6 +679,8 @@ struct PalettDetalj: View {
             KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
         }
         .help("Lagre som, del og kopier")
+        Button("Slett palett", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
+            .help("Slett paletten")
     }
 
     private func vurder() async {

@@ -6307,6 +6307,16 @@
         }
       }
     },
+    "Slett paletten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the palette"
+          }
+        }
+      }
+    },
     "Slett profilen": {
       "localizations": {
         "en": {
