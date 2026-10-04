@@ -109,20 +109,21 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
     }
 
     /// Fargens plass i denne sirkelen som kort tekst, for fargefeltene i en harmoni: «5R 4/14» (Munsell),
-    /// «OKLCH 59 % 0.156 254°», «LCH 55 48 254°», «HSL 254° 60 % 52 %», «RYB 210°» eller «70 % gul, 30 % rød» (Hering).
+    /// «OKLCH 59% 0.156 254°», «LCH 55 48 254°», «HSL 254° 60% 52%», «RYB 210°» eller «70% gul, 30% rød» (Hering).
+    /// Prosent skrives inntil tallet, som i fargefeltene ellers.
     public func verditekst(for farge: Farge) -> String {
         func n(_ v: Double, _ d: Int = 0) -> String { String(format: "%.\(d)f", v) }
         switch self {
         case .munsell: return farge.munsell.notasjon
         case .okLCH:
             let l = farge.okLCH
-            return "OKLCH \(n(l.l * 100)) % \(n(l.c, 3)) \(n(l.c < 0.002 ? 0 : l.h))°"
+            return "OKLCH \(n(l.l * 100))% \(n(l.c, 3)) \(n(l.c < 0.002 ? 0 : l.h))°"
         case .cieLCH:
             let l = farge.cieLCH
             return "LCH \(n(l.l)) \(n(l.c)) \(n(l.c < 0.5 ? 0 : l.h))°"
         case .hsl:
             let h = farge.hsl
-            return "HSL \(n(h.h))° \(n(h.s * 100)) % \(n(h.l * 100)) %"
+            return "HSL \(n(h.h))° \(n(h.s * 100))% \(n(h.l * 100))%"
         case .ryb: return "RYB \(n(vinkel(for: farge)))°"
         case .hering: return Hering.sammensetning(vinkel: vinkel(for: farge))
         }
@@ -224,7 +225,7 @@ public enum Hering {
         return elementærfarger[0]
     }
 
-    /// Kuløren som andeler av de to nærmeste elementærfargene, f.eks. «70 % gul, 30 % rød».
+    /// Kuløren som andeler av de to nærmeste elementærfargene, f.eks. «70% gul, 30% rød».
     public static func sammensetning(vinkel: Double) -> String {
         let navn = [String(localized: "gul", bundle: .module), String(localized: "rød", bundle: .module),
                     String(localized: "blå", bundle: .module), String(localized: "grønn", bundle: .module)]
@@ -233,7 +234,7 @@ public enum Hering {
         let andel = Int(((v - Double(i) * 90) / 90 * 100).rounded())
         if andel < 5 { return navn[i].capitalized }
         if andel > 95 { return navn[(i + 1) % 4].capitalized }
-        return String(localized: "\(100 - andel) % \(navn[i]), \(andel) % \(navn[(i + 1) % 4])", bundle: .module)
+        return String(localized: "\(100 - andel)% \(navn[i]), \(andel)% \(navn[(i + 1) % 4])", bundle: .module)
     }
 
     public static func vinkel(forOKLCHKulør kulør: Double) -> Double {

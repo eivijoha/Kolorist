@@ -83,7 +83,7 @@ extension ICCProfil {
         case .lab: return v.map { String(format: "%.1f", $0) }.joined(separator: " / ")
         default:
             let tall = v.map { String(format: "%.0f", $0 * visningsskala) }.joined(separator: " / ")
-            return visningsenhet.isEmpty ? tall : "\(tall) \(visningsenhet)"
+            return tall + visningsenhet
         }
     }
 }
