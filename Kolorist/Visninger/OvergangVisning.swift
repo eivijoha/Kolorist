@@ -96,6 +96,7 @@ struct OvergangVisning: View {
             HarmoniFlate(farger: toner, grunnIndeks: nil, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                          romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
                          verditekst: arbeidsbenk.modell.kortTekst,
+                         rammeRundtAlle: true,
                          velg: { arbeidsbenk.aktivFarge = $0 },
                          lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                          leggIPalett: { leggIPalett = [$0] })

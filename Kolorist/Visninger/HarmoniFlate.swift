@@ -20,6 +20,8 @@ struct HarmoniFlate: View {
     var stablet = false
     /// Ramme rundt grunnfargens flate (Harmoni). Uten ramme merkes den bare med stjernen (Toner).
     var rammeRundtGrunn = true
+    /// Ramme rundt alle flatene (Overgang: hele overgangen er grunnraden for lysere og mørkere toner).
+    var rammeRundtAlle = false
     var velg: (Farge) -> Void = { _ in }
     var lagre: (PalettFarge) -> Void = { _ in }
     var leggIPalett: (PalettFarge) -> Void = { _ in }
@@ -75,6 +77,15 @@ struct HarmoniFlate: View {
             }
         }
         .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
+        .overlay {
+            if rammeRundtAlle {
+                // Samme regel som grunnfarge-sirkelen: lesbar tekstfarge når flatene er enige, ellers primærfargen.
+                let kanter = Set(farger.map(\.lesbarTekstfarge))
+                UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous)
+                    .strokeBorder(kanter.count == 1 ? kanter.first!.swiftUI : Color.primary, lineWidth: 3)
+                    .allowsHitTesting(false)
+            }
+        }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(String(localized: "Harmonien i \(romnavn)"))
     }

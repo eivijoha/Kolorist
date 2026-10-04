@@ -735,7 +735,7 @@ final class Lyshetslupetilstand {
 }
 
 extension View {
-    /// Tegner grunnfarge-sirkelen fra lyshetsstigen løftet over fingeren og 25 % større mens den dras (iPhone/iPad).
+    /// Tegner grunnfarge-sirkelen fra lyshetsstigen løftet over fingeren og forstørret mens den dras (iPhone/iPad).
     /// Legges på skjemaet, så sirkelen ikke klippes av raden den står i.
     func lyshetslupe(_ tilstand: Lyshetslupetilstand) -> some View {
         environment(tilstand)
@@ -744,9 +744,9 @@ extension View {
                     if let p = tilstand.punkt {
                         let o = geo.frame(in: .global).origin
                         GrunnfargeSirkel(farger: tilstand.farger)
-                            .frame(width: 22 * 1.25, height: 22 * 1.25)
-                            .shadow(color: .black.opacity(0.25), radius: 4, y: 2)
-                            .position(x: p.x - o.x, y: p.y - o.y - 38)
+                            .frame(width: 55, height: 55)
+                            .shadow(color: .black.opacity(0.25), radius: 5, y: 2)
+                            .position(x: p.x - o.x, y: p.y - o.y - 50)
                             .transition(.scale(scale: 0.8).combined(with: .opacity))
                     }
                 }
