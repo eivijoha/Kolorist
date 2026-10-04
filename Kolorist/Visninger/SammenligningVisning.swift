@@ -35,6 +35,18 @@ struct SammenligningVisning: View {
                     FargeflateVelger(bokstav: "B", tittel: String(localized: "Farge B"), farge: $b, kant: .trailing)
                 }
                 .frame(height: 140)
+                // Bytt A og B midt mellom flatene.
+                .overlay {
+                    Button { swap(&a, &b) } label: {
+                        Image(systemName: "arrow.left.arrow.right")
+                            .font(.callout.weight(.semibold))
+                            .frame(width: 40, height: 40)
+                            .background(.regularMaterial, in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .help("Bytt A og B")
+                    .accessibilityLabel("Bytt A og B")
+                }
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 // Tynn kant, så hvite og svært lyse flater synes mot kortet.
                 .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(.secondary.opacity(0.3), lineWidth: 1))
@@ -73,11 +85,6 @@ struct SammenligningVisning: View {
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem {
-                Button("Bytt A og B", systemImage: "arrow.left.arrow.right") { swap(&a, &b) }
-            }
-        }
     }
 
     private func rad(_ navn: LocalizedStringKey, _ verdi: Double, _ desimaler: Int) -> some View {

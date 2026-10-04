@@ -3,16 +3,18 @@ import FargeKjerne
 import SwiftData
 import SwiftUI
 
-/// Vurdering: kontrast (WCAG), forskjell (ΔE2000) og fargesyn (CVD). Hele paletter vurderes fra paletten selv.
+/// Vurdering: kontrast (WCAG), forskjell (ΔE2000), fargesyn (CVD) og lys (fargen i lysmiljøer). Hele paletter vurderes fra paletten selv.
 struct VurderingVisning: View {
     enum Del: String, CaseIterable, Identifiable {
-        case kontrast, sammenlign, fargesyn
+        case kontrast, sammenlign, fargesyn, lys
         var id: String { rawValue }
         var navn: String {
             switch self {
             case .kontrast: String(localized: "Kontrast")
             case .sammenlign: String(localized: "Forskjell")
-            case .fargesyn: String(localized: "Fargesyn")
+            // Kort på engelsk («CVD»), så alle fire valgene får plass.
+            case .fargesyn: String(localized: "Fargesyn (valg)", defaultValue: "Fargesyn")
+            case .lys: String(localized: "Lys")
             }
         }
     }
@@ -30,6 +32,7 @@ struct VurderingVisning: View {
                                      b: arbeidsbenk.målinger.last(where: { $0 != arbeidsbenk.aktivFarge }) ?? Farge(hex: "#FFFFFF")!,
                                      innebygd: true)
             case .fargesyn: FargesynVurdering()
+            case .lys: LysVurdering()
             }
         }
         #if os(iOS)
@@ -37,12 +40,20 @@ struct VurderingVisning: View {
         #endif
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Picker("Vurdering", selection: $del) {
-                    ForEach(Del.allCases) { Text($0.navn).tag($0) }
+                // Segmentert når det er plass; ellers (smale iPhoner, lengre engelske navn) som meny.
+                ViewThatFits(in: .horizontal) {
+                    delvalg.pickerStyle(.segmented).fixedSize()
+                    delvalg.pickerStyle(.menu).menuIndicator(.visible).fixedSize()
                 }
-                .pickerStyle(.segmented)
-                .fixedSize()
             }
+        }
+    }
+}
+
+extension VurderingVisning {
+    private var delvalg: some View {
+        Picker("Vurdering", selection: $del) {
+            ForEach(Del.allCases) { Text($0.navn).tag($0) }
         }
     }
 }

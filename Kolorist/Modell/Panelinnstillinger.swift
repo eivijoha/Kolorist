@@ -17,7 +17,7 @@ final class Panelinnstillinger {
 
         var paneler: [Panel] {
             switch self {
-            case .studioFarge: [.fargemodell, .verdier, .fargestyring, .lys]
+            case .studioFarge: [.fargemodell, .verdier, .fargestyring]
             case .kontrast: [.wcag, .lrv]
             case .overgang: [.overgangstoner, .lysereMørkere, .gradient]
             }
@@ -28,7 +28,7 @@ final class Panelinnstillinger {
     }
 
     enum Panel: String, CaseIterable, Identifiable {
-        case fargemodell, verdier, fargestyring, lys, wcag, lrv, overgangstoner, lysereMørkere, gradient
+        case fargemodell, verdier, fargestyring, wcag, lrv, overgangstoner, lysereMørkere, gradient
         var id: String { rawValue }
 
         var navn: String {
@@ -36,7 +36,6 @@ final class Panelinnstillinger {
             case .fargemodell: String(localized: "Fargemodell")
             case .verdier: String(localized: "Verdier")
             case .fargestyring: String(localized: "Fargestyring (ICC)")
-            case .lys: String(localized: "Se i lys")
             case .wcag: String(localized: "Tekst og grafikk (WCAG 2.2)")
             case .lrv: String(localized: "Flater (LRV)")
             case .overgangstoner: String(localized: "Overgang")
@@ -98,7 +97,7 @@ final class Panelinnstillinger {
         let lagret = (rekkefølger[skjerm.rawValue] ?? []).compactMap(Panel.init(rawValue:)).filter(skjerm.paneler.contains)
         var paneler = lagret + skjerm.paneler.filter { !lagret.contains($0) }
         #if DEBUG
-        // Skjermbilder: `-panelFørst lys` legger et panel øverst.
+        // Skjermbilder: `-panelFørst fargestyring` legger et panel øverst.
         if let først = UserDefaults.standard.string(forKey: "panelFørst").flatMap(Panel.init(rawValue:)),
            let i = paneler.firstIndex(of: først) {
             paneler.insert(paneler.remove(at: i), at: 0)

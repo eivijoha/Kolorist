@@ -473,16 +473,16 @@
     },
     "%lld av %lld fargepar består": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld av %2$lld fargepar består"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld of %2$lld colour pairs pass"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av %2$lld fargepar består"
           }
         }
       }
@@ -1746,12 +1746,32 @@
         }
       }
     },
+    "Fargen i lysmiljøene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colour in viewing conditions"
+          }
+        }
+      }
+    },
     "Fargen testes som tekst/grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. «Vis med» simulerer et fargesynsavvik i forhåndsvisningen; WCAG-kravene gjelder alltid de faktiske fargene.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The colour is tested as text/graphics against the background. “Fix” only changes lightness and keeps hue and saturation. “Show with” simulates a colour vision deficiency in the preview; the WCAG requirements always apply to the actual colours."
+          }
+        }
+      }
+    },
+    "Fargen vises i dette lyset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colour is shown in this light"
           }
         }
       }
@@ -1922,6 +1942,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour vision"
+          }
+        }
+      }
+    },
+    "Fargesyn (valg)": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fargesyn"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CVD"
           }
         }
       }
@@ -2141,16 +2178,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Find the card"
-          }
-        }
-      }
-    },
-    "Fjern fra «Se i lys»": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remove from “See in light”"
           }
         }
       }
@@ -2397,6 +2424,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name the palette"
+          }
+        }
+      }
+    },
+    "Gi tilgang i Innstillinger for å måle lyset med kameraet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow access in Settings to measure the light with the camera."
           }
         }
       }
@@ -2879,6 +2916,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not saved"
+          }
+        }
+      }
+    },
+    "Ikke vis fargen i dette lyset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don’t show the colour in this light"
           }
         }
       }
@@ -3991,22 +4038,22 @@
         }
       }
     },
-    "Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer kan også måles med kameraet under Utplukk. Merk dem som skal vises samtidig i «Se i lys».": {
+    "Lagre lyset der fargene skal brukes – stua, kontoret, butikken – med fargetemperatur og lysstyrke. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save the light where the colours will be used – the living room, the office, the shop – and see the colours in it. Light environments can also be measured with the camera under Pick. Mark the ones to show together in “See in light”."
+            "value": "Save the light where the colours will be used – the living room, the office, the shop – with colour temperature and illuminance. Viewing conditions measured with the camera on iPhone and iPad arrive here via iCloud."
           }
         }
       }
     },
-    "Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud. Merk dem som skal vises samtidig i «Se i lys».": {
+    "Lagre lyset der fargene skal brukes – stua, kontoret, butikken. Mål det med kameraet der du står, eller legg inn fargetemperatur og lysstyrke selv.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save the light where the colours will be used – the living room, the office, the shop – and see the colours in it. Light environments measured with the camera on iPhone and iPad arrive here via iCloud. Mark the ones to show together in “See in light”."
+            "value": "Save the light where the colours will be used – the living room, the office, the shop. Measure it with the camera where you are, or enter the colour temperature and illuminance yourself."
           }
         }
       }
@@ -4099,6 +4146,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save as camera profile"
+          }
+        }
+      }
+    },
+    "Lagre som lysmiljø …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as viewing condition …"
           }
         }
       }
@@ -4515,6 +4572,16 @@
         }
       }
     },
+    "Lyset er målt. Lagre det som lysmiljø, eller mål på nytt. Med et grått eller hvitt kort får du også lysstyrken.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The light is measured. Save it as a viewing condition, or measure again. With a grey or white card you also get the illuminance."
+          }
+        }
+      }
+    },
     "Lyset kameraet måler": {
       "localizations": {
         "en": {
@@ -4581,16 +4648,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Viewing condition"
-          }
-        }
-      }
-    },
-    "Lysmiljøer": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Viewing conditions"
           }
         }
       }
@@ -4711,6 +4768,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "With grey card and camera profile"
+          }
+        }
+      }
+    },
+    "Med kort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With card"
           }
         }
       }
@@ -4933,6 +5000,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Museum, paintings (CIE 157)"
+          }
+        }
+      }
+    },
+    "Mål lyset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measure light"
+          }
+        }
+      }
+    },
+    "Mål lyset med kameraet …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measure light with the camera …"
           }
         }
       }
@@ -5545,22 +5632,22 @@
         }
       }
     },
-    "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig.": {
+    "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Velg lysmiljøene med haken i lista under.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The swatches show the colour with the light’s full colour cast, as a photo with daylight white balance would show it. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable."
+            "value": "The swatches show the colour with the full colour cast of the light, as a photo with daylight white balance would show it. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable. Choose the viewing conditions with the checkmark in the list below."
           }
         }
       }
     },
-    "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig.": {
+    "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Velg lysmiljøene med haken i lista under.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The swatches show the colour as it is perceived in each light environment: the eye adapts almost completely to the colour of the light, and dim light makes colours less colourful. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable."
+            "value": "The swatches show the colour as it is perceived in each viewing condition: the eye adapts almost fully to the colour of the light, and dim light makes colours less colourful. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable. Choose the viewing conditions with the checkmark in the list below."
           }
         }
       }
@@ -6471,6 +6558,16 @@
         }
       }
     },
+    "Stå der fargene skal brukes og mål lyset. Kameraet gir lysets farge; med et grått eller hvitt kort i lyset får du også lysstyrken (lux).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stand where the colours will be used and measure the light. The camera gives the colour of the light; with a grey or white card in the light you also get the illuminance (lux)."
+          }
+        }
+      }
+    },
     "Svakheter": {
       "localizations": {
         "en": {
@@ -6833,6 +6930,16 @@
         }
       }
     },
+    "Trykk på kortet i bildet. Kortet må ligge i lyset du måler, uten skygge eller gjenskinn.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the card in the image. The card must be in the light you are measuring, without shadow or glare."
+          }
+        }
+      }
+    },
     "Type": {
       "localizations": {
         "en": {
@@ -7189,16 +7296,6 @@
         }
       }
     },
-    "Velg lysmiljøer …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose viewing conditions …"
-          }
-        }
-      }
-    },
     "Velg mappa filene skal lagres i.": {
       "localizations": {
         "en": {
@@ -7339,6 +7436,16 @@
         }
       }
     },
+    "Vis fargen i dette lyset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the colour in this light"
+          }
+        }
+      }
+    },
     "Vis fargene": {
       "localizations": {
         "en": {
@@ -7359,32 +7466,12 @@
         }
       }
     },
-    "Vis i Se i lys": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show in See in light"
-          }
-        }
-      }
-    },
     "Vis i Studio": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Show in Studio"
-          }
-        }
-      }
-    },
-    "Vis i «Se i lys»": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show in “See in light”"
           }
         }
       }
@@ -7455,16 +7542,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shows the panel"
-          }
-        }
-      }
-    },
-    "Vises i Se i lys": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Shown in See in light"
           }
         }
       }
