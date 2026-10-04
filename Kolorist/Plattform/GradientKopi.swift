@@ -32,6 +32,13 @@ struct Gradientkopi {
 
     var css: CSSGradient { CSSGradient(farger: farger, form: form, vinkel: vinkel, trinnvis: trinnvis) }
 
+    /// Gradienten i Overgang: endepunktene (glidende) eller tonene (trinnvis), med navn etter endepunktene.
+    static func overgang(fra start: Farge, til slutt: Farge, toner: [Farge], form: CSSGradient.Form, vinkel: Double,
+                         trinnvis: Bool) -> Gradientkopi {
+        Gradientkopi(farger: trinnvis ? toner : [start, slutt], form: form, vinkel: vinkel, trinnvis: trinnvis,
+                     navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"))
+    }
+
     /// Start- og sluttpunkt for lineær gradient i et rektangel (CSS-vinkel: 0° = opp, med klokka).
     func endepunkter(i rekt: CGRect) -> (CGPoint, CGPoint) {
         let a = vinkel * .pi / 180
@@ -89,15 +96,23 @@ enum Gradientmål: String, CaseIterable, Identifiable {
 struct GradientKopierTilMeny: View {
     let gradient: Gradientkopi
     var tittel: LocalizedStringKey = "Kopier til"
+    /// Som en seksjon i menyen den står i, i stedet for en undermeny (undermenyer lukker seg selv på iOS).
+    var inline = false
 
     var body: some View {
-        Menu(tittel, systemImage: "arrow.up.doc.on.clipboard") {
-            ForEach(Gradientmål.allCases) { mål in
-                Button {
-                    Utklippstavle.kopier(gradient, til: mål)
-                } label: {
-                    Label { Text(mål.navn); Text(mål.forklaring) } icon: { Image(systemName: mål.symbol) }
-                }
+        if inline {
+            Section(tittel) { valg }
+        } else {
+            Menu(tittel, systemImage: "arrow.up.doc.on.clipboard") { valg }
+        }
+    }
+
+    private var valg: some View {
+        ForEach(Gradientmål.allCases) { mål in
+            Button {
+                Utklippstavle.kopier(gradient, til: mål)
+            } label: {
+                Label { Text(mål.navn); Text(mål.forklaring) } icon: { Image(systemName: mål.symbol) }
             }
         }
     }

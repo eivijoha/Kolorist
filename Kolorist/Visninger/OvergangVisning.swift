@@ -252,7 +252,7 @@ struct CSSGradientSeksjon: View {
     let oppsett: Gradientoppsett
     /// Viser en hake i «+»-knappen rett etter lagring.
     var lagret = false
-    /// «+» i hjørnet av gradienten: lagre hele gradienten under «Gradienter» i Paletter.
+    /// «Lagre gradient …» i «+»-menyen i hjørnet av gradienten: lagre hele gradienten under «Gradienter» i Paletter.
     var lagreGradient: () -> Void = {}
     @AppStorage("gradientForm") private var form: CSSGradient.Form = .lineær
     @AppStorage("gradientVinkel") private var vinkel = 90.0
@@ -262,6 +262,11 @@ struct CSSGradientSeksjon: View {
     /// Glidende: bare endepunktene (CSS interpolerer selv i OKLab). Trinnvis: hver tone som et bånd.
     private var gradient: CSSGradient {
         CSSGradient(farger: trinnvis ? toner : [start, slutt], form: form, vinkel: vinkel, trinnvis: trinnvis)
+    }
+
+    /// Gradienten slik den kopieres til andre programmer.
+    private var kopi: Gradientkopi {
+        .overgang(fra: start, til: slutt, toner: toner, form: form, vinkel: vinkel, trinnvis: trinnvis)
     }
 
     private var stopp: [Gradient.Stop] {
@@ -280,7 +285,10 @@ struct CSSGradientSeksjon: View {
             forhåndsvisning
                 .frame(height: 96)
                 .overlay(alignment: .topTrailing) {
-                    Button(action: lagreGradient) {
+                    Menu {
+                        Button("Lagre gradient …", systemImage: "square.and.arrow.down", action: lagreGradient)
+                        GradientKopierTilMeny(gradient: kopi, tittel: "Kopier gradienten til", inline: true)
+                    } label: {
                         Image(systemName: lagret ? "checkmark.square.fill" : "plus.square")
                             .font(.body.weight(.semibold))
                             .foregroundStyle(slutt.lesbarTekstfarge.swiftUI)
@@ -288,8 +296,10 @@ struct CSSGradientSeksjon: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .menuIndicator(.hidden)
+                    .menuOrder(.fixed)
                     .sensoryFeedback(.success, trigger: lagret) { _, ny in ny }
-                    .accessibilityLabel(lagret ? String(localized: "Lagret") : String(localized: "Lagre gradient"))
+                    .accessibilityLabel(lagret ? String(localized: "Lagret") : String(localized: "Lagre eller kopier gradienten"))
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
@@ -315,9 +325,7 @@ struct CSSGradientSeksjon: View {
                     kopiert = true
                     Task { try? await Task.sleep(for: .seconds(1.5)); kopiert = false }
                 }
-                GradientKopierTilMeny(gradient: Gradientkopi(farger: trinnvis ? toner : [start, slutt], form: form, vinkel: vinkel,
-                                                             trinnvis: trinnvis, navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())")),
-                                      tittel: "Kopier gradient til")
+                GradientKopierTilMeny(gradient: kopi, tittel: "Kopier gradient til")
                 Spacer()
                 Menu("Mer") {
                     LeggGradientIPalettMeny(oppsett: oppsett, navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"))

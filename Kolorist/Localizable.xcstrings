@@ -3617,6 +3617,16 @@
         }
       }
     },
+    "Kopier gradienten til": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Gradient To"
+          }
+        }
+      }
+    },
     "Kopier hex": {
       "localizations": {
         "en": {
@@ -4057,6 +4067,16 @@
         }
       }
     },
+    "Lagre eller kopier gradienten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save or copy the gradient"
+          }
+        }
+      }
+    },
     "Lagre en farge uten palett fra Studio, Utplukk eller «Legg i palett».": {
       "localizations": {
         "en": {
@@ -4093,6 +4113,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save gradient"
+          }
+        }
+      }
+    },
+    "Lagre gradient …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save Gradient …"
           }
         }
       }
