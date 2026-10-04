@@ -186,7 +186,7 @@ struct KoloristSnarveier: AppShortcutsProvider {
             intent: SjekkKontrastIntent(),
             phrases: ["Sjekk kontrast i \(.applicationName)", "Test fargekontrast med \(.applicationName)"],
             shortTitle: "Sjekk kontrast",
-            systemImageName: "circle.lefthalf.filled"
+            systemImageName: "a.square"
         )
         AppShortcut(
             intent: KonverterFargeIntent(),

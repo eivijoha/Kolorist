@@ -148,66 +148,73 @@ struct KravRad: View {
     }
 }
 
-/// Alle fargepar i en palett: rader er forgrunn, kolonner er bakgrunn.
-struct KontrastmatriseArk: View {
-    let palett: Palett
-    @State private var krav: WCAGKrav = .aaTekst
+/// Skriftkontrast i en palett: hver farge som tekst på hver av de andre, med valgt WCAG-krav. Står rett i
+/// palettvisningen (og i et ark fra palettlista).
+struct Kontrastmatrise: View {
+    let farger: [PalettFarge]
+    @AppStorage("kontrast.krav") private var krav: WCAGKrav = .aaTekst
     @State private var valgt: Kontrasttest?
-    @Environment(\.dismiss) private var lukk
 
     var body: some View {
-        NavigationStack {
-            ScrollView([.horizontal, .vertical]) {
-                let f = palett.farger
+        // Kontrasten er lik begge veier, så hvert fargepar telles én gang.
+        let par = farger.indices.flatMap { i in farger.indices.filter { $0 > i }.map { (i, $0) } }
+        let bestått = par.filter { Kontrasttest(forgrunn: farger[$0.0].farge, bakgrunn: farger[$0.1].farge).består(krav) }.count
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemName: "a.square.fill").foregroundStyle(Color.accentColor)
+                Picker("Krav", selection: $krav) {
+                    ForEach(WCAGKrav.allCases) { Text($0.navn).tag($0) }
+                }
+                .labelsHidden()
+                .fixedSize()
+                Spacer(minLength: 0)
+                Text("\(bestått) av \(par.count) fargepar består")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(Color.sekundærTekst)
+            }
+            ScrollView(.horizontal, showsIndicators: false) {
                 Grid(horizontalSpacing: 4, verticalSpacing: 4) {
                     GridRow {
-                        Text("Tekst ↓ / bakgrunn →").font(.caption2).foregroundStyle(Color.sekundærTekst).frame(width: 72)
-                        ForEach(f) { bg in
-                            FargeRute(farge: bg.farge, visTekst: false, hjørne: 6).frame(width: 64, height: 28)
+                        Text("Tekst ↓ / bakgrunn →").font(.caption2).foregroundStyle(Color.sekundærTekst).frame(width: 60)
+                        ForEach(farger) { bg in
+                            FargeRute(farge: bg.farge, visTekst: false, hjørne: 6).frame(width: 56, height: 28)
                         }
                     }
-                    ForEach(f) { fg in
+                    ForEach(farger) { fg in
                         GridRow {
-                            FargeRute(farge: fg.farge, visTekst: false, hjørne: 6).frame(width: 72, height: 52)
-                            ForEach(f) { bg in
-                                let t = Kontrasttest(forgrunn: fg.farge, bakgrunn: bg.farge)
-                                celle(t, sammeFarge: fg.id == bg.id)
+                            FargeRute(farge: fg.farge, visTekst: false, hjørne: 6).frame(width: 60, height: 52)
+                            ForEach(farger) { bg in
+                                celle(Kontrasttest(forgrunn: fg.farge, bakgrunn: bg.farge), sammeFarge: fg.id == bg.id)
                             }
                         }
                     }
                 }
-                .padding()
+                .padding(.vertical, 6)
             }
-            .safeAreaInset(edge: .top) {
-                Picker("Krav", selection: $krav) {
-                    ForEach(WCAGKrav.allCases) { Text($0.navn).tag($0) }
+            Text("Trykk på en rute for kontrasten mot alle kravene og forslag til en farge som består.")
+                .font(.footnote)
+                .foregroundStyle(Color.sekundærTekst)
+        }
+        .sheet(item: $valgt) { t in
+            NavigationStack {
+                Form {
+                    KontrastForhåndsvisning(forgrunn: t.forgrunn, bakgrunn: t.bakgrunn, test: t)
+                    ForEach(WCAGKrav.allCases) { k in KravRad(krav: k, test: t) { Utklippstavle.kopier(t.rettet(for: k)) } }
                 }
-                .padding(.horizontal)
-                .padding(.top, 8)
+                .formStyle(.grouped)
+                .navigationTitle("\(t.forgrunn.hex()) på \(t.bakgrunn.hex())")
+                #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+                #endif
             }
-            .navigationTitle("Kontrastmatrise")
-            .toolbar { Button("Ferdig") { lukk() } }
-            .sheet(item: $valgt) { t in
-                NavigationStack {
-                    Form {
-                        KontrastForhåndsvisning(forgrunn: t.forgrunn, bakgrunn: t.bakgrunn, test: t)
-                        ForEach(WCAGKrav.allCases) { k in KravRad(krav: k, test: t) { Utklippstavle.kopier(t.rettet(for: k)) } }
-                    }
-                    .formStyle(.grouped)
-                    .navigationTitle("\(t.forgrunn.hex()) på \(t.bakgrunn.hex())")
-                    #if os(iOS)
-                    .navigationBarTitleDisplayMode(.inline)
-                    #endif
-                }
-                .presentationDetents([.medium, .large])
-            }
+            .presentationDetents([.medium, .large])
         }
     }
 
     @ViewBuilder
     private func celle(_ t: Kontrasttest, sammeFarge: Bool) -> some View {
         if sammeFarge {
-            Color.clear.frame(width: 64, height: 52)
+            Color.clear.frame(width: 56, height: 52)
         } else {
             let bestått = t.består(krav)
             Button { valgt = t } label: {
@@ -216,7 +223,7 @@ struct KontrastmatriseArk: View {
                     Text(t.formatert).font(.caption2.monospacedDigit())
                 }
                 .foregroundStyle(t.forgrunn.swiftUI)
-                .frame(width: 64, height: 52)
+                .frame(width: 56, height: 52)
                 .background(t.bakgrunn.swiftUI, in: RoundedRectangle(cornerRadius: 6))
                 .overlay(alignment: .topTrailing) {
                     Image(systemName: bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -229,6 +236,25 @@ struct KontrastmatriseArk: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel("\(t.forgrunn.hex()) på \(t.bakgrunn.hex()), \(t.formatert), \(bestått ? String(localized: "bestått") : String(localized: "ikke bestått"))")
+        }
+    }
+}
+
+/// Skriftkontrasten for en palett i et ark (fra menyen i palettlista).
+struct KontrastmatriseArk: View {
+    let palett: Palett
+    @Environment(\.dismiss) private var lukk
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                Kontrastmatrise(farger: palett.farger).padding()
+            }
+            .navigationTitle("Skriftkontrast")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar { Button("Ferdig") { lukk() } }
         }
     }
 }

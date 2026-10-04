@@ -82,7 +82,7 @@ struct PalettVurderingInnhold: View {
     var body: some View {
         // Hva vurderingen bygger på – før selve vurderingen, så det er tydelig hva den sier noe om.
         Section {
-            grunnlagsrad("circle.lefthalf.filled", "Kontrast", "WCAG 2.2-kontrast mellom alle fargepar, og hvor mange som kan brukes til tekst (4,5:1).")
+            grunnlagsrad("a.square", "Kontrast", "WCAG 2.2-kontrast mellom alle fargepar, og hvor mange som kan brukes til tekst (4,5:1).")
             grunnlagsrad("sun.max", "Lyshet", "Spennet i lyshet (OKLCH) – om paletten har lyse og mørke farger nok til hierarki og lesbarhet.")
             grunnlagsrad("circle.hexagongrid", "Kulører", "Hvilke kulører paletten består av, og om det bare er nøytrale.")
             grunnlagsrad("eye", "Fargesyn", "Fargepar som er tydelig ulike med normalt syn, men blir vanskelige å skille med protan-, deutan- eller tritanavvik eller akromatopsi (ΔE2000 under 10).")

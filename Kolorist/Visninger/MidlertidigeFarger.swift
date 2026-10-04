@@ -85,8 +85,7 @@ struct PlukkedeFargerRad: View {
     @Environment(\.modelContext) private var kontekst
 
     private func visIStudio(_ farge: Farge) {
-        arbeidsbenk.aktivFarge = farge
-        arbeidsbenk.valgtFane = .studio
+        arbeidsbenk.visIStudio(farge)
     }
 
     var body: some View {

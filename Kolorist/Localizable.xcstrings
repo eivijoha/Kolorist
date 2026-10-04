@@ -471,6 +471,22 @@
         }
       }
     },
+    "%lld av %lld fargepar består": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av %2$lld fargepar består"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld colour pairs pass"
+          }
+        }
+      }
+    },
     "%lld fargepar blir vanskelige å skille: %@": {
       "localizations": {
         "en": {
@@ -657,16 +673,6 @@
         }
       }
     },
-    "A": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A"
-          }
-        }
-      }
-    },
     "Aa": {
       "localizations": {
         "en": {
@@ -843,16 +849,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cancel"
-          }
-        }
-      }
-    },
-    "B": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "B"
           }
         }
       }
@@ -1370,16 +1366,6 @@
         }
       }
     },
-    "Dette kan ikke angres.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This can’t be undone."
-          }
-        }
-      }
-    },
     "Display P3": {
       "localizations": {
         "en": {
@@ -1790,16 +1776,6 @@
         }
       }
     },
-    "Fargene og gradientene i paletten slettes også. Dette kan ikke angres.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The colours and gradients in the palette are deleted too. This cannot be undone."
-          }
-        }
-      }
-    },
     "Fargene og gradientene i paletten slettes også. Du kan angre med ⌘Z.": {
       "localizations": {
         "en": {
@@ -1926,16 +1902,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour wheels and harmonies"
-          }
-        }
-      }
-    },
-    "Fargeskiftet er hvor mye fargen endrer karakter når øyet har tilpasset seg lyset; over 3 merkes det tydelig.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The colour shift is how much the colour changes character once the eye has adapted to the light; above 3 it is clearly noticeable."
           }
         }
       }
@@ -2853,16 +2819,16 @@
     },
     "I lyset: %@, fargeskift %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "I lyset: %1$@, fargeskift %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "In the light: %1$@, colour shift %2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "I lyset: %1$@, fargeskift %2$@"
           }
         }
       }
@@ -3415,16 +3381,6 @@
         }
       }
     },
-    "Kontrastmatrise": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contrast matrix"
-          }
-        }
-      }
-    },
     "Konverter ${farge} til ${modell}": {
       "localizations": {
         "en": {
@@ -3961,16 +3917,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "Lagre aktiv farge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save active colour"
           }
         }
       }
@@ -5619,16 +5565,6 @@
         }
       }
     },
-    "På skjermen · i lyset": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "On screen · in the light"
-          }
-        }
-      }
-    },
     "På, %lld prosent": {
       "localizations": {
         "en": {
@@ -6031,6 +5967,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hidden viewing conditions are not shown in the viewing condition choices or in palette critiques."
+          }
+        }
+      }
+    },
+    "Skriftkontrast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text contrast"
+          }
+        }
+      }
+    },
+    "Skriftkontrast mellom fargene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text contrast between the colours"
           }
         }
       }
@@ -6857,6 +6813,16 @@
         }
       }
     },
+    "Trykk på en rute for kontrasten mot alle kravene og forslag til en farge som består.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a tile for the contrast against all the requirements and a suggested colour that passes."
+          }
+        }
+      }
+    },
     "Trykk på kortet": {
       "localizations": {
         "en": {
@@ -7373,6 +7339,16 @@
         }
       }
     },
+    "Vis fargene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the colours"
+          }
+        }
+      }
+    },
     "Vis fargene uten lys": {
       "localizations": {
         "en": {
@@ -7699,16 +7675,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "“%@” is neither an ICC profile (.icc, .icm) nor a colour library (.ase, .aco, .acb)."
-          }
-        }
-      }
-    },
-    "«%@» i lys": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "“%@” in light"
           }
         }
       }

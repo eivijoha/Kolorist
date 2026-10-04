@@ -85,7 +85,7 @@ struct PalettListe: View {
                                 .contextMenu {
                                     Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
                                         .disabled(p.farger.isEmpty)
-                                    Button("Kontrastmatrise", systemImage: "square.grid.3x3.fill") { matrise = p }
+                                    Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
                                         .disabled(p.farger.count < 2)
                                     Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                                         .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
@@ -462,9 +462,10 @@ struct PalettDetalj: View {
     @Environment(\.modelContext) private var kontekst
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var visSkala: PalettFarge?
-    @State private var visKontrast = false
-    /// «Se i lys»: palettens farger i et lysmiljø, rett i rutene (huskes mellom palettene).
-    @AppStorage("palett.seILys") private var seILys = false
+    /// Hva palettvisningen viser: fargene, fargene i et lysmiljø (rett i rutene), eller skriftkontrasten mellom dem.
+    /// Huskes mellom palettene.
+    enum Visning: String { case farger, lys, skriftkontrast }
+    @AppStorage("palett.visning") private var visning: Visning = .farger
     @AppStorage("seILys.somFoto") private var somFoto = false
     @State private var lysbibliotek = Lysbibliotek.delt
     @State private var visLagreSom = false
@@ -487,7 +488,7 @@ struct PalettDetalj: View {
 
     /// Analysen for «Se i lys», eller nil når modusen er av.
     private var lys: PalettLys? {
-        guard seILys, !dokument.farger.isEmpty else { return nil }
+        guard visning == .lys, !dokument.farger.isEmpty else { return nil }
         return PalettLys(farger: dokument.farger, miljø: lysbibliotek.gjeldendeLysmiljø, somFoto: somFoto)
     }
 
@@ -536,34 +537,38 @@ struct PalettDetalj: View {
             if let lys {
                 PalettLysValg(lys: lys).padding([.horizontal, .top])
             }
-            LazyVGrid(columns: rutenett, spacing: 10) {
-                ForEach(dokument.farger) { pf in
-                    // Fargerutens egen meny (høyreklikk / trykk og hold) har Slett; den overstyrer en ytre meny.
-                    let iLyset = lys?.iLyset(pf)
-                    FargeRute(farge: pf.farge, navn: pf.navn, visTekst: iLyset == nil,
-                              fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
-                              navngi: { navngisPalettfarge = pf }, palettFarge: pf,
-                              ekstraMeny: AnyView(Group {
-                                  Button("Lag toneskala", systemImage: "square.3.layers.3d") { visSkala = pf }
-                                  FlyttMeny(farge: pf, fra: dokument)
-                              }))
-                        .aspectRatio(1, contentMode: .fit)
-                        // Se i lys: fargen i lyset i nedre halvdel.
-                        .overlay {
-                            if let iLyset, let skift = lys?.skift(pf) { LysHalvdel(farge: iLyset, skift: skift) }
-                        }
-                        .onTapGesture {
-                            arbeidsbenk.aktivFarge = pf.farge
-                            // I palettkolonnen blir du der du er; ellers vises fargen i Studio.
-                            if !iKolonne { arbeidsbenk.valgtFane = .studio }
-                        }
+            if visning == .skriftkontrast && dokument.farger.count >= 2 {
+                Kontrastmatrise(farger: dokument.farger).padding()
+            } else {
+                LazyVGrid(columns: rutenett, spacing: 10) {
+                    ForEach(dokument.farger) { pf in
+                        // Fargerutens egen meny (høyreklikk / trykk og hold) har Slett; den overstyrer en ytre meny.
+                        let iLyset = lys?.iLyset(pf)
+                        FargeRute(farge: pf.farge, navn: pf.navn, visTekst: iLyset == nil,
+                                  fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
+                                  navngi: { navngisPalettfarge = pf }, palettFarge: pf,
+                                  ekstraMeny: AnyView(Group {
+                                      Button("Lag toneskala", systemImage: "square.3.layers.3d") { visSkala = pf }
+                                      FlyttMeny(farge: pf, fra: dokument)
+                                  }))
+                            .aspectRatio(1, contentMode: .fit)
+                            // Se i lys: fargen i lyset i nedre halvdel.
+                            .overlay {
+                                if let iLyset, let skift = lys?.skift(pf) { LysHalvdel(farge: iLyset, skift: skift) }
+                            }
+                            .onTapGesture {
+                                arbeidsbenk.aktivFarge = pf.farge
+                                // I palettkolonnen blir du der du er; ellers vises fargen i Studio.
+                                if !iKolonne { arbeidsbenk.valgtFane = .studio }
+                            }
+                    }
+                    LeggTilFelt(farge: arbeidsbenk.aktivFarge) {
+                        kontekst.angresteg("Legg til farge") { dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge)) }
+                    }
+                    .aspectRatio(1, contentMode: .fit)
                 }
-                LeggTilFelt(farge: arbeidsbenk.aktivFarge) {
-                    kontekst.angresteg("Legg til farge") { dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge)) }
-                }
-                .aspectRatio(1, contentMode: .fit)
+                .padding()
             }
-            .padding()
             if let lys {
                 PalettLysPar(lys: lys).padding(.horizontal).padding(.bottom)
             }
@@ -593,7 +598,6 @@ struct PalettDetalj: View {
         .sheet(item: $visSkala) { pf in
             ToneskalaArk(grunnfarge: pf) { nye in dokument.farger += nye }
         }
-        .sheet(isPresented: $visKontrast) { KontrastmatriseArk(palett: dokument.palett) }
         .sheet(isPresented: $visLagreSom) {
             LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter))
         }
@@ -610,18 +614,26 @@ struct PalettDetalj: View {
         } message: { Text(kiFeil ?? "") }
     }
 
+    /// Av/på for en visning; de utelukker hverandre.
+    private func visningsvalg(_ v: Visning) -> Binding<Bool> {
+        Binding(get: { visning == v }, set: { visning = $0 ? v : .farger })
+    }
+
     /// Knappene for paletten: i verktøylinjen, eller i en rad under tittelen i palettkolonnen.
     @ViewBuilder private var handlinger: some View {
         LimInnFargerKnapp { farger in kontekst.angresteg("Lim inn farger") { dokument.farger += farger } }
-        Button("Kontrast", systemImage: "circle.lefthalf.filled") { visKontrast = true }
-            .disabled(dokument.farger.count < 2)
-            .help("Kontrastmatrise")
-        Toggle(isOn: $seILys) {
-            Label("Se i lys", systemImage: seILys ? "lightbulb.fill" : "lightbulb")
+        Toggle(isOn: visningsvalg(.skriftkontrast)) {
+            Label("Skriftkontrast", systemImage: visning == .skriftkontrast ? "a.square.fill" : "a.square")
+        }
+        .toggleStyle(.button)
+        .disabled(dokument.farger.count < 2)
+        .help(visning == .skriftkontrast ? "Vis fargene" : "Skriftkontrast mellom fargene")
+        Toggle(isOn: visningsvalg(.lys)) {
+            Label("Se i lys", systemImage: visning == .lys ? "lightbulb.fill" : "lightbulb")
         }
         .toggleStyle(.button)
         .disabled(dokument.farger.isEmpty)
-        .help(seILys ? "Vis fargene uten lys" : "Se fargene i et lysmiljø")
+        .help(visning == .lys ? "Vis fargene uten lys" : "Se fargene i et lysmiljø")
         Button {
             Task { await vurder() }
         } label: {

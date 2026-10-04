@@ -145,7 +145,7 @@ struct PalettKolonne: View {
         .contextMenu {
             Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
                 .disabled(p.farger.isEmpty)
-            Button("Kontrastmatrise", systemImage: "square.grid.3x3.fill") { matrise = p }
+            Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
                 .disabled(p.farger.count < 2)
             Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                 .disabled(p.farger.isEmpty && p.gradienter.isEmpty)

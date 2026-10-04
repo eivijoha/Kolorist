@@ -203,6 +203,13 @@ final class Arbeidsbenk {
         #endif
     }
 
+    /// Viser en farge i Studio i Farge-modus, uansett hvilken modus Studio sto i (fra Utplukk).
+    func visIStudio(_ farge: Farge) {
+        aktivFarge = farge
+        UserDefaults.standard.set("farge", forKey: "studioModus")
+        valgtFane = .studio
+    }
+
     /// Viser en beskrevet farge i Studio, i OKLCH (fargen er regnet ut der).
     func vis(_ beskrevet: BeskrevetFarge) {
         profilverdier = nil
