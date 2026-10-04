@@ -13,6 +13,7 @@ struct FargeEditor: View {
     @State private var visMineFargerom = false
     /// Aktiv farge da dra-bevegelsen på lyshetsstigen startet (Toner).
     @State private var lyshetsutgangspunkt: Farge?
+    @State private var lyshetslupe = Lyshetslupetilstand()
     /// Harmoniens farger (Harmoni-modus), vist i fargeflaten øverst, og grunnfargens plass blant dem.
     @State private var harmonifarger: [Farge] = []
     @State private var harmoniGrunn: Int?
@@ -210,6 +211,8 @@ struct FargeEditor: View {
             }
         }
         .formStyle(.grouped)
+        // Grunnfarge-sirkelen fra lyshetsstigen (Toner) løftet over fingeren, utenfor radens klipping.
+        .lyshetslupe(lyshetslupe)
         #if os(iOS)
         .listSectionSpacing(.compact)
         #endif
@@ -603,30 +606,18 @@ private struct Lyshetsstige: View {
     let grunnindeks: Int
     var grunnfarger: [Farge] = []
     var forskyv: ((Double, Bool) -> Void)? = nil
-    /// Sirkelen dras nå (iPhone/iPad: den løftes opp over fingeren).
+    /// Sirkelen dras nå.
     @State private var drar = false
+    /// Delt med skjemaet, som tegner den løftede sirkelen (se `lyshetslupe(_:)`).
+    @Environment(Lyshetslupetilstand.self) private var lupe: Lyshetslupetilstand?
 
-    /// Hvor høyt over fingeren sirkelen løftes, og hvor mye større den blir, mens den dras (berøringsskjerm).
-    private var løft: (y: CGFloat, skala: CGFloat) {
+    /// Berøringsskjerm: fingeren skjuler sirkelen, så den løftede kopien tegnes over skjemaet.
+    private var løftesOverFingeren: Bool {
         #if os(iOS)
-        drar ? (-38, 1.25) : (0, 1)
+        true
         #else
-        (0, 1)
+        false
         #endif
-    }
-
-    /// Sirkelen: én farge, eller venstre og høyre halvdel for to.
-    private var sirkelfyll: LinearGradient {
-        let a = grunnfarger.first?.swiftUI ?? .clear, b = grunnfarger.last?.swiftUI ?? .clear
-        return LinearGradient(stops: [.init(color: a, location: 0), .init(color: a, location: 0.5),
-                                      .init(color: b, location: 0.5), .init(color: b, location: 1)],
-                              startPoint: .leading, endPoint: .trailing)
-    }
-
-    /// Kanten: grunnfargenes lesbare tekstfarge når de er enige, ellers primærfargen.
-    private var sirkelkant: Color {
-        let kanter = Set(grunnfarger.map(\.lesbarTekstfarge))
-        return kanter.count == 1 ? kanter.first!.swiftUI : .primary
     }
 
     /// Tall som får plass uten å overlappe: grunnfargen alltid, så utover fra den.
@@ -643,6 +634,7 @@ private struct Lyshetsstige: View {
     var body: some View {
         GeometryReader { geo in
             let b = geo.size.width
+            let globalt = geo.frame(in: .global)
             // Med grunnfarge-sirkelen flyttes streken ned, så sirkelen (22 pt) kan sentreres på den.
             let topp: CGFloat = grunnfarger.isEmpty ? 0 : 6
             ZStack(alignment: .topLeading) {
@@ -677,27 +669,25 @@ private struct Lyshetsstige: View {
                         .frame(width: 22, height: 22)
                         .contentShape(Circle().inset(by: -11))
                         .position(x: x, y: 5 + topp)
-                        .gesture(DragGesture(minimumDistance: 1)
+                        .gesture(DragGesture(minimumDistance: 1, coordinateSpace: .global)
                             .onChanged {
                                 drar = true
                                 forskyv?(Double($0.translation.width / max(b, 1)), false)
+                                // Skjemaet tegner den løftede sirkelen ved fingeren, uten at raden klipper den.
+                                if løftesOverFingeren {
+                                    lupe?.vis(farger: grunnfarger, punkt: CGPoint(x: $0.location.x, y: globalt.minY + 5 + topp))
+                                }
                             }
                             .onEnded {
                                 drar = false
                                 forskyv?(Double($0.translation.width / max(b, 1)), true)
+                                lupe?.skjul()
                             })
                         .allowsHitTesting(forskyv != nil)
-                    Circle()
-                        .fill(sirkelfyll)
-                        // 1 pt tynnere enn i Harmoni: sirkelen er mindre her.
-                        .overlay(Circle().strokeBorder(sirkelkant, lineWidth: 3))
+                    GrunnfargeSirkel(farger: grunnfarger)
                         .frame(width: 22, height: 22)
-                        .shadow(color: .black.opacity(drar ? 0.25 : 0), radius: 4, y: 2)
-                        .scaleEffect(løft.skala)
-                        .offset(y: løft.y)
                         // Sentrert på streken; tallet for grunnlysheten står synlig under.
                         .position(x: x, y: 5 + topp)
-                        .animation(.snappy(duration: 0.18), value: drar)
                         .allowsHitTesting(false)
                 }
             }
@@ -710,6 +700,59 @@ private struct Lyshetsstige: View {
         }
         // Et lett tikk for hvert hele prosentpoeng i lyshet mens sirkelen dras.
         .sensoryFeedback(.selection, trigger: lysheter.indices.contains(grunnindeks) ? Int((lysheter[grunnindeks] * 100).rounded()) : 0) { _, _ in drar }
+    }
+}
+
+/// Grunnfargen som sirkel: én farge, eller venstre og høyre halvdel for to (Overgang: Fra og Til). Kanten er
+/// grunnfargenes lesbare tekstfarge når de er enige, ellers primærfargen – 1 pt tynnere enn i Harmoni.
+struct GrunnfargeSirkel: View {
+    let farger: [Farge]
+
+    var body: some View {
+        let a = farger.first?.swiftUI ?? .clear, b = farger.last?.swiftUI ?? .clear
+        let kanter = Set(farger.map(\.lesbarTekstfarge))
+        Circle()
+            .fill(LinearGradient(stops: [.init(color: a, location: 0), .init(color: a, location: 0.5),
+                                         .init(color: b, location: 0.5), .init(color: b, location: 1)],
+                                 startPoint: .leading, endPoint: .trailing))
+            .overlay(Circle().strokeBorder(kanter.count == 1 ? kanter.first!.swiftUI : .primary, lineWidth: 3))
+    }
+}
+
+/// Grunnfarge-sirkelen som dras på lyshetsstigen (iPhone/iPad): fargene og hvor den er i skjermkoordinater.
+/// Stigen setter den; skjemaet tegner sirkelen løftet over fingeren.
+@Observable
+final class Lyshetslupetilstand {
+    private(set) var farger: [Farge] = []
+    private(set) var punkt: CGPoint?
+
+    func vis(farger: [Farge], punkt: CGPoint) {
+        self.farger = farger
+        self.punkt = punkt
+    }
+
+    func skjul() { punkt = nil }
+}
+
+extension View {
+    /// Tegner grunnfarge-sirkelen fra lyshetsstigen løftet over fingeren og 25 % større mens den dras (iPhone/iPad).
+    /// Legges på skjemaet, så sirkelen ikke klippes av raden den står i.
+    func lyshetslupe(_ tilstand: Lyshetslupetilstand) -> some View {
+        environment(tilstand)
+            .overlay {
+                GeometryReader { geo in
+                    if let p = tilstand.punkt {
+                        let o = geo.frame(in: .global).origin
+                        GrunnfargeSirkel(farger: tilstand.farger)
+                            .frame(width: 22 * 1.25, height: 22 * 1.25)
+                            .shadow(color: .black.opacity(0.25), radius: 4, y: 2)
+                            .position(x: p.x - o.x, y: p.y - o.y - 38)
+                            .transition(.scale(scale: 0.8).combined(with: .opacity))
+                    }
+                }
+                .animation(.snappy(duration: 0.15), value: tilstand.punkt == nil)
+                .allowsHitTesting(false)
+            }
     }
 }
 

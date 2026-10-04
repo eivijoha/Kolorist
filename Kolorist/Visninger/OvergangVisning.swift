@@ -37,6 +37,7 @@ struct OvergangVisning: View {
     @State private var visMineFargerom = false
     /// Endepunktene da dra-bevegelsen på lyshetsstigen startet.
     @State private var lyshetsutgangspunkt: (Farge, Farge)?
+    @State private var lyshetslupe = Lyshetslupetilstand()
 
     private var visOgsåProfil: ICCProfil { bibliotek.profil(id: visOgsåID) ?? .sRGB }
     private var visOgsåBibliotek: Fargebibliotek? { bibliotek.fargebibliotek(id: visOgsåID) }
@@ -212,6 +213,8 @@ struct OvergangVisning: View {
             TilpassKnapp(skjerm: .overgang)
         }
         .formStyle(.grouped)
+        // Grunnfarge-sirkelen fra lyshetsstigen løftet over fingeren, utenfor radens klipping.
+        .lyshetslupe(lyshetslupe)
         }
         .background(Color.skjemabakgrunn)
         .navigationTitle("Overgang")
