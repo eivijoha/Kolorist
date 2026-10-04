@@ -603,6 +603,17 @@ private struct Lyshetsstige: View {
     let grunnindeks: Int
     var grunnfarger: [Farge] = []
     var forskyv: ((Double, Bool) -> Void)? = nil
+    /// Sirkelen dras nå (iPhone/iPad: den løftes opp over fingeren).
+    @State private var drar = false
+
+    /// Hvor høyt over fingeren sirkelen løftes, og hvor mye større den blir, mens den dras (berøringsskjerm).
+    private var løft: (y: CGFloat, skala: CGFloat) {
+        #if os(iOS)
+        drar ? (-38, 1.25) : (0, 1)
+        #else
+        (0, 1)
+        #endif
+    }
 
     /// Sirkelen: én farge, eller venstre og høyre halvdel for to.
     private var sirkelfyll: LinearGradient {
@@ -658,19 +669,36 @@ private struct Lyshetsstige: View {
                     .position(x: x, y: 16 + topp)
                 }
                 if !grunnfarger.isEmpty, lysheter.indices.contains(grunnindeks) {
+                    let x = min(max(lysheter[grunnindeks], 0), 1) * b
                     // Grunnfargen som sirkel med samme kant som grunnfargen i Harmoni; dras for å flytte lysheten.
+                    // Berøringsflaten blir liggende på streken; det synlige løftes over fingeren mens den dras.
+                    Circle()
+                        .fill(.clear)
+                        .frame(width: 22, height: 22)
+                        .contentShape(Circle().inset(by: -11))
+                        .position(x: x, y: 5 + topp)
+                        .gesture(DragGesture(minimumDistance: 1)
+                            .onChanged {
+                                drar = true
+                                forskyv?(Double($0.translation.width / max(b, 1)), false)
+                            }
+                            .onEnded {
+                                drar = false
+                                forskyv?(Double($0.translation.width / max(b, 1)), true)
+                            })
+                        .allowsHitTesting(forskyv != nil)
                     Circle()
                         .fill(sirkelfyll)
                         // 1 pt tynnere enn i Harmoni: sirkelen er mindre her.
                         .overlay(Circle().strokeBorder(sirkelkant, lineWidth: 3))
                         .frame(width: 22, height: 22)
-                        .contentShape(Circle().inset(by: -11))
+                        .shadow(color: .black.opacity(drar ? 0.25 : 0), radius: 4, y: 2)
+                        .scaleEffect(løft.skala)
+                        .offset(y: løft.y)
                         // Sentrert på streken; tallet for grunnlysheten står synlig under.
-                        .position(x: min(max(lysheter[grunnindeks], 0), 1) * b, y: 5 + topp)
-                        .gesture(DragGesture(minimumDistance: 1)
-                            .onChanged { forskyv?(Double($0.translation.width / max(b, 1)), false) }
-                            .onEnded { forskyv?(Double($0.translation.width / max(b, 1)), true) })
-                        .allowsHitTesting(forskyv != nil)
+                        .position(x: x, y: 5 + topp)
+                        .animation(.snappy(duration: 0.18), value: drar)
+                        .allowsHitTesting(false)
                 }
             }
         }
@@ -680,6 +708,8 @@ private struct Lyshetsstige: View {
         .accessibilityAdjustableAction { retning in
             forskyv?(retning == .increment ? 0.02 : -0.02, true)
         }
+        // Et lett tikk for hvert hele prosentpoeng i lyshet mens sirkelen dras.
+        .sensoryFeedback(.selection, trigger: lysheter.indices.contains(grunnindeks) ? Int((lysheter[grunnindeks] * 100).rounded()) : 0) { _, _ in drar }
     }
 }
 
