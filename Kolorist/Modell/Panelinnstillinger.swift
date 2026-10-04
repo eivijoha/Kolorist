@@ -13,22 +13,27 @@ final class Panelinnstillinger {
 
     /// Skjermene som har tilpassbare paneler, med panelene i standardrekkefølge.
     enum Skjerm: String, CaseIterable {
-        case studioFarge, kontrast, overgang
+        case studioFarge, kontrast, overgang, lys
 
         var paneler: [Panel] {
             switch self {
             case .studioFarge: [.fargemodell, .verdier, .fargestyring]
             case .kontrast: [.wcag, .lrv]
             case .overgang: [.overgangstoner, .lysereMørkere, .gradient]
+            case .lys: [.fargeILys, .mineLysmiljøer, .lysmiljøer, .lysstandarder, .skjulteLysmiljøer]
             }
         }
 
         /// Studio/Farge har mange paneler: som standard er bare det øverste åpent, så panelene under synes.
         var bareØversteÅpent: Bool { self == .studioFarge }
+
+        /// Paneler som er lagt sammen til brukeren åpner dem: i Lys de lange listene med innebygde lysmiljøer.
+        var standardLagtSammen: Set<Panel> { self == .lys ? [.lysmiljøer, .lysstandarder, .skjulteLysmiljøer] : [] }
     }
 
     enum Panel: String, CaseIterable, Identifiable {
         case fargemodell, verdier, fargestyring, wcag, lrv, overgangstoner, lysereMørkere, gradient
+        case fargeILys, mineLysmiljøer, lysmiljøer, lysstandarder, skjulteLysmiljøer
         var id: String { rawValue }
 
         var navn: String {
@@ -41,6 +46,11 @@ final class Panelinnstillinger {
             case .overgangstoner: String(localized: "Overgang")
             case .lysereMørkere: String(localized: "Lysere og mørkere toner")
             case .gradient: String(localized: "Gradient")
+            case .fargeILys: String(localized: "Fargen i lysmiljøene")
+            case .mineLysmiljøer: String(localized: "Mine lysmiljøer")
+            case .lysmiljøer: String(localized: "Lysmiljøer")
+            case .lysstandarder: String(localized: "Standarder")
+            case .skjulteLysmiljøer: String(localized: "Skjulte lysmiljøer")
             }
         }
     }
@@ -123,9 +133,9 @@ final class Panelinnstillinger {
     func erLagtSammen(_ panel: Panel) -> Bool {
         if lagtSammen.contains(panel.rawValue) { return true }
         if åpnet.contains(panel.rawValue) { return false }
-        guard let skjerm = Skjerm.allCases.first(where: { $0.paneler.contains(panel) }), skjerm.bareØversteÅpent
-        else { return false }
-        return paneler(for: skjerm).first != panel
+        guard let skjerm = Skjerm.allCases.first(where: { $0.paneler.contains(panel) }) else { return false }
+        if skjerm.standardLagtSammen.contains(panel) { return true }
+        return skjerm.bareØversteÅpent && paneler(for: skjerm).first != panel
     }
     func viser(_ verdi: Verdi) -> Bool { !skjulteVerdier.contains(verdi.id) }
 

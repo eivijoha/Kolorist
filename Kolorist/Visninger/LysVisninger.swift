@@ -12,6 +12,56 @@ extension Lysmiljø {
     }
 }
 
+/// Hvor godt et lysmiljø er kjent – og dermed hvor mye man kan stole på fargene i det. Fra fire streker (kjent
+/// spekter, så fargene regnes spektralt) til én (bare lysets farge, lysstyrken anslått).
+struct Lyskvalitet {
+    let nivå: Int
+    let tekst: String
+
+    /// Andelen av strekene som fylles (for `cellularbars`).
+    var andel: Double { Double(nivå) / 4 }
+}
+
+extension Lysmiljø {
+    var kvalitet: Lyskvalitet {
+        switch lyskilde {
+        case .cie, .d50, .d65, .a:
+            return Lyskvalitet(nivå: 4, tekst: String(localized: "Kjent spekter (CIE)"))
+        case .spekter:
+            return Lyskvalitet(nivå: 4, tekst: String(localized: "Målt spekter"))
+        case .sortlegeme, .dagslys:
+            return Lyskvalitet(nivå: 3, tekst: String(localized: "Spekter fra fargetemperaturen: nøyaktig for glødelys og dagslys, omtrentlig for LED"))
+        case .hvitpunkt:
+            switch måling?.metode {
+            case .referansekort:
+                return Lyskvalitet(nivå: 3, tekst: måling?.lux == nil
+                                   ? String(localized: "Målt med referansekort; lysstyrken er anslått")
+                                   : String(localized: "Målt med referansekort: lysets farge og styrke"))
+            case .gråkort:
+                return Lyskvalitet(nivå: måling?.lux == nil ? 2 : 3, tekst: måling?.lux == nil
+                                   ? String(localized: "Målt med gråkort; lysstyrken er anslått")
+                                   : String(localized: "Målt med gråkort: lysets farge og styrke"))
+            case .kamera:
+                return Lyskvalitet(nivå: 2, tekst: String(localized: "Målt med kameraet: lysets farge; lysstyrken er anslått"))
+            case nil:
+                return Lyskvalitet(nivå: 1, tekst: String(localized: "Bare lysets farge er kjent"))
+            }
+        }
+    }
+}
+
+/// Strekene for kvaliteten, med teksten for VoiceOver og som hjelpetekst.
+struct LyskvalitetMerke: View {
+    let kvalitet: Lyskvalitet
+
+    var body: some View {
+        Image(systemName: "cellularbars", variableValue: kvalitet.andel)
+            .imageScale(.small)
+            .help(kvalitet.tekst)
+            .accessibilityLabel(String(localized: "Kvalitet: \(kvalitet.tekst)"))
+    }
+}
+
 enum Lysbeskrivelse {
     /// «≈ 2700 K · 100 lx».
     static func tekst(_ miljø: Lysmiljø) -> String {
@@ -24,15 +74,57 @@ enum Lysbeskrivelse {
     }
 }
 
-/// Lysmiljøene som seksjoner i Vurdering › Lys: egne (kan redigeres), eksempler, standarder og skjulte. Haken til
-/// høyre merker lysmiljøene fargen vises i øverst.
-struct LysmiljøSeksjoner: View {
+/// Ett av lysmiljøpanelene i Vurdering › Lys: egne (kan redigeres og måles), innebygde lysmiljøer, standarder
+/// eller skjulte. Haken til høyre merker lysmiljøene fargen vises i øverst.
+struct LysmiljøSeksjon: View {
+    let panel: Panelinnstillinger.Panel
     @State private var bibliotek = Lysbibliotek.delt
     @State private var redigerer: Lysmiljø?
     @State private var måler = false
 
     var body: some View {
-        Section {
+        switch panel {
+        case .mineLysmiljøer: mine
+        case .lysmiljøer:
+            if !bibliotek.synligeEksempler.isEmpty {
+                PanelSeksjon(panel: panel) {
+                    ForEach(bibliotek.synligeEksempler) { innebygdRad($0) }
+                } fot: {
+                    #if os(macOS)
+                    Text("Skjul lysmiljøer og standarder du ikke bruker med øyet til høyre på raden.")
+                    #else
+                    Text("Sveip eller trykk og hold for å skjule lysmiljøer og standarder du ikke bruker.")
+                    #endif
+                }
+            }
+        case .lysstandarder:
+            if !bibliotek.synligeStandarder.isEmpty {
+                PanelSeksjon(panel: panel) {
+                    ForEach(bibliotek.synligeStandarder) { innebygdRad($0) }
+                } fot: {
+                    Text("Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.")
+                }
+            }
+        case .skjulteLysmiljøer:
+            if !bibliotek.skjulteLysmiljøer.isEmpty {
+                PanelSeksjon(panel: panel) {
+                    ForEach(bibliotek.skjulteLysmiljøer) { miljø in
+                        HStack {
+                            rad(miljø).opacity(0.6)
+                            Button("Vis") { withAnimation { bibliotek.settSkjult(miljø, false) } }
+                                .buttonStyle(.borderless)
+                        }
+                    }
+                } fot: {
+                    Text("Skjulte lysmiljøer vises ikke i valgene for lysmiljø og i vurderingen av paletter.")
+                }
+            }
+        default: EmptyView()
+        }
+    }
+
+    private var mine: some View {
+        PanelSeksjon(panel: .mineLysmiljøer) {
             ForEach(bibliotek.lysmiljøer) { miljø in
                 HStack {
                     Button { redigerer = miljø } label: { rad(miljø) }
@@ -48,18 +140,13 @@ struct LysmiljøSeksjoner: View {
             Button("Nytt lysmiljø", systemImage: "plus") {
                 redigerer = Lysmiljø(navn: String(localized: "Nytt lysmiljø"), lyskilde: .sortlegeme(kelvin: 3000), lux: 300)
             }
-        } header: {
-            Text("Mine lysmiljøer")
-        } footer: {
+        } fot: {
             #if os(macOS)
             Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – med fargetemperatur og lysstyrke. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud.")
             #else
             Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken. Mål det med kameraet der du står, eller legg inn fargetemperatur og lysstyrke selv.")
             #endif
         }
-        #if os(iOS)
-        .fullScreenCover(isPresented: $måler) { LysmålingArk() }
-        #endif
         .sheet(item: $redigerer) { miljø in
             LysmiljøRedigering(miljø: miljø) { lagret in
                 let nytt = !bibliotek.lysmiljøer.contains { $0.id == lagret.id }
@@ -69,43 +156,9 @@ struct LysmiljøSeksjoner: View {
                 if nytt && !bibliotek.erVist(lagret) { bibliotek.veksleVist(lagret) }
             }
         }
-        if !bibliotek.synligeEksempler.isEmpty {
-            Section {
-                ForEach(bibliotek.synligeEksempler) { innebygdRad($0) }
-            } header: {
-                Text("Eksempler")
-            } footer: {
-                #if os(macOS)
-                Text("Skjul eksempler og standarder du ikke bruker med øyet til høyre på raden.")
-                #else
-                Text("Sveip eller trykk og hold for å skjule eksempler og standarder du ikke bruker.")
-                #endif
-            }
-        }
-        if !bibliotek.synligeStandarder.isEmpty {
-            Section {
-                ForEach(bibliotek.synligeStandarder) { innebygdRad($0) }
-            } header: {
-                Text("Standarder")
-            } footer: {
-                Text("Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.")
-            }
-        }
-        if !bibliotek.skjulteLysmiljøer.isEmpty {
-            Section {
-                ForEach(bibliotek.skjulteLysmiljøer) { miljø in
-                    HStack {
-                        rad(miljø).opacity(0.6)
-                        Button("Vis") { withAnimation { bibliotek.settSkjult(miljø, false) } }
-                            .buttonStyle(.borderless)
-                    }
-                }
-            } header: {
-                Text("Skjulte")
-            } footer: {
-                Text("Skjulte lysmiljøer vises ikke i valgene for lysmiljø og i vurderingen av paletter.")
-            }
-        }
+        #if os(iOS)
+        .fullScreenCover(isPresented: $måler) { LysmålingArk() }
+        #endif
     }
 
     /// Et eksempel eller en standard: trykk for å velge; kan skjules (sveip eller trykk og hold, knapp på Mac).
@@ -133,10 +186,16 @@ struct LysmiljøSeksjoner: View {
                 .fill(miljø.sett(Farge(hex: "#FFFFFF")!).swiftUI)
                 .overlay(Circle().strokeBorder(.separator))
                 .frame(width: 24, height: 24)
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text(miljø.navn).foregroundStyle(Color.primary)
                 Text("\(miljø.lyskilde.navn) · \(Lysbeskrivelse.tekst(miljø))")
                     .font(.caption).foregroundStyle(Color.sekundærTekst)
+                let k = miljø.kvalitet
+                HStack(spacing: 4) {
+                    LyskvalitetMerke(kvalitet: k)
+                    Text(k.tekst)
+                }
+                .font(.caption2).foregroundStyle(Color.sekundærTekst)
             }
             Spacer()
         }

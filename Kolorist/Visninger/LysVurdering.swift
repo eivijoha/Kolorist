@@ -16,39 +16,45 @@ struct LysVurdering: View {
         let farge = arbeidsbenk.aktivFarge
         let miljøer = bibliotek.visteLysmiljøer.isEmpty ? [bibliotek.gjeldendeLysmiljø] : bibliotek.visteLysmiljøer
         Form {
-            Section {
-                FargeValgRad(tittel: String(localized: "Farge"), farge: $arbeidsbenk.aktivFarge)
-                Picker("Vis", selection: $somFoto) {
-                    Text("Slik øyet ser det").tag(false)
-                    Text("Som et foto").tag(true)
-                }
-                .pickerStyle(.segmented)
-                // To prøver i bredden på iPhone, flere på iPad og Mac.
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12, alignment: .top)], spacing: 22) {
-                    ForEach(miljøer) { prøve(farge, $0) }
-                }
-                .padding(.vertical, 4)
-                if miljøer.contains(where: \.harUjevntSpekter) {
-                    Label("Lysrør og LED har ujevne spektre. Fargens spekter er anslått, så en ekte flate med samme farge på skjermen kan endre seg annerledes i slikt lys (metameri).", systemImage: "info.circle")
-                        .font(.footnote)
-                        .foregroundStyle(Color.sekundærTekst)
-                }
-            } header: {
-                Text("Fargen i lysmiljøene")
-            } footer: {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(somFoto
-                         ? "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Velg lysmiljøene med haken i lista under."
-                         : "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Velg lysmiljøene med haken i lista under.")
-                    MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
-                }
+            // Panelene i brukerens rekkefølge, sammenleggbare (Panelinnstillinger, synkronisert).
+            ForEach(Panelinnstillinger.delt.paneler(for: .lys)) { panel in
+                if panel == .fargeILys { fargeseksjon(farge, miljøer, $arbeidsbenk.aktivFarge) }
+                else { LysmiljøSeksjon(panel: panel) }
             }
-            LysmiljøSeksjoner()
+            TilpassKnapp(skjerm: .lys)
         }
         .formStyle(.grouped)
         .navigationTitle("Lys")
         .sheet(isPresented: Binding(get: { leggIPalett != nil }, set: { if !$0 { leggIPalett = nil } })) {
             VelgPalettArk(farger: leggIPalett ?? [])
+        }
+    }
+
+    private func fargeseksjon(_ farge: Farge, _ miljøer: [Lysmiljø], _ aktiv: Binding<Farge>) -> some View {
+        PanelSeksjon(panel: .fargeILys) {
+            FargeValgRad(tittel: String(localized: "Farge"), farge: aktiv)
+            Picker("Vis", selection: $somFoto) {
+                Text("Slik øyet ser det").tag(false)
+                Text("Som et foto").tag(true)
+            }
+            .pickerStyle(.segmented)
+            // To prøver i bredden på iPhone, flere på iPad og Mac.
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12, alignment: .top)], spacing: 22) {
+                ForEach(miljøer) { prøve(farge, $0) }
+            }
+            .padding(.vertical, 4)
+            if miljøer.contains(where: \.harUjevntSpekter) {
+                Label("Lysrør og LED har ujevne spektre. Fargens spekter er anslått, så en ekte flate med samme farge på skjermen kan endre seg annerledes i slikt lys (metameri).", systemImage: "info.circle")
+                    .font(.footnote)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
+        } fot: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(somFoto
+                     ? "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Strekene viser hvor godt lyset er kjent: fire for kjent spekter, færre når bare lysets farge er målt eller lysstyrken er anslått. Velg lysmiljøene med haken i lista under."
+                     : "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Strekene viser hvor godt lyset er kjent: fire for kjent spekter, færre når bare lysets farge er målt eller lysstyrken er anslått. Velg lysmiljøene med haken i lista under.")
+                MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
+            }
         }
     }
 
@@ -62,7 +68,11 @@ struct LysVurdering: View {
                 .frame(height: 64)
             VStack(alignment: .leading, spacing: 1) {
                 Text(miljø.navn).font(.callout).lineLimit(2)
-                Text(Lysbeskrivelse.tekst(miljø)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
+                HStack(spacing: 4) {
+                    Text(Lysbeskrivelse.tekst(miljø)).monospacedDigit()
+                    LyskvalitetMerke(kvalitet: miljø.kvalitet)
+                }
+                .font(.caption).foregroundStyle(Color.sekundærTekst)
                 Text("ΔE00 \(skift, format: .number.precision(.fractionLength(1)))")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(skift >= 3 ? Color.advarsel : Color.sekundærTekst)

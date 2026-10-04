@@ -883,6 +883,16 @@
         }
       }
     },
+    "Bare lysets farge er kjent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only the colour of the light is known"
+          }
+        }
+      }
+    },
     "Begrens farger til %@": {
       "localizations": {
         "en": {
@@ -1947,18 +1957,17 @@
       }
     },
     "Fargesyn (valg)": {
-      "extractionState": "extracted_with_value",
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fargesyn"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "CVD"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fargesyn"
           }
         }
       }
@@ -3260,6 +3269,16 @@
         }
       }
     },
+    "Kjent spekter (CIE)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Known spectrum (CIE)"
+          }
+        }
+      }
+    },
     "Kjent verdi": {
       "localizations": {
         "en": {
@@ -3764,6 +3783,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Knowledge base"
+          }
+        }
+      }
+    },
+    "Kvalitet: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quality: %@"
           }
         }
       }
@@ -4652,6 +4681,16 @@
         }
       }
     },
+    "Lysmiljøer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewing conditions"
+          }
+        }
+      }
+    },
     "Lysrefleksjonsverdi og luminanskontrast": {
       "localizations": {
         "en": {
@@ -5050,6 +5089,66 @@
           "stringUnit": {
             "state": "translated",
             "value": "Measured light"
+          }
+        }
+      }
+    },
+    "Målt med gråkort: lysets farge og styrke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured with grey card: colour and strength of the light"
+          }
+        }
+      }
+    },
+    "Målt med gråkort; lysstyrken er anslått": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured with grey card; the illuminance is estimated"
+          }
+        }
+      }
+    },
+    "Målt med kameraet: lysets farge; lysstyrken er anslått": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured with the camera: colour of the light; the illuminance is estimated"
+          }
+        }
+      }
+    },
+    "Målt med referansekort: lysets farge og styrke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured with reference card: colour and strength of the light"
+          }
+        }
+      }
+    },
+    "Målt med referansekort; lysstyrken er anslått": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured with reference card; the illuminance is estimated"
+          }
+        }
+      }
+    },
+    "Målt spekter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measured spectrum"
           }
         }
       }
@@ -5632,22 +5731,22 @@
         }
       }
     },
-    "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Velg lysmiljøene med haken i lista under.": {
+    "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Strekene viser hvor godt lyset er kjent: fire for kjent spekter, færre når bare lysets farge er målt eller lysstyrken er anslått. Velg lysmiljøene med haken i lista under.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The swatches show the colour with the full colour cast of the light, as a photo with daylight white balance would show it. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable. Choose the viewing conditions with the checkmark in the list below."
+            "value": "The swatches show the colour with the full colour cast of the light, as a photo with daylight white balance would show it. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable. The bars show how well the light is known: four for a known spectrum, fewer when only the colour of the light is measured or the illuminance is estimated. Choose the viewing conditions with the checkmark in the list below."
           }
         }
       }
     },
-    "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Velg lysmiljøene med haken i lista under.": {
+    "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Strekene viser hvor godt lyset er kjent: fire for kjent spekter, færre når bare lysets farge er målt eller lysstyrken er anslått. Velg lysmiljøene med haken i lista under.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The swatches show the colour as it is perceived in each viewing condition: the eye adapts almost fully to the colour of the light, and dim light makes colours less colourful. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable. Choose the viewing conditions with the checkmark in the list below."
+            "value": "The swatches show the colour as it is perceived in each viewing condition: the eye adapts almost fully to the colour of the light, and dim light makes colours less colourful. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable. The bars show how well the light is known: four for a known spectrum, fewer when only the colour of the light is measured or the illuminance is estimated. Choose the viewing conditions with the checkmark in the list below."
           }
         }
       }
@@ -5988,22 +6087,22 @@
         }
       }
     },
-    "Skjul eksempler og standarder du ikke bruker med øyet til høyre på raden.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hide examples and standards you don’t use with the eye on the right of the row."
-          }
-        }
-      }
-    },
     "Skjul lysfelt": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Hide light panel"
+          }
+        }
+      }
+    },
+    "Skjul lysmiljøer og standarder du ikke bruker med øyet til høyre på raden.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide viewing conditions and standards you don’t use with the eye on the right of the row."
           }
         }
       }
@@ -6038,12 +6137,12 @@
         }
       }
     },
-    "Skjulte": {
+    "Skjulte lysmiljøer": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hidden"
+            "value": "Hidden viewing conditions"
           }
         }
       }
@@ -6438,6 +6537,16 @@
         }
       }
     },
+    "Spekter fra fargetemperaturen: nøyaktig for glødelys og dagslys, omtrentlig for LED": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spectrum from the colour temperature: exact for incandescent light and daylight, approximate for LED"
+          }
+        }
+      }
+    },
     "Spektre, lyskilder og fargetemperatur": {
       "localizations": {
         "en": {
@@ -6578,12 +6687,12 @@
         }
       }
     },
-    "Sveip eller trykk og hold for å skjule eksempler og standarder du ikke bruker.": {
+    "Sveip eller trykk og hold for å skjule lysmiljøer og standarder du ikke bruker.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Swipe or touch and hold to hide examples and standards you don’t use."
+            "value": "Swipe or touch and hold to hide viewing conditions and standards you don’t use."
           }
         }
       }
