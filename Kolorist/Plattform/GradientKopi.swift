@@ -288,10 +288,12 @@ enum Gradientgrafikk {
 
     // MARK: AICB (InDesign)
 
-    /// Gradienten som PostScript i Illustrators utklippsformat (AICB): en boks med `shfill`, som InDesign gjør om til
-    /// en boks med ekte gradientfyll (lineær eller radiell, med alle stoppene). Gradienten ligger i et eget
-    /// koordinatsystem fra 0 til 1 langs x-aksen – InDesign leser stopposisjonene derfra – og hvert stopp er et ledd i en
-    /// sammenskjøtt funksjon (FunctionType 3). Fargene i sRGB (DeviceRGB). Testet mot InDesign 2026.
+    /// Gradienten som PostScript i Illustrators utklippsformat (AICB): en boks fylt med et skyggeleggingsmønster
+    /// (PatternType 2), som InDesign gjør om til én boks med ekte gradientfyll (lineær eller radiell, med alle stoppene).
+    /// Mønsteret får gradientens eget koordinatsystem (fra 0 til 1 langs x-aksen) som matrise – InDesign leser
+    /// stopposisjoner, retning og lengde derfra. (Med `clip` og `shfill` la InDesign boksen inne i en ekstra ramme.)
+    /// Hvert stopp er et ledd i en sammenskjøtt funksjon (FunctionType 3). Fargene i sRGB (DeviceRGB). Testet mot
+    /// InDesign 2026.
     static func aicb(_ g: Gradientkopi) -> Data {
         let r = flate
         var stopp: [(farge: SRGB, posisjon: Double)] = []
@@ -317,14 +319,14 @@ enum Gradientgrafikk {
         let matrise: String, skyggelegging: String
         if g.form == .radiell {
             let radius = hypot(r.width, r.height) / 2
-            matrise = "[\(tall(radius)) 0 0 \(tall(radius)) \(tall(r.midX)) \(tall(r.midY))] concat"
-            skyggelegging = "<< /ShadingType 3 /ColorSpace /DeviceRGB /Coords [0 0 0 0 0 1] /Domain [0 1] /Extend [true true] /Function \(funksjon) >> shfill"
+            matrise = "[\(tall(radius)) 0 0 \(tall(radius)) \(tall(r.midX)) \(tall(r.midY))]"
+            skyggelegging = "<< /ShadingType 3 /ColorSpace /DeviceRGB /Coords [0 0 0 0 0 1] /Domain [0 1] /Extend [true true] /Function \(funksjon) >>"
         } else {
             let (a, b) = g.endepunkter(i: r)
             let p0 = CGPoint(x: a.x, y: r.height - a.y), p1 = CGPoint(x: b.x, y: r.height - b.y)
             let dx = p1.x - p0.x, dy = p1.y - p0.y
-            matrise = "[\(tall(dx)) \(tall(dy)) \(tall(-dy)) \(tall(dx)) \(tall(p0.x)) \(tall(p0.y))] concat"
-            skyggelegging = "<< /ShadingType 2 /ColorSpace /DeviceRGB /Coords [0 0 1 0] /Domain [0 1] /Extend [true true] /Function \(funksjon) >> shfill"
+            matrise = "[\(tall(dx)) \(tall(dy)) \(tall(-dy)) \(tall(dx)) \(tall(p0.x)) \(tall(p0.y))]"
+            skyggelegging = "<< /ShadingType 2 /ColorSpace /DeviceRGB /Coords [0 0 1 0] /Domain [0 1] /Extend [true true] /Function \(funksjon) >>"
         }
         let linjer = [
             "%!PS-Adobe-3.0 EPSF-3.0",
@@ -337,9 +339,8 @@ enum Gradientgrafikk {
             "%%EndProlog",
             "%%Page: 1 1",
             "gsave",
-            "newpath 0 0 moveto 0 \(tall(r.height)) lineto \(tall(r.width)) \(tall(r.height)) lineto \(tall(r.width)) 0 lineto closepath clip",
-            matrise,
-            skyggelegging,
+            "<< /PatternType 2 /Shading \(skyggelegging) >> \(matrise) makepattern setpattern",
+            "newpath 0 0 moveto 0 \(tall(r.height)) lineto \(tall(r.width)) \(tall(r.height)) lineto \(tall(r.width)) 0 lineto closepath fill",
             "grestore",
             "showpage",
             "%%Trailer",
