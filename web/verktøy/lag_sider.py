@@ -185,7 +185,7 @@ def iphonebilde(s, navn):
     if (lang, navn) in NYE_BILDER:
         alt, tekst = NYE_BILDER[(lang, navn)]
         sti, b, h = NYE_STIER.get(navn, (f'skjermbilde-{navn}.png', 1284, 2778))
-        src = f'assets/{sti}?v=7' if lang == 'nb' else f'../assets/en/{sti}?v=7'
+        src = f'assets/{sti}?v=8' if lang == 'nb' else f'../assets/en/{sti}?v=8'
         return f'<img src="{src}" alt="{alt}" width="{b}" height="{h}" loading="lazy">', tekst
     m = re.search(r'(<img src="[^"]*assets/(?:en/)?skjermbilde-' + navn + r'\.png[^"]*"[^>]*>)\s*<figcaption>(.*?)</figcaption>', s)
     img = m.group(1)
@@ -994,8 +994,8 @@ def filamentside(lang):
 # ---------- Skriv ----------
 
 def skriv(sti, tekst):
-    # Nye skjermbilder (build 6): ny versjon i adressen, så nettleser og Varnish henter dem på nytt.
-    tekst = tekst.replace('.png?v=5', '.png?v=7').replace('.png?v=6', '.png?v=7')
+    # Nye skjermbilder: ny versjon i adressen, så nettleser og Varnish henter dem på nytt.
+    tekst = re.sub(r'\.png\?v=\d+', '.png?v=8', tekst)
     open(f'{W}/{sti}', 'w').write(tekst)
 
 
