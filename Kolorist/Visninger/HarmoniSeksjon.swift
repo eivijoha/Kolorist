@@ -347,7 +347,7 @@ struct Fargesirkelvisning: View {
                     ctx.fill(Path(ellipseIn: rute), with: .color(f.swiftUI))
                     // Grunnfargen får samme ramme som flaten øverst: fargens lesbare tekstfarge i stedet for hvitt.
                     ctx.stroke(Path(ellipseIn: rute), with: .color(erGrunn ? f.lesbarTekstfarge.swiftUI : .white),
-                               lineWidth: erGrunn ? 1 : 2)
+                               lineWidth: erGrunn ? 4 : 2)
                 }
                 // Midten viser grunnfargen.
                 let m = r * 0.34
