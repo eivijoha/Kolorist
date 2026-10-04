@@ -18,12 +18,19 @@ struct KoloristApp: App {
             InnholdsVisning()
                 .environment(arbeidsbenk)
                 .environment(profiler)
+                #if os(macOS)
+                // Minste vindu: sidepanel og én kolonne omtrent som på iPhone. Mindre enn dette presses innholdet sammen.
+                .frame(minWidth: 640, minHeight: 600)
+                #endif
                 #if DEBUG
                 .focusEffectDisabled(Skjermbildemodus.på)
                 .task { Skjermbildemodus.forbered(Lagring.container.mainContext) }
                 #endif
         }
         .modelContainer(Lagring.container)
+        #if os(macOS)
+        .windowResizability(.contentMinSize)
+        #endif
         // ⌘P (Arkiv › Skriv ut) for paletten som er åpen – Mac, og iPad med tastatur.
         .commands { UtskriftKommando() }
         .commands { KoloristKommandoer(arbeidsbenk: arbeidsbenk) }
@@ -330,8 +337,13 @@ struct InnholdsVisning: View {
     }
     @AppStorage("visPalettkolonne") private var visPalettkolonne = true
 
-    /// Minste vindusbredde for palettkolonnen: 13"-iPad i liggende format, eller et bredt Mac-vindu.
+    /// Minste vindusbredde for palettkolonnen på iPad: 13"-iPad i liggende format.
     static let palettkolonneBredde: CGFloat = 1300
+    /// Mac: palettkolonnen (ca. 380 pt) kommer når det fortsatt er plass til to kolonner i innholdet ved siden av den
+    /// (sidepanel ca. 200 + 820 + 380), og går først når vinduet er klart smalere, så den ikke blinker av og på ved
+    /// grensen og får innholdet til å hoppe mellom én og to kolonner.
+    static let palettkolonneInnMac: CGFloat = 1440
+    static let palettkolonneUtMac: CGFloat = 1380
 
     /// Mac med bredt nok vindu: Paletter ligger fast til høyre og er tatt ut av menyen.
     private var paletterTilHøyre: Bool {
@@ -386,11 +398,12 @@ struct InnholdsVisning: View {
         // ⌘Z: én angrehistorikk for paletter, lagrede farger og aktiv farge.
         .onAppear { kobleAngring() }
         .onChange(of: undoManager) { kobleAngring() }
+        // Hele vinduets bredde (palettkolonnen medregnet).
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { bredde in
             #if os(iOS)
             let stor = UIDevice.current.userInterfaceIdiom == .pad && bredde >= Self.palettkolonneBredde
             #else
-            let stor = bredde >= Self.palettkolonneBredde
+            let stor = bredde >= (arbeidsbenk.palettkolonneMulig ? Self.palettkolonneUtMac : Self.palettkolonneInnMac)
             #endif
             if arbeidsbenk.palettkolonneMulig != stor { arbeidsbenk.palettkolonneMulig = stor }
         }
