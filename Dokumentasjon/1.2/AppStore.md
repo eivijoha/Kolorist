@@ -19,8 +19,8 @@ Utgangspunktet er tekstene for 1.1 (`Dokumentasjon/1.1/AppStore.md`). Endringer 
       seks bilder holder.
 - [ ] Innholdsrettigheter (App Store Connect › Appinformasjon): «Inneholder appen tredjepartsinnhold?» – ja, filamentfarger
       fra FilamentColors.xyz under CC BY 4.0; kreditering i appen (Mine fargerom, Metoder) og på kolorist.no.
-- [ ] App Review-notater: delingslenker (testlenke https://kolorist.no/l#… fra `Testlenker.json`), «Lagre som» (velg formater, lagre i en
-      mappe i Filer), filamentbibliotek («Vis som» › Filament: alle typer), lysmåling krever gråkort for full funksjon.
+- [x] App Review-notater for 1.2 skrevet (seksjon 4): lys, paletten i lys, lysmåling, gråkort/referansekort (beta),
+      delingslenke med testlenke, «Lagre som», filament og Mac (Continuity-kamera, hurtigtaster).
 - [ ] Ved lansering: 1.2-nettsiden til roten, 1.1 til `historisk/1.1/`; `l/` og `.well-known/` må bli liggende.
 
 ### Utkast: Nytt i 1.2 – iPhone og iPad, norsk
@@ -609,62 +609,63 @@ på iPad og Mac). Mac-bildene er tatt med `-kunSRGB NO`, så grunnfargen er den 
 | Contact – telefon | *(fyll inn, med landskode +47)* |
 | Vedlegg | Valgfritt: en kort skjermopptaksvideo av fargebibliotek-import og dra og slipp på Mac |
 
-**Notes (4000)** – på engelsk, som App Review leser raskest:
+**Notes (4000)** – på engelsk, som App Review leser raskest. Gjelder iOS og macOS (samme tekst, Mac-avsnittet nederst):
 
 ```
-Thank you for reviewing Kolorist 1.1, a colour palette tool for designers and architects on iPhone, iPad and Mac (one universal purchase).
+Thank you for reviewing Kolorist 1.2, a colour palette tool for designers and architects on iPhone, iPad and Mac (one universal purchase).
 
 NO ACCOUNT NEEDED
-All features work without signing in. There is no account, no server of our own, no analytics, no ads and no in-app purchases. Palettes sync through the user's private iCloud database (CloudKit) when the device is signed in to iCloud; without iCloud everything is stored on device.
+No account, no server of our own, no analytics, ads or in-app purchases. Palettes and viewing conditions sync through the user's private iCloud when signed in; otherwise everything stays on device.
+
+NEW IN 1.2 – HOW TO TEST
+• Light: Assess › Light shows the active colour on screen and in a chosen viewing condition (tap the right half of the large field to pick one), plus more viewing conditions below. Bars show how well each light is known.
+• Palette in light: open a palette and tap the light bulb. Each tile shows the colour on screen (top) and in the light (bottom). The "A" button next to it shows text contrast between all colours.
+• Measure light (iPhone/iPad): Assess › Light › My viewing conditions › Measure light with the camera. The camera gives the colour temperature and an estimated illuminance; "Save as viewing condition" stores it.
+• Grey card / reference card (marked beta): Pick › Camera › light menu (sun). A grey or white surface works ("Own card" lets you enter its LRV). Reference values for 24-patch cards are not bundled; users import their own file under My colour spaces.
+• Share as link: touch and hold a colour or palette › Share as link. Test link (opens in the app, or in a browser without it):
+https://kolorist.no/l#znZJLTsMwEIavYlliFxw_M-PuaEpZVLAoK4S6CCWUkL6UtIiq6nE4CRdjnAfKmo09Htuf5v9nzvyNj57PvKRVCmMSqaJrKaQ2XWCVShYR3xz5iCs5ZlqY2AjLI76lzOS0Z28fu-qVzl_hxdTc2Am_RD3RKatNAzI-cS0Rve6JINyYWUJaAR1ydqoPL-uf745opsktugERLEjf1uhtGxh0dlgjEE71FRZ1sWLvxWaTrzskTscmhQESPSgVEUhqMGHXCL4HauGeGAqM1Z_qx2zbC75NJmmKQ8FeIxJDaZANEw2agdw5c7GSwneoh-xYHyiuKC6Wy1GZ3qW79a563GfL_C7f5lWxTO-fZuFJeN-m6pL1yUOjmcUMkBbUtOircPFJ5SgZAUaoo2B4KDdF5wz1h46rpu8ZH0EnqjxuqmK7or91c0WD8a-5GM5B8GXAAaCeBVPAtbvXSg2NnjMQOsY_zlR7cpg4i1ByYxgNW9Bfnhrfgvx9ts4P4UCS1eUX
+• Save as: open a palette › Share › Save as …, choose formats, then Save (folder in Files) or Share.
+• Filament colours: Studio › Show as › Filament: all types shows the nearest 3D-printing filament. With Filament selected, the dashed "Add" tile in a palette adds that filament.
+• Harmonies: Studio › Harmony – triad, square, analogous with accent.
+• Undo: shake (iPhone/iPad) or ⌘Z.
 
 WHERE TO FIND THE MAIN FEATURES
-• Studio (first tab): edit the active colour in OKLCH, Lab, Munsell, RGB, CMYK etc. "Show as" picks a second colour space, an ICC profile or a colour library shown side by side. Colour | Tones | Harmony switches between editing, tone scales and harmonies.
-• Palettes: tap + to create a palette, either empty or "New palette from value words (AI)". Tap a colour to select it; tap a palette's title to open it. Touch and hold (right-click on Mac) a palette for "Critique the palette" and "Contrast matrix", or a colour for "Copy to" (Figma, Adobe apps, Pages/Keynote/Numbers, CSS, SwiftUI) and other actions.
-• Gradient: perceptual gradients between two colours, with lighter/darker rows and CSS export.
-• Pick: camera, photos and (on Mac) a screen eyedropper. Picked colours appear at the top of Palettes, marked "Not saved".
-• Assess: Contrast (WCAG text contrast and LRV surface contrast), Difference (ΔE2000) and Colour vision (simulation of colour vision deficiencies). The camera button next to each deficiency opens the camera with that filter.
-
-NEW IN 1.1 – HOW TO TEST
-• Colour libraries: export any palette as ASE (open a palette › Export › ASE), then import that file under Studio › Show as › My colour spaces … › Import. Choose the library under "Show as" to see the nearest named tone.
-• Munsell: Studio › Colour model › Munsell.
-• LRV: Assess › Contrast › Surfaces (LRV).
-• Palette column: on a 13-inch iPad in landscape, or on a Mac with a window at least 1300 points wide. Drag a colour from the column onto From or To in Gradient.
-• Undo: ⌘Z (Edit › Undo) after changing a colour or editing a palette.
-• Gradients: in Gradient, use More › Add gradient to palette, or Copy gradient to … (Figma, Adobe apps, iWork, CSS, SwiftUI).
-• Print: open a palette › Print … (or ⌘P on Mac), or Export › PDF with swatches (A4).
+• Studio: edit the active colour in OKLCH, Lab, Munsell, RGB, CMYK etc. "Show as" picks an ICC profile or colour library shown side by side.
+• Palettes: + creates a palette (empty or from value words, AI). Touch and hold (right-click on Mac) for more actions.
+• Gradient: perceptual gradients with lighter/darker rows.
+• Pick: camera, photos and (on Mac) a screen eyedropper.
+• Assess: Contrast (WCAG and LRV), Difference (ΔE2000), CVD (colour vision deficiencies) and Light.
 
 CAMERA
-The camera is used live, on device only, to pick colours and to show the colour vision filter. No photos or video are stored or sent. If no camera is available (for example on a Mac without one), picking from photos and the screen eyedropper still work.
+Used live, on device only: to pick colours, measure light and show the colour vision filter. Nothing is stored or sent. A still image of a reference card is processed on device and discarded.
 
 APPLE INTELLIGENCE
-Value-word palettes, "Describe a colour", free-text adjustments, colour naming and palette critique use the on-device Foundation Models framework. On devices without Apple Intelligence, or when it is turned off, palettes are generated from a built-in knowledge base instead, and the app explains what is unavailable. No text leaves the device.
+Value-word palettes, colour descriptions, naming and critique use on-device Foundation Models, with a built-in knowledge base as fallback. No text leaves the device.
 
-ICC PROFILES AND COLOUR LIBRARIES
-No ICC profiles or colour libraries are bundled. The app uses the system's built-in colour spaces (sRGB, Display P3, Adobe RGB, Rec. 2020, ProPhoto RGB, Generic CMYK) and profiles and libraries the user imports under "My colour spaces". Imported files are stored in the app's iCloud Drive folder and can be deleted in the app. The Munsell conversion uses the published Munsell renotation data.
+BUNDLED DATA
+Filament colours come from FilamentColors.xyz under CC BY 4.0, credited in the app (My colour spaces, Methods and sources) and at kolorist.no. No ICC profiles or proprietary colour libraries are bundled; users import their own.
 
-SIRI AND SHORTCUTS
-App Shortcuts: "Describe a colour in Kolorist", "Create a palette in Kolorist", plus actions to create a gradient, convert a colour and check contrast.
+SHARED LINKS
+Colours are carried in the URL fragment, never sent to the server. Associated domain: applinks:kolorist.no.
 
 MAC
-The screen eyedropper uses the system colour sampler (NSColorSampler) and does not require screen recording permission. Swatches can be dragged into other apps, and colours can be dropped in from the system colour panel and other apps.
+Pick prefers an iPhone as Continuity Camera (needed for card compensation); the camera menu lists all connected cameras. The screen eyedropper uses NSColorSampler and needs no screen recording permission. Keyboard: ⌘N new palette, ⇧⌘S Save as, ⌘1–5 tabs, ⌘C/⌘V colours.
 
-Methods and sources used by the app are listed in the app (bottom of Palettes › Methods and sources) and at https://kolorist.no/en/methods.html.
-
+Methods and sources: in the app (Palettes › Methods and sources) and at https://kolorist.no/en/methods.html
 Contact: eivind.johansen@ntnu.no
 ```
 
----
-
 ## 5. Før du sender inn
 
-- [ ] Nettsiden for 1.1 (`web/1.1/`) er publisert på kolorist.no.
-- [x] `MARKETING_VERSION` er `1.1`. `CURRENT_PROJECT_VERSION` (nå `5`) økes for hver opplasting.
-- [ ] Ny versjon opprettet i App Store Connect for både iOS og macOS (1.1), med «Nytt i denne versjonen» fra over.
-- [ ] Nøkkelord og beskrivelse oppdatert (nye: Munsell, LRV, fargebiblioteker).
-- [x] Skjermbilder for iPhone, iPad og Mac på norsk og engelsk (se 3d).
-- [x] CloudKit-skjemaet er rullet ut til produksjon (3.10.2026): nytt felt `CD_gradientData` på paletter, og Core Datas `…_ckAsset`- og `CD_moveReceipt`-felt (lagt inn med `initializeCloudKitSchema`, som også dekker store paletter som synkroniseres som asset). Eldre versjoner (1.0) ignorerer feltene.
-- [ ] Notes for App Review byttet til teksten over.
-- [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) med begrunnelse `CA92.1` for `UserDefaults` – finnes fortsatt ikke i prosjektet.
-- [ ] `ITSAppUsesNonExemptEncryption = NO` – står fortsatt ikke i Info.plist eller byggeinnstillingene.
+- [ ] 1.2-nettsiden er publisert på kolorist.no (fra `neste/` til roten; 1.1 til `historisk/1.1/`; `l/` og `.well-known/` blir liggende).
+- [x] `MARKETING_VERSION` er `1.2`. `CURRENT_PROJECT_VERSION` (nå `6`) økes for hver opplasting.
+- [ ] Ny versjon opprettet i App Store Connect for både iOS og macOS (1.2), med «Nytt i denne versjonen» fra over.
+- [ ] Nøkkelord og beskrivelse oppdatert (nye: lys, lysmiljø, filament, 3D-print, gråkort).
+- [x] Skjermbilder for iPhone, iPad og Mac på norsk og engelsk (se 3d og sjekklisten øverst).
+- [ ] Innholdsrettigheter: ja, tredjepartsinnhold (filamentfarger, CC BY 4.0).
+- [x] CloudKit-skjemaet er uendret siden 1.1 (kilde og representasjon for farger ligger i de kodede palettdataene).
+- [ ] Notes for App Review byttet til teksten over (iOS og macOS).
+- [x] Privacy manifest (`Kolorist/PrivacyInfo.xcprivacy`) finnes.
+- [x] `ITSAppUsesNonExemptEncryption = NO` står i byggeinnstillingene.
 - [x] Lagringsformatet er bakoverkompatibelt: paletter med Munsell-farger og farger fra fargebiblioteker kan
       leses av 1.0 på enheter som ikke er oppdatert ennå (se `PalettFarge` i `Palett.swift` og `LagringsformatTests`).
