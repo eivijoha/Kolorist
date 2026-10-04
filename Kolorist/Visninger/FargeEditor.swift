@@ -632,11 +632,14 @@ private struct Lyshetsstige: View {
     var body: some View {
         GeometryReader { geo in
             let b = geo.size.width
+            // Med grunnfarge-sirkelen flyttes streken ned, så sirkelen (22 pt) kan sentreres på den.
+            let topp: CGFloat = grunnfarger.isEmpty ? 0 : 6
             ZStack(alignment: .topLeading) {
                 LinearGradient(colors: [.black, .white], startPoint: .leading, endPoint: .trailing)
                     .frame(height: 10)
                     .clipShape(Capsule())
                     .overlay(Capsule().strokeBorder(Color.sekundærTekst.opacity(0.4), lineWidth: 0.5))
+                    .padding(.top, topp)
                 let synlige = synligeEtiketter(bredde: b)
                 ForEach(Array(lysheter.enumerated()), id: \.offset) { i, l in
                     let x = min(max(l, 0), 1) * b
@@ -652,8 +655,7 @@ private struct Lyshetsstige: View {
                             .fixedSize()
                             .opacity(synlige.contains(i) ? 1 : 0)
                     }
-                    // Litt lavere med grunnfarge-sirkelen, så tallet under den synes.
-                    .position(x: x, y: grunnfarger.isEmpty ? 16 : 20)
+                    .position(x: x, y: 16 + topp)
                 }
                 if !grunnfarger.isEmpty, lysheter.indices.contains(grunnindeks) {
                     // Grunnfargen som sirkel med samme kant som grunnfargen i Harmoni; dras for å flytte lysheten.
@@ -663,8 +665,8 @@ private struct Lyshetsstige: View {
                         .overlay(Circle().strokeBorder(sirkelkant, lineWidth: 3))
                         .frame(width: 22, height: 22)
                         .contentShape(Circle().inset(by: -11))
-                        // Over tallet for grunnlysheten, som står synlig under sirkelen.
-                        .position(x: min(max(lysheter[grunnindeks], 0), 1) * b, y: 11)
+                        // Sentrert på streken; tallet for grunnlysheten står synlig under.
+                        .position(x: min(max(lysheter[grunnindeks], 0), 1) * b, y: 5 + topp)
                         .gesture(DragGesture(minimumDistance: 1)
                             .onChanged { forskyv?(Double($0.translation.width / max(b, 1)), false) }
                             .onEnded { forskyv?(Double($0.translation.width / max(b, 1)), true) })
