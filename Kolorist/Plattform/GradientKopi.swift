@@ -121,9 +121,8 @@ extension Utklippstavle {
             tekst = svg
         case .indesign:
             // InDesign gjør Illustrators utklippsformat (AICB, PostScript) om til en ekte, redigerbar gradient.
-            // PDF-en er reserve for programmer som ikke leser AICB.
+            // Ingen PDF ved siden av: da kunne InDesign lime inn PDF-en som bilde i tillegg til gradienten.
             typer.append(("com.adobe.illustrator.aicb", Gradientgrafikk.aicb(gradient)))
-            typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
             tekst = gradient.css.moderne
         case .photoshop, .iWork:
             typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
