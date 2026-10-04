@@ -37,20 +37,40 @@ struct VurderingVisning: View {
         }
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
-        #endif
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                #if os(macOS)
-                delvalg.pickerStyle(.segmented).fixedSize()
-                #else
-                // Segmentert når det er plass; ellers (smale iPhoner, lengre engelske navn) som meny.
+        // iPhone: valget står fast øverst i innholdet, ikke i verktøylinjen. I verktøylinjen kunne iOS 26 tegne det
+        // sammenpresset, med etikettene oppå hverandre, etter at innholdet under byttet (feilmelding fra 1.1).
+        // Fanen sier allerede «Vurdering», så tittellinjen trengs ikke (som i Studio).
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if påTelefon {
                 ViewThatFits(in: .horizontal) {
                     delvalg.pickerStyle(.segmented).fixedSize()
                     delvalg.pickerStyle(.menu).menuIndicator(.visible).fixedSize()
                 }
-                #endif
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(Color.skjemabakgrunn)
             }
         }
+        .toolbar(påTelefon ? .hidden : .automatic, for: .navigationBar)
+        #endif
+        .toolbar {
+            #if os(macOS)
+            ToolbarItem(placement: .principal) { delvalg.pickerStyle(.segmented).fixedSize() }
+            #else
+            if !påTelefon {
+                ToolbarItem(placement: .principal) { delvalg.pickerStyle(.segmented).fixedSize() }
+            }
+            #endif
+        }
+    }
+
+    private var påTelefon: Bool {
+        #if os(iOS)
+        UIDevice.current.userInterfaceIdiom == .phone
+        #else
+        false
+        #endif
     }
 }
 
