@@ -145,6 +145,34 @@ avispapir …).
   gjengivelse – for eksempel hvordan avispapiret ser ut på skjermen eller i en annen trykkprofil.
 - Henger sammen med «rene CMYK-verdier» og fargekart i CMYK: verdiene må tolkes i samme profil som de er laget i.
 
+## Til 1.3: Lim inn farger og gradienter fra de samme programmene som «Kopier til» (2026-10-05)
+
+I dag leser «Lim inn» fargeobjekter og hex/CSS-tekst. Målet er å ta imot farger *og gradienter* fra de programmene vi
+kopierer til, slik at veien går begge veier: lim inn en gradient fra Keynote eller Illustrator, og få den som gradient
+i Overgang (eller i en palett), med endepunkter og stopp.
+
+**Utklippsformatene vi kjenner fra arbeidet med «Kopier til» (1.2)**
+- **Pages/Keynote/Numbers (og trolig Freeform):** `com.apple.apps.content-language.canvas-object-1.0` – JSON med
+  figurer, fyll (farge eller gradient med stopp, P3/sRGB og vinkel). Lettest å lese. Radiell gradient kommer ut som
+  lineær i JSON-en (iWork skriver den slik), så formen må gjettes fra bildet eller utelates.
+- **Illustrator:** SVG-kode som tekst og `public.svg-image` (gradient med stopp), PDF med skyggelegging (ShadingType 2/3)
+  og AICB (PostScript). SVG er enklest å tolke.
+- **InDesign:** PDF på utklippstavlen. Eget utvekslingsformat finnes, men leveres bare på forespørsel og var tomt i test.
+  PDF-ens skyggelegging (ShadingType 2/3, FunctionType 2/3) kan tolkes, men det er mer arbeid.
+- **Figma og Sketch/Affinity:** sjekkes. Figma legger eget, lukket format i HTML på utklippstavlen; «Copy as SVG» og
+  «Copy as CSS» fra Figma er trolig realistiske veier.
+- **Photoshop:** sjekkes (forventet bilde/PDF; farger kanskje bare som tekst).
+- **CSS og SwiftUI:** tekst – `linear-gradient(...)`/`radial-gradient(...)` og `Color(...)`/`LinearGradient(...)` kan
+  tolkes med Fargetolk utvidet til gradienter.
+
+**Hensyn**
+- iOS spør «Tillat innliming?» når vi leser innhold fra andre apper. Knappen «Lim inn» kan vises ut fra hvilke typer
+  som finnes (uten å lese dem), og innholdet leses først når brukeren trykker.
+- Farger fra en gradient eller figur kan også gå til en palett (stoppene som farger).
+- Gradienter med flere enn to stopp henger sammen med «Flere fargestopp i gradienter» over: inntil det finnes, blir
+  innlimte gradienter forenklet til endepunktene (eller tonene som palett).
+- Testes på samme måte som «Kopier til»: kopier fra programmet, les utklippstavlen og sammenlign med det vi selv lager.
+
 ## App Clip for delingslenker (vurdert 2026-10-04 – lagt til side)
 
 **Beslutning (Eivind, 2026-10-04): droppet for nå.** Lenkene brukes nok oftest på desktop, der App Clips ikke finnes.
