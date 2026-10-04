@@ -6497,6 +6497,16 @@
         }
       }
     },
+    "Som figur med redigerbar gradient": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a shape with an editable gradient"
+          }
+        }
+      }
+    },
     "Som form med gradientfyll (SVG)": {
       "localizations": {
         "en": {

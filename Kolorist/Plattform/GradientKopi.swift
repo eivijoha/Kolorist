@@ -75,7 +75,7 @@ enum Gradientmål: String, CaseIterable, Identifiable {
         case .illustrator: String(localized: "Som redigerbar gradient (PDF) i sRGB")
         case .indesign: String(localized: "Som redigerbar gradient i sRGB")
         case .photoshop: String(localized: "Som formlag eller bilde (PDF/PNG)")
-        case .iWork: String(localized: "Som vektorbilde (PDF) med riktige farger")
+        case .iWork: String(localized: "Som figur med redigerbar gradient")
         case .css: String(localized: "Som gradient med OKLab og reserve")
         case .swiftUI: String(localized: "Som gradient med Display P3-stopp")
         }
@@ -122,7 +122,7 @@ extension Utklippstavle {
     static func kopier(_ gradient: Gradientkopi, til mål: Gradientmål) {
         guard gradient.farger.count >= 1 else { return }
         var typer: [(String, Data)] = []
-        let tekst: String
+        let tekst: String?
         switch mål {
         case .figma, .sketchAffinity:
             let svg = Gradientgrafikk.svg(gradient)
@@ -139,7 +139,19 @@ extension Utklippstavle {
             // Ingen PDF ved siden av: da kunne InDesign lime inn PDF-en som bilde i tillegg til gradienten.
             typer.append(("com.adobe.illustrator.aicb", Gradientgrafikk.aicb(gradient)))
             tekst = gradient.css.moderne
-        case .photoshop, .iWork:
+        case .iWork:
+            // Pages, Keynote, Numbers og Freeform leser figurer med redigerbar gradient fra Apples felles
+            // utklippsformat (JSON). Bare lineær: iWork tar ikke imot radiell der (og gir den selv ut som lineær),
+            // så radiell og konisk blir vektorbilde (PDF).
+            if let figur = Gradientgrafikk.iWorkFigur(gradient) {
+                typer.append(("com.apple.apps.content-language.canvas-object-1.0", figur))
+            } else {
+                typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
+                if let png = Gradientgrafikk.png(gradient) { typer.append(("public.png", png)) }
+            }
+            // Uten tekst ved siden av: Numbers og Pages limer heller inn teksten enn figuren eller bildet.
+            tekst = nil
+        case .photoshop:
             typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
             if let png = Gradientgrafikk.png(gradient) { typer.append(("public.png", png)) }
             tekst = gradient.css.moderne
@@ -149,14 +161,15 @@ extension Utklippstavle {
             tekst = Gradientgrafikk.swiftUI(gradient)
         }
         #if canImport(UIKit)
-        var element: [String: Any] = ["public.utf8-plain-text": tekst]
+        var element: [String: Any] = [:]
+        if let tekst { element["public.utf8-plain-text"] = tekst }
         for (type, data) in typer { element[type] = data }
         UIPasteboard.general.items = [element]
         #elseif canImport(AppKit)
         let tavle = NSPasteboard.general
         tavle.clearContents()
         for (type, data) in typer { tavle.setData(data, forType: NSPasteboard.PasteboardType(type)) }
-        tavle.setString(tekst, forType: .string)
+        if let tekst { tavle.setString(tekst, forType: .string) }
         #endif
     }
 }
@@ -378,6 +391,42 @@ enum Gradientgrafikk {
         guard let mål = CGImageDestinationCreateWithData(data as CFMutableData, "public.png" as CFString, 1, nil) else { return nil }
         CGImageDestinationAddImage(mål, bilde, nil)
         return CGImageDestinationFinalize(mål) ? data as Data : nil
+    }
+
+    // MARK: Pages, Keynote, Numbers og Freeform
+
+    /// Figur med gradientfyll i Apples felles utklippsformat (`com.apple.apps.content-language.canvas-object-1.0`),
+    /// som iWork og Freeform selv legger på utklippstavlen. Stoppene i Display P3. Vinkelen regnes mot klokka fra
+    /// høyre (0° = mot høyre, 90° = opp), altså 90° minus CSS-vinkelen. Nil for former formatet ikke tar imot ennå.
+    static func iWorkFigur(_ g: Gradientkopi) -> Data? {
+        guard g.form == .lineær else { return nil }
+        let id = "com.apple.apps.content-language"
+        func objekt(_ type: String, _ felt: [String: Any]) -> [String: Any] {
+            felt.merging(["type_identifier": "\(id).\(type)", "version": "1.0"]) { a, _ in a }
+        }
+        let stopp = g.stopp.map { s -> [String: Any] in
+            let v = s.farge.gamutKartlagt(til: .displayP3).displayP3
+            let rgba = objekt("color.rgba", ["version": "1.1", "color_space": "p3", "red": v.r, "green": v.g, "blue": v.b,
+                                             "alpha": s.farge.alfa, "headroom": 1])
+            return objekt("fill.gradient.stop", ["fraction": s.posisjon, "inflection": 0.5,
+                                                 "color": objekt("color", ["primary_case": "rgba", "rgba": rgba])])
+        }
+        var vinkel = (90 - g.vinkel).truncatingRemainder(dividingBy: 360)
+        if vinkel < 0 { vinkel += 360 }
+        let flavor = objekt("fill.gradient.flavor", ["primary_case": "linear",
+                                                     "linear": objekt("fill.gradient.flavor.linear", ["angle": vinkel])])
+        let figur = objekt("shape", [
+            "identifier": UUID().uuidString,
+            "geometry": objekt("geometry", [
+                "angle": 0, "flip_horizontally": false, "width_valid": true, "height_valid": true,
+                "size": objekt("size", ["width": flate.width, "height": flate.height]),
+                "position": objekt("position", ["x": 0, "y": 0]),
+            ]),
+            "fill": objekt("fill", ["primary_case": "gradient",
+                                    "gradient": objekt("fill.gradient", ["opacity": 1, "stops": stopp, "flavor": flavor])]),
+            "stroke": "empty", "opacity": 1, "aspect_ratio_locked": false, "head": "none", "tail": "none", "comments": [Any](),
+        ])
+        return try? JSONSerialization.data(withJSONObject: [figur])
     }
 
     // MARK: SwiftUI
