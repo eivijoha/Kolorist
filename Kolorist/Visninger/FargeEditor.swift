@@ -14,7 +14,6 @@ struct FargeEditor: View {
     /// Harmoniens farger (Harmoni-modus), vist i fargeflaten øverst, og grunnfargens plass blant dem.
     @State private var harmonifarger: [Farge] = []
     @State private var harmoniGrunn: Int?
-    @State private var tonerMål = false
     @Environment(\.modelContext) private var kontekst
     @AppStorage("studioModus") private var modus: Modus = .farge
     @AppStorage("visOgsåProfil") private var visOgsåID = ICCProfil.sRGB.id
@@ -86,7 +85,17 @@ struct FargeEditor: View {
         @Bindable var arbeidsbenk = arbeidsbenk
         VStack(spacing: 0) {
             Group {
-                if modus == .harmoni, !harmonifarger.isEmpty {
+                if modus == .toner {
+                    // Toner: lysere og mørkere trinn i «Vis også»-rommet, med grunnfargen merket.
+                    HarmoniFlate(farger: tonevarianter(farge), grunnIndeks: arbeidsbenk.lyshetstrinn.antallLysere, profil: visOgsåProfil,
+                                 fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
+                                 romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
+                                 sirkel: .okLCH,
+                                 stablet: bred,
+                                 velg: { arbeidsbenk.aktivFarge = $0 },
+                                 lagre: { lagreEnkeltfarger([$0], i: kontekst) },
+                                 leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+                } else if modus == .harmoni, !harmonifarger.isEmpty {
                     // Harmoni: alle fargene i «Vis også»-rommet, med grunnfargen merket.
                     HarmoniFlate(farger: harmonifarger, grunnIndeks: harmoniGrunn, profil: visOgsåProfil,
                                  fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
@@ -314,50 +323,26 @@ extension FargeEditor {
         }
     }
 
+    /// Lysere og mørkere trinn rundt fargen, fra lysest til mørkest; grunnfargen står på plass `antallLysere`.
+    fileprivate func tonevarianter(_ farge: Farge) -> [Farge] {
+        arbeidsbenk.lyshetstrinn.toner(for: farge, gamut: arbeidsbenk.gamut).map(arbeidsbenk.begrens)
+    }
+
+    /// Kontrollene for tonene; selve tonene vises i feltene øverst, så hånden ikke skjuler dem.
     @ViewBuilder
     fileprivate func tonerModus(_ farge: Farge) -> some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         Section {
-            let varianter = arbeidsbenk.lyshetstrinn.toner(for: farge, gamut: arbeidsbenk.gamut).map(arbeidsbenk.begrens)
-            HStack(spacing: 4) {
-                ForEach(Array(varianter.enumerated()), id: \.offset) { i, variant in
-                    VStack(spacing: 2) {
-                        FargeRute(farge: variant, visTekst: false, hjørne: 6,
-                                  lagre: { lagreEnkeltfarger([PalettFarge(farge: $0, opphav: .toneskala)], i: kontekst) },
-                                  leggIPalett: { lagreNavn = ""; lagreFarger = [PalettFarge(farge: $0, opphav: .toneskala)] },
-                                  valgBoble: true)
-                            .frame(height: 44)
-                            .overlay {
-                                if i == arbeidsbenk.lyshetstrinn.antallLysere {
-                                    RoundedRectangle(cornerRadius: 6).strokeBorder(.primary, lineWidth: 2)
-                                }
-                            }
-                            .onTapGesture { arbeidsbenk.aktivFarge = variant }
-                        Text(variant.okLCH.l * 100, format: .number.precision(.fractionLength(0)))
-                            .font(.caption2.monospacedDigit())
-                            .foregroundStyle(Color.sekundærTekst)
-                    }
-                }
-            }
-            // Slipp en farge på raden for å gjøre den til grunnfargen (midten).
-            .tarImotFarger { farger in
-                guard let f = farger.first else { return false }
-                arbeidsbenk.aktivFarge = f.farge
-                return true
-            } isTargeted: { tonerMål = $0 }
-            .overlay {
-                if tonerMål { RoundedRectangle(cornerRadius: 8).strokeBorder(Color.accentColor, lineWidth: 2).padding(-3) }
-            }
             LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn, grunnlyshet: farge.okLCH.l)
             Button("Legg raden i palett", systemImage: "plus.square.on.square") {
                 lagreNavn = String(localized: "Lysere og mørkere \(farge.hex())")
-                lagreFarger = varianter.map { PalettFarge(farge: $0, opphav: .toneskala) }
+                lagreFarger = tonevarianter(farge).map { PalettFarge(farge: $0, opphav: .toneskala) }
             }
         } header: { Group {
             Text("Lysere og mørkere")
         }.foregroundStyle(Color.sekundærTekst) } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tallene under hver prøve er OKLCH-lyshet i prosent. Trykk på en tone for å gjøre den til aktiv farge, eller trykk og hold for å lagre den.")
+                Text("Tonene vises i feltene øverst, med grunnfargen merket. Trykk på en tone for å gjøre den til aktiv farge, eller trykk og hold for å lagre den.")
                 MetodeHenvisning(.oklab, .cssColor4)
             }
         }

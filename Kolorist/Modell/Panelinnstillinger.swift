@@ -13,18 +13,19 @@ final class Panelinnstillinger {
 
     /// Skjermene som har tilpassbare paneler, med panelene i standardrekkefølge.
     enum Skjerm: String, CaseIterable {
-        case studioFarge, kontrast
+        case studioFarge, kontrast, overgang
 
         var paneler: [Panel] {
             switch self {
             case .studioFarge: [.fargemodell, .verdier, .fargestyring, .lys]
             case .kontrast: [.wcag, .lrv]
+            case .overgang: [.overgangstoner, .lysereMørkere, .gradient]
             }
         }
     }
 
     enum Panel: String, CaseIterable, Identifiable {
-        case fargemodell, verdier, fargestyring, lys, wcag, lrv
+        case fargemodell, verdier, fargestyring, lys, wcag, lrv, overgangstoner, lysereMørkere, gradient
         var id: String { rawValue }
 
         var navn: String {
@@ -35,6 +36,9 @@ final class Panelinnstillinger {
             case .lys: String(localized: "Se i lys")
             case .wcag: String(localized: "Tekst og grafikk (WCAG 2.2)")
             case .lrv: String(localized: "Flater (LRV)")
+            case .overgangstoner: String(localized: "Overgang")
+            case .lysereMørkere: String(localized: "Lysere og mørkere toner")
+            case .gradient: String(localized: "Gradient")
             }
         }
     }

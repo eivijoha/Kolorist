@@ -30,6 +30,14 @@ struct OvergangVisning: View {
     /// Én farge fra overgangen som skal legges i en palett (trykk og hold).
     @State private var leggIPalett: [PalettFarge]?
     @Environment(\.modelContext) private var kontekst
+    @Environment(ProfilBibliotek.self) private var bibliotek
+    /// Samme «Vis som»-rom og hensikt som Studio, så feltene øverst viser verdiene der.
+    @AppStorage("visOgsåProfil") private var visOgsåID = ICCProfil.sRGB.id
+    @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
+    @State private var visMineFargerom = false
+
+    private var visOgsåProfil: ICCProfil { bibliotek.profil(id: visOgsåID) ?? .sRGB }
+    private var visOgsåBibliotek: Fargebibliotek? { bibliotek.fargebibliotek(id: visOgsåID) }
 
     /// «+» i øvre høyre hjørne av den trinnvise overgangen: lagre tonene som palett, med eller uten
     /// lysere og mørkere rader. (Hele gradienten lagres fra «+» på selve gradienten.)
@@ -84,7 +92,89 @@ struct OvergangVisning: View {
         }
     }
 
+    /// Feltene øverst, som i Studio: tonene i «Vis som»-rommet (venstre ende er nøyaktig «Fra», høyre nøyaktig
+    /// «Til»), med endepunktene og «Vis som» under. Fast øverst mens resten ruller.
+    private var overgangsflate: some View {
+        @Bindable var arbeidsbenk = arbeidsbenk
+        return VStack(spacing: 0) {
+            HarmoniFlate(farger: toner, grunnIndeks: nil, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
+                         romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
+                         velg: { arbeidsbenk.aktivFarge = $0 },
+                         lagre: { lagreEnkeltfarger([$0], i: kontekst) },
+                         leggIPalett: { leggIPalett = [$0] })
+                .frame(height: 140)
+                .overlay(alignment: .topTrailing) { lagremeny }
+            HStack(alignment: .center, spacing: 12) {
+                endepunkt(String(localized: "Fra"), start)
+                Spacer(minLength: 8)
+                VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom)
+                    .layoutPriority(1)
+                Spacer(minLength: 8)
+                endepunkt(String(localized: "Til"), slutt, trailing: true)
+            }
+            .padding(.horizontal, 16)
+            .frame(minHeight: 48)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.kortbakgrunn, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .padding(.horizontal, 16)
+        .padding(.top, 4)
+        .padding(.bottom, 8)
+        .background(Color.skjemabakgrunn)
+    }
+
+    /// Antall toner i overgangen (tonene vises i feltene øverst).
+    private var overgangspanel: some View {
+        PanelSeksjon(panel: .overgangstoner, tittel: String(localized: "Overgang i OKLab – \(antall) toner")) {
+            Stepper("Toner: \(antall)", value: $antall, in: 2...24)
+        } fot: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold for å lagre den.")
+                MetodeHenvisning(.oklab)
+            }
+        }
+    }
+
+    /// Lysere og mørkere varianter av hver tone (overgangsraden markert med ramme), over trinnkontrollene.
+    private var lysereMørkerePanel: some View {
+        @Bindable var arbeidsbenk = arbeidsbenk
+        return PanelSeksjon(panel: .lysereMørkere) {
+            if rader.count > 1 {
+                Grid(horizontalSpacing: 3, verticalSpacing: 3) {
+                    let midtrad = arbeidsbenk.lyshetstrinn.antallLysere
+                    ForEach(Array(rader.enumerated()), id: \.offset) { r, rad in
+                        GridRow {
+                            ForEach(Array(rad.enumerated()), id: \.offset) { _, farge in
+                                FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett, valgBoble: true)
+                                    .frame(minHeight: 36)
+                                    .overlay {
+                                        if r == midtrad {
+                                            RoundedRectangle(cornerRadius: 4).strokeBorder(.primary, lineWidth: 2)
+                                        }
+                                    }
+                                    .onTapGesture { arbeidsbenk.aktivFarge = farge }
+                            }
+                        }
+                    }
+                }
+                .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+            }
+            // Forklaringen regnes fra midterste tone i overgangen.
+            LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn,
+                                   grunnlyshet: toner.isEmpty ? 0.6 : toner[toner.count / 2].okLCH.l)
+        } fot: {
+            VStack(alignment: .leading, spacing: 6) {
+                if rader.count > 1 {
+                    Text("Raden med ramme er selve overgangen. Radene over er lysere, radene under mørkere.")
+                }
+                MetodeHenvisning(.oklab, .cssColor4)
+            }
+        }
+    }
+
     var body: some View {
+        VStack(spacing: 0) {
+        overgangsflate
         Form {
             Seksjon("Endepunkter") {
                 FargeValgRad(tittel: String(localized: "Fra"), farge: Binding(get: { start }, set: { start = $0 }))
@@ -95,79 +185,30 @@ struct OvergangVisning: View {
                     slutt = a
                 }
             }
-            Seksjon("Overgang") {
-                Stepper("Toner: \(antall)", value: $antall, in: 2...24)
-            }
-            Seksjon("Lysere og mørkere rader") {
-                @Bindable var arbeidsbenk = arbeidsbenk
-                // Forklaringen regnes fra midterste tone i overgangen.
-                LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn,
-                                       grunnlyshet: toner.isEmpty ? 0.6 : toner[toner.count / 2].okLCH.l)
-            }
-            // Selve overgangen: venstre ende er nøyaktig «Fra», høyre ende nøyaktig «Til».
-            Section {
-                HStack(spacing: 3) {
-                    ForEach(Array(toner.enumerated()), id: \.offset) { _, farge in
-                        FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett, valgBoble: true)
-                            .frame(height: 56)
-                            .onTapGesture { arbeidsbenk.aktivFarge = farge }
+            // Sammenleggbare paneler i brukerens rekkefølge. I hvert panel ligger forhåndsvisningen over kontrollene,
+            // så hånden som bruker kontrollen, ikke skjuler resultatet (iPhone og iPad).
+            ForEach(Panelinnstillinger.delt.paneler(for: .overgang)) { panel in
+                switch panel {
+                case .overgangstoner: overgangspanel
+                case .lysereMørkere: lysereMørkerePanel
+                case .gradient:
+                    CSSGradientSeksjon(start: start, slutt: slutt, toner: toner,
+                                       oppsett: Gradientoppsett(fra: start, til: slutt, antall: antall, trinn: arbeidsbenk.lyshetstrinn),
+                                       lagret: gradientLagret) {
+                        gradientnavn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
+                        navngirGradient = true
                     }
-                }
-                .overlay(alignment: .topTrailing) { lagremeny }
-                HStack(alignment: .top) {
-                    endepunkt(String(localized: "Fra"), start)
-                    Spacer()
-                    endepunkt(String(localized: "Til"), slutt, trailing: true)
-                }
-            } header: { Group {
-                Text("Overgang i OKLab – \(antall) toner")
-            }.foregroundStyle(Color.sekundærTekst) } footer: {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Trykk på en farge for å gjøre den aktiv, eller trykk og hold for å lagre den.")
-                    MetodeHenvisning(.oklab)
+                default: EmptyView()
                 }
             }
-
-            // Lysere og mørkere varianter av hver tone; overgangsraden er markert med ramme.
-            if rader.count > 1 {
-                Section {
-                    Grid(horizontalSpacing: 3, verticalSpacing: 3) {
-                        let midtrad = arbeidsbenk.lyshetstrinn.antallLysere
-                        ForEach(Array(rader.enumerated()), id: \.offset) { r, rad in
-                            GridRow {
-                                ForEach(Array(rad.enumerated()), id: \.offset) { _, farge in
-                                    FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett, valgBoble: true)
-                                        .frame(minHeight: 36)
-                                        .overlay {
-                                            if r == midtrad {
-                                                RoundedRectangle(cornerRadius: 4).strokeBorder(.primary, lineWidth: 2)
-                                            }
-                                        }
-                                        .onTapGesture { arbeidsbenk.aktivFarge = farge }
-                                }
-                            }
-                        }
-                    }
-                    .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
-                } header: { Group {
-                    Text("Med lysere og mørkere rader")
-                }.foregroundStyle(Color.sekundærTekst) } footer: {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Raden med ramme er selve overgangen. Radene over er lysere, radene under mørkere.")
-                        MetodeHenvisning(.oklab, .cssColor4)
-                    }
-                }
-            }
-
-            CSSGradientSeksjon(start: start, slutt: slutt, toner: toner,
-                               oppsett: Gradientoppsett(fra: start, til: slutt, antall: antall, trinn: arbeidsbenk.lyshetstrinn),
-                               lagret: gradientLagret) {
-                gradientnavn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
-                navngirGradient = true
-            }
+            TilpassKnapp(skjerm: .overgang)
         }
         .formStyle(.grouped)
+        }
+        .background(Color.skjemabakgrunn)
         .navigationTitle("Overgang")
+        // Arket presenteres herfra, ikke fra menyen (iOS viser ikke ark fra et menyvalg som lukkes).
+        .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }
         .alert("Lagre gradient", isPresented: $navngirGradient) {
             TextField("Navn", text: $gradientnavn)
             Button("Avbryt", role: .cancel) {}
@@ -218,7 +259,7 @@ struct CSSGradientSeksjon: View {
     }
 
     var body: some View {
-        Section {
+        PanelSeksjon(panel: .gradient) {
             forhåndsvisning
                 .frame(height: 96)
                 .overlay(alignment: .topTrailing) {
@@ -269,9 +310,7 @@ struct CSSGradientSeksjon: View {
                 }
             }
             .buttonStyle(.borderless)
-        } header: { Group {
-            Text("CSS-gradient")
-        }.foregroundStyle(Color.sekundærTekst) } footer: {
+        } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Moderne nettlesere bruker OKLab og viser nøyaktig samme overgang som her. Eldre nettlesere får tette sRGB-stopp som etterligner den.")
                 MetodeHenvisning(.cssColor4, .oklab)

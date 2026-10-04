@@ -1141,16 +1141,6 @@
         }
       }
     },
-    "CSS-gradient": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CSS gradient"
-          }
-        }
-      }
-    },
     "Dagslys (LRV)": {
       "localizations": {
         "en": {
@@ -2203,6 +2193,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Severity"
+          }
+        }
+      }
+    },
+    "Gradient": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gradient"
           }
         }
       }
@@ -4033,12 +4033,12 @@
         }
       }
     },
-    "Lysere og mørkere rader": {
+    "Lysere og mørkere toner": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lighter and darker rows"
+            "value": "Lighter and darker tones"
           }
         }
       }
@@ -4271,16 +4271,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "With grey card and camera profile"
-          }
-        }
-      }
-    },
-    "Med lysere og mørkere rader": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With lighter and darker rows"
           }
         }
       }
@@ -5921,16 +5911,6 @@
         }
       }
     },
-    "Tallene under hver prøve er OKLCH-lyshet i prosent. Trykk på en tone for å gjøre den til aktiv farge, eller trykk og hold for å lagre den.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The numbers under each swatch are OKLCH lightness in percent. Tap a tone to make it the active colour, or touch and hold to save it."
-          }
-        }
-      }
-    },
     "Tekst og grafikk (WCAG 2.2)": {
       "localizations": {
         "en": {
@@ -6091,6 +6071,26 @@
         }
       }
     },
+    "Tonene vises i feltene øverst, med grunnfargen merket. Trykk på en tone for å gjøre den til aktiv farge, eller trykk og hold for å lagre den.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The tones are shown in the swatches at the top, with the base colour marked. Tap a tone to make it the active colour, or touch and hold to save it."
+          }
+        }
+      }
+    },
+    "Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold for å lagre den.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The tones are shown in the swatches at the top. Tap a tone to make it active, or touch and hold to save it."
+          }
+        }
+      }
+    },
     "Toner": {
       "localizations": {
         "en": {
@@ -6159,16 +6159,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Touch and hold the image to compare with normal vision."
-          }
-        }
-      }
-    },
-    "Trykk på en farge for å gjøre den aktiv, eller trykk og hold for å lagre den.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap a colour to make it active, or touch and hold to save it."
           }
         }
       }
