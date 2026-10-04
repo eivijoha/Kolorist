@@ -126,7 +126,8 @@ final class Lysbibliotek {
         valgtLysmiljø = UserDefaults.standard.string(forKey: Nøkkel.valgt).flatMap(UUID.init(uuidString:))
         guard !lager.skjermbildemodus else {
             // Skjermbilder: noen typiske lys vist samtidig i «Se i lys».
-            viste = [Self.stueOmKvelden.id, Self.varmhvitLED.id, Self.lysrør.id, Self.standarder[2].id]
+            viste = [Self.stueOmKvelden.id, Self.varmhvitLED.id, Self.lysrør.id, Self.standarder[2].id,
+                     Self.museumLysfølsomme.id, Self.innebygde[3].id]
             return
         }
         last()

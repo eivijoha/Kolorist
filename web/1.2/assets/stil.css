@@ -964,3 +964,327 @@ thead th {
   cursor: default;
   opacity: 0.85;
 }
+
+/* ---------- Startside: hovedpoeng og fagfelt ---------- */
+
+.poeng {
+  display: grid;
+  gap: 1.25rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.poeng > li {
+  margin: 0;
+  padding-top: 0.85rem;
+  border-top: 4px solid var(--poengfarge, var(--kant));
+}
+
+.poeng h3 {
+  margin: 0 0 0.35rem;
+}
+
+.poeng p {
+  margin: 0;
+  color: var(--tekst-dempet);
+}
+
+.poeng > li:nth-child(4n + 1) { --poengfarge: #2b7fd0; }
+.poeng > li:nth-child(4n + 2) { --poengfarge: #3a9f62; }
+.poeng > li:nth-child(4n + 3) { --poengfarge: #ea8a1f; }
+.poeng > li:nth-child(4n + 4) { --poengfarge: #6a4fd8; }
+
+@supports (color: oklch(50% 0.1 280)) {
+  .poeng > li:nth-child(4n + 1) { --poengfarge: oklch(58% 0.15 252); }
+  .poeng > li:nth-child(4n + 2) { --poengfarge: oklch(64% 0.14 150); }
+  .poeng > li:nth-child(4n + 3) { --poengfarge: oklch(72% 0.16 58); }
+  .poeng > li:nth-child(4n + 4) { --poengfarge: oklch(52% 0.2 285); }
+}
+
+.dorer {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  margin-top: 1rem;
+}
+
+/* Hele kortet er klikkbart via lenken i overskriften. */
+.dor {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6.5rem;
+  gap: 1.25rem;
+  align-items: center;
+  background: var(--flate);
+  border: 1px solid var(--kant);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: border-color 0.15s ease;
+}
+
+.dor:hover {
+  border-color: var(--lenke);
+}
+
+.dor h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.45rem;
+}
+
+.dor h3 a {
+  color: var(--tekst);
+  text-decoration: none;
+}
+
+.dor h3 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+}
+
+.dor p {
+  margin: 0 0 0.6rem;
+  color: var(--tekst-dempet);
+}
+
+.dor .videre {
+  margin: 0;
+  color: var(--lenke);
+  font-weight: 600;
+}
+
+.dor img {
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: var(--skygge);
+}
+
+.tillit p:first-child {
+  font-size: 1.05rem;
+}
+
+/* ---------- Undersider ---------- */
+
+.sidetopp {
+  padding: 0.5rem 0 0.5rem;
+}
+
+.sidetopp h1 {
+  margin-bottom: 0.5rem;
+}
+
+/* Fagsidene: nummererte steg, med skjermbilde ved siden av på brede skjermer */
+.fagsteg-liste {
+  counter-reset: steg;
+}
+
+.fagsteg {
+  counter-increment: steg;
+  display: grid;
+  gap: 1rem 3rem;
+  margin-top: 2.25rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--kant);
+}
+
+.fagsteg h2 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.fagsteg h2::before {
+  content: counter(steg);
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--merke-bg);
+  color: var(--merke-tekst);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.fagsteg ul {
+  max-width: var(--tekstbredde);
+}
+
+.fagsteg figure {
+  max-width: 13rem;
+}
+
+.videre-boks h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.videre-boks .handlinger {
+  margin-bottom: 0;
+}
+
+/* Alle funksjoner: innholdsliste og tematiske grupper */
+.innholdsliste ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.innholdsliste li {
+  margin: 0;
+}
+
+.innholdsliste a {
+  display: inline-block;
+  min-height: 44px;
+  padding: 0.4rem 0.85rem;
+  line-height: 1.75;
+  border: 1px solid var(--kant);
+  border-radius: 999px;
+  background: var(--flate);
+  color: var(--tekst);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.innholdsliste a:hover {
+  border-color: var(--lenke);
+  color: var(--lenke);
+}
+
+.funksjonsgruppe {
+  margin-top: 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--kant);
+  scroll-margin-top: 1rem;
+}
+
+.funksjonsgruppe > h2 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.funksjonsgruppe > h2::before {
+  content: "";
+  flex: none;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 4px;
+  background: var(--gruppefarge, var(--kant));
+}
+
+.funksjonsgruppe .nytt {
+  font-family: var(--font);
+}
+
+.underpunkter {
+  display: grid;
+  gap: 0.25rem 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}
+
+.underpunkter h3 {
+  margin-top: 0.75rem;
+}
+
+.underpunkter p,
+.underpunkter ul {
+  font-size: 0.98rem;
+}
+
+.funksjonsgruppe:nth-of-type(8n + 1) { --gruppefarge: #d8434b; }
+.funksjonsgruppe:nth-of-type(8n + 2) { --gruppefarge: #ea8a1f; }
+.funksjonsgruppe:nth-of-type(8n + 3) { --gruppefarge: #d5b312; }
+.funksjonsgruppe:nth-of-type(8n + 4) { --gruppefarge: #3a9f62; }
+.funksjonsgruppe:nth-of-type(8n + 5) { --gruppefarge: #1f9bb0; }
+.funksjonsgruppe:nth-of-type(8n + 6) { --gruppefarge: #2b7fd0; }
+.funksjonsgruppe:nth-of-type(8n + 7) { --gruppefarge: #6a4fd8; }
+.funksjonsgruppe:nth-of-type(8n + 8) { --gruppefarge: #b9479f; }
+
+@supports (color: oklch(50% 0.1 280)) {
+  .funksjonsgruppe:nth-of-type(8n + 1) { --gruppefarge: oklch(62% 0.19 22); }
+  .funksjonsgruppe:nth-of-type(8n + 2) { --gruppefarge: oklch(72% 0.16 58); }
+  .funksjonsgruppe:nth-of-type(8n + 3) { --gruppefarge: oklch(80% 0.16 95); }
+  .funksjonsgruppe:nth-of-type(8n + 4) { --gruppefarge: oklch(64% 0.14 150); }
+  .funksjonsgruppe:nth-of-type(8n + 5) { --gruppefarge: oklch(64% 0.11 210); }
+  .funksjonsgruppe:nth-of-type(8n + 6) { --gruppefarge: oklch(58% 0.15 252); }
+  .funksjonsgruppe:nth-of-type(8n + 7) { --gruppefarge: oklch(52% 0.2 285); }
+  .funksjonsgruppe:nth-of-type(8n + 8) { --gruppefarge: oklch(56% 0.18 335); }
+}
+
+/* Plattformer: samme visning på iPhone, iPad og Mac, i lik høyde */
+.sammenligning {
+  margin-top: 1.75rem;
+}
+
+.sammenligning h3 {
+  margin: 0 0 0.6rem;
+}
+
+.sammenligning-bilder {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 0.462fr 0.75fr;
+  grid-template-areas: "iphone ipad" "mac mac";
+  align-items: start;
+}
+
+.sammenligning-bilder .iphone { grid-area: iphone; }
+.sammenligning-bilder .ipad { grid-area: ipad; }
+.sammenligning-bilder .mac { grid-area: mac; }
+
+.sammenligning-bilder .iphone img { border-radius: 18px; }
+.sammenligning-bilder .ipad img { border-radius: 14px; }
+
+.plattformtabell td {
+  text-align: center;
+}
+
+.plattformtabell th[scope="col"]:not(:first-child) {
+  text-align: center;
+}
+
+.plattformtabell td span[aria-hidden] {
+  font-weight: 700;
+}
+
+@media (min-width: 40rem) {
+  .dor {
+    grid-template-columns: minmax(0, 1fr) 8rem;
+  }
+}
+
+@media (min-width: 60rem) {
+  .fagsteg.med-bilde {
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    align-items: start;
+  }
+
+  .skjermbilder.tre {
+    grid-template-columns: repeat(3, minmax(0, 14rem));
+  }
+
+  .sammenligning-bilder {
+    grid-template-columns: 0.462fr 0.75fr 1.6fr;
+    grid-template-areas: "iphone ipad mac";
+  }
+}
+
+.funksjonsgruppe > p,
+.funksjonsgruppe > ul {
+  max-width: var(--tekstbredde);
+}
+
+.plattformtabell tbody th {
+  font-weight: 500;
+}

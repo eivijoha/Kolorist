@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kolorist – colour palettes for designers</title>
-  <meta name="description" content="Kolorist is a colour tool for designers on iPhone, iPad and Mac: OKLCH, OKLab, CIELab, CMYK and ICC profiles, perceptually even gradients, WCAG contrast, camera colour picking and export to Adobe and Figma.">
+  <title>Kolorist – colour for design and architecture</title>
+  <meta name="description" content="Kolorist is a colour tool for design and architecture on iPhone, iPad and Mac: colours in perceptually equal steps, contrast and colour vision checks, and colours seen in the light where they will be used.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Kolorist">
-  <meta property="og:title" content="Kolorist – colour palettes for designers">
-  <meta property="og:description" content="Kolorist is a colour tool for designers on iPhone, iPad and Mac: OKLCH, OKLab, CIELab, CMYK and ICC profiles, perceptually even gradients, WCAG contrast, camera colour picking and export to Adobe and Figma.">
+  <meta property="og:title" content="Kolorist – colour for design and architecture">
+  <meta property="og:description" content="Kolorist is a colour tool for design and architecture on iPhone, iPad and Mac: colours in perceptually equal steps, contrast and colour vision checks, and colours seen in the light where they will be used.">
   <meta property="og:url" content="https://kolorist.no/en/">
   <meta property="og:locale" content="en_US">
   <meta name="color-scheme" content="light dark">
@@ -16,7 +16,7 @@
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/stil.css?v=4">
+  <link rel="stylesheet" href="../assets/stil.css?v=5">
   <link rel="canonical" href="https://kolorist.no/en/">
   <link rel="alternate" hreflang="nb" href="https://kolorist.no/">
   <link rel="alternate" hreflang="en" href="https://kolorist.no/en/">
@@ -34,10 +34,10 @@
       </a>
       <nav class="hovednav" aria-label="Main menu">
         <ul>
-          <li><a href="index.html" aria-current="page">About</a></li>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+          <li><a href="platforms.html">Platforms</a></li>
           <li><a href="support.html">Support</a></li>
-          <li><a href="privacy.html">Privacy</a></li>
-          <li><a href="terms.html">Terms</a></li>
         </ul>
       </nav>
       <nav class="sprakvalg" aria-label="Language">
@@ -52,8 +52,8 @@
       <div>
         <img class="helt-ikon" src="../assets/ikon.svg" alt="" width="88" height="88">
         <h1 id="tittel">Kolorist</h1>
-        <p class="ingress">Build colour palettes across colour spaces – with perceptually even gradients, contrast checking, ICC profiles and export to the tools you already use.</p>
-        <p class="nyhet"><span class="nytt">New in 1.2</span> <a href="#lys">See colours in the light where they will be used – and measure and compensate for the light with grey cards and reference cards</a></p>
+        <p class="ingress">A colour tool for design and architecture – on iPhone, iPad and Mac.</p>
+        <p class="nyhet"><span class="nytt">New in 1.2</span> <a href="light.html">See colours in the light where they will be used – and measure the light with a grey card</a></p>
 
         <div class="handlinger">
           <a class="knapp" href="https://apps.apple.com/app/kolorist-fargepaletter/id6818636272">
@@ -80,274 +80,57 @@
       </figure>
     </section>
 
-    <section class="seksjon" aria-labelledby="funksjoner">
-      <h2 id="funksjoner">Features</h2>
-      <p class="dempet">What’s new in version 1.2 is marked<span class="nytt">New in 1.2</span></p>
-      <p class="lesetekst">Kolorist is designed for iPhone first. On iPad and Mac you get more room – in landscape on iPad and in a wide Mac window the colour swatches sit beside the tools <span class="nytt">New in 1.2</span> – and on the Mac an eyedropper that picks colours from anywhere on screen. On Mac and large iPads your palettes are at hand while you work, and you move colours where you need them with drag and drop. Colours you pick from the camera and photos are kept – clearly marked as not saved – until you decide.</p>
-
-      <ul class="kort-rutenett">
+    <section class="seksjon" aria-labelledby="kort-fortalt">
+      <h2 id="kort-fortalt">In short</h2>
+      <ul class="poeng">
         <li>
-          <article class="kort">
-            <h3>Every colour space</h3>
-            <p>Edit colours in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK – with Display P3 as the wide gamut.</p>
-            <ul>
-              <li>Display P3 side by side with sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK or any installed ICC profile</li>
-              <li>Enter CMYK or RGB directly in a chosen ICC profile</li>
-              <li>Save a colour in its colour model or in the profile – exports follow the format</li>
-              <li>Munsell in the steps of the Munsell book – hue 2.5, value 1 and chroma 2 – with Munsell notation <span class="nytt">New in 1.2</span></li>
-              <li>Warnings when a colour is out of gamut</li>
-              <li>Optionally limit colours to a chosen profile</li>
-              <li>Clean CMYK values: grey components move to black (UCR/GCR), with as few inks as possible</li>
-            </ul>
-          </article>
+          <h3>Colours as the eye sees them</h3>
+          <p>Palettes, tones and gradients in perceptually equal steps – in OKLCH, Munsell and every colour space and ICC profile.</p>
         </li>
         <li>
-          <article class="kort">
-            <h3>ICC profiles and colour libraries</h3>
-            <p>Import your own ICC profiles (.icc, .icm) and colour libraries (.ase, .aco, .acb). They live in the app’s iCloud Drive folder and follow you to your other devices.</p>
-            <ul>
-              <li>Convert between profiles with a chosen rendering intent</li>
-              <li>Investigate colour difference with ΔE2000</li>
-              <li>Colour charts with named tones: work within the chart, with the tone names shown</li>
-              <li>Import profiles and colour charts together, and delete them again in the app</li>
-            </ul>
-          </article>
+          <h3>Checks before problems arise</h3>
+          <p>Contrast for text and surfaces to WCAG and LRV, and colours as they appear with colour vision deficiencies.</p>
         </li>
         <li>
-          <article class="kort">
-            <h3>Gradients</h3>
-            <p>Create transitions between two colours in equal perceptual steps in OKLab, with lighter and darker rows.</p>
-            <ul>
-              <li>Export as a CSS gradient in <code>oklab</code> with an sRGB fallback</li>
-              <li>Linear, radial or conic</li>
-              <li>Save whole gradients and pick up where you left off</li>
-              <li>Add gradients to palettes</li>
-              <li>Copy the gradient straight into design, layout and presentation apps</li>
-              <li>The tones are shown in the swatches with values in the chosen colour model and colour space <span class="nytt">New in 1.2</span></li>
-              <li>Drag the base tones on the lightness scale to make the whole gradient lighter or darker <span class="nytt">New in 1.2</span></li>
-            </ul>
-          </article>
+          <h3>Light in the equation <span class="nytt">New in 1.2</span></h3>
+          <p>Colours seen in the light where they will be used, and colours picked as they really are – with a grey card as the yardstick.</p>
         </li>
         <li>
-          <article class="kort">
-            <h3>Tones and harmonies</h3>
-            <p>Lighter and darker steps, tone scales from 50 to 950, and colour harmonies:</p>
-            <ul>
-              <li>Complementary, split complementary, analogous, triad, square, double complementary and even distribution with a chosen count</li>
-              <li>Analogous with a complementary accent – a calm group and one colour that stands out <span class="nytt">New in 1.2</span></li>
-              <li>Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension <span class="nytt">New in 1.2</span></li>
-              <li>On an OKLCH, CIE LCH, HSL or RYB colour wheel</li>
-              <li>The Munsell colour wheel with real Munsell colours, and Hering’s opponent-colour wheel</li>
-              <li>Saturation and lightness for the whole harmony, shown right in the colour wheel</li>
-              <li>See the whole harmony in the chosen colour space or colour library, with the base colour clearly marked</li>
-              <li>The colour-wheel values for each colour in the harmony – Munsell notation, OKLCH, LCH, HSL, RYB or Hering’s unique hues <span class="nytt">New in 1.2</span></li>
-              <li>Lighter and darker tones in equal or easing steps, shown in the swatches with values in the chosen colour model <span class="nytt">New in 1.2</span></li>
-              <li>Drag the base colour on the lightness scale to make the whole row lighter or darker <span class="nytt">New in 1.2</span></li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Pick colours</h3>
-            <ul>
-              <li>Camera with zoom, macro focus and torch – and a light panel on the Mac screen as a light source</li>
-              <li>Photos and images: zoom and dominant colours</li>
-              <li>Screen eyedropper on Mac</li>
-              <li>Colours as they really are: compensate for the light – also with a grey card or reference card in photos <span class="nytt">New in 1.2</span> <a href="#lys">Read more</a></li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Apple Intelligence on device</h3>
-            <ul>
-              <li>From value words to a palette, grounded in a knowledge base of more than a hundred colour concepts – nature, materials, styles and values</li>
-              <li>Describe a colour – “deep ocean blue”, “dusty pink” – and see it in Studio</li>
-              <li>Palettes are built on harmony principles with legible contrast</li>
-              <li>Adjust with free text – “warmer”, “more exclusive”</li>
-              <li>Name colours and get a critique of your palette</li>
-            </ul>
-            <p>Everything runs on device. Nothing leaves it.</p>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Accessibility</h3>
-            <ul>
-              <li>WCAG 2.2 contrast: AA and AAA, large text and graphics</li>
-              <li>Auto-fix that adjusts the colour until it passes</li>
-              <li>Contrast matrix and critique of the whole palette</li>
-              <li>The critique shows what it is based on</li>
-              <li>Light reflectance value (LRV) and contrast between surfaces for buildings and interiors – BS 8300 and NS 11001</li>
-              <li>LRV and luminance contrast in the chosen light – including fluorescent and LED <span class="nytt">New in 1.2</span></li>
-              <li>Palette critique in different light: colours that change character, and colour pairs that become hard to tell apart <span class="nytt">New in 1.2</span></li>
-              <li>The difference between two colours with ΔE2000</li>
-              <li>See the palette with protan, deutan and tritan deficiencies and achromatopsia, at any severity – and which colours become hard to tell apart</li>
-              <li>Colour vision deficiencies listed by how common they are, with estimated prevalence <span class="nytt">New in 1.2</span></li>
-              <li>Camera with a colour vision filter: see your surroundings as they may appear with each deficiency</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Palettes and iCloud</h3>
-            <p>Collect colours in palettes, save single colours and whole gradients. Name them, move colours between palettes, and critique and check contrast for whole palettes.</p>
-            <ul>
-              <li>Gradients in palettes</li>
-              <li>See whole palettes in a viewing condition <span class="nytt">New in 1.2</span></li>
-              <li>Print palettes on A4 – CIELab swatches with names and values</li>
-              <li>Undo what you do</li>
-              <li>Tailor the view to your work</li>
-            </ul>
-            <p>Everything syncs through your own private iCloud.</p>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Export</h3>
-            <p>Adobe ASE, Photoshop ACO, Figma variables (DTCG JSON), Tokens Studio, SVG swatches, CSS, Design Tokens, GIMP GPL, SwiftUI and hex list.</p>
-            <p><strong>Gradients:</strong> add gradients to palettes, and copy them as a gradient to Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS or SwiftUI.</p>
-            <p><strong>Print:</strong> palettes as A4 PDFs with swatches in CIELab (D50), names, the values in the colour model each colour was made in, the chosen colour space or colour library and the CIELab value.</p>
-            <p>Colours are exported in the format they were saved in – for example CMYK to Adobe.</p>
-            <p><strong>Copy to …</strong> Figma, Illustrator, InDesign, Photoshop, Sketch and Affinity, Pages, Keynote and Numbers, CSS or SwiftUI – in the format each app accepts. Works for single colours and whole palettes.</p>
-            <p>On Mac, drag swatches straight into other apps – and drag colours into Kolorist from the colour panel and colour wells in other apps</p>
-            <p><strong>Colour libraries:</strong> import your own colour charts in ASE, ACO or ACB (Adobe Color Book) with named tones, and show the nearest tones within them: colours, tones and harmonies thus stay on the set’s reference colours.</p>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Siri and Shortcuts</h3>
-            <ul>
-              <li>Create a palette from value words</li>
-              <li>Create a gradient</li>
-              <li>Convert a colour</li>
-              <li>Check contrast</li>
-              <li>Describe a colour</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Open about methods</h3>
-            <p>Every part of the app shows the methods it builds on – OKLab, CSS Color 4, CIEDE2000, CAM16, WCAG, colour vision simulation, ICC – with source and explanation. What was developed for Kolorist is marked as such.</p>
-            <p><a href="methods.html">Read about the methods and sources</a></p>
-          </article>
+          <h3>One app – one or more devices</h3>
+          <p>The same app on iPhone, iPad and Mac. Use the one you have, or several, with everything synced through iCloud. <a href="platforms.html">See the differences</a></p>
         </li>
       </ul>
     </section>
 
-
-    <section class="seksjon" aria-labelledby="lys">
-      <p class="overtittel">Advanced<span class="nytt">New in 1.2</span></p>
-      <h2 id="lys">Light and colour measurement</h2>
-      <p class="lesetekst">A colour is never just a colour – it is a surface in a light. Kolorist brings the light into the equation: see colours and whole palettes as they will appear where they are used, and pick colours from your surroundings as they really are – not as the evening light or a fluorescent tube makes them look. A grey card or a reference card turns your phone into a simple measuring tool for colour and light.</p>
-
-      <ul class="kort-rutenett">
-        <li>
-          <article class="kort">
-            <h3>See colours in light</h3>
-            <p>Save viewing conditions – the living room in the evening, the office, the shop – or use standard viewing conditions for appraising prints and images (ISO 3664), workplaces and schools (EN 12464-1) and museums (CIE 157).</p>
-            <ul>
-              <li>As the eye sees it: the eye adapts to the light, and dim light makes colours less colourful</li>
-              <li>As a photo: the full colour cast of the light</li>
-              <li>Whole palettes: colours that change character, and colour pairs that become hard to tell apart</li>
-              <li>LRV and luminance contrast in the chosen light, for buildings and interiors</li>
-              <li>Fluorescent and LED lights are calculated from their spectra</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Colours as they really are</h3>
-            <p>Compensate the colours you pick for the light they were photographed in, so you get the colour the surface has in daylight.</p>
-            <ul>
-              <li>From the light the camera measures, or a chosen light source</li>
-              <li>With a grey card or reference card for the right colour and lightness</li>
-              <li>In photos too: a card in the image is enough</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>The grey card as a yardstick</h3>
-            <p>An inexpensive grey card (18 %) or a white card gives both the colour and the strength of the light. The lightness comes out right, and you get colour temperature and illuminance (lux).</p>
-            <ul>
-              <li>Custom card: use a grey or white surface with a known LRV, such as a painted wall</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Reference cards for the highest accuracy</h3>
-            <p>With a 24-patch reference card in the image, Kolorist finds the card by itself, calibrates the camera against the reference values and shows how accurate the result is.</p>
-            <ul>
-              <li>Calibrate the camera once – after that a grey card is enough, even in different light</li>
-              <li>Estimated colour rendering and the probable type of light</li>
-              <li>Accuracy given as mean and maximum ΔE00, cross-validated</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Measure and document the light</h3>
-            <p>Colour temperature, illuminance and estimated colour rendering – useful when lighting conditions need documenting, or comparing with recommended levels, such as 500 lx at a workplace.</p>
-            <ul>
-              <li>Save measured light as a viewing condition, and see other colours in it</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Your own reference values</h3>
-            <p>Reference values for cards are not included with the app; you import the file that belongs to your card.</p>
-            <ul>
-              <li>CGATS, CxF3, CSV/TSV and tables of Lab, XYZ or spectral values</li>
-              <li>Colour libraries (ASE, ACO, ACB)</li>
-              <li>With spectra, the reference values are calculated in any light</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>On Mac</h3>
-            <p>See colours and palettes in light, with the viewing conditions you measured on iPhone. With iPhone as the camera (Continuity), colours can be compensated with a grey card or reference card.</p>
-          </article>
-        </li>
-      </ul>
-
-      <div class="tospalter">
-        <div class="boks">
-          <h3>What do I need?</h3>
-          <ul>
-            <li>Nothing extra to see colours and palettes in light.</li>
-            <li>A grey or white card for compensation and light measurement.</li>
-            <li>A 24-patch reference card and the file with its reference values for the highest accuracy.</li>
-            <li>Light measurement requires iPhone or iPad.</li>
-          </ul>
-        </div>
-        <div class="boks">
-          <h3>How accurate is it?</h3>
-          <p>A phone camera is not a measuring instrument. With a reference card the error is typically around 2–3 ΔE00 – the app shows the figure for each calibration. Illuminance and colour rendering are estimates, and colours without a measured spectrum get an estimated one.</p>
-          <p><a href="methods.html#cam16">Read about the methods</a></p>
-        </div>
+    <section class="seksjon" aria-labelledby="fagfelt">
+      <h2 id="fagfelt">Two fields</h2>
+      <div class="dorer">
+        <article class="dor">
+          <div>
+            <h3><a href="design.html">Design</a></h3>
+            <p>Palettes, tone scales and gradients that hold up on screen and in print – delivered straight into your design tools.</p>
+            <p class="videre" aria-hidden="true">Kolorist for design →</p>
+          </div>
+          <img src="../assets/en/skjermbilde-harmoni.png?v=5" alt="" width="1284" height="2778" loading="lazy">
+        </article>
+        <article class="dor">
+          <div>
+            <h3><a href="architecture.html">Architecture</a></h3>
+            <p>Colours taken from the room, specified in Munsell and checked for LRV and light – for universal design.</p>
+            <p class="videre" aria-hidden="true">Kolorist for architecture and interiors →</p>
+          </div>
+          <img src="../assets/en/skjermbilde-lys.png?v=6" alt="" width="1284" height="2778" loading="lazy">
+        </article>
       </div>
     </section>
 
     <section class="seksjon" aria-labelledby="skjermbilder">
       <h2 id="skjermbilder">Screenshots</h2>
-      <!-- Engelske skjermbilder ligger i assets/en/ (samme som Dokumentasjon/Skjermbilder/en/). -->
-      <h3 class="skjermbilder-tittel">iPhone</h3>
-      <ul class="skjermbilder" tabindex="0" aria-label="Screenshots – scroll sideways">
+      <ul class="skjermbilder tre" tabindex="0" aria-label="Screenshots – scroll sideways">
         <li>
           <figure class="skjermbilde">
             <img src="../assets/en/skjermbilde-studio.png?v=5" alt="Studio showing a colour in OKLCH and Display P3 side by side with CMYK" width="1284" height="2778" loading="lazy">
             <figcaption>Studio</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-harmoni.png?v=5" alt="Colour harmony with swatches above the colour wheel" width="1284" height="2778" loading="lazy">
-            <figcaption>Harmony</figcaption>
           </figure>
         </li>
         <li>
@@ -362,67 +145,14 @@
             <figcaption>Contrast</figcaption>
           </figure>
         </li>
-        <li>
-          <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-fargesyn.png?v=5" alt="A palette as it appears with different colour vision deficiencies" width="1284" height="2778" loading="lazy">
-            <figcaption>Colour vision</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-lys.png?v=5" alt="See in light: the colour on screen beside the colour as it appears in a viewing condition" width="1284" height="2778" loading="lazy">
-            <figcaption>See in light</figcaption>
-          </figure>
-        </li>
       </ul>
-      <h3 class="skjermbilder-tittel">Mac</h3>
-      <div class="karusell" data-karusell data-pause="Pause" data-spill="Play" data-bilde="Show image" aria-roledescription="carousel" aria-label="Screenshots from Mac">
-        <ul class="karusell-bilder">
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-studio.png?v=5" alt="Studio on Mac with the colour in OKLCH and Generic CMYK, its values, and the palettes and picked colours beside it" width="1920" height="1200" loading="lazy">
-            <figcaption>Studio</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-harmoni.png?v=5" alt="Harmony on Mac: five colours evenly distributed on the colour wheel" width="1920" height="1200" loading="lazy">
-            <figcaption>Harmony</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-overgang.png?v=5" alt="Gradient on Mac in equal perceptual steps, with lighter and darker rows" width="1920" height="1200" loading="lazy">
-            <figcaption>Gradient</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-kontrast.png?v=5" alt="Contrast on Mac: text and graphics to WCAG 2.2 and surfaces by LRV" width="1920" height="1200" loading="lazy">
-            <figcaption>Contrast</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-fargesyn.png?v=5" alt="Colour vision on Mac: the palette with four types of colour vision deficiency and hard-to-tell pairs" width="1920" height="1200" loading="lazy">
-            <figcaption>Colour vision</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-lys.png?v=5" alt="See in light on Mac: the colour on screen beside the colour in a viewing condition, with the colour shift" width="1920" height="1200" loading="lazy">
-            <figcaption>See in light</figcaption>
-          </figure>
-        </li>
-        </ul>
-      </div>
+      <p><a href="features.html">See all features →</a></p>
     </section>
 
-    <section class="seksjon lesetekst" aria-labelledby="personvern">
-      <h2 id="personvern">Privacy</h2>
-      <div class="boks">
-        <p><strong>No account, no analytics, no ads and no tracking.</strong> The developer collects no data. Your palettes live on your device and in your private iCloud, and Apple Intelligence runs on device.</p>
-        <p><a href="privacy.html">Read the privacy policy</a></p>
+    <section class="seksjon" aria-label="Privacy">
+      <div class="boks tillit">
+        <p><strong>Everything happens on device.</strong> No account, no analytics and no tracking. Palettes sync through your own iCloud, and every part of the app shows the methods it is based on.</p>
+        <p><a href="privacy.html">Privacy</a> · <a href="methods.html">Methods and sources</a></p>
       </div>
     </section>
   </main>
@@ -432,10 +162,15 @@
       <nav aria-label="Footer menu">
         <ul>
           <li><a href="index.html">About</a></li>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+          <li><a href="platforms.html">Platforms</a></li>
+          <li><a href="features.html">All features</a></li>
+          <li><a href="light.html">Light and colour measurement</a></li>
           <li><a href="support.html">Support</a></li>
+          <li><a href="methods.html">Methods and sources</a></li>
           <li><a href="privacy.html">Privacy</a></li>
           <li><a href="terms.html">Terms</a></li>
-          <li><a href="methods.html">Methods and sources</a></li>
           <li><a href="../index.html" hreflang="nb" lang="nb">Norsk</a></li>
         </ul>
       </nav>
@@ -443,6 +178,5 @@
       <p>© 2026 Eivind Arnstein Johansen. Apple, iPhone, iPad, Mac, iCloud, Siri and Apple Intelligence are trademarks of Apple Inc.</p>
     </div>
   </footer>
-  <script src="../assets/karusell.js?v=1" defer></script>
 </body>
 </html>

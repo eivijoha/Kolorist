@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kolorist – fargepaletter for designere</title>
-  <meta name="description" content="Kolorist er et fargeverktøy for designere på iPhone, iPad og Mac: OKLCH, OKLab, CIELab, CMYK og ICC-profiler, perseptuelt jevne overganger, WCAG-kontrast, kamerautplukk og eksport til Adobe og Figma.">
+  <title>Kolorist – farger for design og arkitektur</title>
+  <meta name="description" content="Kolorist er et fargeverktøy for design og arkitektur på iPhone, iPad og Mac: farger i like opplevde steg, kontroll av kontrast og fargesyn, og farger sett i lyset der de skal brukes.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Kolorist">
-  <meta property="og:title" content="Kolorist – fargepaletter for designere">
-  <meta property="og:description" content="Kolorist er et fargeverktøy for designere på iPhone, iPad og Mac: OKLCH, OKLab, CIELab, CMYK og ICC-profiler, perseptuelt jevne overganger, WCAG-kontrast, kamerautplukk og eksport til Adobe og Figma.">
+  <meta property="og:title" content="Kolorist – farger for design og arkitektur">
+  <meta property="og:description" content="Kolorist er et fargeverktøy for design og arkitektur på iPhone, iPad og Mac: farger i like opplevde steg, kontroll av kontrast og fargesyn, og farger sett i lyset der de skal brukes.">
   <meta property="og:url" content="https://kolorist.no/">
   <meta property="og:locale" content="nb_NO">
   <meta name="color-scheme" content="light dark">
@@ -16,7 +16,7 @@
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/stil.css?v=4">
+  <link rel="stylesheet" href="assets/stil.css?v=5">
   <link rel="canonical" href="https://kolorist.no/">
   <link rel="alternate" hreflang="nb" href="https://kolorist.no/">
   <link rel="alternate" hreflang="en" href="https://kolorist.no/en/">
@@ -34,10 +34,10 @@
       </a>
       <nav class="hovednav" aria-label="Hovedmeny">
         <ul>
-          <li><a href="index.html" aria-current="page">Om appen</a></li>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="arkitektur.html">Arkitektur</a></li>
+          <li><a href="plattformer.html">Plattformer</a></li>
           <li><a href="support.html">Støtte</a></li>
-          <li><a href="privacy.html">Personvern</a></li>
-          <li><a href="terms.html">Vilkår</a></li>
         </ul>
       </nav>
       <nav class="sprakvalg" aria-label="Språk">
@@ -52,8 +52,8 @@
       <div>
         <img class="helt-ikon" src="assets/ikon.svg" alt="" width="88" height="88">
         <h1 id="tittel">Kolorist</h1>
-        <p class="ingress">Bygg fargepaletter på tvers av fargerom – med perseptuelt jevne overganger, kontrastsjekk, ICC-profiler og eksport til verktøyene du allerede bruker.</p>
-        <p class="nyhet"><span class="nytt">Nytt i 1.2</span> <a href="#lys">Se farger i lyset der de skal brukes – og mål og kompenser for lyset med gråkort og referansekort</a></p>
+        <p class="ingress">Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.</p>
+        <p class="nyhet"><span class="nytt">Nytt i 1.2</span> <a href="lys.html">Se farger i lyset der de skal brukes – og mål lyset med et gråkort</a></p>
 
         <div class="handlinger">
           <a class="knapp" href="https://apps.apple.com/no/app/kolorist-fargepaletter/id6818636272?l=nb">
@@ -80,273 +80,57 @@
       </figure>
     </section>
 
-    <section class="seksjon" aria-labelledby="funksjoner">
-      <h2 id="funksjoner">Funksjoner</h2>
-      <p class="dempet">Det som er nytt i versjon 1.2, er merket<span class="nytt">Nytt i 1.2</span></p>
-      <p class="lesetekst">Kolorist er laget for iPhone først. På iPad og Mac får du mer plass – i liggende format på iPad og i et bredt Mac-vindu ligger fargeflatene ved siden av verktøyene <span class="nytt">Nytt i 1.2</span> – og på Mac en pipette som plukker farger fra hele skjermen. På Mac og store iPader har du palettene for hånden mens du jobber, og flytter farger dit du trenger dem med dra og slipp. Farger du plukker fra kamera og bilder, tas vare på – tydelig merket som ikke lagret – til du bestemmer deg.</p>
-
-      <ul class="kort-rutenett">
+    <section class="seksjon" aria-labelledby="kort-fortalt">
+      <h2 id="kort-fortalt">Kort fortalt</h2>
+      <ul class="poeng">
         <li>
-          <article class="kort">
-            <h3>Alle fargerom</h3>
-            <p>Rediger farger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK – med Display P3 som bredt fargeområde.</p>
-            <ul>
-              <li>Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst installert ICC-profil</li>
-              <li>Munsell i trinnene fra Munsell-boka – kulør 2,5, valør 1 og kroma 2 – med Munsell-notasjon <span class="nytt">Nytt i 1.2</span></li>
-              <li>Varsel når fargen er utenfor fargeområdet</li>
-              <li>Begrens farger til en valgt profil om du vil</li>
-              <li>Angi CMYK eller RGB direkte i en valgt ICC-profil</li>
-              <li>Lagre en farge i fargemodellen eller i profilen – eksporten følger formatet</li>
-              <li>Rene CMYK-verdier: grått innslag flyttes til sort (UCR/GCR), med færrest mulig trykkfarger</li>
-            </ul>
-          </article>
+          <h3>Farger slik øyet ser dem</h3>
+          <p>Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.</p>
         </li>
         <li>
-          <article class="kort">
-            <h3>ICC-profiler og fargebiblioteker</h3>
-            <p>Importer egne ICC-profiler (.icc, .icm) og fargebiblioteker (.ase, .aco, .acb). De ligger i appens mappe i iCloud Drive og følger med til de andre enhetene dine.</p>
-            <ul>
-              <li>Konverter mellom profiler med valgt gjengivelseshensikt</li>
-              <li>Undersøk fargeforskjell med ΔE2000</li>
-              <li>Fargekart med navngitte toner: arbeid innenfor fargekart, med tonenavn vist</li>
-              <li>Importer profiler og fargekart samlet, og slett dem igjen fra appen</li>
-            </ul>
-          </article>
+          <h3>Kontroll før det blir et problem</h3>
+          <p>Kontrast for tekst og flater etter WCAG og LRV, og farger slik de oppleves med fargesynsavvik.</p>
         </li>
         <li>
-          <article class="kort">
-            <h3>Overganger</h3>
-            <p>Lag overgangstoner mellom to farger i like perseptuelle steg i OKLab, med lysere og mørkere rader.</p>
-            <ul>
-              <li>Eksporter som CSS-gradient i <code>oklab</code> med sRGB-reserve</li>
-              <li>Lineær, radiell eller konisk</li>
-              <li>Lagre hele gradienter og fortsett arbeidet senere</li>
-              <li>Legg gradienter i paletter</li>
-              <li>Kopier gradienter rett inn i design-, layout- og presentasjonsprogrammer</li>
-              <li>Tonene vises i fargefeltene med verdier i valgt fargemodell og fargerom <span class="nytt">Nytt i 1.2</span></li>
-              <li>Dra grunntonene på lyshetsstigen for å gjøre hele overgangen lysere eller mørkere <span class="nytt">Nytt i 1.2</span></li>
-            </ul>
-          </article>
+          <h3>Lyset med i regnestykket <span class="nytt">Nytt i 1.2</span></h3>
+          <p>Farger sett i lyset der de skal brukes, og farger plukket slik de egentlig er – med et gråkort som målestokk.</p>
         </li>
         <li>
-          <article class="kort">
-            <h3>Toner og harmonier</h3>
-            <p>Lysere og mørkere trinn, toneskalaer fra 50 til 950 og fargeharmonier:</p>
-            <ul>
-              <li>Komplementær, split-komplementær, analog, triade, kvadrat, dobbelt komplementær og jevn fordeling med valgfritt antall</li>
-              <li>Analog med komplementær aksent – en rolig gruppe og én farge som skiller seg ut <span class="nytt">Nytt i 1.2</span></li>
-              <li>Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning <span class="nytt">Nytt i 1.2</span></li>
-              <li>På fargesirkel i OKLCH, CIE LCH, HSL eller RYB</li>
-              <li>Munsells fargesirkel med ekte Munsell-farger, og Herings motfargesirkel</li>
-              <li>Metning og lyshet for hele harmonier, vist direkte i fargesirkelen</li>
-              <li>Se hele harmonier i valgt fargerom eller fargebibliotek, med grunnfarger tydelig merket</li>
-              <li>Verdiene fra fargesirkelen for hver farge i harmonien – Munsell-notasjon, OKLCH, LCH, HSL, RYB eller Herings elementærfarger <span class="nytt">Nytt i 1.2</span></li>
-              <li>Lysere og mørkere toner i like eller avtagende steg, vist i fargefeltene med verdier i valgt fargemodell <span class="nytt">Nytt i 1.2</span></li>
-              <li>Dra grunnfargen på lyshetsstigen for å gjøre hele rekken lysere eller mørkere <span class="nytt">Nytt i 1.2</span></li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Plukk farger</h3>
-            <ul>
-              <li>Kamera med zoom, makrofokus og lykt – og lysfelt på skjermen som lyskilde på Mac</li>
-              <li>Bilder: zoom og dominerende farger</li>
-              <li>Skjermpipette på Mac</li>
-              <li>Farger slik de egentlig er: kompenser for lyset – også med gråkort eller referansekort i bilder <span class="nytt">Nytt i 1.2</span> <a href="#lys">Les mer</a></li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Apple Intelligence på enheten</h3>
-            <ul>
-              <li>Fra verdiord til palett, forankret i en kunnskapsbase med over hundre fargebegreper – natur, materialer, stiler og verdier</li>
-              <li>Beskriv en farge – «dyp havblå», «støvete rosa» – og se den i Studio</li>
-              <li>Paletter bygges etter harmoniprinsipper med lesbar kontrast</li>
-              <li>Juster med fritekst – «varmere», «mer eksklusiv»</li>
-              <li>Navngi farger og få vurdering av paletter</li>
-            </ul>
-            <p>Appen viser hvilke begreper forslaget bygger på. Alt kjøres på enheten. Ingenting sendes ut.</p>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Tilgjengelighet</h3>
-            <ul>
-              <li>WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk</li>
-              <li>«Rett opp» som justerer fargen til den består</li>
-              <li>Kontrastmatrise og vurdering av hele paletter</li>
-              <li>Vurderinger viser hva de bygger på</li>
-              <li>Lysrefleksjonsverdi (LRV) og kontrast mellom flater for bygg og interiør – BS 8300 og NS 11001</li>
-              <li>LRV og luminanskontrast i valgt lys – også lysrør og LED <span class="nytt">Nytt i 1.2</span></li>
-              <li>Vurdering av paletter i ulike lys: farger som skifter karakter, og fargepar som blir vanskelige å skille <span class="nytt">Nytt i 1.2</span></li>
-              <li>Forskjellen mellom to farger med ΔE2000</li>
-              <li>Se paletter med protan-, deutan- og tritanavvik og akromatopsi, med valgfri alvorlighetsgrad – og hvilke farger som blir vanskelige å skille</li>
-              <li>Fargesynsavvikene står etter hvor vanlige de er, med anslått utbredelse <span class="nytt">Nytt i 1.2</span></li>
-              <li>Kamera med fargesynsfilter: se omgivelsene slik de kan oppleves med hvert avvik</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Paletter og iCloud</h3>
-            <p>Samle farger i paletter, lagre enkeltfarger og hele gradienter. Gi dem navn, flytt farger mellom paletter, og vurder og kontroller kontrast for hele paletter.</p>
-            <ul>
-              <li>Gradienter i paletter</li>
-              <li>Se hele paletter i et lysmiljø <span class="nytt">Nytt i 1.2</span></li>
-              <li>Skriv ut paletter på A4 – fargeflater i CIELab med navn og verdier</li>
-              <li>Angre det du gjør</li>
-              <li>Tilpass visningen til arbeidet ditt</li>
-            </ul>
-            <p>Alt synkroniseres via din egen, private iCloud.</p>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Eksport</h3>
-            <p>Adobe ASE, Photoshop ACO, Figma-variabler (DTCG-JSON), Tokens Studio, SVG-fargeprøver, CSS, Design Tokens, GIMP GPL, SwiftUI og hex-liste.</p>
-            <p><strong>Gradienter:</strong> legg gradienter i paletter, og kopier dem som gradient til Figma, Sketch, Affinity, Illustrator, InDesign, Photoshop, Pages, Keynote, Numbers, CSS eller SwiftUI.</p>
-            <p><strong>Skriv ut:</strong> paletter som A4-PDF med fargeflater i CIELab (D50), navn, verdier i fargemodellen fargen ble laget i, valgt fargerom eller fargebibliotek og CIELab-verdi.</p>
-            <p>Farger eksporteres i formatet de er lagret i – for eksempel CMYK til Adobe.</p>
-            <p><strong>Kopier til …</strong> Figma, Illustrator, InDesign, Photoshop, Sketch og Affinity, Pages, Keynote og Numbers, CSS eller SwiftUI – i formatet hvert program tar imot. Det gjelder både enkeltfarger og hele paletter.</p>
-            <p>På Mac kan du dra fargeprøver rett inn i andre programmer – og dra farger inn i Kolorist fra fargepanelet og fargebrønner i andre programmer</p>
-            <p><strong>Fargebiblioteker:</strong> importer egne fargekart i ASE, ACO eller ACB (Adobe Color Book) med navngitte toner, og vis nærmeste fargetoner innenfor dem: farger, toner og harmonier holdes altså til fargesettets referansefarger.</p>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Siri og Snarveier</h3>
-            <ul>
-              <li>Lag palett fra verdiord</li>
-              <li>Lag overgang</li>
-              <li>Konverter farge</li>
-              <li>Sjekk kontrast</li>
-              <li>Beskriv en farge</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Åpent om metodene</h3>
-            <p>Hver del av appen viser hvilke metoder den bygger på – OKLab, CSS Color 4, CIEDE2000, CAM16, WCAG, simulering av fargesyn, ICC – med kilde og forklaring. Det som er utviklet for Kolorist, er merket som det.</p>
-            <p><a href="methods.html">Les om metodene og kildene</a></p>
-          </article>
+          <h3>Én app – én eller flere enheter</h3>
+          <p>Samme app på iPhone, iPad og Mac. Bruk den du har, eller flere, med alt synkronisert via iCloud. <a href="plattformer.html">Se forskjellene</a></p>
         </li>
       </ul>
     </section>
 
-
-    <section class="seksjon" aria-labelledby="lys">
-      <p class="overtittel">Avansert<span class="nytt">Nytt i 1.2</span></p>
-      <h2 id="lys">Lys og fargemåling</h2>
-      <p class="lesetekst">En farge er aldri bare en farge – den er en flate i et lys. Kolorist tar lyset med i regnestykket: se farger og hele paletter slik de vil oppleves der de skal brukes, og plukk farger fra omgivelsene slik de egentlig er – ikke slik kveldslyset eller lysrøret får dem til å se ut. Et gråkort eller et referansekort gjør telefonen til et enkelt måleverktøy for farge og lys.</p>
-
-      <ul class="kort-rutenett">
-        <li>
-          <article class="kort">
-            <h3>Se farger i lys</h3>
-            <p>Lagre lysmiljøer – stua om kvelden, kontoret, butikken – eller bruk standard betraktningsforhold for vurdering av trykk og bilder (ISO 3664), arbeidsplasser og skoler (NS-EN 12464-1) og museer (CIE 157).</p>
-            <ul>
-              <li>Slik øyet ser det: øyet tilpasser seg lyset, og svakt lys gir mindre fargerike farger</li>
-              <li>Som et foto: lysets fulle fargestikk</li>
-              <li>Hele paletter: farger som skifter karakter, og fargepar som blir vanskelige å skille</li>
-              <li>LRV og luminanskontrast i valgt lys, for bygg og interiør</li>
-              <li>Lysrør og LED regnes ut fra lysets spekter</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Farger slik de egentlig er</h3>
-            <p>Kompenser fargene du plukker for lyset de ble fotografert i, så du får fargen flaten har i dagslys.</p>
-            <ul>
-              <li>Ut fra lyset kameraet måler, eller en valgt lyskilde</li>
-              <li>Med gråkort eller referansekort for riktig farge og lyshet</li>
-              <li>Også i bilder: et kort i bildet er nok</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Gråkortet som målestokk</h3>
-            <p>Et rimelig gråkort (18 %) eller et hvitt kort gir både lysets farge og styrke. Da blir lysheten riktig, og du får fargetemperatur og belysningsstyrke (lux).</p>
-            <ul>
-              <li>Eget kort: bruk en grå eller hvit flate med kjent LRV, for eksempel en malt vegg</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Referansekort for størst nøyaktighet</h3>
-            <p>Med et referansekort med 24 felt i bildet finner Kolorist kortet selv, kalibrerer kameraet mot fasiten og viser hvor nøyaktig resultatet er.</p>
-            <ul>
-              <li>Kalibrer kameraet én gang – deretter holder et gråkort, også i et annet lys</li>
-              <li>Anslått fargegjengivelse og sannsynlig lystype</li>
-              <li>Nøyaktigheten oppgis som snitt og maks ΔE00, kryssvalidert</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Mål og dokumenter lyset</h3>
-            <p>Fargetemperatur, belysningsstyrke og anslått fargegjengivelse – nyttig når lysforholdene skal dokumenteres, eller sammenlignes med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass.</p>
-            <ul>
-              <li>Lagre målt lys som lysmiljø, og se andre farger i det</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>Dine egne referanseverdier</h3>
-            <p>Referanseverdier for kort følger ikke med appen; du importerer filen som hører til kortet ditt.</p>
-            <ul>
-              <li>CGATS, CxF3, CSV/TSV og tabeller med Lab-, XYZ- eller spektralverdier</li>
-              <li>Fargebiblioteker (ASE, ACO, ACB)</li>
-              <li>Med spektre regnes fasiten ut i ethvert lys</li>
-            </ul>
-          </article>
-        </li>
-        <li>
-          <article class="kort">
-            <h3>På Mac</h3>
-            <p>Se farger og paletter i lys, med lysmiljøene du har målt på iPhone. Med iPhone som kamera (Continuity) kan fargene kompenseres med gråkort eller referansekort.</p>
-          </article>
-        </li>
-      </ul>
-
-      <div class="tospalter">
-        <div class="boks">
-          <h3>Hva trenger jeg?</h3>
-          <ul>
-            <li>Ingenting ekstra for å se farger og paletter i lys.</li>
-            <li>Et gråkort eller hvitt kort for kompensasjon og lysmåling.</li>
-            <li>Et referansekort med 24 felt og filen med referanseverdiene for høyest nøyaktighet.</li>
-            <li>Lysmåling krever iPhone eller iPad.</li>
-          </ul>
-        </div>
-        <div class="boks">
-          <h3>Hvor nøyaktig er det?</h3>
-          <p>Et telefonkamera er ikke et måleinstrument. Med referansekort ligger avviket typisk rundt 2–3 ΔE00 – appen viser tallet for hver kalibrering. Belysningsstyrke og fargegjengivelse er anslag, og farger uten målt spekter får et anslått spekter.</p>
-          <p><a href="methods.html#cam16">Les om metodene</a></p>
-        </div>
+    <section class="seksjon" aria-labelledby="fagfelt">
+      <h2 id="fagfelt">To fagfelt</h2>
+      <div class="dorer">
+        <article class="dor">
+          <div>
+            <h3><a href="design.html">Design</a></h3>
+            <p>Paletter, toneskalaer og gradienter som tåler skjerm og trykk – levert rett inn i designverktøyene.</p>
+            <p class="videre" aria-hidden="true">Kolorist for design →</p>
+          </div>
+          <img src="assets/skjermbilde-harmoni.png?v=5" alt="" width="1284" height="2778" loading="lazy">
+        </article>
+        <article class="dor">
+          <div>
+            <h3><a href="arkitektur.html">Arkitektur</a></h3>
+            <p>Farger hentet fra rommet, spesifisert i Munsell og kontrollert for LRV og lys – for universell utforming.</p>
+            <p class="videre" aria-hidden="true">Kolorist for arkitektur og interiør →</p>
+          </div>
+          <img src="assets/skjermbilde-lys.png?v=6" alt="" width="1284" height="2778" loading="lazy">
+        </article>
       </div>
     </section>
 
     <section class="seksjon" aria-labelledby="skjermbilder">
       <h2 id="skjermbilder">Skjermbilder</h2>
-      <h3 class="skjermbilder-tittel">iPhone</h3>
-      <ul class="skjermbilder" tabindex="0" aria-label="Skjermbilder – rull sidelengs">
+      <ul class="skjermbilder tre" tabindex="0" aria-label="Skjermbilder – rull sidelengs">
         <li>
           <figure class="skjermbilde">
             <img src="assets/skjermbilde-studio.png?v=5" alt="Studio med en farge i OKLCH og Display P3 side om side med CMYK" width="1284" height="2778" loading="lazy">
             <figcaption>Studio</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde">
-            <img src="assets/skjermbilde-harmoni.png?v=5" alt="Fargeharmoni med fargeprøver over fargesirkelen" width="1284" height="2778" loading="lazy">
-            <figcaption>Harmoni</figcaption>
           </figure>
         </li>
         <li>
@@ -361,67 +145,14 @@
             <figcaption>Kontrast</figcaption>
           </figure>
         </li>
-        <li>
-          <figure class="skjermbilde">
-            <img src="assets/skjermbilde-fargesyn.png?v=5" alt="En palett slik den ser ut med ulike fargesynsavvik" width="1284" height="2778" loading="lazy">
-            <figcaption>Fargesyn</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde">
-            <img src="assets/skjermbilde-lys.png?v=5" alt="Se i lys: fargen på skjermen ved siden av fargen slik den oppleves i et lysmiljø" width="1284" height="2778" loading="lazy">
-            <figcaption>Se i lys</figcaption>
-          </figure>
-        </li>
       </ul>
-      <h3 class="skjermbilder-tittel">Mac</h3>
-      <div class="karusell" data-karusell data-pause="Pause" data-spill="Spill av" data-bilde="Vis bilde" aria-roledescription="karusell" aria-label="Skjermbilder fra Mac">
-        <ul class="karusell-bilder">
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="assets/mac/skjermbilde-studio.png?v=5" alt="Studio på Mac med fargen i OKLCH og Generisk CMYK, verdiene, og palettene og de plukkede fargene ved siden av" width="1920" height="1200" loading="lazy">
-            <figcaption>Studio</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="assets/mac/skjermbilde-harmoni.png?v=5" alt="Harmoni på Mac: fem farger jevnt fordelt på fargesirkelen" width="1920" height="1200" loading="lazy">
-            <figcaption>Harmoni</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="assets/mac/skjermbilde-overgang.png?v=5" alt="Overgang på Mac i like perseptuelle steg, med lysere og mørkere rader" width="1920" height="1200" loading="lazy">
-            <figcaption>Overgang</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="assets/mac/skjermbilde-kontrast.png?v=5" alt="Kontrast på Mac: tekst og grafikk etter WCAG 2.2 og flater etter LRV" width="1920" height="1200" loading="lazy">
-            <figcaption>Kontrast</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="assets/mac/skjermbilde-fargesyn.png?v=5" alt="Fargesyn på Mac: paletten med fire typer fargesynsavvik og vanskelige fargepar" width="1920" height="1200" loading="lazy">
-            <figcaption>Fargesyn</figcaption>
-          </figure>
-        </li>
-        <li>
-          <figure class="skjermbilde mac">
-            <img src="assets/mac/skjermbilde-lys.png?v=5" alt="Se i lys på Mac: fargen på skjermen ved siden av fargen i et lysmiljø, med fargeskift" width="1920" height="1200" loading="lazy">
-            <figcaption>Se i lys</figcaption>
-          </figure>
-        </li>
-        </ul>
-      </div>
+      <p><a href="funksjoner.html">Se alle funksjoner →</a></p>
     </section>
 
-    <section class="seksjon lesetekst" aria-labelledby="personvern">
-      <h2 id="personvern">Personvern</h2>
-      <div class="boks">
-        <p><strong>Ingen konto, ingen analyse, ingen reklame og ingen sporing.</strong> Utvikleren samler ikke inn noen data. Palettene dine ligger på enheten og i din private iCloud, og Apple Intelligence kjøres på enheten.</p>
-        <p><a href="privacy.html">Les personvernerklæringen</a></p>
+    <section class="seksjon" aria-label="Personvern">
+      <div class="boks tillit">
+        <p><strong>Alt skjer på enheten.</strong> Ingen konto, ingen analyse og ingen sporing. Palettene synkroniseres via din egen iCloud, og hver del av appen viser metodene den bygger på.</p>
+        <p><a href="privacy.html">Personvern</a> · <a href="methods.html">Metoder og kilder</a></p>
       </div>
     </section>
   </main>
@@ -431,10 +162,15 @@
       <nav aria-label="Bunnmeny">
         <ul>
           <li><a href="index.html">Om appen</a></li>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="arkitektur.html">Arkitektur</a></li>
+          <li><a href="plattformer.html">Plattformer</a></li>
+          <li><a href="funksjoner.html">Alle funksjoner</a></li>
+          <li><a href="lys.html">Lys og fargemåling</a></li>
           <li><a href="support.html">Støtte</a></li>
+          <li><a href="methods.html">Metoder og kilder</a></li>
           <li><a href="privacy.html">Personvern</a></li>
           <li><a href="terms.html">Vilkår</a></li>
-          <li><a href="methods.html">Metoder og kilder</a></li>
           <li><a href="en/index.html" hreflang="en" lang="en">English</a></li>
         </ul>
       </nav>
@@ -442,6 +178,5 @@
       <p>© 2026 Eivind Arnstein Johansen. Apple, iPhone, iPad, Mac, iCloud, Siri og Apple Intelligence er varemerker for Apple Inc.</p>
     </div>
   </footer>
-  <script src="assets/karusell.js?v=1" defer></script>
 </body>
 </html>

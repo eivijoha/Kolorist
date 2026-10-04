@@ -104,7 +104,7 @@ final class Arbeidsbenk {
         guard let profil = begrensning else { return farge }
         return farge.begrenset(til: profil)
     }
-    var modell: Fargemodell = .okLCH
+    var modell: Fargemodell = Arbeidsbenk.startmodell
     var valgtFane: Fane = Arbeidsbenk.startfane
     /// Vinduet er bredt nok til palettkolonnen (Mac og store iPader i liggende format). Settes av rotvisningen.
     var palettkolonneMulig = false
@@ -126,6 +126,15 @@ final class Arbeidsbenk {
         UserDefaults.standard.string(forKey: "startfane").flatMap(Fane.init(rawValue:)) ?? .studio
         #else
         .studio
+        #endif
+    }
+
+    /// Debug: `-startmodell munsell` åpner Studio i en bestemt fargemodell (brukes til skjermbilder).
+    private static var startmodell: Fargemodell {
+        #if DEBUG
+        UserDefaults.standard.string(forKey: "startmodell").flatMap(Fargemodell.init(rawValue:)) ?? .okLCH
+        #else
+        .okLCH
         #endif
     }
 
