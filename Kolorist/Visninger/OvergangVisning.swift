@@ -42,8 +42,8 @@ struct OvergangVisning: View {
     private var visOgsåProfil: ICCProfil { bibliotek.profil(id: visOgsåID) ?? .sRGB }
     private var visOgsåBibliotek: Fargebibliotek? { bibliotek.fargebibliotek(id: visOgsåID) }
 
-    /// «+» i øvre høyre hjørne av den trinnvise overgangen: lagre tonene som palett, med eller uten
-    /// lysere og mørkere rader. (Hele gradienten lagres fra «+» på selve gradienten.)
+    /// «+» i øvre høyre hjørne av feltene: lagre, kopiere eller dele hele overgangen. Hver tone har sine egne valg
+    /// i trykk og hold-menyen (høyreklikk på Mac).
     private var lagremeny: some View {
         Menu {
             Button("Lagre tonene som palett …", systemImage: "swatchpalette") {
@@ -68,7 +68,7 @@ struct OvergangVisning: View {
         }
         .buttonStyle(.plain)
         .menuIndicator(.hidden)
-        .accessibilityLabel(String(localized: "Lagre tonene som palett"))
+        .accessibilityLabel(String(localized: "Lagre eller del alle tonene"))
     }
 
     private func lagreGradient() {
@@ -130,7 +130,7 @@ struct OvergangVisning: View {
             Stepper("Toner: \(antall)", value: $antall, in: 2...24)
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold for å lagre den.")
+                Text("Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold (høyreklikk på Mac) for å lagre, kopiere eller dele den.")
                 MetodeHenvisning(.oklab)
             }
         }

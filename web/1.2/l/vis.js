@@ -28,6 +28,7 @@
     sirkel: "Colour wheel", delt: "Shared from Kolorist", toner: (n) => `${n} tones`,
     produsent: "Manufacturer", materiale: "Material", måling: "Measurement", målt: "Measured", anslått: "Estimated",
     seKilde: (k) => `See the colour at ${k}`,
+    kreditering: "Filament colours from", lisens: "licensed under",
   } : {
     hopp: "Hopp til hovedinnhold", laster: "Åpner …", haAppen: "Har du Kolorist?",
     haAppenTekst: "Åpne lenken i appen for å lagre, endre og bygge videre.",
@@ -43,6 +44,7 @@
     sirkel: "Fargesirkel", delt: "Delt fra Kolorist", toner: (n) => `${n} toner`,
     produsent: "Produsent", materiale: "Materiale", måling: "Måling", målt: "Målt", anslått: "Anslått",
     seKilde: (k) => `Se fargen hos ${k}`,
+    kreditering: "Filamentfarger fra", lisens: "lisensiert under",
   };
   const HARMONIER = en ? {
     komplementær: "Complementary", splittKomplementær: "Split complementary", analog: "Analogous",
@@ -216,7 +218,7 @@
     kort.append(verdier);
     const lenke = q ? godkjentLenke(q.l) : null;
     if (lenke) {
-      const a = lag("a", "delt-kilde", T.seKilde(tekst(q.s) || new URL(lenke).hostname));
+      const a = lag("a", "knapp knapp-sekundaer delt-kilde", `${T.seKilde(tekst(q.s) || new URL(lenke).hostname)} ↗`);
       a.href = lenke;
       a.rel = "noopener noreferrer";
       a.target = "_blank";
@@ -303,6 +305,19 @@
       seksjon.append(liste);
       seksjon.append(knapperad([[T.kopierCSS, `background: ${gradientCSS(g)};`]]));
       innhold.append(seksjon);
+    }
+    // Kreditering når lenken har farger fra FilamentColors.xyz (CC BY 4.0).
+    const alleFarger = d.farger.concat(...d.gradienter.map((g) => g.s.map((x) => x.f)));
+    if (alleFarger.some((f) => f.q && godkjentLenke(f.q.l))) {
+      const p = lag("p", "dempet delt-kreditering");
+      const kilde = lag("a", null, "FilamentColors.xyz");
+      kilde.href = "https://filamentcolors.xyz/";
+      kilde.rel = "noopener noreferrer";
+      const lisens = lag("a", null, "CC BY 4.0");
+      lisens.href = "https://creativecommons.org/licenses/by/4.0/";
+      lisens.rel = "noopener noreferrer";
+      p.append(`${T.kreditering} `, kilde, `, ${T.lisens} `, lisens, ".");
+      innhold.append(p);
     }
     // «Åpne i appen» øverst og nederst; universelle lenker åpner appen direkte, dette er for innebygde nettlesere.
     const enFarge = d.slag === "farge";

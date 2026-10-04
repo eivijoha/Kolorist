@@ -1379,8 +1379,15 @@ thead th {
   display: none !important;
 }
 
-.delt-kilde {
-  display: inline-block;
+.delt-kilde.knapp {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
   margin: 0 0 0.6rem;
+  padding: 0.5rem 0.8rem;
   font-size: 0.9rem;
+}
+
+.delt-kreditering {
+  margin-top: 1.5rem;
 }

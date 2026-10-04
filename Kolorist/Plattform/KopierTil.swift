@@ -66,15 +66,23 @@ struct KopierTilMeny: View {
     let farger: [PalettFarge]
     var navn: String = ""
     var tittel: LocalizedStringKey = "Kopier til"
+    /// Som en seksjon i menyen den står i, i stedet for en undermeny (undermenyer lukker seg selv på iOS).
+    var inline = false
 
     var body: some View {
-        Menu(tittel, systemImage: "arrow.up.doc.on.clipboard") {
-            ForEach(Kopimål.allCases) { mål in
-                Button {
-                    Utklippstavle.kopier(farger, navn: navn, til: mål)
-                } label: {
-                    Label { Text(mål.navn); Text(mål.forklaring) } icon: { Image(systemName: mål.symbol) }
-                }
+        if inline {
+            Section(tittel) { valg }
+        } else {
+            Menu(tittel, systemImage: "arrow.up.doc.on.clipboard") { valg }
+        }
+    }
+
+    private var valg: some View {
+        ForEach(Kopimål.allCases) { mål in
+            Button {
+                Utklippstavle.kopier(farger, navn: navn, til: mål)
+            } label: {
+                Label { Text(mål.navn); Text(mål.forklaring) } icon: { Image(systemName: mål.symbol) }
             }
         }
     }

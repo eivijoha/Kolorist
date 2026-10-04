@@ -3925,6 +3925,16 @@
         }
       }
     },
+    "Lagre eller del alle tonene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save or share all tones"
+          }
+        }
+      }
+    },
     "Lagre en farge uten palett fra Studio, Utplukk eller «Legg i palett».": {
       "localizations": {
         "en": {
@@ -4015,6 +4025,16 @@
         }
       }
     },
+    "Lagre og del farge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save and share colour"
+          }
+        }
+      }
+    },
     "Lagre sist fangede farge": {
       "localizations": {
         "en": {
@@ -4073,16 +4093,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save as palette"
-          }
-        }
-      }
-    },
-    "Lagre tonene som palett": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save tones as palette"
           }
         }
       }
@@ -6635,12 +6645,12 @@
         }
       }
     },
-    "Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold for å lagre den.": {
+    "Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold (høyreklikk på Mac) for å lagre, kopiere eller dele den.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The tones are shown in the swatches at the top. Tap a tone to make it active, or touch and hold to save it."
+            "value": "The tones are shown in the swatches at the top. Tap a tone to make it active, or touch and hold (right-click on the Mac) to save, copy or share it."
           }
         }
       }

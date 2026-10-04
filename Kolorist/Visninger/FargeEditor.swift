@@ -913,7 +913,7 @@ struct Fargeflate: View {
                 .padding(12)
             }
             .overlay(alignment: .topTrailing) {
-                LagreMeny(lagre: { lagre(pf) }, leggIPalett: { leggIPalett(pf) })
+                LagreMeny(lagre: { lagre(pf) }, leggIPalett: { leggIPalett(pf) }, palettFarge: pf, verdier: tekst)
                     .font(.body.weight(.semibold))
                     .foregroundStyle(f.lesbarTekstfarge.swiftUI)
                     .padding(6)
