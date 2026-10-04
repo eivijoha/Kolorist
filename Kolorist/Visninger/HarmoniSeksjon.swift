@@ -345,11 +345,9 @@ struct Fargesirkelvisning: View {
                     let d = erGrunn ? r * 0.26 : r * 0.19
                     let rute = CGRect(x: p.x - d / 2, y: p.y - d / 2, width: d, height: d)
                     ctx.fill(Path(ellipseIn: rute), with: .color(f.swiftUI))
-                    ctx.stroke(Path(ellipseIn: rute), with: .color(.white), lineWidth: erGrunn ? 3 : 2)
-                    if erGrunn {
-                        // Samme ramme som grunnfargens flate øverst: fargens lesbare tekstfarge, innenfor den hvite kanten.
-                        ctx.stroke(Path(ellipseIn: rute.insetBy(dx: 3, dy: 3)), with: .color(f.lesbarTekstfarge.swiftUI), lineWidth: 2.5)
-                    }
+                    // Grunnfargen får samme ramme som flaten øverst: fargens lesbare tekstfarge i stedet for hvitt.
+                    ctx.stroke(Path(ellipseIn: rute), with: .color(erGrunn ? f.lesbarTekstfarge.swiftUI : .white),
+                               lineWidth: erGrunn ? 3 : 2)
                 }
                 // Midten viser grunnfargen.
                 let m = r * 0.34
