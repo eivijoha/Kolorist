@@ -89,19 +89,33 @@ struct PalettLysValg: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            // Lange navn forkortes, så panelet aldri blir bredere enn skjermen.
             HStack(spacing: 8) {
-                Image(systemName: "lightbulb.fill").foregroundStyle(Color.accentColor)
-                LysmiljøVelger(valgt: Binding(get: { lys.miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
-                    .labelsHidden()
-                    .fixedSize()
+                Menu {
+                    LysmiljøMenyvalg(valgt: Binding(get: { lys.miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "lightbulb.fill")
+                        Text(lys.miljø.navn).lineLimit(1).truncationMode(.tail)
+                        Image(systemName: "chevron.up.chevron.down").font(.caption.weight(.semibold))
+                    }
+                    .contentShape(Rectangle())
+                }
+                .menuIndicator(.hidden)
+                .accessibilityLabel("Lysmiljø: \(lys.miljø.navn)")
+                .layoutPriority(1)
                 Spacer(minLength: 0)
-                Text(Lysbeskrivelse.tekst(lys.miljø)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
-                LyskvalitetMerke(kvalitet: lys.miljø.kvalitet).foregroundStyle(Color.sekundærTekst)
                 InfoKnapp {
                     Text("Øverst i hver rute: fargen på skjermen. Nederst: fargen i lyset, med fargeskiftet.")
                     Lysforklaring(somFoto: somFoto, ujevntSpekter: lys.miljø.harUjevntSpekter)
                 }
             }
+            HStack(spacing: 4) {
+                Text(Lysbeskrivelse.tekst(lys.miljø)).monospacedDigit()
+                LyskvalitetMerke(kvalitet: lys.miljø.kvalitet)
+            }
+            .font(.caption)
+            .foregroundStyle(Color.sekundærTekst)
             Picker("Vis", selection: $somFoto) {
                 Text("Slik øyet ser det").tag(false)
                 Text("Som et foto").tag(true)
