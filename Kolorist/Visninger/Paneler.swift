@@ -11,6 +11,17 @@ struct PanelSeksjon<Innhold: View, Fot: View>: View {
     @State private var innstillinger = Panelinnstillinger.delt
 
     var body: some View {
+        #if os(macOS)
+        // Mac: systemets sammenleggbare seksjon, som trekker seg sammen (rader inn og ut i en egen seksjon tones bare
+        // inn og ut). Fotnoten står nederst i panelet, siden slike seksjoner ikke har bunntekst.
+        Section(isExpanded: Binding(get: { !innstillinger.erLagtSammen(panel) },
+                                    set: { innstillinger.settLagtSammen(panel, !$0) })) {
+            innhold
+            fot.font(.footnote).foregroundStyle(Color.sekundærTekst)
+        } header: {
+            Text(tittel ?? panel.navn)
+        }
+        #else
         let sammen = innstillinger.erLagtSammen(panel)
         Section {
             if !sammen { innhold }
@@ -21,6 +32,7 @@ struct PanelSeksjon<Innhold: View, Fot: View>: View {
         } footer: {
             if !sammen { fot }
         }
+        #endif
     }
 }
 
