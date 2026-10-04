@@ -15,7 +15,7 @@ Utgangspunktet er tekstene for 1.1 (`Dokumentasjon/1.1/AppStore.md`). Endringer 
 - [ ] Mac-skjermbildet «6-lys» er fra før rutenettet (skjermopptak på Mac var ikke tillatt 2026-10-04) – ta på nytt.
 - [ ] Innholdsrettigheter (App Store Connect › Appinformasjon): «Inneholder appen tredjepartsinnhold?» – ja, filamentfarger
       fra FilamentColors.xyz under CC BY 4.0; kreditering i appen (Mine fargerom, Metoder) og på kolorist.no.
-- [ ] App Review-notater: delingslenker (testlenke https://kolorist.no/l#… fra `Testlenker.json`), delingsmappe (velg en
+- [ ] App Review-notater: delingslenker (testlenke https://kolorist.no/l#… fra `Testlenker.json`), «Lagre som» (velg formater, lagre i en
       mappe i Filer), filamentbibliotek («Vis som» › Filament: alle typer), lysmåling krever gråkort for full funksjon.
 - [ ] Ved lansering: 1.2-nettsiden til roten, 1.1 til `historisk/1.1/`; `l/` og `.well-known/` må bli liggende.
 
@@ -29,7 +29,7 @@ Kolorist 1.2 tar lyset med i regnestykket.
 • Gråkort og referansekort: få riktig farge og lyshet, og mål fargetemperatur og belysningsstyrke. Kalibrer kameraet én gang med et referansekort – deretter holder et gråkort, også i et annet lys.
 • Vurdering i lys: farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED.
 • LRV og luminanskontrast i valgt lys, for bygg og interiør.
-• Delingsmappe: palettene som filer i en mappe i skytjenesten du bruker – også for kolleger på Windows.
+• Lagre som: velg formater etter hvor filene skal brukes, og lagre dem i en mappe – også i OneDrive – eller del dem.
 • Del som lenke: farger, paletter, gradienter og harmonier – mottakere uten appen ser fargene i nettleseren.
 • Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament.
 • Nye harmonier: analog med komplementær aksent, triade og kvadrat – og naturlig lyshetsrekkefølge, der gule farger blir lysere og blå mørkere, som i naturen.
@@ -46,7 +46,7 @@ Kolorist 1.2 brings light into the equation.
 • Grey cards and reference cards: get the right colour and lightness, and measure colour temperature and illuminance. Calibrate the camera once with a reference card – after that a grey card is enough, even in different light.
 • Critique in light: colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting.
 • LRV and luminance contrast in the chosen light, for buildings and interiors.
-• Sharing folder: your palettes as files in a folder in the cloud service you use – for colleagues on Windows too.
+• Save as: choose formats by where the files will be used, and save them to a folder – including OneDrive – or share them.
 • Share as link: colours, palettes, gradients and harmonies – recipients without the app see the colours in their browser.
 • Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament.
 • New harmonies: analogous with a complementary accent, triad and square – and natural lightness order, where yellows become lighter and blues darker, as in nature.

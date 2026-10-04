@@ -28,6 +28,7 @@ struct FargeRute: View {
     /// forhåndsvisningen kan høre til feil prøve når flere står på samme rad.
     var valgBoble = false
     @State private var visValg = false
+    @State private var visLagreSom = false
 
     var body: some View {
         #if os(macOS)
@@ -83,10 +84,15 @@ struct FargeRute: View {
                 }
                 let delt = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
                 DelSomLenke(navn: navn ?? farge.hex()) { Lenkedeling.farge(delt) }
+                Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
                 if let ekstraMeny { ekstraMeny }
                 if let fjern {
                     Button("Slett", systemImage: "trash", role: .destructive, action: fjern)
                 }
+            }
+            .sheet(isPresented: $visLagreSom) {
+                let pf = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
+                LagreSomArk(innhold: Lagringsinnhold(navn: pf.navn.isEmpty ? farge.hex() : pf.navn, farger: [pf]))
             }
     }
 

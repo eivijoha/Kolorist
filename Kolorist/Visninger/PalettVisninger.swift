@@ -23,7 +23,7 @@ struct PalettListe: View {
     @State private var vurderes: PalettDokument?
     @State private var matrise: PalettDokument?
     @State private var visVerdiord = false
-    @State private var visDelingsmappe = false
+    @State private var lagresSom: PalettDokument?
     @State private var visNyPalett = false
     @State private var nyPalettNavn = ""
 
@@ -95,13 +95,8 @@ struct PalettListe: View {
                                     let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
                                     DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
                                         .disabled(farger.isEmpty && gradienter.isEmpty)
-                                    Button(Delingsmappe.delt.erKoblet ? "Legg i delingsmappa" : "Legg i delingsmappa …", systemImage: "folder") {
-                                        if Delingsmappe.delt.erKoblet {
-                                            Task { await Delingsmappe.delt.del(p, blant: paletter) }
-                                        } else {
-                                            visDelingsmappe = true
-                                        }
-                                    }
+                                    Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = p }
+                                        .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
                                     Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
                                 }
                             }
@@ -113,7 +108,6 @@ struct PalettListe: View {
                         .font(.footnote)
                         .foregroundStyle(Color.sekundærTekst)
                         .padding(.top, 8)
-                    DelingsmappeRad()
                     Utviklerlinje()
                 }
                 .padding()
@@ -123,7 +117,13 @@ struct PalettListe: View {
             .toolbar {
                 if !iKolonne { nyPalettMeny }
             }
-            .sheet(isPresented: $visDelingsmappe) { DelingsmappeArk() }
+            #if DEBUG
+            // Test: `-lagreSomTest` åpner «Lagre som» for første palett.
+            .task { if UserDefaults.standard.bool(forKey: "lagreSomTest") { lagresSom = paletter.first } }
+            #endif
+            .sheet(item: $lagresSom) { p in
+                LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter))
+            }
             .sheet(isPresented: $visVerdiord) {
                 NavigationStack {
                     VerdiordVisning()
@@ -437,12 +437,10 @@ struct PalettDetalj: View {
     @Bindable var dokument: PalettDokument
     @Environment(\.modelContext) private var kontekst
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
-    /// Filen som eksporteres (ett av eksportformatene eller PDF) – én filvelger for alle.
-    @State private var eksport: (data: Data, filnavn: String)?
     @State private var visSkala: PalettFarge?
     @State private var visKontrast = false
     @State private var visILys = false
-    @State private var visDelingsmappe = false
+    @State private var visLagreSom = false
     @State private var vurdering: PalettVurdering?
     @State private var kiArbeider = false
     @State private var kiFeil: String?
@@ -539,17 +537,13 @@ struct PalettDetalj: View {
                 ToolbarItemGroup { handlinger }
             }
         }
-        .fileExporter(
-            isPresented: Binding(get: { eksport != nil }, set: { if !$0 { eksport = nil } }),
-            document: eksport.map { EksportDokument(data: $0.data) },
-            contentType: .data,
-            defaultFilename: eksport?.filnavn ?? eksportnavn
-        ) { _ in eksport = nil }
         .sheet(item: $visSkala) { pf in
             ToneskalaArk(grunnfarge: pf) { nye in dokument.farger += nye }
         }
         .sheet(isPresented: $visKontrast) { KontrastmatriseArk(palett: dokument.palett) }
-        .sheet(isPresented: $visDelingsmappe) { DelingsmappeArk() }
+        .sheet(isPresented: $visLagreSom) {
+            LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter))
+        }
         .sheet(isPresented: $visILys) {
             PalettILysArk(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn, farger: dokument.farger)
         }
@@ -592,21 +586,9 @@ struct PalettDetalj: View {
         Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(dokument) }
             .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
             .help("Skriv ut paletten (A4, fargeflater i CIELab)")
-        Menu("Eksporter", systemImage: "square.and.arrow.up") {
-            ForEach(Eksportformat.allCases) { f in
-                Button(f.navn) { eksport = (f.data(for: dokument.palett), "\(eksportnavn).\(f.filendelse)") }
-            }
-            Button("PDF med fargeflater (A4)") { eksport = (PalettUtskrift.pdf(for: dokument), "\(eksportnavn).pdf") }
+        Menu("Del", systemImage: "square.and.arrow.up") {
+            Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
                 .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
-            Button(Delingsmappe.delt.erKoblet ? "Legg i delingsmappa" : "Legg i delingsmappa …", systemImage: "folder") {
-                if Delingsmappe.delt.erKoblet {
-                    let alle = (try? kontekst.fetch(FetchDescriptor<PalettDokument>())) ?? [dokument]
-                    Task { await Delingsmappe.delt.del(dokument, blant: alle) }
-                } else {
-                    visDelingsmappe = true
-                }
-            }
-            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
             Divider()
             let navn = dokument.navn, farger = dokument.farger, gradienter = dokument.gradienter
             DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
@@ -615,14 +597,7 @@ struct PalettDetalj: View {
             Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
             KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
         }
-        .help("Eksporter og kopier")
-    }
-
-    /// Filnavn uten tegn som ikke tåles i filnavn, og aldri tomt (ellers blir filen skjult, f.eks. «.ase»).
-    private var eksportnavn: String {
-        let rent = dokument.navn.components(separatedBy: CharacterSet(charactersIn: "/\\:?%*|\"<>")).joined(separator: "-")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        return rent.isEmpty ? String(localized: "Uten navn") : rent
+        .help("Lagre som, del og kopier")
     }
 
     private func vurder() async {

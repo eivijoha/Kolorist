@@ -42,7 +42,12 @@ lyshetsrekkefølge. Lagt hit for senere:
 - **Harmonisering etter kulørmaler** (Matsuda; Cohen-Or mfl. 2006): dytt en eksisterende palett – for eksempel
   plukket med kameraet – til nærmeste harmonimal med minst mulig endring.
 
-## Samspill med Windows fra iPhone/iPad (tatt inn i 1.2, 2026-10-04: `Delingsmappe`)
+## Samspill med Windows fra iPhone/iPad (2026-10-04: delingsmappa er erstattet av «Lagre som»)
+
+Delingsmappa (fast mappe som holdes oppdatert) ble droppet: iOS gir ikke apper fast mappetilgang hos OneDrive,
+Jottacloud m.fl. I stedet «Lagre som …» på paletter og farger: velg formater (samme på alle plattformer), lagre i en
+mappe via systemets lagringsdialog (iOS) eller Finder (Mac), eller del filene. Teksten under er historikk.
+
 
 Mange samarbeidspartnere (særlig i arkitektur) sitter på Windows. Palettene ligger i SwiftData/CloudKit og er ikke
 lesbare utenfor Apple-enheter; ICC-profiler og fargekart ligger allerede som filer i appens iCloud Drive-mappe.

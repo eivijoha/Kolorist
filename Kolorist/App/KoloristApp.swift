@@ -16,7 +16,6 @@ struct KoloristApp: App {
     var body: some Scene {
         WindowGroup {
             InnholdsVisning()
-                .background(DelingsmappeSynk())
                 .environment(arbeidsbenk)
                 .environment(profiler)
                 #if DEBUG

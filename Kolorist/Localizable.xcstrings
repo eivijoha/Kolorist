@@ -567,22 +567,6 @@
         }
       }
     },
-    "%lld paletter skrevet %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld palettes written %@"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld paletter skrevet %2$@"
-          }
-        }
-      }
-    },
     "%lld toner": {
       "localizations": {
         "en": {
@@ -643,16 +627,6 @@
         }
       }
     },
-    "1 palett skrevet %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 palette written %@"
-          }
-        }
-      }
-    },
     "1 vanskelig par": {
       "localizations": {
         "en": {
@@ -709,6 +683,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Absolute colorimetric"
+          }
+        }
+      }
+    },
+    "Adobe-programmer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adobe apps"
           }
         }
       }
@@ -829,6 +813,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Count: %lld"
+          }
+        }
+      }
+    },
+    "Apple-utvikling": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple development"
           }
         }
       }
@@ -1256,6 +1250,16 @@
         }
       }
     },
+    "Del": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
     "Del harmonien som lenke": {
       "localizations": {
         "en": {
@@ -1272,26 +1276,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Share gradient as link"
-          }
-        }
-      }
-    },
-    "Del paletter som filer i en mappe – for eksempel OneDrive, Google Drive eller Dropbox, også for kolleger på Windows": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share palettes as files in a folder – for example OneDrive, Google Drive or Dropbox, for colleagues on Windows too"
-          }
-        }
-      }
-    },
-    "Del palettfilene …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share palette files …"
           }
         }
       }
@@ -1316,22 +1300,12 @@
         }
       }
     },
-    "Delingsmappa kan ikke åpnes – velg den på nytt": {
+    "Del …": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The sharing folder can’t be opened – choose it again"
-          }
-        }
-      }
-    },
-    "Delingsmappe": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sharing folder"
+            "value": "Share …"
           }
         }
       }
@@ -1532,36 +1506,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Existing palettes"
-          }
-        }
-      }
-    },
-    "Eksporter": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export"
-          }
-        }
-      }
-    },
-    "Eksporter og kopier": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export and copy"
-          }
-        }
-      }
-    },
-    "Eksporter én gang": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export once"
           }
         }
       }
@@ -2006,6 +1950,16 @@
         }
       }
     },
+    "Figma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Figma"
+          }
+        }
+      }
+    },
     "Fil": {
       "localizations": {
         "en": {
@@ -2121,6 +2075,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file is deleted from iCloud Drive and disappears from all your devices. Colours saved in the profile keep their values."
+          }
+        }
+      }
+    },
+    "Filene får navnet «%@». «Lagre» lar deg velge eller opprette en mappe – også i OneDrive, Jottacloud og andre tjenester. «Del» sender filene med e-post, Teams, AirDrop og andre apper.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files are named “%@”. “Save” lets you choose or create a folder – including OneDrive, Jottacloud and other services. “Share” sends the files by email, Teams, AirDrop and other apps."
           }
         }
       }
@@ -2245,16 +2209,6 @@
         }
       }
     },
-    "Formater": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Formats"
-          }
-        }
-      }
-    },
     "Forskjell": {
       "localizations": {
         "en": {
@@ -2337,6 +2291,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "A physiologically based model of protan, deutan and tritan deficiencies, with matrices in linear sRGB and severity as a blend with normal vision. Achromatopsia is shown as luminance alone. Used in Assess › Colour vision, the contrast preview and the camera filter. The simulation is an approximation; experience varies between people."
+          }
+        }
+      }
+    },
+    "GIMP, Inkscape og Krita": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GIMP, Inkscape and Krita"
           }
         }
       }
@@ -2737,16 +2701,6 @@
         }
       }
     },
-    "Hold palettene oppdatert": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keep palettes up to date"
-          }
-        }
-      }
-    },
     "Hopp over": {
       "localizations": {
         "en": {
@@ -2763,16 +2717,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "The quick buttons change the colours precisely in OKLCH. Free text is interpreted by the language model, which remembers the conversation."
-          }
-        }
-      }
-    },
-    "Hver palett skrives som én fil per format, med palettens navn som filnavn.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Each palette is written as one file per format, named after the palette."
           }
         }
       }
@@ -3037,16 +2981,6 @@
         }
       }
     },
-    "Ingen mappe valgt": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No folder chosen"
-          }
-        }
-      }
-    },
     "Ingen paletter": {
       "localizations": {
         "en": {
@@ -3253,16 +3187,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Classical colour theory (Johannes Itten for RYB); D. B. Judd and G. Wyszecki: “Color in Business, Science, and Industry” (natural colour order); the mappings were developed for Kolorist"
-          }
-        }
-      }
-    },
-    "Koble fra mappa": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Disconnect folder"
           }
         }
       }
@@ -3695,22 +3619,22 @@
         }
       }
     },
-    "Kunne ikke bruke mappa": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn’t use the folder"
-          }
-        }
-      }
-    },
     "Kunne ikke importere": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't import"
+          }
+        }
+      }
+    },
+    "Kunne ikke lagre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t save"
           }
         }
       }
@@ -4075,22 +3999,22 @@
         }
       }
     },
-    "Lagre palettene i en mappe …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save palettes to a folder …"
-          }
-        }
-      }
-    },
     "Lagre sist fangede farge": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Save last captured colour"
+          }
+        }
+      }
+    },
+    "Lagre som": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as"
           }
         }
       }
@@ -4157,12 +4081,32 @@
         }
       }
     },
-    "Lagrer alle palettene i formatene under i en mappe du velger – også i OneDrive, Jottacloud og andre tjenester – eller deler filene med e-post, Teams og andre apper. Filene oppdateres ikke av seg selv; gjør det på nytt når du vil oppdatere dem.": {
+    "Lagre som …": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Saves all palettes in the formats below to a folder you choose – including OneDrive, Jottacloud and other services – or shares the files by email, Teams and other apps. The files are not updated automatically; do it again when you want to update them."
+            "value": "Save as …"
+          }
+        }
+      }
+    },
+    "Lagre som, del og kopier": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as, share and copy"
+          }
+        }
+      }
+    },
+    "Lagre …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save …"
           }
         }
       }
@@ -4253,26 +4197,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add the harmony to a palette"
-          }
-        }
-      }
-    },
-    "Legg i delingsmappa": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Put in sharing folder"
-          }
-        }
-      }
-    },
-    "Legg i delingsmappa …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Put in sharing folder …"
           }
         }
       }
@@ -4659,26 +4583,6 @@
         }
       }
     },
-    "Mappa kan ikke åpnes. Den kan være flyttet eller slettet, eller appen til skytjenesten er fjernet. Velg den på nytt.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The folder can’t be opened. It may have been moved or deleted, or the cloud service’s app has been removed. Choose it again."
-          }
-        }
-      }
-    },
-    "Mappe": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Folder"
-          }
-        }
-      }
-    },
     "Maskinen": {
       "localizations": {
         "en": {
@@ -4755,16 +4659,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "With spectra, the reference values can be calculated in any light. The patches are shown as they look in the chosen light when the eye has partly adapted."
-          }
-        }
-      }
-    },
-    "Med «Hold palettene oppdatert» skrives en palett på nytt når den endres, og filene flyttes når den får nytt navn. Filer for slettede paletter blir liggende i mappa.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With “Keep palettes up to date”, a palette is written again when it changes, and its files are moved when it is renamed. Files for deleted palettes are left in the folder."
           }
         }
       }
@@ -5069,6 +4963,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nearly identical"
+          }
+        }
+      }
+    },
+    "Nett og design tokens": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web and design tokens"
           }
         }
       }
@@ -5445,16 +5349,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Palettes"
-          }
-        }
-      }
-    },
-    "Paletter deles i mappa «%@»": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Palettes are shared in the folder “%@”"
           }
         }
       }
@@ -6005,16 +5899,6 @@
         }
       }
     },
-    "Skriv alle paletter nå": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Write all palettes now"
-          }
-        }
-      }
-    },
     "Skriv ut paletten (A4, fargeflater i CIELab)": {
       "localizations": {
         "en": {
@@ -6041,16 +5925,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Print …"
-          }
-        }
-      }
-    },
-    "Skriver …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Writing …"
           }
         }
       }
@@ -6983,6 +6857,16 @@
         }
       }
     },
+    "Utskrift": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print"
+          }
+        }
+      }
+    },
     "Utviklet for Kolorist; språkmodell fra Apple (Foundation Models)": {
       "localizations": {
         "en": {
@@ -7073,36 +6957,6 @@
         }
       }
     },
-    "Velg en annen mappe …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose another folder …"
-          }
-        }
-      }
-    },
-    "Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose a folder in OneDrive, Google Drive, Dropbox, iCloud Drive or another service. Kolorist writes your palettes there as files, so they can be opened on Windows and other computers. The service’s own app uploads the files – Kolorist sends nothing itself."
-          }
-        }
-      }
-    },
-    "Velg en mappe i OneDrive, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer og holder dem oppdatert, så de kan åpnes på Windows og andre maskiner. Vises en tjeneste grået ut, gir den ikke fast tilgang til mapper på iPhone og iPad – bruk da «Lagre palettene i en mappe» under. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose a folder in OneDrive, iCloud Drive or another service in Files. Kolorist writes your palettes there as files and keeps them up to date, so they can be opened on Windows and other computers. If a service appears greyed out, it doesn’t give lasting access to folders on iPhone and iPad – use “Save palettes to a folder” below instead. The service’s own app uploads the files – Kolorist sends nothing itself."
-          }
-        }
-      }
-    },
     "Velg et foto eller skjermbilde. Fargene leses med bildets egen fargeprofil.": {
       "localizations": {
         "en": {
@@ -7183,12 +7037,12 @@
         }
       }
     },
-    "Velg mappe …": {
+    "Velg mappa filene skal lagres i.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose folder …"
+            "value": "Choose the folder to save the files in."
           }
         }
       }
