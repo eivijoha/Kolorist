@@ -85,15 +85,8 @@ struct OvergangVisning: View {
         return (0..<(trinn.antallLysere + trinn.antallMørkere + 1)).map { rad in variasjoner.map { $0[rad] } }
     }
 
-    private func endepunkt(_ tittel: String, _ farge: Farge, trailing: Bool = false) -> some View {
-        VStack(alignment: trailing ? .trailing : .leading, spacing: 0) {
-            Text(tittel).font(.caption.weight(.semibold))
-            Text(farge.hex()).font(.caption2.monospaced()).foregroundStyle(Color.sekundærTekst)
-        }
-    }
-
     /// Feltene øverst, som i Studio: tonene i «Vis som»-rommet (venstre ende er nøyaktig «Fra», høyre nøyaktig
-    /// «Til»), med endepunktene og «Vis som» under. Fast øverst mens resten ruller.
+    /// «Til»), med «Vis som» under. Fast øverst mens resten ruller.
     private var overgangsflate: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         return VStack(spacing: 0) {
@@ -104,13 +97,9 @@ struct OvergangVisning: View {
                          leggIPalett: { leggIPalett = [$0] })
                 .frame(height: 140)
                 .overlay(alignment: .topTrailing) { lagremeny }
-            HStack(alignment: .center, spacing: 12) {
-                endepunkt(String(localized: "Fra"), start)
-                Spacer(minLength: 8)
+            HStack {
+                Spacer(minLength: 0)
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom)
-                    .layoutPriority(1)
-                Spacer(minLength: 8)
-                endepunkt(String(localized: "Til"), slutt, trailing: true)
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)
