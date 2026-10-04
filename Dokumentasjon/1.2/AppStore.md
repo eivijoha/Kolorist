@@ -24,6 +24,7 @@ Kolorist 1.2 tar lyset med i regnestykket.
 • Vurdering i lys: farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED.
 • LRV og luminanskontrast i valgt lys, for bygg og interiør.
 • Delingsmappe: palettene som filer i en mappe i skytjenesten du bruker – også for kolleger på Windows.
+• Del som lenke: farger, paletter, gradienter og harmonier – mottakere uten appen ser fargene i nettleseren.
 • Nye harmonier: analog med komplementær aksent, triade og kvadrat – og naturlig lyshetsrekkefølge, der gule farger blir lysere og blå mørkere, som i naturen.
 • Munsell i trinnene fra Munsell-boka, og verdiene fra fargesirkelen for hver farge i harmonier.
 ```
@@ -39,6 +40,7 @@ Kolorist 1.2 brings light into the equation.
 • Critique in light: colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting.
 • LRV and luminance contrast in the chosen light, for buildings and interiors.
 • Sharing folder: your palettes as files in a folder in the cloud service you use – for colleagues on Windows too.
+• Share as link: colours, palettes, gradients and harmonies – recipients without the app see the colours in their browser.
 • New harmonies: analogous with a complementary accent, triad and square – and natural lightness order, where yellows become lighter and blues darker, as in nature.
 • Munsell in the steps of the Munsell book, and the colour-wheel values for each colour in harmonies.
 ```
