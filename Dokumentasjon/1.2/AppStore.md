@@ -23,6 +23,7 @@ Kolorist 1.2 tar lyset med i regnestykket.
 • Gråkort og referansekort: få riktig farge og lyshet, og mål fargetemperatur og belysningsstyrke. Kalibrer kameraet én gang med et referansekort – deretter holder et gråkort, også i et annet lys.
 • Vurdering i lys: farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED.
 • LRV og luminanskontrast i valgt lys, for bygg og interiør.
+• Delingsmappe: palettene som filer i en mappe i skytjenesten du bruker – også for kolleger på Windows.
 • Nye harmonier: analog med komplementær aksent, triade og kvadrat – og naturlig lyshetsrekkefølge, der gule farger blir lysere og blå mørkere, som i naturen.
 • Munsell i trinnene fra Munsell-boka, og verdiene fra fargesirkelen for hver farge i harmonier.
 ```
@@ -37,6 +38,7 @@ Kolorist 1.2 brings light into the equation.
 • Grey cards and reference cards: get the right colour and lightness, and measure colour temperature and illuminance. Calibrate the camera once with a reference card – after that a grey card is enough, even in different light.
 • Critique in light: colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting.
 • LRV and luminance contrast in the chosen light, for buildings and interiors.
+• Sharing folder: your palettes as files in a folder in the cloud service you use – for colleagues on Windows too.
 • New harmonies: analogous with a complementary accent, triad and square – and natural lightness order, where yellows become lighter and blues darker, as in nature.
 • Munsell in the steps of the Munsell book, and the colour-wheel values for each colour in harmonies.
 ```

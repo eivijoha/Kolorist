@@ -91,6 +91,11 @@ struct PalettListe: View {
                                     Divider()
                                     Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
                                     KopierTilMeny(farger: p.farger, navn: p.navn)
+                                    if Delingsmappe.delt.erKoblet {
+                                        Button("Legg i delingsmappa", systemImage: "folder") {
+                                            Task { await Delingsmappe.delt.del(p, blant: paletter) }
+                                        }
+                                    }
                                     Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
                                 }
                             }
@@ -102,6 +107,7 @@ struct PalettListe: View {
                         .font(.footnote)
                         .foregroundStyle(Color.sekundærTekst)
                         .padding(.top, 8)
+                    DelingsmappeRad()
                     Utviklerlinje()
                 }
                 .padding()
@@ -583,6 +589,13 @@ struct PalettDetalj: View {
             }
             Button("PDF med fargeflater (A4)") { eksport = (PalettUtskrift.pdf(for: dokument), "\(eksportnavn).pdf") }
                 .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
+            if Delingsmappe.delt.erKoblet {
+                Button("Legg i delingsmappa", systemImage: "folder") {
+                    let alle = (try? kontekst.fetch(FetchDescriptor<PalettDokument>())) ?? [dokument]
+                    Task { await Delingsmappe.delt.del(dokument, blant: alle) }
+                }
+                .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
+            }
             Divider()
             Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
             Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }

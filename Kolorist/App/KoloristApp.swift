@@ -16,6 +16,7 @@ struct KoloristApp: App {
     var body: some Scene {
         WindowGroup {
             InnholdsVisning()
+                .background(DelingsmappeSynk())
                 .environment(arbeidsbenk)
                 .environment(profiler)
                 #if DEBUG
@@ -57,7 +58,7 @@ final class Arbeidsbenk {
         return p.verdier
     }
 
-    var aktivFarge = Farge(hex: "#2F7FD8")! {
+    var aktivFarge = Arbeidsbenk.startfarge {
         didSet {
             if oldValue != aktivFarge { merkForAngring(fra: oldValue) }
             // Unngå løkke: begrens bare når fargen faktisk er utenfor.
@@ -126,6 +127,15 @@ final class Arbeidsbenk {
         UserDefaults.standard.string(forKey: "startfane").flatMap(Fane.init(rawValue:)) ?? .studio
         #else
         .studio
+        #endif
+    }
+
+    /// Debug: `-startfarge "#B4674D"` gir en annen startfarge (brukes til skjermbilder).
+    private static var startfarge: Farge {
+        #if DEBUG
+        UserDefaults.standard.string(forKey: "startfarge").flatMap { Farge(hex: $0) } ?? Farge(hex: "#2F7FD8")!
+        #else
+        Farge(hex: "#2F7FD8")!
         #endif
     }
 

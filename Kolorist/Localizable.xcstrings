@@ -541,6 +541,22 @@
         }
       }
     },
+    "%lld paletter skrevet %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld paletter skrevet %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld palettes written %@"
+          }
+        }
+      }
+    },
     "%lld toner": {
       "localizations": {
         "en": {
@@ -597,6 +613,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 colour pair becomes hard to tell apart: %@"
+          }
+        }
+      }
+    },
+    "1 palett skrevet %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 palette written %@"
           }
         }
       }
@@ -1177,6 +1203,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Date"
+          }
+        }
+      }
+    },
+    "Del paletter i en mappe – for eksempel OneDrive for kolleger på Windows": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share palettes in a folder – for example OneDrive, for colleagues on Windows"
+          }
+        }
+      }
+    },
+    "Delingsmappa kan ikke åpnes – velg den på nytt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sharing folder can’t be opened – choose it again"
+          }
+        }
+      }
+    },
+    "Delingsmappe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharing folder"
           }
         }
       }
@@ -1981,6 +2037,16 @@
         }
       }
     },
+    "Formater": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formats"
+          }
+        }
+      }
+    },
     "Forskjell": {
       "localizations": {
         "en": {
@@ -2453,6 +2519,16 @@
         }
       }
     },
+    "Hold palettene oppdatert": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep palettes up to date"
+          }
+        }
+      }
+    },
     "Hopp over": {
       "localizations": {
         "en": {
@@ -2469,6 +2545,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The quick buttons change the colours precisely in OKLCH. Free text is interpreted by the language model, which remembers the conversation."
+          }
+        }
+      }
+    },
+    "Hver palett skrives som én fil per format, med palettens navn som filnavn.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each palette is written as one file per format, named after the palette."
           }
         }
       }
@@ -2733,6 +2819,16 @@
         }
       }
     },
+    "Ingen mappe valgt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No folder chosen"
+          }
+        }
+      }
+    },
     "Ingen paletter": {
       "localizations": {
         "en": {
@@ -2933,12 +3029,12 @@
         }
       }
     },
-    "Klassisk fargelære (Johannes Itten for RYB); avbildningene er utviklet for Kolorist": {
+    "Koble fra mappa": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Classical colour theory (Johannes Itten for RYB); the mappings were developed for Kolorist"
+            "value": "Disconnect folder"
           }
         }
       }
@@ -3025,16 +3121,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distribution are calculated as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell or Hering’s opponent-colour wheel. With Munsell, real Munsell colours in the book’s steps are used (hue 2.5, value 1, chroma 2). The RYB and Hering wheels are piecewise linear mappings made for the app. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift."
-          }
-        }
-      }
-    },
-    "Komplementær, split-komplementær, analog og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell eller Herings motfargesirkel. Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB- og Hering-sirklene er stykkevis lineære avbildninger laget for appen.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Complementary, split-complementary, analogous and even distributions are computed as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell or Hering’s opponent-colour wheel. With Munsell, real Munsell colours are used in the steps of the book (hue 2.5, value 1, chroma 2). The RYB and Hering wheels are piecewise linear mappings made for the app."
           }
         }
       }
@@ -3377,6 +3463,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hues"
+          }
+        }
+      }
+    },
+    "Kunne ikke bruke mappa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t use the folder"
           }
         }
       }
@@ -3883,6 +3979,16 @@
         }
       }
     },
+    "Legg i delingsmappa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Put in sharing folder"
+          }
+        }
+      }
+    },
     "Legg i palett": {
       "localizations": {
         "en": {
@@ -4225,6 +4331,26 @@
         }
       }
     },
+    "Mappa kan ikke åpnes. Den kan være flyttet eller slettet, eller appen til skytjenesten er fjernet. Velg den på nytt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The folder can’t be opened. It may have been moved or deleted, or the cloud service’s app has been removed. Choose it again."
+          }
+        }
+      }
+    },
+    "Mappe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folder"
+          }
+        }
+      }
+    },
     "Maskinen": {
       "localizations": {
         "en": {
@@ -4301,6 +4427,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "With spectra, the reference values can be calculated in any light. The patches are shown as they look in the chosen light when the eye has partly adapted."
+          }
+        }
+      }
+    },
+    "Med «Hold palettene oppdatert» skrives en palett på nytt når den endres, og filene flyttes når den får nytt navn. Filer for slettede paletter blir liggende i mappa.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With “Keep palettes up to date”, a palette is written again when it changes, and its files are moved when it is renamed. Files for deleted palettes are left in the folder."
           }
         }
       }
@@ -4955,6 +5091,16 @@
         }
       }
     },
+    "Paletter deles i mappa «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palettes are shared in the folder “%@”"
+          }
+        }
+      }
+    },
     "Paletter fra verdiord og «Beskriv en farge» bygger på en kunnskapsbase med fargebegreper laget for appen. Språkmodellen på enheten tolker ordene og velger kulørfamilier og uttrykk. Selve paletten komponeres deretter etter faste regler i OKLCH: harmoniprinsipp, lik valør eller lik metning, én aksent, lys eller mørk bakgrunn og tekst med minst 7:1 kontrast. Tekst om fargebetydning er konvensjoner, ikke vitenskapelige fakta.": {
       "localizations": {
         "en": {
@@ -5091,16 +5237,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "The swatches show the colour as it is perceived in each light environment: the eye adapts almost completely to the colour of the light, and dim light makes colours less colourful. The colour shift (ΔE00) is how much the colour changes character once the eye has fully adapted; above 3 it is clearly noticeable."
-          }
-        }
-      }
-    },
-    "På skjermen": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "On screen"
           }
         }
       }
@@ -5491,6 +5627,16 @@
         }
       }
     },
+    "Skriv alle paletter nå": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write all palettes now"
+          }
+        }
+      }
+    },
     "Skriv ut paletten (A4, fargeflater i CIELab)": {
       "localizations": {
         "en": {
@@ -5517,6 +5663,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Print …"
+          }
+        }
+      }
+    },
+    "Skriver …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Writing …"
           }
         }
       }
@@ -6519,6 +6675,26 @@
         }
       }
     },
+    "Velg en annen mappe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another folder …"
+          }
+        }
+      }
+    },
+    "Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a folder in OneDrive, Google Drive, Dropbox, iCloud Drive or another service in Files. Kolorist writes your palettes there as files, so they can be opened on Windows and other computers. The service’s own app uploads the files – Kolorist sends nothing itself."
+          }
+        }
+      }
+    },
     "Velg et foto eller skjermbilde. Fargene leses med bildets egen fargeprofil.": {
       "localizations": {
         "en": {
@@ -6595,6 +6771,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose light environments …"
+          }
+        }
+      }
+    },
+    "Velg mappe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose folder …"
           }
         }
       }
