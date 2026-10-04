@@ -17,10 +17,9 @@ import AppKit
 ///   fargeprøvepanelet.)
 /// - Photoshop: PDF (limes inn som formlag, smartobjekt eller piksler – Photoshop spør), PNG som
 ///   reserve, og hex uten «#» som tekst til hex-feltet i fargevelgeren.
-/// - Pages, Keynote, Numbers: PDF (vektorbilde med riktige farger, som pipetten i fargepanelet kan
-///   hente fra) og PNG; på Mac også selve fargen (NSColor) for første farge.
+/// - Pages, Keynote, Numbers: figurer med fargefyll i Apples felles utklippsformat (`IWorkUtklipp`), uten tekst.
 /// - CSS og SwiftUI: kode.
-/// Alle mål får i tillegg tekst (hex), så innliming i et tekstfelt også gir mening.
+/// De andre målene får i tillegg tekst (hex), så innliming i et tekstfelt også gir mening.
 enum Kopimål: String, CaseIterable, Identifiable {
     case figma, illustrator, indesign, photoshop, sketchAffinity, iWork, css, swiftUI
 
@@ -44,7 +43,7 @@ enum Kopimål: String, CaseIterable, Identifiable {
         case .figma, .sketchAffinity: String(localized: "Som former (SVG)")
         case .illustrator, .indesign: String(localized: "Som vektorformer (PDF), med fargerom og ICC")
         case .photoshop: String(localized: "Som formlag (PDF), og hex til fargevelgeren")
-        case .iWork: String(localized: "Som vektorbilde (PDF) med riktige farger")
+        case .iWork: String(localized: "Som figurer med fargefyll")
         case .css: String(localized: "Som variabler")
         case .swiftUI: String(localized: "Som Color-konstanter")
         }
@@ -94,7 +93,7 @@ extension Utklippstavle {
         let palett = Palett(navn: navn.isEmpty ? String(localized: "Kolorist") : navn, farger: farger)
         let hex = farger.map { $0.farge.hex(medAlfa: $0.farge.alfa < 1) }.joined(separator: "\n")
         var typer: [(String, Data)] = []
-        let tekst: String
+        let tekst: String?
         switch mål {
         case .figma, .sketchAffinity:
             let svg = Eksportformat.svg.data(for: palett)
@@ -111,26 +110,29 @@ extension Utklippstavle {
             if let png = Fargeprøvepdf.png(for: farger) { typer.append(("public.png", png)) }
             tekst = farger.map { String($0.farge.hex().dropFirst()) }.joined(separator: "\n")
         case .iWork:
-            typer.append(("com.adobe.pdf", Fargeprøvepdf.data(for: farger)))
-            if let png = Fargeprøvepdf.png(for: farger) { typer.append(("public.png", png)) }
-            #if os(macOS)
-            if let farge = try? farger[0].farge.macFargedata() { typer.append((NSPasteboard.PasteboardType.color.rawValue, farge)) }
-            #endif
-            tekst = hex
+            // Figurer med fargefyll i Apples felles utklippsformat, som i Pages, Keynote og Numbers selv. Uten tekst
+            // ved siden av: Numbers limer heller inn teksten (i en markert celle) enn figurene.
+            let r = Fargeprøvepdf.rute, m = Fargeprøvepdf.mellomrom
+            let figurer = farger.enumerated().map { i, pf in
+                (IWorkUtklipp.Fyll.farge(pf.farge), CGRect(x: CGFloat(i) * (r + m), y: 0, width: r, height: r))
+            }
+            if let data = IWorkUtklipp.data(figurer) { typer.append((IWorkUtklipp.type, data)) }
+            tekst = nil
         case .css:
             tekst = String(decoding: Eksportformat.css.data(for: palett), as: UTF8.self)
         case .swiftUI:
             tekst = String(decoding: Eksportformat.swiftUI.data(for: palett), as: UTF8.self)
         }
         #if canImport(UIKit)
-        var element: [String: Any] = ["public.utf8-plain-text": tekst]
+        var element: [String: Any] = [:]
+        if let tekst { element["public.utf8-plain-text"] = tekst }
         for (type, data) in typer { element[type] = data }
         UIPasteboard.general.items = [element]
         #elseif canImport(AppKit)
         let tavle = NSPasteboard.general
         tavle.clearContents()
         for (type, data) in typer { tavle.setData(data, forType: NSPasteboard.PasteboardType(type)) }
-        tavle.setString(tekst, forType: .string)
+        if let tekst { tavle.setString(tekst, forType: .string) }
         #endif
     }
 }

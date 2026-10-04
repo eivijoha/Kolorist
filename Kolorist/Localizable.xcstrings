@@ -6507,6 +6507,16 @@
         }
       }
     },
+    "Som figurer med fargefyll": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As shapes with colour fills"
+          }
+        }
+      }
+    },
     "Som form med gradientfyll (SVG)": {
       "localizations": {
         "en": {
@@ -6613,16 +6623,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "As variables"
-          }
-        }
-      }
-    },
-    "Som vektorbilde (PDF) med riktige farger": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "As vector image (PDF) with exact colours"
           }
         }
       }

@@ -144,7 +144,7 @@ extension Utklippstavle {
             // utklippsformat (JSON). Bare lineær: iWork tar ikke imot radiell der (og gir den selv ut som lineær),
             // så radiell og konisk blir vektorbilde (PDF).
             if let figur = Gradientgrafikk.iWorkFigur(gradient) {
-                typer.append(("com.apple.apps.content-language.canvas-object-1.0", figur))
+                typer.append((IWorkUtklipp.type, figur))
             } else {
                 typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
                 if let png = Gradientgrafikk.png(gradient) { typer.append(("public.png", png)) }
@@ -395,38 +395,11 @@ enum Gradientgrafikk {
 
     // MARK: Pages, Keynote, Numbers og Freeform
 
-    /// Figur med gradientfyll i Apples felles utklippsformat (`com.apple.apps.content-language.canvas-object-1.0`),
-    /// som iWork og Freeform selv legger på utklippstavlen. Stoppene i Display P3. Vinkelen regnes mot klokka fra
-    /// høyre (0° = mot høyre, 90° = opp), altså 90° minus CSS-vinkelen. Nil for former formatet ikke tar imot ennå.
+    /// Figur med redigerbar gradient for Pages, Keynote, Numbers og Freeform (`IWorkUtklipp`). Vinkelen regnes der
+    /// mot klokka fra høyre, altså 90° minus CSS-vinkelen. Nil for former formatet ikke tar imot.
     static func iWorkFigur(_ g: Gradientkopi) -> Data? {
         guard g.form == .lineær else { return nil }
-        let id = "com.apple.apps.content-language"
-        func objekt(_ type: String, _ felt: [String: Any]) -> [String: Any] {
-            felt.merging(["type_identifier": "\(id).\(type)", "version": "1.0"]) { a, _ in a }
-        }
-        let stopp = g.stopp.map { s -> [String: Any] in
-            let v = s.farge.gamutKartlagt(til: .displayP3).displayP3
-            let rgba = objekt("color.rgba", ["version": "1.1", "color_space": "p3", "red": v.r, "green": v.g, "blue": v.b,
-                                             "alpha": s.farge.alfa, "headroom": 1])
-            return objekt("fill.gradient.stop", ["fraction": s.posisjon, "inflection": 0.5,
-                                                 "color": objekt("color", ["primary_case": "rgba", "rgba": rgba])])
-        }
-        var vinkel = (90 - g.vinkel).truncatingRemainder(dividingBy: 360)
-        if vinkel < 0 { vinkel += 360 }
-        let flavor = objekt("fill.gradient.flavor", ["primary_case": "linear",
-                                                     "linear": objekt("fill.gradient.flavor.linear", ["angle": vinkel])])
-        let figur = objekt("shape", [
-            "identifier": UUID().uuidString,
-            "geometry": objekt("geometry", [
-                "angle": 0, "flip_horizontally": false, "width_valid": true, "height_valid": true,
-                "size": objekt("size", ["width": flate.width, "height": flate.height]),
-                "position": objekt("position", ["x": 0, "y": 0]),
-            ]),
-            "fill": objekt("fill", ["primary_case": "gradient",
-                                    "gradient": objekt("fill.gradient", ["opacity": 1, "stops": stopp, "flavor": flavor])]),
-            "stroke": "empty", "opacity": 1, "aspect_ratio_locked": false, "head": "none", "tail": "none", "comments": [Any](),
-        ])
-        return try? JSONSerialization.data(withJSONObject: [figur])
+        return IWorkUtklipp.data([(.lineær(stopp: g.stopp, vinkel: 90 - g.vinkel), flate)])
     }
 
     // MARK: SwiftUI

@@ -50,6 +50,11 @@ enum Skjermbildemodus {
                 Utklippstavle.kopier(UserDefaults.standard.string(forKey: "gradientkopiForm") == "radiell" ? r : g, til: mål)
             }
         }
+        // `-fargekopiTil iWork` (o.l.): legg tre farger på utklippstavlen som i «Kopier til» (test).
+        if let mål = UserDefaults.standard.string(forKey: "fargekopiTil").flatMap(Kopimål.init(rawValue:)) {
+            let farger = ["#1B3A6B", "#F2B84B", "#17E7CF"].compactMap { Farge(hex: $0) }.map { PalettFarge(farge: $0) }
+            Utklippstavle.kopier(UserDefaults.standard.bool(forKey: "fargekopiEn") ? [farger[0]] : farger, navn: "Test", til: mål)
+        }
         // `-bibliotekfil <sti>`: importer et fargebibliotek (til test i simulatoren, der dokumentvelgeren ikke virker).
         if let sti = UserDefaults.standard.string(forKey: "bibliotekfil") {
             _ = try? ProfilBibliotek.delt.importerBibliotek(fra: URL(fileURLWithPath: sti))
