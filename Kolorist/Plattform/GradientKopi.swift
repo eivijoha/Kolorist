@@ -214,17 +214,67 @@ enum Gradientgrafikk {
         ctx.restoreGState()
     }
 
-    /// PDF med jevn skyggelegging (vektor), i sRGB eller Display P3.
+    /// PDF med gradienten som PDF-skyggelegging (aksial eller radiell) der fargene er beskrevet med eksponentielle
+    /// funksjoner (FunctionType 2), skjøtet sammen med FunctionType 3 når det er flere stopp – én per stopp. Da blir den
+    /// en ekte, redigerbar gradient i Illustrator og InDesign. (Quartz skriver en samplet funksjon, FunctionType 0, som
+    /// Illustrator ikke kjenner igjen: «An unknown shading type was encountered».) Fargene i sRGB.
     static func pdf(_ g: Gradientkopi) -> Data {
-        let data = NSMutableData()
-        var boks = flate
-        guard let forbruker = CGDataConsumer(data: data as CFMutableData),
-              let ctx = CGContext(consumer: forbruker, mediaBox: &boks, nil) else { return Data() }
-        ctx.beginPDFPage(nil)
-        tegn(g, i: ctx, rekt: flate)
-        ctx.endPDFPage()
-        ctx.closePDF()
-        return data as Data
+        let r = flate
+        // Stopp i stigende rekkefølge; harde overganger (trinnvis) får et lite mellomrom, siden grensene må stige.
+        var stopp: [(farge: SRGB, posisjon: Double)] = []
+        for s in g.stopp {
+            var pos = min(max(s.posisjon, 0), 1)
+            if let siste = stopp.last, pos <= siste.posisjon { pos = min(siste.posisjon + 0.0001, 1) }
+            stopp.append((s.farge.gamutKartlagt(til: .sRGB).sRGB, pos))
+        }
+        if stopp.count == 1 { stopp.append((stopp[0].farge, 1)) }
+        func tall(_ v: Double) -> String { String(format: "%.4f", v) }
+        func farge(_ c: SRGB) -> String { "[\(tall(c.r)) \(tall(c.g)) \(tall(c.b))]" }
+        func ledd(_ a: SRGB, _ b: SRGB) -> String { "<< /FunctionType 2 /Domain [0 1] /C0 \(farge(a)) /C1 \(farge(b)) /N 1 >>" }
+
+        // Første og siste stopp trenger ikke ligge på 0 og 1: funksjonen strekkes over hele aksen.
+        let start = stopp.first!.posisjon, slutt = stopp.last!.posisjon
+        let lengde = max(slutt - start, 0.0001)
+        let funksjon: String
+        if stopp.count == 2 {
+            funksjon = ledd(stopp[0].farge, stopp[1].farge)
+        } else {
+            let funksjoner = zip(stopp, stopp.dropFirst()).map { ledd($0.farge, $1.farge) }.joined(separator: " ")
+            let grenser = stopp.dropFirst().dropLast().map { tall(($0.posisjon - start) / lengde) }.joined(separator: " ")
+            let koding = Array(repeating: "0 1", count: stopp.count - 1).joined(separator: " ")
+            funksjon = "<< /FunctionType 3 /Domain [0 1] /Functions [\(funksjoner)] /Bounds [\(grenser)] /Encode [\(koding)] >>"
+        }
+
+        // Aksen i PDF-koordinater (origo nede til venstre), forkortet til første og siste stopp.
+        let skyggelegging: String
+        if g.form == .radiell {
+            let radius = hypot(r.width, r.height) / 2
+            skyggelegging = "<< /ShadingType 3 /ColorSpace /DeviceRGB /Coords [\(tall(r.midX)) \(tall(r.midY)) \(tall(radius * start)) \(tall(r.midX)) \(tall(r.midY)) \(tall(radius * slutt))] /Extend [true true] /Function \(funksjon) >>"
+        } else {
+            let (a, b) = g.endepunkter(i: r)
+            let p0 = CGPoint(x: a.x + (b.x - a.x) * start, y: r.height - (a.y + (b.y - a.y) * start))
+            let p1 = CGPoint(x: a.x + (b.x - a.x) * slutt, y: r.height - (a.y + (b.y - a.y) * slutt))
+            skyggelegging = "<< /ShadingType 2 /ColorSpace /DeviceRGB /Coords [\(tall(p0.x)) \(tall(p0.y)) \(tall(p1.x)) \(tall(p1.y))] /Extend [true true] /Function \(funksjon) >>"
+        }
+        let innhold = "q 0 0 \(tall(r.width)) \(tall(r.height)) re W n /Sh1 sh Q"
+        let objekter = [
+            "<< /Type /Catalog /Pages 2 0 R >>",
+            "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+            "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 \(tall(r.width)) \(tall(r.height))] /Resources << /Shading << /Sh1 5 0 R >> >> /Contents 4 0 R >>",
+            "<< /Length \(innhold.utf8.count) >>\nstream\n\(innhold)\nendstream",
+            skyggelegging,
+        ]
+        var pdf = "%PDF-1.4\n"
+        var forskyvninger: [Int] = []
+        for (i, objekt) in objekter.enumerated() {
+            forskyvninger.append(pdf.utf8.count)
+            pdf += "\(i + 1) 0 obj\n\(objekt)\nendobj\n"
+        }
+        let xref = pdf.utf8.count
+        pdf += "xref\n0 \(objekter.count + 1)\n0000000000 65535 f \n"
+        for f in forskyvninger { pdf += String(format: "%010d 00000 n \n", f) }
+        pdf += "trailer\n<< /Size \(objekter.count + 1) /Root 1 0 R >>\nstartxref\n\(xref)\n%%EOF\n"
+        return Data(pdf.utf8)
     }
 
     /// PNG i Display P3 (2×), for programmer som bare tar imot punktgrafikk.
