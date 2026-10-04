@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["7YT4MT7S7U.no.engenett.Kolorist"],
+        "components": [
+          { "/": "/l", "comment": "Delte farger, paletter, harmonier og gradienter" },
+          { "/": "/l/*" }
+        ]
+      }
+    ]
+  }
+}

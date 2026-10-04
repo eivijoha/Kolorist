@@ -1,0 +1,4 @@
+# Apple henter apple-app-site-association som JSON, uten omdirigering.
+<Files "apple-app-site-association">
+  ForceType application/json
+</Files>
