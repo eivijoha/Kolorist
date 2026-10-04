@@ -543,6 +543,38 @@ Methods and sources: in the app (Palettes › Methods and sources) and at https:
 Contact: eivind.johansen@ntnu.no
 ```
 
+### TestFlight (Beta App Review)
+
+Første bygg av en ny versjon (1.2) går til Beta App Review før eksterne testere får det. Senere bygg av 1.2 går som regel
+rett gjennom. Feltene:
+
+- **Beta App Review Information** (TestFlight › Test Information): kontakt som over, ingen innlogging, og samme
+  notater som App Review (se over) – de gjelder også for betaen.
+- **Beta App Description**: kan stå som for 1.1.
+- **What to Test** (per bygg, norsk og engelsk):
+
+```
+Nytt i 1.2 – prøv gjerne dette:
+• Vurdering › Lys: fargen på skjermen og i et lysmiljø, og flere lysmiljøer under. Mål lyset med kameraet og lagre det.
+• Paletter: lyspæren viser paletten i lys, A-knappen viser skriftkontrast. Legg til farger med det stiplede feltet.
+• Utplukk › Lys (beta): kompenser farger med et gråkort eller en hvit flate. Si fra hvis fargene blir feil.
+• Del som lenke fra farger og paletter, og «Lagre som …» til en mappe eller en annen app.
+• Kopier gradienter til designprogrammer – også InDesign, nå som redigerbar gradient.
+• Studio › Vis som › Filament: alle typer – nærmeste filament for 3D-print.
+Gi gjerne beskjed om alt som ser rart ut, særlig på Mac og iPad.
+```
+
+```
+New in 1.2 – please try:
+• Assess › Light: the colour on screen and in a viewing condition, with more viewing conditions below. Measure the light with the camera and save it.
+• Palettes: the light bulb shows the palette in light, the A button shows text contrast. Add colours with the dashed tile.
+• Pick › Light (beta): compensate colours with a grey card or a white surface. Let us know if the colours look wrong.
+• Share as link from colours and palettes, and “Save as …” to a folder or another app.
+• Copy gradients to design apps – including InDesign, now as an editable gradient.
+• Studio › Show as › Filament: all types – the nearest filament for 3D printing.
+Please report anything that looks odd, especially on Mac and iPad.
+```
+
 ### Skjermbilder – slik er de tatt
 
 Alle i `Dokumentasjon/1.2/Skjermbilder/`:
