@@ -147,8 +147,8 @@ struct KameraVisning: View {
                 Lysbibliotek.delt.valgtLysmiljø = lagret.id
             }
         }
-        // Pause kameraet mens arket er åpent, så det ikke konkurrerer med trykk i arket.
-        .onChange(of: lagre != nil) { _, åpent in
+        // Pause kameraet mens et ark er åpent, så det ikke konkurrerer med trykk og skriving i arket.
+        .onChange(of: lagre != nil || lagreLysmiljø != nil) { _, åpent in
             if åpent { plukker.stopp() } else { Task { await plukker.start() } }
         }
         .task {

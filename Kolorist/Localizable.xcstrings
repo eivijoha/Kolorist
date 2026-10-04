@@ -1506,16 +1506,6 @@
         }
       }
     },
-    "Eksempler": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Examples"
-          }
-        }
-      }
-    },
     "Eksisterende paletter": {
       "localizations": {
         "en": {
@@ -1762,16 +1752,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour model"
-          }
-        }
-      }
-    },
-    "Fargen i lysmiljøene": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The colour in viewing conditions"
           }
         }
       }
@@ -2237,6 +2217,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Surfaces (LRV)"
+          }
+        }
+      }
+    },
+    "Flere lysmiljøer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More viewing conditions"
           }
         }
       }
@@ -4711,6 +4701,16 @@
         }
       }
     },
+    "Lysmiljø: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewing condition: %@"
+          }
+        }
+      }
+    },
     "Lysmiljøer": {
       "localizations": {
         "en": {
@@ -4887,6 +4887,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "More about this"
+          }
+        }
+      }
+    },
+    "Merk flere lysmiljøer med haken i lista under for å sammenligne.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check more viewing conditions in the list below to compare."
           }
         }
       }
@@ -7451,6 +7461,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a camera. With iPhone as the camera (Continuity), the colours can be compensated for the light with a grey card or reference card."
+          }
+        }
+      }
+    },
+    "Velg lysmiljøet fargen vises i": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the viewing condition the colour is shown in"
           }
         }
       }

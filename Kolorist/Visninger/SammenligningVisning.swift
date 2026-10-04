@@ -100,10 +100,10 @@ struct SammenligningVisning: View {
     }
 }
 
-/// Halvparten av det store fargefeltet i «Forskjell», som også er velgeren for fargen. Merket nederst (bokstav, hex og
+/// Halvparten av et stort fargefelt (Forskjell, Lys), som også er velgeren for fargen. Merket nederst (bokstav, hex og
 /// blyant) viser at flaten kan trykkes på.
-private struct FargeflateVelger: View {
-    let bokstav: String
+struct FargeflateVelger: View {
+    var bokstav: String? = nil
     let tittel: String
     @Binding var farge: Farge
     let kant: HorizontalAlignment
@@ -148,7 +148,7 @@ private struct FargeflateVelger: View {
 
     private var merke: some View {
         HStack(spacing: 6) {
-            Text(bokstav).font(.headline)
+            if let bokstav { Text(bokstav).font(.headline) }
             Text(farge.hex()).font(.caption.monospaced())
             Image(systemName: "pencil").font(.caption.weight(.semibold))
         }
@@ -160,7 +160,7 @@ private struct FargeflateVelger: View {
 }
 
 /// Lett dimming mens flaten trykkes, så den kjennes som en knapp.
-private struct Flatetrykk: ButtonStyle {
+struct Flatetrykk: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label.opacity(configuration.isPressed ? 0.75 : 1)
     }

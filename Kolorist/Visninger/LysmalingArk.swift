@@ -9,6 +9,8 @@ struct LysmålingArk: View {
     @State private var plukker = KameraFargeplukker()
     @State private var egetKort = false
     @State private var lagreLysmiljø: Lysmiljø?
+    /// Lysmiljøet er lagret: målearket lukkes når navnearket er borte.
+    @State private var lagret = false
     @State private var bibliotek = Lysbibliotek.delt
     @Environment(\.dismiss) private var lukk
 
@@ -79,14 +81,20 @@ struct LysmålingArk: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Avbryt") { lukk() } } }
             .modifier(EgetKortSpørsmål(vises: $egetKort) { plukker.ventPåGråkort(refleksjon: $0, profil: profil) })
-            .sheet(item: $lagreLysmiljø) { miljø in
-                LysmiljøRedigering(miljø: miljø) { lagret in
-                    bibliotek.lagre(lagret)
-                    bibliotek.valgtLysmiljø = lagret.id
+            // Lukk målearket først når navnearket er borte (to lukkinger samtidig gir hakk).
+            .sheet(item: $lagreLysmiljø, onDismiss: { if lagret { lukk() } }) { miljø in
+                LysmiljøRedigering(miljø: miljø) { nytt in
+                    bibliotek.lagre(nytt)
+                    bibliotek.valgtLysmiljø = nytt.id
                     // Det nye lysmiljøet vises med én gang i Vurdering › Lys.
-                    if !bibliotek.erVist(lagret) { bibliotek.veksleVist(lagret) }
-                    lukk()
+                    if !bibliotek.erVist(nytt) { bibliotek.veksleVist(nytt) }
+                    lagret = true
                 }
+            }
+            // Kameraet står stille mens lysmiljøet navngis: målingen oppdateres ellers hvert sekund og tegner arket på
+            // nytt, så skrivingen avbrytes.
+            .onChange(of: lagreLysmiljø != nil) { _, åpent in
+                if åpent { plukker.stopp() } else if !lagret { Task { await plukker.start() } }
             }
         }
         .task { await plukker.start() }

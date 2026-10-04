@@ -19,13 +19,36 @@ struct LysmiljøVelger: View {
                 }
             }
             if !bibliotek.synligeEksempler.isEmpty {
-                Section("Eksempler") {
+                Section("Lysmiljøer") {
                     ForEach(bibliotek.synligeEksempler) { Text($0.navn).tag(Optional($0.id)) }
                 }
             }
             if !bibliotek.synligeStandarder.isEmpty {
                 Section("Standarder") {
                     ForEach(bibliotek.synligeStandarder) { Text($0.navn).tag(Optional($0.id)) }
+                }
+            }
+        }
+    }
+}
+
+/// Valgene for lysmiljø i en meny, gruppert med skiller og overskrift (en Picker i en Menu blir én flat liste).
+struct LysmiljøMenyvalg: View {
+    @Binding var valgt: UUID?
+    @State private var bibliotek = Lysbibliotek.delt
+
+    var body: some View {
+        gruppe("Mine lysmiljøer", bibliotek.lysmiljøer)
+        gruppe("Lysmiljøer", bibliotek.synligeEksempler)
+        gruppe("Standarder", bibliotek.synligeStandarder)
+    }
+
+    @ViewBuilder
+    private func gruppe(_ tittel: LocalizedStringKey, _ miljøer: [Lysmiljø]) -> some View {
+        if !miljøer.isEmpty {
+            Section(tittel) {
+                ForEach(miljøer) { miljø in
+                    Toggle(miljø.navn, isOn: Binding(get: { valgt == miljø.id }, set: { if $0 { valgt = miljø.id } }))
                 }
             }
         }
