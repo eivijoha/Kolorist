@@ -564,7 +564,7 @@ Skriftkontrast med `-startfane paletter -palett.visning lys|skriftkontrast` og e
 
 ### Før du sender inn
 
-- [ ] 1.2-nettsiden er publisert på kolorist.no (fra `neste/` til roten; 1.1 til `historisk/1.1/`; `l/` og `.well-known/` blir liggende).
+- [x] 1.2-nettsiden er publisert på kolorist.no (2026-10-04); 1.1 i `historisk/1.1/`; `l/` og `.well-known/` beholdt.
 - [x] `MARKETING_VERSION` er `1.2`. `CURRENT_PROJECT_VERSION` (nå `6`) økes for hver opplasting.
 - [ ] Ny versjon opprettet i App Store Connect for både iOS og macOS (1.2), med «Nytt i denne versjonen» fra over.
 - [ ] Nøkkelord og beskrivelse oppdatert (nye: lys, lysmiljø, filament, 3D-print, gråkort).
@@ -576,4 +576,4 @@ Skriftkontrast med `-startfane paletter -palett.visning lys|skriftkontrast` og e
 - [x] `ITSAppUsesNonExemptEncryption = NO` står i byggeinnstillingene.
 - [x] Lagringsformatet er bakoverkompatibelt: paletter med Munsell-farger og farger fra fargebiblioteker kan
       leses av 1.0 på enheter som ikke er oppdatert ennå (se `PalettFarge` i `Palett.swift` og `LagringsformatTests`).
-- [ ] Ved lansering: 1.2-nettsiden til roten, 1.1 til `historisk/1.1/`; `l/` og `.well-known/` må bli liggende.
+- [x] 1.2-nettsiden ligger i roten (2026-10-04); 1.1 er flyttet til `historisk/1.1/`; `l/` og `.well-known/` er beholdt.
