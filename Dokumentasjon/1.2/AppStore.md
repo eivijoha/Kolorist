@@ -12,6 +12,12 @@ Utgangspunktet er tekstene for 1.1 (`Dokumentasjon/1.1/AppStore.md`). Endringer 
 - [x] Skjermbilder i `Dokumentasjon/1.2/Skjermbilder/` (iPhone 6,5″, iPad 13″, Mac; nb og en): Studio, Harmoni,
       Overgang, Kontrast, Fargesyn og «Se i lys». Tatt med `-skjermbilde YES` og samme argumenter som for 1.1;
       «Se i lys» med `-panelFørst lys`. Mac med `-testmaalinger YES -kunSRGB NO`.
+- [ ] Mac-skjermbildet «6-lys» er fra før rutenettet (skjermopptak på Mac var ikke tillatt 2026-10-04) – ta på nytt.
+- [ ] Innholdsrettigheter (App Store Connect › Appinformasjon): «Inneholder appen tredjepartsinnhold?» – ja, filamentfarger
+      fra FilamentColors.xyz under CC BY 4.0; kreditering i appen (Mine fargerom, Metoder) og på kolorist.no.
+- [ ] App Review-notater: delingslenker (testlenke https://kolorist.no/l#… fra `Testlenker.json`), delingsmappe (velg en
+      mappe i Filer), filamentbibliotek («Vis som» › Filament: alle typer), lysmåling krever gråkort for full funksjon.
+- [ ] Ved lansering: 1.2-nettsiden til roten, 1.1 til `historisk/1.1/`; `l/` og `.well-known/` må bli liggende.
 
 ### Utkast: Nytt i 1.2 – iPhone og iPad, norsk
 
