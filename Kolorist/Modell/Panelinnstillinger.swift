@@ -3,7 +3,7 @@ import Foundation
 import Observation
 import SwiftUI
 
-/// Brukerens oppsett av panelene: rekkefølge per skjerm, hvilke paneler som er lagt sammen, og hvilke
+/// Brukerens oppsett av panelene: rekkefølge per skjerm, hvilke paneler som er lagt sammen eller åpnet, og hvilke
 /// fargeverdier som er skjult under «Verdier». Lagres i iCloud (nøkkel–verdi) og synkroniseres mellom
 /// enhetene, med en lokal kopi når iCloud ikke er tilgjengelig.
 @MainActor
@@ -22,6 +22,9 @@ final class Panelinnstillinger {
             case .overgang: [.overgangstoner, .lysereMørkere, .gradient]
             }
         }
+
+        /// Studio/Farge har mange paneler: som standard er bare det øverste åpent, så panelene under synes.
+        var bareØversteÅpent: Bool { self == .studioFarge }
     }
 
     enum Panel: String, CaseIterable, Identifiable {
@@ -66,7 +69,9 @@ final class Panelinnstillinger {
     }
 
     private(set) var rekkefølger: [String: [String]] = [:]
+    /// Paneler brukeren har lagt sammen eller åpnet; andre følger skjermens standard.
     private(set) var lagtSammen: Set<String> = []
+    private(set) var åpnet: Set<String> = []
     private(set) var skjulteVerdier: Set<String> = []
     private(set) var verdirekkefølge: [String] = []
 
@@ -74,6 +79,7 @@ final class Panelinnstillinger {
     private enum Nøkkel {
         static let rekkefølge = "paneler.rekkefølge"
         static let lagtSammen = "paneler.lagtSammen"
+        static let åpnet = "paneler.åpnet"
         static let skjulteVerdier = "verdier.skjult"
         static let verdirekkefølge = "verdier.rekkefølge"
     }
@@ -115,7 +121,13 @@ final class Panelinnstillinger {
         lagre()
     }
 
-    func erLagtSammen(_ panel: Panel) -> Bool { lagtSammen.contains(panel.rawValue) }
+    func erLagtSammen(_ panel: Panel) -> Bool {
+        if lagtSammen.contains(panel.rawValue) { return true }
+        if åpnet.contains(panel.rawValue) { return false }
+        guard let skjerm = Skjerm.allCases.first(where: { $0.paneler.contains(panel) }), skjerm.bareØversteÅpent
+        else { return false }
+        return paneler(for: skjerm).first != panel
+    }
     func viser(_ verdi: Verdi) -> Bool { !skjulteVerdier.contains(verdi.id) }
 
     // MARK: - Endringer
@@ -130,7 +142,11 @@ final class Panelinnstillinger {
     func veksle(_ panel: Panel) { settLagtSammen(panel, !erLagtSammen(panel)) }
 
     func settLagtSammen(_ panel: Panel, _ sammen: Bool) {
-        if sammen { lagtSammen.insert(panel.rawValue) } else { lagtSammen.remove(panel.rawValue) }
+        if sammen {
+            lagtSammen.insert(panel.rawValue); åpnet.remove(panel.rawValue)
+        } else {
+            lagtSammen.remove(panel.rawValue); åpnet.insert(panel.rawValue)
+        }
         lagre()
     }
 
@@ -141,7 +157,7 @@ final class Panelinnstillinger {
 
     func tilbakestill(_ skjerm: Skjerm) {
         rekkefølger[skjerm.rawValue] = nil
-        for p in skjerm.paneler { lagtSammen.remove(p.rawValue) }
+        for p in skjerm.paneler { lagtSammen.remove(p.rawValue); åpnet.remove(p.rawValue) }
         if skjerm == .studioFarge { skjulteVerdier = []; verdirekkefølge = [] }
         lagre()
     }
@@ -152,6 +168,7 @@ final class Panelinnstillinger {
         func les<T>(_ nøkkel: String) -> T? { lager.verdi(nøkkel) as? T }
         rekkefølger = les(Nøkkel.rekkefølge) ?? [:]
         lagtSammen = Set(les(Nøkkel.lagtSammen) as [String]? ?? [])
+        åpnet = Set(les(Nøkkel.åpnet) as [String]? ?? [])
         skjulteVerdier = Set(les(Nøkkel.skjulteVerdier) as [String]? ?? [])
         verdirekkefølge = les(Nøkkel.verdirekkefølge) ?? []
     }
@@ -160,6 +177,7 @@ final class Panelinnstillinger {
         lager.skriv([
             (Nøkkel.rekkefølge, rekkefølger),
             (Nøkkel.lagtSammen, Array(lagtSammen).sorted()),
+            (Nøkkel.åpnet, Array(åpnet).sorted()),
             (Nøkkel.skjulteVerdier, Array(skjulteVerdier).sorted()),
             (Nøkkel.verdirekkefølge, verdirekkefølge),
         ])
