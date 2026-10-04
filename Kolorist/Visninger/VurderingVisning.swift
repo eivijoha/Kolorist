@@ -40,11 +40,15 @@ struct VurderingVisning: View {
         #endif
         .toolbar {
             ToolbarItem(placement: .principal) {
+                #if os(macOS)
+                delvalg.pickerStyle(.segmented).fixedSize()
+                #else
                 // Segmentert når det er plass; ellers (smale iPhoner, lengre engelske navn) som meny.
                 ViewThatFits(in: .horizontal) {
                     delvalg.pickerStyle(.segmented).fixedSize()
                     delvalg.pickerStyle(.menu).menuIndicator(.visible).fixedSize()
                 }
+                #endif
             }
         }
     }

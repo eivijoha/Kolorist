@@ -10,9 +10,13 @@ Utgangspunktet er tekstene for 1.1 (`Dokumentasjon/1.1/AppStore.md`). Endringer 
 - [ ] Personvernetiketten er uendret («Data Not Collected»): lysmiljøer, referansekort og kameraprofiler ligger i
       brukerens egen iCloud (nøkkel–verdi), og stillbildet av kortet brukes bare på enheten.
 - [x] Skjermbilder i `Dokumentasjon/1.2/Skjermbilder/` (iPhone 6,5″, iPad 13″, Mac; nb og en): Studio, Harmoni,
-      Overgang, Kontrast, Fargesyn og «Se i lys». Tatt med `-skjermbilde YES` og samme argumenter som for 1.1;
-      «Se i lys» med `-panelFørst lys`. Mac med `-testmaalinger YES -kunSRGB NO`.
-- [ ] Mac-skjermbildet «6-lys» er fra før rutenettet (skjermopptak på Mac var ikke tillatt 2026-10-04) – ta på nytt.
+      Overgang, Kontrast, Fargesyn og Lys (Vurdering › Lys). Tatt med `-skjermbilde YES` og samme argumenter som for 1.1;
+      Lys med `-startfane vurdering -vurderingDel lys -lys.valgtMiljø 6C1E0000-0000-4000-8000-000000002700` (stua om
+      kvelden). Mac med `-testmaalinger YES -kunSRGB NO`. Kontrast, Fargesyn og Lys, og alle Mac-bildene, er tatt på
+      nytt for build 6 (fire deler i Vurdering, palettkolonnen med «Legg til»-feltet).
+- [x] iPhone i tillegg: `7-palett-lys` (paletten i lys) og `8-skriftkontrast` (Skriftkontrast i paletten), tatt med
+      `-startfane paletter -palett.visning lys|skriftkontrast` og et trykk på «Nordisk kyst». Valgfrie – dropp dem om
+      seks bilder holder.
 - [ ] Innholdsrettigheter (App Store Connect › Appinformasjon): «Inneholder appen tredjepartsinnhold?» – ja, filamentfarger
       fra FilamentColors.xyz under CC BY 4.0; kreditering i appen (Mine fargerom, Metoder) og på kolorist.no.
 - [ ] App Review-notater: delingslenker (testlenke https://kolorist.no/l#… fra `Testlenker.json`), «Lagre som» (velg formater, lagre i en

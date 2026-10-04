@@ -89,6 +89,7 @@ struct LysVurdering: View {
                 Text("Som et foto").tag(true)
             }
             .pickerStyle(.segmented)
+            .labelsHidden()
         }
     }
 
