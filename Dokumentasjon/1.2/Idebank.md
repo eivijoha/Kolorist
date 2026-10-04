@@ -145,7 +145,10 @@ avispapir …).
   gjengivelse – for eksempel hvordan avispapiret ser ut på skjermen eller i en annen trykkprofil.
 - Henger sammen med «rene CMYK-verdier» og fargekart i CMYK: verdiene må tolkes i samme profil som de er laget i.
 
-## Til 1.3: App Clip for delingslenker (vurdert 2026-10-04)
+## App Clip for delingslenker (vurdert 2026-10-04 – lagt til side)
+
+**Beslutning (Eivind, 2026-10-04): droppet for nå.** Lenkene brukes nok oftest på desktop, der App Clips ikke finnes.
+Visningssiden på kolorist.no er veien for mottakere uten appen. Vurderingen under står igjen til en eventuell senere runde.
 
 Idé: en App Clip – en liten del av appen som åpnes uten installasjon – for mottakere av `kolorist.no/l#…` som ikke har
 Kolorist på iPhone eller iPad.
