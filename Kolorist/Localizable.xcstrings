@@ -6537,6 +6537,16 @@
         }
       }
     },
+    "Som redigerbar gradient (PDF) i sRGB": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As an editable gradient (PDF) in sRGB"
+          }
+        }
+      }
+    },
     "Som variabler": {
       "localizations": {
         "en": {
@@ -6563,16 +6573,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "As vector shapes (PDF), with colour space and ICC"
-          }
-        }
-      }
-    },
-    "Som vektorgradient (PDF) i Display P3": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "As a vector gradient (PDF) in Display P3"
           }
         }
       }

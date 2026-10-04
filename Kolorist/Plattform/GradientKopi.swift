@@ -65,7 +65,7 @@ enum Gradientmål: String, CaseIterable, Identifiable {
     var forklaring: String {
         switch self {
         case .figma, .sketchAffinity: String(localized: "Som form med gradientfyll (SVG)")
-        case .illustrator, .indesign: String(localized: "Som vektorgradient (PDF) i Display P3")
+        case .illustrator, .indesign: String(localized: "Som redigerbar gradient (PDF) i sRGB")
         case .photoshop: String(localized: "Som formlag eller bilde (PDF/PNG)")
         case .iWork: String(localized: "Som vektorbilde (PDF) med riktige farger")
         case .css: String(localized: "Som gradient med OKLab og reserve")
@@ -112,7 +112,13 @@ extension Utklippstavle {
             let svg = Gradientgrafikk.svg(gradient)
             typer.append(("public.svg-image", Data(svg.utf8)))
             tekst = svg   // Figma og Sketch leser SVG-koden fra teksten
-        case .illustrator, .indesign:
+        case .illustrator:
+            // PDF (redigerbar gradient) og SVG-kode som tekst – det samme Illustrator selv legger på utklippstavlen.
+            typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
+            let svg = Gradientgrafikk.svg(gradient)
+            typer.append(("public.svg-image", Data(svg.utf8)))
+            tekst = svg
+        case .indesign:
             typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
             tekst = gradient.css.moderne
         case .photoshop, .iWork:
