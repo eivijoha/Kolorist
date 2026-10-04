@@ -32,8 +32,9 @@ gjort, så det kan godtas eller endres.
 ## Kompensasjon i Utplukk
 
 9. **Hvitbalanse**: Ved kompensasjon låses hvitbalansen til D65 (iPhone/iPad), og Kolorist kompenserer selv.
-   Mac kan ikke låse hvitbalansen; der finnes bare gråkort og referansekort, og de kompenserer oppå kameraets
-   automatiske hvitbalanse. Godt nok på Mac?
+   *Avklart 2026-10-04:* På Mac er visning det viktige – «Se i lys» med eksempler og lysmiljøer lagret på iOS
+   (synkronisert via iCloud). Lys-menyen og lysmålingen i Utplukk vises bare på iPhone og iPad. Referansekort kan
+   fortsatt importeres på Mac (filen ligger ofte der) og synkroniseres til iOS.
 10. **«For lyset kameraet måler»** bruker kromatisiteten fra kameraets automatiske hvitbalanse (før låsing) og
     CAT16. Resultatet ligner det kameraet gjør selv, men med vist fargetemperatur og konsekvent metode. Nyttig,
     eller forvirrende ved siden av «Som kameraet ser fargene»?

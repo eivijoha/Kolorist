@@ -102,7 +102,11 @@ struct LysmiljøArk: View {
                 } header: {
                     Text("Mine lysmiljøer")
                 } footer: {
+                    #if os(macOS)
+                    Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud.")
+                    #else
                     Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer kan også måles med kameraet under Utplukk.")
+                    #endif
                 }
                 Section("Eksempler") {
                     ForEach(Lysbibliotek.innebygde) { miljø in

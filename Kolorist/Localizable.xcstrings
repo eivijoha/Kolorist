@@ -65,16 +65,16 @@
     },
     "%@ / %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ / %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ / %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ / %2$@"
           }
         }
       }
@@ -91,16 +91,16 @@
     },
     "%@ K, Duv %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ K, Duv %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ K, Duv %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ K, Duv %2$@"
           }
         }
       }
@@ -431,16 +431,16 @@
     },
     "%lld (%lld × %lld)": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld (%2$lld × %3$lld)"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld (%lld × %lld)"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld (%2$lld × %3$lld)"
           }
         }
       }
@@ -855,6 +855,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use"
+          }
+        }
+      }
+    },
+    "Bruk kortet på iPhone eller iPad under Utplukk › Lys › Med referansekort. Kortet synkroniseres via iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use the card on iPhone or iPad under Pick › Light › With reference card. The card syncs via iCloud."
           }
         }
       }
@@ -3379,6 +3389,16 @@
         }
       }
     },
+    "Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the light where the colours will be used – the living room, the office, the shop – and see the colours in it. Light environments measured with the camera on iPhone and iPad arrive here via iCloud."
+          }
+        }
+      }
+    },
     "Lagre lyset som lysmiljø …": {
       "localizations": {
         "en": {
@@ -4739,6 +4759,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reference cards with known values give accurate light compensation in Pick and an estimate of the light. The values are not included with the app; import the file that belongs to your card: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV or a table of Lab, XYZ or spectral values. Spectra give the reference values in any light."
+          }
+        }
+      }
+    },
+    "Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk på iPhone og iPad, og synkroniseres dit via iCloud. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reference cards with known values give accurate light compensation in Pick on iPhone and iPad, and sync there via iCloud. The values are not included with the app; import the file that belongs to your card: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV or a table of Lab, XYZ or spectral values. Spectra give the reference values in any light."
           }
         }
       }
@@ -6581,16 +6611,16 @@
     },
     "≈ %@ K · %@ lx": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "≈ %1$@ K · %2$@ lx"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "≈ %@ K · %@ lx"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "≈ %1$@ K · %2$@ lx"
           }
         }
       }

@@ -344,9 +344,15 @@ struct ReferansekortDetalj: View {
                     }
                 }
                 Section {
-                    Text("Bruk kortet under Utplukk › Lys › Med referansekort: hold kortet i samme lys som fargene, og plasser hjørnene i bildet.")
-                        .font(.footnote)
-                        .foregroundStyle(Color.sekundærTekst)
+                    Group {
+                        #if os(macOS)
+                        Text("Bruk kortet på iPhone eller iPad under Utplukk › Lys › Med referansekort. Kortet synkroniseres via iCloud.")
+                        #else
+                        Text("Bruk kortet under Utplukk › Lys › Med referansekort: hold kortet i samme lys som fargene, og plasser hjørnene i bildet.")
+                        #endif
+                    }
+                    .font(.footnote)
+                    .foregroundStyle(Color.sekundærTekst)
                 }
             }
             .formStyle(.grouped)

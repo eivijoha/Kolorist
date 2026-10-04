@@ -64,7 +64,10 @@ struct KameraVisning: View {
                     }
                 }
                 .overlay(alignment: .topTrailing) { ZoomMerke(plukker: plukker) }
+                #if os(iOS)
+                // Lysmåling og kompensasjon bare på iPhone og iPad (Mac-kameraet kan ikke låse hvitbalansen).
                 .overlay(alignment: .topLeading) { LysmålingMerke(plukker: plukker) }
+                #endif
                 .onChange(of: geo.size) { plukker.tilbakestillMarkør() }
             }
             .clipped()
@@ -99,7 +102,9 @@ struct KameraVisning: View {
         .toolbar {
             ToolbarItemGroup {
                 LyskildeKnapper(plukker: plukker, slukkEtterFangst: $slukkEtterFangst)
+                #if os(iOS)
                 LyskompensasjonMeny(plukker: plukker, kalibrerMed: $kalibrerMed, lagreLysmiljø: $lagreLysmiljø)
+                #endif
                 Button("Legg alle i palett", systemImage: "square.and.arrow.down.on.square") {
                     lagre = arbeidsbenk.målinger.map { PalettFarge(farge: $0, opphav: .kamera) }
                 }
