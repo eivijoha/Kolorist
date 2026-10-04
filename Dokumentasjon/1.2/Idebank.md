@@ -54,12 +54,12 @@ Bluetooth er ikke mulig (iOS sender ikke filer over Bluetooth til andre enn Appl
 Google Drive, Dropbox, Box, iCloud Drive eller en nettverksdisk – og Kolorist skriver palettene dit som filer. Ingen
 innlogging eller SDK i Kolorist: tjenestens egen app laster opp. Personvernet er uendret.
 
-- Per palett: ASE, CSV (navn, hex, sRGB, CIELab D50, Munsell, CMYK, LRV) og A4-PDF; ev. DTCG-JSON.
+- Ingen Windows-app og ingen nye formater (Eivind): bare de eksisterende eksportformatene – ASE, ACO, DTCG-JSON,
+  CSS, GPL, SVG, hex-liste og A4-PDF – skrevet til mappa. Brukeren velger hvilke.
 - Speiling av valgte paletter ved endring (debouncet), og en knapp for å dele én palett dit.
 - Sletter aldri filer i mappa (som i Studieblikk: logg, ikke slett).
 - Status i én modell: koblet / mangler tilgang / mappa er borte → «Koble til på nytt».
 - Senere: lese ICC-profiler og fargekart som kolleger legger i mappa.
-- Fargebøker for CAD/BIM som eget format.
 
 Gjenbruk fra Studieblikk (`SharedFolderStore`):
 - `coordinatedRead`/`coordinatedWrite` (NSFileCoordinator, atomisk erstatning) og `writeFileOffMain`
