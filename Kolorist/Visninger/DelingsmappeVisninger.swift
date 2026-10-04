@@ -9,6 +9,9 @@ struct DelingsmappeArk: View {
     @Query(sort: \PalettDokument.opprettet) private var paletter: [PalettDokument]
     @State private var velgerMappe = false
     @State private var feil: String?
+    /// Filene som eksporteres én gang (til en mappe brukeren velger, f.eks. i OneDrive).
+    @State private var eksport: [Eksportfil] = []
+    @State private var eksporterer = false
     @Environment(\.dismiss) private var lukk
 
     var body: some View {
@@ -35,7 +38,27 @@ struct DelingsmappeArk: View {
                 } header: {
                     Text("Mappe")
                 } footer: {
-                    Text("Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
+                    #if os(macOS)
+                    Text("Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
+                    #else
+                    Text("Kolorist skriver palettene som filer til mappa og holder dem oppdatert. På iPhone og iPad gir iCloud Drive og «På min iPhone» fast tilgang til en mappe; mange andre tjenester (som OneDrive og Jottacloud) tillater det ikke og vises grået ut. Bruk da «Eksporter paletter til en mappe» under, eller del en mappe i iCloud Drive med kolleger. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
+                    #endif
+                }
+
+                Section {
+                    Button("Eksporter paletter til en mappe …", systemImage: "square.and.arrow.up.on.square") {
+                        do {
+                            eksport = try deling.eksportfiler(paletter).map(Eksportfil.init)
+                            eksporterer = !eksport.isEmpty
+                        } catch {
+                            feil = error.localizedDescription
+                        }
+                    }
+                    .disabled(paletter.isEmpty || deling.formater.isEmpty)
+                } header: {
+                    Text("Eksporter én gang")
+                } footer: {
+                    Text("Skriver alle palettene i formatene under til en mappe du velger – også i OneDrive, Jottacloud og andre tjenester. Filene oppdateres ikke av seg selv; eksporter på nytt når du vil oppdatere dem.")
                 }
 
                 Section {
@@ -84,6 +107,7 @@ struct DelingsmappeArk: View {
                     feil = error.localizedDescription
                 }
             }
+            .fileExporter(isPresented: $eksporterer, items: eksport, contentTypes: [.data]) { _ in eksport = [] }
             .alert("Kunne ikke bruke mappa", isPresented: Binding(get: { feil != nil }, set: { if !$0 { feil = nil } })) {
                 Button("OK") {}
             } message: { Text(feil ?? "") }
@@ -158,5 +182,15 @@ struct DelingsmappeSynk: View {
                 await deling.synk(paletter)
             }
             .onChange(of: fase) { _, ny in if ny == .active { deling.oppdaterStatus() } }
+    }
+}
+
+/// En fil fra «Eksporter paletter til en mappe», med filnavnet beholdt.
+nonisolated struct Eksportfil: Transferable {
+    let url: URL
+
+    static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(exportedContentType: .data) { SentTransferredFile($0.url) }
+            .suggestedFileName { $0.url.lastPathComponent }
     }
 }

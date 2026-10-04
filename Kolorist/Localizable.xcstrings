@@ -1566,6 +1566,26 @@
         }
       }
     },
+    "Eksporter paletter til en mappe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export palettes to a folder …"
+          }
+        }
+      }
+    },
+    "Eksporter én gang": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export once"
+          }
+        }
+      }
+    },
     "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
       "localizations": {
         "en": {
@@ -3273,6 +3293,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kolorist"
+          }
+        }
+      }
+    },
+    "Kolorist skriver palettene som filer til mappa og holder dem oppdatert. På iPhone og iPad gir iCloud Drive og «På min iPhone» fast tilgang til en mappe; mange andre tjenester (som OneDrive og Jottacloud) tillater det ikke og vises grået ut. Bruk da «Eksporter paletter til en mappe» under, eller del en mappe i iCloud Drive med kolleger. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kolorist writes your palettes as files to the folder and keeps them up to date. On iPhone and iPad, iCloud Drive and “On My iPhone” give lasting access to a folder; many other services (such as OneDrive and Jottacloud) don’t allow it and appear greyed out. Use “Export palettes to a folder” below instead, or share a folder in iCloud Drive with colleagues. The service’s own app uploads the files – Kolorist sends nothing itself."
           }
         }
       }
@@ -6025,6 +6055,16 @@
         }
       }
     },
+    "Skriver alle palettene i formatene under til en mappe du velger – også i OneDrive, Jottacloud og andre tjenester. Filene oppdateres ikke av seg selv; eksporter på nytt når du vil oppdatere dem.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Writes all palettes in the formats below to a folder you choose – including OneDrive, Jottacloud and other services. The files are not updated automatically; export again when you want to update them."
+          }
+        }
+      }
+    },
     "Skriver …": {
       "localizations": {
         "en": {
@@ -7063,12 +7103,12 @@
         }
       }
     },
-    "Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
+    "Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a folder in OneDrive, Google Drive, Dropbox, iCloud Drive or another service in Files. Kolorist writes your palettes there as files, so they can be opened on Windows and other computers. The service’s own app uploads the files – Kolorist sends nothing itself."
+            "value": "Choose a folder in OneDrive, Google Drive, Dropbox, iCloud Drive or another service. Kolorist writes your palettes there as files, so they can be opened on Windows and other computers. The service’s own app uploads the files – Kolorist sends nothing itself."
           }
         }
       }

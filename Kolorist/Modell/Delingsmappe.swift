@@ -164,6 +164,39 @@ final class Delingsmappe {
         await skriv([palett], blant: paletter, formatnøkkel: formater.map(\.rawValue).sorted().joined(separator: ","))
     }
 
+    /// Filnavn per palett: palettens navn, med løpenummer når to paletter heter det samme. Rekkefølgen er fast
+    /// (eldst først), så navnene ikke bytter plass mellom skrivingene.
+    private static func filnavn(for paletter: [PalettDokument]) -> [String: String] {
+        var navn: [String: String] = [:]
+        var brukt: Set<String> = []
+        for p in paletter.sorted(by: { $0.opprettet < $1.opprettet }) {
+            let grunn = rentFilnavn(p.navn)
+            var kandidat = grunn, n = 2
+            while brukt.contains(kandidat.lowercased()) { kandidat = "\(grunn) \(n)"; n += 1 }
+            brukt.insert(kandidat.lowercased())
+            navn[p.id.uuidString] = kandidat
+        }
+        return navn
+    }
+
+    /// Alle palettene som filer i de valgte formatene, i en midlertidig mappe – til eksport én gang til en mappe
+    /// brukeren velger (også i skytjenester som ikke gir fast tilgang til mapper på iPhone og iPad).
+    func eksportfiler(_ paletter: [PalettDokument]) throws -> [URL] {
+        let mappe = FileManager.default.temporaryDirectory.appendingPathComponent("Kolorist-eksport-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: mappe, withIntermediateDirectories: true)
+        let navn = Self.filnavn(for: paletter)
+        var urler: [URL] = []
+        for p in paletter {
+            guard let grunn = navn[p.id.uuidString] else { continue }
+            for f in formater.sorted(by: { $0.rawValue < $1.rawValue }) {
+                let url = mappe.appendingPathComponent("\(grunn).\(f.filendelse)")
+                try (f.eksportformat?.data(for: p.palett) ?? PalettUtskrift.pdf(for: p)).write(to: url, options: .atomic)
+                urler.append(url)
+            }
+        }
+        return urler
+    }
+
     private static func merke(_ p: PalettDokument, _ formatnøkkel: String) -> String {
         "\(p.endret.timeIntervalSinceReferenceDate)|\(p.navn)|\(formatnøkkel)"
     }
@@ -173,17 +206,7 @@ final class Delingsmappe {
         arbeider = true
         defer { arbeider = false }
 
-        // Filnavn: palettens navn, med løpenummer når to paletter heter det samme. Rekkefølgen er fast (eldst
-        // først), så navnene ikke bytter plass mellom skrivingene.
-        var nyeNavn: [String: String] = [:]
-        var brukt: Set<String> = []
-        for p in alle.sorted(by: { $0.opprettet < $1.opprettet }) {
-            let grunn = Self.rentFilnavn(p.navn)
-            var navn = grunn, n = 2
-            while brukt.contains(navn.lowercased()) { navn = "\(grunn) \(n)"; n += 1 }
-            brukt.insert(navn.lowercased())
-            nyeNavn[p.id.uuidString] = navn
-        }
+        let nyeNavn = Self.filnavn(for: alle)
 
         // Paletter som må bytte filnavn fordi en annen palett har tatt navnet, skrives også (og filene flyttes).
         let berørte = endrede + alle.filter { p in
