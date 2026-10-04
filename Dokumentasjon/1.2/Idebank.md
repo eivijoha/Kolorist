@@ -47,12 +47,24 @@ lyshetsrekkefølge. Lagt hit for senere:
 Mange samarbeidspartnere (særlig i arkitektur) sitter på Windows. Palettene ligger i SwiftData/CloudKit og er ikke
 lesbare utenfor Apple-enheter; ICC-profiler og fargekart ligger allerede som filer i appens iCloud Drive-mappe.
 
-- **Paletter speilet som filer i iCloud Drive** (ASE, CSV og A4-PDF per palett, oppdatert ved endring): nås fra
-  Windows med iCloud for Windows eller iCloud.com, uten egen server. Størst nytte for minst arbeid.
-- **Spesifikasjon som CSV/Excel**: navn, hex, sRGB, CIELab D50, Munsell, CMYK og LRV per farge – til fargeskjema og
-  romskjema i beskrivelser og tilbud.
-- **Fargebøker for CAD/BIM** (XML-baserte fargebøker som kan lastes inn i vanlige tegneprogrammer på Windows), så
-  paletten kan brukes direkte i tegningene.
-- **Deling til filtjenester**: sikre at eksport går via delingsarket/Filer, så OneDrive, Teams og e-post fungerer like
-  godt som AirDrop.
-- Senere, større: en enkel nettvisning av egne paletter via CloudKit JS (innlogging med Apple-ID, ingen egen server).
+Avklart med Eivind: **ingen QR-kode og ingen serverløsning** (verken egen server, lokal webserver eller nettvisning).
+Bluetooth er ikke mulig (iOS sender ikke filer over Bluetooth til andre enn Apple-enheter).
+
+**Valgt retning: delingsmappe i valgfri skytjeneste.** Brukeren peker én gang ut en mappe i Filer – OneDrive,
+Google Drive, Dropbox, Box, iCloud Drive eller en nettverksdisk – og Kolorist skriver palettene dit som filer. Ingen
+innlogging eller SDK i Kolorist: tjenestens egen app laster opp. Personvernet er uendret.
+
+- Per palett: ASE, CSV (navn, hex, sRGB, CIELab D50, Munsell, CMYK, LRV) og A4-PDF; ev. DTCG-JSON.
+- Speiling av valgte paletter ved endring (debouncet), og en knapp for å dele én palett dit.
+- Sletter aldri filer i mappa (som i Studieblikk: logg, ikke slett).
+- Status i én modell: koblet / mangler tilgang / mappa er borte → «Koble til på nytt».
+- Senere: lese ICC-profiler og fargekart som kolleger legger i mappa.
+- Fargebøker for CAD/BIM som eget format.
+
+Gjenbruk fra Studieblikk (`SharedFolderStore`):
+- `coordinatedRead`/`coordinatedWrite` (NSFileCoordinator, atomisk erstatning) og `writeFileOffMain`
+  (sikkerhetsscope og I/O på en frakoblet oppgave, så en kald skymappe ikke fryser UI).
+- Bokmerkeoppløsning med fornying når bokmerket er utdatert (`resolveURL`). På iOS uten `.withSecurityScope`.
+- `isConflictedCopyFilename` og hopp over symlenker; utvid med Google Drives «(1)»-kopier.
+- Én «Koble til»-funksjon og én statusmodell (`OneDriveStatus`/`kobleTilMappe`).
+- Ikke aktuelt: FSEvents-overvåking (bare macOS), Teams-stier og treveis-fletting.
