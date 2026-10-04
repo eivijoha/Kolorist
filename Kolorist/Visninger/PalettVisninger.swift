@@ -352,9 +352,7 @@ struct EnkeltfargerVisning: View {
                 Button("Lagre aktiv farge", systemImage: "plus") {
                     lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.aktivFarge)], i: kontekst)
                 }
-                Button("Lim inn farger", systemImage: "doc.on.clipboard") {
-                    lagreEnkeltfarger(Utklippstavle.limInnListe(), i: kontekst)
-                }
+                LimInnFargerKnapp { lagreEnkeltfarger($0, i: kontekst) }
                 Button("Legg alle i palett", systemImage: "square.and.arrow.down.on.square") {
                     leggIPalett = lagrede.map(\.palettFarge)
                 }
@@ -566,10 +564,7 @@ struct PalettDetalj: View {
             dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge))
         }
         .help("Legg til aktiv farge")
-        Button("Lim inn farger", systemImage: "doc.on.clipboard") {
-            dokument.farger += Utklippstavle.limInnListe()
-        }
-        .help("Lim inn farger")
+        LimInnFargerKnapp { dokument.farger += $0 }
         Button("Kontrast", systemImage: "circle.lefthalf.filled") { visKontrast = true }
             .disabled(dokument.farger.count < 2)
             .help("Kontrastmatrise")
