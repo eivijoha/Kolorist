@@ -92,6 +92,7 @@ struct FargeEditor: View {
                                  romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
                                  sirkel: .okLCH,
                                  stablet: bred,
+                                 rammeRundtGrunn: false,
                                  velg: { arbeidsbenk.aktivFarge = $0 },
                                  lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                                  leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })

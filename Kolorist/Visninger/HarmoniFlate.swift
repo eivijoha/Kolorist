@@ -17,6 +17,8 @@ struct HarmoniFlate: View {
     var sirkel: Fargesirkel? = nil
     /// Flatene under hverandre (bred visning) i stedet for side ved side.
     var stablet = false
+    /// Ramme rundt grunnfargens flate (Harmoni). Uten ramme merkes den bare med stjernen (Toner).
+    var rammeRundtGrunn = true
     var velg: (Farge) -> Void = { _ in }
     var lagre: (PalettFarge) -> Void = { _ in }
     var leggIPalett: (PalettFarge) -> Void = { _ in }
@@ -91,7 +93,7 @@ struct HarmoniFlate: View {
                          lagre: { _ in lagre(m.farge) }, leggIPalett: { _ in leggIPalett(m.farge) }, palettFarge: m.farge,
                          ekstraMeny: AnyView(Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(m.tekst) }))
             .overlay {
-                if erGrunn {
+                if erGrunn && rammeRundtGrunn {
                     UnevenRoundedRectangle(topLeadingRadius: hjørner.venstre, topTrailingRadius: hjørner.høyre, style: .continuous)
                         .strokeBorder(tekstfarge, lineWidth: 3)
                         .allowsHitTesting(false)

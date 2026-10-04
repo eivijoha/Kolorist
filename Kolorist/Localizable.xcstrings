@@ -6183,6 +6183,16 @@
         }
       }
     },
+    "Typene står etter hvor vanlige de er. Tallene gjelder personer av nordeuropeisk opprinnelse og omfatter både delvis og fullstendig avvik; delvis avvik er langt vanligst. Kilde: J. Birch, JOSA A 29(3), 2012.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The types are listed by how common they are. The figures apply to people of Northern European descent and include both partial and complete deficiencies; partial deficiency is by far the most common. Source: J. Birch, JOSA A 29(3), 2012."
+          }
+        }
+      }
+    },
     "Typisk 50–150 lx i en stue om kvelden, 500 lx på et kontor og over 10 000 lx ute på dagtid.": {
       "localizations": {
         "en": {

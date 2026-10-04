@@ -97,12 +97,12 @@
         }
       }
     },
-    "Blå-gul – sjelden": {
+    "Blå-gul": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Blue-yellow – rare"
+            "value": "Blue–yellow"
           }
         }
       }
@@ -357,12 +357,12 @@
         }
       }
     },
-    "Ingen fargesyn, bare lyshet – svært sjelden": {
+    "Ingen fargesyn, bare lyshet": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No colour vision, only lightness – very rare"
+            "value": "No colour vision, only lightness"
           }
         }
       }
@@ -567,6 +567,46 @@
         }
       }
     },
+    "Om lag 1 av 10 000, like vanlig hos kvinner og menn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About 1 in 10,000, equally common in women and men"
+          }
+        }
+      }
+    },
+    "Om lag 1 av 30 000": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About 1 in 30,000"
+          }
+        }
+      }
+    },
+    "Om lag 2 % av menn og 0,03 % av kvinner": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About 2% of men and 0.03% of women"
+          }
+        }
+      }
+    },
+    "Om lag 6 % av menn og 0,4 % av kvinner": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About 6% of men and 0.4% of women"
+          }
+        }
+      }
+    },
     "Perseptuelt like vinkler, og lyshet og metning holdes fast, så fargene veier likt.": {
       "localizations": {
         "en": {
@@ -637,12 +677,12 @@
         }
       }
     },
-    "Rød-grønn, svak grønnsans – den vanligste formen": {
+    "Rød-grønn, svak grønnsans": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Red-green, weak green sensitivity – the most common form"
+            "value": "Red–green, weak green sensitivity"
           }
         }
       }

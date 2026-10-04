@@ -44,13 +44,19 @@ struct FargesynVurdering: View {
                 let analyse = Fargesynstype.allCases.map {
                     ($0, Fargesynsanalyse.forvekslinger(i: farger.map(\.farge), type: $0, grad: grad))
                 }
-                Seksjon("Slik ser paletten ut") {
+                Section {
                     stripe(String(localized: "Normalt syn"), undertekst: nil, farger: farger.map(\.farge), antall: nil, kamera: nil)
+                    // Etter utbredelse, vanligst først.
                     ForEach(analyse, id: \.0) { type, forvekslinger in
-                        stripe(grad >= 1 ? type.navn : type.delvisNavn, undertekst: type.beskrivelse,
+                        stripe(grad >= 1 ? type.navn : type.delvisNavn, undertekst: "\(type.beskrivelse). \(type.utbredelse).",
                                farger: farger.map { $0.farge.simulert(type, grad: grad) }, antall: forvekslinger.count,
                                kamera: { kameratype = type })
                     }
+                } header: {
+                    Text("Slik ser paletten ut").foregroundStyle(Color.sekundærTekst)
+                } footer: {
+                    Text("Typene står etter hvor vanlige de er. Tallene gjelder personer av nordeuropeisk opprinnelse og omfatter både delvis og fullstendig avvik; delvis avvik er langt vanligst. Kilde: J. Birch, JOSA A 29(3), 2012.")
+                        .foregroundStyle(Color.sekundærTekst)
                 }
 
                 forvekslingsseksjon(farger, alle: analyse.flatMap(\.1))

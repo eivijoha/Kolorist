@@ -4,8 +4,9 @@ import Foundation
 ///
 /// Rød-grønn-avvik (protan og deutan) rammer omtrent 8 % av menn og 0,5 % av kvinner med nordeuropeisk
 /// bakgrunn; deutan er klart vanligst. Tritan (blå-gul) og akromatopsi (ingen fargesyn) er sjeldne.
+/// Typene står etter utbredelse, vanligst først.
 public enum Fargesynstype: String, CaseIterable, Codable, Sendable, Identifiable {
-    case protan, deutan, tritan, akromatopsi
+    case deutan, protan, tritan, akromatopsi
 
     public var id: String { rawValue }
 
@@ -32,9 +33,20 @@ public enum Fargesynstype: String, CaseIterable, Codable, Sendable, Identifiable
     public var beskrivelse: String {
         switch self {
         case .protan: String(localized: "Rød-grønn, svak rødsans – rødt virker også mørkere", bundle: .module)
-        case .deutan: String(localized: "Rød-grønn, svak grønnsans – den vanligste formen", bundle: .module)
-        case .tritan: String(localized: "Blå-gul – sjelden", bundle: .module)
-        case .akromatopsi: String(localized: "Ingen fargesyn, bare lyshet – svært sjelden", bundle: .module)
+        case .deutan: String(localized: "Rød-grønn, svak grønnsans", bundle: .module)
+        case .tritan: String(localized: "Blå-gul", bundle: .module)
+        case .akromatopsi: String(localized: "Ingen fargesyn, bare lyshet", bundle: .module)
+        }
+    }
+
+    /// Hvor vanlig avviket er (delvis og fullstendig samlet), for personer av nordeuropeisk opprinnelse
+    /// (J. Birch, JOSA A 29(3), 2012; Sharpe mfl. 1999).
+    public var utbredelse: String {
+        switch self {
+        case .deutan: String(localized: "Om lag 6 % av menn og 0,4 % av kvinner", bundle: .module)
+        case .protan: String(localized: "Om lag 2 % av menn og 0,03 % av kvinner", bundle: .module)
+        case .tritan: String(localized: "Om lag 1 av 10 000, like vanlig hos kvinner og menn", bundle: .module)
+        case .akromatopsi: String(localized: "Om lag 1 av 30 000", bundle: .module)
         }
     }
 
