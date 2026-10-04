@@ -6447,16 +6447,6 @@
         }
       }
     },
-    "Som bilde (PDF). Redigerbar gradient: «Lagre som …» › InDesign-utklipp": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "As an image (PDF). Editable gradient: “Save as …” › InDesign snippet"
-          }
-        }
-      }
-    },
     "Som enkeltfarge": {
       "localizations": {
         "en": {
@@ -6563,6 +6553,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "As an editable gradient (PDF) in sRGB"
+          }
+        }
+      }
+    },
+    "Som redigerbar gradient i sRGB": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As an editable gradient in sRGB"
           }
         }
       }

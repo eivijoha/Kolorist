@@ -66,7 +66,7 @@ enum Gradientmål: String, CaseIterable, Identifiable {
         switch self {
         case .figma, .sketchAffinity: String(localized: "Som form med gradientfyll (SVG)")
         case .illustrator: String(localized: "Som redigerbar gradient (PDF) i sRGB")
-        case .indesign: String(localized: "Som bilde (PDF). Redigerbar gradient: «Lagre som …» › InDesign-utklipp")
+        case .indesign: String(localized: "Som redigerbar gradient i sRGB")
         case .photoshop: String(localized: "Som formlag eller bilde (PDF/PNG)")
         case .iWork: String(localized: "Som vektorbilde (PDF) med riktige farger")
         case .css: String(localized: "Som gradient med OKLab og reserve")
@@ -120,6 +120,9 @@ extension Utklippstavle {
             typer.append(("public.svg-image", Data(svg.utf8)))
             tekst = svg
         case .indesign:
+            // InDesign gjør Illustrators utklippsformat (AICB, PostScript) om til en ekte, redigerbar gradient.
+            // PDF-en er reserve for programmer som ikke leser AICB.
+            typer.append(("com.adobe.illustrator.aicb", Gradientgrafikk.aicb(gradient)))
             typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
             tekst = gradient.css.moderne
         case .photoshop, .iWork:
@@ -282,6 +285,69 @@ enum Gradientgrafikk {
         for f in forskyvninger { pdf += String(format: "%010d 00000 n \n", f) }
         pdf += "trailer\n<< /Size \(objekter.count + 1) /Root 1 0 R >>\nstartxref\n\(xref)\n%%EOF\n"
         return Data(pdf.utf8)
+    }
+
+    // MARK: AICB (InDesign)
+
+    /// Gradienten som PostScript i Illustrators utklippsformat (AICB): en boks med `shfill`, som InDesign gjør om til
+    /// en boks med ekte gradientfyll (lineær eller radiell, med alle stoppene). Gradienten ligger i et eget
+    /// koordinatsystem fra 0 til 1 langs x-aksen – InDesign leser stopposisjonene derfra – og hvert stopp er et ledd i en
+    /// sammenskjøtt funksjon (FunctionType 3). Fargene i sRGB (DeviceRGB). Testet mot InDesign 2026.
+    static func aicb(_ g: Gradientkopi) -> Data {
+        let r = flate
+        var stopp: [(farge: SRGB, posisjon: Double)] = []
+        for s in g.stopp {
+            var pos = min(max(s.posisjon, 0), 1)
+            if let siste = stopp.last, pos <= siste.posisjon { pos = min(siste.posisjon + 0.0001, 1) }
+            stopp.append((s.farge.gamutKartlagt(til: .sRGB).sRGB, pos))
+        }
+        if stopp.count == 1 { stopp.append((stopp[0].farge, 1)) }
+        func tall(_ v: Double) -> String { String(format: "%.4f", v) }
+        func farge(_ c: SRGB) -> String { "[\(tall(min(max(c.r, 0), 1))) \(tall(min(max(c.g, 0), 1))) \(tall(min(max(c.b, 0), 1)))]" }
+        func ledd(_ a: SRGB, _ b: SRGB) -> String { "<< /FunctionType 2 /Domain [0 1] /C0 \(farge(a)) /C1 \(farge(b)) /N 1 >>" }
+        let funksjon: String
+        if stopp.count == 2 {
+            funksjon = ledd(stopp[0].farge, stopp[1].farge)
+        } else {
+            let funksjoner = zip(stopp, stopp.dropFirst()).map { ledd($0.farge, $1.farge) }.joined(separator: " ")
+            let grenser = stopp.dropFirst().dropLast().map { tall($0.posisjon) }.joined(separator: " ")
+            let koding = Array(repeating: "0 1", count: stopp.count - 1).joined(separator: " ")
+            funksjon = "<< /FunctionType 3 /Domain [0 1] /Functions [\(funksjoner)] /Bounds [\(grenser)] /Encode [\(koding)] >>"
+        }
+        // PostScript har origo nede til venstre; CSS-vinkelen er regnet med y nedover.
+        let matrise: String, skyggelegging: String
+        if g.form == .radiell {
+            let radius = hypot(r.width, r.height) / 2
+            matrise = "[\(tall(radius)) 0 0 \(tall(radius)) \(tall(r.midX)) \(tall(r.midY))] concat"
+            skyggelegging = "<< /ShadingType 3 /ColorSpace /DeviceRGB /Coords [0 0 0 0 0 1] /Domain [0 1] /Extend [true true] /Function \(funksjon) >> shfill"
+        } else {
+            let (a, b) = g.endepunkter(i: r)
+            let p0 = CGPoint(x: a.x, y: r.height - a.y), p1 = CGPoint(x: b.x, y: r.height - b.y)
+            let dx = p1.x - p0.x, dy = p1.y - p0.y
+            matrise = "[\(tall(dx)) \(tall(dy)) \(tall(-dy)) \(tall(dx)) \(tall(p0.x)) \(tall(p0.y))] concat"
+            skyggelegging = "<< /ShadingType 2 /ColorSpace /DeviceRGB /Coords [0 0 1 0] /Domain [0 1] /Extend [true true] /Function \(funksjon) >> shfill"
+        }
+        let linjer = [
+            "%!PS-Adobe-3.0 EPSF-3.0",
+            "%%Creator: Kolorist",
+            "%%Title: (Kolorist)",
+            "%%BoundingBox: 0 0 \(Int(r.width)) \(Int(r.height))",
+            "%%LanguageLevel: 3",
+            "%%EndComments",
+            "%%BeginProlog",
+            "%%EndProlog",
+            "%%Page: 1 1",
+            "gsave",
+            "newpath 0 0 moveto 0 \(tall(r.height)) lineto \(tall(r.width)) \(tall(r.height)) lineto \(tall(r.width)) 0 lineto closepath clip",
+            matrise,
+            skyggelegging,
+            "grestore",
+            "showpage",
+            "%%Trailer",
+            "%%EOF",
+            "",
+        ]
+        return Data(linjer.joined(separator: "\r").utf8)
     }
 
     /// PNG i Display P3 (2×), for programmer som bare tar imot punktgrafikk.

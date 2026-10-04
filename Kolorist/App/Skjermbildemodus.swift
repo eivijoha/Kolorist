@@ -44,6 +44,11 @@ enum Skjermbildemodus {
             try? Data(Gradientgrafikk.swiftUI(g).utf8).write(to: tmp.appending(path: "gradient.swift.txt"))
             var r = g; r.form = .radiell
             try? Gradientgrafikk.pdf(r).write(to: tmp.appending(path: "gradient-radiell.pdf"))
+            try? Gradientgrafikk.aicb(g).write(to: tmp.appending(path: "gradient.aicb"))
+            // `-gradientkopiTil indesign` (ev. med `-gradientkopiForm radiell`): legg gradienten på utklippstavlen som i «Kopier til».
+            if let mål = UserDefaults.standard.string(forKey: "gradientkopiTil").flatMap(Gradientmål.init(rawValue:)) {
+                Utklippstavle.kopier(UserDefaults.standard.string(forKey: "gradientkopiForm") == "radiell" ? r : g, til: mål)
+            }
         }
         // `-bibliotekfil <sti>`: importer et fargebibliotek (til test i simulatoren, der dokumentvelgeren ikke virker).
         if let sti = UserDefaults.standard.string(forKey: "bibliotekfil") {
