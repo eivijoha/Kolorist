@@ -447,16 +447,16 @@
     },
     "%lld fargepar blir vanskelige å skille: %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld fargepar blir vanskelige å skille: %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld colour pairs become hard to tell apart: %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld fargepar blir vanskelige å skille: %2$@"
           }
         }
       }
@@ -485,16 +485,16 @@
     },
     "%lld farger skifter tydelig: %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld farger skifter tydelig: %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld colours shift noticeably: %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld farger skifter tydelig: %2$@"
           }
         }
       }
@@ -1361,12 +1361,12 @@
         }
       }
     },
-    "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme inntrykk. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
+    "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light and dim light makes colours less colourful. Finally it shows the screen colour that gives the same appearance. Light compensation uses CAT16 with full adaptation to daylight (D65)."
+            "value": "A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light and dim light makes colours less colourful. Finally it shows the screen colour with the same lightness and colourfulness. Light compensation uses CAT16 with full adaptation to daylight (D65)."
           }
         }
       }
@@ -3029,12 +3029,12 @@
         }
       }
     },
-    "Komplementær, split-komplementær, analog og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL eller RYB. RYB-sirkelen er en stykkevis lineær avbildning til RGB-kulør laget for appen.": {
+    "Komplementær, split-komplementær, analog og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell eller Herings motfargesirkel. Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB- og Hering-sirklene er stykkevis lineære avbildninger laget for appen.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Complementary, split-complementary, analogous and even distributions are computed as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL or RYB. The RYB wheel is a piecewise linear mapping to RGB hue made for the app."
+            "value": "Complementary, split-complementary, analogous and even distributions are computed as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell or Hering’s opponent-colour wheel. With Munsell, real Munsell colours are used in the steps of the book (hue 2.5, value 1, chroma 2). The RYB and Hering wheels are piecewise linear mappings made for the app."
           }
         }
       }
@@ -4115,12 +4115,12 @@
         }
       }
     },
-    "Lyskilder beskrives med spektre fra CIE (dagslysserien, standardlys A, lysrør og LED-typer) eller som sortlegemer. Korrelert fargetemperatur og avstand fra Plancks kurve (Duv) regnes etter Ohno. Fargegjengivelse anslås fra referansekortets spektre, sammenlignet med et referanselys med samme fargetemperatur; tallet er skalert så det ligger nær Ra, men er ikke en offisiell fargegjengivelsesindeks.": {
+    "Lyskilder beskrives med spektre fra CIE (dagslysserien, standardlys A, lysrør og LED-typer) eller som sortlegemer. Korrelert fargetemperatur og avstand fra Plancks kurve (Duv) regnes etter Ohno. Farger uten målt spekter får det glatteste spekteret som gir fargen i dagslys (Burns). Fargegjengivelse anslås fra referansekortets spektre, sammenlignet med et referanselys med samme fargetemperatur; tallet er skalert så det ligger nær Ra, men er ikke en offisiell fargegjengivelsesindeks. Standard betraktningsforhold følger belysningsstyrken i ISO 3664, NS-EN 12464-1 og CIE 157.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Light sources are described by CIE spectra (the daylight series, illuminant A, fluorescent and LED types) or as blackbodies. Correlated colour temperature and distance from the Planckian locus (Duv) are calculated after Ohno. Colour rendering is estimated from the reference card’s spectra, compared with a reference light of the same colour temperature; the figure is scaled to lie close to Ra, but is not an official colour rendering index."
+            "value": "Light sources are described by CIE spectra (the daylight series, illuminant A, fluorescent and LED types) or as blackbodies. Correlated colour temperature and distance from the Planckian locus (Duv) are calculated after Ohno. Colours without a measured spectrum get the smoothest spectrum that gives the colour in daylight (Burns). Colour rendering is estimated from the reference card’s spectra, compared with a reference light of the same colour temperature; the figure is scaled to lie close to Ra, but is not an official colour rendering index. Standard viewing conditions follow the illuminance in ISO 3664, EN 12464-1 and CIE 157."
           }
         }
       }
@@ -4245,12 +4245,12 @@
         }
       }
     },
-    "Med et referansekort i bildet tilpasser Kolorist en tonekurve per kanal fra de grå feltene og deretter en matrise eller et rotpolynom fra kamerafarger til fasiten i dagslys. Nøyaktigheten oppgis som snitt og maks ΔE00, kryssvalidert: hvert felt forutsies av en modell tilpasset uten det. Referanseverdiene for kortet følger ikke med appen; du importerer dem selv.": {
+    "Med et referansekort i bildet tilpasser Kolorist en tonekurve per kanal fra de grå feltene og deretter en matrise eller et rotpolynom fra kamerafarger til fasiten i dagslys – den modellen som forutsier best. Nøyaktigheten oppgis som snitt og maks ΔE00, kryssvalidert: hvert felt forutsies av en modell tilpasset uten det. En kameraprofil laget én gang gjør at et gråkort holder i nytt lys. Kortet finnes automatisk i bildet (Vision), og lysheten i feltene avgjør hvilken vei det ligger. Referanseverdiene for kortet følger ikke med appen; du importerer dem selv.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "With a reference card in the image, Kolorist fits a tone curve per channel from the grey patches and then a matrix or root polynomial from camera colours to the reference values in daylight. Accuracy is given as mean and maximum ΔE00, cross-validated: each patch is predicted by a model fitted without it. The reference values for the card are not included with the app; you import them yourself."
+            "value": "With a reference card in the image, Kolorist fits a tone curve per channel from the grey patches and then a matrix or root polynomial from camera colours to the reference values in daylight – whichever predicts best. Accuracy is given as mean and maximum ΔE00, cross-validated: each patch is predicted by a model fitted without it. A camera profile made once lets a grey card do the job in new light. The card is found automatically in the image (Vision), and the lightness of the patches tells which way round it is. The reference values for the card are not included with the app; you import them yourself."
           }
         }
       }
