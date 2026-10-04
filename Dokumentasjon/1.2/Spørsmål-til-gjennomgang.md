@@ -12,9 +12,12 @@ gjort, så det kan godtas eller endres.
    siste karakterisering per kort. Slipper ny utrulling av CloudKit-skjemaet. Grensen er 1 MB totalt (et kort med
    24 spektre er ≈ 15 KB). En liste som ikke kan leses (fra en nyere versjon), overskrives ikke. Godt nok, eller
    SwiftData/CloudKit?
-3. **Innebygde eksempelmiljøer** (seks, faste id-er): Stue om kvelden (2700 K, 100 lx), Varmhvit LED (LED-B2,
-   200 lx), Kontor med LED (LED-B3, 500 lx), Lysrør (FL11, 400 lx), Dagslys inne (D65, 1000 lx), Overskyet ute
-   (7500 K, 10 000 lx). Riktige navn og verdier?
+3. **Innebygde lysmiljøer**: *Standarder* – Grafisk vurdering, kritisk (ISO 3664 P1: D50, 2000 lx) og praktisk
+   (P2: D50, 500 lx); Kontor og arbeidsplass (NS-EN 12464-1: 500 lx), Klasserom (300 lx) og Korridor (100 lx), alle
+   med nøytral LED 4000 K; Museum, malerier (CIE 157: 200 lx) og lysfølsomme gjenstander (50 lx), varmt lys 3000 K.
+   *Eksempler* – Stue om kvelden (2700 K, 100 lx), Varmhvit LED (200 lx), Lysrør (FL11, 400 lx), Dagslys inne
+   (D65, 1000 lx), Overskyet ute (7500 K, 10 000 lx). Belysningsstyrken følger standardene; spekteret er et typisk
+   valg. Riktige verdier, og flere (f.eks. sykehus, butikk, NS 11001 for universell utforming)?
 
 ## Se i lys
 

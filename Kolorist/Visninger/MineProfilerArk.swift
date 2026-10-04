@@ -72,6 +72,22 @@ struct MineProfilerArk: View {
                     }
                 }
                 Section {
+                    Button("Importer …", systemImage: "square.and.arrow.down") { importererKort = false; importerer = true }
+                    VStack(alignment: .leading, spacing: 6) {
+                        #if os(macOS)
+                        Text("Du kan også dra filer hit.")
+                        #endif
+                        Text("ICC-profiler: .icc og .icm – for eksempel trykkprofilen fra trykkeriet (FOGRA, GRACoL) eller en skjermprofil.")
+                        Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen slike kart; du importerer dine egne.")
+                        Text(bibliotek.brukerICloud
+                             ? "Filene ligger i iCloud Drive › Kolorist › Profiler og synkroniseres mellom enhetene dine."
+                             : "Filene lagres på denne enheten (iCloud Drive er ikke tilgjengelig).")
+                    }
+                    .forklaring()
+                } header: {
+                    Text("Importer")
+                }
+                Section {
                     ForEach(lys.referansekort) { kort in
                         Button { visKort = kort } label: { kortrad(kort) }
                             .buttonStyle(.plain)
@@ -88,22 +104,6 @@ struct MineProfilerArk: View {
                     #endif
                 } header: {
                     Text("Referansekort")
-                }
-                Section {
-                    Button("Importer …", systemImage: "square.and.arrow.down") { importererKort = false; importerer = true }
-                    VStack(alignment: .leading, spacing: 6) {
-                        #if os(macOS)
-                        Text("Du kan også dra filer hit.")
-                        #endif
-                        Text("ICC-profiler: .icc og .icm – for eksempel trykkprofilen fra trykkeriet (FOGRA, GRACoL) eller en skjermprofil.")
-                        Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen slike kart; du importerer dine egne.")
-                        Text(bibliotek.brukerICloud
-                             ? "Filene ligger i iCloud Drive › Kolorist › Profiler og synkroniseres mellom enhetene dine."
-                             : "Filene lagres på denne enheten (iCloud Drive er ikke tilgjengelig).")
-                    }
-                    .forklaring()
-                } header: {
-                    Text("Importer")
                 }
             }
             .navigationTitle("Mine fargerom")

@@ -22,6 +22,9 @@ struct SeILysPanel: View {
                         ForEach(bibliotek.lysmiljøer) { Text($0.navn).tag($0.id) }
                     }
                 }
+                Section("Standarder") {
+                    ForEach(Lysbibliotek.standarder) { Text($0.navn).tag($0.id) }
+                }
                 Section("Eksempler") {
                     ForEach(Lysbibliotek.innebygde) { Text($0.navn).tag($0.id) }
                 }
@@ -107,6 +110,15 @@ struct LysmiljøArk: View {
                     #else
                     Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – og se fargene i det. Lysmiljøer kan også måles med kameraet under Utplukk.")
                     #endif
+                }
+                Section {
+                    ForEach(Lysbibliotek.standarder) { miljø in
+                        Button { bibliotek.valgtLysmiljø = miljø.id; lukk() } label: { rad(miljø) }
+                    }
+                } header: {
+                    Text("Standarder")
+                } footer: {
+                    Text("Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.")
                 }
                 Section("Eksempler") {
                     ForEach(Lysbibliotek.innebygde) { miljø in

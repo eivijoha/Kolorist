@@ -26,14 +26,31 @@ final class Lysbibliotek {
         var kamera: String
     }
 
-    /// Ferdige lysmiljøer som alltid finnes, med faste id-er.
+    /// Standard betraktningsforhold: belysningsstyrken følger standardene; lysets spekter er et typisk valg
+    /// (D50 for grafisk vurdering, nøytral LED for arbeidsplasser og skoler, varmt lys i museer). Faste id-er.
+    static let standarder: [Lysmiljø] = [
+        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000050002")!,
+                 navn: String(localized: "Grafisk vurdering, kritisk (ISO 3664 P1)"), lyskilde: .d50, lux: 2000),
+        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000050005")!,
+                 navn: String(localized: "Grafisk vurdering, praktisk (ISO 3664 P2)"), lyskilde: .d50, lux: 500),
+        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000004000")!,
+                 navn: String(localized: "Kontor og arbeidsplass (NS-EN 12464-1)"), lyskilde: .cie("LED-B3"), lux: 500),
+        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000040003")!,
+                 navn: String(localized: "Klasserom (NS-EN 12464-1)"), lyskilde: .cie("LED-B3"), lux: 300),
+        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000040001")!,
+                 navn: String(localized: "Korridor (NS-EN 12464-1)"), lyskilde: .cie("LED-B3"), lux: 100),
+        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000030002")!,
+                 navn: String(localized: "Museum, malerier (CIE 157)"), lyskilde: .sortlegeme(kelvin: 3000), lux: 200),
+        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000030005")!,
+                 navn: String(localized: "Museum, lysfølsomme gjenstander (CIE 157)"), lyskilde: .sortlegeme(kelvin: 3000), lux: 50),
+    ]
+
+    /// Ferdige eksempler på hverdagslys, med faste id-er.
     static let innebygde: [Lysmiljø] = [
         Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000002700")!,
                  navn: String(localized: "Stue om kvelden"), lyskilde: .sortlegeme(kelvin: 2700), lux: 100),
         Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000003000")!,
                  navn: String(localized: "Varmhvit LED"), lyskilde: .cie("LED-B2"), lux: 200),
-        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000004000")!,
-                 navn: String(localized: "Kontor med LED"), lyskilde: .cie("LED-B3"), lux: 500),
         Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000004001")!,
                  navn: String(localized: "Lysrør"), lyskilde: .cie("FL11"), lux: 400),
         Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000006500")!,
@@ -42,9 +59,9 @@ final class Lysbibliotek {
                  navn: String(localized: "Overskyet ute"), lyskilde: .dagslys(kelvin: 7500), lux: 10000),
     ]
 
-    var alleLysmiljøer: [Lysmiljø] { lysmiljøer + Self.innebygde }
+    var alleLysmiljøer: [Lysmiljø] { lysmiljøer + Self.standarder + Self.innebygde }
 
-    func erInnebygd(_ miljø: Lysmiljø) -> Bool { Self.innebygde.contains { $0.id == miljø.id } }
+    func erInnebygd(_ miljø: Lysmiljø) -> Bool { (Self.standarder + Self.innebygde).contains { $0.id == miljø.id } }
 
     var gjeldendeLysmiljø: Lysmiljø {
         alleLysmiljøer.first { $0.id == valgtLysmiljø } ?? Self.innebygde[0]

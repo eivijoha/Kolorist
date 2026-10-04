@@ -779,6 +779,16 @@
         }
       }
     },
+    "Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The illuminance follows the standards: ISO 3664 for appraising prints and images, EN 12464-1 for workplaces and schools, and CIE 157 for museums. The spectrum of the light is a typical choice – D50 for graphic arts, neutral LED (4000 K) for workplaces and warm light (3000 K) in museums."
+          }
+        }
+      }
+    },
     "Beregn": {
       "localizations": {
         "en": {
@@ -2081,6 +2091,26 @@
         }
       }
     },
+    "Grafisk vurdering, kritisk (ISO 3664 P1)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Graphic arts, critical comparison (ISO 3664 P1)"
+          }
+        }
+      }
+    },
+    "Grafisk vurdering, praktisk (ISO 3664 P2)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Graphic arts, practical appraisal (ISO 3664 P2)"
+          }
+        }
+      }
+    },
     "Grunnfarge": {
       "localizations": {
         "en": {
@@ -2721,6 +2751,16 @@
         }
       }
     },
+    "Klasserom (NS-EN 12464-1)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classroom (EN 12464-1)"
+          }
+        }
+      }
+    },
     "Klassisk fargelære (Johannes Itten for RYB); avbildningene er utviklet for Kolorist": {
       "localizations": {
         "en": {
@@ -2807,12 +2847,12 @@
         }
       }
     },
-    "Kontor med LED": {
+    "Kontor og arbeidsplass (NS-EN 12464-1)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Office with LED"
+            "value": "Office and workplace (EN 12464-1)"
           }
         }
       }
@@ -3055,6 +3095,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copied"
+          }
+        }
+      }
+    },
+    "Korridor (NS-EN 12464-1)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corridor (EN 12464-1)"
           }
         }
       }
@@ -4181,6 +4231,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "The Munsell system"
+          }
+        }
+      }
+    },
+    "Museum, lysfølsomme gjenstander (CIE 157)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Museum, light-sensitive objects (CIE 157)"
+          }
+        }
+      }
+    },
+    "Museum, malerier (CIE 157)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Museum, paintings (CIE 157)"
           }
         }
       }
@@ -5405,6 +5475,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The standard for colour on the web. Kolorist uses the specification’s matrices and transfer functions for sRGB, Display P3, Adobe RGB, Lab and OKLab, its gamut mapping (chroma is reduced in OKLCH while lightness and hue are preserved) and its colour text syntax."
+          }
+        }
+      }
+    },
+    "Standarder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standards"
           }
         }
       }
