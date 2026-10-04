@@ -105,3 +105,15 @@ kontrastpar. Ikke referansekort (referanseverdiene er rettighetsbelagt).
 felles testlenker binder dem sammen.
 
 Ikke aktuelt (Eivind): QR-kode og serverløsninger.
+
+## Flere fargestopp i gradienter (i kø, 2026-10-04)
+
+Eivind: gradienter med flere enn to fargestopp. I dag har en gradient «Fra» og «Til» (`Gradientoppsett`), med toner i
+like OKLab-steg mellom dem. Ting å avklare når den tas opp:
+- Stoppene som liste (minst to), med valgfri posisjon (0–100 %) eller jevnt fordelt; interpolasjon i OKLab mellom
+  nabostopp.
+- Lagring: `Gradientoppsett` kodes i paletter og synkroniseres – nye felt må være valgfrie, så eldre versjoner leser
+  dagens to stopp uendret (jf. `TolerantListe`).
+- Overgang-visningen: legge til, flytte og fjerne stopp; lyshetsstigen og «Flytt lysheten» med flere grunntoner.
+- Eksport: CSS-gradienter med flere stopp (oklab og sRGB-reserve), kopi til andre programmer, A4-PDF.
+- Lenkeformatet (se «Lenker til andre Kolorist-brukere») bør ha plass til flere stopp fra start.
