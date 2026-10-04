@@ -4399,16 +4399,6 @@
         }
       }
     },
-    "Legg til den aktive fargen, eller slipp farger her": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add the active colour, or drop colours here"
-          }
-        }
-      }
-    },
     "Legg til farge": {
       "localizations": {
         "en": {
@@ -6387,6 +6377,16 @@
         }
       }
     },
+    "Slipp farger her, eller åpne paletten for å legge til": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop colours here, or open the palette to add"
+          }
+        }
+      }
+    },
     "Slukk etter fangst": {
       "localizations": {
         "en": {
@@ -7597,16 +7597,16 @@
     },
     "Versjon %@ (%@)": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Versjon %1$@ (%2$@)"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Version %1$@ (%2$@)"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Versjon %1$@ (%2$@)"
           }
         }
       }

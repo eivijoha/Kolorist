@@ -428,16 +428,12 @@ struct PalettRad: View {
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
                     }
-                    LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn, hjørne: 6, visTekst: false) {
-                        kontekst.angresteg("Legg til farge") { dokument.farger.append(arbeidsbenk.aktivFargeSomVistSom.kopi) }
-                    }
-                    .frame(width: 44, height: 44)
                     // Gradienter som bredere brikker etter fargene.
                     ForEach(gradienter) { g in
                         GradientStripe(oppsett: g.oppsett).frame(width: 72, height: 44)
                     }
                     if dokument.farger.isEmpty && gradienter.isEmpty {
-                        Text("Legg til den aktive fargen, eller slipp farger her").font(.caption).foregroundStyle(Color.sekundærTekst)
+                        Text("Slipp farger her, eller åpne paletten for å legge til").font(.caption).foregroundStyle(Color.sekundærTekst)
                     }
                 }
             }
