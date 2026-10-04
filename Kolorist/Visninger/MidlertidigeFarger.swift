@@ -84,6 +84,11 @@ struct PlukkedeFargerRad: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.modelContext) private var kontekst
 
+    private func visIStudio(_ farge: Farge) {
+        arbeidsbenk.aktivFarge = farge
+        arbeidsbenk.valgtFane = .studio
+    }
+
     var body: some View {
         let målinger = arbeidsbenk.målinger
         ScrollView(.horizontal, showsIndicators: false) {
@@ -98,8 +103,10 @@ struct PlukkedeFargerRad: View {
                         .frame(width: størrelse, height: størrelse)
                         .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous)
                             .strokeBorder(Color.sekundærTekst.opacity(0.6), style: StrokeStyle(lineWidth: 1, dash: [3, 2])))
-                        .onTapGesture { arbeidsbenk.aktivFarge = farge }
-                        .help(String(localized: "\(farge.hex()) – ikke lagret"))
+                        // Trykk tar den fangede fargen rett til Studio.
+                        .onTapGesture { visIStudio(farge) }
+                        .accessibilityAction(named: "Vis i Studio") { visIStudio(farge) }
+                        .help(String(localized: "\(farge.hex()) – ikke lagret. Klikk for å vise den i Studio."))
                 }
             }
         }

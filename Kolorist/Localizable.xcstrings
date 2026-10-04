@@ -273,6 +273,16 @@
         }
       }
     },
+    "%@ – ikke lagret. Klikk for å vise den i Studio.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ – not saved. Click to show it in Studio."
+          }
+        }
+      }
+    },
     "%@ – utenfor gamut": {
       "localizations": {
         "en": {
