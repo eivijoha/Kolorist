@@ -53,7 +53,7 @@ struct LysmålingArk: View {
                         .foregroundStyle(Color.sekundærTekst)
                         .fixedSize(horizontal: false, vertical: true)
                     HStack(spacing: 10) {
-                        Button("Mål lyset", systemImage: "camera.metering.center.weighted") { plukker.kompenser(for: nil) }
+                        Button("Mål lyset", systemImage: "camera.metering.center.weighted") { plukker.målLys() }
                         Menu {
                             Button("Gråkort 18 %") { plukker.ventPåGråkort(refleksjon: 0.18, profil: profil) }
                             Button("Hvitt kort 90 %") { plukker.ventPåGråkort(refleksjon: 0.9, profil: profil) }

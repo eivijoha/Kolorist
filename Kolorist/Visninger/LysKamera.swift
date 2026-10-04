@@ -3,15 +3,12 @@ import FargeKjerne
 import FargeMaaling
 import SwiftUI
 
-/// Valgene for lyskompensasjon, felles for kamera og bilder. Flate seksjoner, ikke nøstede menyer (en nøstet meny
+/// Valgene for lyskompensasjon med gråkort eller referansekort, felles for kamera og bilder. Flate seksjoner, ikke nøstede menyer (en nøstet meny
 /// lukker seg på iOS før man har valgt).
 struct LyskompensasjonValg: View {
     let erAktiv: Bool
     var avTekst: LocalizedStringKey = "Som kameraet ser fargene"
     let slåAv: () -> Void
-    /// «Lyset kameraet måler» og lyskildene – bare kamera på iPhone/iPad, der hvitbalansen kan låses.
-    var målLys: (() -> Void)? = nil
-    var lyskilde: ((Lyskilde) -> Void)? = nil
     var medKameraprofil = false
     var glemKameraprofil: (() -> Void)? = nil
     let gråkort: (Double) -> Void
@@ -20,13 +17,8 @@ struct LyskompensasjonValg: View {
     @State private var bibliotek = Lysbibliotek.delt
 
     var body: some View {
+        // Fargene normaliseres bare med et kort i lyset: kameraets egen lysmåling (hvitbalansen) er for grov til det.
         Button(avTekst, systemImage: erAktiv ? "" : "checkmark", action: slåAv)
-        if målLys != nil || lyskilde != nil {
-            Section("Kompenser for lyset") {
-                if let målLys { Button("Lyset kameraet måler", systemImage: "camera.metering.center.weighted", action: målLys) }
-                if let lyskilde { ForEach(Lyskilde.forslag, id: \.self) { lys in Button(lys.navn) { lyskilde(lys) } } }
-            }
-        }
         Section(medKameraprofil ? "Med gråkort og kameraprofil" : "Med gråkort") {
             Button("Gråkort 18 %") { gråkort(0.18) }
             Button("Hvitt kort 90 %") { gråkort(0.9) }
@@ -49,8 +41,7 @@ struct LyskompensasjonValg: View {
     }
 }
 
-/// Lysmenyen i Utplukk (kamera): kompenser for målt lys, en valgt lyskilde, et gråkort eller et referansekort, og
-/// lagre lyset som lysmiljø.
+/// Lysmenyen i Utplukk (kamera): kompenser med et gråkort eller et referansekort, og lagre lyset som lysmiljø.
 struct LyskompensasjonMeny: View {
     let plukker: KameraFargeplukker
     @Binding var kalibrerMed: Referansekort?
@@ -62,8 +53,6 @@ struct LyskompensasjonMeny: View {
         let profil = plukker.målerLys ? bibliotek.kameraprofil(for: plukker.kameranøkkel)?.karakterisering : nil
         Menu {
             LyskompensasjonValg(erAktiv: plukker.kompensasjon != nil, slåAv: plukker.slåAvKompensasjon,
-                                målLys: plukker.målerLys ? { plukker.kompenser(for: nil) } : nil,
-                                lyskilde: plukker.målerLys ? { plukker.kompenser(for: $0) } : nil,
                                 medKameraprofil: profil != nil,
                                 glemKameraprofil: profil == nil ? nil : { bibliotek.fjernKameraprofil(for: plukker.kameranøkkel) },
                                 gråkort: { plukker.ventPåGråkort(refleksjon: $0, profil: profil) },

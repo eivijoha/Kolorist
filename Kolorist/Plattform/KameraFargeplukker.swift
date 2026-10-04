@@ -25,6 +25,8 @@ final class KameraFargeplukker {
     @ObservationIgnored private var gråkortProfil: Kamerakarakterisering?
     /// Lyset slik kameraet anslår det: fra hvitbalansen (før låsing) og eksponeringen, eller fra et kort.
     private(set) var lysmåling: Lysmåling?
+    /// Lysmålingen holdes fast (etter «Mål lyset») i stedet for å oppdateres hvert sekund.
+    @ObservationIgnored private var målingHoldt = false
     @ObservationIgnored private var sistLysmåling = Date.distantPast
     /// Kalles når et stillbilde (for referansekortet) er tatt.
     @ObservationIgnored private var vedStillbilde: ((CGImage) -> Void)?
@@ -143,25 +145,19 @@ final class KameraFargeplukker {
         }
         gjeldende = kompensasjon?.kompensert(farge) ?? farge
         if erFangst { vedFangst?(gjeldende ?? farge) }
-        if kompensasjon == nil, Date.now.timeIntervalSince(sistLysmåling) > 1 {
+        if kompensasjon == nil, !målingHoldt, Date.now.timeIntervalSince(sistLysmåling) > 1 {
             sistLysmåling = .now
             lysmåling = målLysFraKamera()
         }
     }
 
-    /// Kompenserer for en valgt lyskilde, eller for lyset kameraet måler nå (`nil`).
-    func kompenser(for lys: Lyskilde?) {
+    /// Måler lyset nå og holder målingen fast (for å lagre den som lysmiljø). Fargene kompenseres ikke: til det er
+    /// kameraets hvitbalanse for grov – da trengs et gråkort eller referansekort.
+    func målLys() {
         venterPåGråkort = false
-        #if os(iOS)
-        let måling = lys == nil ? målLysFraKamera() : nil
-        let målt = lys ?? måling?.lyskilde
-        guard let målt else { return }
-        låsHvitbalanse()
-        kompensasjon = .hvitpunkt(målt)
-        if let t = målt.fargetemperatur {
-            lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: måling?.lux, metode: .kamera)
-        }
-        #endif
+        guard let måling = målLysFraKamera() else { return }
+        lysmåling = måling
+        målingHoldt = true
     }
 
     /// Neste trykk i bildet er på et grått eller hvitt kort med kjent refleksjon.
@@ -201,6 +197,7 @@ final class KameraFargeplukker {
 
     func slåAvKompensasjon() {
         kompensasjon = nil
+        målingHoldt = false
         venterPåGråkort = false
         låsOpp()
     }

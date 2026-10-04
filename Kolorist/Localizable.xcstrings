@@ -3375,16 +3375,6 @@
         }
       }
     },
-    "Kompenser for lyset": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compensate for the light"
-          }
-        }
-      }
-    },
     "Kompensert med gråkort": {
       "localizations": {
         "en": {
@@ -4627,16 +4617,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "The light is measured. Save it as a viewing condition, or measure again. With a grey or white card the illuminance is measured too."
-          }
-        }
-      }
-    },
-    "Lyset kameraet måler": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The light the camera measures"
           }
         }
       }
