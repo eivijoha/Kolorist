@@ -77,12 +77,12 @@ struct HarmoniFlate: View {
                 }
             }
         }
-        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
+        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: høyreHjørne, style: .continuous))
         .overlay {
             if rammeRundtAlle {
                 // Samme regel som grunnfarge-sirkelen: lesbar tekstfarge når flatene er enige, ellers primærfargen.
                 let kanter = Set(farger.map(\.lesbarTekstfarge))
-                UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous)
+                UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: høyreHjørne, style: .continuous)
                     .strokeBorder(kanter.count == 1 ? kanter.first!.swiftUI : Color.primary, lineWidth: 3)
                     .allowsHitTesting(false)
             }
@@ -91,11 +91,14 @@ struct HarmoniFlate: View {
         .accessibilityLabel(String(localized: "Harmonien i \(romnavn)"))
     }
 
+    /// Bred visning (flatene stablet til venstre): skarpt øvre høyre hjørne mot kontrollene til høyre.
+    private var høyreHjørne: CGFloat { stablet ? 0 : 20 }
+
     /// Avrundede hjørner for flaten på plass `indeks`: flatene ligger i en form med avrundede øvre hjørner (20 pt),
     /// så rammen rundt grunnfargen må følge de samme hjørnene for ikke å bli kuttet.
     private func hjørner(indeks: Int, antall: Int) -> (venstre: CGFloat, høyre: CGFloat) {
         let r: CGFloat = 20
-        if stablet { return indeks == 0 ? (r, r) : (0, 0) }
+        if stablet { return indeks == 0 ? (r, høyreHjørne) : (0, 0) }
         return (indeks == 0 ? r : 0, indeks == antall - 1 ? r : 0)
     }
 

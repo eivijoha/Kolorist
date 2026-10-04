@@ -105,11 +105,12 @@ struct OvergangVisning: View {
             .frame(minHeight: 48)
         }
         .frame(maxWidth: .infinity)
-        .background(Color.kortbakgrunn, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
         .padding(.leading, 16)
         .padding(.trailing, bred ? 0 : 16)
-        .padding(.top, 4)
-        .padding(.bottom, 8)
+        // Bred visning: like mye luft over som til venstre for kortet.
+        .padding(.top, bred ? 16 : 4)
+        .padding(.bottom, bred ? 16 : 8)
         .background(Color.skjemabakgrunn)
     }
 

@@ -182,11 +182,12 @@ struct FargeEditor: View {
             .frame(minHeight: 48)
         }
         .frame(maxWidth: .infinity)
-        .background(Color.kortbakgrunn, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
         .padding(.leading, 16)
         .padding(.trailing, bred ? 0 : 16)
-        .padding(.top, 4)
-        .padding(.bottom, 8)
+        // Bred visning: like mye luft over som til venstre for kortet.
+        .padding(.top, bred ? 16 : 4)
+        .padding(.bottom, bred ? 16 : 8)
         .background(Color.skjemabakgrunn)
     }
 
@@ -743,6 +744,15 @@ private struct Lyshetsstige: View {
 
 /// Bred visning: fargefeltene til venstre og kontrollene til høyre. iPad og åpen foldetelefon i liggende format, og
 /// Mac med bredt nok innholdsområde – der ville én sentrert kolonne gi lang avstand mellom tekst og kontroller.
+/// Formen på kortet med de store fargefeltene: avrundet rundt hele i smal visning, og bare på venstre side i bred
+/// visning, der kortet ligger til venstre og møter kontrollene til høyre.
+enum Kortform {
+    static func fargepanel(bred: Bool) -> UnevenRoundedRectangle {
+        UnevenRoundedRectangle(topLeadingRadius: 20, bottomLeadingRadius: 20,
+                               bottomTrailingRadius: bred ? 0 : 20, topTrailingRadius: bred ? 0 : 20, style: .continuous)
+    }
+}
+
 enum Breddeoppsett {
     static func erBred(_ størrelse: CGSize) -> Bool {
         #if os(iOS)
@@ -906,7 +916,8 @@ struct Fargeflate: View {
                             : String(localized: "Utenfor gamut · ΔE00 \(String(format: "%.1f", høyre.farge.deltaE2000(til: farge)))"))
             }
         }
-        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .continuous))
+        // Bred visning (halvdelene stablet til venstre): skarpt øvre høyre hjørne mot kontrollene til høyre.
+        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: stablet ? 0 : 20, style: .continuous))
         .task(id: renNøkkel) {
             guard let nøkkel = renNøkkel else { return }
             try? await Task.sleep(for: .milliseconds(120))
