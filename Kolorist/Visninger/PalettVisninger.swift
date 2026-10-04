@@ -301,17 +301,17 @@ struct EnkeltfargerRad: View {
                 Text("\(farger.count)").font(.caption).foregroundStyle(Color.sekundærTekst).monospacedDigit()
             }
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 4) {
+                HStack(spacing: 8) {
                     // Nyeste først, så den nye fargen havner der feltet står.
                     LeggTilFelt(farge: arbeidsbenk.aktivFarge, hjørne: 6, visTekst: false) {
                         kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.aktivFarge)], i: kontekst) }
                     }
-                    .frame(width: 36, height: 36)
+                    .frame(width: 44, height: 44)
                     ForEach(farger.prefix(60)) { pf in
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
                                   fjern: { slettEnkeltfarge(pf.id, i: kontekst) },
                                   palettFarge: pf, ekstraMeny: AnyView(FlyttMeny(farge: pf, fra: nil)))
-                            .frame(width: 36, height: 36)
+                            .frame(width: 44, height: 44)
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
                     }
@@ -421,22 +421,22 @@ struct PalettRad: View {
                 Text("\(dokument.farger.count)").font(.caption).foregroundStyle(Color.sekundærTekst).monospacedDigit()
             }
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 3) {
+                HStack(spacing: 8) {
                     ForEach(dokument.farger) { pf in
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
                                   fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } }, palettFarge: pf,
                                   ekstraMeny: AnyView(FlyttMeny(farge: pf, fra: dokument)))
-                            .frame(width: 36, height: 36)
+                            .frame(width: 44, height: 44)
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
                     }
                     LeggTilFelt(farge: arbeidsbenk.aktivFarge, hjørne: 6, visTekst: false) {
                         kontekst.angresteg("Legg til farge") { dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge)) }
                     }
-                    .frame(width: 36, height: 36)
+                    .frame(width: 44, height: 44)
                     // Gradienter som bredere brikker etter fargene.
                     ForEach(gradienter) { g in
-                        GradientStripe(oppsett: g.oppsett).frame(width: 64, height: 36)
+                        GradientStripe(oppsett: g.oppsett).frame(width: 72, height: 44)
                     }
                     if dokument.farger.isEmpty && gradienter.isEmpty {
                         Text("Legg til den aktive fargen, eller slipp farger her").font(.caption).foregroundStyle(Color.sekundærTekst)

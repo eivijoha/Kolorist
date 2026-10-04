@@ -40,7 +40,7 @@ struct SammenligningVisning: View {
                     Button { swap(&a, &b) } label: {
                         Image(systemName: "arrow.left.arrow.right")
                             .font(.callout.weight(.semibold))
-                            .frame(width: 40, height: 40)
+                            .frame(width: 44, height: 44)
                             .background(.regularMaterial, in: Circle())
                     }
                     .buttonStyle(.plain)

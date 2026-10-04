@@ -50,6 +50,34 @@ extension Lysmiljø {
     }
 }
 
+/// Forklaringen bak ⓘ for fargen i lysmiljøene: hva prøvene viser, fargeskiftet, strekene for kvalitet og metameri.
+struct Lysforklaring: View {
+    let somFoto: Bool
+    var ujevntSpekter = false
+
+    var body: some View {
+        Text(somFoto
+             ? "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den."
+             : "Prøvene viser fargen slik den oppleves i lyset: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger.")
+        Text("Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig.")
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Strekene viser hvor godt lyset er kjent:")
+            ForEach([(4, String(localized: "kjent spekter")),
+                     (3, String(localized: "spekter fra fargetemperaturen, eller målt med kort")),
+                     (2, String(localized: "målt med kameraet, lysstyrken anslått")),
+                     (1, String(localized: "bare lysets farge"))], id: \.0) { nivå, tekst in
+                HStack(spacing: 6) {
+                    Image(systemName: "cellularbars", variableValue: Double(nivå) / 4).imageScale(.small)
+                    Text(tekst)
+                }
+            }
+        }
+        if ujevntSpekter {
+            Text("Lysrør og LED har ujevne spektre. Fargens spekter er anslått, så en ekte flate kan endre seg annerledes i slikt lys (metameri).")
+        }
+    }
+}
+
 /// Strekene for kvaliteten, med teksten for VoiceOver og som hjelpetekst.
 struct LyskvalitetMerke: View {
     let kvalitet: Lyskvalitet
@@ -91,9 +119,9 @@ struct LysmiljøSeksjon: View {
                     ForEach(bibliotek.synligeEksempler) { innebygdRad($0) }
                 } fot: {
                     #if os(macOS)
-                    Text("Skjul lysmiljøer og standarder du ikke bruker med øyet til høyre på raden.")
+                    Text("Skjul det du ikke bruker med øyet til høyre.")
                     #else
-                    Text("Sveip eller trykk og hold for å skjule lysmiljøer og standarder du ikke bruker.")
+                    Text("Sveip for å skjule det du ikke bruker.")
                     #endif
                 }
             }
@@ -102,7 +130,12 @@ struct LysmiljøSeksjon: View {
                 PanelSeksjon(panel: panel) {
                     ForEach(bibliotek.synligeStandarder) { innebygdRad($0) }
                 } fot: {
-                    Text("Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.")
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text("Belysningsstyrke etter ISO 3664, NS-EN 12464-1 og CIE 157.")
+                        InfoKnapp {
+                            Text("Belysningsstyrken følger standardene: ISO 3664 for vurdering av trykk og bilder, NS-EN 12464-1 for arbeidsplasser og skoler, og CIE 157 for museer. Lysets spekter er et typisk valg – D50 for grafisk vurdering, nøytral LED (4000 K) for arbeidsplasser og varmt lys (3000 K) i museer.")
+                        }
+                    }
                 }
             }
         case .skjulteLysmiljøer:
@@ -142,9 +175,9 @@ struct LysmiljøSeksjon: View {
             }
         } fot: {
             #if os(macOS)
-            Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken – med fargetemperatur og lysstyrke. Lysmiljøer målt med kameraet på iPhone og iPad kommer hit via iCloud.")
+            Text("Lysmiljøer målt på iPhone og iPad kommer hit via iCloud.")
             #else
-            Text("Lagre lyset der fargene skal brukes – stua, kontoret, butikken. Mål det med kameraet der du står, eller legg inn fargetemperatur og lysstyrke selv.")
+            Text("Lyset der fargene skal brukes – stua, kontoret, butikken.")
             #endif
         }
         .sheet(item: $redigerer) { miljø in
@@ -188,14 +221,11 @@ struct LysmiljøSeksjon: View {
                 .frame(width: 24, height: 24)
             VStack(alignment: .leading, spacing: 1) {
                 Text(miljø.navn).foregroundStyle(Color.primary)
-                Text("\(miljø.lyskilde.navn) · \(Lysbeskrivelse.tekst(miljø))")
-                    .font(.caption).foregroundStyle(Color.sekundærTekst)
-                let k = miljø.kvalitet
                 HStack(spacing: 4) {
-                    LyskvalitetMerke(kvalitet: k)
-                    Text(k.tekst)
+                    Text("\(miljø.lyskilde.navn) · \(Lysbeskrivelse.tekst(miljø))")
+                    LyskvalitetMerke(kvalitet: miljø.kvalitet)
                 }
-                .font(.caption2).foregroundStyle(Color.sekundærTekst)
+                .font(.caption).foregroundStyle(Color.sekundærTekst)
             }
             Spacer()
         }
@@ -209,6 +239,8 @@ struct LysmiljøSeksjon: View {
             Image(systemName: vist ? "checkmark.circle.fill" : "circle")
                 .font(.title3)
                 .foregroundStyle(vist ? Color.accentColor : Color.sekundærTekst)
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.borderless)
         .accessibilityLabel(vist ? String(localized: "Fargen vises i dette lyset") : String(localized: "Vis fargen i dette lyset"))
@@ -261,6 +293,15 @@ struct LysmiljøRedigering: View {
                            in: 1...4.3)
                 } footer: {
                     Text("Typisk 50–150 lx i en stue om kvelden, 500 lx på et kontor og over 10 000 lx ute på dagtid.")
+                }
+                Section {
+                    HStack(spacing: 6) {
+                        LyskvalitetMerke(kvalitet: miljø.kvalitet)
+                        Text(miljø.kvalitet.tekst)
+                    }
+                    .foregroundStyle(Color.sekundærTekst)
+                } header: {
+                    Text("Kvalitet")
                 }
                 if let m = miljø.måling {
                     Section("Målt") {

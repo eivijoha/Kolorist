@@ -43,16 +43,12 @@ struct LysVurdering: View {
                 ForEach(miljøer) { prøve(farge, $0) }
             }
             .padding(.vertical, 4)
-            if miljøer.contains(where: \.harUjevntSpekter) {
-                Label("Lysrør og LED har ujevne spektre. Fargens spekter er anslått, så en ekte flate med samme farge på skjermen kan endre seg annerledes i slikt lys (metameri).", systemImage: "info.circle")
-                    .font(.footnote)
-                    .foregroundStyle(Color.sekundærTekst)
-            }
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
-                Text(somFoto
-                     ? "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Strekene viser hvor godt lyset er kjent: fire for kjent spekter, færre når bare lysets farge er målt eller lysstyrken er anslått. Velg lysmiljøene med haken i lista under."
-                     : "Prøvene viser fargen slik den oppleves i hvert lysmiljø: øyet tilpasser seg lysets farge nesten helt, og svakt lys gir mindre fargerike farger. Fargeskiftet (ΔE00) er hvor mye fargen endrer karakter når øyet har tilpasset seg fullt; over 3 merkes det tydelig. Strekene viser hvor godt lyset er kjent: fire for kjent spekter, færre når bare lysets farge er målt eller lysstyrken er anslått. Velg lysmiljøene med haken i lista under.")
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text("Fargeskift (ΔE00) over 3 merkes tydelig.")
+                    InfoKnapp { Lysforklaring(somFoto: somFoto, ujevntSpekter: miljøer.contains(where: \.harUjevntSpekter)) }
+                }
                 MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
             }
         }

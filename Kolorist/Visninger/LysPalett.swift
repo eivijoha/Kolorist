@@ -73,6 +73,11 @@ struct PalettLysValg: View {
                     .fixedSize()
                 Spacer(minLength: 0)
                 Text(Lysbeskrivelse.tekst(lys.miljø)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
+                LyskvalitetMerke(kvalitet: lys.miljø.kvalitet).foregroundStyle(Color.sekundærTekst)
+                InfoKnapp {
+                    Text("Øverst i hver rute: fargen på skjermen. Nederst: fargen i lyset, med fargeskiftet.")
+                    Lysforklaring(somFoto: somFoto, ujevntSpekter: lys.miljø.harUjevntSpekter)
+                }
             }
             Picker("Vis", selection: $somFoto) {
                 Text("Slik øyet ser det").tag(false)
@@ -80,14 +85,6 @@ struct PalettLysValg: View {
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            Text("Øverst i hver rute: fargen på skjermen. Nederst: fargen i lyset, med fargeskiftet (ΔE00); over 3 merkes det tydelig.")
-                .font(.footnote)
-                .foregroundStyle(Color.sekundærTekst)
-            if lys.miljø.harUjevntSpekter {
-                Label("Lysrør og LED har ujevne spektre. Fargenes spektre er anslått, så ekte flater kan endre seg annerledes (metameri).", systemImage: "info.circle")
-                    .font(.footnote)
-                    .foregroundStyle(Color.sekundærTekst)
-            }
         }
         .padding(12)
         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
