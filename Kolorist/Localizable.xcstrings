@@ -3069,16 +3069,6 @@
         }
       }
     },
-    "Ingen farger å lime inn": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No colours to paste"
-          }
-        }
-      }
-    },
     "Ingen forvekslinger": {
       "localizations": {
         "en": {
@@ -7251,16 +7241,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Outside sRGB"
-          }
-        }
-      }
-    },
-    "Utklippstavlen inneholder ingen farger. Kopier hex-verdier, CSS-farger eller farger fra en annen palett.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The clipboard contains no colours. Copy hex values, CSS colours or colours from another palette."
           }
         }
       }

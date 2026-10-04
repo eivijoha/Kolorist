@@ -12,12 +12,32 @@ import AppKit
 /// Kopiering etter plattformkonvensjon: ett element med både fargeobjekt
 /// (limes inn som farge i Keynote, Pages, Figma m.fl.) og tekst (limes inn i kode).
 enum Utklippstavle {
+    #if canImport(UIKit)
+    /// `changeCount` etter siste kopiering fra Kolorist. Eget innhold kan leses uten at iOS spør «Tillat innliming?».
+    private static var egenEndring = -1
+    private static func merkEgen() { egenEndring = UIPasteboard.general.changeCount }
+    #endif
+
+    /// Om utklippstavlen har farger. På iOS uten å lese innhold fra andre apper (det utløser «Tillat innliming?»):
+    /// fargeobjekter (fra Kolorist, Keynote, Figma o.l.) og farger kopiert fra Kolorist. Hex-tekst fra andre apper
+    /// kan ikke kjennes igjen uten å lese den.
+    static var harFarger: Bool {
+        #if canImport(UIKit)
+        let tavle = UIPasteboard.general
+        if tavle.hasColors { return true }
+        return tavle.changeCount == egenEndring && !limInnListe().isEmpty
+        #else
+        return !limInnListe().isEmpty
+        #endif
+    }
+
     static func kopier(_ farge: Farge, som modell: Fargemodell? = nil) {
         let tekst = modell?.tekst(for: farge) ?? farge.hex(medAlfa: farge.alfa < 1)
         #if canImport(UIKit)
         let leverandør = NSItemProvider(object: farge.plattform)
         leverandør.registerObject(tekst as NSString, visibility: .all)
         UIPasteboard.general.itemProviders = [leverandør]
+        merkEgen()
         #elseif canImport(AppKit)
         let tavle = NSPasteboard.general
         tavle.clearContents()
@@ -29,6 +49,7 @@ enum Utklippstavle {
     static func kopierTekst(_ tekst: String) {
         #if canImport(UIKit)
         UIPasteboard.general.string = tekst
+        merkEgen()
         #elseif canImport(AppKit)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(tekst, forType: .string)
@@ -43,6 +64,7 @@ enum Utklippstavle {
         }.joined(separator: "\n")
         #if canImport(UIKit)
         UIPasteboard.general.string = linjer
+        merkEgen()
         #elseif canImport(AppKit)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(linjer, forType: .string)
@@ -78,27 +100,41 @@ enum Utklippstavle {
     }
 }
 
-/// «Lim inn farger» på iPhone og iPad: systemets innlimingsknapp, aktiv når utklippstavlen har tekst. Trykket er
-/// tillatelsen, så iOS ikke spør «Tillat innliming?» (å sjekke om teksten er en farge før trykket ville utløst det
-/// spørsmålet hver gang). På Mac brukes ⌘V i stedet (se `fargetastatur`).
+/// Følger utklippstavlen (iPhone og iPad), så «Lim inn farger» bare vises når det er farger å lime inn.
+@Observable
+final class Utklippstavlevakt {
+    static let delt = Utklippstavlevakt()
+    private(set) var harFarger = false
+
+    private init() {
+        #if canImport(UIKit)
+        oppdater()
+        // Endringer i appen, og når man kommer tilbake fra en annen app som kan ha kopiert noe.
+        for navn in [UIPasteboard.changedNotification, UIApplication.didBecomeActiveNotification] {
+            NotificationCenter.default.addObserver(forName: navn, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.oppdater() }
+            }
+        }
+        #endif
+    }
+
+    func oppdater() { harFarger = Utklippstavle.harFarger }
+}
+
+/// «Lim inn farger» på iPhone og iPad: vises bare når utklippstavlen har farger (se `Utklippstavle.harFarger`).
+/// På Mac brukes ⌘V i stedet (se `fargetastatur`).
 struct LimInnFargerKnapp: View {
     var leggTil: ([PalettFarge]) -> Void
-    @State private var ingenFarger = false
+    @State private var vakt = Utklippstavlevakt.delt
 
     var body: some View {
         #if os(iOS)
-        PasteButton(payloadType: String.self) { tekster in
-            let farger = tekster.flatMap(Fargetolk.tolkListe)
-            Task { @MainActor in
-                if farger.isEmpty { ingenFarger = true } else { leggTil(farger) }
+        if vakt.harFarger {
+            Button("Lim inn farger", systemImage: "doc.on.clipboard") {
+                let farger = Utklippstavle.limInnListe()
+                if !farger.isEmpty { leggTil(farger) }
             }
-        }
-        .labelStyle(.iconOnly)
-        .help("Lim inn farger")
-        .alert("Ingen farger å lime inn", isPresented: $ingenFarger) {
-            Button("OK") {}
-        } message: {
-            Text("Utklippstavlen inneholder ingen farger. Kopier hex-verdier, CSS-farger eller farger fra en annen palett.")
+            .help("Lim inn farger")
         }
         #endif
     }
