@@ -135,6 +135,13 @@ struct PalettListe: View {
             .omdøpPalett($omdøpes)
             .sheet(item: $vurderes) { PalettVurderingArk(palett: $0.palett) }
             .sheet(item: $matrise) { KontrastmatriseArk(palett: $0.palett) }
+            // ⌘N (Arkiv › Ny palett).
+            .onChange(of: arbeidsbenk.nyPalettForespurt) { _, ny in
+                guard ny else { return }
+                arbeidsbenk.nyPalettForespurt = false
+                nyPalettNavn = ""
+                visNyPalett = true
+            }
             .alert("Ny palett", isPresented: $visNyPalett) {
                 TextField("Navn", text: $nyPalettNavn)
                 Button("Avbryt", role: .cancel) {}
@@ -347,6 +354,7 @@ struct EnkeltfargerVisning: View {
         .tarImotFarger { farger in
             flyttTilEnkeltfarger(farger, i: kontekst)
         }
+        .fargetastatur(kopier: { lagrede.map(\.palettFarge) }, limInn: { lagreEnkeltfarger($0, i: kontekst) })
         .toolbar {
             ToolbarItemGroup {
                 Button("Lagre aktiv farge", systemImage: "plus") {
@@ -527,6 +535,10 @@ struct PalettDetalj: View {
         .tarImotFarger { farger in
             flytt(farger, til: dokument, i: kontekst)
         }
+        .fargetastatur(kopier: { dokument.farger }, limInn: { dokument.farger += $0 })
+        // ⇧⌘S: «Lagre som …» for denne paletten.
+        .focusedSceneValue(\.palettlagring, dokument.farger.isEmpty && dokument.gradienter.isEmpty ? nil
+            : Palettlagring(id: dokument.id) { visLagreSom = true })
         // ⌘P skriver ut denne paletten.
         .focusedSceneValue(\.palettutskrift, dokument.farger.isEmpty && dokument.gradienter.isEmpty ? nil
             : Palettutskrift(id: dokument.id, navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn) { PalettUtskrift.skrivUt(dokument) })

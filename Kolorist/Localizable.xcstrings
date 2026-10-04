@@ -3429,6 +3429,16 @@
         }
       }
     },
+    "Kopier aktiv farge som hex": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy active colour as hex"
+          }
+        }
+      }
+    },
     "Kopier alle som OKLCH": {
       "localizations": {
         "en": {

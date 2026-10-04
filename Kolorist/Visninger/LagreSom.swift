@@ -198,3 +198,15 @@ struct Eksportvelger: UIViewControllerRepresentable {
     func updateUIViewController(_ vc: UIDocumentPickerViewController, context: Context) {}
 }
 #endif
+
+/// Paletten «Lagre som …» (⇧⌘S) gjelder, der brukeren står. Lik ved samme id, så menyen ikke bygges om hele tiden.
+struct Palettlagring: Equatable {
+    let id: UUID
+    let lagreSom: () -> Void
+
+    static func == (a: Palettlagring, b: Palettlagring) -> Bool { a.id == b.id }
+}
+
+extension FocusedValues {
+    @Entry var palettlagring: Palettlagring?
+}

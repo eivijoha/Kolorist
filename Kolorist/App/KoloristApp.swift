@@ -26,9 +26,12 @@ struct KoloristApp: App {
         .modelContainer(Lagring.container)
         // ⌘P (Arkiv › Skriv ut) for paletten som er åpen – Mac, og iPad med tastatur.
         .commands { UtskriftKommando() }
+        .commands { KoloristKommandoer(arbeidsbenk: arbeidsbenk) }
         #if os(macOS)
         .commands {
             CommandGroup(after: .pasteboard) {
+                Button("Kopier aktiv farge som hex") { Utklippstavle.kopier(arbeidsbenk.aktivFarge) }
+                    .keyboardShortcut("c", modifiers: [.command, .shift])
                 Button("Kopier aktiv farge som OKLCH") { Utklippstavle.kopier(arbeidsbenk.aktivFarge, som: .okLCH) }
                     .keyboardShortcut("c", modifiers: [.command, .option])
                 Button("Lim inn farge") { if let f = Utklippstavle.limInn() { arbeidsbenk.aktivFarge = f } }
@@ -108,6 +111,8 @@ final class Arbeidsbenk {
     var valgtFane: Fane = Arbeidsbenk.startfane
     /// Vinduet er bredt nok til palettkolonnen (Mac og store iPader i liggende format). Settes av rotvisningen.
     var palettkolonneMulig = false
+    /// ⌘N: be palettoversikten om en ny palett.
+    var nyPalettForespurt = false
     /// En åpnet delingslenke som vises i et ark (se `åpneLenke`).
     var mottattLenke: MottattLenke?
     /// Feilmelding når en delingslenke ikke kunne leses.
@@ -416,6 +421,44 @@ struct UtskriftKommando: Commands {
             }
             .keyboardShortcut("p", modifiers: .command)
             .disabled(utskrift == nil)
+        }
+    }
+}
+
+/// Tastatursnarveier (Mac, og iPad med tastatur): ny palett, «Lagre som …» og fanene.
+struct KoloristKommandoer: Commands {
+    let arbeidsbenk: Arbeidsbenk
+    @FocusedValue(\.palettlagring) private var lagring
+
+    /// Paletter ligger fast til høyre på Mac med bredt vindu, og er da ikke en fane.
+    private var palettfane: Bool {
+        #if os(macOS)
+        !arbeidsbenk.palettkolonneMulig
+        #else
+        true
+        #endif
+    }
+
+    var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+            Button("Ny palett") {
+                if palettfane { arbeidsbenk.valgtFane = .paletter }
+                arbeidsbenk.nyPalettForespurt = true
+            }
+            .keyboardShortcut("n", modifiers: .command)
+        }
+        CommandGroup(after: .saveItem) {
+            Button("Lagre som …") { lagring?.lagreSom() }
+                .keyboardShortcut("s", modifiers: [.command, .shift])
+                .disabled(lagring == nil)
+        }
+        CommandGroup(before: .toolbar) {
+            Button("Studio") { arbeidsbenk.valgtFane = .studio }.keyboardShortcut("1", modifiers: .command)
+            Button("Paletter") { arbeidsbenk.valgtFane = .paletter }.keyboardShortcut("2", modifiers: .command).disabled(!palettfane)
+            Button("Overgang") { arbeidsbenk.valgtFane = .overgang }.keyboardShortcut("3", modifiers: .command)
+            Button("Utplukk") { arbeidsbenk.valgtFane = .utplukk }.keyboardShortcut("4", modifiers: .command)
+            Button("Vurdering") { arbeidsbenk.valgtFane = .vurdering }.keyboardShortcut("5", modifiers: .command)
+            Divider()
         }
     }
 }

@@ -1,6 +1,7 @@
 import FargeKjerne
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 #if canImport(UIKit)
 import UIKit
@@ -77,29 +78,14 @@ enum Utklippstavle {
     }
 }
 
-/// «Lim inn farger»: aktiv bare når utklippstavlen har noe å lime inn.
-///
-/// iOS: systemets innlimingsknapp – den er aktiv når utklippstavlen har tekst, og trykket er tillatelsen, så iOS ikke
-/// spør «Tillat innliming?». (Å sjekke om teksten er en farge før trykket ville utløst det spørsmålet hver gang.)
-/// Mac: utklippstavlen kan leses fritt, så knappen er aktiv bare når den har gyldige farger.
+/// «Lim inn farger» på iPhone og iPad: systemets innlimingsknapp, aktiv når utklippstavlen har tekst. Trykket er
+/// tillatelsen, så iOS ikke spør «Tillat innliming?» (å sjekke om teksten er en farge før trykket ville utløst det
+/// spørsmålet hver gang). På Mac brukes ⌘V i stedet (se `fargetastatur`).
 struct LimInnFargerKnapp: View {
     var leggTil: ([PalettFarge]) -> Void
     @State private var ingenFarger = false
-    #if os(macOS)
-    @State private var harFarger = false
-    @State private var endringstall = -1
-    #endif
 
     var body: some View {
-        knapp
-            .alert("Ingen farger å lime inn", isPresented: $ingenFarger) {
-                Button("OK") {}
-            } message: {
-                Text("Utklippstavlen inneholder ingen farger. Kopier hex-verdier, CSS-farger eller farger fra en annen palett.")
-            }
-    }
-
-    @ViewBuilder private var knapp: some View {
         #if os(iOS)
         PasteButton(payloadType: String.self) { tekster in
             let farger = tekster.flatMap(Fargetolk.tolkListe)
@@ -109,24 +95,48 @@ struct LimInnFargerKnapp: View {
         }
         .labelStyle(.iconOnly)
         .help("Lim inn farger")
-        #else
-        Button("Lim inn farger", systemImage: "doc.on.clipboard") {
-            let farger = Utklippstavle.limInnListe()
-            if farger.isEmpty { ingenFarger = true } else { leggTil(farger) }
-        }
-        .disabled(!harFarger)
-        .help("Lim inn farger")
-        // Sjekk utklippstavlen når den endres (billig: bare endringstallet leses hvert sekund).
-        .task {
-            while !Task.isCancelled {
-                let tall = NSPasteboard.general.changeCount
-                if tall != endringstall {
-                    endringstall = tall
-                    harFarger = !Utklippstavle.limInnListe().isEmpty
-                }
-                try? await Task.sleep(for: .seconds(1))
-            }
+        .alert("Ingen farger å lime inn", isPresented: $ingenFarger) {
+            Button("OK") {}
+        } message: {
+            Text("Utklippstavlen inneholder ingen farger. Kopier hex-verdier, CSS-farger eller farger fra en annen palett.")
         }
         #endif
     }
 }
+
+extension View {
+    /// Mac: ⌘C kopierer fargene som hex og ⌘V limer inn farger (Rediger-menyen) – i stedet for knapper.
+    func fargetastatur(kopier: @escaping () -> [PalettFarge], limInn: @escaping ([PalettFarge]) -> Void) -> some View {
+        #if os(macOS)
+        modifier(Fargetastatur(kopier: kopier, limInn: limInn))
+        #else
+        self
+        #endif
+    }
+}
+
+#if os(macOS)
+private struct Fargetastatur: ViewModifier {
+    let kopier: () -> [PalettFarge]
+    let limInn: ([PalettFarge]) -> Void
+    @FocusState private var fokus: Bool
+
+    func body(content: Content) -> some View {
+        content
+            // Visningen må kunne ha fokus for å få ⌘C og ⌘V; den får fokus når den åpnes.
+            .focusable()
+            .focusEffectDisabled()
+            .focused($fokus)
+            .onAppear { fokus = true }
+            .onCopyCommand {
+                let farger = kopier()
+                guard !farger.isEmpty else { return [] }
+                return [NSItemProvider(object: farger.map { $0.farge.hex() }.joined(separator: "\n") as NSString)]
+            }
+            .onPasteCommand(of: [.plainText, .utf8PlainText, .text]) { _ in
+                let farger = Utklippstavle.limInnListe()
+                if !farger.isEmpty { limInn(farger) }
+            }
+    }
+}
+#endif
