@@ -99,16 +99,8 @@ struct OvergangVisning: View {
                 .frame(height: 140)
                 .overlay(alignment: .topTrailing) { lagremeny }
             HStack {
-                // Fargemodellen deles med Studio.
-                Picker("Fargemodell", selection: $arbeidsbenk.modell) {
-                    ForEach(Fargemodell.redigerbare) { Text($0.navn).tag($0) }
-                }
-                .pickerStyle(.menu)
-                .labelsHidden()
-                .fixedSize()
-                Spacer(minLength: 8)
+                Spacer(minLength: 0)
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom)
-                    .layoutPriority(1)
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)
@@ -174,6 +166,13 @@ struct OvergangVisning: View {
         VStack(spacing: 0) {
         overgangsflate
         Form {
+            // Første valg under feltene, som i Studio. Fargemodellen deles med Studio.
+            Section {
+                @Bindable var arbeidsbenk = arbeidsbenk
+                Picker("Fargemodell", selection: $arbeidsbenk.modell) {
+                    ForEach(Fargemodell.redigerbare) { Text($0.navn).tag($0) }
+                }
+            }
             Seksjon("Endepunkter") {
                 FargeValgRad(tittel: String(localized: "Fra"), farge: Binding(get: { start }, set: { start = $0 }),
                              verditekst: arbeidsbenk.modell.kortTekst)

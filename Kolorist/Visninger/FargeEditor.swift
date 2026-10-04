@@ -333,6 +333,12 @@ extension FargeEditor {
     @ViewBuilder
     fileprivate func tonerModus(_ farge: Farge) -> some View {
         @Bindable var arbeidsbenk = arbeidsbenk
+        // Første valg under feltene, som i Farge-modus: verdiene i feltene vises i denne modellen.
+        Section {
+            Picker("Fargemodell", selection: $arbeidsbenk.modell) {
+                ForEach(Fargemodell.redigerbare) { Text($0.navn).tag($0) }
+            }
+        }
         Section {
             LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn, grunnlyshet: farge.okLCH.l)
             Button("Legg raden i palett", systemImage: "plus.square.on.square") {
