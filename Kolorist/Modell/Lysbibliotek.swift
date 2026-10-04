@@ -14,12 +14,13 @@ final class Lysbibliotek {
     private(set) var referansekort: [Referansekort] = []
     /// Siste karakterisering per kort (kortets id). En karakterisering gjelder lyset den ble laget i.
     private(set) var karakteriseringer: [UUID: LagretKarakterisering] = [:]
-    /// Kameraprofiler per kamera (navn): en karakterisering som beskriver kameraet, ikke lyset, så et gråkort holder
-    /// i nytt lys. Gjelder bare med hvitbalansen låst til dagslys (iPhone/iPad).
+    /// Kameraprofiler per kamera (enhetsmodell og kameratype, se `KameraFargeplukker.kameranøkkel`): en
+    /// karakterisering som beskriver kameraet, ikke lyset, så et gråkort holder i nytt lys. Gjelder bare med
+    /// hvitbalansen låst til dagslys (iPhone/iPad). Synkroniseres, men brukes bare på samme enhetsmodell.
     private(set) var kameraprofiler: [String: LagretKarakterisering] = [:]
     /// Lysmiljøet «Se i lys» viser (id fra `alleLysmiljøer`).
     var valgtLysmiljø: UUID? {
-        didSet { lokalt.set(valgtLysmiljø?.uuidString, forKey: Nøkkel.valgt) }
+        didSet { UserDefaults.standard.set(valgtLysmiljø?.uuidString, forKey: Nøkkel.valgt) }
     }
 
     struct LagretKarakterisering: Codable, Hashable {
@@ -44,34 +45,40 @@ final class Lysbibliotek {
                  navn: String(localized: "Korridor (NS-EN 12464-1)"), lyskilde: .cie("LED-B3"), lux: 100),
         Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000030002")!,
                  navn: String(localized: "Museum, malerier (CIE 157)"), lyskilde: .sortlegeme(kelvin: 3000), lux: 200),
-        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000030005")!,
-                 navn: String(localized: "Museum, lysfølsomme gjenstander (CIE 157)"), lyskilde: .sortlegeme(kelvin: 3000), lux: 50),
+        museumLysfølsomme,
     ]
+
+    static let museumLysfølsomme = Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000030005")!,
+        navn: String(localized: "Museum, lysfølsomme gjenstander (CIE 157)"), lyskilde: .sortlegeme(kelvin: 3000), lux: 50)
 
     /// Ferdige eksempler på hverdagslys, med faste id-er.
     static let innebygde: [Lysmiljø] = [
-        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000002700")!,
-                 navn: String(localized: "Stue om kvelden"), lyskilde: .sortlegeme(kelvin: 2700), lux: 100),
-        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000003000")!,
-                 navn: String(localized: "Varmhvit LED"), lyskilde: .cie("LED-B2"), lux: 200),
-        Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000004001")!,
-                 navn: String(localized: "Lysrør"), lyskilde: .cie("FL11"), lux: 400),
+        stueOmKvelden, varmhvitLED, lysrør,
         Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000006500")!,
                  navn: String(localized: "Dagslys inne"), lyskilde: .d65, lux: 1000),
         Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000007500")!,
                  navn: String(localized: "Overskyet ute"), lyskilde: .dagslys(kelvin: 7500), lux: 10000),
     ]
 
+    static let stueOmKvelden = Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000002700")!,
+        navn: String(localized: "Stue om kvelden"), lyskilde: .sortlegeme(kelvin: 2700), lux: 100)
+    static let varmhvitLED = Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000003000")!,
+        navn: String(localized: "Varmhvit LED"), lyskilde: .cie("LED-B2"), lux: 200)
+    static let lysrør = Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000004001")!,
+        navn: String(localized: "Lysrør"), lyskilde: .cie("FL11"), lux: 400)
+
+    /// Et utvalg typiske lys for vurderingen av paletter: varmt kveldslys, varmhvit LED, lysrør og museumslys.
+    static let typiske = [stueOmKvelden, varmhvitLED, lysrør, museumLysfølsomme]
+
     var alleLysmiljøer: [Lysmiljø] { lysmiljøer + Self.standarder + Self.innebygde }
 
     func erInnebygd(_ miljø: Lysmiljø) -> Bool { (Self.standarder + Self.innebygde).contains { $0.id == miljø.id } }
 
     var gjeldendeLysmiljø: Lysmiljø {
-        alleLysmiljøer.first { $0.id == valgtLysmiljø } ?? Self.innebygde[0]
+        alleLysmiljøer.first { $0.id == valgtLysmiljø } ?? Self.stueOmKvelden
     }
 
-    private let sky = NSUbiquitousKeyValueStore.default
-    private let lokalt = UserDefaults.standard
+    private let lager = SkyLager.delt
     private enum Nøkkel {
         static let miljøer = "lys.miljøer"
         static let kort = "lys.referansekort"
@@ -80,22 +87,11 @@ final class Lysbibliotek {
         static let valgt = "lys.valgtMiljø"
     }
 
-    private let skjermbilder: Bool = {
-        #if DEBUG
-        UserDefaults.standard.bool(forKey: "skjermbilde")
-        #else
-        false
-        #endif
-    }()
-
     private init() {
-        valgtLysmiljø = lokalt.string(forKey: Nøkkel.valgt).flatMap(UUID.init(uuidString:))
-        guard !skjermbilder else { return }
+        valgtLysmiljø = UserDefaults.standard.string(forKey: Nøkkel.valgt).flatMap(UUID.init(uuidString:))
+        guard !lager.skjermbildemodus else { return }
         last()
-        NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
-                                               object: sky, queue: .main) { [weak self] _ in
-            MainActor.assumeIsolated { self?.last() }
-        }
+        lager.vedEndring { [weak self] in self?.last() }
     }
 
     // MARK: Lysmiljøer
@@ -155,7 +151,7 @@ final class Lysbibliotek {
 
     private func last() {
         func les<T: Decodable>(_ nøkkel: String, som: T.Type) -> T? {
-            guard let data = sky.data(forKey: nøkkel) ?? lokalt.data(forKey: nøkkel) else { return nil }
+            guard let data = lager.data(nøkkel) else { return nil }
             do {
                 ulesbare.remove(nøkkel)
                 return try JSONDecoder().decode(T.self, from: data)
@@ -171,7 +167,6 @@ final class Lysbibliotek {
     }
 
     private func skriv() {
-        guard !skjermbilder else { return }
         let koder = JSONEncoder()
         let verdier: [(String, Data?)] = [
             (Nøkkel.miljøer, try? koder.encode(lysmiljøer)),
@@ -179,11 +174,9 @@ final class Lysbibliotek {
             (Nøkkel.karakteriseringer, try? koder.encode(karakteriseringer)),
             (Nøkkel.kameraprofiler, try? koder.encode(kameraprofiler)),
         ]
-        for (nøkkel, data) in verdier where !ulesbare.contains(nøkkel) {
-            guard let data else { continue }
-            sky.set(data, forKey: nøkkel)
-            lokalt.set(data, forKey: nøkkel)
-        }
-        sky.synchronize()
+        lager.skriv(verdier.compactMap { nøkkel, data in
+            guard let data, !ulesbare.contains(nøkkel) else { return nil }
+            return (nøkkel, data)
+        })
     }
 }

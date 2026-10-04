@@ -119,9 +119,7 @@ final class KameraFargeplukker {
         guard let enhet, enhet.hasTorch else { return }
         if let nivå { lyktNivå = min(max(nivå, 0.05), 1) }
         let styrke = lyktNivå
-        kø.async {
-            guard (try? enhet.lockForConfiguration()) != nil else { return }
-            defer { enhet.unlockForConfiguration() }
+        konfigurer { enhet in
             if på {
                 #if os(iOS)
                 try? enhet.setTorchModeOn(level: min(styrke, AVCaptureDevice.maxAvailableTorchLevel))
@@ -155,10 +153,9 @@ final class KameraFargeplukker {
     func kompenser(for lys: Lyskilde?) {
         venterPåGråkort = false
         #if os(iOS)
-        let målt = lys ?? målLysFraKamera().map { Lyskilde.hvitpunkt(x: Kolorimetri.xy(kelvin: $0.kelvin, duv: $0.duv).x,
-                                                                     y: Kolorimetri.xy(kelvin: $0.kelvin, duv: $0.duv).y) }
+        let målt = lys ?? målLysFraKamera()?.lyskilde
         guard let målt else { return }
-        låsHvitbalanseTilDagslys()
+        låsHvitbalanse()
         kompensasjon = .hvitpunkt(målt)
         if let t = målt.fargetemperatur {
             lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, metode: .kamera)
@@ -170,17 +167,10 @@ final class KameraFargeplukker {
     /// Med en kameraprofil (iPhone/iPad) gir gråkortet også lysets farge gjennom profilen.
     func ventPåGråkort(refleksjon: Double, profil: Kamerakarakterisering? = nil) {
         gråkortRefleksjon = refleksjon
-        #if os(iOS)
-        gråkortProfil = profil
-        #else
-        gråkortProfil = nil
-        #endif
+        // Kameraprofilen forutsetter hvitbalanse låst til dagslys, som bare iPhone/iPad har.
+        gråkortProfil = målerLys ? profil : nil
         venterPåGråkort = true
-        #if os(iOS)
-        låsHvitbalanseTilDagslys()
-        #else
-        låsGjeldendeHvitbalanse()
-        #endif
+        låsHvitbalanse()
     }
 
     private func registrerGråkort(_ målt: Farge) {
@@ -216,11 +206,7 @@ final class KameraFargeplukker {
 
     /// Låser hvitbalanse og eksponering og tar et stillbilde av hele bildet (for referansekortet).
     func taStillbilde(_ ferdig: @escaping (CGImage) -> Void) {
-        #if os(iOS)
-        låsHvitbalanseTilDagslys()
-        #else
-        låsGjeldendeHvitbalanse()
-        #endif
+        låsHvitbalanse()
         låsEksponering()
         vedStillbilde = ferdig
         leser.taStillbilde()
@@ -252,57 +238,60 @@ final class KameraFargeplukker {
     }
 
     #if os(iOS)
-    private static func begrenset(_ g: AVCaptureDevice.WhiteBalanceGains, enhet: AVCaptureDevice) -> AVCaptureDevice.WhiteBalanceGains {
+    nonisolated private static func begrenset(_ g: AVCaptureDevice.WhiteBalanceGains, enhet: AVCaptureDevice) -> AVCaptureDevice.WhiteBalanceGains {
         let maks = enhet.maxWhiteBalanceGain
         return .init(redGain: min(max(g.redGain, 1), maks), greenGain: min(max(g.greenGain, 1), maks),
                      blueGain: min(max(g.blueGain, 1), maks))
     }
-
-    /// Låser hvitbalansen til D65, så bildet viser lysets farge og Kolorist kan kompensere selv.
-    private func låsHvitbalanseTilDagslys() {
-        guard let enhet, enhet.isWhiteBalanceModeSupported(.locked) else { return }
-        kø.async {
-            guard (try? enhet.lockForConfiguration()) != nil else { return }
-            defer { enhet.unlockForConfiguration() }
-            let d65 = enhet.deviceWhiteBalanceGains(for: .init(x: 0.3127, y: 0.3290))
-            enhet.setWhiteBalanceModeLocked(with: Self.begrenset(d65, enhet: enhet))
-        }
-    }
     #endif
 
-    #if os(macOS)
-    /// Mac: hvitbalansen kan bare låses der den er (ikke settes til dagslys), så den ikke endrer seg etter kortet.
-    private func låsGjeldendeHvitbalanse() {
-        guard let enhet, enhet.isWhiteBalanceModeSupported(.locked) else { return }
-        kø.async {
-            guard (try? enhet.lockForConfiguration()) != nil else { return }
-            enhet.whiteBalanceMode = .locked
-            enhet.unlockForConfiguration()
-        }
-    }
-    #endif
-
-    private func låsEksponering() {
-        guard let enhet, enhet.isExposureModeSupported(.locked) else { return }
-        kø.async {
-            guard (try? enhet.lockForConfiguration()) != nil else { return }
-            enhet.exposureMode = .locked
-            enhet.unlockForConfiguration()
-        }
-    }
-
-    private func låsOpp() {
+    /// Endrer kameraet på kamerakøen, med enheten låst for konfigurasjon.
+    private func konfigurer(_ endring: @escaping @Sendable (AVCaptureDevice) -> Void) {
         guard let enhet else { return }
         kø.async {
             guard (try? enhet.lockForConfiguration()) != nil else { return }
             defer { enhet.unlockForConfiguration() }
+            endring(enhet)
+        }
+    }
+
+    /// Låser hvitbalansen. På iPhone/iPad til dagslys (D65), så bildet viser lysets farge og Kolorist kan kompensere
+    /// selv; på Mac der den er (macOS kan ikke sette den), så den ikke endrer seg etter kortet.
+    private func låsHvitbalanse() {
+        guard let enhet, enhet.isWhiteBalanceModeSupported(.locked) else { return }
+        konfigurer { enhet in
+            #if os(iOS)
+            let d65 = enhet.deviceWhiteBalanceGains(for: .init(x: 0.3127, y: 0.3290))
+            enhet.setWhiteBalanceModeLocked(with: Self.begrenset(d65, enhet: enhet))
+            #else
+            enhet.whiteBalanceMode = .locked
+            #endif
+        }
+    }
+
+    private func låsEksponering() {
+        guard let enhet, enhet.isExposureModeSupported(.locked) else { return }
+        konfigurer { $0.exposureMode = .locked }
+    }
+
+    private func låsOpp() {
+        konfigurer { enhet in
             if enhet.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) { enhet.whiteBalanceMode = .continuousAutoWhiteBalance }
             if enhet.isExposureModeSupported(.continuousAutoExposure) { enhet.exposureMode = .continuousAutoExposure }
         }
     }
 
-    /// Kameraets navn, for å knytte en karakterisering til det.
+    /// Kameraets navn, for visning.
     var kameranavn: String { enhet?.localizedName ?? String(localized: "Kamera") }
+
+    /// Nøkkelen en kameraprofil lagres under: enhetsmodellen (f.eks. «iPhone19,2») og kameratypen. Kameranavnet
+    /// alene er likt på tvers av modeller, og profilen synkroniseres til de andre enhetene.
+    var kameranøkkel: String {
+        var info = utsname()
+        uname(&info)
+        let modell = withUnsafeBytes(of: &info.machine) { String(decoding: $0.prefix { $0 != 0 }, as: UTF8.self) }
+        return "\(modell)|\(enhet?.deviceType.rawValue ?? "")"
+    }
 
     func stopp() {
         if lyktPå { settLykt(på: false) }
@@ -425,20 +414,13 @@ final class KameraFargeplukker {
         let ny = min(max(relativ, minst), mest)
         zoom = ny
         let faktor = ny * grunnZoom
-        kø.async {
-            guard (try? enhet.lockForConfiguration()) != nil else { return }
-            enhet.videoZoomFactor = faktor
-            enhet.unlockForConfiguration()
-        }
+        konfigurer { $0.videoZoomFactor = faktor }
     }
     #endif
 
     /// Fokus og eksponering på punktet brukeren trykket på (normaliserte enhetskoordinater).
     private func fokuser(på punkt: CGPoint) {
-        guard let enhet else { return }
-        kø.async {
-            guard (try? enhet.lockForConfiguration()) != nil else { return }
-            defer { enhet.unlockForConfiguration() }
+        konfigurer { enhet in
             if enhet.isFocusPointOfInterestSupported {
                 enhet.focusPointOfInterest = punkt
                 if enhet.isFocusModeSupported(.continuousAutoFocus) { enhet.focusMode = .continuousAutoFocus }

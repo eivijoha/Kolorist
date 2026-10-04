@@ -3,8 +3,54 @@ import FargeKjerne
 import FargeMaaling
 import SwiftUI
 
-/// Menyen for lyskompensasjon i Utplukk: kompenser for målt lys, en valgt lyskilde, et gråkort eller et
-/// referansekort, og lagre lyset som lysmiljø.
+/// Valgene for lyskompensasjon, felles for kamera og bilder. Flate seksjoner, ikke nøstede menyer (en nøstet meny
+/// lukker seg på iOS før man har valgt).
+struct LyskompensasjonValg: View {
+    let erAktiv: Bool
+    var avTekst: LocalizedStringKey = "Som kameraet ser fargene"
+    let slåAv: () -> Void
+    /// «Lyset kameraet måler» og lyskildene – bare kamera på iPhone/iPad, der hvitbalansen kan låses.
+    var målLys: (() -> Void)? = nil
+    var lyskilde: ((Lyskilde) -> Void)? = nil
+    var medKameraprofil = false
+    var glemKameraprofil: (() -> Void)? = nil
+    let gråkort: (Double) -> Void
+    let egetKort: () -> Void
+    let referansekort: (Referansekort) -> Void
+    @State private var bibliotek = Lysbibliotek.delt
+
+    var body: some View {
+        Button(avTekst, systemImage: erAktiv ? "" : "checkmark", action: slåAv)
+        if målLys != nil || lyskilde != nil {
+            Section("Kompenser for lyset") {
+                if let målLys { Button("Lyset kameraet måler", systemImage: "camera.metering.center.weighted", action: målLys) }
+                if let lyskilde { ForEach(Lyskilde.forslag, id: \.self) { lys in Button(lys.navn) { lyskilde(lys) } } }
+            }
+        }
+        Section(medKameraprofil ? "Med gråkort og kameraprofil" : "Med gråkort") {
+            Button("Gråkort 18 %") { gråkort(0.18) }
+            Button("Hvitt kort 90 %") { gråkort(0.9) }
+            Button("Eget kort …", action: egetKort)
+            if let glemKameraprofil { Button("Glem kameraprofilen", systemImage: "trash", role: .destructive, action: glemKameraprofil) }
+        }
+        Section("Med referansekort") {
+            if bibliotek.referansekort.isEmpty {
+                // Referanseverdiene følger ikke med appen; brukeren importerer dem under Mine fargerom.
+                Button("Importer verdiene under Mine fargerom", systemImage: "square.grid.3x2") {}.disabled(true)
+            } else {
+                ForEach(bibliotek.referansekort) { kort in Button(kort.navn) { referansekort(kort) } }
+            }
+        }
+    }
+
+    /// Etiketten for menyen: «Lys», fylt sol når fargene kompenseres.
+    static func etikett(erAktiv: Bool) -> some View {
+        Label("Lys", systemImage: erAktiv ? "sun.max.fill" : "sun.max")
+    }
+}
+
+/// Lysmenyen i Utplukk (kamera): kompenser for målt lys, en valgt lyskilde, et gråkort eller et referansekort, og
+/// lagre lyset som lysmiljø.
 struct LyskompensasjonMeny: View {
     let plukker: KameraFargeplukker
     @Binding var kalibrerMed: Referansekort?
@@ -13,61 +59,29 @@ struct LyskompensasjonMeny: View {
     @State private var egetKort = false
 
     var body: some View {
-        let profil = bibliotek.kameraprofil(for: plukker.kameranavn)
+        let profil = plukker.målerLys ? bibliotek.kameraprofil(for: plukker.kameranøkkel)?.karakterisering : nil
         Menu {
-            Button("Som kameraet ser fargene", systemImage: plukker.kompensasjon == nil ? "checkmark" : "") {
-                plukker.slåAvKompensasjon()
-            }
-            Section("Kompenser til dagslys") {
-                #if os(iOS)
-                Button("For lyset kameraet måler", systemImage: "camera.metering.center.weighted") { plukker.kompenser(for: nil) }
-                Menu("For en lyskilde") {
-                    ForEach(Lyskilde.forslag, id: \.self) { lys in
-                        Button(lys.navn) { plukker.kompenser(for: lys) }
-                    }
-                }
-                #endif
-                Menu(profil == nil ? "Med gråkort" : "Med gråkort og kameraprofil") {
-                    Button("Gråkort 18 %") { plukker.ventPåGråkort(refleksjon: 0.18, profil: profil?.karakterisering) }
-                    Button("Hvitt kort 90 %") { plukker.ventPåGråkort(refleksjon: 0.9, profil: profil?.karakterisering) }
-                    Button("Eget kort …") { egetKort = true }
-                    if profil != nil {
-                        Divider()
-                        Button("Glem kameraprofilen", systemImage: "trash", role: .destructive) {
-                            bibliotek.fjernKameraprofil(for: plukker.kameranavn)
-                        }
-                    }
-                }
-                if bibliotek.referansekort.isEmpty {
-                    // Referanseverdiene følger ikke med appen; brukeren importerer dem under Mine fargerom.
-                    Button("Med referansekort (importer verdiene under Mine fargerom)", systemImage: "square.grid.3x2") {}
-                        .disabled(true)
-                } else {
-                    Menu("Med referansekort") {
-                        ForEach(bibliotek.referansekort) { kort in
-                            Button(kort.navn) { kalibrerMed = kort }
-                        }
-                    }
-                }
-            }
+            LyskompensasjonValg(erAktiv: plukker.kompensasjon != nil, slåAv: plukker.slåAvKompensasjon,
+                                målLys: plukker.målerLys ? { plukker.kompenser(for: nil) } : nil,
+                                lyskilde: plukker.målerLys ? { plukker.kompenser(for: $0) } : nil,
+                                medKameraprofil: profil != nil,
+                                glemKameraprofil: profil == nil ? nil : { bibliotek.fjernKameraprofil(for: plukker.kameranøkkel) },
+                                gråkort: { plukker.ventPåGråkort(refleksjon: $0, profil: profil) },
+                                egetKort: { egetKort = true },
+                                referansekort: { kalibrerMed = $0 })
             if let måling = plukker.lysmåling {
                 Section {
                     Button("Lagre lyset som lysmiljø …", systemImage: "lightbulb.2") {
-                        lagreLysmiljø = Lysmiljø(navn: String(localized: "Målt lys"), lyskilde: Self.lyskilde(fra: måling),
+                        lagreLysmiljø = Lysmiljø(navn: String(localized: "Målt lys"), lyskilde: måling.lyskilde,
                                                  lux: måling.lux.map(LysmiljøRedigering.rundet) ?? 300, måling: måling)
                     }
                 }
             }
         } label: {
-            Label("Lys", systemImage: plukker.kompensasjon == nil ? "sun.max" : "sun.max.fill")
+            LyskompensasjonValg.etikett(erAktiv: plukker.kompensasjon != nil)
         }
         .help("Kompenser fargene for lyset de ble fotografert i")
-        .modifier(EgetKortSpørsmål(vises: $egetKort) { plukker.ventPåGråkort(refleksjon: $0, profil: profil?.karakterisering) })
-    }
-
-    static func lyskilde(fra m: Lysmåling) -> Lyskilde {
-        let p = Kolorimetri.xy(kelvin: m.kelvin, duv: m.duv)
-        return .hvitpunkt(x: p.x, y: p.y)
+        .modifier(EgetKortSpørsmål(vises: $egetKort) { plukker.ventPåGråkort(refleksjon: $0, profil: profil) })
     }
 }
 
@@ -93,25 +107,27 @@ struct EgetKortSpørsmål: ViewModifier {
     }
 }
 
-/// Lysmålingen over kamerabildet: «≈ 3200 K · 450 lx · gråkort».
+/// Merket over kamerabildet eller bildet: «Trykk på kortet», lysmålingen («≈ 3200 K · 450 lx · gråkort»), eller
+/// bare hvordan fargene kompenseres når lyset ikke kan måles (bilder, Mac).
 struct LysmålingMerke: View {
-    let plukker: KameraFargeplukker
+    let venterPåGråkort: Bool
+    let kompensasjon: Lyskompensasjon?
+    var måling: Lysmåling? = nil
 
     var body: some View {
-        if plukker.venterPåGråkort {
+        if venterPåGråkort {
             Label("Trykk på kortet", systemImage: "hand.tap")
                 .merke()
-        } else if plukker.lysmåling == nil, let komp = plukker.kompensasjon {
-            // Mac med Continuity-kamera: kompensert, men uten lysmåling.
-            Label(komp.erReferansekort ? "Kompensert med referansekort" : "Kompensert med gråkort", systemImage: "sun.max.fill")
-                .merke()
-        } else if let m = plukker.lysmåling {
+        } else if let m = måling {
             HStack(spacing: 6) {
-                Image(systemName: plukker.kompensasjon == nil ? "sun.max" : "sun.max.fill")
+                Image(systemName: kompensasjon == nil ? "sun.max" : "sun.max.fill")
                 Text(tekst(m)).monospacedDigit()
             }
             .merke()
             .accessibilityElement(children: .combine)
+        } else if let kompensasjon {
+            Label(kompensasjon.erReferansekort ? "Kompensert med referansekort" : "Kompensert med gråkort", systemImage: "sun.max.fill")
+                .merke()
         }
     }
 
@@ -119,11 +135,11 @@ struct LysmålingMerke: View {
         let kelvin = (Int((m.kelvin / 50).rounded()) * 50).formatted(.number.grouping(.never))
         var deler = [String(localized: "≈ \(kelvin) K")]
         if let lux = m.lux { deler.append(String(localized: "≈ \(lux.formatted(.number.precision(.significantDigits(2)))) lx")) }
-        if plukker.kompensasjon != nil {
+        if let kompensasjon {
             switch m.metode {
             case .kamera: deler.append(String(localized: "kompensert"))
             case .gråkort:
-                if case .kameraprofil = plukker.kompensasjon { deler.append(String(localized: "gråkort og kameraprofil")) }
+                if case .kameraprofil = kompensasjon { deler.append(String(localized: "gråkort og kameraprofil")) }
                 else { deler.append(String(localized: "gråkort")) }
             case .referansekort: deler.append(String(localized: "referansekort"))
             }
@@ -390,8 +406,7 @@ struct KortkalibreringArk: View {
         var profil: Kamerakarakterisering?
         if målLys {
             // Lyset: kameraets farge for de grå feltene (hvitbalansen er låst til dagslys under opptaket).
-            let p = Kolorimetri.xy(k.kameraHvit)
-            if let t = Kolorimetri.fargetemperatur(x: p.x, y: p.y) {
+            if let t = Kolorimetri.fargetemperatur(k.kameraHvit) {
                 var gjengivelse: Double?
                 let spektre = kort.felt.compactMap { if case .spekter(let s) = $0.verdi { s } else { nil } }
                 if kort.harSpektre {
@@ -405,7 +420,9 @@ struct KortkalibreringArk: View {
                 måling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: luxverdi, fargegjengivelse: gjengivelse, metode: .referansekort)
                 // Kameraprofil: fasiten under lyset i bildet (anslått fra fargetemperaturen), så profilen beskriver
                 // kameraet og ikke lyset.
-                let scenelys: Lyskilde = kort.harSpektre ? .spekter(Fargegjengivelse.referanselys(kelvin: t.kelvin)) : .hvitpunkt(x: p.x, y: p.y)
+                let scenelys: Lyskilde = kort.harSpektre
+                    ? .spekter(Fargegjengivelse.referanselys(kelvin: t.kelvin))
+                    : Lysmåling(kelvin: t.kelvin, duv: t.duv, metode: .referansekort).lyskilde
                 profil = Kamerakarakterisering.beste(kamera: målt, referanse: kort, lys: scenelys)
             }
         }

@@ -66,34 +66,41 @@ public extension Farge {
 
 // MARK: - CIELab (D50)
 
-private enum LabKonstanter {
+/// CIELab mot et vilkårlig hvitpunkt (CIE 15). Kolorist oppgir Lab med D50; FargeMaaling bruker andre hvitpunkter.
+package enum Labregning {
     static let ε = 216.0 / 24389
     static let κ = 24389.0 / 27
-}
 
-public extension Farge {
-    init(cieLab lab: CIELab, alfa: Double = 1) {
-        let (ε, κ) = (LabKonstanter.ε, LabKonstanter.κ)
+    package static func lab(_ v: XYZ, hvit: XYZ) -> CIELab {
+        let f = { (t: Double) in t > ε ? cbrt(t) : (κ * t + 16) / 116 }
+        let fx = f(v.x / hvit.x), fy = f(v.y / hvit.y), fz = f(v.z / hvit.z)
+        return CIELab(l: 116 * fy - 16, a: 500 * (fx - fy), b: 200 * (fy - fz))
+    }
+
+    package static func xyz(_ lab: CIELab, hvit: XYZ) -> XYZ {
         let fy = (lab.l + 16) / 116
         let fx = lab.a / 500 + fy
         let fz = fy - lab.b / 200
         let x = fx * fx * fx > ε ? fx * fx * fx : (116 * fx - 16) / κ
         let y = lab.l > κ * ε ? fy * fy * fy : lab.l / κ
         let z = fz * fz * fz > ε ? fz * fz * fz : (116 * fz - 16) / κ
+        return XYZ(x: x * hvit.x, y: y * hvit.y, z: z * hvit.z)
+    }
+}
+
+public extension Farge {
+    init(cieLab lab: CIELab, alfa: Double = 1) {
         let hvit = Matriser.hvitD50
-        let xyzD50 = Vektor3(x * hvit.x, y * hvit.y, z * hvit.z)
-        let xyzD65 = Matriser.d50TilD65 * xyzD50
+        let d50 = Labregning.xyz(lab, hvit: XYZ(x: hvit.x, y: hvit.y, z: hvit.z))
+        let xyzD65 = Matriser.d50TilD65 * Vektor3(d50.x, d50.y, d50.z)
         self.init(xyz: XYZ(x: xyzD65.x, y: xyzD65.y, z: xyzD65.z), alfa: alfa)
     }
 
     var cieLab: CIELab {
-        let (ε, κ) = (LabKonstanter.ε, LabKonstanter.κ)
         let x = xyz
         let d50 = Matriser.d65TilD50 * Vektor3(x.x, x.y, x.z)
         let hvit = Matriser.hvitD50
-        let f = { (t: Double) in t > ε ? cbrt(t) : (κ * t + 16) / 116 }
-        let fx = f(d50.x / hvit.x), fy = f(d50.y / hvit.y), fz = f(d50.z / hvit.z)
-        return CIELab(l: 116 * fy - 16, a: 500 * (fx - fy), b: 200 * (fy - fz))
+        return Labregning.lab(XYZ(x: d50.x, y: d50.y, z: d50.z), hvit: XYZ(x: hvit.x, y: hvit.y, z: hvit.z))
     }
 
     init(cieLCH lch: CIELCH, alfa: Double = 1) {

@@ -1,49 +1,15 @@
 import FargeKjerne
 import Foundation
 
-/// Litt lineær algebra for modultilpasning: 3×3-matriser og minste kvadraters metode.
-public struct Matrise3x3: Hashable, Codable, Sendable {
-    public var rader: [[Double]]
-
-    public init(_ rader: [[Double]]) { self.rader = rader }
-
-    public static let identitet = Matrise3x3([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
-
-    public static func diagonal(_ a: Double, _ b: Double, _ c: Double) -> Matrise3x3 {
-        Matrise3x3([[a, 0, 0], [0, b, 0], [0, 0, c]])
-    }
-
-    public func ganget(_ v: (Double, Double, Double)) -> (Double, Double, Double) {
-        let r = rader
-        return (r[0][0] * v.0 + r[0][1] * v.1 + r[0][2] * v.2,
-                r[1][0] * v.0 + r[1][1] * v.1 + r[1][2] * v.2,
-                r[2][0] * v.0 + r[2][1] * v.1 + r[2][2] * v.2)
-    }
-
-    public func ganget(_ v: XYZ) -> XYZ {
-        let (x, y, z) = ganget((v.x, v.y, v.z))
-        return XYZ(x: x, y: y, z: z)
-    }
-
-    public static func * (a: Matrise3x3, b: Matrise3x3) -> Matrise3x3 {
-        Matrise3x3((0..<3).map { i in (0..<3).map { j in (0..<3).reduce(0) { $0 + a.rader[i][$1] * b.rader[$1][j] } } })
-    }
-
-    public var invertert: Matrise3x3 {
-        let m = rader
-        let a = m[1][1] * m[2][2] - m[1][2] * m[2][1]
-        let b = m[1][2] * m[2][0] - m[1][0] * m[2][2]
-        let c = m[1][0] * m[2][1] - m[1][1] * m[2][0]
-        let det = m[0][0] * a + m[0][1] * b + m[0][2] * c
-        let d = 1 / det
-        return Matrise3x3([
-            [a * d, (m[0][2] * m[2][1] - m[0][1] * m[2][2]) * d, (m[0][1] * m[1][2] - m[0][2] * m[1][1]) * d],
-            [b * d, (m[0][0] * m[2][2] - m[0][2] * m[2][0]) * d, (m[0][2] * m[1][0] - m[0][0] * m[1][2]) * d],
-            [c * d, (m[0][1] * m[2][0] - m[0][0] * m[2][1]) * d, (m[0][0] * m[1][1] - m[0][1] * m[1][0]) * d],
-        ])
+/// 3×3-matriser (FargeKjernes `Matrise3`) brukt på XYZ.
+extension Matrise3 {
+    func ganget(_ v: XYZ) -> XYZ {
+        let r = self * Vektor3(v.x, v.y, v.z)
+        return XYZ(x: r.x, y: r.y, z: r.z)
     }
 }
 
+/// Minste kvadraters metode for modelltilpasning.
 enum Lineær {
     /// Løser A·x = b med gausseliminasjon og delvis pivotering. `nil` hvis A er (nesten) singulær.
     static func løs(_ a: [[Double]], _ b: [[Double]]) -> [[Double]]? {

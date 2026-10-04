@@ -35,8 +35,7 @@ public enum Kolorimetri {
             let e = s.verdi(ved: cie.bølgelengde(i))
             x += e * cie.observatør.x[i]; y += e * cie.observatør.y[i]; z += e * cie.observatør.z[i]
         }
-        guard y > 0 else { return XYZ(x: 0, y: 0, z: 0) }
-        return XYZ(x: x / y, y: 1, z: z / y)
+        return XYZ(x: x, y: y, z: z).normalisert
     }
 
     /// XYZ for en flate med gitt refleksjon under en lyskilde, skalert så en perfekt hvit flate har Y = 1.
@@ -57,6 +56,12 @@ public enum Kolorimetri {
     public static func xy(_ v: XYZ) -> (x: Double, y: Double) {
         let s = v.x + v.y + v.z
         return s > 0 ? (v.x / s, v.y / s) : (0.3127, 0.3290)
+    }
+
+    /// Korrelert fargetemperatur og Duv for en farge (bare kromatisiteten brukes).
+    public static func fargetemperatur(_ v: XYZ) -> (kelvin: Double, duv: Double)? {
+        let p = xy(v)
+        return fargetemperatur(x: p.x, y: p.y)
     }
 
     /// XYZ med Y = 1 for en kromatisitet.
@@ -164,4 +169,11 @@ public enum Kolorimetri {
         }
         return cie.spektrum(verdier)
     }
+}
+
+public extension XYZ {
+    /// Skalert så Y = 1 (et hvitpunkt), eller null hvis Y er 0.
+    var normalisert: XYZ { y > 0 ? XYZ(x: x / y, y: 1, z: z / y) : XYZ(x: 0, y: 0, z: 0) }
+
+    func skalert(_ k: Double) -> XYZ { XYZ(x: x * k, y: y * k, z: z * k) }
 }

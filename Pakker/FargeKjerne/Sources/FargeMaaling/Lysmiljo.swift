@@ -33,9 +33,7 @@ public struct Lysmiljø: Hashable, Codable, Sendable, Identifiable {
     public func sett(_ farge: Farge, refleksjon: Spektrum? = nil, skjerm: Visningsforhold = .skjerm) -> Farge {
         let iLyset = xyzUnderLyset(farge, refleksjon: refleksjon)
         let inntrykk = CAM16(visningsforhold).korrelater(iLyset)
-        let skjermmodell = CAM16(skjerm)
-        let kroma = inntrykk.m / pow(skjermmodell.fl, 0.25)
-        return Farge(xyz: skjermmodell.xyz(j: inntrykk.j, c: kroma, h: inntrykk.h), alfa: farge.alfa)
+        return Farge(xyz: CAM16(skjerm).xyz(j: inntrykk.j, m: inntrykk.m, h: inntrykk.h), alfa: farge.alfa)
     }
 
     /// Fargen slik et foto med dagslys-hvitbalanse ville vist den: lysets fulle fargestikk, uten at øyet har tilpasset
@@ -84,6 +82,12 @@ public struct Lysmåling: Hashable, Codable, Sendable {
         case referansekort
     }
 
+    /// Lyset som lyskilde (bare hvitpunktet er kjent fra en måling).
+    public var lyskilde: Lyskilde {
+        let p = Kolorimetri.xy(kelvin: kelvin, duv: duv)
+        return .hvitpunkt(x: p.x, y: p.y)
+    }
+
     public init(tidspunkt: Date = .now, kelvin: Double, duv: Double, lux: Double? = nil, fargegjengivelse: Double? = nil,
                 metode: Metode) {
         self.tidspunkt = tidspunkt
@@ -104,23 +108,35 @@ public struct SammenfallendePar: Hashable, Sendable {
     public let iLyset: Double
 }
 
+/// En palett i et lysmiljø: fargene slik øyet ser dem, fargeskiftet per farge og fargepar som faller sammen.
+public struct PalettILys: Sendable {
+    public let sett: [Farge]
+    public let fargeskift: [Double]
+    public let sammenfallendePar: [SammenfallendePar]
+}
+
 public extension Lysmiljø {
     /// Fargeskift (ΔE2000, full tilpasning) for hver farge.
     func fargeskift(_ farger: [Farge]) -> [Double] { farger.map { fargeskift($0) } }
 
-    /// Fargepar med minst `påSkjerm` ΔE2000 på skjermen og under `iLyset` i lysmiljøet (slik øyet ser det – svakt lys
-    /// gjør fargene mindre fargerike, og ujevne spektre kan føre farger sammen).
-    func sammenfallendePar(_ farger: [Farge], påSkjerm: Double = 6, iLyset: Double = 3) -> [SammenfallendePar] {
-        let lab = farger.map(\.cieLab)
-        let sett = farger.map { self.sett($0).cieLab }
+    /// Hele paletten i lysmiljøet, med fargene i lyset regnet ut én gang. Fargepar med minst `påSkjerm` ΔE2000 på
+    /// skjermen og under `iLyset` i lysmiljøet (slik øyet ser det – svakt lys gjør fargene mindre fargerike, og
+    /// ujevne spektre kan føre farger sammen) regnes som sammenfallende.
+    func palett(_ farger: [Farge], påSkjerm: Double = 6, iLyset: Double = 3) -> PalettILys {
+        let sett = farger.map { self.sett($0) }
+        let lab = farger.map(\.cieLab), settLab = sett.map(\.cieLab)
         var par: [SammenfallendePar] = []
         for i in farger.indices {
             for j in farger.indices where j > i {
                 let før = Fargeavstand.deltaE2000(lab[i], lab[j])
-                let etter = Fargeavstand.deltaE2000(sett[i], sett[j])
+                let etter = Fargeavstand.deltaE2000(settLab[i], settLab[j])
                 if før >= påSkjerm && etter < iLyset { par.append(SammenfallendePar(a: i, b: j, påSkjerm: før, iLyset: etter)) }
             }
         }
-        return par.sorted { $0.iLyset < $1.iLyset }
+        return PalettILys(sett: sett, fargeskift: fargeskift(farger), sammenfallendePar: par.sorted { $0.iLyset < $1.iLyset })
+    }
+
+    func sammenfallendePar(_ farger: [Farge], påSkjerm: Double = 6, iLyset: Double = 3) -> [SammenfallendePar] {
+        palett(farger, påSkjerm: påSkjerm, iLyset: iLyset).sammenfallendePar
     }
 }

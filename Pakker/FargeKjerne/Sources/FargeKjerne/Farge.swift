@@ -81,16 +81,21 @@ extension Double {
 }
 
 /// Liten 3-vektor for matriseregning uten avhengigheter (simd er ikke Double-vennlig på tvers av alle mål).
-struct Vektor3: Hashable, Sendable {
-    var x, y, z: Double
-    init(_ x: Double, _ y: Double, _ z: Double) { self.x = x; self.y = y; self.z = z }
+package struct Vektor3: Hashable, Sendable {
+    package var x, y, z: Double
+    package init(_ x: Double, _ y: Double, _ z: Double) { self.x = x; self.y = y; self.z = z }
 }
 
-struct Matrise3: Sendable {
-    let rader: [[Double]]
-    init(_ rader: [[Double]]) { self.rader = rader }
+/// 3×3-matrise, delt med de andre målene i pakken (FargeMaaling).
+package struct Matrise3: Hashable, Sendable {
+    package let rader: [[Double]]
+    package init(_ rader: [[Double]]) { self.rader = rader }
 
-    static func * (m: Matrise3, v: Vektor3) -> Vektor3 {
+    package static func diagonal(_ a: Double, _ b: Double, _ c: Double) -> Matrise3 {
+        Matrise3([[a, 0, 0], [0, b, 0], [0, 0, c]])
+    }
+
+    package static func * (m: Matrise3, v: Vektor3) -> Vektor3 {
         let r = m.rader
         return Vektor3(
             r[0][0] * v.x + r[0][1] * v.y + r[0][2] * v.z,
@@ -99,13 +104,13 @@ struct Matrise3: Sendable {
         )
     }
 
-    static func * (a: Matrise3, b: Matrise3) -> Matrise3 {
+    package static func * (a: Matrise3, b: Matrise3) -> Matrise3 {
         Matrise3((0..<3).map { i in (0..<3).map { j in (0..<3).reduce(0) { $0 + a.rader[i][$1] * b.rader[$1][j] } } })
     }
 
     /// Invers via kofaktorer. Brukes for å utlede motsatte konverteringsmatriser
     /// i stedet for å hardkode dem (unngår avrundingsinkonsistens).
-    var invertert: Matrise3 {
+    package var invertert: Matrise3 {
         let m = rader
         let c00 = m[1][1] * m[2][2] - m[1][2] * m[2][1]
         let c01 = m[1][2] * m[2][0] - m[1][0] * m[2][2]

@@ -25,38 +25,28 @@ public enum Lyskompensasjon: Hashable, Codable, Sendable {
         case .hvitpunkt(let lys):
             return Farge(xyz: CAT16.tilpass(farge.xyz, fra: lys.hvitpunkt, til: Lyskilde.d65.hvitpunkt), alfa: farge.alfa)
         case .gråkort(let målt, let refleksjon):
-            let grå = målt.xyz
-            guard grå.y > 0 else { return farge }
-            // Hvitpunktet er kortets farge skalert til Y = 1; lysheten skaleres så kortet får sin kjente refleksjon.
-            let hvit = XYZ(x: grå.x / grå.y, y: 1, z: grå.z / grå.y)
-            let v = CAT16.tilpass(farge.xyz, fra: hvit, til: Lyskilde.d65.hvitpunkt)
-            let k = refleksjon / grå.y
-            return Farge(xyz: XYZ(x: v.x * k, y: v.y * k, z: v.z * k), alfa: farge.alfa)
+            return Self.medGråkort(farge.xyz, grå: målt.xyz, refleksjon: refleksjon).map { Farge(xyz: $0, alfa: farge.alfa) } ?? farge
         case .referansekort(let karakterisering):
             return karakterisering.farge(fraKamera: farge)
         case .kameraprofil(let profil, let gråkort, let refleksjon):
-            let g = profil.xyz(fraKamera: gråkort)
-            guard g.y > 0 else { return farge }
-            let hvit = XYZ(x: g.x / g.y, y: 1, z: g.z / g.y)
-            let v = CAT16.tilpass(profil.xyz(fraKamera: farge), fra: hvit, til: Lyskilde.d65.hvitpunkt)
-            let k = refleksjon / g.y
-            return Farge(xyz: XYZ(x: v.x * k, y: v.y * k, z: v.z * k), alfa: farge.alfa)
+            return Self.medGråkort(profil.xyz(fraKamera: farge), grå: profil.xyz(fraKamera: gråkort), refleksjon: refleksjon)
+                .map { Farge(xyz: $0, alfa: farge.alfa) } ?? farge
         }
+    }
+
+    /// Kortets farge skalert til Y = 1 er lysets hvitpunkt; lysheten skaleres så kortet får sin kjente refleksjon.
+    private static func medGråkort(_ v: XYZ, grå: XYZ, refleksjon: Double) -> XYZ? {
+        guard grå.y > 0 else { return nil }
+        return CAT16.tilpass(v, fra: grå.normalisert, til: Lyskilde.d65.hvitpunkt).skalert(refleksjon / grå.y)
     }
 
     /// Lysets fargetemperatur slik kompensasjonen anslår den.
     public var fargetemperatur: (kelvin: Double, duv: Double)? {
         switch self {
-        case .hvitpunkt(let lys): return lys.fargetemperatur
-        case .gråkort(let målt, _):
-            let p = Kolorimetri.xy(målt.xyz)
-            return Kolorimetri.fargetemperatur(x: p.x, y: p.y)
-        case .referansekort(let k):
-            let p = Kolorimetri.xy(k.kameraHvit)
-            return Kolorimetri.fargetemperatur(x: p.x, y: p.y)
-        case .kameraprofil(let profil, let gråkort, _):
-            let p = Kolorimetri.xy(profil.xyz(fraKamera: gråkort))
-            return Kolorimetri.fargetemperatur(x: p.x, y: p.y)
+        case .hvitpunkt(let lys): lys.fargetemperatur
+        case .gråkort(let målt, _): Kolorimetri.fargetemperatur(målt.xyz)
+        case .referansekort(let k): Kolorimetri.fargetemperatur(k.kameraHvit)
+        case .kameraprofil(let profil, let gråkort, _): Kolorimetri.fargetemperatur(profil.xyz(fraKamera: gråkort))
         }
     }
 }

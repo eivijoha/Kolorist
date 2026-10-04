@@ -54,7 +54,7 @@ public struct CAM16Korrelater: Hashable, Codable, Sendable {
 public struct CAM16: Sendable {
     public let forhold: Visningsforhold
 
-    static let m16 = Matrise3x3([
+    static let m16 = Matrise3([
         [0.401288, 0.650173, -0.051461],
         [-0.250268, 1.204414, 0.045854],
         [-0.002079, 0.048952, 0.953127],
@@ -70,8 +70,8 @@ public struct CAM16: Sendable {
         let la = forhold.adaptasjonsluminans
         let grad = forhold.fullAdaptasjon ? 1
             : min(max(forhold.omgivelse.f * (1 - (1 / 3.6) * exp((-la - 42) / 92)), 0), 1)
-        let rgbw = Self.m16.ganget((hvit.x, hvit.y, hvit.z))
-        d = (grad * hvit.y / rgbw.0 + 1 - grad, grad * hvit.y / rgbw.1 + 1 - grad, grad * hvit.y / rgbw.2 + 1 - grad)
+        let rgbw = Self.m16.ganget(hvit)
+        d = (grad * hvit.y / rgbw.x + 1 - grad, grad * hvit.y / rgbw.y + 1 - grad, grad * hvit.y / rgbw.z + 1 - grad)
         let k = 1 / (5 * la + 1)
         let k4 = pow(k, 4)
         fl = 0.2 * k4 * (5 * la) + 0.1 * pow(1 - k4, 2) * cbrt(5 * la)
@@ -80,7 +80,7 @@ public struct CAM16: Sendable {
         nbb = 0.725 * pow(1 / n, 0.2)
         let fl0 = fl
         let tilpasset = { (v: Double) -> Double in Self.etterTilpasning(v, fl: fl0) }
-        let (rw, gw, bw) = (tilpasset(rgbw.0 * d.0), tilpasset(rgbw.1 * d.1), tilpasset(rgbw.2 * d.2))
+        let (rw, gw, bw) = (tilpasset(rgbw.x * d.0), tilpasset(rgbw.y * d.1), tilpasset(rgbw.z * d.2))
         aw = (2 * rw + gw + 0.05 * bw - 0.305) * nbb
     }
 
@@ -96,10 +96,10 @@ public struct CAM16: Sendable {
 
     /// Fra XYZ (hvitt har Y = 1) til CAM16-korrelater.
     public func korrelater(_ xyz: XYZ) -> CAM16Korrelater {
-        let rgb = Self.m16.ganget((xyz.x * 100, xyz.y * 100, xyz.z * 100))
-        let ra = Self.etterTilpasning(rgb.0 * d.0, fl: fl)
-        let ga = Self.etterTilpasning(rgb.1 * d.1, fl: fl)
-        let ba = Self.etterTilpasning(rgb.2 * d.2, fl: fl)
+        let rgb = Self.m16.ganget(XYZ(x: xyz.x * 100, y: xyz.y * 100, z: xyz.z * 100))
+        let ra = Self.etterTilpasning(rgb.x * d.0, fl: fl)
+        let ga = Self.etterTilpasning(rgb.y * d.1, fl: fl)
+        let ba = Self.etterTilpasning(rgb.z * d.2, fl: fl)
         let a = ra - 12 * ga / 11 + ba / 11
         let b = (ra + ga - 2 * ba) / 9
         var h = atan2(b, a) * 180 / .pi
@@ -143,25 +143,30 @@ public struct CAM16: Sendable {
         let ra = (460 * p2 + 451 * a + 288 * b) / 1403
         let ga = (460 * p2 - 891 * a - 261 * b) / 1403
         let ba = (460 * p2 - 220 * a - 6300 * b) / 1403
-        let rgb = (Self.førTilpasning(ra, fl: fl) / d.0, Self.førTilpasning(ga, fl: fl) / d.1, Self.førTilpasning(ba, fl: fl) / d.2)
+        let rgb = XYZ(x: Self.førTilpasning(ra, fl: fl) / d.0, y: Self.førTilpasning(ga, fl: fl) / d.1,
+                      z: Self.førTilpasning(ba, fl: fl) / d.2)
         let v = Self.m16Invers.ganget(rgb)
-        return XYZ(x: v.0 / 100, y: v.1 / 100, z: v.2 / 100)
+        return XYZ(x: v.x / 100, y: v.y / 100, z: v.z / 100)
     }
 
     public func xyz(_ k: CAM16Korrelater) -> XYZ { xyz(j: k.j, c: k.c, h: k.h) }
+
+    /// Fra lyshet J, fargerikhet M og kulørvinkel h til XYZ. Fargerikheten er absolutt (M = C · F_L^¼), så samme M
+    /// i et svakere lys gir lavere kroma.
+    public func xyz(j: Double, m: Double, h: Double) -> XYZ { xyz(j: j, c: m / pow(fl, 0.25), h: h) }
 }
 
 /// CAT16 kromatisk adaptasjonstransformasjon.
 public enum CAT16 {
     /// Matrisen som flytter farger fra ett hvitpunkt til et annet med en gitt grad av adaptasjon (1 = full).
-    public static func matrise(fra kilde: XYZ, til mål: XYZ, grad: Double = 1) -> Matrise3x3 {
+    static func matrise(fra kilde: XYZ, til mål: XYZ, grad: Double = 1) -> Matrise3 {
         let k = CAM16.m16.ganget(kilde), m = CAM16.m16.ganget(mål)
-        let skalering = Matrise3x3.diagonal(
+        let skalering = Matrise3.diagonal(
             grad * (kilde.y / mål.y) * (m.x / k.x) + 1 - grad,
             grad * (kilde.y / mål.y) * (m.y / k.y) + 1 - grad,
             grad * (kilde.y / mål.y) * (m.z / k.z) + 1 - grad)
         // Skalér så hvitt beholder luminansen (mål.y/kilde.y = 1 når begge har Y = 1).
-        let luminans = Matrise3x3.diagonal(mål.y / kilde.y, mål.y / kilde.y, mål.y / kilde.y)
+        let luminans = Matrise3.diagonal(mål.y / kilde.y, mål.y / kilde.y, mål.y / kilde.y)
         return luminans * (CAM16.m16Invers * (skalering * CAM16.m16))
     }
 

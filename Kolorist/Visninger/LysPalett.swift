@@ -40,8 +40,8 @@ struct PalettILysArk: View {
     var body: some View {
         let miljø = bibliotek.gjeldendeLysmiljø
         let ff = farger.map(\.farge)
-        let skift = miljø.fargeskift(ff)
-        let par = miljø.sammenfallendePar(ff)
+        let analyse = miljø.palett(ff)
+        let skift = analyse.fargeskift, par = analyse.sammenfallendePar
         NavigationStack {
             Form {
                 Section {
@@ -62,9 +62,9 @@ struct PalettILysArk: View {
                     ForEach(Array(farger.enumerated()), id: \.offset) { i, pf in
                         HStack(spacing: 10) {
                             pf.farge.swiftUI.frame(width: 44, height: 36).clipShape(RoundedRectangle(cornerRadius: 6))
-                            (somFoto ? miljø.somFoto(pf.farge) : miljø.sett(pf.farge)).swiftUI
+                            (somFoto ? miljø.somFoto(pf.farge) : analyse.sett[i]).swiftUI
                                 .frame(width: 44, height: 36).clipShape(RoundedRectangle(cornerRadius: 6))
-                            Text(pf.navn.isEmpty ? pf.farge.hex() : pf.navn).lineLimit(1)
+                            Text(pf.etikett).lineLimit(1)
                             Spacer()
                             Text("ΔE00 \(skift[i], format: .number.precision(.fractionLength(1)))")
                                 .monospacedDigit()
@@ -81,9 +81,9 @@ struct PalettILysArk: View {
                     Section {
                         ForEach(par, id: \.self) { p in
                             HStack(spacing: 6) {
-                                miljø.sett(ff[p.a]).swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
-                                miljø.sett(ff[p.b]).swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
-                                Text("\(etikett(p.a)) og \(etikett(p.b))").lineLimit(2)
+                                analyse.sett[p.a].swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
+                                analyse.sett[p.b].swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
+                                Text("\(farger[p.a].etikett) og \(farger[p.b].etikett)").lineLimit(2)
                                 Spacer()
                                 Text("ΔE00 \(p.påSkjerm, format: .number.precision(.fractionLength(0))) → \(p.iLyset, format: .number.precision(.fractionLength(1)))")
                                     .font(.callout.monospacedDigit())
@@ -111,8 +111,6 @@ struct PalettILysArk: View {
         .frame(minWidth: 480, minHeight: 560)
         #endif
     }
-
-    private func etikett(_ i: Int) -> String { farger[i].navn.isEmpty ? farger[i].farge.hex() : farger[i].navn }
 }
 
 /// Lyset i palettvurderingen: farger som skifter tydelig og fargepar som blir vanskelige å skille i vanlige lys.
@@ -120,20 +118,16 @@ struct LysVurderingSeksjon: View {
     let farger: [PalettFarge]
     @State private var bibliotek = Lysbibliotek.delt
 
-    /// Egne lysmiljøer og et utvalg typiske: varmt kveldslys, lysrør, varmhvit LED og museumslys.
-    private var miljøer: [Lysmiljø] {
-        let utvalg = ["6C1E0000-0000-4000-8000-000000002700", "6C1E0000-0000-4000-8000-000000004001",
-                      "6C1E0000-0000-4000-8000-000000003000", "6C1E0000-0000-4000-8000-000000030005"]
-        let innebygde = (Lysbibliotek.standarder + Lysbibliotek.innebygde).filter { utvalg.contains($0.id.uuidString) }
-        return bibliotek.lysmiljøer + innebygde
-    }
+    /// Egne lysmiljøer og et utvalg typiske.
+    private var miljøer: [Lysmiljø] { bibliotek.lysmiljøer + Lysbibliotek.typiske }
 
     var body: some View {
         let ff = farger.map(\.farge)
         Section {
             ForEach(miljøer) { miljø in
-                let skift = miljø.fargeskift(ff).enumerated().filter { $0.element >= 3 }.map(\.offset)
-                let par = miljø.sammenfallendePar(ff)
+                let analyse = miljø.palett(ff)
+                let skift = analyse.fargeskift.indices.filter { analyse.fargeskift[$0] >= 3 }
+                let par = analyse.sammenfallendePar
                 Label {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(miljø.navn).font(.callout.weight(.semibold))
@@ -142,14 +136,14 @@ struct LysVurderingSeksjon: View {
                         }
                         if !skift.isEmpty {
                             Text(skift.count == 1
-                                 ? "1 farge skifter tydelig: \(skift.map(etikett).joined(separator: ", "))"
-                                 : "\(skift.count) farger skifter tydelig: \(skift.map(etikett).joined(separator: ", "))")
+                                 ? "1 farge skifter tydelig: \(skift.map { farger[$0].etikett }.joined(separator: ", "))"
+                                 : "\(skift.count) farger skifter tydelig: \(skift.map { farger[$0].etikett }.joined(separator: ", "))")
                                 .font(.callout).foregroundStyle(Color.sekundærTekst)
                         }
                         if !par.isEmpty {
                             Text(par.count == 1
-                                 ? "1 fargepar blir vanskelig å skille: \(par.map { "\(etikett($0.a))/\(etikett($0.b))" }.joined(separator: ", "))"
-                                 : "\(par.count) fargepar blir vanskelige å skille: \(par.map { "\(etikett($0.a))/\(etikett($0.b))" }.joined(separator: ", "))")
+                                 ? "1 fargepar blir vanskelig å skille: \(par.map { "\(farger[$0.a].etikett)/\(farger[$0.b].etikett)" }.joined(separator: ", "))"
+                                 : "\(par.count) fargepar blir vanskelige å skille: \(par.map { "\(farger[$0.a].etikett)/\(farger[$0.b].etikett)" }.joined(separator: ", "))")
                                 .font(.callout).foregroundStyle(Color.sekundærTekst)
                         }
                     }
@@ -167,6 +161,9 @@ struct LysVurderingSeksjon: View {
             }
         }
     }
+}
 
-    private func etikett(_ i: Int) -> String { farger[i].navn.isEmpty ? farger[i].farge.hex() : farger[i].navn }
+extension PalettFarge {
+    /// Navnet, eller hex-verdien for farger uten navn.
+    var etikett: String { navn.isEmpty ? farge.hex() : navn }
 }

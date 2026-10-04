@@ -32,6 +32,11 @@ public struct Kamerakarakterisering: Hashable, Codable, Sendable {
         public var kryssvalidertMaksΔE: Double
         /// ΔE2000 per felt (kryssvalidert).
         public var avvik: [Double]
+
+        /// Før treffsikkerheten er regnet ut.
+        static func tom(antallFelt: Int) -> Statistikk {
+            Statistikk(antallFelt: antallFelt, snittΔE: 0, maksΔE: 0, kryssvalidertSnittΔE: 0, kryssvalidertMaksΔE: 0, avvik: [])
+        }
     }
 
     /// Lineariserte kameraverdier.
@@ -82,7 +87,7 @@ public struct Kamerakarakterisering: Hashable, Codable, Sendable {
                 let v = kamera[i].xyz
                 return XYZ(x: s.x + v.x, y: s.y + v.y, z: s.z + v.z)
             }
-            if sum.y > 0 { k.kameraHvit = XYZ(x: sum.x / sum.y, y: 1, z: sum.z / sum.y) }
+            if sum.y > 0 { k.kameraHvit = sum.normalisert }
         }
 
         // Treffsikkerhet, i Lab etter tilpasning til dagslys så tallene kan sammenlignes på tvers av lys.
@@ -129,9 +134,7 @@ public struct Kamerakarakterisering: Hashable, Codable, Sendable {
             }
         }
         var k = Kamerakarakterisering(modell: modell, gamma: gamma, forsterkning: forsterkning, koeffisienter: [],
-                                      lys: lys, kameraHvit: XYZ(x: 0.9505, y: 1, z: 1.089),
-                                      statistikk: Statistikk(antallFelt: indekser.count, snittΔE: 0, maksΔE: 0,
-                                                             kryssvalidertSnittΔE: 0, kryssvalidertMaksΔE: 0, avvik: []))
+                                      lys: lys, kameraHvit: Lyskilde.d65.hvitpunkt, statistikk: .tom(antallFelt: indekser.count))
         let x = indekser.map { egenskaper(k.lineær(kamera[$0]), modell: modell) }
         let y = indekser.map { [mål[$0].x, mål[$0].y, mål[$0].z] }
         guard let koeff = Lineær.minsteKvadrater(x, y, ridge: 1e-6) else { return nil }

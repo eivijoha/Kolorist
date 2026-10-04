@@ -1931,26 +1931,6 @@
         }
       }
     },
-    "For en lyskilde": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "For a light source"
-          }
-        }
-      }
-    },
-    "For lyset kameraet måler": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "For the light the camera measures"
-          }
-        }
-      }
-    },
     "For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.": {
       "localizations": {
         "en": {
@@ -2653,6 +2633,16 @@
         }
       }
     },
+    "Importer verdiene under Mine fargerom": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import the values under My colour spaces"
+          }
+        }
+      }
+    },
     "Importer …": {
       "localizations": {
         "en": {
@@ -2999,12 +2989,12 @@
         }
       }
     },
-    "Kompenser til dagslys": {
+    "Kompenser for lyset": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Compensate to daylight"
+            "value": "Compensate for the light"
           }
         }
       }
@@ -4085,6 +4075,16 @@
         }
       }
     },
+    "Lyset kameraet måler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The light the camera measures"
+          }
+        }
+      }
+    },
     "Lyshet": {
       "localizations": {
         "en": {
@@ -4265,16 +4265,6 @@
         }
       }
     },
-    "Med gråkort i bildet": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With grey card in the image"
-          }
-        }
-      }
-    },
     "Med gråkort og kameraprofil": {
       "localizations": {
         "en": {
@@ -4301,26 +4291,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "With reference card"
-          }
-        }
-      }
-    },
-    "Med referansekort (importer verdiene under Mine fargerom)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With reference card (import the values under My colour spaces)"
-          }
-        }
-      }
-    },
-    "Med referansekort i bildet": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With reference card in the image"
           }
         }
       }

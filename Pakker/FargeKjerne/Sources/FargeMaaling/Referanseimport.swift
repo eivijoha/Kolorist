@@ -41,6 +41,9 @@ public enum Referanseimport {
         return kort
     }
 
+    /// Skala til 0–1: verdier over `grense` antas å være oppgitt i prosent (0–100).
+    static func enhetsskala(maks: Double, grense: Double) -> Double { maks > grense ? 0.01 : 1 }
+
     // MARK: Rekkefølge og oppsett
 
     /// Rader × kolonner for et antall felt, liggende og så nær 2:3 som mulig (24 → 4 × 6).
@@ -62,7 +65,7 @@ public enum Referanseimport {
         let (rader, kolonner) = oppsett(for: felt.count)
         var ordnet = felt
         if rader > 1 && rader * kolonner == felt.count {
-            let nøytral = felt.map { hypot($0.verdi.lab.a, $0.verdi.lab.b) < 6 }
+            let nøytral = felt.map { Referanseverdi.erNøytral($0.verdi.lab) }
             func andelPåEnRad(_ indeks: (Int, Int) -> Int) -> Int {
                 (0..<rader).map { r in (0..<kolonner).filter { nøytral[indeks(r, $0)] }.count }.max() ?? 0
             }
@@ -119,13 +122,10 @@ public enum Referanseimport {
         let tall = rader.map { $0.map { Double($0.replacingOccurrences(of: ",", with: ".")) } }
 
         // Skala: prosent eller 0–1 for spektre, 0–100 eller 0–1 for XYZ.
-        var spekterSkala = 1.0
-        if spektral.count >= 3 {
-            let maks = tall.flatMap { r in spektral.compactMap { $0.0 < r.count ? r[$0.0] : nil } }.max() ?? 1
-            if maks > 1.5 { spekterSkala = 0.01 }
-        }
-        var xyzSkala = 1.0
-        if let yi = indeks(.y), (tall.compactMap { yi < $0.count ? $0[yi] : nil }.max() ?? 0) > 2 { xyzSkala = 0.01 }
+        let spekterSkala = enhetsskala(maks: tall.flatMap { r in spektral.compactMap { $0.0 < r.count ? r[$0.0] : nil } }.max() ?? 1,
+                                       grense: 1.5)
+        let xyzSkala = enhetsskala(maks: indeks(.y).map { yi in tall.compactMap { yi < $0.count ? $0[yi] : nil }.max() ?? 0 } ?? 0,
+                                   grense: 2)
 
         var steg = 10.0
         if spektral.count >= 2 { steg = spektral[1].1 - spektral[0].1 }
@@ -256,17 +256,17 @@ public enum Referanseimport {
             let felt: [Referanseverdi]
             var treKolonnerSkala: Double?
             if b == 3 {
-                treKolonnerSkala = (m.map { $0[1] }.max() ?? 0) > 2 ? 0.01 : 1
+                let skala = enhetsskala(maks: m.map { $0[1] }.max() ?? 0, grense: 2)
+                treKolonnerSkala = skala
                 // Lab hvis andre og tredje verdi har negative tall eller første er lyshet; ellers XYZ.
                 let harNegative = m.contains { $0[1] < 0 || $0[2] < 0 }
                 if harNegative || m.allSatisfy({ $0[0] <= 100 }) && !m.allSatisfy({ $0[0] <= 1.5 && $0[1] <= 1.5 }) {
                     felt = m.map { .lab(CIELab(l: $0[0], a: $0[1], b: $0[2])) }
                 } else {
-                    let skala = (m.map { $0[1] }.max() ?? 0) > 2 ? 0.01 : 1
                     felt = m.map { .xyz(XYZ(x: $0[0] * skala, y: $0[1] * skala, z: $0[2] * skala), hvit: Lyskilde.d50.hvitpunkt) }
                 }
             } else if let oppsett = start.map({ ($0, steg ?? 10) }) ?? spektraleOppsett[b] {
-                let skala = (m.flatMap { $0 }.max() ?? 0) > 1.5 ? 0.01 : 1
+                let skala = enhetsskala(maks: m.flatMap { $0 }.max() ?? 0, grense: 1.5)
                 felt = m.map { .spekter(Spektrum(start: oppsett.0, steg: oppsett.1, verdier: $0.map { $0 * skala })) }
             } else {
                 return ([], nil)
@@ -333,11 +333,11 @@ public enum Referanseimport {
             case "ColorCIEXYZ": iXYZ = false
             case "Object":
                 if let s = spekter, s.count >= 3 {
-                    let skala = (s.max() ?? 0) > 1.5 ? 0.01 : 1
+                    let skala = enhetsskala(maks: s.max() ?? 0, grense: 1.5)
                     felt.append(Referansefelt(navn: navn, verdi: .spekter(Spektrum(start: spekterStart, steg: spekterSteg,
                                                                                   verdier: s.map { $0 * skala }))))
                 } else if let x = xyz["X"], let y = xyz["Y"], let z = xyz["Z"] {
-                    let skala = y > 2 ? 0.01 : 1
+                    let skala = enhetsskala(maks: y, grense: 2)
                     felt.append(Referansefelt(navn: navn, verdi: .xyz(XYZ(x: x * skala, y: y * skala, z: z * skala),
                                                                      hvit: Lyskilde.d50.hvitpunkt)))
                 } else if let l = lab["L"], let a = lab["A"], let b = lab["B"] {

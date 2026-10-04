@@ -19,11 +19,9 @@ public enum Lyskilde: Hashable, Codable, Sendable {
     /// Bare kromatisiteten er kjent.
     case hvitpunkt(x: Double, y: Double)
 
-    /// Lyskilder brukeren kan velge mellom, med de vanligste først.
-    public static let forslag: [Lyskilde] = [
-        .sortlegeme(kelvin: 2700), .a, .cie("LED-B2"), .cie("FL11"), .cie("LED-B3"), .cie("FL2"), .d50,
-        .cie("LED-B4"), .d65, .dagslys(kelvin: 7500),
-    ]
+    /// Lyskildene brukeren kan velge mellom: varmt glødelys, nøytral LED og dagslys for trykk og skjerm.
+    /// (Lysmiljøene og standardene kan bruke flere, f.eks. lysrør.)
+    public static let forslag: [Lyskilde] = [.sortlegeme(kelvin: 2700), .cie("LED-B3"), .d50, .d65]
 
     /// Spekteret, når det er kjent.
     public var spektrum: Spektrum? {
@@ -51,10 +49,7 @@ public enum Lyskilde: Hashable, Codable, Sendable {
     }
 
     /// Korrelert fargetemperatur og Duv.
-    public var fargetemperatur: (kelvin: Double, duv: Double)? {
-        let p = Kolorimetri.xy(hvitpunkt)
-        return Kolorimetri.fargetemperatur(x: p.x, y: p.y)
-    }
+    public var fargetemperatur: (kelvin: Double, duv: Double)? { Kolorimetri.fargetemperatur(hvitpunkt) }
 
     public var navn: String {
         switch self {

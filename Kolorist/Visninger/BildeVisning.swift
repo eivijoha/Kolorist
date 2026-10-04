@@ -63,7 +63,6 @@ struct BildeVisning: View {
     @State private var gråkortRefleksjon = 0.18
     @State private var egetKort = false
     @State private var kalibrerMed: Referansekort?
-    @State private var lys = Lysbibliotek.delt
 
     /// Fargen i bildet der lupen står.
     private var rå: Farge? {
@@ -130,28 +129,13 @@ struct BildeVisning: View {
     /// Kompensasjon med gråkort eller referansekort i bildet.
     private var lysmeny: some View {
         Menu {
-            Button("Som i bildet", systemImage: kompensasjon == nil ? "checkmark" : "") {
-                kompensasjon = nil
-                venterPåGråkort = false
-                beregnKlynger()
-            }
-            Section("Kompenser til dagslys") {
-                Menu("Med gråkort i bildet") {
-                    Button("Gråkort 18 %") { gråkortRefleksjon = 0.18; venterPåGråkort = true }
-                    Button("Hvitt kort 90 %") { gråkortRefleksjon = 0.9; venterPåGråkort = true }
-                    Button("Eget kort …") { egetKort = true }
-                }
-                if lys.referansekort.isEmpty {
-                    Button("Med referansekort (importer verdiene under Mine fargerom)", systemImage: "square.grid.3x2") {}
-                        .disabled(true)
-                } else {
-                    Menu("Med referansekort i bildet") {
-                        ForEach(lys.referansekort) { kort in Button(kort.navn) { kalibrerMed = kort } }
-                    }
-                }
-            }
+            LyskompensasjonValg(erAktiv: kompensasjon != nil, avTekst: "Som i bildet",
+                                slåAv: { kompensasjon = nil; venterPåGråkort = false; beregnKlynger() },
+                                gråkort: { gråkortRefleksjon = $0; venterPåGråkort = true },
+                                egetKort: { egetKort = true },
+                                referansekort: { kalibrerMed = $0 })
         } label: {
-            Label("Lys", systemImage: kompensasjon == nil ? "sun.max" : "sun.max.fill")
+            LyskompensasjonValg.etikett(erAktiv: kompensasjon != nil)
         }
         .help("Kompenser fargene med et gråkort eller referansekort som er med i bildet")
     }
@@ -214,12 +198,7 @@ struct BildeVisning: View {
             )
             #endif
             .overlay(alignment: .topLeading) {
-                if venterPåGråkort {
-                    Label("Trykk på kortet", systemImage: "hand.tap").merke()
-                } else if let kompensasjon {
-                    Label(kompensasjon.erReferansekort ? "Kompensert med referansekort" : "Kompensert med gråkort",
-                          systemImage: "sun.max.fill").merke()
-                }
+                LysmålingMerke(venterPåGråkort: venterPåGråkort, kompensasjon: kompensasjon)
             }
             .overlay(alignment: .topTrailing) {
                 if skala > 1.01 {

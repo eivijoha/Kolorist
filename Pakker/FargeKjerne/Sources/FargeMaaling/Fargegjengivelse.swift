@@ -31,8 +31,7 @@ public enum Fargegjengivelse {
     /// Fra målte farger (XYZ under lyset, hvitt har Y = 1) når bare kameraet har sett lyset.
     public static func anslag(målt: [XYZ], hvit: XYZ, prøver: [Spektrum]) -> Resultat? {
         guard målt.count == prøver.count, !prøver.isEmpty else { return nil }
-        let p = Kolorimetri.xy(hvit)
-        guard let (kelvin, _) = Kolorimetri.fargetemperatur(x: p.x, y: p.y) else { return nil }
+        guard let (kelvin, _) = Kolorimetri.fargetemperatur(hvit) else { return nil }
         let referanse = referanselys(kelvin: kelvin)
         let refHvit = Kolorimetri.xyz(lyskilde: referanse)
         let d65 = Lyskilde.d65.hvitpunkt

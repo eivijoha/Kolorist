@@ -67,10 +67,10 @@ public struct Referansekort: Hashable, Codable, Sendable, Identifiable {
         felt.allSatisfy { if case .spekter = $0.verdi { true } else { false } }
     }
 
-    /// Indeksene til de nøytrale feltene (kroma under 6 i CIELab), fra lysest til mørkest.
+    /// Indeksene til de nøytrale feltene, fra lysest til mørkest.
     public var nøytrale: [Int] {
         let lab = felt.map(\.verdi.lab)
-        return lab.indices.filter { hypot(lab[$0].a, lab[$0].b) < 6 }.sorted { lab[$0].l > lab[$1].l }
+        return lab.indices.filter { Referanseverdi.erNøytral(lab[$0]) }.sorted { lab[$0].l > lab[$1].l }
     }
 
     /// Posisjonsnavn som «A1» (rad A, kolonne 1).
@@ -127,6 +127,9 @@ public enum Referanseverdi: Hashable, Codable, Sendable {
         }
     }
 
+    /// Nøytral (grå) når kroma i CIELab er under 6.
+    static func erNøytral(_ lab: CIELab) -> Bool { hypot(lab.a, lab.b) < 6 }
+
     /// CIELab under D50.
     public var lab: CIELab {
         switch self {
@@ -137,22 +140,6 @@ public enum Referanseverdi: Hashable, Codable, Sendable {
 
     /// Fargen slik den ser ut i dagslys (D65), for visning.
     public var farge: Farge { Farge(xyz: xyz(under: .d65)) }
-}
-
-/// CIELab mot et vilkårlig hvitpunkt.
-enum Labregning {
-    static func lab(_ v: XYZ, hvit: XYZ) -> CIELab {
-        func f(_ t: Double) -> Double { t > 216.0 / 24389 ? cbrt(t) : (24389.0 / 27 * t + 16) / 116 }
-        let (fx, fy, fz) = (f(v.x / hvit.x), f(v.y / hvit.y), f(v.z / hvit.z))
-        return CIELab(l: 116 * fy - 16, a: 500 * (fx - fy), b: 200 * (fy - fz))
-    }
-
-    static func xyz(_ lab: CIELab, hvit: XYZ) -> XYZ {
-        let fy = (lab.l + 16) / 116, fx = fy + lab.a / 500, fz = fy - lab.b / 200
-        func g(_ f: Double) -> Double { let f3 = f * f * f; return f3 > 216.0 / 24389 ? f3 : (116 * f - 16) * 27 / 24389 }
-        let y = lab.l > 8 ? fy * fy * fy : lab.l * 27 / 24389
-        return XYZ(x: g(fx) * hvit.x, y: y * hvit.y, z: g(fz) * hvit.z)
-    }
 }
 
 /// Plassering av felt på et kort i et bilde.

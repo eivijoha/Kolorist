@@ -66,8 +66,7 @@ final class Panelinnstillinger {
     private(set) var skjulteVerdier: Set<String> = []
     private(set) var verdirekkefølge: [String] = []
 
-    private let sky = NSUbiquitousKeyValueStore.default
-    private let lokalt = UserDefaults.standard
+    private let lager = SkyLager.delt
     private enum Nøkkel {
         static let rekkefølge = "paneler.rekkefølge"
         static let lagtSammen = "paneler.lagtSammen"
@@ -75,23 +74,11 @@ final class Panelinnstillinger {
         static let verdirekkefølge = "verdier.rekkefølge"
     }
 
-    /// Skjermbilder (Debug): standardoppsettet, uten å lese eller endre brukerens synkroniserte oppsett.
-    private let standardOppsett: Bool = {
-        #if DEBUG
-        UserDefaults.standard.bool(forKey: "skjermbilde")
-        #else
-        false
-        #endif
-    }()
-
     private init() {
-        guard !standardOppsett else { return }
+        // Skjermbilder (Debug): standardoppsettet, uten å lese brukerens synkroniserte oppsett.
+        guard !lager.skjermbildemodus else { return }
         last()
-        NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
-                                               object: sky, queue: .main) { [weak self] _ in
-            MainActor.assumeIsolated { self?.last() }
-        }
-        sky.synchronize()
+        lager.vedEndring { [weak self] in self?.last() }
     }
 
     // MARK: - Oppslag
@@ -150,7 +137,7 @@ final class Panelinnstillinger {
     // MARK: - Lagring
 
     private func last() {
-        func les<T>(_ nøkkel: String) -> T? { (sky.object(forKey: nøkkel) ?? lokalt.object(forKey: nøkkel)) as? T }
+        func les<T>(_ nøkkel: String) -> T? { lager.verdi(nøkkel) as? T }
         rekkefølger = les(Nøkkel.rekkefølge) ?? [:]
         lagtSammen = Set(les(Nøkkel.lagtSammen) as [String]? ?? [])
         skjulteVerdier = Set(les(Nøkkel.skjulteVerdier) as [String]? ?? [])
@@ -158,17 +145,11 @@ final class Panelinnstillinger {
     }
 
     private func lagre() {
-        guard !standardOppsett else { return }
-        let verdier: [(String, Any)] = [
+        lager.skriv([
             (Nøkkel.rekkefølge, rekkefølger),
             (Nøkkel.lagtSammen, Array(lagtSammen).sorted()),
             (Nøkkel.skjulteVerdier, Array(skjulteVerdier).sorted()),
             (Nøkkel.verdirekkefølge, verdirekkefølge),
-        ]
-        for (nøkkel, verdi) in verdier {
-            sky.set(verdi, forKey: nøkkel)
-            lokalt.set(verdi, forKey: nøkkel)
-        }
-        sky.synchronize()
+        ])
     }
 }
