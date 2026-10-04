@@ -35,6 +35,17 @@ public struct Munsell: Hashable, Codable, Sendable {
     /// Kulørtrinnet i Munsell Book of Color: 2.5, 5, 7.5 og 10 i hver familie (40 kulører rundt sirkelen).
     public static let kulørsteg = 2.5
 
+    /// Valørtrinnet i Munsell-notasjonen (4, 5, 6 …) og kromatrinnet (2, 4, 6 …), som i renotasjonsdataene og
+    /// Munsell Book of Color.
+    public static let valørsteg = 1.0
+    public static let kromasteg = 2.0
+
+    /// Valøren avrundet til nærmeste hele trinn (0–10).
+    public static func avrundetValør(_ v: Double) -> Double { min(max((v / valørsteg).rounded() * valørsteg, 0), 10) }
+
+    /// Kromaen avrundet til nærmeste partall (≥ 0).
+    public static func avrundetKroma(_ c: Double) -> Double { max((c / kromasteg).rounded() * kromasteg, 0) }
+
     /// Kuløren avrundet til nærmeste trinn på 2,5.
     public static func avrundetKulør(_ h: Double) -> Double {
         let r = (h / kulørsteg).rounded() * kulørsteg

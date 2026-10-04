@@ -13,6 +13,8 @@ struct HarmoniFlate: View {
     var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     /// Navnet på fargerommet slik det vises i «Vis også» (står i menyen under flaten; her bare for VoiceOver).
     let romnavn: String
+    /// Fargesirkelen harmonien er laget på; hvert felt viser også fargens plass i den («5R 4/14», «RYB 210°» …).
+    var sirkel: Fargesirkel? = nil
     /// Flatene under hverandre (bred visning) i stedet for side ved side.
     var stablet = false
     var velg: (Farge) -> Void = { _ in }
@@ -63,7 +65,8 @@ struct HarmoniFlate: View {
             let oppsett = stablet ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
             oppsett {
                 ForEach(Array(motparter.enumerated()), id: \.offset) { i, m in
-                    flate(m, original: farger[i], erGrunn: i == grunnIndeks, visTekst: visTekst, kompakt: kompakt,
+                    flate(m, original: farger[i], sirkeltekst: sirkel?.verditekst(for: farger[i]),
+                          erGrunn: i == grunnIndeks, visTekst: visTekst, kompakt: kompakt,
                           hjørner: hjørner(indeks: i, antall: motparter.count))
                 }
             }
@@ -81,7 +84,7 @@ struct HarmoniFlate: View {
         return (indeks == 0 ? r : 0, indeks == antall - 1 ? r : 0)
     }
 
-    private func flate(_ m: Motpart, original: Farge, erGrunn: Bool, visTekst: Bool, kompakt: Bool,
+    private func flate(_ m: Motpart, original: Farge, sirkeltekst: String?, erGrunn: Bool, visTekst: Bool, kompakt: Bool,
                        hjørner: (venstre: CGFloat, høyre: CGFloat)) -> some View {
         let tekstfarge = m.farge.farge.lesbarTekstfarge.swiftUI
         return FargeRute(farge: m.farge.farge, visTekst: false, hjørne: 0, visMerke: false,
@@ -104,6 +107,9 @@ struct HarmoniFlate: View {
                         }
                     }
                     if visTekst {
+                        if let sirkeltekst {
+                            Text(sirkeltekst).font(.caption2.monospaced().weight(.semibold)).lineLimit(2).minimumScaleFactor(0.6)
+                        }
                         Text(m.tekst).font(.caption2.monospaced()).lineLimit(3).minimumScaleFactor(0.6)
                         if let merknad = m.merknad {
                             if kompakt {
@@ -121,7 +127,8 @@ struct HarmoniFlate: View {
             .contentShape(Rectangle())
             .onTapGesture { velg(original) }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(erGrunn ? String(localized: "Grunnfarge: \(m.tekst)") : m.tekst)
+            .accessibilityLabel(erGrunn ? String(localized: "Grunnfarge: \([sirkeltekst, m.tekst].compactMap { $0 }.joined(separator: ", "))")
+                                        : [sirkeltekst, m.tekst].compactMap { $0 }.joined(separator: ", "))
             .accessibilityValue(m.merknad ?? "")
             .accessibilityAddTraits(.isButton)
     }

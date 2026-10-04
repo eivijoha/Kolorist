@@ -20,6 +20,8 @@ struct FargeEditor: View {
     @AppStorage("visOgsåProfil") private var visOgsåID = ICCProfil.sRGB.id
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     @AppStorage("renCMYK") private var renCMYK = false
+    /// Sirkelen valgt i Harmoni (samme lagring som HarmoniSeksjon), for verdiene i harmoniflaten.
+    @AppStorage("harmoniSirkel") private var harmonisirkel: Fargesirkel = .okLCH
     @Environment(ProfilBibliotek.self) private var bibliotek
 
     private var modusvelger: some View {
@@ -89,6 +91,7 @@ struct FargeEditor: View {
                     HarmoniFlate(farger: harmonifarger, grunnIndeks: harmoniGrunn, profil: visOgsåProfil,
                                  fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                                  romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
+                                 sirkel: harmonisirkel,
                                  stablet: bred,
                                  velg: { arbeidsbenk.aktivFarge = $0 },
                                  lagre: { lagreEnkeltfarger([$0], i: kontekst) },
@@ -397,6 +400,16 @@ struct KomponentGlidere: View {
         return v.formatted(.number.precision(.fractionLength(k.desimaler)))
     }
 
+    /// Munsell i trinn som i Munsell-boka: kulør 2,5 (2.5R, 5R, 7.5R, 10R …), valør 1 og kroma 2.
+    private func trinnvis(_ v: Double, komponent i: Int) -> Double {
+        guard profil == nil, modell == .munsell else { return v }
+        switch i {
+        case 0: return Munsell.avrundetKulør(v)
+        case 1: return Munsell.avrundetValør(v)
+        default: return Munsell.avrundetKroma(v)
+        }
+    }
+
     /// Fargene langs sporet for komponent `i`: de andre komponentene holdes fast, så sporet viser
     /// nøyaktig hva gliden gir. Farger utenfor skjermens gamut kartlegges ved visning.
     private func spor(for i: Int, område: ClosedRange<Double>, prøver: Int = 24) -> [Color] {
@@ -430,8 +443,7 @@ struct KomponentGlidere: View {
                     set: { ny in
                         var v = gjeldende
                         guard v.indices.contains(i) else { return }
-                        // Munsell-kulør i trinn på 2,5 (2.5R, 5R, 7.5R, 10R …), som i Munsell-boka.
-                        v[i] = profil == nil && modell == .munsell && k.erKulør ? Munsell.avrundetKulør(ny) : ny
+                        v[i] = trinnvis(ny, komponent: i)
                         verdier = v
                         let ny = farge(fra: v, alfa: farge.alfa)
                         // Meld verdiene før fargen settes, så begrensningen ser at de er angitt i profilen.
@@ -440,7 +452,9 @@ struct KomponentGlidere: View {
                     }
                 ), område: k.område, spor: spor(for: i, område: k.område), gjeldende: farge.swiftUI,
                    tittel: Text(k.navn),
-                   verdiTekst: verditekst(gjeldende[i], k))
+                   verdiTekst: verditekst(gjeldende[i], k),
+                   stegForTilgjengelighet: profil == nil && modell == .munsell
+                       ? [Munsell.kulørsteg, Munsell.valørsteg, Munsell.kromasteg][min(i, 2)] : nil)
                 Text(verditekst(gjeldende[i], k))
                     .font(.callout.monospacedDigit())
                     .foregroundStyle(Color.sekundærTekst)

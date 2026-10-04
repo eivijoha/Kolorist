@@ -65,14 +65,17 @@ struct HarmoniSeksjon: View {
     }
 
     private func juster(_ f: Farge) -> Farge {
-        guard metning != nil || lyshet != nil else { return f }
         if brukerMunsell {
-            // Munsell: gliderne er valør og kroma, og fargene er ekte Munsell-farger.
+            // Munsell: gliderne er valør og kroma, og fargene er ekte Munsell-farger med gyldige notasjoner
+            // (valør og kroma i trinn, også før gliderne er rørt).
             var m = f.munsell
-            if let lyshet { m.valør = lyshet * 10 }
-            if let metning { m.kroma = metning * Self.munsellMaksKroma }
-            return Farge.innenforMunsell(m, alfa: f.alfa, gamut: gamut) ?? f
+            m.valør = (lyshet ?? grunnLyshet) * 10
+            m.kroma = (metning ?? grunnMetning) * Self.munsellMaksKroma
+            var farge = munsellfarge(m) ?? f
+            farge.alfa = f.alfa
+            return farge
         }
+        guard metning != nil || lyshet != nil else { return f }
         if sirkel == .hsl || sirkel == .ryb {
             var h = f.hsl
             if let metning { h.s = metning }
@@ -97,7 +100,7 @@ struct HarmoniSeksjon: View {
         if brukerMunsell {
             // Ekte Munsell-farger på hvert trinn, med gjeldende valør og kroma (senket der kuløren ikke når så høyt).
             let munsell = Munsell(kulør: sirkel.avrundet(vinkel) / 3.6, valør: l * 10, kroma: m * Self.munsellMaksKroma)
-            return Farge.innenforMunsell(munsell, gamut: gamut) ?? grunnfarge.gamutKartlagt(til: gamut)
+            return munsellfarge(munsell) ?? grunnfarge.gamutKartlagt(til: gamut)
         }
         let f = sirkel.farge(grunnfarge, vinkel: vinkel, gamut: gamut)
         if sirkel == .hsl || sirkel == .ryb {
@@ -124,12 +127,22 @@ struct HarmoniSeksjon: View {
     /// Munsell-sirkelen: «Metning» er Munsell-kroma (0–24) og «Lyshet» er valør (0–10).
     private var brukerMunsell: Bool { sirkel == .munsell }
     private static let munsellMaksKroma = 24.0
+    /// En Munsell-farge innenfor gamut. Når kuløren ikke når valgt kroma, senkes den til nærmeste lavere trinn
+    /// (partall), så notasjonen fortsatt er gyldig («5GY 5/10», ikke «5GY 5/11.6»).
+    private func munsellfarge(_ m: Munsell) -> Farge? {
+        guard let f = Farge.innenforMunsell(m, gamut: gamut) else { return nil }
+        let oppnådd = f.munsell.kroma
+        guard oppnådd < m.kroma - 0.1 else { return f }
+        let trinn = (oppnådd / Munsell.kromasteg).rounded(.down) * Munsell.kromasteg
+        return Farge.innenforMunsell(Munsell(kulør: m.kulør, valør: m.valør, kroma: trinn), gamut: gamut) ?? f
+    }
+
     private var grunnMetning: Double {
-        if brukerMunsell { return min(grunnfarge.munsell.kroma / Self.munsellMaksKroma, 1) }
+        if brukerMunsell { return min(Munsell.avrundetKroma(grunnfarge.munsell.kroma) / Self.munsellMaksKroma, 1) }
         return brukerHSL ? grunnfarge.hsl.s : relativMetning(grunnfarge)
     }
     private var grunnLyshet: Double {
-        if brukerMunsell { return grunnfarge.munsell.valør / 10 }
+        if brukerMunsell { return Munsell.avrundetValør(grunnfarge.munsell.valør) / 10 }
         return brukerHSL ? grunnfarge.hsl.l : grunnfarge.okLCH.l
     }
 
@@ -139,7 +152,7 @@ struct HarmoniSeksjon: View {
             var g = grunnfarge.munsell
             g.valør = l * 10
             g.kroma = m * Self.munsellMaksKroma
-            return Farge.innenforMunsell(g, gamut: gamut) ?? grunnfarge.gamutKartlagt(til: gamut)
+            return munsellfarge(g) ?? grunnfarge.gamutKartlagt(til: gamut)
         }
         if brukerHSL {
             var h = grunnfarge.hsl
@@ -173,13 +186,18 @@ struct HarmoniSeksjon: View {
                 // av valgt profil), og en verdi som «følger grunnfargen» ville da krype.
                 if metning == nil { metning = grunnMetning }
                 if lyshet == nil { lyshet = grunnLyshet }
-                verdi.wrappedValue = ny
+                // Munsell i trinn som i Munsell-boka: kroma 2, 4, 6 … og valør 1, 2, 3 …
+                verdi.wrappedValue = brukerMunsell
+                    ? (metningsakse ? Munsell.avrundetKroma(ny * Self.munsellMaksKroma) / Self.munsellMaksKroma
+                                    : Munsell.avrundetValør(ny * 10) / 10)
+                    : ny
             }), område: 0...1,
                         spor: spor(metningsakse: metningsakse),
                         gjeldende: grunnfarge(metning: metning ?? grunnMetning, lyshet: lyshet ?? grunnLyshet).swiftUI,
                         tittel: Text(tittel),
                         verdiTekst: tekst,
-                        stegForTilgjengelighet: 0.05)
+                        stegForTilgjengelighet: brukerMunsell
+                            ? (metningsakse ? Munsell.kromasteg / Self.munsellMaksKroma : Munsell.valørsteg / 10) : 0.05)
             Text(tekst)
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(Color.sekundærTekst)

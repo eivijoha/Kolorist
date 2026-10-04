@@ -17,6 +17,16 @@
         }
       }
     },
+    "%lld %% %@, %lld %% %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld %% %2$@, %3$lld %% %4$@"
+          }
+        }
+      }
+    },
     "%lld %% mot hvitt": {
       "localizations": {
         "en": {
