@@ -119,7 +119,13 @@ final class Arbeidsbenk {
     var lenkefeil: String?
     /// Lysere/mørkere-innstillinger, delt mellom Studio og Overgang og husket mellom oppstarter.
     var lyshetstrinn: Lyshetstrinn = Arbeidsbenk.lastTrinn() {
-        didSet { try? UserDefaults.standard.set(JSONEncoder().encode(lyshetstrinn), forKey: "lyshetstrinn") }
+        didSet {
+            try? UserDefaults.standard.set(JSONEncoder().encode(lyshetstrinn), forKey: "lyshetstrinn")
+            if oldValue != lyshetstrinn {
+                merkEndring("lyshetstrinn", navn: String(localized: "Endre lysere og mørkere"), fra: oldValue,
+                            nå: { [weak self] in self?.lyshetstrinn ?? oldValue }, sett: { [weak self] in self?.lyshetstrinn = $0 })
+            }
+        }
     }
 
     private static func lastTrinn() -> Lyshetstrinn {
@@ -238,7 +244,11 @@ final class Arbeidsbenk {
     @ObservationIgnored weak var angring: UndoManager?
     @ObservationIgnored private var angreStart: Farge?
     @ObservationIgnored private var angreOppgave: Task<Void, Never>?
-    @ObservationIgnored private var angrer = false
+    @ObservationIgnored var angrer = false
+    /// Endringer i innstillinger som venter på å bli angresteg (se Angring.swift), og vokteren som melder dem.
+    @ObservationIgnored var ventendeEndringer: [String: () -> Void] = [:]
+    @ObservationIgnored var endringsoppgave: Task<Void, Never>?
+    @ObservationIgnored var innstillingsvokter: Innstillingsvokter?
 
     /// Samler endringer i aktiv farge som kommer tett (en glider som dras) til ett angresteg.
     private func merkForAngring(fra gammel: Farge) {
@@ -299,11 +309,15 @@ struct InnholdsVisning: View {
     private func kobleAngring() {
         kontekst.undoManager = undoManager
         arbeidsbenk.angring = undoManager
+        arbeidsbenk.følgInnstillinger()
         // Fullfør en ventende fargeendring før et angresteg, så ⌘Z rett etter en dragning angrer den.
         if let undoManager, observertAngring != ObjectIdentifier(undoManager) {
             observertAngring = ObjectIdentifier(undoManager)
             NotificationCenter.default.addObserver(forName: .NSUndoManagerWillUndoChange, object: undoManager, queue: .main) { _ in
-                MainActor.assumeIsolated { Arbeidsbenk.delt.fullførAngresteg() }
+                MainActor.assumeIsolated {
+                    Arbeidsbenk.delt.fullførAngresteg()
+                    Arbeidsbenk.delt.fullførEndringer()
+                }
             }
         }
     }

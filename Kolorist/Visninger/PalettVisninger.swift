@@ -159,11 +159,15 @@ struct PalettListe: View {
                 Button("Slett palett", role: .destructive) {
                     if let p = slettes {
                         sti.removeAll { $0 == .palett(p) }
-                        kontekst.delete(p)
+                        kontekst.angresteg("Slett palett") { kontekst.delete(p) }
                     }
                 }
             } message: {
-                Text("Fargene og gradientene i paletten slettes også. Dette kan ikke angres.")
+                #if os(macOS)
+                Text("Fargene og gradientene i paletten slettes også. Du kan angre med ⌘Z.")
+                #else
+                Text("Fargene og gradientene i paletten slettes også. Rist for å angre.")
+                #endif
             }
             .navigationDestination(for: Valg.self) { v in
                 Group {
@@ -287,6 +291,7 @@ struct EnkeltfargerRad: View {
     let paletter: [PalettDokument]
     var velg: (Farge) -> Void = { _ in }
     @Environment(\.modelContext) private var kontekst
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -297,6 +302,11 @@ struct EnkeltfargerRad: View {
             }
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 4) {
+                    // Nyeste først, så den nye fargen havner der feltet står.
+                    LeggTilFelt(farge: arbeidsbenk.aktivFarge, hjørne: 6, visTekst: false) {
+                        kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.aktivFarge)], i: kontekst) }
+                    }
+                    .frame(width: 36, height: 36)
                     ForEach(farger.prefix(60)) { pf in
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
                                   fjern: { slettEnkeltfarge(pf.id, i: kontekst) },
@@ -328,11 +338,16 @@ struct EnkeltfargerVisning: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: rutenett, spacing: 10) {
+                // Nyeste først, så den nye fargen havner der feltet står.
+                LeggTilFelt(farge: arbeidsbenk.aktivFarge) {
+                    kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.aktivFarge)], i: kontekst) }
+                }
+                .aspectRatio(1, contentMode: .fit)
                 ForEach(lagrede) { lagret in
                     let pf = lagret.palettFarge
                     FargeRute(farge: pf.farge, navn: pf.navn,
                               leggIPalett: { _ in leggIPalett = [pf] },
-                              fjern: { kontekst.delete(lagret) },
+                              fjern: { kontekst.angresteg("Slett farge") { kontekst.delete(lagret) } },
                               navngi: { navngis = lagret }, palettFarge: pf)
                         .aspectRatio(1, contentMode: .fit)
                         .onTapGesture {
@@ -357,9 +372,6 @@ struct EnkeltfargerVisning: View {
         .fargetastatur(kopier: { lagrede.map(\.palettFarge) }, limInn: { lagreEnkeltfarger($0, i: kontekst) })
         .toolbar {
             ToolbarItemGroup {
-                Button("Lagre aktiv farge", systemImage: "plus") {
-                    lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.aktivFarge)], i: kontekst)
-                }
                 LimInnFargerKnapp { lagreEnkeltfarger($0, i: kontekst) }
                 Button("Legg alle i palett", systemImage: "square.and.arrow.down.on.square") {
                     leggIPalett = lagrede.map(\.palettFarge)
@@ -394,6 +406,8 @@ func leggTil(_ farger: [PalettFarge], i dokument: PalettDokument) -> Bool {
 /// Rad i palettlisten: navn og små fargeprøver som kan dras til andre paletter.
 struct PalettRad: View {
     let dokument: PalettDokument
+    @Environment(\.modelContext) private var kontekst
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
     /// Trykk på en fargeprøve velger fargen (resten av kortet åpner paletten).
     var velg: (Farge) -> Void = { _ in }
 
@@ -410,18 +424,22 @@ struct PalettRad: View {
                 HStack(spacing: 3) {
                     ForEach(dokument.farger) { pf in
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
-                                  fjern: { dokument.farger.removeAll { $0.id == pf.id } }, palettFarge: pf,
+                                  fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } }, palettFarge: pf,
                                   ekstraMeny: AnyView(FlyttMeny(farge: pf, fra: dokument)))
                             .frame(width: 36, height: 36)
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
                     }
+                    LeggTilFelt(farge: arbeidsbenk.aktivFarge, hjørne: 6, visTekst: false) {
+                        kontekst.angresteg("Legg til farge") { dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge)) }
+                    }
+                    .frame(width: 36, height: 36)
                     // Gradienter som bredere brikker etter fargene.
                     ForEach(gradienter) { g in
                         GradientStripe(oppsett: g.oppsett).frame(width: 64, height: 36)
                     }
                     if dokument.farger.isEmpty && gradienter.isEmpty {
-                        Text("Slipp farger her").font(.caption).foregroundStyle(Color.sekundærTekst)
+                        Text("Legg til den aktive fargen, eller slipp farger her").font(.caption).foregroundStyle(Color.sekundærTekst)
                     }
                 }
             }
@@ -445,7 +463,10 @@ struct PalettDetalj: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var visSkala: PalettFarge?
     @State private var visKontrast = false
-    @State private var visILys = false
+    /// «Se i lys»: palettens farger i et lysmiljø, rett i rutene (huskes mellom palettene).
+    @AppStorage("palett.seILys") private var seILys = false
+    @AppStorage("seILys.somFoto") private var somFoto = false
+    @State private var lysbibliotek = Lysbibliotek.delt
     @State private var visLagreSom = false
     @State private var vurdering: PalettVurdering?
     @State private var kiArbeider = false
@@ -464,7 +485,14 @@ struct PalettDetalj: View {
 
     private let rutenett = [GridItem(.adaptive(minimum: 96), spacing: 10)]
 
+    /// Analysen for «Se i lys», eller nil når modusen er av.
+    private var lys: PalettLys? {
+        guard seILys, !dokument.farger.isEmpty else { return nil }
+        return PalettLys(farger: dokument.farger, miljø: lysbibliotek.gjeldendeLysmiljø, somFoto: somFoto)
+    }
+
     var body: some View {
+        let lys = lys
         ScrollView {
             // Tittel med blyant: trykk på blyanten (eller tittelen) for å endre navnet.
             HStack(spacing: 8) {
@@ -505,25 +533,40 @@ struct PalettDetalj: View {
                     .padding(.horizontal)
                     .padding(.top, 4)
             }
+            if let lys {
+                PalettLysValg(lys: lys).padding([.horizontal, .top])
+            }
             LazyVGrid(columns: rutenett, spacing: 10) {
                 ForEach(dokument.farger) { pf in
                     // Fargerutens egen meny (høyreklikk / trykk og hold) har Slett; den overstyrer en ytre meny.
-                    FargeRute(farge: pf.farge, navn: pf.navn,
-                              fjern: { dokument.farger.removeAll { $0.id == pf.id } },
+                    let iLyset = lys?.iLyset(pf)
+                    FargeRute(farge: pf.farge, navn: pf.navn, visTekst: iLyset == nil,
+                              fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
                               navngi: { navngisPalettfarge = pf }, palettFarge: pf,
                               ekstraMeny: AnyView(Group {
                                   Button("Lag toneskala", systemImage: "square.3.layers.3d") { visSkala = pf }
                                   FlyttMeny(farge: pf, fra: dokument)
                               }))
                         .aspectRatio(1, contentMode: .fit)
+                        // Se i lys: fargen i lyset i nedre halvdel.
+                        .overlay {
+                            if let iLyset, let skift = lys?.skift(pf) { LysHalvdel(farge: iLyset, skift: skift) }
+                        }
                         .onTapGesture {
                             arbeidsbenk.aktivFarge = pf.farge
                             // I palettkolonnen blir du der du er; ellers vises fargen i Studio.
                             if !iKolonne { arbeidsbenk.valgtFane = .studio }
                         }
                 }
+                LeggTilFelt(farge: arbeidsbenk.aktivFarge) {
+                    kontekst.angresteg("Legg til farge") { dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge)) }
+                }
+                .aspectRatio(1, contentMode: .fit)
             }
             .padding()
+            if let lys {
+                PalettLysPar(lys: lys).padding(.horizontal).padding(.bottom)
+            }
             // Gradienter i paletten, under fargene.
             PalettGradientListe(dokument: dokument)
         }
@@ -535,7 +578,7 @@ struct PalettDetalj: View {
         .tarImotFarger { farger in
             flytt(farger, til: dokument, i: kontekst)
         }
-        .fargetastatur(kopier: { dokument.farger }, limInn: { dokument.farger += $0 })
+        .fargetastatur(kopier: { dokument.farger }, limInn: { farger in kontekst.angresteg("Lim inn farger") { dokument.farger += farger } })
         // ⇧⌘S: «Lagre som …» for denne paletten.
         .focusedSceneValue(\.palettlagring, dokument.farger.isEmpty && dokument.gradienter.isEmpty ? nil
             : Palettlagring(id: dokument.id) { visLagreSom = true })
@@ -554,9 +597,6 @@ struct PalettDetalj: View {
         .sheet(isPresented: $visLagreSom) {
             LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter))
         }
-        .sheet(isPresented: $visILys) {
-            PalettILysArk(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn, farger: dokument.farger)
-        }
         .sheet(item: $navngisPalettfarge) { pf in
             NavngiArk(farge: pf) { navn in
                 var f = dokument.farger
@@ -572,17 +612,16 @@ struct PalettDetalj: View {
 
     /// Knappene for paletten: i verktøylinjen, eller i en rad under tittelen i palettkolonnen.
     @ViewBuilder private var handlinger: some View {
-        Button("Legg til aktiv farge", systemImage: "plus") {
-            dokument.farger.append(PalettFarge(farge: arbeidsbenk.aktivFarge))
-        }
-        .help("Legg til aktiv farge")
-        LimInnFargerKnapp { dokument.farger += $0 }
+        LimInnFargerKnapp { farger in kontekst.angresteg("Lim inn farger") { dokument.farger += farger } }
         Button("Kontrast", systemImage: "circle.lefthalf.filled") { visKontrast = true }
             .disabled(dokument.farger.count < 2)
             .help("Kontrastmatrise")
-        Button("Se i lys", systemImage: "lightbulb") { visILys = true }
-            .disabled(dokument.farger.isEmpty)
-            .help("Se paletten i et lysmiljø")
+        Toggle(isOn: $seILys) {
+            Label("Se i lys", systemImage: seILys ? "lightbulb.fill" : "lightbulb")
+        }
+        .toggleStyle(.button)
+        .disabled(dokument.farger.isEmpty)
+        .help(seILys ? "Vis fargene uten lys" : "Se fargene i et lysmiljø")
         Button {
             Task { await vurder() }
         } label: {

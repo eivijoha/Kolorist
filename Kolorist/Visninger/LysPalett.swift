@@ -32,88 +32,126 @@ struct LysmiljøVelger: View {
     }
 }
 
-/// Hele paletten i et lysmiljø: hver farge på skjermen og i lyset, fargeskiftet, og fargepar som blir vanskelige
-/// å skille.
-struct PalettILysArk: View {
-    let navn: String
+/// «Se i lys» i palettvisningen: hver farge i lysmiljøet, fargeskiftet, og fargepar som blir vanskelige å skille.
+/// Beregnes én gang per tegning; slås opp etter fargens id.
+struct PalettLys {
+    let miljø: Lysmiljø
+    let somFoto: Bool
     let farger: [PalettFarge]
+    let analyse: PalettILys
+    private let indeks: [UUID: Int]
+
+    init(farger: [PalettFarge], miljø: Lysmiljø, somFoto: Bool) {
+        self.miljø = miljø
+        self.somFoto = somFoto
+        self.farger = farger
+        analyse = miljø.palett(farger.map(\.farge))
+        indeks = Dictionary(farger.enumerated().map { ($1.id, $0) }, uniquingKeysWith: { a, _ in a })
+    }
+
+    /// Fargen slik den vises i lyset (øyets inntrykk, eller som et foto).
+    func iLyset(_ pf: PalettFarge) -> Farge? {
+        guard let i = indeks[pf.id] else { return nil }
+        return somFoto ? miljø.somFoto(pf.farge) : analyse.sett[i]
+    }
+
+    func skift(_ pf: PalettFarge) -> Double? { indeks[pf.id].map { analyse.fargeskift[$0] } }
+}
+
+/// Valgene over palettens farger når «Se i lys» er på: lysmiljø, og om fargene vises slik øyet ser dem eller som et foto.
+struct PalettLysValg: View {
+    let lys: PalettLys
     @State private var bibliotek = Lysbibliotek.delt
     @AppStorage("seILys.somFoto") private var somFoto = false
-    @Environment(\.dismiss) private var lukk
 
     var body: some View {
-        let miljø = bibliotek.gjeldendeLysmiljø
-        let ff = farger.map(\.farge)
-        let analyse = miljø.palett(ff)
-        let skift = analyse.fargeskift, par = analyse.sammenfallendePar
-        NavigationStack {
-            Form {
-                Section {
-                    LysmiljøVelger(valgt: Binding(get: { miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
-                    Picker("Vis", selection: $somFoto) {
-                        Text("Slik øyet ser det").tag(false)
-                        Text("Som et foto").tag(true)
-                    }
-                    .pickerStyle(.segmented)
-                    LabeledContent("Lys") { Text(Lysbeskrivelse.tekst(miljø)).monospacedDigit() }
-                    if miljø.harUjevntSpekter {
-                        Label("Lysrør og LED har ujevne spektre. Fargenes spektre er anslått, så ekte flater kan endre seg annerledes (metameri).", systemImage: "info.circle")
-                            .font(.footnote)
-                            .foregroundStyle(Color.sekundærTekst)
-                    }
-                }
-                Section {
-                    ForEach(Array(farger.enumerated()), id: \.offset) { i, pf in
-                        HStack(spacing: 10) {
-                            pf.farge.swiftUI.frame(width: 44, height: 36).clipShape(RoundedRectangle(cornerRadius: 6))
-                            (somFoto ? miljø.somFoto(pf.farge) : analyse.sett[i]).swiftUI
-                                .frame(width: 44, height: 36).clipShape(RoundedRectangle(cornerRadius: 6))
-                            Text(pf.etikett).lineLimit(1)
-                            Spacer()
-                            Text("ΔE00 \(skift[i], format: .number.precision(.fractionLength(1)))")
-                                .monospacedDigit()
-                                .foregroundStyle(skift[i] >= 3 ? Color.advarsel : Color.sekundærTekst)
-                        }
-                        .accessibilityElement(children: .combine)
-                    }
-                } header: {
-                    Text("På skjermen · i lyset")
-                } footer: {
-                    Text("Fargeskiftet er hvor mye fargen endrer karakter når øyet har tilpasset seg lyset; over 3 merkes det tydelig.")
-                }
-                if !par.isEmpty {
-                    Section {
-                        ForEach(par, id: \.self) { p in
-                            HStack(spacing: 6) {
-                                analyse.sett[p.a].swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
-                                analyse.sett[p.b].swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
-                                Text("\(farger[p.a].etikett) og \(farger[p.b].etikett)").lineLimit(2)
-                                Spacer()
-                                Text("ΔE00 \(p.påSkjerm, format: .number.precision(.fractionLength(0))) → \(p.iLyset, format: .number.precision(.fractionLength(1)))")
-                                    .font(.callout.monospacedDigit())
-                                    .foregroundStyle(Color.advarsel)
-                            }
-                        }
-                    } header: {
-                        Text("Vanskelige å skille i dette lyset")
-                    } footer: {
-                        Text("Fargepar som skilles godt på skjermen (ΔE00 minst 6), men nesten ikke i lyset (under 3) – typisk i svakt lys, der fargene blir mindre fargerike.")
-                    }
-                }
-                Section {
-                    MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
-                }
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemName: "lightbulb.fill").foregroundStyle(Color.accentColor)
+                LysmiljøVelger(valgt: Binding(get: { lys.miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
+                    .labelsHidden()
+                    .fixedSize()
+                Spacer(minLength: 0)
+                Text(Lysbeskrivelse.tekst(lys.miljø)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
             }
-            .formStyle(.grouped)
-            .navigationTitle(String(localized: "«\(navn)» i lys"))
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Ferdig") { lukk() } } }
+            Picker("Vis", selection: $somFoto) {
+                Text("Slik øyet ser det").tag(false)
+                Text("Som et foto").tag(true)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            Text("Øverst i hver rute: fargen på skjermen. Nederst: fargen i lyset, med fargeskiftet (ΔE00); over 3 merkes det tydelig.")
+                .font(.footnote)
+                .foregroundStyle(Color.sekundærTekst)
+            if lys.miljø.harUjevntSpekter {
+                Label("Lysrør og LED har ujevne spektre. Fargenes spektre er anslått, så ekte flater kan endre seg annerledes (metameri).", systemImage: "info.circle")
+                    .font(.footnote)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
         }
-        #if os(macOS)
-        .frame(minWidth: 480, minHeight: 560)
-        #endif
+        .padding(12)
+        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
+/// Nedre halvdel av en fargerute i «Se i lys»: fargen i lyset og fargeskiftet.
+struct LysHalvdel: View {
+    let farge: Farge
+    let skift: Double
+    var hjørne: CGFloat = 12
+
+    var body: some View {
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                Spacer(minLength: 0)
+                UnevenRoundedRectangle(bottomLeadingRadius: hjørne, bottomTrailingRadius: hjørne, style: .continuous)
+                    .fill(farge.swiftUI)
+                    .frame(height: geo.size.height / 2)
+                    .overlay(alignment: .bottomLeading) {
+                        HStack(spacing: 3) {
+                            if skift >= 3 { Image(systemName: "exclamationmark.triangle.fill") }
+                            Text("ΔE00 \(skift, format: .number.precision(.fractionLength(1)))")
+                        }
+                        .font(.caption2.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(farge.lesbarTekstfarge.swiftUI)
+                        .padding(8)
+                    }
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("I lyset: \(farge.hex()), fargeskift \(skift.formatted(.number.precision(.fractionLength(1))))")
+    }
+}
+
+/// Fargepar som skilles godt på skjermen, men nesten ikke i lyset; under palettens farger når «Se i lys» er på.
+struct PalettLysPar: View {
+    let lys: PalettLys
+
+    var body: some View {
+        let par = lys.analyse.sammenfallendePar, sett = lys.analyse.sett, farger = lys.farger
+        VStack(alignment: .leading, spacing: 8) {
+            if !par.isEmpty {
+                Text("Vanskelige å skille i dette lyset").font(.headline)
+                ForEach(par, id: \.self) { p in
+                    HStack(spacing: 6) {
+                        sett[p.a].swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
+                        sett[p.b].swiftUI.frame(width: 28, height: 28).clipShape(RoundedRectangle(cornerRadius: 5))
+                        Text("\(farger[p.a].etikett) og \(farger[p.b].etikett)").lineLimit(2)
+                        Spacer()
+                        Text("ΔE00 \(p.påSkjerm, format: .number.precision(.fractionLength(0))) → \(p.iLyset, format: .number.precision(.fractionLength(1)))")
+                            .font(.callout.monospacedDigit())
+                            .foregroundStyle(Color.advarsel)
+                    }
+                    .accessibilityElement(children: .combine)
+                }
+                Text("Fargepar som skilles godt på skjermen (ΔE00 minst 6), men nesten ikke i lyset (under 3) – typisk i svakt lys, der fargene blir mindre fargerike.")
+                    .font(.footnote)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
+            MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

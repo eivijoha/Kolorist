@@ -142,10 +142,23 @@ final class Lysbibliotek {
         skriv()
     }
 
+    /// Sletter et eget lysmiljø; kan angres (rist eller ⌘Z) via vinduets angrehistorikk.
     func slett(_ miljø: Lysmiljø) {
-        lysmiljøer.removeAll { $0.id == miljø.id }
-        if valgtLysmiljø == miljø.id { valgtLysmiljø = nil }
+        guard let plass = lysmiljøer.firstIndex(where: { $0.id == miljø.id }) else { return }
+        let varValgt = valgtLysmiljø == miljø.id
+        lysmiljøer.remove(at: plass)
+        if varValgt { valgtLysmiljø = nil }
         skriv()
+        if let angring = Arbeidsbenk.delt.angring {
+            angring.registerUndo(withTarget: self) { bibliotek in
+                bibliotek.lysmiljøer.insert(miljø, at: min(plass, bibliotek.lysmiljøer.count))
+                if varValgt { bibliotek.valgtLysmiljø = miljø.id }
+                bibliotek.skriv()
+                angring.registerUndo(withTarget: bibliotek) { $0.slett(miljø) }
+                angring.setActionName(String(localized: "Slett lysmiljø"))
+            }
+            angring.setActionName(String(localized: "Slett lysmiljø"))
+        }
     }
 
     // MARK: Referansekort
@@ -155,10 +168,23 @@ final class Lysbibliotek {
         skriv()
     }
 
+    /// Sletter et referansekort (og karakteriseringen for det); kan angres.
     func slett(_ kort: Referansekort) {
-        referansekort.removeAll { $0.id == kort.id }
+        guard let plass = referansekort.firstIndex(where: { $0.id == kort.id }) else { return }
+        let karakterisering = karakteriseringer[kort.id]
+        referansekort.remove(at: plass)
         karakteriseringer[kort.id] = nil
         skriv()
+        if let angring = Arbeidsbenk.delt.angring {
+            angring.registerUndo(withTarget: self) { bibliotek in
+                bibliotek.referansekort.insert(kort, at: min(plass, bibliotek.referansekort.count))
+                bibliotek.karakteriseringer[kort.id] = karakterisering
+                bibliotek.skriv()
+                angring.registerUndo(withTarget: bibliotek) { $0.slett(kort) }
+                angring.setActionName(String(localized: "Slett referansekort"))
+            }
+            angring.setActionName(String(localized: "Slett referansekort"))
+        }
     }
 
     func oppdater(_ kort: Referansekort) {

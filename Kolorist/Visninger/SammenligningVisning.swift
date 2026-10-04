@@ -29,21 +29,17 @@ struct SammenligningVisning: View {
         let de00 = a.deltaE2000(til: b)
         return Form {
             Section {
+                // De store flatene er selve velgerne: trykk for å endre, slipp en farge på dem, eller hold inne for mer.
                 HStack(spacing: 0) {
-                    a.swiftUI
-                    b.swiftUI
+                    FargeflateVelger(bokstav: "A", tittel: String(localized: "Farge A"), farge: $a, kant: .leading)
+                    FargeflateVelger(bokstav: "B", tittel: String(localized: "Farge B"), farge: $b, kant: .trailing)
                 }
-                .frame(height: 120)
+                .frame(height: 140)
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .overlay(alignment: .bottom) {
-                    HStack {
-                        Text("A").padding(8).foregroundStyle(a.lesbarTekstfarge.swiftUI)
-                        Spacer()
-                        Text("B").padding(8).foregroundStyle(b.lesbarTekstfarge.swiftUI)
-                    }
-                    .font(.headline)
-                }
+                // Tynn kant, så hvite og svært lyse flater synes mot kortet.
+                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(.secondary.opacity(0.3), lineWidth: 1))
                 .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
 
                 VStack(spacing: 2) {
                     Text("ΔE00 \(de00, format: .number.precision(.fractionLength(2)))")
@@ -54,9 +50,6 @@ struct SammenligningVisning: View {
                 .padding(.vertical, 6)
                 .accessibilityElement(children: .combine)
             }
-
-            Section { FargeValgRad(tittel: String(localized: "Farge A"), farge: $a) }
-            Section { FargeValgRad(tittel: String(localized: "Farge B"), farge: $b) }
 
             Section {
                 let la = a.cieLab, lb = b.cieLab, ca = a.cieLCH, cb = b.cieLCH
@@ -97,6 +90,72 @@ struct SammenligningVisning: View {
         var d = h2 - h1
         if d > 180 { d -= 360 } else if d < -180 { d += 360 }
         return d
+    }
+}
+
+/// Halvparten av det store fargefeltet i «Forskjell», som også er velgeren for fargen. Merket nederst (bokstav, hex og
+/// blyant) viser at flaten kan trykkes på.
+private struct FargeflateVelger: View {
+    let bokstav: String
+    let tittel: String
+    @Binding var farge: Farge
+    let kant: HorizontalAlignment
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @State private var visVelger = false
+    @State private var målrettet = false
+
+    var body: some View {
+        Button { visVelger = true } label: {
+            farge.swiftUI
+                .overlay(alignment: Alignment(horizontal: kant, vertical: .bottom)) { merke.padding(10) }
+                .overlay {
+                    if målrettet { Rectangle().strokeBorder(Color.accentColor, lineWidth: 3) }
+                }
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(Flatetrykk())
+        #if os(iOS)
+        .hoverEffect(.highlight)
+        #endif
+        .contextMenu {
+            Button("Velg farge …", systemImage: "square.grid.2x2") { visVelger = true }
+            Button("Aktiv farge", systemImage: "slider.horizontal.3") { farge = arbeidsbenk.aktivFarge }
+            Button("Lim inn", systemImage: "doc.on.clipboard") { if let f = Utklippstavle.limInn() { farge = f } }
+            #if os(macOS)
+            Button("Plukk fra skjermen", systemImage: "eyedropper") {
+                Task { if let f = await Pipette.plukkFraSkjerm() { farge = f; arbeidsbenk.registrerMåling(f) } }
+            }
+            #endif
+        }
+        .tarImotFarger { farger in
+            guard let f = farger.first else { return false }
+            farge = f.farge
+            return true
+        } isTargeted: { målrettet = $0 }
+        .accessibilityLabel("\(tittel): \(farge.hex())")
+        .accessibilityHint("Trykk for å velge en annen farge")
+        .sheet(isPresented: $visVelger) {
+            LagretFargeArk(tittel: tittel) { farge = $0 }
+        }
+    }
+
+    private var merke: some View {
+        HStack(spacing: 6) {
+            Text(bokstav).font(.headline)
+            Text(farge.hex()).font(.caption.monospaced())
+            Image(systemName: "pencil").font(.caption.weight(.semibold))
+        }
+        .foregroundStyle(.primary)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(.regularMaterial, in: Capsule())
+    }
+}
+
+/// Lett dimming mens flaten trykkes, så den kjennes som en knapp.
+private struct Flatetrykk: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label.opacity(configuration.isPressed ? 0.75 : 1)
     }
 }
 

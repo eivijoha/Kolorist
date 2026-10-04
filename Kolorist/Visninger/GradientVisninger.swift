@@ -56,10 +56,14 @@ struct GradientSeksjon: View {
         .confirmationDialog("Slette «\(slettes?.navn ?? "")»?", isPresented: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } }),
                             titleVisibility: .visible) {
             Button("Slett gradient", role: .destructive) {
-                if let slettes { kontekst.delete(slettes) }
+                if let slettes { kontekst.angresteg("Slett gradient") { kontekst.delete(slettes) } }
             }
         } message: {
-            Text("Dette kan ikke angres.")
+            #if os(macOS)
+            Text("Du kan angre med ⌘Z.")
+            #else
+            Text("Rist for å angre.")
+            #endif
         }
         .sheet(item: $somPalett) { g in
             VelgPalettArk(farger: (g.oppsett?.rader ?? []).flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) },

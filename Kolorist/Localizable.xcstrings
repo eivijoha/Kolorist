@@ -1450,6 +1450,16 @@
         }
       }
     },
+    "Du kan angre med ⌘Z.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can undo with ⌘Z."
+          }
+        }
+      }
+    },
     "Du kan også dra filer hit.": {
       "localizations": {
         "en": {
@@ -1540,6 +1550,26 @@
         }
       }
     },
+    "Endre harmoni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change harmony"
+          }
+        }
+      }
+    },
+    "Endre lysere og mørkere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change lighter and darker"
+          }
+        }
+      }
+    },
     "Endre navnet": {
       "localizations": {
         "en": {
@@ -1556,6 +1586,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rename the palette"
+          }
+        }
+      }
+    },
+    "Endre overgang": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change gradient"
           }
         }
       }
@@ -1756,6 +1796,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "The colours and gradients in the palette are deleted too. This cannot be undone."
+          }
+        }
+      }
+    },
+    "Fargene og gradientene i paletten slettes også. Du kan angre med ⌘Z.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colours and gradients in the palette are deleted too. You can undo with ⌘Z."
+          }
+        }
+      }
+    },
+    "Fargene og gradientene i paletten slettes også. Rist for å angre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colours and gradients in the palette are deleted too. Shake to undo."
           }
         }
       }
@@ -2787,6 +2847,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "What does the colour look like?"
+          }
+        }
+      }
+    },
+    "I lyset: %@, fargeskift %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "I lyset: %1$@, fargeskift %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the light: %1$@, colour shift %2$@"
           }
         }
       }
@@ -4271,6 +4347,36 @@
         }
       }
     },
+    "Legg til aktiv farge, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add active colour, %@"
+          }
+        }
+      }
+    },
+    "Legg til den aktive fargen, eller slipp farger her": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add the active colour, or drop colours here"
+          }
+        }
+      }
+    },
+    "Legg til farge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add colour"
+          }
+        }
+      }
+    },
     "Legg til i paletter": {
       "localizations": {
         "en": {
@@ -5653,6 +5759,16 @@
         }
       }
     },
+    "Rist for å angre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shake to undo."
+          }
+        }
+      }
+    },
     "Roter": {
       "localizations": {
         "en": {
@@ -5703,6 +5819,16 @@
         }
       }
     },
+    "Se fargene i et lysmiljø": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See the colours in a viewing condition"
+          }
+        }
+      }
+    },
     "Se i lys": {
       "localizations": {
         "en": {
@@ -5739,16 +5865,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "View your surroundings with the camera"
-          }
-        }
-      }
-    },
-    "Se paletten i et lysmiljø": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "See the palette in a viewing condition"
           }
         }
       }
@@ -5969,12 +6085,32 @@
         }
       }
     },
+    "Slett farge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete colour"
+          }
+        }
+      }
+    },
     "Slett gradient": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Delete gradient"
+          }
+        }
+      }
+    },
+    "Slett lysmiljø": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete viewing condition"
           }
         }
       }
@@ -5995,6 +6131,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete profile"
+          }
+        }
+      }
+    },
+    "Slett referansekort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete reference card"
           }
         }
       }
@@ -6691,6 +6837,16 @@
         }
       }
     },
+    "Trykk for å velge en annen farge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to choose another colour"
+          }
+        }
+      }
+    },
     "Trykk og hold på bildet for å sammenligne med normalt syn.": {
       "localizations": {
         "en": {
@@ -7007,6 +7163,16 @@
         }
       }
     },
+    "Velg farge …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose colour …"
+          }
+        }
+      }
+    },
     "Velg fargerommet som vises ved siden av fargen": {
       "localizations": {
         "en": {
@@ -7203,6 +7369,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show the colour ${beskrivelse}"
+          }
+        }
+      }
+    },
+    "Vis fargene uten lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the colours without light"
           }
         }
       }
@@ -7583,6 +7759,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opens the gradient in Gradient"
+          }
+        }
+      }
+    },
+    "Øverst i hver rute: fargen på skjermen. Nederst: fargen i lyset, med fargeskiftet (ΔE00); over 3 merkes det tydelig.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top of each tile: the colour on screen. Bottom: the colour in the light, with the colour shift (ΔE00); above 3 it is clearly noticeable."
           }
         }
       }
