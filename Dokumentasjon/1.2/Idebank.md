@@ -144,3 +144,33 @@ avispapir …).
 - Da kan en CMYK-profils papirhvitt (hvitpunktet) gjengis i en annen ICC-profils fargerom med absolutt kolorimetrisk
   gjengivelse – for eksempel hvordan avispapiret ser ut på skjermen eller i en annen trykkprofil.
 - Henger sammen med «rene CMYK-verdier» og fargekart i CMYK: verdiene må tolkes i samme profil som de er laget i.
+
+## Til 1.3: App Clip for delingslenker (vurdert 2026-10-04)
+
+Idé: en App Clip – en liten del av appen som åpnes uten installasjon – for mottakere av `kolorist.no/l#…` som ikke har
+Kolorist på iPhone eller iPad.
+
+**Hva den kan gi utover visningssiden på nettet**
+- Fargene vist riktig i Display P3 (nettleseren klipper ofte til sRGB) og med appens egne verdier (Munsell, CMYK i profil).
+- «Kopier til» og «Lagre som» med appens egne formater – ASE, design tokens, gradienter til designprogrammer – rett fra
+  lenken, uten å lage formatene på nytt i JavaScript.
+- Kort vei til full app: App Clip-kortet viser appen, og fargene kan følge med over når appen installeres (felles
+  app-gruppe).
+
+**Begrensninger**
+- Bare iPhone og iPad. Mac og Windows får fortsatt visningssiden.
+- Lite lagring og ingen iCloud-synk; paletter kan ikke lagres i App Clip-en, bare vises, kopieres og eksporteres.
+- Størrelsesgrense for App Clips: FargeKjerne med Munsell-data, ICC og eksport må holde seg under. Filamentdata og
+  KI-biblioteket utelates.
+- Eget mål i prosjektet, egen gjennomgang hos Apple og «App Clip-opplevelse» i App Store Connect (bilde, tekst, knapp).
+
+**Må sjekkes før vi bestemmer oss**
+- Størrelsesgrensen for App Clips på iOS 26, og hva FargeKjerne og et minimalt grensesnitt veier.
+- At App Clip-en får hele adressen, også delen etter `#` (innholdet ligger bare der).
+- AASA-fila trenger nøkkelen `appclips` i tillegg til `applinks`, og visningssiden en meta-tag for App Clip-banneret.
+- Hvordan App Clip-kortet og visningssiden spiller sammen: kortet vises i Safari og Meldinger, siden fortsatt for alle
+  andre.
+
+**Vurdering:** Verdien er størst om lenker deles mye til folk uten appen, og kopiering rett inn i designverktøy er det
+som skiller den fra visningssiden. Alternativet er å la visningssiden få «Last ned ASE» og «Kopier som …» – billigere,
+og virker også på Mac og Windows. Mulig rekkefølge: først visningssiden, App Clip etterpå hvis lenkene brukes mye.
