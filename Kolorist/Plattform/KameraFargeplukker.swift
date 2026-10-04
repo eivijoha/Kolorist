@@ -22,6 +22,7 @@ final class KameraFargeplukker {
     /// Neste trykk i bildet registrerer et gråkort i stedet for å fange en farge.
     private(set) var venterPåGråkort = false
     @ObservationIgnored private var gråkortRefleksjon = 0.18
+    @ObservationIgnored private var gråkortProfil: Kamerakarakterisering?
     /// Lyset slik kameraet anslår det: fra hvitbalansen (før låsing) og eksponeringen, eller fra et kort.
     private(set) var lysmåling: Lysmåling?
     @ObservationIgnored private var sistLysmåling = Date.distantPast
@@ -160,14 +161,20 @@ final class KameraFargeplukker {
         låsHvitbalanseTilDagslys()
         kompensasjon = .hvitpunkt(målt)
         if let t = målt.fargetemperatur {
-            lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: lysmåling?.lux, metode: .kamera)
+            lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, metode: .kamera)
         }
         #endif
     }
 
     /// Neste trykk i bildet er på et grått eller hvitt kort med kjent refleksjon.
-    func ventPåGråkort(refleksjon: Double) {
+    /// Med en kameraprofil (iPhone/iPad) gir gråkortet også lysets farge gjennom profilen.
+    func ventPåGråkort(refleksjon: Double, profil: Kamerakarakterisering? = nil) {
         gråkortRefleksjon = refleksjon
+        #if os(iOS)
+        gråkortProfil = profil
+        #else
+        gråkortProfil = nil
+        #endif
         venterPåGråkort = true
         #if os(iOS)
         låsHvitbalanseTilDagslys()
@@ -179,7 +186,8 @@ final class KameraFargeplukker {
     private func registrerGråkort(_ målt: Farge) {
         venterPåGråkort = false
         låsEksponering()
-        let komp = Lyskompensasjon.gråkort(målt: målt, refleksjon: gråkortRefleksjon)
+        let komp: Lyskompensasjon = gråkortProfil.map { .kameraprofil($0, gråkort: målt, refleksjon: gråkortRefleksjon) }
+            ?? .gråkort(målt: målt, refleksjon: gråkortRefleksjon)
         kompensasjon = komp
         #if os(macOS)
         // macOS gir ikke hvitbalanse eller eksponering, og bildet er allerede hvitbalansert: ingen lysmåling.
@@ -218,24 +226,21 @@ final class KameraFargeplukker {
         leser.taStillbilde()
     }
 
-    /// Lyset fra kameraets automatiske hvitbalanse og eksponering (iPhone/iPad). Lux anslås som om motivet i
-    /// snitt er midtgrått – grovt.
+    /// Lyset fra kameraets automatiske hvitbalanse (iPhone/iPad). Lux vises bare med kort i bildet (for grovt uten).
     private func målLysFraKamera() -> Lysmåling? {
         #if os(iOS)
         guard let enhet, enhet.whiteBalanceMode != .locked else { return lysmåling }
         let g = Self.begrenset(enhet.deviceWhiteBalanceGains, enhet: enhet)
         let c = enhet.chromaticityValues(for: g)
         guard let t = Kolorimetri.fargetemperatur(x: Double(c.x), y: Double(c.y)) else { return nil }
-        let l = Eksponeringsmåling.luminans(lineærVerdi: 0.18, blender: Double(enhet.lensAperture),
-                                            lukkertid: CMTimeGetSeconds(enhet.exposureDuration), iso: Double(enhet.iso))
-        return Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: Eksponeringsmåling.lux(luminans: l, refleksjon: 0.18),
-                         metode: .kamera)
+        return Lysmåling(kelvin: t.kelvin, duv: t.duv, metode: .kamera)
         #else
         return nil
         #endif
     }
 
-    private func luxFraKort(_ målt: Farge, refleksjon: Double) -> Double? {
+    /// Lux fra kamerafargen til et kort eller felt med kjent refleksjon og gjeldende eksponering (iPhone/iPad).
+    func luxFraKort(_ målt: Farge, refleksjon: Double) -> Double? {
         #if os(iOS)
         guard let enhet else { return nil }
         let l = Eksponeringsmåling.luminans(lineærVerdi: målt.xyz.y, blender: Double(enhet.lensAperture),
@@ -360,6 +365,14 @@ final class KameraFargeplukker {
     /// Om kameraet er en iPhone (eget kamera på iPhone/iPad, eller Continuity-kamera på Mac). Lyskompensasjon med
     /// kort tilbys bare da.
     private(set) var erIPhoneKamera = false
+    /// Om lyset kan måles (hvitbalansen kan låses til dagslys): iPhone og iPad, ikke Mac.
+    var målerLys: Bool {
+        #if os(iOS)
+        true
+        #else
+        false
+        #endif
+    }
     /// Kameraet som er i bruk (for valget på Mac).
     private(set) var kameraID: String?
 

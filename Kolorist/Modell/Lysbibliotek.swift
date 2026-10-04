@@ -14,6 +14,9 @@ final class Lysbibliotek {
     private(set) var referansekort: [Referansekort] = []
     /// Siste karakterisering per kort (kortets id). En karakterisering gjelder lyset den ble laget i.
     private(set) var karakteriseringer: [UUID: LagretKarakterisering] = [:]
+    /// Kameraprofiler per kamera (navn): en karakterisering som beskriver kameraet, ikke lyset, så et gråkort holder
+    /// i nytt lys. Gjelder bare med hvitbalansen låst til dagslys (iPhone/iPad).
+    private(set) var kameraprofiler: [String: LagretKarakterisering] = [:]
     /// Lysmiljøet «Se i lys» viser (id fra `alleLysmiljøer`).
     var valgtLysmiljø: UUID? {
         didSet { lokalt.set(valgtLysmiljø?.uuidString, forKey: Nøkkel.valgt) }
@@ -73,6 +76,7 @@ final class Lysbibliotek {
         static let miljøer = "lys.miljøer"
         static let kort = "lys.referansekort"
         static let karakteriseringer = "lys.karakteriseringer"
+        static let kameraprofiler = "lys.kameraprofiler"
         static let valgt = "lys.valgtMiljø"
     }
 
@@ -121,6 +125,24 @@ final class Lysbibliotek {
         skriv()
     }
 
+    func oppdater(_ kort: Referansekort) {
+        guard let i = referansekort.firstIndex(where: { $0.id == kort.id }) else { return }
+        referansekort[i] = kort
+        skriv()
+    }
+
+    func kameraprofil(for kamera: String) -> LagretKarakterisering? { kameraprofiler[kamera] }
+
+    func lagreKameraprofil(_ k: Kamerakarakterisering, kamera: String) {
+        kameraprofiler[kamera] = LagretKarakterisering(karakterisering: k, dato: .now, kamera: kamera)
+        skriv()
+    }
+
+    func fjernKameraprofil(for kamera: String) {
+        kameraprofiler[kamera] = nil
+        skriv()
+    }
+
     func lagre(_ k: Kamerakarakterisering, for kort: Referansekort, kamera: String) {
         karakteriseringer[kort.id] = LagretKarakterisering(karakterisering: k, dato: .now, kamera: kamera)
         skriv()
@@ -145,6 +167,7 @@ final class Lysbibliotek {
         lysmiljøer = les(Nøkkel.miljøer, som: [Lysmiljø].self) ?? []
         referansekort = les(Nøkkel.kort, som: [Referansekort].self) ?? []
         karakteriseringer = les(Nøkkel.karakteriseringer, som: [UUID: LagretKarakterisering].self) ?? [:]
+        kameraprofiler = les(Nøkkel.kameraprofiler, som: [String: LagretKarakterisering].self) ?? [:]
     }
 
     private func skriv() {
@@ -154,6 +177,7 @@ final class Lysbibliotek {
             (Nøkkel.miljøer, try? koder.encode(lysmiljøer)),
             (Nøkkel.kort, try? koder.encode(referansekort)),
             (Nøkkel.karakteriseringer, try? koder.encode(karakteriseringer)),
+            (Nøkkel.kameraprofiler, try? koder.encode(kameraprofiler)),
         ]
         for (nøkkel, data) in verdier where !ulesbare.contains(nøkkel) {
             guard let data else { continue }

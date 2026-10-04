@@ -20,6 +20,7 @@ public enum Referanseimport {
     public static func les(_ data: Data, filnavn: String) throws -> Referansekort {
         let navn = (filnavn as NSString).deletingPathExtension
         let felt: [Referansefelt]
+        var treKolonnerSkala: Double?
         if Bibliotekimport.endelse(for: data) != nil {
             let palett = try Bibliotekimport.les(data, filnavn: filnavn)
             felt = palett.farger.map { Referansefelt(navn: $0.navn, verdi: .lab($0.farge.cieLab)) }
@@ -29,13 +30,15 @@ public enum Referanseimport {
             } else if tekst.contains("BEGIN_DATA") {
                 felt = try CGATS.les(tekst)
             } else {
-                felt = try Tabell.les(tekst)
+                (felt, treKolonnerSkala) = try Tabell.les(tekst)
             }
         } else {
             throw Feil.ukjentFormat
         }
         guard !felt.isEmpty else { throw Feil.ingenFelt }
-        return ordnet(felt, navn: navn, kilde: filnavn)
+        var kort = ordnet(felt, navn: navn, kilde: filnavn)
+        kort.treKolonnerSkala = treKolonnerSkala
+        return kort
     }
 
     // MARK: Rekkefølge og oppsett
@@ -190,7 +193,8 @@ public enum Referanseimport {
     // MARK: CSV, TSV og rene tallmatriser
 
     enum Tabell {
-        static func les(_ tekst: String) throws -> [Referansefelt] {
+        /// Feltene, og skalaen for XYZ når verdiene var tre kolonner uten overskrift (tolkningen er et valg).
+        static func les(_ tekst: String) throws -> ([Referansefelt], Double?) {
             let linjer = tekst.components(separatedBy: .newlines)
                 .map { $0.trimmingCharacters(in: .whitespaces) }
                 .filter { !$0.isEmpty && !$0.hasPrefix("#") }
@@ -206,7 +210,7 @@ public enum Referanseimport {
                 // Overskrifter. Kjenner vi ingen kolonner, prøver vi første kolonne som navn og resten som tall.
                 let kolonner = rader[0].map(kolonne)
                 let resultat = felt(rader: Array(rader.dropFirst()), kolonner: kolonner)
-                if !resultat.isEmpty { return resultat }
+                if !resultat.isEmpty { return (resultat, nil) }
                 return matrise(rader.dropFirst().map { Array($0.dropFirst()) }, navn: rader.dropFirst().map { $0.first ?? "" })
             }
             return matrise(rader, navn: nil)
@@ -225,9 +229,9 @@ public enum Referanseimport {
 
         /// En ren tallmatrise: hver rad et felt (eller hver kolonne, hvis det passer bedre), med Lab, XYZ eller
         /// spekter. En første kolonne med løpenummer eller bølgelengder kjennes igjen.
-        static func matrise(_ tekstrader: [[String]], navn: [String]?) -> [Referansefelt] {
+        static func matrise(_ tekstrader: [[String]], navn: [String]?) -> ([Referansefelt], Double?) {
             var m = tekstrader.map { $0.compactMap { Double($0.replacingOccurrences(of: ",", with: ".")) } }.filter { !$0.isEmpty }
-            guard let bredde = m.first?.count, m.allSatisfy({ $0.count == bredde }) else { return [] }
+            guard let bredde = m.first?.count, m.allSatisfy({ $0.count == bredde }) else { return ([], nil) }
             var start: Double?, steg: Double?
             // Bølgelengder i første kolonne → kolonnene er felt.
             let førsteKolonne = m.map { $0[0] }
@@ -248,9 +252,11 @@ public enum Referanseimport {
             if let b = m.first?.count, b == 4, m.enumerated().allSatisfy({ $1[0] == Double($0 + 1) }) {
                 m = m.map { Array($0.dropFirst()) }
             }
-            guard let b = m.first?.count else { return [] }
+            guard let b = m.first?.count else { return ([], nil) }
             let felt: [Referanseverdi]
+            var treKolonnerSkala: Double?
             if b == 3 {
+                treKolonnerSkala = (m.map { $0[1] }.max() ?? 0) > 2 ? 0.01 : 1
                 // Lab hvis andre og tredje verdi har negative tall eller første er lyshet; ellers XYZ.
                 let harNegative = m.contains { $0[1] < 0 || $0[2] < 0 }
                 if harNegative || m.allSatisfy({ $0[0] <= 100 }) && !m.allSatisfy({ $0[0] <= 1.5 && $0[1] <= 1.5 }) {
@@ -263,11 +269,11 @@ public enum Referanseimport {
                 let skala = (m.flatMap { $0 }.max() ?? 0) > 1.5 ? 0.01 : 1
                 felt = m.map { .spekter(Spektrum(start: oppsett.0, steg: oppsett.1, verdier: $0.map { $0 * skala })) }
             } else {
-                return []
+                return ([], nil)
             }
-            return felt.enumerated().map { i, v in
+            return (felt.enumerated().map { i, v in
                 Referansefelt(navn: navn.flatMap { i < $0.count ? $0[i] : nil } ?? "", verdi: v)
-            }
+            }, treKolonnerSkala)
         }
 
         static func transponert(_ m: [[Double]]) -> [[Double]] {

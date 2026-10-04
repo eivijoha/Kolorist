@@ -28,11 +28,14 @@ public struct Lysmiljø: Hashable, Codable, Sendable, Identifiable {
     /// 1. Flaten under miljøets lys: spektralt når lysets spekter er kjent (med målt eller anslått refleksjon),
     ///    ellers med full CAT16 fra D65 til miljøets hvitpunkt.
     /// 2. Inntrykket i miljøet (CAM16 med miljøets hvitpunkt og lysstyrke; øyet tilpasser seg bare delvis).
-    /// 3. Den skjermfargen som gir samme inntrykk (CAM16 baklengs med `skjerm`).
+    /// 3. Den skjermfargen som gir samme inntrykk (CAM16 baklengs med `skjerm`): samme lyshet J og samme
+    ///    fargerikhet M. Fargerikheten er absolutt, så svakt lys gir mindre fargerike farger (Hunt-effekten).
     public func sett(_ farge: Farge, refleksjon: Spektrum? = nil, skjerm: Visningsforhold = .skjerm) -> Farge {
         let iLyset = xyzUnderLyset(farge, refleksjon: refleksjon)
         let inntrykk = CAM16(visningsforhold).korrelater(iLyset)
-        return Farge(xyz: CAM16(skjerm).xyz(inntrykk), alfa: farge.alfa)
+        let skjermmodell = CAM16(skjerm)
+        let kroma = inntrykk.m / pow(skjermmodell.fl, 0.25)
+        return Farge(xyz: skjermmodell.xyz(j: inntrykk.j, c: kroma, h: inntrykk.h), alfa: farge.alfa)
     }
 
     /// Fargen slik et foto med dagslys-hvitbalanse ville vist den: lysets fulle fargestikk, uten at øyet har tilpasset
@@ -89,5 +92,35 @@ public struct Lysmåling: Hashable, Codable, Sendable {
         self.lux = lux
         self.fargegjengivelse = fargegjengivelse
         self.metode = metode
+    }
+}
+
+/// To farger som skilles godt på skjermen, men blir vanskelige å skille i et lysmiljø.
+public struct SammenfallendePar: Hashable, Sendable {
+    public let a: Int
+    public let b: Int
+    /// ΔE2000 mellom fargene på skjermen og i lyset (slik øyet ser det).
+    public let påSkjerm: Double
+    public let iLyset: Double
+}
+
+public extension Lysmiljø {
+    /// Fargeskift (ΔE2000, full tilpasning) for hver farge.
+    func fargeskift(_ farger: [Farge]) -> [Double] { farger.map { fargeskift($0) } }
+
+    /// Fargepar med minst `påSkjerm` ΔE2000 på skjermen og under `iLyset` i lysmiljøet (slik øyet ser det – svakt lys
+    /// gjør fargene mindre fargerike, og ujevne spektre kan føre farger sammen).
+    func sammenfallendePar(_ farger: [Farge], påSkjerm: Double = 6, iLyset: Double = 3) -> [SammenfallendePar] {
+        let lab = farger.map(\.cieLab)
+        let sett = farger.map { self.sett($0).cieLab }
+        var par: [SammenfallendePar] = []
+        for i in farger.indices {
+            for j in farger.indices where j > i {
+                let før = Fargeavstand.deltaE2000(lab[i], lab[j])
+                let etter = Fargeavstand.deltaE2000(sett[i], sett[j])
+                if før >= påSkjerm && etter < iLyset { par.append(SammenfallendePar(a: i, b: j, påSkjerm: før, iLyset: etter)) }
+            }
+        }
+        return par.sorted { $0.iLyset < $1.iLyset }
     }
 }

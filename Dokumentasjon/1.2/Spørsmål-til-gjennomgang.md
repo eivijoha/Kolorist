@@ -37,18 +37,18 @@ gjort, så det kan godtas eller endres.
 
 ### Oppgaver fra gjennomgangen
 
-- [ ] 26 Engelsk «viewing condition(s)»
-- [ ] 7 Merknad om anslått spekter ved lysrør/LED
-- [ ] 11 Lux bare med kort
-- [ ] 12 Eget gråkort
-- [ ] 15 Automatisk modellvalg
-- [ ] 18 Lystype «sannsynligvis», bare med kort
-- [ ] 20 Vis tolkningen av tre kolonner, med bytte Lab/XYZ
-- [ ] 23 Strengere kryssvalidering
-- [ ] 4 Se i lys for hele paletten, i Vurdering og for LRV
-- [ ] 16 Karakteriser én gang, deretter gråkort
-- [ ] 25 Kompensasjon for bilder
-- [ ] 14 Automatisk forslag til hjørner (Vision)
+- [x] 26 Engelsk «viewing condition(s)»
+- [x] 7 Merknad om anslått spekter ved lysrør/LED
+- [x] 11 Lux bare med kort
+- [x] 12 Eget gråkort
+- [x] 15 Automatisk modellvalg
+- [x] 18 Lystype «sannsynligvis», bare med kort
+- [x] 20 Vis tolkningen av tre kolonner, med bytte Lab/XYZ
+- [x] 23 Strengere kryssvalidering
+- [x] 4 Se i lys for hele paletten, i Vurdering og for LRV
+- [x] 16 Karakteriser én gang, deretter gråkort
+- [x] 25 Kompensasjon for bilder
+- [x] 14 Automatisk forslag til hjørner (Vision)
 
 ## Arkitektur og lagring
 

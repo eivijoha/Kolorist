@@ -60,6 +60,12 @@ public struct Kamerakarakterisering: Hashable, Codable, Sendable {
         }
     }
 
+    /// Tilpasser begge modellene og velger den med lavest kryssvalidert snitt-ΔE00.
+    public static func beste(kamera: [Farge], referanse: Referansekort, lys: Lyskilde = .d65) -> Kamerakarakterisering? {
+        Modell.allCases.compactMap { tilpass(kamera: kamera, referanse: referanse, lys: lys, modell: $0) }
+            .min { $0.statistikk.kryssvalidertSnittΔE < $1.statistikk.kryssvalidertSnittΔE }
+    }
+
     /// Tilpasser en karakterisering. `kamera` er fargene kameraet ga for feltene, i kortets rekkefølge.
     public static func tilpass(kamera: [Farge], referanse: Referansekort, lys: Lyskilde = .d65,
                                modell: Modell = .matrise) -> Kamerakarakterisering? {
@@ -68,7 +74,40 @@ public struct Kamerakarakterisering: Hashable, Codable, Sendable {
         guard n >= minimum else { return nil }
         let mål = referanse.felt.prefix(n).map { $0.verdi.xyz(under: lys) }
         let nøytrale = referanse.nøytrale.filter { $0 < n }
+        guard var k = tilpass(kamera: kamera, mål: mål, nøytrale: nøytrale, indekser: Array(0..<n), lys: lys, modell: modell)
+        else { return nil }
 
+        if !nøytrale.isEmpty {
+            let sum = nøytrale.reduce(XYZ(x: 0, y: 0, z: 0)) { s, i in
+                let v = kamera[i].xyz
+                return XYZ(x: s.x + v.x, y: s.y + v.y, z: s.z + v.z)
+            }
+            if sum.y > 0 { k.kameraHvit = XYZ(x: sum.x / sum.y, y: 1, z: sum.z / sum.y) }
+        }
+
+        // Treffsikkerhet, i Lab etter tilpasning til dagslys så tallene kan sammenlignes på tvers av lys.
+        let tilD65 = CAT16.matrise(fra: lys.hvitpunkt, til: Lyskilde.d65.hvitpunkt)
+        func avvik(_ v: XYZ, _ i: Int) -> Double {
+            Fargeavstand.deltaE2000(Farge(xyz: tilD65.ganget(v)).cieLab, Farge(xyz: tilD65.ganget(mål[i])).cieLab)
+        }
+        let direkte = (0..<n).map { avvik(k.xyz(fraKamera: kamera[$0]), $0) }
+        // Kryssvalidert: både tonekurven og matrisen tilpasses uten feltet som forutsies.
+        let kryss = (0..<n).map { i -> Double in
+            let uten = (0..<n).filter { $0 != i }
+            guard let ki = tilpass(kamera: kamera, mål: mål, nøytrale: nøytrale.filter { $0 != i }, indekser: uten,
+                                   lys: lys, modell: modell) else { return direkte[i] }
+            return avvik(ki.xyz(fraKamera: kamera[i]), i)
+        }
+        k.statistikk = Statistikk(antallFelt: n,
+                                  snittΔE: direkte.reduce(0, +) / Double(n), maksΔE: direkte.max() ?? 0,
+                                  kryssvalidertSnittΔE: kryss.reduce(0, +) / Double(n), kryssvalidertMaksΔE: kryss.max() ?? 0,
+                                  avvik: kryss)
+        return k
+    }
+
+    /// Tonekurve og matrise fra feltene i `indekser` (uten statistikk).
+    static func tilpass(kamera: [Farge], mål: [XYZ], nøytrale: [Int], indekser: [Int], lys: Lyskilde,
+                        modell: Modell) -> Kamerakarakterisering? {
         // Tonekurve: log(Y_ref) = log(forsterkning) + gamma · log(kamera), per kanal, fra de nøytrale feltene.
         var gamma = [1.0, 1.0, 1.0], forsterkning = [1.0, 1.0, 1.0]
         for kanal in 0..<3 {
@@ -89,40 +128,14 @@ public struct Kamerakarakterisering: Hashable, Codable, Sendable {
                 forsterkning[kanal] = exp(y - x)
             }
         }
-
         var k = Kamerakarakterisering(modell: modell, gamma: gamma, forsterkning: forsterkning, koeffisienter: [],
                                       lys: lys, kameraHvit: XYZ(x: 0.9505, y: 1, z: 1.089),
-                                      statistikk: Statistikk(antallFelt: n, snittΔE: 0, maksΔE: 0,
+                                      statistikk: Statistikk(antallFelt: indekser.count, snittΔE: 0, maksΔE: 0,
                                                              kryssvalidertSnittΔE: 0, kryssvalidertMaksΔE: 0, avvik: []))
-        let x = kamera.prefix(n).map { egenskaper(k.lineær($0), modell: modell) }
-        let y = mål.map { [$0.x, $0.y, $0.z] }
+        let x = indekser.map { egenskaper(k.lineær(kamera[$0]), modell: modell) }
+        let y = indekser.map { [mål[$0].x, mål[$0].y, mål[$0].z] }
         guard let koeff = Lineær.minsteKvadrater(x, y, ridge: 1e-6) else { return nil }
         k.koeffisienter = koeff
-
-        if !nøytrale.isEmpty {
-            let sum = nøytrale.reduce(XYZ(x: 0, y: 0, z: 0)) { s, i in
-                let v = kamera[i].xyz
-                return XYZ(x: s.x + v.x, y: s.y + v.y, z: s.z + v.z)
-            }
-            if sum.y > 0 { k.kameraHvit = XYZ(x: sum.x / sum.y, y: 1, z: sum.z / sum.y) }
-        }
-
-        // Treffsikkerhet, i Lab etter tilpasning til dagslys så tallene kan sammenlignes på tvers av lys.
-        let tilD65 = CAT16.matrise(fra: lys.hvitpunkt, til: Lyskilde.d65.hvitpunkt)
-        func avvik(_ v: XYZ, _ i: Int) -> Double {
-            Fargeavstand.deltaE2000(Farge(xyz: tilD65.ganget(v)).cieLab, Farge(xyz: tilD65.ganget(mål[i])).cieLab)
-        }
-        let direkte = (0..<n).map { avvik(k.xyz(fraKamera: kamera[$0]), $0) }
-        let kryss = (0..<n).map { i -> Double in
-            let uten = (0..<n).filter { $0 != i }
-            guard let ki = Lineær.minsteKvadrater(uten.map { x[$0] }, uten.map { y[$0] }, ridge: 1e-6) else { return direkte[i] }
-            let v = (0..<3).map { j in zip(x[i], ki).reduce(0) { $0 + $1.0 * $1.1[j] } }
-            return avvik(XYZ(x: v[0], y: v[1], z: v[2]), i)
-        }
-        k.statistikk = Statistikk(antallFelt: n,
-                                  snittΔE: direkte.reduce(0, +) / Double(n), maksΔE: direkte.max() ?? 0,
-                                  kryssvalidertSnittΔE: kryss.reduce(0, +) / Double(n), kryssvalidertMaksΔE: kryss.max() ?? 0,
-                                  avvik: kryss)
         return k
     }
 }

@@ -15,6 +15,9 @@ public enum Lyskompensasjon: Hashable, Codable, Sendable {
     case gråkort(målt: Farge, refleksjon: Double)
     /// Full karakterisering fra et referansekort i samme lys.
     case referansekort(Kamerakarakterisering)
+    /// En kameraprofil (karakterisering laget én gang med referansekort) og et gråkort i lyset nå: profilen gir
+    /// kameraets farger som XYZ, og gråkortet gir lysets farge og eksponeringen.
+    case kameraprofil(Kamerakarakterisering, gråkort: Farge, refleksjon: Double)
 
     /// Den kompenserte fargen (slik flaten ser ut i dagslys).
     public func kompensert(_ farge: Farge) -> Farge {
@@ -31,6 +34,13 @@ public enum Lyskompensasjon: Hashable, Codable, Sendable {
             return Farge(xyz: XYZ(x: v.x * k, y: v.y * k, z: v.z * k), alfa: farge.alfa)
         case .referansekort(let karakterisering):
             return karakterisering.farge(fraKamera: farge)
+        case .kameraprofil(let profil, let gråkort, let refleksjon):
+            let g = profil.xyz(fraKamera: gråkort)
+            guard g.y > 0 else { return farge }
+            let hvit = XYZ(x: g.x / g.y, y: 1, z: g.z / g.y)
+            let v = CAT16.tilpass(profil.xyz(fraKamera: farge), fra: hvit, til: Lyskilde.d65.hvitpunkt)
+            let k = refleksjon / g.y
+            return Farge(xyz: XYZ(x: v.x * k, y: v.y * k, z: v.z * k), alfa: farge.alfa)
         }
     }
 
@@ -43,6 +53,9 @@ public enum Lyskompensasjon: Hashable, Codable, Sendable {
             return Kolorimetri.fargetemperatur(x: p.x, y: p.y)
         case .referansekort(let k):
             let p = Kolorimetri.xy(k.kameraHvit)
+            return Kolorimetri.fargetemperatur(x: p.x, y: p.y)
+        case .kameraprofil(let profil, let gråkort, _):
+            let p = Kolorimetri.xy(profil.xyz(fraKamera: gråkort))
             return Kolorimetri.fargetemperatur(x: p.x, y: p.y)
         }
     }

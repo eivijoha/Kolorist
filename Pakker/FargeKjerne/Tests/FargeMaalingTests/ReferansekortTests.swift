@@ -204,3 +204,59 @@ struct ReferansekortTests {
         #expect(abs(kort.felt[0].verdi.xyz(under: .a).y - 0.18) < 1e-9)
     }
 }
+
+@Suite("Kameraprofil, tolkning og retning")
+struct KameraprofilTests {
+    let kort = try! Referanseimport.les(Data(ReferansekortTests().tekst(ReferansekortTests.spektre).utf8), filnavn: "kort.txt")
+
+    /// Et fast kamera (hvitbalansen låst): lyset i bildet, en kanalblanding og en tonekurve, uten automatikk.
+    func kamera(_ v: XYZ, eksponering: Double = 1) -> Farge {
+        let f = Farge(xyz: XYZ(x: v.x * eksponering, y: v.y * eksponering, z: v.z * eksponering))
+        let b = (0.9 * f.r + 0.1 * f.g, 0.05 * f.r + 0.9 * f.g + 0.05 * f.b, 0.1 * f.g + 0.9 * f.b)
+        return Farge(lineærR: 0.8 * pow(max(b.0, 0), 0.9), g: 0.8 * pow(max(b.1, 0), 0.9), b: 0.8 * pow(max(b.2, 0), 0.9))
+    }
+
+    /// Profil laget én gang under glødelys; senere gråkort under kald LED gir dagslysfargene tilbake.
+    @Test func kameraprofilMedGråkortINyttLys() throws {
+        let opplæring = Lyskilde.a
+        let profil = try #require(Kamerakarakterisering.beste(
+            kamera: kort.felt.map { kamera($0.verdi.xyz(under: opplæring)) }, referanse: kort, lys: opplæring))
+        let nytt = Lyskilde.cie("LED-B4")
+        let grå = Referansekort.gråkort(refleksjon: 0.18).felt[0].verdi
+        let komp = Lyskompensasjon.kameraprofil(profil, gråkort: kamera(grå.xyz(under: nytt), eksponering: 0.5), refleksjon: 0.18)
+        let avvik = kort.felt.map { felt in
+            Fargeavstand.deltaE2000(komp.kompensert(kamera(felt.verdi.xyz(under: nytt), eksponering: 0.5)).cieLab,
+                                    felt.verdi.farge.cieLab)
+        }
+        #expect(avvik.reduce(0, +) / Double(avvik.count) < 4)
+        let t = try #require(komp.fargetemperatur)
+        #expect(abs(t.kelvin - 5000) < 400)
+    }
+
+    @Test func treKolonnerKanTolkesPåNytt() throws {
+        let tekst = "38.0 13.6 14.1\n65.7 18.1 17.8\n96.0 0.1 0.2"
+        let lab = try Referanseimport.les(Data(tekst.utf8), filnavn: "x.txt")
+        #expect(lab.tolkning == .lab)
+        let xyz = lab.tolket(som: .xyz)
+        #expect(xyz.tolkning == .xyz)
+        if case .xyz(let v, _) = xyz.felt[0].verdi { #expect(abs(v.x - 0.38) < 1e-9) }
+        for (a, b) in zip(xyz.tolket(som: .lab).felt, lab.felt) {
+            #expect(abs(a.verdi.lab.l - b.verdi.lab.l) < 1e-9 && abs(a.verdi.lab.b - b.verdi.lab.b) < 1e-9)
+        }
+        let cgats = try Referanseimport.les(Data("BEGIN_DATA_FORMAT\nLAB_L LAB_A LAB_B\nEND_DATA_FORMAT\nBEGIN_DATA\n50 0 0\nEND_DATA".utf8), filnavn: "c.txt")
+        #expect(cgats.tolkning == nil)
+    }
+
+    @Test func retningVelgesFraLyshet() {
+        let fasit = kort.felt.map { $0.verdi.xyz(under: .d65).y }
+        // Et «bilde» der kortet ligger opp-ned: målingen slår opp fasiten for feltet som faktisk ligger der.
+        let riktig = [CGPoint(x: 600, y: 400), CGPoint(x: 0, y: 400), CGPoint(x: 0, y: 0), CGPoint(x: 600, y: 0)]
+        let senterTilFelt = Dictionary(uniqueKeysWithValues: Kortgeometri.sentre(hjørner: riktig, rader: 4, kolonner: 6)
+            .enumerated().map { ("\(Int($1.x.rounded())),\(Int($1.y.rounded()))", $0) })
+        let start = [CGPoint(x: 0, y: 0), CGPoint(x: 600, y: 0), CGPoint(x: 600, y: 400), CGPoint(x: 0, y: 400)]
+        let valgt = Kortgeometri.besteRetning(hjørner: start, rader: 4, kolonner: 6, fasitY: fasit) { sentre in
+            sentre.map { p in senterTilFelt["\(Int(p.x.rounded())),\(Int(p.y.rounded()))"].map { fasit[$0] } ?? 0.5 }
+        }
+        #expect(valgt == riktig)
+    }
+}

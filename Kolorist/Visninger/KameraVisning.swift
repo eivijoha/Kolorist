@@ -127,7 +127,10 @@ struct KameraVisning: View {
                                         if plukker.kompensasjon == nil { plukker.slåAvKompensasjon() }
                                     } })) {
             if let kort = kalibrerMed, let bilde = kortbilde {
-                KortkalibreringArk(kort: kort, bilde: bilde) { karakterisering, måling in
+                KortkalibreringArk(kort: kort, bilde: bilde, målLys: plukker.målerLys,
+                                   lux: { plukker.luxFraKort($0, refleksjon: $1) },
+                                   lagreProfil: plukker.målerLys
+                                       ? { Lysbibliotek.delt.lagreKameraprofil($0, kamera: plukker.kameranavn) } : nil) { karakterisering, måling in
                     plukker.bruk(karakterisering, måling: måling)
                     Lysbibliotek.delt.lagre(karakterisering, for: kort, kamera: plukker.kameranavn)
                 }

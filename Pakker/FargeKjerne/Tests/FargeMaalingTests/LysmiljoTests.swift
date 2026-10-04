@@ -106,3 +106,18 @@ struct LysmiljoTests {
         #expect(try JSONDecoder().decode(Lysmiljø.self, from: data) == miljø)
     }
 }
+
+@Suite("Paletter i lys")
+struct PalettILysTests {
+    @Test func svaktLysFørerMørkeFargerSammen() {
+        // To mørke, ulike farger: tydelig ulike på skjermen, men nesten like i svakt lys.
+        let farger = [Farge(hex: "#2A1E3C")!, Farge(hex: "#1E2E3A")!, Farge(hex: "#F2B84B")!]
+        let svakt = Lysmiljø(navn: "Svakt", lyskilde: .sortlegeme(kelvin: 2700), lux: 5)
+        let sterkt = Lysmiljø(navn: "Sterkt", lyskilde: .d65, lux: 500)
+        #expect(sterkt.sammenfallendePar(farger, påSkjerm: 4, iLyset: 3).isEmpty)
+        let iSvakt = svakt.sammenfallendePar(farger, påSkjerm: 4, iLyset: 100).first { $0.a == 0 && $0.b == 1 }!.iLyset
+        let iSterkt = sterkt.sammenfallendePar(farger, påSkjerm: 4, iLyset: 100).first { $0.a == 0 && $0.b == 1 }!.iLyset
+        #expect(iSvakt < iSterkt * 0.8)
+        #expect(svakt.fargeskift(farger).count == 3)
+    }
+}

@@ -10,8 +10,10 @@ struct LyskompensasjonMeny: View {
     @Binding var kalibrerMed: Referansekort?
     @Binding var lagreLysmiljø: Lysmiljø?
     @State private var bibliotek = Lysbibliotek.delt
+    @State private var egetKort = false
 
     var body: some View {
+        let profil = bibliotek.kameraprofil(for: plukker.kameranavn)
         Menu {
             Button("Som kameraet ser fargene", systemImage: plukker.kompensasjon == nil ? "checkmark" : "") {
                 plukker.slåAvKompensasjon()
@@ -25,9 +27,16 @@ struct LyskompensasjonMeny: View {
                     }
                 }
                 #endif
-                Menu("Med gråkort") {
-                    Button("Gråkort 18 %") { plukker.ventPåGråkort(refleksjon: 0.18) }
-                    Button("Hvitt kort 90 %") { plukker.ventPåGråkort(refleksjon: 0.9) }
+                Menu(profil == nil ? "Med gråkort" : "Med gråkort og kameraprofil") {
+                    Button("Gråkort 18 %") { plukker.ventPåGråkort(refleksjon: 0.18, profil: profil?.karakterisering) }
+                    Button("Hvitt kort 90 %") { plukker.ventPåGråkort(refleksjon: 0.9, profil: profil?.karakterisering) }
+                    Button("Eget kort …") { egetKort = true }
+                    if profil != nil {
+                        Divider()
+                        Button("Glem kameraprofilen", systemImage: "trash", role: .destructive) {
+                            bibliotek.fjernKameraprofil(for: plukker.kameranavn)
+                        }
+                    }
                 }
                 if bibliotek.referansekort.isEmpty {
                     // Referanseverdiene følger ikke med appen; brukeren importerer dem under Mine fargerom.
@@ -53,11 +62,34 @@ struct LyskompensasjonMeny: View {
             Label("Lys", systemImage: plukker.kompensasjon == nil ? "sun.max" : "sun.max.fill")
         }
         .help("Kompenser fargene for lyset de ble fotografert i")
+        .modifier(EgetKortSpørsmål(vises: $egetKort) { plukker.ventPåGråkort(refleksjon: $0, profil: profil?.karakterisering) })
     }
 
     static func lyskilde(fra m: Lysmåling) -> Lyskilde {
         let p = Kolorimetri.xy(kelvin: m.kelvin, duv: m.duv)
         return .hvitpunkt(x: p.x, y: p.y)
+    }
+}
+
+/// «Eget kort …»: refleksjonen (LRV i prosent) for et kort eller en flate med kjent verdi.
+struct EgetKortSpørsmål: ViewModifier {
+    @Binding var vises: Bool
+    var bruk: (Double) -> Void
+    @State private var tekst = "50"
+
+    func body(content: Content) -> some View {
+        content.alert("Eget kort", isPresented: $vises) {
+            TextField("LRV i prosent", text: $tekst)
+                #if os(iOS)
+                .keyboardType(.decimalPad)
+                #endif
+            Button("Avbryt", role: .cancel) {}
+            Button("Bruk") {
+                if let v = Double(tekst.replacingOccurrences(of: ",", with: ".")), v > 0, v <= 100 { bruk(v / 100) }
+            }
+        } message: {
+            Text("Oppgi refleksjonen (LRV) til et nøytralt kort eller en grå eller hvit flate med kjent verdi, for eksempel en malt vegg.")
+        }
     }
 }
 
@@ -86,11 +118,13 @@ struct LysmålingMerke: View {
     private func tekst(_ m: Lysmåling) -> String {
         let kelvin = (Int((m.kelvin / 50).rounded()) * 50).formatted(.number.grouping(.never))
         var deler = [String(localized: "≈ \(kelvin) K")]
-        if let lux = m.lux { deler.append(String(localized: "\(lux.formatted(.number.precision(.significantDigits(2)))) lx")) }
+        if let lux = m.lux { deler.append(String(localized: "≈ \(lux.formatted(.number.precision(.significantDigits(2)))) lx")) }
         if plukker.kompensasjon != nil {
             switch m.metode {
             case .kamera: deler.append(String(localized: "kompensert"))
-            case .gråkort: deler.append(String(localized: "gråkort"))
+            case .gråkort:
+                if case .kameraprofil = plukker.kompensasjon { deler.append(String(localized: "gråkort og kameraprofil")) }
+                else { deler.append(String(localized: "gråkort")) }
             case .referansekort: deler.append(String(localized: "referansekort"))
             }
         }
@@ -127,7 +161,8 @@ struct KameraMeny: View {
 }
 #endif
 
-private extension View {
+extension View {
+    /// Merke over et bilde (lysmåling, «Trykk på kortet»).
     func merke() -> some View {
         font(.callout.weight(.semibold))
             .padding(.horizontal, 10)
@@ -138,20 +173,32 @@ private extension View {
     }
 }
 
-/// Kalibrering med et referansekort: et stillbilde, fire hjørner som dras på plass, og resultatet.
+/// Kalibrering med et referansekort i et bilde (kamera eller bildefil): hjørnene foreslås automatisk og kan dras
+/// på plass, og resultatet viser fasit mot kompensert farge per felt.
 struct KortkalibreringArk: View {
     let kort: Referansekort
     let bilde: CGImage
+    /// Anslå lyset (fargetemperatur, fargegjengivelse, lystype): bare med kamera med hvitbalanse låst til dagslys.
+    var målLys = false
+    /// Lux fra kortet: (kamerafarge for et nøytralt felt, feltets refleksjon) → lux.
+    var lux: ((Farge, Double) -> Double?)? = nil
+    /// Lagre en kameraprofil, så et gråkort holder neste gang (bare kamera med låst hvitbalanse).
+    var lagreProfil: ((Kamerakarakterisering) -> Void)? = nil
     var bruk: (Kamerakarakterisering, Lysmåling?) -> Void
     @Environment(\.dismiss) private var lukk
     /// Hjørnene i bildets koordinater (0–1): øverst til venstre, øverst til høyre, nederst til høyre, nederst til venstre.
     @State private var hjørner: [CGPoint] = [CGPoint(x: 0.2, y: 0.3), CGPoint(x: 0.8, y: 0.3), CGPoint(x: 0.8, y: 0.7), CGPoint(x: 0.2, y: 0.7)]
     @State private var resultat: Resultat?
+    @State private var prøve: Bildeprøve?
+    @State private var leter = true
+    @State private var fantKortet = false
+    @State private var lagreSomProfil = true
 
     struct Resultat {
         var karakterisering: Kamerakarakterisering
         var målt: [Farge]
         var måling: Lysmåling?
+        var profil: Kamerakarakterisering?
     }
 
     var body: some View {
@@ -167,13 +214,18 @@ struct KortkalibreringArk: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Avbryt") { lukk() } }
                 ToolbarItem(placement: .confirmationAction) {
                     if let resultat {
-                        Button("Bruk") { bruk(resultat.karakterisering, resultat.måling); lukk() }
+                        Button("Bruk") {
+                            if lagreSomProfil, let profil = resultat.profil { lagreProfil?(profil) }
+                            bruk(resultat.karakterisering, resultat.måling)
+                            lukk()
+                        }
                     } else {
-                        Button("Beregn") { beregn() }
+                        Button("Beregn") { beregn() }.disabled(prøve == nil)
                     }
                 }
             }
         }
+        .task { await foreslåHjørner() }
         #if os(macOS)
         .frame(minWidth: 640, minHeight: 600)
         #endif
@@ -216,6 +268,7 @@ struct KortkalibreringArk: View {
                             })
                             .accessibilityLabel(Text("Hjørne \(i + 1)"))
                     }
+                    if leter { ProgressView().position(x: geo.size.width / 2, y: geo.size.height / 2) }
                 }
             }
             HStack {
@@ -223,9 +276,13 @@ struct KortkalibreringArk: View {
                 Button("Speil", systemImage: "arrow.left.and.right.righttriangle.left.righttriangle.right") {
                     hjørner = [hjørner[1], hjørner[0], hjørner[3], hjørner[2]]
                 }
+                Button("Finn kortet", systemImage: "viewfinder") { Task { await foreslåHjørner() } }
             }
             .buttonStyle(.bordered)
-            Text("Dra hjørnene 1–4 til kortets hjørner, med de grå feltene langs den nederste kanten. De små prikkene viser fasiten og skal ligge på riktig felt.")
+            .disabled(leter)
+            Text(fantKortet
+                 ? "Kortet ble funnet. Juster hjørnene 1–4 om nødvendig: de små prikkene viser fasiten og skal ligge på riktig felt."
+                 : "Dra hjørnene 1–4 til kortets hjørner, med de grå feltene langs den nederste kanten. De små prikkene viser fasiten og skal ligge på riktig felt.")
                 .font(.footnote)
                 .foregroundStyle(Color.sekundærTekst)
                 .multilineTextAlignment(.center)
@@ -258,12 +315,12 @@ struct KortkalibreringArk: View {
                     }
                 }
             } footer: {
-                Text("Øverst i hvert felt: fasiten i dagslys. Nederst: kamerafargen etter kompensasjon.")
+                Text("Øverst i hvert felt: fasiten i dagslys. Nederst: fargen fra bildet etter kompensasjon.")
             }
             Section("Nøyaktighet") {
                 LabeledContent("Snitt ΔE00") { Text(s.kryssvalidertSnittΔE, format: .number.precision(.fractionLength(1))) }
                 LabeledContent("Maks ΔE00") { Text(s.kryssvalidertMaksΔE, format: .number.precision(.fractionLength(1))) }
-                LabeledContent("Modell") {
+                LabeledContent("Modell (valgt automatisk)") {
                     Text(r.karakterisering.modell == .matrise ? "Matrise 3 × 3" : "Rotpolynom")
                 }
             }
@@ -272,12 +329,24 @@ struct KortkalibreringArk: View {
                     LabeledContent("Fargetemperatur") {
                         Text("≈ \((Int((m.kelvin / 50).rounded()) * 50).formatted(.number.grouping(.never))) K").monospacedDigit()
                     }
+                    if let lux = m.lux {
+                        LabeledContent("Belysningsstyrke") {
+                            Text("≈ \(lux.formatted(.number.precision(.significantDigits(2)))) lx").monospacedDigit()
+                        }
+                    }
                     if let g = m.fargegjengivelse {
                         LabeledContent("Fargegjengivelse (anslått)") { Text(g, format: .number.precision(.fractionLength(0))) }
                     }
-                    LabeledContent("Lystype") {
+                    LabeledContent("Sannsynlig lystype") {
                         Text(Lystype.anslå(kelvin: m.kelvin, duv: m.duv, fargegjengivelse: m.fargegjengivelse).navn)
                     }
+                }
+            }
+            if r.profil != nil, lagreProfil != nil {
+                Section {
+                    Toggle("Lagre som kameraprofil", isOn: $lagreSomProfil)
+                } footer: {
+                    Text("Med en kameraprofil holder det med et gråkort neste gang, også i et annet lys: Kolorist kjenner da kameraets farger, og gråkortet gir lysets farge og styrke.")
                 }
             }
             Section {
@@ -292,33 +361,55 @@ struct KortkalibreringArk: View {
         .formStyle(.grouped)
     }
 
+    /// Finner kortet med Vision og velger retningen der lysheten i feltene stemmer best med fasiten.
+    private func foreslåHjørner() async {
+        leter = true
+        defer { leter = false }
+        let bilde = self.bilde, kort = self.kort
+        let (funnet, prøve) = await Task.detached(priority: .userInitiated) { () -> ([CGPoint]?, Bildeprøve?) in
+            guard let prøve = Bildeprøve(bilde: bilde) else { return (nil, nil) }
+            return (Kortgjenkjenning.foreslå(kort: kort, i: bilde, prøve: prøve), prøve)
+        }.value
+        self.prøve = prøve
+        if let funnet {
+            hjørner = funnet
+            fantKortet = true
+        }
+    }
+
     private func beregn() {
-        guard let prøve = Bildeprøve(bilde: bilde) else { return }
+        guard let prøve else { return }
         let punkter = hjørner.map { CGPoint(x: $0.x * Double(prøve.bredde), y: $0.y * Double(prøve.høyde)) }
         let sentre = Kortgeometri.sentre(hjørner: punkter, rader: kort.rader, kolonner: kort.kolonner)
         // Gjennomsnitt over ca. en tredjedel av feltets bredde.
         let feltbredde = hypot(punkter[1].x - punkter[0].x, punkter[1].y - punkter[0].y) / Double(kort.kolonner)
         let radius = max(1, Int(feltbredde / 6))
         let målt = sentre.map { prøve.farge(x: Int($0.x), y: Int($0.y), radius: radius) }
-        let modell: Kamerakarakterisering.Modell = kort.felt.count >= 18 ? .rotpolynom : .matrise
-        guard let k = Kamerakarakterisering.tilpass(kamera: målt, referanse: kort, modell: modell)
-                ?? Kamerakarakterisering.tilpass(kamera: målt, referanse: kort, modell: .matrise) else { return }
-        // Lyset: kameraets farge for de grå feltene (hvitbalansen er låst til dagslys under opptaket). På Mac er bildet
-        // allerede hvitbalansert, så lyset kan ikke anslås.
+        guard let k = Kamerakarakterisering.beste(kamera: målt, referanse: kort) else { return }
         var måling: Lysmåling?
-        #if os(iOS)
-        let p = Kolorimetri.xy(k.kameraHvit)
-        if let t = Kolorimetri.fargetemperatur(x: p.x, y: p.y) {
-            var gjengivelse: Double?
-            if kort.harSpektre {
+        var profil: Kamerakarakterisering?
+        if målLys {
+            // Lyset: kameraets farge for de grå feltene (hvitbalansen er låst til dagslys under opptaket).
+            let p = Kolorimetri.xy(k.kameraHvit)
+            if let t = Kolorimetri.fargetemperatur(x: p.x, y: p.y) {
+                var gjengivelse: Double?
                 let spektre = kort.felt.compactMap { if case .spekter(let s) = $0.verdi { s } else { nil } }
-                // Kamerafargene med låst hvitbalanse er et grovt mål på fargene under lyset.
-                gjengivelse = Fargegjengivelse.anslag(målt: målt.map(\.xyz), hvit: k.kameraHvit, prøver: spektre)?.indeks
+                if kort.harSpektre {
+                    // Kamerafargene med låst hvitbalanse er et grovt mål på fargene under lyset.
+                    gjengivelse = Fargegjengivelse.anslag(målt: målt.map(\.xyz), hvit: k.kameraHvit, prøver: spektre)?.indeks
+                }
+                // Lux fra et mellomgrått felt (det hviteste kan være overeksponert).
+                let nøytrale = kort.nøytrale
+                let felt = nøytrale.count > 2 ? nøytrale[1] : nøytrale.first
+                let luxverdi = felt.flatMap { lux?(målt[$0], kort.felt[$0].verdi.xyz(under: .d65).y) }
+                måling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: luxverdi, fargegjengivelse: gjengivelse, metode: .referansekort)
+                // Kameraprofil: fasiten under lyset i bildet (anslått fra fargetemperaturen), så profilen beskriver
+                // kameraet og ikke lyset.
+                let scenelys: Lyskilde = kort.harSpektre ? .spekter(Fargegjengivelse.referanselys(kelvin: t.kelvin)) : .hvitpunkt(x: p.x, y: p.y)
+                profil = Kamerakarakterisering.beste(kamera: målt, referanse: kort, lys: scenelys)
             }
-            måling = Lysmåling(kelvin: t.kelvin, duv: t.duv, fargegjengivelse: gjengivelse, metode: .referansekort)
         }
-        #endif
-        resultat = Resultat(karakterisering: k, målt: målt, måling: måling)
+        resultat = Resultat(karakterisering: k, målt: målt, måling: måling, profil: profil)
     }
 
     static func tilpasset(_ bilde: CGSize, i ramme: CGSize) -> CGSize {
@@ -329,7 +420,7 @@ struct KortkalibreringArk: View {
 
 /// Et importert referansekort: feltene slik de ser ut i dagslys og i et valgt lys, og siste karakterisering.
 struct ReferansekortDetalj: View {
-    let kort: Referansekort
+    @State var kort: Referansekort
     @State private var lys: Lyskilde = .d65
     @State private var bibliotek = Lysbibliotek.delt
     @Environment(\.dismiss) private var lukk
@@ -363,6 +454,19 @@ struct ReferansekortDetalj: View {
                     Text(kort.harSpektre
                          ? "Med spektre kan fasiten regnes ut i ethvert lys. Feltene vises slik de ser ut i valgt lys når øyet har tilpasset seg delvis."
                          : "Verdiene er målt i ett lys (CIELab D50). I andre lys brukes kromatisk tilpasning.")
+                }
+                if let tolkning = kort.tolkning {
+                    Section {
+                        Picker("Verdiene er", selection: Binding(get: { tolkning }, set: { ny in
+                            kort = kort.tolket(som: ny)
+                            bibliotek.oppdater(kort)
+                        })) {
+                            Text("CIELab (D50)").tag(Referansekort.Tolkning.lab)
+                            Text("XYZ (D50)").tag(Referansekort.Tolkning.xyz)
+                        }
+                    } footer: {
+                        Text("Filen har tre tallkolonner uten overskrift, så Kolorist har gjettet hva de er. Sjekk at feltene over ser riktige ut.")
+                    }
                 }
                 Section("Kortet") {
                     LabeledContent("Felt") { Text("\(kort.felt.count) (\(kort.rader) × \(kort.kolonner))") }

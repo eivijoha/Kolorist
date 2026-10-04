@@ -12,14 +12,47 @@ public struct Referansekort: Hashable, Codable, Sendable, Identifiable {
     public var felt: [Referansefelt]
     /// Filen verdiene kom fra.
     public var kilde: String?
+    /// Satt når verdiene kom som tre tallkolonner uten overskrift (Lab eller XYZ kan ikke avgjøres sikkert):
+    /// faktoren XYZ-verdiene er skalert med (0,01 for 0–100, 1 for 0–1).
+    public var treKolonnerSkala: Double?
 
-    public init(id: UUID = UUID(), navn: String, rader: Int, kolonner: Int, felt: [Referansefelt], kilde: String? = nil) {
+    public init(id: UUID = UUID(), navn: String, rader: Int, kolonner: Int, felt: [Referansefelt], kilde: String? = nil,
+                treKolonnerSkala: Double? = nil) {
         self.id = id
         self.navn = navn
         self.rader = rader
         self.kolonner = kolonner
         self.felt = felt
         self.kilde = kilde
+        self.treKolonnerSkala = treKolonnerSkala
+    }
+
+    /// Hvordan tre tallkolonner uten overskrift er tolket.
+    public enum Tolkning: String, Hashable, Sendable, CaseIterable { case lab, xyz }
+
+    /// Tolkningen, når den var et valg (tre kolonner uten overskrift); ellers `nil`.
+    public var tolkning: Tolkning? {
+        guard treKolonnerSkala != nil, let første = felt.first else { return nil }
+        if case .lab = første.verdi { return .lab }
+        return .xyz
+    }
+
+    /// Kortet med de samme tallene tolket på nytt som Lab (D50) eller XYZ (D50).
+    public func tolket(som ny: Tolkning) -> Referansekort {
+        guard let skala = treKolonnerSkala, ny != tolkning else { return self }
+        var kort = self
+        kort.felt = felt.map { f in
+            var f = f
+            switch (f.verdi, ny) {
+            case (.lab(let l), .xyz):
+                f.verdi = .xyz(XYZ(x: l.l * skala, y: l.a * skala, z: l.b * skala), hvit: Lyskilde.d50.hvitpunkt)
+            case (.xyz(let v, _), .lab):
+                f.verdi = .lab(CIELab(l: v.x / skala, a: v.y / skala, b: v.z / skala))
+            default: break
+            }
+            return f
+        }
+        return kort
     }
 
     /// Et grått (eller hvitt) kort med jevn refleksjon, f.eks. 0,18 for et 18 %-gråkort.
@@ -144,6 +177,32 @@ public enum Kortgeometri {
         guard let m = homografi(hjørner) else { return nil }
         let w = m[2][0] * u + m[2][1] * v + m[2][2]
         return CGPoint(x: (m[0][0] * u + m[0][1] * v + m[0][2]) / w, y: (m[1][0] * u + m[1][1] * v + m[1][2]) / w)
+    }
+
+    /// De åtte måtene å tilordne fire hjørner på: fire rotasjoner, med og uten speiling.
+    public static func retninger(_ h: [CGPoint]) -> [[CGPoint]] {
+        guard h.count == 4 else { return [h] }
+        let rotasjoner = (0..<4).map { r in (0..<4).map { h[($0 + r) % 4] } }
+        return rotasjoner + rotasjoner.map { [$0[1], $0[0], $0[3], $0[2]] }
+    }
+
+    /// Velger retningen der lysheten i feltene best stemmer med fasiten (korrelasjon mellom logaritmene).
+    /// `måling` gir målt luminans for feltsentrene.
+    public static func besteRetning(hjørner: [CGPoint], rader: Int, kolonner: Int, fasitY: [Double],
+                                    måling: ([CGPoint]) -> [Double]) -> [CGPoint] {
+        func korrelasjon(_ a: [Double], _ b: [Double]) -> Double {
+            let n = Double(min(a.count, b.count))
+            guard n > 2 else { return -1 }
+            let (la, lb) = (a.map { log(max($0, 1e-4)) }, b.map { log(max($0, 1e-4)) })
+            let (ma, mb) = (la.reduce(0, +) / n, lb.reduce(0, +) / n)
+            var sab = 0.0, saa = 0.0, sbb = 0.0
+            for (x, y) in zip(la, lb) { sab += (x - ma) * (y - mb); saa += (x - ma) * (x - ma); sbb += (y - mb) * (y - mb) }
+            return saa > 0 && sbb > 0 ? sab / (saa * sbb).squareRoot() : -1
+        }
+        return retninger(hjørner).max { a, b in
+            korrelasjon(måling(sentre(hjørner: a, rader: rader, kolonner: kolonner)), fasitY)
+                < korrelasjon(måling(sentre(hjørner: b, rader: rader, kolonner: kolonner)), fasitY)
+        } ?? hjørner
     }
 
     public static func sentre(hjørner: [CGPoint], rader: Int, kolonner: Int) -> [CGPoint] {

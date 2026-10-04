@@ -76,6 +76,8 @@ private struct KontrastVurdering: View {
 /// både fra en åpen palett og fra palettens meny i oversikten.
 struct PalettVurderingInnhold: View {
     let vurdering: PalettVurdering
+    /// Palettens farger, for lysdelen (beregnet i appen, ikke av vurdereren).
+    var farger: [PalettFarge] = []
 
     var body: some View {
         // Hva vurderingen bygger på – før selve vurderingen, så det er tydelig hva den sier noe om.
@@ -101,6 +103,7 @@ struct PalettVurderingInnhold: View {
         punkter(String(localized: "Styrker"), vurdering.styrker, "plus.circle.fill", Color.suksess)
         punkter(String(localized: "Svakheter"), vurdering.svakheter, "minus.circle.fill", Color.advarsel)
         punkter(String(localized: "Forslag"), vurdering.forslag, "arrow.right.circle.fill", Color.accentColor)
+        if !farger.isEmpty { LysVurderingSeksjon(farger: farger) }
         Section {
             DisclosureGroup("Tallene for denne paletten") {
                 ForEach(vurdering.fakta, id: \.self) { Text($0).font(.callout) }

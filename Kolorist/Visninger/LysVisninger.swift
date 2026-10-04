@@ -16,19 +16,7 @@ struct SeILysPanel: View {
         let sett = somFoto ? miljø.somFoto(farge) : miljø.sett(farge)
         let skift = miljø.fargeskift(farge)
         PanelSeksjon(panel: .lys) {
-            Picker("Lysmiljø", selection: Binding(get: { miljø.id }, set: { bibliotek.valgtLysmiljø = $0 })) {
-                if !bibliotek.lysmiljøer.isEmpty {
-                    Section("Mine lysmiljøer") {
-                        ForEach(bibliotek.lysmiljøer) { Text($0.navn).tag($0.id) }
-                    }
-                }
-                Section("Standarder") {
-                    ForEach(Lysbibliotek.standarder) { Text($0.navn).tag($0.id) }
-                }
-                Section("Eksempler") {
-                    ForEach(Lysbibliotek.innebygde) { Text($0.navn).tag($0.id) }
-                }
-            }
+            LysmiljøVelger(valgt: Binding(get: { miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
             Picker("Vis", selection: $somFoto) {
                 Text("Slik øyet ser det").tag(false)
                 Text("Som et foto").tag(true)
@@ -42,6 +30,11 @@ struct SeILysPanel: View {
             LabeledContent("Lys") {
                 Text(Lysbeskrivelse.tekst(miljø))
                     .monospacedDigit()
+            }
+            if miljø.harUjevntSpekter {
+                Label("Lysrør og LED har ujevne spektre. Fargens spekter er anslått, så en ekte flate med samme farge på skjermen kan endre seg annerledes i dette lyset (metameri).", systemImage: "info.circle")
+                    .font(.footnote)
+                    .foregroundStyle(Color.sekundærTekst)
             }
             LabeledContent("Fargeskift i lyset") {
                 Text("ΔE00 \(skift, format: .number.precision(.fractionLength(1)))")
@@ -69,6 +62,16 @@ struct SeILysPanel: View {
             Text(f.hex()).font(.caption.monospaced()).foregroundStyle(Color.sekundærTekst)
         }
         .frame(maxWidth: .infinity)
+    }
+}
+
+extension Lysmiljø {
+    /// Lysrør, LED og målte spektre: ujevne spektre der det anslåtte spekteret for fargen betyr noe.
+    var harUjevntSpekter: Bool {
+        switch lyskilde {
+        case .cie, .spekter: true
+        default: false
+        }
     }
 }
 

@@ -428,6 +428,7 @@ struct PalettDetalj: View {
     @State private var eksport: (data: Data, filnavn: String)?
     @State private var visSkala: PalettFarge?
     @State private var visKontrast = false
+    @State private var visILys = false
     @State private var vurdering: PalettVurdering?
     @State private var kiArbeider = false
     @State private var kiFeil: String?
@@ -534,6 +535,9 @@ struct PalettDetalj: View {
             ToneskalaArk(grunnfarge: pf) { nye in dokument.farger += nye }
         }
         .sheet(isPresented: $visKontrast) { KontrastmatriseArk(palett: dokument.palett) }
+        .sheet(isPresented: $visILys) {
+            PalettILysArk(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn, farger: dokument.farger)
+        }
         .sheet(item: $navngisPalettfarge) { pf in
             NavngiArk(farge: pf) { navn in
                 var f = dokument.farger
@@ -541,7 +545,7 @@ struct PalettDetalj: View {
                 dokument.farger = f
             }
         }
-        .sheet(item: $vurdering) { VurderingArk(vurdering: $0) }
+        .sheet(item: $vurdering) { VurderingArk(vurdering: $0, farger: dokument.farger) }
         .alert("KI", isPresented: Binding(get: { kiFeil != nil }, set: { if !$0 { kiFeil = nil } })) {
             Button("OK") {}
         } message: { Text(kiFeil ?? "") }
@@ -560,6 +564,9 @@ struct PalettDetalj: View {
         Button("Kontrast", systemImage: "circle.lefthalf.filled") { visKontrast = true }
             .disabled(dokument.farger.count < 2)
             .help("Kontrastmatrise")
+        Button("Se i lys", systemImage: "lightbulb") { visILys = true }
+            .disabled(dokument.farger.isEmpty)
+            .help("Se paletten i et lysmiljø")
         Button {
             Task { await vurder() }
         } label: {
@@ -610,7 +617,7 @@ struct PalettVurderingArk: View {
         NavigationStack {
             Group {
                 if let vurdering {
-                    Form { PalettVurderingInnhold(vurdering: vurdering) }.formStyle(.grouped)
+                    Form { PalettVurderingInnhold(vurdering: vurdering, farger: palett.farger) }.formStyle(.grouped)
                 } else if let feil {
                     ContentUnavailableView("Kunne ikke vurdere paletten", systemImage: "xmark.circle", description: Text(feil))
                 } else {
@@ -632,11 +639,12 @@ struct PalettVurderingArk: View {
 
 struct VurderingArk: View {
     let vurdering: PalettVurdering
+    var farger: [PalettFarge] = []
     @Environment(\.dismiss) private var lukk
 
     var body: some View {
         NavigationStack {
-            Form { PalettVurderingInnhold(vurdering: vurdering) }
+            Form { PalettVurderingInnhold(vurdering: vurdering, farger: farger) }
                 .formStyle(.grouped)
                 .navigationTitle("Vurdering")
                 .toolbar { Button("Ferdig") { lukk() } }

@@ -1,4 +1,5 @@
 import FargeKjerne
+import FargeMaaling
 import SwiftUI
 
 /// WCAG-kontrasttest i Studio: aktiv farge som forgrunn mot en valgt bakgrunn.
@@ -241,6 +242,11 @@ extension Kontrasttest: @retroactive Identifiable {
 struct FlatekontrastSeksjon: View {
     @Binding var flate: Farge
     let bakgrunn: Farge
+    /// Lysmiljøet flatene ses i (nil = dagslys, som LRV er definert for).
+    @AppStorage("lrvLysmiljø") private var lysmiljøID = ""
+    @State private var lys = Lysbibliotek.delt
+
+    private var lysmiljø: Lysmiljø? { lys.alleLysmiljøer.first { $0.id.uuidString == lysmiljøID } }
 
     var body: some View {
         let k = Flatekontrast(flate, bakgrunn)
@@ -252,6 +258,20 @@ struct FlatekontrastSeksjon: View {
                 verdi(String(localized: "Luminanskontrast"), k.michelson.formatted(.number.precision(.fractionLength(2))))
             }
             .padding(.vertical, 4)
+            LysmiljøVelger(tittel: "Lys", valgt: Binding(get: { lysmiljø?.id }, set: { lysmiljøID = $0?.uuidString ?? "" }),
+                           ingen: "Dagslys (LRV)")
+            if let miljø = lysmiljø {
+                // Refleksjonen under lyset: spektralt for lysrør og LED, så flater kan få en annen kontrast enn LRV tilsier.
+                let yf = miljø.xyzUnderLyset(flate).y * 100, yb = miljø.xyzUnderLyset(bakgrunn).y * 100
+                let kontrast = yf + yb > 0 ? abs(yf - yb) / (yf + yb) : 0
+                HStack(spacing: 0) {
+                    verdi(String(localized: "Flate i lyset"), yf.formatted(.number.precision(.fractionLength(0))))
+                    verdi(String(localized: "Bakgrunn i lyset"), yb.formatted(.number.precision(.fractionLength(0))))
+                    verdi(String(localized: "Forskjell"), abs(yf - yb).formatted(.number.precision(.fractionLength(0))) + " p.")
+                    verdi(String(localized: "Luminanskontrast"), kontrast.formatted(.number.precision(.fractionLength(2))))
+                }
+                .padding(.vertical, 4)
+            }
             ForEach(Flatekrav.allCases) { krav in
                 let bestått = k.består(krav)
                 HStack {
@@ -277,6 +297,9 @@ struct FlatekontrastSeksjon: View {
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.")
+                if lysmiljø != nil {
+                    Text("Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer i valgt lysmiljø – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.")
+                }
                 MetodeHenvisning(.lrv, .oklab)
             }
         }

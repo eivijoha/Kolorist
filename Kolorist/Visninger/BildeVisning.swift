@@ -1,4 +1,5 @@
 import FargeKjerne
+import FargeMaaling
 import ImageIO
 import PhotosUI
 import SwiftData
@@ -55,13 +56,25 @@ struct BildeVisning: View {
     @State private var klynger: [Bildepalett.Klynge] = []
     @State private var lagre: [PalettFarge]?
     @Environment(\.modelContext) private var kontekst
+    /// Kompensasjon for lyset i bildet (gråkort eller referansekort i bildet). Bildet er allerede hvitbalansert,
+    /// så dette retter restfargestikk og lyshet; lyset kan ikke måles fra et bilde.
+    @State private var kompensasjon: Lyskompensasjon?
+    @State private var venterPåGråkort = false
+    @State private var gråkortRefleksjon = 0.18
+    @State private var egetKort = false
+    @State private var kalibrerMed: Referansekort?
+    @State private var lys = Lysbibliotek.delt
 
-    private var gjeldende: Farge? {
+    /// Fargen i bildet der lupen står.
+    private var rå: Farge? {
         guard let prøve else { return nil }
         let x = min(prøve.bredde - 1, max(0, Int(punkt.x * Double(prøve.bredde))))
         let y = min(prøve.høyde - 1, max(0, Int(punkt.y * Double(prøve.høyde))))
         return prøve.farge(x: x, y: y, radius: 2)
     }
+
+    /// Fargen etter eventuell kompensasjon.
+    private var gjeldende: Farge? { rå.map { kompensasjon?.kompensert($0) ?? $0 } }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -80,7 +93,17 @@ struct BildeVisning: View {
         }
         .toolbar {
             if bilde != nil {
+                ToolbarItem { lysmeny }
                 ToolbarItem { Menu("Nytt bilde", systemImage: "photo.badge.plus") { velgKnapper } }
+            }
+        }
+        .modifier(EgetKortSpørsmål(vises: $egetKort) { gråkortRefleksjon = $0; venterPåGråkort = true })
+        .sheet(item: $kalibrerMed) { kort in
+            if let bilde {
+                KortkalibreringArk(kort: kort, bilde: bilde) { k, _ in
+                    kompensasjon = .referansekort(k)
+                    beregnKlynger()
+                }
             }
         }
         .onChange(of: bildevalg) { _, valg in
@@ -102,6 +125,35 @@ struct BildeVisning: View {
         .sheet(isPresented: Binding(get: { lagre != nil }, set: { if !$0 { lagre = nil } })) {
             VelgPalettArk(farger: lagre ?? [])
         }
+    }
+
+    /// Kompensasjon med gråkort eller referansekort i bildet.
+    private var lysmeny: some View {
+        Menu {
+            Button("Som i bildet", systemImage: kompensasjon == nil ? "checkmark" : "") {
+                kompensasjon = nil
+                venterPåGråkort = false
+                beregnKlynger()
+            }
+            Section("Kompenser til dagslys") {
+                Menu("Med gråkort i bildet") {
+                    Button("Gråkort 18 %") { gråkortRefleksjon = 0.18; venterPåGråkort = true }
+                    Button("Hvitt kort 90 %") { gråkortRefleksjon = 0.9; venterPåGråkort = true }
+                    Button("Eget kort …") { egetKort = true }
+                }
+                if lys.referansekort.isEmpty {
+                    Button("Med referansekort (importer verdiene under Mine fargerom)", systemImage: "square.grid.3x2") {}
+                        .disabled(true)
+                } else {
+                    Menu("Med referansekort i bildet") {
+                        ForEach(lys.referansekort) { kort in Button(kort.navn) { kalibrerMed = kort } }
+                    }
+                }
+            }
+        } label: {
+            Label("Lys", systemImage: kompensasjon == nil ? "sun.max" : "sun.max.fill")
+        }
+        .help("Kompenser fargene med et gråkort eller referansekort som er med i bildet")
     }
 
     @ViewBuilder private var velgKnapper: some View {
@@ -161,6 +213,14 @@ struct BildeVisning: View {
                     }
             )
             #endif
+            .overlay(alignment: .topLeading) {
+                if venterPåGråkort {
+                    Label("Trykk på kortet", systemImage: "hand.tap").merke()
+                } else if let kompensasjon {
+                    Label(kompensasjon.erReferansekort ? "Kompensert med referansekort" : "Kompensert med gråkort",
+                          systemImage: "sun.max.fill").merke()
+                }
+            }
             .overlay(alignment: .topTrailing) {
                 if skala > 1.01 {
                     Button {
@@ -207,6 +267,13 @@ struct BildeVisning: View {
         case .slutt:
             // Trykk/klikk (eller slipp etter dra) fanger fargen – samme oppførsel som kameraet.
             drar = false
+            if venterPåGråkort, let kort = rå {
+                // Trykket var på gråkortet: det blir referansen, ikke en plukket farge.
+                venterPåGråkort = false
+                kompensasjon = .gråkort(målt: kort, refleksjon: gråkortRefleksjon)
+                beregnKlynger()
+                return
+            }
             if let målt = gjeldende {
                 let f = arbeidsbenk.begrens(målt)
                 arbeidsbenk.aktivFarge = f
@@ -315,6 +382,8 @@ struct BildeVisning: View {
         guard let data = try? await hent(), let resultat = await Self.dekod(data) else { return }
         bilde = resultat.bilde
         prøve = resultat.prøve
+        kompensasjon = nil
+        venterPåGråkort = false
         punkt = CGPoint(x: 0.5, y: 0.5)
         skala = 1
         forskyvning = .zero
@@ -338,7 +407,7 @@ struct BildeVisning: View {
     private func beregnKlynger() {
         guard let prøve else { klynger = []; return }
         klynger = Bildepalett.dominerende(prøve.utvalg(maks: 4000), antall: antallKlynger)
-            .map { Bildepalett.Klynge(farge: arbeidsbenk.begrens($0.farge), andel: $0.andel) }
+            .map { Bildepalett.Klynge(farge: arbeidsbenk.begrens(kompensasjon?.kompensert($0.farge) ?? $0.farge), andel: $0.andel) }
     }
 }
 
