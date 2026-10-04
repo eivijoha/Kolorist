@@ -22,7 +22,7 @@ struct SeILysPanel: View {
             .pickerStyle(.segmented)
             // Fargen på skjermen står alltid i feltet øverst; her bare lysmiljøene, to i bredden på iPhone og
             // flere på iPad og Mac.
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12, alignment: .top)], spacing: 14) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 12, alignment: .top)], spacing: 22) {
                 ForEach(miljøer) { prøve($0) }
             }
             .padding(.vertical, 4)
@@ -47,15 +47,18 @@ struct SeILysPanel: View {
     /// Én prøve: fargen i lyset, navnet på lyset, lyset (K og lx) og fargeskiftet.
     private func prøve(_ miljø: Lysmiljø) -> some View {
         let skift = miljø.fargeskift(farge)
-        return VStack(alignment: .leading, spacing: 4) {
+        // Teksten tett inntil sin egen prøve, og god avstand til neste rad, så det er tydelig hva som hører sammen.
+        return VStack(alignment: .leading, spacing: 6) {
             FargeRute(farge: somFoto ? miljø.somFoto(farge) : miljø.sett(farge), visTekst: false, hjørne: 8,
                       leggIPalett: leggIPalett, valgBoble: true)
                 .frame(height: 64)
-            Text(miljø.navn).font(.callout).lineLimit(2, reservesSpace: true)
-            Text(Lysbeskrivelse.tekst(miljø)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
-            Text("ΔE00 \(skift, format: .number.precision(.fractionLength(1)))")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(skift >= 3 ? Color.advarsel : Color.sekundærTekst)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(miljø.navn).font(.callout).lineLimit(2)
+                Text(Lysbeskrivelse.tekst(miljø)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
+                Text("ΔE00 \(skift, format: .number.precision(.fractionLength(1)))")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(skift >= 3 ? Color.advarsel : Color.sekundærTekst)
+            }
         }
         .accessibilityElement(children: .combine)
     }
