@@ -10,8 +10,9 @@ struct DelingsmappeArk: View {
     @State private var velgerMappe = false
     @State private var feil: String?
     /// Filene som eksporteres én gang (til en mappe brukeren velger, f.eks. i OneDrive).
-    @State private var eksport: [Eksportfil] = []
+    @State private var eksport: [URL] = []
     @State private var eksporterer = false
+    @State private var deler = false
     @Environment(\.dismiss) private var lukk
 
     var body: some View {
@@ -41,24 +42,27 @@ struct DelingsmappeArk: View {
                     #if os(macOS)
                     Text("Velg en mappe i OneDrive, Google Drive, Dropbox, iCloud Drive eller en annen tjeneste. Kolorist skriver palettene dit som filer, så de kan åpnes på Windows og andre maskiner. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
                     #else
-                    Text("Velg en mappe i OneDrive, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer og holder dem oppdatert, så de kan åpnes på Windows og andre maskiner. Vises en tjeneste grået ut, gir den ikke fast tilgang til mapper på iPhone og iPad – bruk da «Eksporter paletter til en mappe» under. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
+                    Text("Velg en mappe i OneDrive, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer og holder dem oppdatert, så de kan åpnes på Windows og andre maskiner. Vises en tjeneste grået ut, gir den ikke fast tilgang til mapper på iPhone og iPad – bruk da «Lagre palettene i en mappe» under. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.")
                     #endif
                 }
 
                 Section {
-                    Button("Eksporter paletter til en mappe …", systemImage: "square.and.arrow.up.on.square") {
-                        do {
-                            eksport = try deling.eksportfiler(paletter).map(Eksportfil.init)
-                            eksporterer = !eksport.isEmpty
-                        } catch {
-                            feil = error.localizedDescription
-                        }
+                    // Systemets egen eksportvelger (kan også opprette mapper) – virker i skytjenester som ikke gir fast
+                    // mappetilgang. Delingsarket gir i tillegg «Arkiver i Filer», e-post, Teams osv.
+                    Button("Lagre palettene i en mappe …", systemImage: "folder.badge.plus") {
+                        lagEksport { eksporterer = true }
                     }
                     .disabled(paletter.isEmpty || deling.formater.isEmpty)
+                    #if os(iOS)
+                    Button("Del palettfilene …", systemImage: "square.and.arrow.up") {
+                        lagEksport { deler = true }
+                    }
+                    .disabled(paletter.isEmpty || deling.formater.isEmpty)
+                    #endif
                 } header: {
                     Text("Eksporter én gang")
                 } footer: {
-                    Text("Skriver alle palettene i formatene under til en mappe du velger – også i OneDrive, Jottacloud og andre tjenester. Filene oppdateres ikke av seg selv; eksporter på nytt når du vil oppdatere dem.")
+                    Text("Lagrer alle palettene i formatene under i en mappe du velger – også i OneDrive, Jottacloud og andre tjenester – eller deler filene med e-post, Teams og andre apper. Filene oppdateres ikke av seg selv; gjør det på nytt når du vil oppdatere dem.")
                 }
 
                 Section {
@@ -107,7 +111,16 @@ struct DelingsmappeArk: View {
                     feil = error.localizedDescription
                 }
             }
-            .fileExporter(isPresented: $eksporterer, items: eksport, contentTypes: [.data]) { _ in eksport = [] }
+            #if os(iOS)
+            .sheet(isPresented: $eksporterer, onDismiss: { eksport = [] }) {
+                Eksportvelger(filer: eksport).ignoresSafeArea()
+            }
+            .sheet(isPresented: $deler, onDismiss: { eksport = [] }) {
+                Delingsark(filer: eksport).presentationDetents([.medium, .large])
+            }
+            #else
+            .fileExporter(isPresented: $eksporterer, items: eksport.map(Eksportfil.init), contentTypes: [.data]) { _ in eksport = [] }
+            #endif
             .alert("Kunne ikke bruke mappa", isPresented: Binding(get: { feil != nil }, set: { if !$0 { feil = nil } })) {
                 Button("OK") {}
             } message: { Text(feil ?? "") }
@@ -184,6 +197,42 @@ struct DelingsmappeSynk: View {
             .onChange(of: fase) { _, ny in if ny == .active { deling.oppdaterStatus() } }
     }
 }
+
+extension DelingsmappeArk {
+    /// Lager filene og åpner eksportvelgeren.
+    fileprivate func lagEksport(_ vis: () -> Void) {
+        do {
+            eksport = try deling.eksportfiler(paletter)
+            if !eksport.isEmpty { vis() }
+        } catch {
+            feil = error.localizedDescription
+        }
+    }
+}
+
+#if os(iOS)
+/// Systemets eksportvelger for ferdige filer: velg mappe (eller opprett en) i Filer, også i OneDrive, Jottacloud o.l.
+struct Eksportvelger: UIViewControllerRepresentable {
+    let filer: [URL]
+
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        UIDocumentPickerViewController(forExporting: filer, asCopy: true)
+    }
+
+    func updateUIViewController(_ vc: UIDocumentPickerViewController, context: Context) {}
+}
+
+/// Delingsarket for ferdige filer («Arkiver i Filer», e-post, Teams …).
+struct Delingsark: UIViewControllerRepresentable {
+    let filer: [URL]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: filer, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
+}
+#endif
 
 /// En fil fra «Eksporter paletter til en mappe», med filnavnet beholdt.
 nonisolated struct Eksportfil: Transferable {

@@ -1296,6 +1296,16 @@
         }
       }
     },
+    "Del palettfilene …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share palette files …"
+          }
+        }
+      }
+    },
     "Del som lenke": {
       "localizations": {
         "en": {
@@ -1562,16 +1572,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Export and copy"
-          }
-        }
-      }
-    },
-    "Eksporter paletter til en mappe …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export palettes to a folder …"
           }
         }
       }
@@ -4095,6 +4095,16 @@
         }
       }
     },
+    "Lagre palettene i en mappe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save palettes to a folder …"
+          }
+        }
+      }
+    },
     "Lagre sist fangede farge": {
       "localizations": {
         "en": {
@@ -4163,6 +4173,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save as palette …"
+          }
+        }
+      }
+    },
+    "Lagrer alle palettene i formatene under i en mappe du velger – også i OneDrive, Jottacloud og andre tjenester – eller deler filene med e-post, Teams og andre apper. Filene oppdateres ikke av seg selv; gjør det på nytt når du vil oppdatere dem.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saves all palettes in the formats below to a folder you choose – including OneDrive, Jottacloud and other services – or shares the files by email, Teams and other apps. The files are not updated automatically; do it again when you want to update them."
           }
         }
       }
@@ -6045,16 +6065,6 @@
         }
       }
     },
-    "Skriver alle palettene i formatene under til en mappe du velger – også i OneDrive, Jottacloud og andre tjenester. Filene oppdateres ikke av seg selv; eksporter på nytt når du vil oppdatere dem.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Writes all palettes in the formats below to a folder you choose – including OneDrive, Jottacloud and other services. The files are not updated automatically; export again when you want to update them."
-          }
-        }
-      }
-    },
     "Skriver …": {
       "localizations": {
         "en": {
@@ -7103,12 +7113,12 @@
         }
       }
     },
-    "Velg en mappe i OneDrive, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer og holder dem oppdatert, så de kan åpnes på Windows og andre maskiner. Vises en tjeneste grået ut, gir den ikke fast tilgang til mapper på iPhone og iPad – bruk da «Eksporter paletter til en mappe» under. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
+    "Velg en mappe i OneDrive, iCloud Drive eller en annen tjeneste i Filer. Kolorist skriver palettene dit som filer og holder dem oppdatert, så de kan åpnes på Windows og andre maskiner. Vises en tjeneste grået ut, gir den ikke fast tilgang til mapper på iPhone og iPad – bruk da «Lagre palettene i en mappe» under. Tjenestens egen app laster opp filene – Kolorist sender ingenting selv.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a folder in OneDrive, iCloud Drive or another service in Files. Kolorist writes your palettes there as files and keeps them up to date, so they can be opened on Windows and other computers. If a service appears greyed out, it doesn’t give lasting access to folders on iPhone and iPad – use “Export palettes to a folder” below instead. The service’s own app uploads the files – Kolorist sends nothing itself."
+            "value": "Choose a folder in OneDrive, iCloud Drive or another service in Files. Kolorist writes your palettes there as files and keeps them up to date, so they can be opened on Windows and other computers. If a service appears greyed out, it doesn’t give lasting access to folders on iPhone and iPad – use “Save palettes to a folder” below instead. The service’s own app uploads the files – Kolorist sends nothing itself."
           }
         }
       }
