@@ -95,27 +95,40 @@ struct DelingsmappeArk: View {
     }
 }
 
-/// Raden i palettoversikten: status for delingsmappa, og trykk for å sette den opp.
+/// Kortet i palettoversikten: status for delingsmappa, og trykk for å sette den opp.
 struct DelingsmappeRad: View {
     @State private var deling = Delingsmappe.delt
     @State private var visArk = false
 
     var body: some View {
         Button { visArk = true } label: {
-            Label {
-                switch deling.status {
-                case .ikkeKoblet: Text("Del paletter i en mappe – for eksempel OneDrive for kolleger på Windows")
-                case .koblet(let navn): Text("Paletter deles i mappa «\(navn)»")
-                case .utenTilgang: Text("Delingsmappa kan ikke åpnes – velg den på nytt")
-                }
-            } icon: {
+            HStack(spacing: 12) {
                 Image(systemName: deling.status == .utenTilgang ? "exclamationmark.triangle" : "folder")
+                    .font(.title3)
+                    .foregroundStyle(deling.status == .utenTilgang ? Color.advarsel : Color.accentColor)
+                    .frame(width: 28)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Delingsmappe").font(.body.weight(.semibold)).foregroundStyle(.primary)
+                    Group {
+                        switch deling.status {
+                        case .ikkeKoblet: Text("Del paletter som filer i en mappe – for eksempel OneDrive, Google Drive eller Dropbox, også for kolleger på Windows")
+                        case .koblet(let navn): Text("Paletter deles i mappa «\(navn)»")
+                        case .utenTilgang: Text("Delingsmappa kan ikke åpnes – velg den på nytt")
+                        }
+                    }
+                    .font(.footnote)
+                    .foregroundStyle(deling.status == .utenTilgang ? Color.advarsel : Color.sekundærTekst)
+                    .multilineTextAlignment(.leading)
+                }
+                Spacer(minLength: 8)
+                Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Color.sekundærTekst)
             }
-            .font(.footnote)
-            .foregroundStyle(deling.status == .utenTilgang ? Color.advarsel : Color.sekundærTekst)
+            .padding(12)
+            .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .padding(.top, 8)
         .sheet(isPresented: $visArk) { DelingsmappeArk() }
     }
 }

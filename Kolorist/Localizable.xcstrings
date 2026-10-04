@@ -1276,12 +1276,22 @@
         }
       }
     },
-    "Del paletter i en mappe – for eksempel OneDrive for kolleger på Windows": {
+    "Del paletter som filer i en mappe – for eksempel OneDrive, Google Drive eller Dropbox, også for kolleger på Windows": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share palettes in a folder – for example OneDrive, for colleagues on Windows"
+            "value": "Share palettes as files in a folder – for example OneDrive, Google Drive or Dropbox, for colleagues on Windows too"
+          }
+        }
+      }
+    },
+    "Del paletter som filer i en mappe, for eksempel i OneDrive": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share palettes as files in a folder, for example in OneDrive"
           }
         }
       }
@@ -1322,6 +1332,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sharing folder"
+          }
+        }
+      }
+    },
+    "Delingsmappe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharing folder …"
           }
         }
       }
@@ -2031,16 +2051,16 @@
     },
     "Filamentfarger for 3D-print fra FilamentColors.xyz: %lld prøver fra mange produsenter, %lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz.": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Filamentfarger for 3D-print fra FilamentColors.xyz: %1$lld prøver fra mange produsenter, %2$lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz."
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Filament colours for 3D printing from FilamentColors.xyz: %1$lld samples from many manufacturers, %2$lld of them measured with a colorimeter. The rest are estimated from photos and marked as such. Each colour links to the sample at FilamentColors.xyz."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Filamentfarger for 3D-print fra FilamentColors.xyz: %1$lld prøver fra mange produsenter, %2$lld av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz."
           }
         }
       }
@@ -4223,6 +4243,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Put in sharing folder"
+          }
+        }
+      }
+    },
+    "Legg i delingsmappa …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Put in sharing folder …"
           }
         }
       }

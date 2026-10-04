@@ -23,6 +23,7 @@ struct PalettListe: View {
     @State private var vurderes: PalettDokument?
     @State private var matrise: PalettDokument?
     @State private var visVerdiord = false
+    @State private var visDelingsmappe = false
     @State private var visNyPalett = false
     @State private var nyPalettNavn = ""
 
@@ -63,7 +64,12 @@ struct PalettListe: View {
                     HStack {
                         Text("Paletter").font(.title3.weight(.semibold))
                         Spacer()
-                        if iKolonne { nyPalettMeny.labelStyle(.iconOnly).menuIndicator(.hidden).fixedSize() }
+                        if iKolonne {
+                            Button("Delingsmappe …", systemImage: "folder") { visDelingsmappe = true }
+                                .labelStyle(.iconOnly).buttonStyle(.borderless)
+                                .help("Del paletter som filer i en mappe, for eksempel i OneDrive")
+                            nyPalettMeny.labelStyle(.iconOnly).menuIndicator(.hidden).fixedSize()
+                        }
                     }
                     .padding(.top, 8)
                     if paletter.isEmpty {
@@ -94,9 +100,11 @@ struct PalettListe: View {
                                     let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
                                     DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
                                         .disabled(farger.isEmpty && gradienter.isEmpty)
-                                    if Delingsmappe.delt.erKoblet {
-                                        Button("Legg i delingsmappa", systemImage: "folder") {
+                                    Button(Delingsmappe.delt.erKoblet ? "Legg i delingsmappa" : "Legg i delingsmappa …", systemImage: "folder") {
+                                        if Delingsmappe.delt.erKoblet {
                                             Task { await Delingsmappe.delt.del(p, blant: paletter) }
+                                        } else {
+                                            visDelingsmappe = true
                                         }
                                     }
                                     Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
@@ -118,8 +126,13 @@ struct PalettListe: View {
             .background(Color(white: 0.5).opacity(0.06))
             .navigationTitle("Paletter")
             .toolbar {
-                if !iKolonne { nyPalettMeny }
+                if !iKolonne {
+                    Button("Delingsmappe …", systemImage: "folder") { visDelingsmappe = true }
+                        .help("Del paletter som filer i en mappe, for eksempel i OneDrive")
+                    nyPalettMeny
+                }
             }
+            .sheet(isPresented: $visDelingsmappe) { DelingsmappeArk() }
             .sheet(isPresented: $visVerdiord) {
                 NavigationStack {
                     VerdiordVisning()
@@ -438,6 +451,7 @@ struct PalettDetalj: View {
     @State private var visSkala: PalettFarge?
     @State private var visKontrast = false
     @State private var visILys = false
+    @State private var visDelingsmappe = false
     @State private var vurdering: PalettVurdering?
     @State private var kiArbeider = false
     @State private var kiFeil: String?
@@ -544,6 +558,7 @@ struct PalettDetalj: View {
             ToneskalaArk(grunnfarge: pf) { nye in dokument.farger += nye }
         }
         .sheet(isPresented: $visKontrast) { KontrastmatriseArk(palett: dokument.palett) }
+        .sheet(isPresented: $visDelingsmappe) { DelingsmappeArk() }
         .sheet(isPresented: $visILys) {
             PalettILysArk(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn, farger: dokument.farger)
         }
@@ -592,13 +607,15 @@ struct PalettDetalj: View {
             }
             Button("PDF med fargeflater (A4)") { eksport = (PalettUtskrift.pdf(for: dokument), "\(eksportnavn).pdf") }
                 .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
-            if Delingsmappe.delt.erKoblet {
-                Button("Legg i delingsmappa", systemImage: "folder") {
+            Button(Delingsmappe.delt.erKoblet ? "Legg i delingsmappa" : "Legg i delingsmappa …", systemImage: "folder") {
+                if Delingsmappe.delt.erKoblet {
                     let alle = (try? kontekst.fetch(FetchDescriptor<PalettDokument>())) ?? [dokument]
                     Task { await Delingsmappe.delt.del(dokument, blant: alle) }
+                } else {
+                    visDelingsmappe = true
                 }
-                .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
             }
+            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
             Divider()
             let navn = dokument.navn, farger = dokument.farger, gradienter = dokument.gradienter
             DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
