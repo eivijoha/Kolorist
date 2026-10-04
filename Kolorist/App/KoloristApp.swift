@@ -109,6 +109,10 @@ final class Arbeidsbenk {
     var valgtFane: Fane = Arbeidsbenk.startfane
     /// Vinduet er bredt nok til palettkolonnen (Mac og store iPader i liggende format). Settes av rotvisningen.
     var palettkolonneMulig = false
+    /// En åpnet delingslenke som vises i et ark (se `åpneLenke`).
+    var mottattLenke: MottattLenke?
+    /// Feilmelding når en delingslenke ikke kunne leses.
+    var lenkefeil: String?
     /// Lysere/mørkere-innstillinger, delt mellom Studio og Overgang og husket mellom oppstarter.
     var lyshetstrinn: Lyshetstrinn = Arbeidsbenk.lastTrinn() {
         didSet { try? UserDefaults.standard.set(JSONEncoder().encode(lyshetstrinn), forKey: "lyshetstrinn") }
@@ -365,6 +369,22 @@ struct InnholdsVisning: View {
             #endif
             if arbeidsbenk.palettkolonneMulig != stor { arbeidsbenk.palettkolonneMulig = stor }
         }
+        // Delingslenker (https://kolorist.no/l#… og kolorist://l#…): vises i et ark, lagres ikke av seg selv.
+        .onOpenURL { arbeidsbenk.åpneLenke($0) }
+        #if DEBUG
+        // Test: `-åpneLenke <lenke>` åpner en delingslenke ved oppstart (uten systemets «Åpne i»-spørsmål).
+        .task {
+            if let tekst = UserDefaults.standard.string(forKey: "åpneLenke"), let url = URL(string: tekst) { arbeidsbenk.åpneLenke(url) }
+        }
+        #endif
+        #if os(macOS)
+        .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
+        #endif
+        .sheet(item: $arbeidsbenk.mottattLenke) { MottattLenkeArk(innhold: $0.innhold) }
+        .alert("Kunne ikke åpne lenken", isPresented: Binding(get: { arbeidsbenk.lenkefeil != nil },
+                                                              set: { if !$0 { arbeidsbenk.lenkefeil = nil } })) {
+            Button("OK") {}
+        } message: { Text(arbeidsbenk.lenkefeil ?? "") }
         .sheet(item: $arbeidsbenk.sammenligning) { par in
             SammenligningVisning(a: par.a, b: par.b)
         }

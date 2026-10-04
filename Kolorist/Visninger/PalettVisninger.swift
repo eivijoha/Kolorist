@@ -91,6 +91,9 @@ struct PalettListe: View {
                                     Divider()
                                     Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
                                     KopierTilMeny(farger: p.farger, navn: p.navn)
+                                    let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
+                                    DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
+                                        .disabled(farger.isEmpty && gradienter.isEmpty)
                                     if Delingsmappe.delt.erKoblet {
                                         Button("Legg i delingsmappa", systemImage: "folder") {
                                             Task { await Delingsmappe.delt.del(p, blant: paletter) }
@@ -597,6 +600,9 @@ struct PalettDetalj: View {
                 .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
             }
             Divider()
+            let navn = dokument.navn, farger = dokument.farger, gradienter = dokument.gradienter
+            DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
+                .disabled(farger.isEmpty && gradienter.isEmpty)
             Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
             Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
             KopierTilMeny(farger: dokument.farger, navn: dokument.navn)

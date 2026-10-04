@@ -289,6 +289,11 @@ struct HarmoniSeksjon: View {
                 lagre(farger.map { PalettFarge(farge: $0, opphav: .manuell) }, harmoni.navn)
             }
             KopierTilMeny(farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }, navn: harmoni.navn)
+            let (h, s, f, a, v, o, i) = (harmoni, sirkel, farger, antall, vinkel, lyshetsrekkefølge, grunnIndeks)
+            let grunn = i.flatMap { f.indices.contains($0) ? f[$0] : nil } ?? juster(grunnfarge).gamutKartlagt(til: gamut)
+            DelSomLenke(navn: harmoni.navn, tittel: "Del harmonien som lenke") {
+                Lenkedeling.harmoni(h, sirkel: s, grunn: grunn, farger: f, antall: a, vinkel: v, lyshetsrekkefølge: o, grunnIndeks: i)
+            }
         } header: {
             Text("Fargeharmonier")
         } footer: {

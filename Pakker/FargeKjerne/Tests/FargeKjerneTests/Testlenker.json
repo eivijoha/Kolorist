@@ -1,0 +1,232 @@
+[
+  {
+    "farger" : [
+      {
+        "cieLab" : [
+          51.332043068383072,
+          32.913854450041747,
+          30.508892786393581
+        ],
+        "hex" : "#B66248",
+        "okLCH" : [
+          0.58823999571964947,
+          0.11538060791286553,
+          37.952517375650253
+        ]
+      }
+    ],
+    "lenke" : "https://kolorist.no/l#zq1ZKU7KKrlbKBpIGeqYWFkYmOgZ6BpYGlhYg2tzA0ixWRym3VMlKydAgSMFU30JJRykPyAtJTc8BMouAzNz8lNScHKvc0rxiIA0SBCnwRXBLUHQXlQHtMjTQMdWxABpdAZRzMjMzMrFQqgVyQUrTEovSU4EKgeoMawE",
+    "navn" : "farge",
+    "slag" : "farge"
+  },
+  {
+    "farger" : [
+      {
+        "cieLab" : [
+          22.957899669927258,
+          -5.7707174128057428,
+          -15.034684294331523
+        ],
+        "hex" : "#1F3A4D",
+        "okLCH" : [
+          0.33600999788566005,
+          0.047155112628398235,
+          240.79314879262068
+        ]
+      },
+      {
+        "cieLab" : [
+          43.807937894187759,
+          -11.474382420253198,
+          -18.01713949983148
+        ],
+        "hex" : "#3F6E85",
+        "okLCH" : [
+          0.51422999681037707,
+          0.062970524374349315,
+          230.9749830040044
+        ]
+      },
+      {
+        "cieLab" : [
+          70.794452077651954,
+          -9.1199089526407544,
+          -14.413599186862381
+        ],
+        "hex" : "#8FB3C7",
+        "okLCH" : [
+          0.74708999524495046,
+          0.048528234110660526,
+          232.57752208527342
+        ]
+      },
+      {
+        "cieLab" : [
+          88.16743492435549,
+          1.0835564136719711,
+          11.153774163770237
+        ],
+        "hex" : "#E6DCC8",
+        "okLCH" : [
+          0.89710999416947956,
+          0.02891917942853876,
+          84.583154804586471
+        ]
+      },
+      {
+        "cieLab" : [
+          51.434403914317542,
+          45.677011498451606,
+          37.612729071139341
+        ],
+        "hex" : "#C8553D",
+        "okLCH" : [
+          0.59287999549272552,
+          0.15218085253794825,
+          33.425887148041483
+        ]
+      },
+      {
+        "cieLab" : [
+          22.957899669927258,
+          -5.7707174128057428,
+          -15.034684294331523
+        ],
+        "hex" : "#1F3A4D",
+        "okLCH" : [
+          0.33600999788566005,
+          0.047155112628398235,
+          240.79314879262068
+        ]
+      },
+      {
+        "cieLab" : [
+          73.019463167551635,
+          28.617267426728652,
+          38.995931802200666
+        ],
+        "hex" : "#F29E6D",
+        "okLCH" : [
+          0.77293999463376573,
+          0.11937814171350279,
+          50.496167284419919
+        ]
+      }
+    ],
+    "lenke" : "https://kolorist.no/l#znZJLTsMwEIavYlliFxw_M-PuaEpZVLAoK4S6CCWUkL6UtIiq6nE4CRdjnAfKmo09Htuf5v9nzvyNj57PvKRVCmMSqaJrKaQ2XWCVShYR3xz5iCs5ZlqY2AjLI76lzOS0Z28fu-qVzl_hxdTc2Am_RD3RKatNAzI-cS0Rve6JINyYWUJaAR1ydqoPL-uf745opsktugERLEjf1uhtGxh0dlgjEE71FRZ1sWLvxWaTrzskTscmhQESPSgVEUhqMGHXCL4HauGeGAqM1Z_qx2zbC75NJmmKQ8FeIxJDaZANEw2agdw5c7GSwneoh-xYHyiuKC6Wy1GZ3qW79a563GfL_C7f5lWxTO-fZuFJeN-m6pL1yUOjmcUMkBbUtOircPFJ5SgZAUaoo2B4KDdF5wz1h46rpu8ZH0EnqjxuqmK7or91c0WD8a-5GM5B8GXAAaCeBVPAtbvXSg2NnjMQOsY_zlR7cpg4i1ByYxgNW9Bfnhrfgvx9ts4P4UCS1eUX",
+    "navn" : "palett",
+    "slag" : "palett"
+  },
+  {
+    "farger" : [
+      {
+        "cieLab" : [
+          21.446111258257339,
+          15.831006671740312,
+          -38.900053234841138
+        ],
+        "hex" : "#2B2D6E",
+        "okLCH" : [
+          0.33570999757135317,
+          0.11039031906114109,
+          277.32265730023983
+        ]
+      },
+      {
+        "cieLab" : [
+          51.434403914317542,
+          45.677011498451606,
+          37.612729071139341
+        ],
+        "hex" : "#C8553D",
+        "okLCH" : [
+          0.59287999549272552,
+          0.15218085253794825,
+          33.425887148041483
+        ]
+      },
+      {
+        "cieLab" : [
+          78.777483531147027,
+          13.991516472110554,
+          61.509735183125059
+        ],
+        "hex" : "#F2B84B",
+        "okLCH" : [
+          0.81649999472264145,
+          0.13986500855610534,
+          80.094538678304247
+        ]
+      }
+    ],
+    "lenke" : "https://kolorist.no/l#zXdDNasMwDADgVwk6e6osx7HsY9b1PLrTGD0E2oayNh1LWwoh7z45pLDtYmT9fDIeoIX0MUADKRo4QhrywRr2kAhJDJym--kMCfZNfwGN59pooNPs2_nY7bZt07Va6ydun6FPDQmd88EabbclBfNEaCmWcaPKVWcD-te6YORFRKvjd81xzcvqBVT_0j2j-cP5yCLKWQ40seLE_dLWhV9Ywjhbz-K9Wz4sdP80sZXPCJdUZdSFIA_M0vu6CCj6smrWVlxLWc-aHTej9l40334328Ouy39zy4Uf",
+    "navn" : "gradient",
+    "slag" : "gradient"
+  },
+  {
+    "farger" : [
+      {
+        "cieLab" : [
+          51.84852750604459,
+          -0.28509804928306126,
+          -53.53881137337568
+        ],
+        "hex" : "#2F7FD8",
+        "okLCH" : [
+          0.59338999617303945,
+          0.15612309628537432,
+          253.91345446184016
+        ]
+      },
+      {
+        "cieLab" : [
+          51.088773893275189,
+          50.699393809319815,
+          15.950806307230113
+        ],
+        "hex" : "#C94F62",
+        "okLCH" : [
+          0.59338999527805292,
+          0.15612054270039363,
+          13.913417678066381
+        ]
+      },
+      {
+        "cieLab" : [
+          54.456060780271685,
+          -34.589199318979247,
+          49.78498900112691
+        ],
+        "hex" : "#55911E",
+        "okLCH" : [
+          0.59338999692932159,
+          0.15612195397975631,
+          133.91260753735156
+        ]
+      }
+    ],
+    "lenke" : "https://kolorist.no/l#zpY9LC8IwEIT_iuw5ptkk2zY5-qgePIh4EfFQ8FXUFmoVofS_uwF7EI9eNpnJzJekhSP4bQsXnkqSM8aJoZLKGh2HDZJSuBNwe4AHWo4GJHWEBgS82NBZkk1S6MQ3INSQLK_KJGT7upa0GlCEKPWnP3Y2i_VPP9yrUp0GEGqb9IBE0mzDLzCRk_EHQeQQp9Bx5gy-hVMYf_4mkKCpi3x_4KMCvBJQsVXmzaO-Fic27yyry2I8D_GSxbqPNyzOeX2ryoLVEzx2bw",
+    "navn" : "harmoni",
+    "slag" : "harmoni"
+  },
+  {
+    "farger" : [
+      {
+        "cieLab" : [
+          73.901242890180939,
+          -70.607941672653439,
+          62.613159493410834
+        ],
+        "hex" : "#00D32C",
+        "okLCH" : [
+          0.74999999652349969,
+          0.24999928819364461,
+          145.00102680522923
+        ]
+      }
+    ],
+    "lenke" : "https://kolorist.no/l#zq1ZKU7KKrlZKVLIy0DPVUcoG8gz0zE11dA30jAxMzC11DPQMTYyNLWN1lHJLlayUDA3cIxXM9Yz1Dc30DJV0lPKAYt45iUUK6UWHd-TlAUUqgCIGBi7GRs5KtUBdJUBuWmJReipQqkzJyrAWAA",
+    "navn" : "bred",
+    "slag" : "farge"
+  }
+]

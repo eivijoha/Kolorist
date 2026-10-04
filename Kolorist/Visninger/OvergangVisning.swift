@@ -56,6 +56,9 @@ struct OvergangVisning: View {
             }
             KopierTilMeny(farger: toner.map { PalettFarge(farge: $0, opphav: .overgang) },
                           navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"), tittel: "Kopier tonene til")
+            let oppsett = Gradientoppsett(fra: start, til: slutt, antall: antall, trinn: arbeidsbenk.lyshetstrinn)
+            let navn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
+            DelSomLenke(navn: navn, tittel: "Del overgangen som lenke") { Lenkedeling.gradient(oppsett, navn: navn) }
         } label: {
             Image(systemName: "plus.square")
                 .font(.body.weight(.semibold))

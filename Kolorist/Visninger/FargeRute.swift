@@ -75,6 +75,8 @@ struct FargeRute: View {
                 }
                 KopierMeny(farge: farge)
                 KopierTilMeny(farger: [palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)], navn: navn ?? "")
+                let delt = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
+                DelSomLenke(navn: navn ?? farge.hex()) { Lenkedeling.farge(delt) }
                 if let ekstraMeny { ekstraMeny }
                 if let fjern {
                     Button("Slett", systemImage: "trash", role: .destructive, action: fjern)

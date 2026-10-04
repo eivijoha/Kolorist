@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>no.engenett.Kolorist.lenke</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kolorist</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSCameraUseContinuityCameraDeviceType</key>
 	<true/>
 	<key>NSUbiquitousContainers</key>

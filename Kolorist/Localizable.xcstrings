@@ -205,6 +205,22 @@
         }
       }
     },
+    "%@ · %lld fargestopp": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · %2$lld fargestopp"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$lld colour stops"
+          }
+        }
+      }
+    },
     "%@ · minst %@:1": {
       "localizations": {
         "en": {
@@ -543,16 +559,16 @@
     },
     "%lld paletter skrevet %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld paletter skrevet %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld palettes written %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld paletter skrevet %2$@"
           }
         }
       }
@@ -1207,12 +1223,42 @@
         }
       }
     },
+    "Del harmonien som lenke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share harmony as link"
+          }
+        }
+      }
+    },
+    "Del overgangen som lenke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share gradient as link"
+          }
+        }
+      }
+    },
     "Del paletter i en mappe – for eksempel OneDrive for kolleger på Windows": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Share palettes in a folder – for example OneDrive, for colleagues on Windows"
+          }
+        }
+      }
+    },
+    "Del som lenke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share as link"
           }
         }
       }
@@ -1233,6 +1279,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sharing folder"
+          }
+        }
+      }
+    },
+    "Delt gradient": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared gradient"
+          }
+        }
+      }
+    },
+    "Delt harmoni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared harmony"
+          }
+        }
+      }
+    },
+    "Delt med deg": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared with you"
+          }
+        }
+      }
+    },
+    "Delt palett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared palette"
           }
         }
       }
@@ -2315,6 +2401,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gradients"
+          }
+        }
+      }
+    },
+    "Gradienter med flere enn to fargestopp lagres med første og siste stopp i denne versjonen av Kolorist.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gradients with more than two colour stops are saved with the first and last stop in this version of Kolorist."
           }
         }
       }
@@ -3497,6 +3593,16 @@
         }
       }
     },
+    "Kunne ikke åpne lenken": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t open the link"
+          }
+        }
+      }
+    },
     "Kunnskapsbase": {
       "localizations": {
         "en": {
@@ -3763,6 +3869,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save gradient"
+          }
+        }
+      }
+    },
+    "Lagre i Gradienter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save to Gradients"
           }
         }
       }
@@ -4039,12 +4155,52 @@
         }
       }
     },
+    "Legg til i paletter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to palettes"
+          }
+        }
+      }
+    },
+    "Legg til som palett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add as palette"
+          }
+        }
+      }
+    },
     "Legger panelet sammen": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Collapses the panel"
+          }
+        }
+      }
+    },
+    "Lenken er laget med en nyere versjon av Kolorist. Noe kan mangle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The link was made with a newer version of Kolorist. Something may be missing."
+          }
+        }
+      }
+    },
+    "Lenken kunne ikke leses. Den kan være avkortet, eller laget med en nyere versjon av Kolorist.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The link couldn’t be read. It may be cut short, or made with a newer version of Kolorist."
           }
         }
       }
@@ -4745,6 +4901,16 @@
         }
       }
     },
+    "Noen farger er laget i en ICC-profil du ikke har. Fargene kommer med, men ikke verdiene i profilen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some colours were made in an ICC profile you don’t have. The colours come along, but not the values in the profile."
+          }
+        }
+      }
+    },
     "Normalt syn": {
       "localizations": {
         "en": {
@@ -5057,6 +5223,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Palette from value words"
+          }
+        }
+      }
+    },
+    "Palett · %lld farger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palette · %lld colours"
+          }
+        }
+      }
+    },
+    "Palett · 1 farge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palette · 1 colour"
           }
         }
       }
@@ -6479,6 +6665,16 @@
         }
       }
     },
+    "Ukjent innhold": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown content"
+          }
+        }
+      }
+    },
     "Under 4000 K regnes lyset som glødelys (sortlegeme), over som dagslys. Lysrør og LED har ujevne spektre som kan endre enkelte farger mer enn fargetemperaturen tilsier.": {
       "localizations": {
         "en": {
@@ -6925,6 +7121,16 @@
         }
       }
     },
+    "Vis i Studio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in Studio"
+          }
+        }
+      }
+    },
     "Vis i «Se i lys»": {
       "localizations": {
         "en": {
@@ -7251,6 +7457,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Expanded"
+          }
+        }
+      }
+    },
+    "Åpne i Harmoni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in Harmony"
           }
         }
       }

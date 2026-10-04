@@ -66,6 +66,7 @@ struct PalettGradientListe: View {
                     .contextMenu {
                         Button("Åpne i Overgang", systemImage: "arrow.up.forward.app") { åpne(g) }
                         GradientKopierTilMeny(gradient: Gradientkopi(farger: [g.oppsett.fra, g.oppsett.til], navn: g.navn))
+                        DelSomLenke(navn: g.navn) { Lenkedeling.gradient(g.oppsett, navn: g.navn) }
                         Button("Slett", systemImage: "trash", role: .destructive) {
                             dokument.gradienter.removeAll { $0.id == g.id }
                         }
