@@ -1,9 +1,9 @@
 import Foundation
 import Synchronization
 
-/// Hindrer at innhold fra fargebiblioteker brukeren har importert – ofte rettighetsbelagte fargekart med navngitte
-/// toner – deles videre i lenker. Fargen selv deles (en enkelt fargeverdi), men ikke tonens navn, bibliotekets
-/// verdier eller kilden.
+/// Hindrer at koblingen mellom navn og fargeverdi i fargebiblioteker brukeren har importert – ofte rettighetsbelagte
+/// fargekart med navngitte toner – deles videre i lenker. Fargeverdiene deles (også verdiene i fargemodellen eller
+/// profilen fargen er lagret i), men ikke tonens navn eller hvilket bibliotek den kommer fra.
 ///
 /// Toner fra importerte bibliotek er merket (`Fargekilde.importert`). Farger lagret før merket fantes, kjennes igjen
 /// på navnet: appen melder navnene i de importerte bibliotekene med `oppdater(tonenavn:)`. Rene tall (toner uten
@@ -24,9 +24,9 @@ public enum Delingsvern {
         return !navn.isEmpty && tonenavn.withLock { $0.contains(navn) }
     }
 
-    /// Fargen uten navn, verdier og kilde fra et importert bibliotek; andre farger uendret.
+    /// Fargen uten navn og kilde når den er fra et importert bibliotek; andre farger uendret.
     public static func renset(_ pf: PalettFarge) -> PalettFarge {
         guard erFraImportertBibliotek(pf) else { return pf }
-        return PalettFarge(id: pf.id, farge: pf.farge, opphav: .manuell)
+        return PalettFarge(id: pf.id, farge: pf.farge, opphav: .manuell, representasjon: pf.representasjon)
     }
 }

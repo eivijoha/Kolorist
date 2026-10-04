@@ -1696,12 +1696,12 @@
         }
       }
     },
-    "Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne. Navn og verdier fra bibliotekene du importerer, tas ikke med når du deler farger som lenke.": {
+    "Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne. Når du deler farger som lenke, deles fargeverdiene, men ikke tonenavnene fra bibliotekene du har importert.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Colour libraries: .ase (Adobe Swatch Exchange), .aco (Photoshop swatches) and .acb (Adobe Color Book) – colour charts with named tones. Kolorist includes no colour charts from colour systems; you import your own. Names and values from the libraries you import are left out when you share colours as a link."
+            "value": "Colour libraries: .ase (Adobe Swatch Exchange), .aco (Photoshop swatches) and .acb (Adobe Color Book) – colour charts with named tones. Kolorist includes no colour charts from colour systems; you import your own. When you share colours as a link, the colour values are shared, but not the tone names from libraries you have imported."
           }
         }
       }

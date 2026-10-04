@@ -4,13 +4,14 @@ import Testing
 
 @Suite("Delingsvern", .serialized)
 struct DelingsvernTests {
-    @Test func importertTonerDelesUtenNavnOgVerdier() throws {
+    @Test func importertTonerDelesUtenNavnMenMedVerdier() throws {
         let tone = PalettFarge(navn: "Kartfarge 186", farge: Farge(hex: "#C8102E")!, opphav: .bibliotek,
                                representasjon: Fargerepresentasjon(rom: .modell(.cmyk), verdier: [0, 100, 81, 4], tekst: "0/100/81/4"),
                                kilde: Fargekilde(kildenavn: "Et fargekart", importert: true))
         let delt = DeltFarge(tone)
-        #expect(delt.navn == nil && delt.rom == nil && delt.tekst == nil && delt.kilde == nil)
-        #expect(delt.farge.avstandOK(til: tone.farge) < 0.0001)
+        // Koblingen mellom navn og verdi deles ikke; verdiene gjør.
+        #expect(delt.navn == nil && delt.kilde == nil)
+        #expect(delt.tekst == "0/100/81/4" && delt.farge.avstandOK(til: tone.farge) < 0.0001)
     }
 
     @Test func eldreFargerKjennesIgjenPåNavnet() {
