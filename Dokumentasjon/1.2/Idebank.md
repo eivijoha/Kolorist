@@ -148,17 +148,26 @@ avispapir …).
 ## Til 1.3: Lim inn farger og gradienter fra de samme programmene som «Kopier til» (2026-10-05)
 
 I dag leser «Lim inn» fargeobjekter og hex/CSS-tekst. Målet er å ta imot farger *og gradienter* fra de programmene vi
-kopierer til, slik at veien går begge veier: lim inn en gradient fra Keynote eller Illustrator, og få den som gradient
-i Overgang (eller i en palett), med endepunkter og stopp.
+kopierer til, slik at veien går begge veier.
+
+**Oftest enkle objekter med farge.** Det vanlige er å kopiere en figur, et rektangel eller en tekstramme i
+designprogrammet og ville ha *fargen* i Kolorist – ikke selve objektet. Lim inn bør derfor hente fargen fra objektet:
+- Én figur → fyllfargen (og ev. strekfargen som valg) som enkeltfarge, i Studio eller i palett.
+- Flere figurer → én farge per figur, i rekkefølge, som palett (dubletter slås sammen).
+- Figur med gradient → gradienten i Overgang (eller stoppene som palett).
+- Ta med det programmet oppgir: fargenavn (fargeprøve/swatch), fargerom (P3, sRGB, CMYK) og ev. dekkfarge, så
+  verdien tolkes riktig og ikke klippes.
 
 **Utklippsformatene vi kjenner fra arbeidet med «Kopier til» (1.2)**
 - **Pages/Keynote/Numbers (og trolig Freeform):** `com.apple.apps.content-language.canvas-object-1.0` – JSON med
-  figurer, fyll (farge eller gradient med stopp, P3/sRGB og vinkel). Lettest å lese. Radiell gradient kommer ut som
+  figurer, fyll (`fill.color` eller gradient med stopp, P3/sRGB og vinkel), strek og tekstfarge. Lettest å lese. Radiell gradient kommer ut som
   lineær i JSON-en (iWork skriver den slik), så formen må gjettes fra bildet eller utelates.
-- **Illustrator:** SVG-kode som tekst og `public.svg-image` (gradient med stopp), PDF med skyggelegging (ShadingType 2/3)
-  og AICB (PostScript). SVG er enklest å tolke.
+- **Illustrator:** SVG-kode som tekst og `public.svg-image` (`fill`/`stroke`, gradient med stopp), PDF med
+  skyggelegging (ShadingType 2/3) og AICB (PostScript). SVG er enklest å tolke; CMYK og fargeprøvenavn finnes bare i
+  PDF/AICB.
 - **InDesign:** PDF på utklippstavlen. Eget utvekslingsformat finnes, men leveres bare på forespørsel og var tomt i test.
-  PDF-ens skyggelegging (ShadingType 2/3, FunctionType 2/3) kan tolkes, men det er mer arbeid.
+  Fyllfarger (også CMYK og dekkfarger med navn, `/Separation`) og skyggelegging (ShadingType 2/3, FunctionType 2/3)
+  kan leses fra PDF-ens innhold – mer arbeid, men gir de mest presise verdiene.
 - **Figma og Sketch/Affinity:** sjekkes. Figma legger eget, lukket format i HTML på utklippstavlen; «Copy as SVG» og
   «Copy as CSS» fra Figma er trolig realistiske veier.
 - **Photoshop:** sjekkes (forventet bilde/PDF; farger kanskje bare som tekst).
