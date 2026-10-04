@@ -337,7 +337,8 @@ def fagside(lang, fil, tittel, beskrivelse, overtittel, h1, ingress, steg, vider
         {img}
         <figcaption>{tekst_b}</figcaption>
       </figure>'''
-        id_ = re.sub(r'[^a-zæøå0-9]+', '-', overskrift.lower()).strip('-')
+        # Aksenter bort (é → e), men æ, ø og å beholdes.
+        id_ = re.sub(r'[^a-zæøå0-9]+', '-', overskrift.lower().translate(str.maketrans('éèêáàóòôúü', 'eeeaaooouu'))).strip('-')
         deler.append(f'''    <section class="fagsteg{' med-bilde' if bildenavn else ''}" aria-labelledby="{id_}">
       <div>
         <h2 id="{id_}">{overskrift}</h2>
@@ -402,7 +403,7 @@ def design(lang):
               'Vurder trykk og bilder under standardlys for grafisk vurdering (ISO 3664)' + N,
               'Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt med kolorimeter – finn nærmeste filament, med lenke til prøven (<a href="filament.html">les mer</a>)' + N],
              'studio', ('lys.html', 'Les om lys og fargemåling')),
-            ('Lever', 'Eksporter og kopier farger til andre programmer, i formatet de ble laget i.',
+            ('Levér', 'Eksporter og kopier farger til andre programmer, i formatet de ble laget i.',
              ['Eksport til ASE, ACO, design tokens (DTCG-JSON), CSS, SwiftUI, GPL, SVG-fargeprøver og hex-lister',
               'Farger eksporteres i formatet de er laget i – for eksempel CMYK som CMYK',
               'Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer',
