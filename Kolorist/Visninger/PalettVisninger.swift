@@ -115,7 +115,9 @@ struct PalettListe: View {
                         .font(.footnote)
                         .foregroundStyle(Color.sekundærTekst)
                         .padding(.top, 8)
+                    // Luft over presentasjonen av appen, så den skiller seg fra palettene (mest i bred visning).
                     Utviklerlinje()
+                        .padding(.top, iKolonne ? 8 : 24)
                 }
                 .padding()
             }
