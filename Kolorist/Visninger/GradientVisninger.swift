@@ -13,35 +13,36 @@ struct GradientSeksjon: View {
     @State private var somPalett: LagretGradient?
 
     var body: some View {
-        Text("Gradienter").font(.title3.weight(.semibold)).padding(.top, 8)
-        if gradienter.isEmpty {
-            Text("Ingen gradienter ennå. Lagre en fra Overgang med + på gradienten.")
-                .font(.callout)
-                .foregroundStyle(Color.sekundærTekst)
-        }
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)],
-                  alignment: .leading, spacing: 12) {
-            ForEach(gradienter) { g in
-                if let oppsett = g.oppsett {
-                    GradientKort(navn: g.navn, oppsett: oppsett)
-                        .onTapGesture { arbeidsbenk.åpne(oppsett) }
-                        .accessibilityAction { arbeidsbenk.åpne(oppsett) }
-                        .contextMenu {
-                            Button("Åpne i Overgang", systemImage: "arrow.up.forward.app") { arbeidsbenk.åpne(oppsett) }
-                            Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") {
-                                nyttNavn = g.navn
-                                omdøpes = g
+        Listeseksjon("gradienter", tittel: "Gradienter") {
+            if gradienter.isEmpty {
+                Text("Ingen gradienter ennå. Lagre en fra Overgang med + på gradienten.")
+                    .font(.callout)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)],
+                      alignment: .leading, spacing: 12) {
+                ForEach(gradienter) { g in
+                    if let oppsett = g.oppsett {
+                        GradientKort(navn: g.navn, oppsett: oppsett)
+                            .onTapGesture { arbeidsbenk.åpne(oppsett) }
+                            .accessibilityAction { arbeidsbenk.åpne(oppsett) }
+                            .contextMenu {
+                                Button("Åpne i Overgang", systemImage: "arrow.up.forward.app") { arbeidsbenk.åpne(oppsett) }
+                                Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") {
+                                    nyttNavn = g.navn
+                                    omdøpes = g
+                                }
+                                Button("Kopier CSS", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(oppsett.css) }
+                                GradientKopierTilMeny(gradient: Gradientkopi(farger: [oppsett.fra, oppsett.til], navn: g.navn))
+                                KopierTilMeny(farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) }, navn: g.navn,
+                                              tittel: "Kopier tonene til")
+                                LeggGradientIPalettMeny(oppsett: oppsett, navn: g.navn)
+                                let navn = g.navn
+                                DelSomLenke(navn: navn) { Lenkedeling.gradient(oppsett, navn: navn) }
+                                Button("Lagre farger som palett …", systemImage: "swatchpalette") { somPalett = g }
+                                Button("Slett gradient", systemImage: "trash", role: .destructive) { slettes = g }
                             }
-                            Button("Kopier CSS", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(oppsett.css) }
-                            GradientKopierTilMeny(gradient: Gradientkopi(farger: [oppsett.fra, oppsett.til], navn: g.navn))
-                            KopierTilMeny(farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) }, navn: g.navn,
-                                          tittel: "Kopier tonene til")
-                            LeggGradientIPalettMeny(oppsett: oppsett, navn: g.navn)
-                            let navn = g.navn
-                            DelSomLenke(navn: navn) { Lenkedeling.gradient(oppsett, navn: navn) }
-                            Button("Lagre farger som palett …", systemImage: "swatchpalette") { somPalett = g }
-                            Button("Slett gradient", systemImage: "trash", role: .destructive) { slettes = g }
-                        }
+                    }
                 }
             }
         }

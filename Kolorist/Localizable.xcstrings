@@ -4439,6 +4439,16 @@
         }
       }
     },
+    "Legger seksjonen sammen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collapses the section"
+          }
+        }
+      }
+    },
     "Lenken er laget med en nyere versjon av Kolorist. Noe kan mangle.": {
       "localizations": {
         "en": {
@@ -7695,6 +7705,16 @@
         }
       }
     },
+    "Viser seksjonen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows the section"
+          }
+        }
+      }
+    },
     "Vurder paletten": {
       "localizations": {
         "en": {
@@ -7991,6 +8011,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open in Gradient"
+          }
+        }
+      }
+    },
+    "Åpne i Studio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in Studio"
           }
         }
       }

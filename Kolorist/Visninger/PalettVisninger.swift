@@ -47,57 +47,64 @@ struct PalettListe: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     if !arbeidsbenk.målinger.isEmpty {
-                        MidlertidigeFarger()
-                            .padding(12)
-                            .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .strokeBorder(Color.sekundærTekst.opacity(0.35), style: StrokeStyle(lineWidth: 1, dash: [5, 3])))
+                        Listeseksjon("plukkede", tittel: "Plukkede farger") {
+                            IkkeLagretMerke()
+                            PlukkedeFargerValg()
+                        } innhold: {
+                            MidlertidigeFarger(medTittel: false)
+                                .padding(12)
+                                .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .strokeBorder(Color.sekundærTekst.opacity(0.35), style: StrokeStyle(lineWidth: 1, dash: [5, 3])))
+                        }
                     }
-                    kort(.enkeltfarger) {
-                        EnkeltfargerRad(farger: enkeltfarger.map(\.palettFarge), paletter: paletter, velg: velgFarge)
-                    } slipp: { farger in
-                        flyttTilEnkeltfarger(farger, i: kontekst)
+                    Listeseksjon("enkeltfarger", tittel: "Enkeltfarger") {
+                        Text("\(enkeltfarger.count)").font(.callout).foregroundStyle(Color.sekundærTekst).monospacedDigit()
+                    } innhold: {
+                        kort(.enkeltfarger) {
+                            EnkeltfargerRad(farger: enkeltfarger.map(\.palettFarge), paletter: paletter, velg: velgFarge)
+                        } slipp: { farger in
+                            flyttTilEnkeltfarger(farger, i: kontekst)
+                        }
                     }
 
                     GradientSeksjon()
 
-                    HStack {
-                        Text("Paletter").font(.title3.weight(.semibold))
-                        Spacer()
+                    Listeseksjon("paletter", tittel: "Paletter") {
                         if iKolonne { nyPalettMeny.labelStyle(.iconOnly).menuIndicator(.hidden).fixedSize() }
-                    }
-                    .padding(.top, 8)
-                    if paletter.isEmpty {
-                        Text("Ingen paletter ennå. Trykk + for en tom palett eller en palett fra verdiord, eller lag en fra Studio, Overgang eller Utplukk.")
-                            .font(.callout)
-                            .foregroundStyle(Color.sekundærTekst)
-                    }
-                    // Rutenett som tilpasser seg bredden: én kolonne på iPhone, flere på iPad og Mac.
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)],
-                              alignment: .leading, spacing: 12) {
-                        ForEach(paletter) { p in
-                            SveipForÅSlette(slett: { slettes = p }) {
-                                kort(.palett(p)) {
-                                    PalettRad(dokument: p, velg: velgFarge)
-                                } slipp: { farger in
-                                    flytt(farger, til: p, i: kontekst)
-                                }
-                                .contextMenu {
-                                    Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
-                                        .disabled(p.farger.isEmpty)
-                                    Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
-                                        .disabled(p.farger.count < 2)
-                                    Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
-                                        .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                                    Divider()
-                                    Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
-                                    KopierTilMeny(farger: p.farger, navn: p.navn)
-                                    let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
-                                    DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
-                                        .disabled(farger.isEmpty && gradienter.isEmpty)
-                                    Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = p }
-                                        .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                                    Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
+                    } innhold: {
+                        if paletter.isEmpty {
+                            Text("Ingen paletter ennå. Trykk + for en tom palett eller en palett fra verdiord, eller lag en fra Studio, Overgang eller Utplukk.")
+                                .font(.callout)
+                                .foregroundStyle(Color.sekundærTekst)
+                        }
+                        // Rutenett som tilpasser seg bredden: én kolonne på iPhone, flere på iPad og Mac.
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)],
+                                  alignment: .leading, spacing: 12) {
+                            ForEach(paletter) { p in
+                                SveipForÅSlette(slett: { slettes = p }) {
+                                    kort(.palett(p)) {
+                                        PalettRad(dokument: p, velg: velgFarge)
+                                    } slipp: { farger in
+                                        flytt(farger, til: p, i: kontekst)
+                                    }
+                                    .contextMenu {
+                                        Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
+                                            .disabled(p.farger.isEmpty)
+                                        Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
+                                            .disabled(p.farger.count < 2)
+                                        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
+                                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
+                                        Divider()
+                                        Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
+                                        KopierTilMeny(farger: p.farger, navn: p.navn)
+                                        let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
+                                        DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
+                                            .disabled(farger.isEmpty && gradienter.isEmpty)
+                                        Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = p }
+                                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
+                                        Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
+                                    }
                                 }
                             }
                         }
@@ -294,12 +301,8 @@ struct EnkeltfargerRad: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
 
     var body: some View {
+        // Tittel og antall står i seksjonsoverskriften over kortet.
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Label("Enkeltfarger", systemImage: "square.fill").font(.headline)
-                Spacer()
-                Text("\(farger.count)").font(.caption).foregroundStyle(Color.sekundærTekst).monospacedDigit()
-            }
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     // Nyeste først, så den nye fargen havner der feltet står.

@@ -4,9 +4,33 @@ import SwiftUI
 
 /// Farger plukket fra kamera, bilder og skjermen som ikke er lagret ennå. Vises øverst i Paletter og
 /// palettkolonnen, tydelig merket som ulagret: de forsvinner når appen lukkes.
+/// Valgene for plukkede farger: lagre alle som enkeltfarger, eller tøm.
+struct PlukkedeFargerValg: View {
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.modelContext) private var kontekst
+
+    var body: some View {
+        Menu {
+            Button("Lagre alle som enkeltfarger", systemImage: "square.and.arrow.down") {
+                let farger = arbeidsbenk.målinger.reversed().map { PalettFarge(farge: $0, opphav: .kamera) }
+                lagreEnkeltfarger(farger, i: kontekst, navngi: false)
+                arbeidsbenk.tømMålinger()
+            }
+            Button("Tøm", systemImage: "trash", role: .destructive) { arbeidsbenk.tømMålinger() }
+        } label: {
+            Image(systemName: "ellipsis.circle")
+        }
+        .menuIndicator(.hidden)
+        .fixedSize()
+        .accessibilityLabel("Valg for plukkede farger")
+    }
+}
+
 struct MidlertidigeFarger: View {
     /// Kompakt utgave til palettkolonnen (rutenett i stedet for rad).
     var kompakt = false
+    /// Uten egen overskrift (i Paletter står tittel og valg i seksjonsoverskriften).
+    var medTittel = true
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.modelContext) private var kontekst
 
@@ -16,22 +40,13 @@ struct MidlertidigeFarger: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Label("Plukkede farger", systemImage: "eyedropper.halffull").font(kompakt ? .subheadline.weight(.semibold) : .headline)
-                IkkeLagretMerke()
-                Spacer()
-                Menu {
-                    Button("Lagre alle som enkeltfarger", systemImage: "square.and.arrow.down") {
-                        lagreEnkeltfarger(farger, i: kontekst, navngi: false)
-                        arbeidsbenk.tømMålinger()
-                    }
-                    Button("Tøm", systemImage: "trash", role: .destructive) { arbeidsbenk.tømMålinger() }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
+            if medTittel {
+                HStack(spacing: 8) {
+                    Label("Plukkede farger", systemImage: "eyedropper.halffull").font(kompakt ? .subheadline.weight(.semibold) : .headline)
+                    IkkeLagretMerke()
+                    Spacer()
+                    PlukkedeFargerValg()
                 }
-                .menuIndicator(.hidden)
-                .fixedSize()
-                .accessibilityLabel("Valg for plukkede farger")
             }
             Group {
                 if kompakt {

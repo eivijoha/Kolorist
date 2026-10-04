@@ -133,3 +133,49 @@ struct TilpasningArk: View {
         #endif
     }
 }
+
+/// Seksjon i en rullbar liste (Paletter): overskrift med pil som legger seksjonen sammen, og valgfrie knapper til
+/// høyre. Hvilke seksjoner som er lagt sammen, huskes på enheten.
+struct Listeseksjon<Innhold: View, Tillegg: View>: View {
+    let tittel: LocalizedStringKey
+    @ViewBuilder var tillegg: Tillegg
+    @ViewBuilder var innhold: Innhold
+    @AppStorage private var sammen: Bool
+
+    init(_ id: String, tittel: LocalizedStringKey, @ViewBuilder tillegg: () -> Tillegg, @ViewBuilder innhold: () -> Innhold) {
+        self.tittel = tittel
+        self.tillegg = tillegg()
+        self.innhold = innhold()
+        _sammen = AppStorage(wrappedValue: false, "listeseksjon.sammen.\(id)")
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Button { withAnimation(.snappy) { sammen.toggle() } } label: {
+                    HStack(spacing: 6) {
+                        Text(tittel).font(.title3.weight(.semibold)).foregroundStyle(Color.primary)
+                        Image(systemName: "chevron.down")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(Color.sekundærTekst)
+                            .rotationEffect(.degrees(sammen ? -90 : 0))
+                    }
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityValue(sammen ? String(localized: "Lagt sammen") : String(localized: "Åpen"))
+                .accessibilityHint(sammen ? String(localized: "Viser seksjonen") : String(localized: "Legger seksjonen sammen"))
+                Spacer()
+                tillegg
+            }
+            if !sammen { innhold }
+        }
+    }
+}
+
+extension Listeseksjon where Tillegg == EmptyView {
+    init(_ id: String, tittel: LocalizedStringKey, @ViewBuilder innhold: () -> Innhold) {
+        self.init(id, tittel: tittel, tillegg: { EmptyView() }, innhold: innhold)
+    }
+}

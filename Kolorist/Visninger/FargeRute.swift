@@ -16,6 +16,8 @@ struct FargeRute: View {
     /// Valgfrie handlinger i kontekstmenyen (trykk og hold / høyreklikk).
     var lagre: ((Farge) -> Void)? = nil
     var leggIPalett: ((Farge) -> Void)? = nil
+    /// «Åpne i Studio» for prøver utenfor Studio (f.eks. toner i Overgang).
+    var åpneIStudio: ((Farge) -> Void)? = nil
     var fjern: (() -> Void)? = nil
     var navngi: (() -> Void)? = nil
     /// Når satt, dras fargen med navn (mellom paletter); ellers som ren farge.
@@ -43,7 +45,7 @@ struct FargeRute: View {
                 .onLongPressGesture(minimumDuration: 0.35) { visValg = true }
                 .sensoryFeedback(.impact(weight: .medium), trigger: visValg) { _, ny in ny }
                 .popover(isPresented: $visValg, arrowEdge: .bottom) {
-                    FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett) { visValg = false }
+                    FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett, åpneIStudio: åpneIStudio) { visValg = false }
                         .presentationCompactAdaptation(.popover)
                 }
                 .accessibilityAction(named: "Valg for fargen") { visValg = true }
@@ -65,6 +67,9 @@ struct FargeRute: View {
     private var medMeny: some View {
         rute
             .contextMenu {
+                if let åpneIStudio {
+                    Button("Åpne i Studio", systemImage: "slider.horizontal.3") { åpneIStudio(farge) }
+                }
                 if let navngi {
                     Button("Gi navn …", systemImage: "character.cursor.ibeam", action: navngi)
                 }
@@ -162,6 +167,7 @@ struct FargeValgBoble: View {
     let farge: Farge
     var lagre: ((Farge) -> Void)?
     var leggIPalett: ((Farge) -> Void)?
+    var åpneIStudio: ((Farge) -> Void)? = nil
     var lukk: () -> Void
     @State private var lagret = false
 
@@ -179,6 +185,12 @@ struct FargeValgBoble: View {
                     .padding(10)
                 }
             VStack(alignment: .leading, spacing: 4) {
+                if let åpneIStudio {
+                    Button("Åpne i Studio", systemImage: "slider.horizontal.3") {
+                        lukk()
+                        åpneIStudio(farge)
+                    }
+                }
                 if let lagre {
                     Button(lagret ? "Lagret" : "Lagre som enkeltfarge", systemImage: lagret ? "checkmark.square.fill" : "plus.square") {
                         lagre(farge)

@@ -122,7 +122,8 @@ struct LysVurdering: View {
         // Teksten tett inntil sin egen prøve, og god avstand til neste rad, så det er tydelig hva som hører sammen.
         return VStack(alignment: .leading, spacing: 6) {
             FargeRute(farge: somFoto ? miljø.somFoto(farge) : miljø.sett(farge), visTekst: false, hjørne: 8,
-                      leggIPalett: { leggIPalett = [PalettFarge(farge: $0, opphav: .manuell)] }, valgBoble: true)
+                      leggIPalett: { leggIPalett = [PalettFarge(farge: $0, opphav: .manuell)] },
+                      åpneIStudio: { arbeidsbenk.visIStudio($0) }, valgBoble: true)
                 .frame(height: 64)
             VStack(alignment: .leading, spacing: 1) {
                 Text(miljø.navn).font(.callout).lineLimit(2)

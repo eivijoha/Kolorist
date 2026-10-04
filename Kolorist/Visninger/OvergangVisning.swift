@@ -135,7 +135,8 @@ struct OvergangVisning: View {
                     ForEach(Array(rader.enumerated()), id: \.offset) { r, rad in
                         GridRow {
                             ForEach(Array(rad.enumerated()), id: \.offset) { _, farge in
-                                FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett, valgBoble: true)
+                                FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett,
+                                          åpneIStudio: { arbeidsbenk.visIStudio($0) }, valgBoble: true)
                                     .frame(minHeight: 36)
                                     .overlay {
                                         if r == midtrad {
