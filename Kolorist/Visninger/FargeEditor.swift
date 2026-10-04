@@ -168,13 +168,7 @@ struct FargeEditor: View {
 
     /// Bred visning (iPad i landskap, åpen foldetelefon i landskap): fargeflatene får venstre halvdel,
     /// over/under hverandre, og kontrollene ligger til høyre.
-    private func erBred(_ størrelse: CGSize) -> Bool {
-        #if os(iOS)
-        størrelse.width > størrelse.height && størrelse.width >= 700
-        #else
-        false
-        #endif
-    }
+    private func erBred(_ størrelse: CGSize) -> Bool { Breddeoppsett.erBred(størrelse) }
 
     var body: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
@@ -722,6 +716,18 @@ private struct Lyshetsstige: View {
         }
         // Et lett tikk for hvert hele prosentpoeng i lyshet mens sirkelen dras.
         .sensoryFeedback(.selection, trigger: lysheter.indices.contains(grunnindeks) ? Int((lysheter[grunnindeks] * 100).rounded()) : 0) { _, _ in drar }
+    }
+}
+
+/// Bred visning: fargefeltene til venstre og kontrollene til høyre. iPad og åpen foldetelefon i liggende format, og
+/// Mac med bredt nok innholdsområde – der ville én sentrert kolonne gi lang avstand mellom tekst og kontroller.
+enum Breddeoppsett {
+    static func erBred(_ størrelse: CGSize) -> Bool {
+        #if os(iOS)
+        størrelse.width > størrelse.height && størrelse.width >= 700
+        #else
+        størrelse.width >= 820
+        #endif
     }
 }
 

@@ -90,7 +90,15 @@ final class Panelinnstillinger {
     /// Panelene i brukerens rekkefølge. Nye paneler (fra en nyere versjon) legges til sist.
     func paneler(for skjerm: Skjerm) -> [Panel] {
         let lagret = (rekkefølger[skjerm.rawValue] ?? []).compactMap(Panel.init(rawValue:)).filter(skjerm.paneler.contains)
-        return lagret + skjerm.paneler.filter { !lagret.contains($0) }
+        var paneler = lagret + skjerm.paneler.filter { !lagret.contains($0) }
+        #if DEBUG
+        // Skjermbilder: `-panelFørst lys` legger et panel øverst.
+        if let først = UserDefaults.standard.string(forKey: "panelFørst").flatMap(Panel.init(rawValue:)),
+           let i = paneler.firstIndex(of: først) {
+            paneler.insert(paneler.remove(at: i), at: 0)
+        }
+        #endif
+        return paneler
     }
 
     /// Alle verdiene (viste og skjulte) i brukerens rekkefølge. Nye verdier legges til sist.

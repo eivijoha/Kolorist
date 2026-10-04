@@ -90,17 +90,20 @@ struct OvergangVisning: View {
 
     /// Feltene øverst, som i Studio: tonene i «Vis som»-rommet (venstre ende er nøyaktig «Fra», høyre nøyaktig
     /// «Til»), med «Vis som» under. Fast øverst mens resten ruller.
-    private var overgangsflate: some View {
+    /// Bred visning (Mac, iPad i liggende format): feltene stablet til venstre, kontrollene til høyre.
+    private func overgangsflate(bred: Bool) -> some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         return VStack(spacing: 0) {
             HarmoniFlate(farger: toner, grunnIndeks: nil, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                          romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
                          verditekst: arbeidsbenk.modell.kortTekst,
+                         stablet: bred,
                          rammeRundtAlle: true,
                          velg: { arbeidsbenk.aktivFarge = $0 },
                          lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                          leggIPalett: { leggIPalett = [$0] })
-                .frame(height: 140)
+                .frame(height: bred ? nil : 140)
+                .frame(maxHeight: bred ? .infinity : nil)
                 .overlay(alignment: .topTrailing) { lagremeny }
             HStack {
                 Spacer(minLength: 0)
@@ -111,7 +114,8 @@ struct OvergangVisning: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .padding(.horizontal, 16)
+        .padding(.leading, 16)
+        .padding(.trailing, bred ? 0 : 16)
         .padding(.top, 4)
         .padding(.bottom, 8)
         .background(Color.skjemabakgrunn)
@@ -175,8 +179,13 @@ struct OvergangVisning: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-        overgangsflate
+        GeometryReader { geo in
+        let bred = Breddeoppsett.erBred(geo.size)
+        // AnyLayout bevarer skjemaets tilstand (rulleposisjon) når oppsettet skifter.
+        let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
+        oppsett {
+        overgangsflate(bred: bred)
+            .frame(width: bred ? geo.size.width / 2 : nil)
         Form {
             // Første valg under feltene, som i Studio. Fargemodellen deles med Studio.
             Section {
@@ -217,6 +226,7 @@ struct OvergangVisning: View {
         .formStyle(.grouped)
         // Grunnfarge-sirkelen fra lyshetsstigen løftet over fingeren, utenfor radens klipping.
         .lyshetslupe(lyshetslupe)
+        }
         }
         .background(Color.skjemabakgrunn)
         .navigationTitle("Overgang")
