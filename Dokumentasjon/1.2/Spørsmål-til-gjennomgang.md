@@ -3,6 +3,53 @@
 Samlet under implementeringen (2026-10-04) i stedet for å spørre underveis. Hvert punkt beskriver valget som er
 gjort, så det kan godtas eller endres.
 
+## Beslutninger (gjennomgang 2026-10-04)
+
+| Punkt | Beslutning |
+|---|---|
+| 1 | Egen modul `FargeMaaling` – godtatt. |
+| 2 | Beholde iCloud nøkkel–verdi. |
+| 3 | De sju standardene holder. |
+| 4 | «Se i lys» også for **hele paletten**, i **Vurdering** og for **LRV** (flater). Ikke for WCAG – det gjelder skjermfarger. |
+| 5 | Standardvisning «Slik øyet ser det». |
+| 6 | Beholde skjermreferansen (D65, 160 cd/m²). |
+| 7 | Beholde spektral vei, men **forklare tydeligere** ved lysrør/LED at spekteret er anslått (metameri). |
+| 8 | Terskel 3 ΔE00. |
+| 9 | Mac: visning; Continuity-kamera med gråkort/referansekort uten lysmåling – godtatt. |
+| 10 | Beholde «For lyset kameraet måler». |
+| 11 | **Lux bare med kort**, merket «≈». |
+| 12 | **«Eget kort …»** med egen refleksjon. |
+| 13 | Låsing av eksponering – godtatt. |
+| 14 | **Automatisk forslag til hjørner** (Vision), som brukeren kan justere. |
+| 15 | **Automatisk modellvalg**: beregn begge, bruk lavest kryssvalidert ΔE00, vis hvilken. |
+| 16 | **«Karakteriser én gang, deretter gråkort» med i 1.2.** |
+| 17 | Anslått fargegjengivelse vises både for kjente spektre og fra kameramåling, merket «anslått». |
+| 18 | Lystype vises som **«sannsynligvis …»**, bare når målingen har kort. |
+| 19 | Rekkefølgeheuristikken – godtatt. |
+| 20 | **Vis tolkningen** («Tolket som Lab D50») i kortets detaljer, med bytte til XYZ. |
+| 21 | Ikke Argyll .cht. |
+| 22 | Slipp av tekst/XML som referanseverdier – godtatt. |
+| 23 | **Strengere kryssvalidering**: også tonekurven tilpasses uten feltet. |
+| 24 | Lysmiljø fra kameramåling med hvitpunkt – godtatt. |
+| 25 | **Kompensasjon for bilder** med gråkort og referansekort (uten lysmåling). |
+| 26 | Engelsk: **«viewing condition»** i stedet for «light environment». |
+| 27 | Sitatet er riktig: Burns, Color Research & Application 45(1), 8–21, 2020 (metode 1, LLSS). |
+
+### Oppgaver fra gjennomgangen
+
+- [ ] 26 Engelsk «viewing condition(s)»
+- [ ] 7 Merknad om anslått spekter ved lysrør/LED
+- [ ] 11 Lux bare med kort
+- [ ] 12 Eget gråkort
+- [ ] 15 Automatisk modellvalg
+- [ ] 18 Lystype «sannsynligvis», bare med kort
+- [ ] 20 Vis tolkningen av tre kolonner, med bytte Lab/XYZ
+- [ ] 23 Strengere kryssvalidering
+- [ ] 4 Se i lys for hele paletten, i Vurdering og for LRV
+- [ ] 16 Karakteriser én gang, deretter gråkort
+- [ ] 25 Kompensasjon for bilder
+- [ ] 14 Automatisk forslag til hjørner (Vision)
+
 ## Arkitektur og lagring
 
 1. **Ny modul `FargeMaaling`** i pakken FargeKjerne: spektre, CIE-data (`CIEData.json`, 380–780 nm/5 nm),
