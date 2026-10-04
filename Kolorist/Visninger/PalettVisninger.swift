@@ -139,6 +139,14 @@ struct PalettListe: View {
                         }
                 }
             }
+            // Varsel midt på skjermen: en boble (iPad) bundet til et kort i rutenettet havnet på uventede steder.
+            .modifier(SlettPalettBekreftelse(navn: slettes?.navn ?? "",
+                                             vises: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } })) {
+                if let p = slettes {
+                    sti.removeAll { $0 == .palett(p) }
+                    kontekst.angresteg("Slett palett") { kontekst.delete(p) }
+                }
+            })
             .omdøpPalett($omdøpes)
             .sheet(item: $vurderes) { PalettVurderingArk(palett: $0.palett) }
             .sheet(item: $matrise) { KontrastmatriseArk(palett: $0.palett) }
@@ -160,21 +168,6 @@ struct PalettListe: View {
                 }
             } message: {
                 Text("Gi paletten et navn. Du kan endre det senere.")
-            }
-            .confirmationDialog("Slette «\(slettes?.navn ?? "")»?", isPresented: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } }),
-                                titleVisibility: .visible) {
-                Button("Slett palett", role: .destructive) {
-                    if let p = slettes {
-                        sti.removeAll { $0 == .palett(p) }
-                        kontekst.angresteg("Slett palett") { kontekst.delete(p) }
-                    }
-                }
-            } message: {
-                #if os(macOS)
-                Text("Fargene og gradientene i paletten slettes også. Du kan angre med ⌘Z.")
-                #else
-                Text("Fargene og gradientene i paletten slettes også. Rist for å angre.")
-                #endif
             }
             .navigationDestination(for: Valg.self) { v in
                 Group {
@@ -614,27 +607,20 @@ struct PalettDetalj: View {
             }
         }
         .sheet(item: $vurdering) { VurderingArk(vurdering: $0, farger: dokument.farger) }
-        .confirmationDialog("Slette «\(dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn)»?",
-                            isPresented: $slettSpørsmål, titleVisibility: .visible) {
-            Button("Slett palett", role: .destructive) {
-                // Lukk paletten først, så visningen ikke tegnes for en slettet palett.
-                let dokument = dokument
-                lukkPalett()
-                Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(350))
-                    kontekst.angresteg("Slett palett") { kontekst.delete(dokument) }
-                }
-            }
-        } message: {
-            #if os(macOS)
-            Text("Fargene og gradientene i paletten slettes også. Du kan angre med ⌘Z.")
-            #else
-            Text("Fargene og gradientene i paletten slettes også. Rist for å angre.")
-            #endif
-        }
+        .modifier(SlettPalettBekreftelse(navn: dokument.navn, vises: $slettSpørsmål, slett: slettPalett))
         .alert("KI", isPresented: Binding(get: { kiFeil != nil }, set: { if !$0 { kiFeil = nil } })) {
             Button("OK") {}
         } message: { Text(kiFeil ?? "") }
+    }
+
+    /// Lukk paletten først, så visningen ikke tegnes for en slettet palett.
+    private func slettPalett() {
+        let dokument = dokument
+        lukkPalett()
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(350))
+            kontekst.angresteg("Slett palett") { kontekst.delete(dokument) }
+        }
     }
 
     /// Av/på for en visning; de utelukker hverandre.
@@ -1073,6 +1059,8 @@ struct SveipForÅSlette<Innhold: View>: View {
                 .offset(x: forskyvning)
                 .animation(.snappy(duration: 0.2), value: drag == 0)
         }
+        // Kortet glir inn under sin egen kant, ikke over naboen i rutenettet (iPad og Mac har flere kolonner).
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .simultaneousGesture(
             DragGesture(minimumDistance: 20)
                 .updating($drag) { g, tilstand, _ in
@@ -1108,5 +1096,26 @@ extension EnvironmentValues {
 func slettEnkeltfarge(_ id: UUID, i kontekst: ModelContext) {
     for lagret in (try? kontekst.fetch(FetchDescriptor<LagretFarge>())) ?? [] where lagret.id == id {
         kontekst.delete(lagret)
+    }
+}
+
+/// «Slette «navn»?» med angremulighet, felles for palettlista og palettvisningen. Et varsel midt på skjermen, så det
+/// ikke er avhengig av hvor knappen eller kortet står.
+private struct SlettPalettBekreftelse: ViewModifier {
+    let navn: String
+    @Binding var vises: Bool
+    let slett: () -> Void
+
+    func body(content: Content) -> some View {
+        content.alert("Slette «\(navn.isEmpty ? String(localized: "Uten navn") : navn)»?", isPresented: $vises) {
+            Button("Slett palett", role: .destructive, action: slett)
+            Button("Avbryt", role: .cancel) {}
+        } message: {
+            #if os(macOS)
+            Text("Fargene og gradientene i paletten slettes også. Du kan angre med ⌘Z.")
+            #else
+            Text("Fargene og gradientene i paletten slettes også. Rist for å angre.")
+            #endif
+        }
     }
 }
