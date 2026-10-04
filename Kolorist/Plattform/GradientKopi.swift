@@ -19,16 +19,15 @@ struct Gradientkopi {
     var trinnvis = false
     var navn = ""
 
-    /// Stoppene med posisjon 0…1. Glidende: tette stopp langs OKLab-kurven, så programmer som interpolerer
-    /// i sRGB likevel følger appens overgang. Trinnvis: harde stopp, ett bånd per tone.
+    /// Stoppene med posisjon 0…1. Glidende: så få stopp som mulig, men nok til at programmer som blander i sRGB
+    /// (Figma, Sketch, SVG) følger appens OKLab-overgang innen ΔE00 1 – ofte bare start og slutt, flere når fargene
+    /// ligger langt fra hverandre. Trinnvis: harde stopp, ett bånd per tone.
     var stopp: [(farge: Farge, posisjon: Double)] {
         if trinnvis {
             let n = Double(farger.count)
             return farger.enumerated().flatMap { i, f in [(f, Double(i) / n), (f, Double(i + 1) / n)] }
         }
-        let prøver = Overgang.toner(gjennom: farger, stegMellom: max(1, 16 / max(farger.count - 1, 1)))
-        let n = Double(max(prøver.count - 1, 1))
-        return prøver.enumerated().map { ($1, Double($0) / n) }
+        return Gradientstopp.forenklet(gjennom: farger)
     }
 
     var css: CSSGradient { CSSGradient(farger: farger, form: form, vinkel: vinkel, trinnvis: trinnvis) }
