@@ -863,9 +863,12 @@ struct Fargeflate: View {
                         merknad: farge.erIDisplayP3 ? nil : String(localized: "Utenfor P3"))
                 if let n = fargebibliotek.nærmeste(til: farge) {
                     // Tonen beholder navnet sitt, så den kan lagres og kopieres som bibliotekstone.
-                    let tone = PalettFarge(navn: n.tone.navn, farge: n.tone.farge, opphav: .bibliotek, representasjon: n.tone.representasjon)
+                    let tone = PalettFarge(navn: n.tone.navn, farge: n.tone.farge, opphav: .bibliotek, representasjon: n.tone.representasjon,
+                                           kilde: n.tone.kilde)
+                    let avstand = n.avstand < 1 ? nil : String(localized: "Nærmeste tone · ΔE00 \(String(format: "%.1f", n.avstand))")
+                    let anslått = n.tone.kilde?.målt == false ? String(localized: "Anslått, ikke målt") : nil
                     halvdel(tone, tittel: fargebibliotek.navn, tekst: n.tone.visningsnavn,
-                            merknad: n.avstand < 1 ? nil : String(localized: "Nærmeste tone · ΔE00 \(String(format: "%.1f", n.avstand))"))
+                            merknad: [avstand, anslått].compactMap { $0 }.joined(separator: " · ").nilHvisTom)
                 } else {
                     halvdel(venstre, tittel: fargebibliotek.navn, tekst: String(localized: "Tomt bibliotek"))
                 }
@@ -1018,6 +1021,11 @@ struct VisOgsåMeny: View {
                 }
                 .pickerStyle(.inline)
             }
+            // Innebygde filamentfarger (FilamentColors.xyz), ett bibliotek per materiale.
+            Picker("Filamentfarger", selection: $valgtID) {
+                ForEach(Filamentfarger.biblioteker) { b in Text("\(b.navn) (\(b.farger.count))").tag(b.id) }
+            }
+            .pickerStyle(.inline)
         } label: {
             HStack(spacing: 4) {
                 // Eksplisitte farger: menyetiketter tones ellers i aksentfarge, og «sekundær» av
@@ -1091,4 +1099,8 @@ extension Color {
         Color(nsColor: .controlBackgroundColor)
         #endif
     }
+}
+
+private extension String {
+    var nilHvisTom: String? { isEmpty ? nil : self }
 }

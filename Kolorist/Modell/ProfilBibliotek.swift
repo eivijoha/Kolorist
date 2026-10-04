@@ -56,7 +56,10 @@ final class ProfilBibliotek {
     }
 
     func profil(id: String) -> ICCProfil? { alle.first { $0.id == id } }
-    func fargebibliotek(id: String) -> Fargebibliotek? { fargebiblioteker.first { $0.id == id } }
+    /// Importerte og innebygde fargebiblioteker (filamentfarger).
+    func fargebibliotek(id: String) -> Fargebibliotek? {
+        fargebiblioteker.first { $0.id == id } ?? Filamentfarger.biblioteker.first { $0.id == id }
+    }
 
     static let bibliotekendelser = ["ase", "aco", "acb"]
 

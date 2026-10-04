@@ -117,3 +117,14 @@ like OKLab-steg mellom dem. Ting å avklare når den tas opp:
 - Overgang-visningen: legge til, flytte og fjerne stopp; lyshetsstigen og «Flytt lysheten» med flere grunntoner.
 - Eksport: CSS-gradienter med flere stopp (oklab og sRGB-reserve), kopi til andre programmer, A4-PDF.
 - Lenkeformatet (se «Lenker til andre Kolorist-brukere») bør ha plass til flere stopp fra start.
+
+## Filamentfarger for 3D-print (tatt inn i 1.2, 2026-10-04)
+
+Innebygde bibliotek fra FilamentColors.xyz (CC BY 4.0), ett per materialgruppe, med kilde (produsent, navn,
+materiale, lenke til prøven, målt/anslått, TD) på hver farge. Uttrekk med `Pakker/FargeKjerne/Verktøy/hent_filamentfarger.py`;
+Lab er D65/10° (fra kildekoden deres). Senere:
+- Import av SpoolmanDB og Open Filament Database (MIT, bare hex – merkes som omtrentlige).
+- Filter på produsent i «Vis som» og ved nærmeste tone (biblioteket har ~150 produsenter).
+- OpenPrintTag (NFC på spolen): lese fargen rett fra spolen med iPhone – sjekk hvordan fargen er kodet i spesifikasjonen.
+- Vurder å publisere det bearbeidede uttrekket åpent på kolorist.no (CC BY 4.0), for åpenhet og fordi CC BY 4.0
+  ikke tillater tekniske begrensninger som hindrer bruken av dataene.

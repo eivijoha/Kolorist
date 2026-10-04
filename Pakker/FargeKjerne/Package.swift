@@ -12,7 +12,7 @@ let package = Package(
     ],
     targets: [
         // Ren fargematematikk, paletter og eksport. Ingen UI-avhengigheter.
-        .target(name: "FargeKjerne", resources: [.process("Localizable.xcstrings"), .process("Munsell.json")]),
+        .target(name: "FargeKjerne", resources: [.process("Localizable.xcstrings"), .process("Munsell.json"), .process("Filamentfarger.json")]),
         // Verdiord → fargeforslag (Foundation Models på enheten + leksikon-reserve).
         .target(name: "FargeKI", dependencies: ["FargeKjerne"],
                 resources: [.process("Localizable.xcstrings"), .process("Fargesemantikk.json")]),

@@ -216,9 +216,12 @@ public struct DeltFarge: Codable, Equatable, Sendable {
     public var munsell: String?
     /// sRGB-hex uten «#», gamut-kartlagt som i appen (CSS Color 4), så visningssiden viser samme verdi.
     public var hex: String?
+    /// Kilden, for farger fra et innebygd bibliotek (f.eks. filament): produsent, navn, materiale og lenke.
+    public var kilde: DeltKilde?
 
     enum CodingKeys: String, CodingKey {
         case okLab = "k", alfa = "a", navn = "n", rom = "r", romnavn = "rn", verdier = "rv", tekst = "rt", munsell = "mu", hex = "x"
+        case kilde = "q"
     }
 
     public init(_ farge: Farge, navn: String? = nil, representasjon: Fargerepresentasjon? = nil) {
@@ -240,6 +243,7 @@ public struct DeltFarge: Codable, Equatable, Sendable {
 
     public init(_ pf: PalettFarge) {
         self.init(pf.farge, navn: pf.navn, representasjon: pf.representasjon)
+        kilde = pf.kilde.map(DeltKilde.init)
     }
 
     public var farge: Farge {
@@ -261,7 +265,8 @@ public struct DeltFarge: Codable, Equatable, Sendable {
     }
 
     public func palettFarge(opphav: PalettFarge.Opphav = .manuell, harProfil: (String) -> Bool) -> PalettFarge {
-        PalettFarge(navn: navn ?? "", farge: farge, opphav: opphav, representasjon: representasjon(harProfil: harProfil))
+        PalettFarge(navn: navn ?? "", farge: farge, opphav: opphav, representasjon: representasjon(harProfil: harProfil),
+                    kilde: kilde?.fargekilde)
     }
 
     var erGyldig: Bool {
@@ -277,12 +282,60 @@ public struct DeltFarge: Codable, Equatable, Sendable {
         tekst = tekst.map(DeltInnhold.rensket)
         munsell = munsell.map(DeltInnhold.rensket)
         hex = hex.flatMap { $0.count == 6 && $0.allSatisfy(\.isHexDigit) ? $0 : nil }
+        kilde?.rens()
         rom = rom.map(DeltInnhold.rensket)
     }
 
     static func avrundet(_ x: Double, _ desimaler: Int) -> Double {
         let f = pow(10, Double(desimaler))
         return (x * f).rounded() / f
+    }
+}
+
+/// Kilden til en farge i en lenke. Lenken godtas bare til kjente kilder, så en lenke ikke kan smugle inn en
+/// annen adresse.
+public struct DeltKilde: Codable, Equatable, Sendable {
+    public var produsent: String?
+    public var navn: String?
+    public var materiale: String?
+    public var lenke: String?
+    public var målt: Bool?
+    public var td: Double?
+    public var kildenavn: String?
+
+    enum CodingKeys: String, CodingKey { case produsent = "p", navn = "n", materiale = "m", lenke = "l", målt = "o", td, kildenavn = "s" }
+
+    /// Kildene lenker kan peke til.
+    public static let godkjenteVerter: Set<String> = ["filamentcolors.xyz"]
+
+    public init(_ k: Fargekilde) {
+        produsent = k.produsent
+        navn = k.navn
+        materiale = k.materiale
+        lenke = k.lenke?.absoluteString
+        målt = k.målt
+        td = k.td
+        kildenavn = k.kildenavn
+    }
+
+    /// Bare https-lenker til godkjente kilder.
+    public static func godkjent(_ tekst: String?) -> URL? {
+        guard let tekst, let url = URL(string: tekst), url.scheme == "https",
+              let vert = url.host?.lowercased(), godkjenteVerter.contains(vert) else { return nil }
+        return url
+    }
+
+    public var fargekilde: Fargekilde {
+        Fargekilde(produsent: produsent, navn: navn, materiale: materiale, lenke: Self.godkjent(lenke), målt: målt,
+                   td: td.flatMap { $0.isFinite ? $0 : nil }, kildenavn: kildenavn)
+    }
+
+    mutating func rens() {
+        produsent = produsent.map(DeltInnhold.rensket)
+        navn = navn.map(DeltInnhold.rensket)
+        materiale = materiale.map(DeltInnhold.rensket)
+        kildenavn = kildenavn.map(DeltInnhold.rensket)
+        lenke = Self.godkjent(lenke)?.absoluteString
     }
 }
 

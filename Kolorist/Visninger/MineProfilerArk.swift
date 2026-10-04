@@ -71,6 +71,23 @@ struct MineProfilerArk: View {
                         Text("Fargebiblioteker")
                     }
                 }
+                if let om = Filamentfarger.om {
+                    Section {
+                        ForEach(Filamentfarger.biblioteker) { b in innebygdRad(b) }
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Filamentfarger for 3D-print fra FilamentColors.xyz: \(om.antall) prøver fra mange produsenter, \(om.målt) av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz.")
+                            Text("Dataene er lisensiert under CC BY 4.0. Kolorist har valgt ut opplysninger og regnet om fargene (uttrekk \(om.hentet)) og er ikke tilknyttet FilamentColors.xyz.")
+                            HStack(spacing: 16) {
+                                if let lenke = om.kildelenke { Link("FilamentColors.xyz", destination: lenke) }
+                                if let lenke = om.lisenslenke { Link("CC BY 4.0", destination: lenke) }
+                            }
+                            MetodeHenvisning(.filamentfarger, .cieLab)
+                        }
+                        .forklaring()
+                    } header: {
+                        Text("Innebygde fargebiblioteker")
+                    }
+                }
                 Section {
                     Button("Importer …", systemImage: "square.and.arrow.down") { importererKort = false; importerer = true }
                     VStack(alignment: .leading, spacing: 6) {
@@ -78,7 +95,7 @@ struct MineProfilerArk: View {
                         Text("Du kan også dra filer hit.")
                         #endif
                         Text("ICC-profiler: .icc og .icm – for eksempel trykkprofilen fra trykkeriet (FOGRA, GRACoL) eller en skjermprofil.")
-                        Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen slike kart; du importerer dine egne.")
+                        Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne.")
                         Text(bibliotek.brukerICloud
                              ? "Filene ligger i iCloud Drive › Kolorist › Profiler og synkroniseres mellom enhetene dine."
                              : "Filene lagres på denne enheten (iCloud Drive er ikke tilgjengelig).")
@@ -251,6 +268,19 @@ struct MineProfilerArk: View {
                 .buttonStyle(.borderless)
                 .help("Slett biblioteket")
             #endif
+        }
+    }
+
+    /// Et innebygd bibliotek: kan velges, ikke slettes.
+    private func innebygdRad(_ b: Fargebibliotek) -> some View {
+        HStack(spacing: 12) {
+            PalettStripe(farger: b.farger.prefix(12).map(\.farge)).frame(width: 56, height: 28).clipShape(RoundedRectangle(cornerRadius: 6))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(b.navn).lineLimit(2)
+                Text(String(localized: "\(b.farger.count) toner") + (b.id == valgtID ? " · " + String(localized: "vises i Studio") : ""))
+                    .font(.caption)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
         }
     }
 

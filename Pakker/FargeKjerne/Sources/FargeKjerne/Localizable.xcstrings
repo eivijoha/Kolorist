@@ -217,6 +217,56 @@
         }
       }
     },
+    "Filament: ABS og ASA": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filament: ABS and ASA"
+          }
+        }
+      }
+    },
+    "Filament: PETG": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filament: PETG"
+          }
+        }
+      }
+    },
+    "Filament: PLA": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filament: PLA"
+          }
+        }
+      }
+    },
+    "Filament: TPU og TPE": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filament: TPU and TPE"
+          }
+        }
+      }
+    },
+    "Filament: andre materialer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filament: other materials"
+          }
+        }
+      }
+    },
     "Filen er ikke et ASE-, ACO- eller ACB-fargebibliotek.": {
       "localizations": {
         "en": {

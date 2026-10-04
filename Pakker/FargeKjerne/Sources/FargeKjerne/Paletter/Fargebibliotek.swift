@@ -16,6 +16,13 @@ public struct Fargebibliotek: Sendable, Hashable, Identifiable {
         self.id = "bib:" + SHA256.hash(data: data).prefix(12).map { String(format: "%02x", $0) }.joined()
     }
 
+    /// Et bibliotek bygget i appen (f.eks. filamentfarger). `id` må begynne med «bib:».
+    public init(id: String, navn: String, farger: [PalettFarge]) {
+        self.id = id
+        self.navn = navn
+        self.farger = farger
+    }
+
     public static func erBibliotekID(_ id: String) -> Bool { id.hasPrefix("bib:") }
 
     /// Nærmeste tone etter ΔE2000, med avstanden.

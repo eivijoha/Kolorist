@@ -43,18 +43,49 @@ public struct PalettFarge: Hashable, Codable, Sendable, Identifiable {
     public var opphav: Opphav
     /// Fargemodell/fargerom fargen ble lagret i (nil for eldre farger og farger uten valgt rom).
     public var representasjon: Fargerepresentasjon?
+    /// Hvor fargen kommer fra, når den er en tone i et innebygd bibliotek (f.eks. et filament): produsent, navn og
+    /// lenke til kilden.
+    public var kilde: Fargekilde?
 
     public enum Opphav: String, Codable, Sendable {
         case manuell, kamera, pipette, ki, overgang, toneskala, bilde, bibliotek
     }
 
     public init(id: UUID = UUID(), navn: String = "", farge: Farge, opphav: Opphav = .manuell,
-                representasjon: Fargerepresentasjon? = nil) {
+                representasjon: Fargerepresentasjon? = nil, kilde: Fargekilde? = nil) {
         self.id = id
         self.navn = navn
         self.farge = farge
         self.opphav = opphav
         self.representasjon = representasjon
+        self.kilde = kilde
+    }
+}
+
+/// Kilden til en farge fra et innebygd bibliotek, så brukeren kan se hvor verdien kommer fra og gå videre derfra.
+public struct Fargekilde: Hashable, Codable, Sendable {
+    public var produsent: String?
+    /// Navnet hos kilden (f.eks. produsentens fargenavn).
+    public var navn: String?
+    public var materiale: String?
+    /// Siden hos kilden (f.eks. prøven hos FilamentColors.xyz).
+    public var lenke: URL?
+    /// Målt med instrument (`true`) eller anslått, f.eks. fra et fotografi (`false`).
+    public var målt: Bool?
+    /// Gjennomskinnelighet for filament (TD, «transmission distance»), der kilden oppgir den.
+    public var td: Double?
+    /// Navnet på kilden («FilamentColors.xyz»).
+    public var kildenavn: String?
+
+    public init(produsent: String? = nil, navn: String? = nil, materiale: String? = nil, lenke: URL? = nil,
+                målt: Bool? = nil, td: Double? = nil, kildenavn: String? = nil) {
+        self.produsent = produsent
+        self.navn = navn
+        self.materiale = materiale
+        self.lenke = lenke
+        self.målt = målt
+        self.td = td
+        self.kildenavn = kildenavn
     }
 }
 
@@ -63,9 +94,10 @@ public struct PalettFarge: Hashable, Codable, Sendable, Identifiable {
 /// - Opphav `bibliotek` (fra 1.1) lagres som `manuell`; opphavet er bare til informasjon.
 /// - Representasjon i Munsell (fra 1.1) lagres i et eget felt som eldre versjoner hopper over.
 /// - Ukjente verdier fra nyere versjoner gir en farge uten opphav/representasjon i stedet for en tom palett.
+/// - Kilden (fra 1.2) er et eget felt som eldre versjoner hopper over.
 extension PalettFarge {
     private enum Nøkler: String, CodingKey {
-        case id, navn, farge, opphav, representasjon
+        case id, navn, farge, opphav, representasjon, kilde
         /// Representasjon i en fargemodell som 1.0 ikke kjenner (Munsell).
         case representasjonUtvidet
     }
@@ -81,6 +113,7 @@ extension PalettFarge {
         opphav = (try? c.decodeIfPresent(Opphav.self, forKey: .opphav)) ?? .manuell
         representasjon = (try? c.decodeIfPresent(Fargerepresentasjon.self, forKey: .representasjonUtvidet))
             ?? (try? c.decodeIfPresent(Fargerepresentasjon.self, forKey: .representasjon))
+        kilde = try? c.decodeIfPresent(Fargekilde.self, forKey: .kilde)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -96,6 +129,7 @@ extension PalettFarge {
                 try c.encode(representasjon, forKey: .representasjon)
             }
         }
+        try c.encodeIfPresent(kilde, forKey: .kilde)
     }
 }
 

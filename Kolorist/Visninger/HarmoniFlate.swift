@@ -38,7 +38,8 @@ struct HarmoniFlate: View {
             guard let n = fargebibliotek.nærmeste(til: f) else {
                 return Motpart(farge: PalettFarge(farge: f), tekst: String(localized: "Tomt bibliotek"))
             }
-            let tone = PalettFarge(navn: n.tone.navn, farge: n.tone.farge, opphav: .bibliotek, representasjon: n.tone.representasjon)
+            let tone = PalettFarge(navn: n.tone.navn, farge: n.tone.farge, opphav: .bibliotek, representasjon: n.tone.representasjon,
+                                  kilde: n.tone.kilde)
             return Motpart(farge: tone, tekst: n.tone.visningsnavn,
                            merknad: n.avstand < 1 ? nil : "ΔE00 \(String(format: "%.1f", n.avstand))")
         }

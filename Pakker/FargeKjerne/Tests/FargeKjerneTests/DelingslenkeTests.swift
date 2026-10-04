@@ -96,6 +96,20 @@ struct DelingslenkeTests {
         }
     }
 
+    @Test func kildenFølgerMedOgFremmedeLenkerFjernes() throws {
+        let kilde = Fargekilde(produsent: "Produsent", navn: "Rød", materiale: "PLA",
+                               lenke: URL(string: "https://filamentcolors.xyz/swatch/1/"), målt: true, td: 1.2, kildenavn: "FilamentColors.xyz")
+        let pf = PalettFarge(navn: "Produsent Rød (PLA)", farge: Farge(hex: "#C8553D")!, kilde: kilde)
+        let lest = try Delingslenke.les(Delingslenke.lenke(DeltInnhold(slag: .farge, farger: [DeltFarge(pf)])))
+        #expect(lest.farger[0].palettFarge(harProfil: { _ in false }).kilde == kilde)
+
+        var falsk = DeltFarge(pf)
+        falsk.kilde?.lenke = "https://eksempel.no/lur"
+        let lestFalsk = try Delingslenke.les(Delingslenke.lenke(DeltInnhold(slag: .farge, farger: [falsk])))
+        #expect(lestFalsk.farger[0].kilde?.lenke == nil)
+        #expect(lestFalsk.farger[0].palettFarge(harProfil: { _ in false }).kilde?.lenke == nil)
+    }
+
     @Test func tekstRenses() throws {
         var innhold = Self.eksempler[0].innhold
         innhold.navn = "Farge\u{0007}navn" + String(repeating: "x", count: 500)

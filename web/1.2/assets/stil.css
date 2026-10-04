@@ -1378,3 +1378,9 @@ thead th {
 [hidden] {
   display: none !important;
 }
+
+.delt-kilde {
+  display: inline-block;
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+}

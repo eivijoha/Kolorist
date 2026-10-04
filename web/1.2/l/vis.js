@@ -26,6 +26,8 @@
     feilTekst: "It may be cut short, or made with a newer version of Kolorist. Ask the sender to share it again.",
     ingenTittel: "Nothing shared", ingenTekst: "This page shows colours, palettes, gradients and harmonies shared from Kolorist.",
     sirkel: "Colour wheel", delt: "Shared from Kolorist", toner: (n) => `${n} tones`,
+    produsent: "Manufacturer", materiale: "Material", måling: "Measurement", målt: "Measured", anslått: "Estimated",
+    seKilde: (k) => `See the colour at ${k}`,
   } : {
     hopp: "Hopp til hovedinnhold", laster: "Åpner …", haAppen: "Har du Kolorist?",
     haAppenTekst: "Åpne lenken i appen for å lagre, endre og bygge videre.",
@@ -39,6 +41,8 @@
     feilTekst: "Den kan være avkortet, eller laget med en nyere versjon av Kolorist. Be avsenderen dele den på nytt.",
     ingenTittel: "Ingenting delt", ingenTekst: "Denne siden viser farger, paletter, gradienter og harmonier delt fra Kolorist.",
     sirkel: "Fargesirkel", delt: "Delt fra Kolorist", toner: (n) => `${n} toner`,
+    produsent: "Produsent", materiale: "Materiale", måling: "Måling", målt: "Målt", anslått: "Anslått",
+    seKilde: (k) => `Se fargen hos ${k}`,
   };
   const HARMONIER = en ? {
     komplementær: "Complementary", splittKomplementær: "Split complementary", analog: "Analogous",
@@ -91,6 +95,14 @@
   const erFarge = (f) => f && Array.isArray(f.k) && f.k.length === 3 && f.k.every(erTall)
     && f.k[0] >= -0.5 && f.k[0] <= 1.5 && Math.abs(f.k[1]) <= 1 && Math.abs(f.k[2]) <= 1
     && (f.a === undefined || (erTall(f.a) && f.a >= 0 && f.a <= 1));
+  // Kildelenker godtas bare til kjente kilder (som i appen: DeltKilde.godkjenteVerter).
+  const GODKJENTE_VERTER = ["filamentcolors.xyz"];
+  function godkjentLenke(tekstverdi) {
+    try {
+      const u = new URL(tekstverdi);
+      return u.protocol === "https:" && GODKJENTE_VERTER.includes(u.hostname.toLowerCase()) ? u.href : null;
+    } catch { return null; }
+  }
   const tekst = (s) => typeof s === "string" ? s.replace(/[\u0000-\u001F\u007F-\u009F]/g, "").slice(0, 200) : "";
 
   async function les(fragment) {
@@ -195,7 +207,21 @@
     rad("OKLCH", `${tall(L * 100, 0)}% ${tall(C, 3)} ${tall(H, 0)}°`);
     rad("CIELab (D50)", `${tall(lab[0], 1)} ${tall(lab[1], 1)} ${tall(lab[2], 1)}`);
     if (f.mu && f.rn !== "Munsell") rad("Munsell", tekst(f.mu));
+    const q = f.q && typeof f.q === "object" ? f.q : null;
+    if (q) {
+      if (q.p) rad(T.produsent, tekst(q.p));
+      if (q.m) rad(T.materiale, tekst(q.m));
+      if (typeof q.o === "boolean") rad(T.måling, q.o ? T.målt : T.anslått);
+    }
     kort.append(verdier);
+    const lenke = q ? godkjentLenke(q.l) : null;
+    if (lenke) {
+      const a = lag("a", "delt-kilde", T.seKilde(tekst(q.s) || new URL(lenke).hostname));
+      a.href = lenke;
+      a.rel = "noopener noreferrer";
+      a.target = "_blank";
+      kort.append(a);
+    }
     if (hex(f)) {
       const knapp = lag("button", "delt-kopier", T.kopierHex);
       knapp.type = "button";

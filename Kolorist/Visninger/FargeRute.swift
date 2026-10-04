@@ -75,6 +75,12 @@ struct FargeRute: View {
                 }
                 KopierMeny(farge: farge)
                 KopierTilMeny(farger: [palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)], navn: navn ?? "")
+                if let kilde = palettFarge?.kilde, let lenke = kilde.lenke {
+                    Link(destination: lenke) {
+                        Label(kilde.kildenavn.map { String(localized: "Se fargen hos \($0)") } ?? String(localized: "Se kilden"),
+                              systemImage: "arrow.up.right.square")
+                    }
+                }
                 let delt = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
                 DelSomLenke(navn: navn ?? farge.hex()) { Lenkedeling.farge(delt) }
                 if let ekstraMeny { ekstraMeny }
