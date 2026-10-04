@@ -1,0 +1,7 @@
+# Siden lenker til skript og stilark med versjonsnummer; selve siden mellomlagres bare kort,
+# så nye versjoner av vis.js tas i bruk med en gang (Varnish holdt ellers gammel side i en time).
+<IfModule mod_headers.c>
+  <Files "index.html">
+    Header set Cache-Control "public, max-age=300"
+  </Files>
+</IfModule>
