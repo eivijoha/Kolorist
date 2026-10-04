@@ -117,7 +117,7 @@ public enum Kolorimetri {
         let nevner = (t2 - t3) * (t1 - t2) * (t3 - t1)
         let a = (t3 * (d1 - d2) + t2 * (d3 - d1) + t1 * (d2 - d3)) / nevner
         let b = -(t3 * t3 * (d1 - d2) + t2 * t2 * (d3 - d1) + t1 * t1 * (d2 - d3)) / nevner
-        let c = -(d1 * (t3 - t2) * t2 * t3 + d3 * (t2 - t1) * t1 * t2 + d2 * (t1 - t3) * t3 * t1) / nevner
+        // Parabelens bunnpunkt gir temperaturen (konstantleddet trengs ikke; Duv regnes direkte under).
         let t = -b / (2 * a)
         // Duv som avstanden til kurven ved den funne temperaturen (parabelens bunnverdi er unøyaktig nær kurven,
         // der avstanden er V-formet). Positiv over kurven (større v, mot grønt).
