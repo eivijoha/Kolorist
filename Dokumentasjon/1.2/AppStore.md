@@ -9,7 +9,9 @@ Utgangspunktet er tekstene for 1.1 (`Dokumentasjon/1.1/AppStore.md`). Endringer 
 - [x] Kameraforklaringen (systemspørsmålet) nevner nå lysmåling.
 - [ ] Personvernetiketten er uendret («Data Not Collected»): lysmiljøer, referansekort og kameraprofiler ligger i
       brukerens egen iCloud (nøkkel–verdi), og stillbildet av kortet brukes bare på enheten.
-- [ ] Skjermbilder – tas på nytt hvis grensesnittet endres.
+- [x] Skjermbilder i `Dokumentasjon/1.2/Skjermbilder/` (iPhone 6,5″, iPad 13″, Mac; nb og en): Studio, Harmoni,
+      Overgang, Kontrast, Fargesyn og «Se i lys». Tatt med `-skjermbilde YES` og samme argumenter som for 1.1;
+      «Se i lys» med `-panelFørst lys`. Mac med `-testmaalinger YES -kunSRGB NO`.
 
 ### Utkast: Nytt i 1.2 – iPhone og iPad, norsk
 

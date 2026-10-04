@@ -83,7 +83,7 @@
     <section class="seksjon" aria-labelledby="funksjoner">
       <h2 id="funksjoner">Features</h2>
       <p class="dempet">What’s new in version 1.2 is marked<span class="nytt">New in 1.2</span></p>
-      <p class="lesetekst">Kolorist is designed for iPhone first. On iPad and Mac you get more room – in landscape on iPad the colour swatches sit beside the tools – and on the Mac an eyedropper that picks colours from anywhere on screen. On Mac and large iPads your palettes are at hand while you work, and you move colours where you need them with drag and drop. Colours you pick from the camera and photos are kept – clearly marked as not saved – until you decide.</p>
+      <p class="lesetekst">Kolorist is designed for iPhone first. On iPad and Mac you get more room – in landscape on iPad and in a wide Mac window the colour swatches sit beside the tools <span class="nytt">New in 1.2</span> – and on the Mac an eyedropper that picks colours from anywhere on screen. On Mac and large iPads your palettes are at hand while you work, and you move colours where you need them with drag and drop. Colours you pick from the camera and photos are kept – clearly marked as not saved – until you decide.</p>
 
       <ul class="kort-rutenett">
         <li>
@@ -123,6 +123,8 @@
               <li>Save whole gradients and pick up where you left off</li>
               <li>Add gradients to palettes</li>
               <li>Copy the gradient straight into design, layout and presentation apps</li>
+              <li>The tones are shown in the swatches with values in the chosen colour model and colour space <span class="nytt">New in 1.2</span></li>
+              <li>Drag the base tones on the lightness scale to make the whole gradient lighter or darker <span class="nytt">New in 1.2</span></li>
             </ul>
           </article>
         </li>
@@ -137,7 +139,8 @@
               <li>Saturation and lightness for the whole harmony, shown right in the colour wheel</li>
               <li>See the whole harmony in the chosen colour space or colour library, with the base colour clearly marked</li>
               <li>The colour-wheel values for each colour in the harmony – Munsell notation, OKLCH, LCH, HSL, RYB or Hering’s unique hues <span class="nytt">New in 1.2</span></li>
-              <li>Lighter and darker tones in equal or easing steps</li>
+              <li>Lighter and darker tones in equal or easing steps, shown in the swatches with values in the chosen colour model <span class="nytt">New in 1.2</span></li>
+              <li>Drag the base colour on the lightness scale to make the whole row lighter or darker <span class="nytt">New in 1.2</span></li>
             </ul>
           </article>
         </li>
@@ -178,6 +181,7 @@
               <li>Palette critique in different light: colours that change character, and colour pairs that become hard to tell apart <span class="nytt">New in 1.2</span></li>
               <li>The difference between two colours with ΔE2000</li>
               <li>See the palette with protan, deutan and tritan deficiencies and achromatopsia, at any severity – and which colours become hard to tell apart</li>
+              <li>Colour vision deficiencies listed by how common they are, with estimated prevalence <span class="nytt">New in 1.2</span></li>
               <li>Camera with a colour vision filter: see your surroundings as they may appear with each deficiency</li>
             </ul>
           </article>
@@ -334,32 +338,38 @@
       <ul class="skjermbilder" tabindex="0" aria-label="Screenshots – scroll sideways">
         <li>
           <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-studio.png?v=4" alt="Studio showing a colour in OKLCH and Display P3 side by side with CMYK" width="1284" height="2778" loading="lazy">
+            <img src="../assets/en/skjermbilde-studio.png?v=5" alt="Studio showing a colour in OKLCH and Display P3 side by side with CMYK" width="1284" height="2778" loading="lazy">
             <figcaption>Studio</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-harmoni.png?v=4" alt="Colour harmony with swatches above the colour wheel" width="1284" height="2778" loading="lazy">
+            <img src="../assets/en/skjermbilde-harmoni.png?v=5" alt="Colour harmony with swatches above the colour wheel" width="1284" height="2778" loading="lazy">
             <figcaption>Harmony</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-overgang.png" alt="Gradient between two colours in equal perceptual steps, with lighter and darker rows" width="1284" height="2778" loading="lazy">
+            <img src="../assets/en/skjermbilde-overgang.png?v=5" alt="Gradient between two colours in equal perceptual steps, with lighter and darker rows" width="1284" height="2778" loading="lazy">
             <figcaption>Gradient</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-kontrast.png" alt="Contrast between text colour and background, checked against WCAG AA and AAA" width="1284" height="2778" loading="lazy">
+            <img src="../assets/en/skjermbilde-kontrast.png?v=5" alt="Contrast between text colour and background, checked against WCAG AA and AAA" width="1284" height="2778" loading="lazy">
             <figcaption>Contrast</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde">
-            <img src="../assets/en/skjermbilde-fargesyn.png" alt="A palette as it appears with different colour vision deficiencies" width="1284" height="2778" loading="lazy">
+            <img src="../assets/en/skjermbilde-fargesyn.png?v=5" alt="A palette as it appears with different colour vision deficiencies" width="1284" height="2778" loading="lazy">
             <figcaption>Colour vision</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde">
+            <img src="../assets/en/skjermbilde-lys.png?v=5" alt="See in light: the colour on screen beside the colour as it appears in a viewing condition" width="1284" height="2778" loading="lazy">
+            <figcaption>See in light</figcaption>
           </figure>
         </li>
       </ul>
@@ -368,32 +378,38 @@
         <ul class="karusell-bilder">
         <li>
           <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-studio.png?v=4" alt="Studio on Mac with the colour in OKLCH and Generic CMYK, its values, and the palettes and picked colours beside it" width="1920" height="1200" loading="lazy">
+            <img src="../assets/en/mac/skjermbilde-studio.png?v=5" alt="Studio on Mac with the colour in OKLCH and Generic CMYK, its values, and the palettes and picked colours beside it" width="1920" height="1200" loading="lazy">
             <figcaption>Studio</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-harmoni.png?v=4" alt="Harmony on Mac: five colours evenly distributed on the colour wheel" width="1920" height="1200" loading="lazy">
+            <img src="../assets/en/mac/skjermbilde-harmoni.png?v=5" alt="Harmony on Mac: five colours evenly distributed on the colour wheel" width="1920" height="1200" loading="lazy">
             <figcaption>Harmony</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-overgang.png" alt="Gradient on Mac in equal perceptual steps, with lighter and darker rows" width="1920" height="1200" loading="lazy">
+            <img src="../assets/en/mac/skjermbilde-overgang.png?v=5" alt="Gradient on Mac in equal perceptual steps, with lighter and darker rows" width="1920" height="1200" loading="lazy">
             <figcaption>Gradient</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-kontrast.png" alt="Contrast on Mac: text and graphics to WCAG 2.2 and surfaces by LRV" width="1920" height="1200" loading="lazy">
+            <img src="../assets/en/mac/skjermbilde-kontrast.png?v=5" alt="Contrast on Mac: text and graphics to WCAG 2.2 and surfaces by LRV" width="1920" height="1200" loading="lazy">
             <figcaption>Contrast</figcaption>
           </figure>
         </li>
         <li>
           <figure class="skjermbilde mac">
-            <img src="../assets/en/mac/skjermbilde-fargesyn.png" alt="Colour vision on Mac: the palette with four types of colour vision deficiency and hard-to-tell pairs" width="1920" height="1200" loading="lazy">
+            <img src="../assets/en/mac/skjermbilde-fargesyn.png?v=5" alt="Colour vision on Mac: the palette with four types of colour vision deficiency and hard-to-tell pairs" width="1920" height="1200" loading="lazy">
             <figcaption>Colour vision</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde mac">
+            <img src="../assets/en/mac/skjermbilde-lys.png?v=5" alt="See in light on Mac: the colour on screen beside the colour in a viewing condition, with the colour shift" width="1920" height="1200" loading="lazy">
+            <figcaption>See in light</figcaption>
           </figure>
         </li>
         </ul>
