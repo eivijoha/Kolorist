@@ -81,6 +81,14 @@ struct LysmiljoTests {
         #expect(abs(Eksponeringsmåling.lux(luminans: l, refleksjon: 0.18) - 353.4) < 0.5)
     }
 
+    @Test func anslåttLuxUtenKort() {
+        // Samme eksponering uten kort: bildet antas å reflektere 18 % i snitt, altså som det midtgrå kortet over.
+        #expect(abs(Eksponeringsmåling.anslåttLux(blender: 1.8, lukkertid: 1.0 / 50, iso: 100) - 353.4) < 0.5)
+        // Typisk stue om kvelden (f/1.8, 1/60 s, ISO 400): rundt 100 lx.
+        let stue = Eksponeringsmåling.anslåttLux(blender: 1.8, lukkertid: 1.0 / 60, iso: 400)
+        #expect(stue > 60 && stue < 150)
+    }
+
     @Test func fargegjengivelse() throws {
         let prøver = (0..<12).map { i -> Spektrum in
             // Syntetiske, glatte refleksjonsspektre (ikke ekte kortdata).

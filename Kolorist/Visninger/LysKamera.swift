@@ -134,7 +134,10 @@ struct LysmålingMerke: View {
     private func tekst(_ m: Lysmåling) -> String {
         let kelvin = (Int((m.kelvin / 50).rounded()) * 50).formatted(.number.grouping(.never))
         var deler = [String(localized: "≈ \(kelvin) K")]
-        if let lux = m.lux { deler.append(String(localized: "≈ \(lux.formatted(.number.precision(.significantDigits(2)))) lx")) }
+        if let lux = m.lux {
+            let tall = lux.formatted(.number.precision(.significantDigits(2)))
+            deler.append(m.metode == .kamera ? String(localized: "≈ \(tall) lx anslått") : String(localized: "≈ \(tall) lx"))
+        }
         if let kompensasjon {
             switch m.metode {
             case .kamera: deler.append(String(localized: "kompensert"))

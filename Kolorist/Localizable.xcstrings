@@ -4621,12 +4621,12 @@
         }
       }
     },
-    "Lyset er målt. Lagre det som lysmiljø, eller mål på nytt. Med et grått eller hvitt kort får du også lysstyrken.": {
+    "Lyset er målt. Lagre det som lysmiljø, eller mål på nytt. Med et grått eller hvitt kort blir også lysstyrken målt.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The light is measured. Save it as a viewing condition, or measure again. With a grey or white card you also get the illuminance."
+            "value": "The light is measured. Save it as a viewing condition, or measure again. With a grey or white card the illuminance is measured too."
           }
         }
       }
@@ -6727,12 +6727,12 @@
         }
       }
     },
-    "Stå der fargene skal brukes og mål lyset. Kameraet gir lysets farge; med et grått eller hvitt kort i lyset får du også lysstyrken (lux).": {
+    "Stå der fargene skal brukes og mål lyset. Kameraet gir lysets farge og anslår lysstyrken; med et grått eller hvitt kort i lyset blir den målt.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stand where the colours will be used and measure the light. The camera gives the colour of the light; with a grey or white card in the light you also get the illuminance (lux)."
+            "value": "Stand where the colours will be used and measure the light. The camera gives the colour of the light and estimates the illuminance; with a grey or white card in the light it is measured."
           }
         }
       }
@@ -8189,6 +8189,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "≈ %@ lx"
+          }
+        }
+      }
+    },
+    "≈ %@ lx anslått": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %@ lx estimated"
           }
         }
       }

@@ -153,12 +153,13 @@ final class KameraFargeplukker {
     func kompenser(for lys: Lyskilde?) {
         venterPåGråkort = false
         #if os(iOS)
-        let målt = lys ?? målLysFraKamera()?.lyskilde
+        let måling = lys == nil ? målLysFraKamera() : nil
+        let målt = lys ?? måling?.lyskilde
         guard let målt else { return }
         låsHvitbalanse()
         kompensasjon = .hvitpunkt(målt)
         if let t = målt.fargetemperatur {
-            lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, metode: .kamera)
+            lysmåling = Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: måling?.lux, metode: .kamera)
         }
         #endif
     }
@@ -212,14 +213,17 @@ final class KameraFargeplukker {
         leser.taStillbilde()
     }
 
-    /// Lyset fra kameraets automatiske hvitbalanse (iPhone/iPad). Lux vises bare med kort i bildet (for grovt uten).
+    /// Lyset fra kameraets automatiske hvitbalanse (iPhone/iPad), med lysstyrken anslått fra eksponeringen (med et kort
+    /// i bildet blir den målt i stedet).
     private func målLysFraKamera() -> Lysmåling? {
         #if os(iOS)
         guard let enhet, enhet.whiteBalanceMode != .locked else { return lysmåling }
         let g = Self.begrenset(enhet.deviceWhiteBalanceGains, enhet: enhet)
         let c = enhet.chromaticityValues(for: g)
         guard let t = Kolorimetri.fargetemperatur(x: Double(c.x), y: Double(c.y)) else { return nil }
-        return Lysmåling(kelvin: t.kelvin, duv: t.duv, metode: .kamera)
+        let lux = Eksponeringsmåling.anslåttLux(blender: Double(enhet.lensAperture),
+                                               lukkertid: CMTimeGetSeconds(enhet.exposureDuration), iso: Double(enhet.iso))
+        return Lysmåling(kelvin: t.kelvin, duv: t.duv, lux: lux.isFinite && lux > 0 ? lux : nil, metode: .kamera)
         #else
         return nil
         #endif

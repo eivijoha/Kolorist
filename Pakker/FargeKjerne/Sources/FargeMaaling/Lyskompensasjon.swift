@@ -68,4 +68,10 @@ public enum Eksponeringsmåling {
     public static func lux(luminans: Double, refleksjon: Double) -> Double {
         .pi * luminans / max(refleksjon, 0.01)
     }
+
+    /// Anslått belysningsstyrke fra kameraets automatiske eksponering alene, uten kort: antar at bildet i snitt
+    /// reflekterer 18 % (som en lysmåler). Lyse rom gir for høyt anslag og mørke for lavt, ofte med en faktor 2.
+    public static func anslåttLux(blender: Double, lukkertid: Double, iso: Double, k: Double = standardK) -> Double {
+        lux(luminans: luminans(lineærVerdi: 0.18, blender: blender, lukkertid: lukkertid, iso: iso, k: k), refleksjon: 0.18)
+    }
 }
