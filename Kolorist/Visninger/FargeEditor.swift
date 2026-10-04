@@ -554,7 +554,18 @@ struct LyshetstrinnKontroller: View {
     /// Med `forskyv` kan sirkelen dras for å gjøre hele rekken lysere eller mørkere: (endring i OKLCH-lyshet siden
     /// dra-bevegelsen startet, om bevegelsen er ferdig).
     var grunnfarger: [Farge] = []
+    /// Lyshetene rekken bygges fra (Overgang: alle tonene); brukes til å stoppe dra-bevegelsen ved tak og gulv.
+    var grunnlysheter: [Double] = []
     var forskyv: ((Double, Bool) -> Void)? = nil
+
+    /// Hvor langt rekken kan flyttes uten at lyseste trinn går over 100 % eller mørkeste under 0 %. En retning som
+    /// allerede er forbi taket eller gulvet, stoppes helt; den andre er fri.
+    private var tillattEndring: ClosedRange<Double> {
+        let l = grunnlysheter.isEmpty ? [grunnlyshet] : grunnlysheter
+        let lyseste = (l.max() ?? grunnlyshet) + Double(trinn.antallLysere) * trinn.lysereSteg
+        let mørkeste = (l.min() ?? grunnlyshet) - Double(trinn.antallMørkere) * trinn.mørkereSteg
+        return min(0, -mørkeste)...max(0, 1 - lyseste)
+    }
 
     private let område: ClosedRange<Double> = 0.01...0.2
 
@@ -571,7 +582,7 @@ struct LyshetstrinnKontroller: View {
 
     var body: some View {
         Lyshetsstige(lysheter: trinn.lysheter(fra: grunnlyshet), grunnindeks: trinn.antallLysere,
-                     grunnfarger: grunnfarger, forskyv: forskyv)
+                     grunnfarger: grunnfarger, tillattEndring: tillattEndring, forskyv: forskyv)
             .frame(height: grunnfarger.isEmpty ? 34 : 44)
             .padding(.vertical, 2)
         Stepper("Lysere: \(trinn.antallLysere) steg", value: $trinn.antallLysere, in: 0...8)
@@ -605,9 +616,18 @@ private struct Lyshetsstige: View {
     let lysheter: [Double]
     let grunnindeks: Int
     var grunnfarger: [Farge] = []
+    /// Hvor langt rekken kan flyttes nå; låses når dra-bevegelsen starter.
+    var tillattEndring: ClosedRange<Double> = -1...1
     var forskyv: ((Double, Bool) -> Void)? = nil
     /// Sirkelen dras nå.
     @State private var drar = false
+    @State private var grenseVedStart: ClosedRange<Double>?
+
+    /// Endringen fra dra-bevegelsen, stoppet ved tak og gulv slik de var da bevegelsen startet.
+    private func endring(_ bredde: CGFloat, breddeTotal: CGFloat) -> Double {
+        let grense = grenseVedStart ?? tillattEndring
+        return min(max(Double(bredde / max(breddeTotal, 1)), grense.lowerBound), grense.upperBound)
+    }
     /// Delt med skjemaet, som tegner den løftede sirkelen (se `lyshetslupe(_:)`).
     @Environment(Lyshetslupetilstand.self) private var lupe: Lyshetslupetilstand?
 
@@ -671,16 +691,18 @@ private struct Lyshetsstige: View {
                         .position(x: x, y: 5 + topp)
                         .gesture(DragGesture(minimumDistance: 1, coordinateSpace: .global)
                             .onChanged {
+                                if !drar { grenseVedStart = tillattEndring }
                                 drar = true
-                                forskyv?(Double($0.translation.width / max(b, 1)), false)
+                                forskyv?(endring($0.translation.width, breddeTotal: b), false)
                                 // Skjemaet tegner den løftede sirkelen ved fingeren, uten at raden klipper den.
                                 if løftesOverFingeren {
                                     lupe?.vis(farger: grunnfarger, punkt: CGPoint(x: $0.location.x, y: globalt.minY + 5 + topp))
                                 }
                             }
                             .onEnded {
+                                forskyv?(endring($0.translation.width, breddeTotal: b), true)
                                 drar = false
-                                forskyv?(Double($0.translation.width / max(b, 1)), true)
+                                grenseVedStart = nil
                                 lupe?.skjul()
                             })
                         .allowsHitTesting(forskyv != nil)
@@ -696,7 +718,7 @@ private struct Lyshetsstige: View {
         .accessibilityLabel("Lyshet for tonene")
         .accessibilityValue(lysheter.map { String(Int(($0 * 100).rounded())) }.joined(separator: ", "))
         .accessibilityAdjustableAction { retning in
-            forskyv?(retning == .increment ? 0.02 : -0.02, true)
+            forskyv?(min(max(retning == .increment ? 0.02 : -0.02, tillattEndring.lowerBound), tillattEndring.upperBound), true)
         }
         // Et lett tikk for hvert hele prosentpoeng i lyshet mens sirkelen dras.
         .sensoryFeedback(.selection, trigger: lysheter.indices.contains(grunnindeks) ? Int((lysheter[grunnindeks] * 100).rounded()) : 0) { _, _ in drar }

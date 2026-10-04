@@ -156,7 +156,8 @@ struct OvergangVisning: View {
             // Forklaringen regnes fra midterste tone i overgangen.
             LyshetstrinnKontroller(trinn: $arbeidsbenk.lyshetstrinn,
                                    grunnlyshet: toner.isEmpty ? 0.6 : toner[toner.count / 2].okLCH.l,
-                                   grunnfarger: [start, slutt]) { endring, ferdig in
+                                   grunnfarger: [start, slutt],
+                                   grunnlysheter: toner.map(\.okLCH.l)) { endring, ferdig in
                 // Begge endepunktene flyttes like mye, så hele overgangen og radene blir lysere eller mørkere.
                 let (fra, til) = lyshetsutgangspunkt ?? (start, slutt)
                 lyshetsutgangspunkt = ferdig ? nil : (fra, til)
