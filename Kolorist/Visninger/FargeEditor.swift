@@ -606,7 +606,7 @@ struct LyshetstrinnKontroller: View {
         Stepper("Mørkere: \(trinn.antallMørkere) steg", value: $trinn.antallMørkere, in: 0...8)
         HStack {
             Text("Steg")
-            Slider(value: steg, in: område, step: 0.01)
+            Trinnglider(verdi: steg, område: område, steg: 0.01)
                 .disabled(trinn.antallLysere == 0 && trinn.antallMørkere == 0)
             Text("±\(Int((trinn.lysereSteg * 100).rounded())) %-poeng")
                 .lineLimit(1)

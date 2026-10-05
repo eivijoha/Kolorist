@@ -310,7 +310,7 @@ struct CSSGradientSeksjon: View {
             if form != .radiell {
                 HStack {
                     Text(form == .lineær ? "Retning" : "Start")
-                    Slider(value: $vinkel, in: 0...360, step: 15)
+                    Trinnglider(verdi: $vinkel, område: 0...360, steg: 15)
                     Text("\(Int(vinkel))°").monospacedDigit().frame(width: 44, alignment: .trailing)
                 }
             }

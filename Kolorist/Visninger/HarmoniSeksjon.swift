@@ -244,7 +244,7 @@ struct HarmoniSeksjon: View {
             if harmoni.harVinkel {
                 HStack {
                     Text("Vinkel")
-                    Slider(value: $vinkel, in: 5...90, step: 1)
+                    Trinnglider(verdi: $vinkel, område: 5...90, steg: 1)
                     Text("\(Int(vinkel))°").monospacedDigit().frame(width: 44, alignment: .trailing)
                 }
             }

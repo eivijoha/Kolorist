@@ -39,7 +39,8 @@ extension View {
         return self
             .frame(minWidth: side, minHeight: side)
             .contentShape(Rectangle())
-            .padding(.vertical, -12)
-            .padding(.horizontal, -10)
+            // Tilbake til omtrent symbolets størrelse i oppsettet (ca. 24 × 20 pt).
+            .padding(.vertical, -(side - 20) / 2)
+            .padding(.horizontal, -(side - 24) / 2)
     }
 }
