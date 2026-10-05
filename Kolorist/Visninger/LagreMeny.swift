@@ -31,9 +31,6 @@ struct LagreMeny: View {
                     DelSomLenke(navn: pf.navn.isEmpty ? pf.farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
                 }
                 KopierTilMeny(farger: [pf], navn: pf.navn, inline: true)
-                if let kilde = pf.kilde, kilde.lenke != nil {
-                    Section { Kildelenke(kilde: kilde) }
-                }
             }
         } label: {
             Image(systemName: lagret ? "checkmark.square.fill" : "plus.square")

@@ -747,7 +747,7 @@ struct PalettDetalj: View {
                                   ekstraMeny: AnyView(Group {
                                       Button("Lag toneskala", systemImage: "square.3.layers.3d") { visSkala = pf }
                                       FlyttMeny(farge: pf, fra: dokument)
-                                  }), visKildelenke: true)
+                                  }))
                             .aspectRatio(1, contentMode: .fit)
                             // Se i lys: fargen i lyset i nedre halvdel.
                             .overlay {

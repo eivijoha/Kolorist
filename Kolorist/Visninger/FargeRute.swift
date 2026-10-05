@@ -24,9 +24,6 @@ struct FargeRute: View {
     var palettFarge: PalettFarge? = nil
     /// Ekstra menypunkter (f.eks. «Flytt til …»).
     var ekstraMeny: AnyView? = nil
-    /// Vis lenken til kilden (f.eks. filamentprøven) som knapp på prøven, ikke bare i menyen.
-    var visKildelenke = false
-    @Environment(\.openURL) private var åpneURL
 
     /// Valgene vises i en boble ved prøven (trykk og hold) i stedet for som kontekstmeny.
     /// Brukes i lister/skjemaer: der gjelder iOS' kontekstmeny hele raden, så menyen og
@@ -138,45 +135,22 @@ struct FargeRute: View {
                         .accessibilityLabel("Utenfor sRGB")
                 }
             }
-            .overlay(alignment: .bottomTrailing) {
-                if visKildelenke, visTekst, let kilde = palettFarge?.kilde, kilde.lenke != nil {
-                    Kildelenke(kilde: kilde, bareSymbol: true).foregroundStyle(farge.lesbarTekstfarge.swiftUI)
-                }
-            }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(navn.flatMap { $0.isEmpty ? nil : $0 } ?? farge.hex())
             .accessibilityValue(Fargemodell.okLCH.tekst(for: farge))
-            .accessibilityAction(named: Kildelenke.tittel(for: palettFarge?.kilde)) {
-                if let lenke = palettFarge?.kilde?.lenke { åpneURL(lenke) }
-            }
     }
 }
 
-/// Lenke til kilden for en farge fra et innebygd bibliotek (f.eks. prøven hos FilamentColors.xyz). Vises ikke
-/// når kilden ikke har noen lenke.
+/// Lenke til kilden for en farge fra et innebygd bibliotek (f.eks. prøven hos FilamentColors.xyz), i menyen på
+/// fargen. Vises ikke når kilden ikke har noen lenke.
 struct Kildelenke: View {
     let kilde: Fargekilde
-    /// Bare symbolet, med en trykkflate etter HIG (på fargeprøver og fargefelt).
-    var bareSymbol = false
-
-    static func tittel(for kilde: Fargekilde?) -> String {
-        kilde?.kildenavn.map { String(localized: "Se fargen hos \($0)") } ?? String(localized: "Se kilden")
-    }
 
     var body: some View {
         if let lenke = kilde.lenke {
-            if bareSymbol {
-                Link(destination: lenke) {
-                    Image(systemName: "arrow.up.right.square")
-                        .font(.body.weight(.semibold))
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .help(Self.tittel(for: kilde))
-                .accessibilityLabel(Text(Self.tittel(for: kilde)))
-            } else {
-                Link(destination: lenke) { Label(Self.tittel(for: kilde), systemImage: "arrow.up.right.square") }
+            Link(destination: lenke) {
+                Label(kilde.kildenavn.map { String(localized: "Se fargen hos \($0)") } ?? String(localized: "Se kilden"),
+                      systemImage: "arrow.up.right.square")
             }
         }
     }
