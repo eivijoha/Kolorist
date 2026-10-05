@@ -26,6 +26,8 @@ struct PalettListe: View {
     @State private var lagresSom: PalettDokument?
     @State private var visNyPalett = false
     @State private var nyPalettNavn = ""
+    @State private var importererASE = false
+    @State private var importfeil: String?
 
     enum Valg: Hashable {
         case enkeltfarger
@@ -39,6 +41,25 @@ struct PalettListe: View {
                 visNyPalett = true
             }
             Button("Ny palett fra verdiord (KI)", systemImage: "sparkles") { visVerdiord = true }
+            Button("Importer fra ASE …", systemImage: "square.and.arrow.down") { importererASE = true }
+        }
+    }
+
+    /// ASE-filer som nye paletter: én palett per fargegruppe i filen (se `Bibliotekimport.aseSomPaletter`).
+    private func importerASE(_ urler: [URL]) {
+        var nye: [Palett] = []
+        for url in urler {
+            let tilgang = url.startAccessingSecurityScopedResource()
+            defer { if tilgang { url.stopAccessingSecurityScopedResource() } }
+            do {
+                nye += try Bibliotekimport.aseSomPaletter(Data(contentsOf: url), filnavn: url.lastPathComponent)
+            } catch {
+                importfeil = String(localized: "«\(url.lastPathComponent)» kunne ikke leses: \(error.localizedDescription)")
+            }
+        }
+        guard !nye.isEmpty else { return }
+        kontekst.angresteg("Importer paletter") {
+            for p in nye { kontekst.insert(PalettDokument(navn: p.navn, farger: p.farger)) }
         }
     }
 
@@ -133,6 +154,13 @@ struct PalettListe: View {
             .sheet(item: $lagresSom) { p in
                 LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter))
             }
+            .fileImporter(isPresented: $importererASE, allowedContentTypes: [UTType(filenameExtension: "ase") ?? .data, .data],
+                          allowsMultipleSelection: true) { resultat in
+                if let urler = try? resultat.get() { importerASE(urler) }
+            }
+            .alert("Importen mislyktes", isPresented: Binding(get: { importfeil != nil }, set: { if !$0 { importfeil = nil } })) {
+                Button("OK", role: .cancel) {}
+            } message: { Text(importfeil ?? "") }
             .sheet(isPresented: $visVerdiord) {
                 NavigationStack {
                     VerdiordVisning()

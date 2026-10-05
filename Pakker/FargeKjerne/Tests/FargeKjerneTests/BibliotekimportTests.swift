@@ -12,6 +12,23 @@ struct BibliotekimportTests {
 
     /// Én importknapp: formatet avgjøres av innholdet. En ICC-profil over 64 KB begynner med 00 01 og må
     /// ikke tas for en ACO-fil.
+    /// ASE som paletter: gruppen blir en palett med gruppens navn, CMYK beholdes, og fargene er merket importert.
+    @Test func aseSomPaletter() throws {
+        let f = Farge(hex: "#2F7FD8")!
+        let merkevare = Palett(navn: "Merkevare", farger: [
+            PalettFarge(navn: "Blå", farge: f),
+            PalettFarge(navn: "Trykk", farge: f, representasjon: Fargerepresentasjon(modell: .cmyk, farge: f)),
+        ])
+        let paletter = try Bibliotekimport.aseSomPaletter(Eksportformat.ase.data(for: merkevare), filnavn: "fil.ase")
+        #expect(paletter.count == 1)
+        #expect(paletter[0].navn == "Merkevare")
+        #expect(paletter[0].farger.map { $0.navn } == ["Blå", "Trykk"])
+        #expect(paletter[0].farger[0].farge.avstandOK(til: f) < 0.001)
+        #expect(paletter[0].farger[1].representasjon?.rom == .modell(.cmyk))
+        #expect(paletter[0].farger.allSatisfy { $0.kilde?.importert == true })
+        #expect(throws: (any Error).self) { try Bibliotekimport.aseSomPaletter(Data("tull".utf8), filnavn: "x.ase") }
+    }
+
     @Test func formatGjenkjennesFraInnholdet() throws {
         #expect(Bibliotekimport.endelse(for: Eksportformat.ase.data(for: palett)) == "ase")
         #expect(Bibliotekimport.endelse(for: Eksportformat.aco.data(for: palett)) == "aco")

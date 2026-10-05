@@ -76,6 +76,58 @@ public enum Bibliotekimport {
         return Palett(navn: farger.count > 0 && gruppe?.isEmpty == false && navn.isEmpty ? gruppe! : navn, farger: farger)
     }
 
+    /// ASE-fil som paletter: én palett per fargegruppe (med gruppens navn), og farger utenfor grupper i en palett med
+    /// filnavnet. CMYK beholdes som CMYK. Fargene merkes som importerte (`Fargekilde.importert`), så navn og verdier
+    /// fra filen ikke deles i lenker – filen kan komme fra et rettighetsbelagt fargekart.
+    public static func aseSomPaletter(_ d: Data, filnavn: String) throws -> [Palett] {
+        guard endelse(for: d) == "ase" else { throw Feil.ukjentFormat }
+        let navn = (filnavn as NSString).deletingPathExtension
+        var l = Leser(d); l.pos = 4
+        _ = try l.u16(); _ = try l.u16()
+        let antall = try l.u32()
+        var løse: [PalettFarge] = []
+        var grupper: [(navn: String, farger: [PalettFarge])] = []
+        var iGruppe = false
+        let kilde = Fargekilde(kildenavn: navn, importert: true)
+        for _ in 0..<antall {
+            let type = try l.u16(), lengde = Int(try l.u32())
+            let slutt = l.pos + lengde
+            switch type {
+            case 0xC001:
+                grupper.append((try l.utf16Tekst().trimmingCharacters(in: .whitespaces), []))
+                iGruppe = true
+            case 0xC002: iGruppe = false
+            case 0x0001:
+                let fargenavn = try l.utf16Tekst().trimmingCharacters(in: .whitespaces)
+                let modell = try l.ascii(4)
+                var farge: Farge?, representasjon: Fargerepresentasjon?
+                switch modell {
+                case "RGB ": farge = Farge(sRGB: SRGB(r: Double(try l.f32()), g: Double(try l.f32()), b: Double(try l.f32())))
+                case "CMYK":
+                    let c = Double(try l.f32()), m = Double(try l.f32()), y = Double(try l.f32()), k = Double(try l.f32())
+                    let f = Farge(naivCMYK: CMYK(c: c, m: m, y: y, k: k))
+                    farge = f
+                    representasjon = Fargerepresentasjon(modell: .cmyk, farge: f)
+                case "LAB ":
+                    let L = Double(try l.f32()) * 100, a = Double(try l.f32()), b = Double(try l.f32())
+                    farge = Farge(cieLab: CIELab(l: L, a: a, b: b))
+                case "Gray": let g = Double(try l.f32()); farge = Farge(sRGB: SRGB(r: g, g: g, b: g))
+                default: break
+                }
+                if let farge {
+                    let pf = PalettFarge(navn: fargenavn, farge: farge, opphav: .bibliotek, representasjon: representasjon, kilde: kilde)
+                    if iGruppe, !grupper.isEmpty { grupper[grupper.count - 1].farger.append(pf) } else { løse.append(pf) }
+                }
+            default: break
+            }
+            l.pos = slutt
+        }
+        var paletter = grupper.filter { !$0.farger.isEmpty }.map { Palett(navn: $0.navn.isEmpty ? navn : $0.navn, farger: $0.farger) }
+        if !løse.isEmpty { paletter.insert(Palett(navn: navn, farger: løse), at: 0) }
+        guard !paletter.isEmpty else { throw Feil.ødelagt }
+        return paletter
+    }
+
     // MARK: - ACO
 
     static func aco(_ d: Data, navn: String) throws -> Palett {

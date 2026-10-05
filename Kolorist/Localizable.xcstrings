@@ -3055,6 +3055,16 @@
         }
       }
     },
+    "Importen mislyktes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Failed"
+          }
+        }
+      }
+    },
     "Importer": {
       "localizations": {
         "en": {
@@ -3071,6 +3081,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Import ICC profiles or colour libraries below. They appear under “Show as” in Studio."
+          }
+        }
+      }
+    },
+    "Importer fra ASE …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import from ASE …"
+          }
+        }
+      }
+    },
+    "Importer paletter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Palettes"
           }
         }
       }
@@ -8193,6 +8223,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "“%@” is neither an ICC profile (.icc, .icm) nor a colour library (.ase, .aco, .acb)."
+          }
+        }
+      }
+    },
+    "«%@» kunne ikke leses: %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "«%1$@» kunne ikke leses: %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%1$@” couldn’t be read: %2$@"
           }
         }
       }
