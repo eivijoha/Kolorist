@@ -162,6 +162,11 @@ struct OvergangVisning: View {
                 start = fra.medOKLCHLyshet(fra.okLCH.l + endring, gamut: arbeidsbenk.gamut)
                 slutt = til.medOKLCHLyshet(til.okLCH.l + endring, gamut: arbeidsbenk.gamut)
             }
+            // Hele settet (alle radene, lysest først) som én palett.
+            Button("Lagre settet som palett …", systemImage: "square.grid.3x3") {
+                somPalett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
+            }
+            .disabled(rader.count < 2)
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 if rader.count > 1 {

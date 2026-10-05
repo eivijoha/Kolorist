@@ -4343,6 +4343,16 @@
         }
       }
     },
+    "Lagre settet som palett …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the Set as a Palette …"
+          }
+        }
+      }
+    },
     "Lagre sist fangede farge": {
       "localizations": {
         "en": {
