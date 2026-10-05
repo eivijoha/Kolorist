@@ -2409,16 +2409,16 @@
     },
     "Fra lyshet %lld %% og metning %lld %% til lyshet %lld %% og metning %lld %%": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Fra lyshet %1$lld %% og metning %2$lld %% til lyshet %3$lld %% og metning %4$lld %%"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "From lightness %lld %% and saturation %lld %% to lightness %lld %% and saturation %lld %%"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fra lyshet %1$lld %% og metning %2$lld %% til lyshet %3$lld %% og metning %4$lld %%"
           }
         }
       }
@@ -8267,12 +8267,12 @@
         }
       }
     },
-    "Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Flaten viser fargene innenfor gamut for kuløren.": {
+    "Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One hue in several tones. Drag the end points in the field – lightness vertically, saturation horizontally – and the tones spread evenly along the line. Tap a tone to make it active. The field shows the colours within gamut for the hue."
+            "value": "One hue in several tones. Drag the end points in the field – lightness vertically, saturation horizontally – and the tones spread evenly along the line. Tap a tone to make it active. Saturation runs from grey to as saturated as the hue can be at each lightness."
           }
         }
       }

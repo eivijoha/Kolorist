@@ -280,8 +280,10 @@ struct HarmoniSeksjon: View {
                 .foregroundStyle(Color.sekundærTekst)
                 .frame(width: 48, alignment: .trailing)
         }
+        // Kvadratisk, like høy som fargesirkelen i de andre harmoniene.
         LyshetMetningFlate(kulør: monokromKulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velg)
-            .frame(height: sirkelhøyde)
+            .frame(width: sirkelhøyde, height: sirkelhøyde)
+            .frame(maxWidth: .infinity)
             .padding(.vertical, 4)
         if !monokromTekst.isEmpty {
             Button("Tilbakestill streken", systemImage: "arrow.uturn.backward") { monokromTekst = "" }
@@ -380,7 +382,7 @@ struct HarmoniSeksjon: View {
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
                 if harmoni == .monokrom {
-                    Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Flaten viser fargene innenfor gamut for kuløren.")
+                    Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.")
                 } else {
                 Text(sirkel.forklaring + " " + (brukerMunsell
                     ? String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.")

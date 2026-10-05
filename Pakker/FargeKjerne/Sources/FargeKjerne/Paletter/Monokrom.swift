@@ -1,10 +1,11 @@
 import Foundation
 
-/// Monokromatisk harmoni: én kulør i flere toner langs en strek i lyshet–metning-planet. Streken går mellom to
-/// endepunkter, og tonene fordeles jevnt langs den i OKLab (en rett linje i planet ved fast kulør).
+/// Monokromatisk harmoni: én kulør i flere toner langs en strek i et kvadrat med lyshet loddrett og metning
+/// vannrett. Metningen er andel av høyeste kroma innenfor gamut ved punktets lyshet (0 = grå, 1 = så mettet som
+/// kuløren kan bli der), så hele kvadratet er gyldige farger og streken beholder formen når kuløren endres.
 ///
-/// Metningen lagres som andel av høyeste kroma innenfor gamut ved punktets lyshet (0…1), så streken holder seg
-/// innenfor gamut og beholder formen når kuløren endres.
+/// Tonene fordeles jevnt i lyshet og metningsandel – rett langs streken i kvadratet brukeren ser og drar i. Det er
+/// et bevisst unntak fra interpolasjon i OKLab: en rett linje i OKLab ville bøyd seg i kvadratet.
 public struct Monokromstrek: Equatable, Sendable {
     public struct Punkt: Equatable, Sendable {
         /// OKLCH-lyshet (0…1).
@@ -20,6 +21,11 @@ public struct Monokromstrek: Equatable, Sendable {
         /// Kroma for punktet ved en kulør.
         public func kroma(kulør: Double, gamut: Gamut) -> Double {
             metning * Farge.maksKroma(lyshet: lyshet, kulør: kulør, i: gamut)
+        }
+
+        /// Fargen i punktet ved en kulør.
+        public func farge(kulør: Double, gamut: Gamut) -> Farge {
+            Farge(okLCH: OKLCH(l: lyshet, c: kroma(kulør: kulør, gamut: gamut), h: kulør)).gamutKartlagt(til: gamut)
         }
 
         /// Punktet for en lyshet og kroma, med kroma begrenset til gamut.
@@ -50,15 +56,13 @@ public struct Monokromstrek: Equatable, Sendable {
         return Monokromstrek(a: annen, b: grunnpunkt)
     }
 
-    /// `antall` toner fra `a` til `b` ved en kulør (OKLCH-grader), jevnt fordelt i OKLab og gamut-kartlagt.
+    /// `antall` toner fra `a` til `b` ved en kulør (OKLCH-grader), jevnt fordelt i lyshet og metningsandel.
     public func toner(kulør: Double, antall: Int, gamut: Gamut = .displayP3) -> [Farge] {
         let n = max(antall, 2)
-        let ca = a.kroma(kulør: kulør, gamut: gamut), cb = b.kroma(kulør: kulør, gamut: gamut)
         return (0..<n).map { i in
             let t = Double(i) / Double(n - 1)
-            let l = a.lyshet + (b.lyshet - a.lyshet) * t
-            let c = ca + (cb - ca) * t
-            return Farge(okLCH: OKLCH(l: l, c: c, h: kulør)).gamutKartlagt(til: gamut)
+            let p = Punkt(lyshet: a.lyshet + (b.lyshet - a.lyshet) * t, metning: a.metning + (b.metning - a.metning) * t)
+            return p.farge(kulør: kulør, gamut: gamut)
         }
     }
 

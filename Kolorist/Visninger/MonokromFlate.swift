@@ -1,9 +1,9 @@
 import FargeKjerne
 import SwiftUI
 
-/// Lyshet–metning-planet for én kulør (OKLCH): lyshet loddrett, kroma vannrett, med fargene innenfor gamut og
-/// grensen der de slutter. Streken for en monokromatisk harmoni ligger oppå; dra endepunktene for å flytte den,
-/// og tonene fordeler seg jevnt langs streken.
+/// Kvadrat for én kulør (OKLCH): lyshet loddrett, metning vannrett som andel av høyeste kroma innenfor gamut ved
+/// hver lyshet (grå til venstre, så mettet som kuløren kan bli til høyre). Streken for en monokromatisk harmoni
+/// ligger oppå; dra endepunktene for å flytte den, og tonene fordeler seg jevnt langs streken.
 struct LyshetMetningFlate: View {
     let kulør: Double
     let gamut: Gamut
@@ -18,61 +18,33 @@ struct LyshetMetningFlate: View {
     /// Om bevegelsen har startet (og om den startet nær et endepunkt).
     @State private var startet = false
 
-    private static let rader = 40, kolonner = 40
+    private static let rader = 96
     private let marg: CGFloat = 14
 
-    /// Høyeste kroma for kuløren ved noen lyshet: flatens bredde.
-    private var kromaområde: Double {
-        let maks = (1..<40).map { Farge.maksKroma(lyshet: Double($0) / 40, kulør: kulør, i: gamut) }.max() ?? 0.1
-        return max(maks, 0.02) * 1.04
-    }
-
-    private func punkt(_ p: Monokromstrek.Punkt, i r: CGRect, kromaområde: Double) -> CGPoint {
-        CGPoint(x: r.minX + r.width * p.kroma(kulør: kulør, gamut: gamut) / kromaområde,
-                y: r.maxY - r.height * p.lyshet)
-    }
-
-    private func punkt(for f: Farge, i r: CGRect, kromaområde: Double) -> CGPoint {
-        let lch = f.okLCH
-        return CGPoint(x: r.minX + r.width * min(lch.c / kromaområde, 1), y: r.maxY - r.height * lch.l)
+    private func punkt(_ p: Monokromstrek.Punkt, i r: CGRect) -> CGPoint {
+        CGPoint(x: r.minX + r.width * p.metning, y: r.maxY - r.height * p.lyshet)
     }
 
     var body: some View {
         GeometryReader { geo in
             let r = CGRect(origin: .zero, size: geo.size).insetBy(dx: marg, dy: marg)
-            let kromaområde = kromaområde
-            let pa = punkt(strek.a, i: r, kromaområde: kromaområde)
-            let pb = punkt(strek.b, i: r, kromaområde: kromaområde)
+            let pa = punkt(strek.a, i: r)
+            let pb = punkt(strek.b, i: r)
             Canvas { ctx, _ in
-                // Gamut-grensen for kuløren som en jevn kurve, og fargene innenfor den (rad for rad, klippet til kurven).
-                var grense = Path()
-                grense.move(to: CGPoint(x: r.minX, y: r.maxY))
-                for i in 0...120 {
-                    let l = Double(i) / 120
+                // Fargene i kvadratet: én tynn rad per lyshet, med en jevn overgang fra grå til høyeste metning.
+                let radH = r.height / CGFloat(Self.rader)
+                for rad in 0..<Self.rader {
+                    let l = (Double(rad) + 0.5) / Double(Self.rader)
                     let maks = Farge.maksKroma(lyshet: l, kulør: kulør, i: gamut)
-                    grense.addLine(to: CGPoint(x: r.minX + r.width * maks / kromaområde, y: r.maxY - r.height * l))
-                }
-                grense.addLine(to: CGPoint(x: r.minX, y: r.minY))
-                grense.closeSubpath()
-                let celleH = r.height / CGFloat(Self.rader), celleB = r.width / CGFloat(Self.kolonner)
-                ctx.drawLayer { lag in
-                    lag.clip(to: grense)
-                    for rad in 0..<Self.rader {
-                        let l = (Double(rad) + 0.5) / Double(Self.rader)
-                        let maks = Farge.maksKroma(lyshet: l, kulør: kulør, i: gamut)
-                        let y = r.maxY - CGFloat(rad + 1) * celleH
-                        // Én celle ekstra forbi grensen ved denne lysheten; kurven klipper bort resten.
-                        let antall = min(Int((r.width * maks / kromaområde / celleB).rounded(.up)) + 1, Self.kolonner)
-                        for k in 0..<antall {
-                            let c = min((Double(k) + 0.5) * Double(celleB / r.width) * kromaområde, maks)
-                            let farge = Farge(okLCH: OKLCH(l: l, c: c, h: kulør)).gamutKartlagt(til: gamut)
-                            // Litt overlapp, så det ikke blir fuger mellom cellene.
-                            lag.fill(Path(CGRect(x: r.minX + CGFloat(k) * celleB, y: y, width: celleB + 0.5, height: celleH + 0.5)),
-                                     with: .color(farge.swiftUI))
-                        }
+                    let stopp = (0...8).map { k in
+                        Farge(okLCH: OKLCH(l: l, c: Double(k) / 8 * maks, h: kulør)).gamutKartlagt(til: gamut).swiftUI
                     }
+                    let y = r.maxY - CGFloat(rad + 1) * radH
+                    // Litt overlapp, så det ikke blir fuger mellom radene.
+                    ctx.fill(Path(CGRect(x: r.minX, y: y, width: r.width, height: radH + 0.6)),
+                             with: .linearGradient(Gradient(colors: stopp), startPoint: CGPoint(x: r.minX, y: y),
+                                                   endPoint: CGPoint(x: r.maxX, y: y)))
                 }
-                ctx.stroke(grense, with: .color(.primary.opacity(0.3)), lineWidth: 1)
 
                 // Streken og tonene langs den.
                 var linje = Path()
@@ -91,7 +63,7 @@ struct LyshetMetningFlate: View {
                 }
 
                 // Grunnfargen som en liten ring.
-                let g = punkt(for: grunnfarge, i: r, kromaområde: kromaområde)
+                let g = punkt(.fra(lyshet: grunnfarge.okLCH.l, kroma: grunnfarge.okLCH.c, kulør: kulør, gamut: gamut), i: r)
                 ctx.stroke(Path(ellipseIn: CGRect(x: g.x - 6, y: g.y - 6, width: 12, height: 12)),
                            with: .color(grunnfarge.lesbarTekstfarge.swiftUI), style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
             }
@@ -108,8 +80,8 @@ struct LyshetMetningFlate: View {
                         }
                         guard let drar else { return }
                         let l = Double((r.maxY - v.location.y) / r.height)
-                        let c = max(Double((v.location.x - r.minX) / r.width) * kromaområde, 0)
-                        strek[keyPath: drar] = .fra(lyshet: min(max(l, 0.02), 0.98), kroma: c, kulør: kulør, gamut: gamut)
+                        let m = Double((v.location.x - r.minX) / r.width)
+                        strek[keyPath: drar] = Monokromstrek.Punkt(lyshet: min(max(l, 0.02), 0.98), metning: m)
                     }
                     .onEnded { v in
                         // Et trykk uten bevegelse på en tone gjør den til aktiv farge.
