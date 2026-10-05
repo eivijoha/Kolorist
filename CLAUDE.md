@@ -23,8 +23,9 @@ Fargepalett-verktøy for designere – iOS, iPadOS og macOS (én multiplattform-
   fagnavn, ikke appnavn, og beholdes.
 - Fysisk testenhet: «Burgund» (iPhone 18 Pro). Bygg med `-allowProvisioningUpdates`, installer med `xcrun devicectl`.
 - `Dokumentasjon/Grunnlag.md` – arkitektur, beslutninger og veikart.
-- `web/<versjon>/` – kolorist.no. 1.2-sidene bygges med `python3 web/verktøy/lag_sider.py` fra `web/verktøy/webkilde/`;
-  endre tekst der, ikke i de ferdige sidene.
+- `web/<versjon>/` – kolorist.no. Sidene for versjonen i `VERSJON` (nå 1.3) bygges med `python3 web/verktøy/lag_sider.py`
+  fra `web/verktøy/webkilde/`; endre tekst der, ikke i de ferdige sidene. `methods.html`, `support.html` m.fl. er faste
+  sider i versjonsmappa. `web/1.2` er ferdig (live på rota) og bygges ikke på nytt.
 
 ## Konvensjoner
 

@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
-"""Bygger 1.2-nettsidene: kort startside, Design, Arkitektur, Lys og fargemåling og Alle funksjoner (nb og en).
+"""Bygger nettsidene: kort startside, Design, Arkitektur, Lys og fargemåling og Alle funksjoner (nb og en).
 Innholdet hentes fra de opprinnelige forsidene (webkilde/), så funksjonslistene står ordrett som før.
 
     python3 web/verktøy/lag_sider.py
 
-Skriver sidene i web/1.2. Tekst endres i webkilde/ eller her, ikke i de ferdige sidene (de skrives over)."""
+Skriver sidene i web/<VERSJON> (nå 1.3; 1.2-sidene i web/1.2 er ferdige og bygges ikke på nytt). Tekst endres i
+webkilde/ eller her, ikke i de ferdige sidene (de skrives over). Det som er nytt i versjonen, merkes med N; det som
+var nytt i forrige versjon, står med N12 (tomt), så merket kan flyttes tilbake om det trengs."""
 import pathlib
 import re
 
+VERSJON = '1.3'
+# Merke for det som var nytt i 1.2 – ikke lenger nytt.
+N12 = ''
+
 S = str(pathlib.Path(__file__).resolve().parent)
-W = str(pathlib.Path(__file__).resolve().parent.parent / '1.2')
+W = str(pathlib.Path(__file__).resolve().parent.parent / VERSJON)
 
 kilde = {'nb': open(f'{S}/webkilde/index.html').read(), 'en': open(f'{S}/webkilde/en/index.html').read()}
 
@@ -21,7 +27,7 @@ TIL_NB = {v: k for k, v in PAR.items()}
 
 T = {
     'nb': dict(
-        nytt='Nytt i 1.2', hopp='Hopp til hovedinnhold', hovedmeny='Hovedmeny', bunnmeny='Bunnmeny', språk='Språk',
+        nytt=f'Nytt i {VERSJON}', hopp='Hopp til hovedinnhold', hovedmeny='Hovedmeny', bunnmeny='Bunnmeny', språk='Språk',
         nav=[('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('filament.html', '3D-print'), ('plattformer.html', 'Plattformer'), ('support.html', 'Støtte')],
         bunn=[('index.html', 'Om appen'), ('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('plattformer.html', 'Plattformer'), ('filament.html', '3D-print'),
               ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('support.html', 'Støtte'),
@@ -31,7 +37,7 @@ T = {
         copyright='© 2026 Eivind Arnstein Johansen. Apple, iPhone, iPad, Mac, iCloud, Siri og Apple Intelligence er varemerker for Apple Inc.',
     ),
     'en': dict(
-        nytt='New in 1.2', hopp='Skip to main content', hovedmeny='Main menu', bunnmeny='Footer menu', språk='Language',
+        nytt=f'New in {VERSJON}', hopp='Skip to main content', hovedmeny='Main menu', bunnmeny='Footer menu', språk='Language',
         nav=[('design.html', 'Design'), ('architecture.html', 'Architecture'), ('filament.html', '3D printing'), ('platforms.html', 'Platforms'), ('support.html', 'Support')],
         bunn=[('index.html', 'About'), ('design.html', 'Design'), ('architecture.html', 'Architecture'), ('platforms.html', 'Platforms'), ('filament.html', '3D printing'),
               ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('support.html', 'Support'),
@@ -228,12 +234,12 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="lys.html">Simuler farger mot andre lysmiljøer – og mål lyset med et gråkort</a></p>'
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">Monokromatiske paletter du former i lyshet og metning – og farger og gradienter rett inn i designprogrammene</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.'),
                    ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG og LRV, og farger slik de oppleves med fargesynsavvik.'),
-                   (f'Farger i ulikt lys {N}', 'Simuler farger mot andre lysmiljøer, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
+                   ('Farger i ulikt lys', 'Simuler farger mot andre lysmiljøer, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
                    ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac. Bruk den du har, eller flere, med alt synkronisert via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter kontrollert for skjerm og trykk – levert rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
@@ -247,12 +253,12 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="light.html">Simulate colours in other viewing conditions – and measure the light with a grey card</a></p>'
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">Monochromatic palettes you shape in lightness and saturation – and colours and gradients straight into your design apps</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, Munsell and every colour space and ICC profile.'),
                    ('Contrast and colour vision', 'Contrast for text and surfaces to WCAG and LRV, and colours as they appear with colour vision deficiencies.'),
-                   (f'Colours in different light {N}', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
+                   ('Colours in different light', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
                    ('One app – one or more devices', 'The same app on iPhone, iPad and Mac. Use the one you have, or several, with everything synced through iCloud. <a href="platforms.html">See the differences</a>')],
             fagfelt='Two fields',
             dører=[('design.html', 'Design', 'Palettes, tone scales and gradients checked for screen and print – delivered straight into your design tools.', 'Kolorist for design', 'harmoni'),
@@ -381,36 +387,39 @@ def design(lang):
             ('Finn fargene', 'Start fra et ord, et bilde eller en farge du allerede har.',
              ['Fra verdiord til palett med Apple Intelligence på enheten, forankret i en kunnskapsbase med over hundre fargebegreper',
               'Beskriv en farge – «dyp havblå», «støvete rosa» – og se den med en gang',
-              'Harmonier på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N,
-              'Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning' + N,
+              'Harmonier på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N12,
+              'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N,
+              'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N,
+              'Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning' + N12,
               'Plukk farger fra bilder og kamera – og fra hele skjermen på Mac'], 'harmoni-aksent', None),
             ('Bygg fargesystemet', 'Toner og overganger i like perseptuelle steg, så trinnene oppleves jevne.',
              ['Toneskalaer fra 50 til 950',
-              'Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell' + N,
+              'Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell' + N12,
               'Overganger i OKLab, med lysere og mørkere rader',
-              'Dra på lyshetsstigen for å gjøre hele rekken lysere eller mørkere' + N,
+              'Dra på lyshetsstigen for å gjøre hele rekken lysere eller mørkere' + N12,
               'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'overgang', None),
             ('Kontroller', 'Kontroller kontrast og lesbarhet, også med fargesynsavvik.',
              ['WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk',
               '«Rett opp» som justerer fargen til den består',
-              'Skriftkontrast for hele paletter, rett i palettvisningen' + N,
+              'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
+              'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N,
               'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'skriftkontrast', None),
             ('Skjerm, trykk og 3D-print', 'Display P3 side om side med trykkprofiler, egne ICC-profiler og fargekart – og filamentfarger for 3D-print.',
              ['Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil',
               'Varsel når fargen er utenfor fargeområdet – og begrens farger til en profil om du vil',
               'Rene CMYK-verdier: grått innslag flyttes til sort, med færrest mulig trykkfarger',
               'Fargekart med navngitte toner: arbeid innenfor dem, med tonenavn vist',
-              'Vurder trykk og bilder under standardlys for grafisk vurdering (ISO 3664)' + N,
-              'Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt med kolorimeter – finn nærmeste filament, med lenke til prøven (<a href="filament.html">les mer</a>)' + N],
+              'Vurder trykk og bilder under standardlys for grafisk vurdering (ISO 3664)' + N12,
+              'Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt med kolorimeter – finn nærmeste filament, med lenke til prøven (<a href="filament.html">les mer</a>)' + N12],
              'studio', ('lys.html', 'Les om lys og fargemåling')),
             ('Levér', 'Eksporter og kopier farger til andre programmer, i formatet de ble laget i.',
              ['Eksport til ASE, ACO, design tokens (DTCG-JSON), CSS, SwiftUI, GPL, SVG-fargeprøver og hex-lister',
               'Farger eksporteres i formatet de er laget i – for eksempel CMYK som CMYK',
-              'Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer',
+              'Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer – som figurer og redigerbare gradienter, ikke bilder' + N,
               'Dra fargeprøver rett inn i andre programmer på Mac – og farger inn i Kolorist',
               'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier',
-              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N,
-              'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N,
+              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
+              'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
               'Siri og Snarveier: lag paletter og overganger, konverter farger og sjekk kontrast'], None, None),
         ]
         return fagside('nb', 'design.html', 'Kolorist for design – paletter, toner, kontroll og eksport',
@@ -422,36 +431,39 @@ def design(lang):
         ('Find the colours', 'Start from a word, a photo or a colour you already have.',
          ['From value words to a palette with Apple Intelligence on device, grounded in a knowledge base of more than a hundred colour concepts',
           'Describe a colour – “deep ocean blue”, “dusty pink” – and see it right away',
-          'Harmonies on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N,
-          'Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension' + N,
+          'Harmonies on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N12,
+          'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N,
+          'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N,
+          'Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension' + N12,
           'Pick colours from photos and the camera – and from anywhere on screen on the Mac'], 'harmoni-aksent', None),
         ('Build the colour system', 'Tones and gradients in perceptually equal steps, so the steps look even.',
          ['Tone scales from 50 to 950',
-          'Lighter and darker tones in equal or easing steps, with values in the chosen colour model' + N,
+          'Lighter and darker tones in equal or easing steps, with values in the chosen colour model' + N12,
           'Gradients in OKLab, with lighter and darker rows',
-          'Drag on the lightness ladder to make the whole row lighter or darker' + N,
+          'Drag on the lightness ladder to make the whole row lighter or darker' + N12,
           'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'overgang', None),
         ('Check', 'Check contrast and legibility, including with colour vision deficiencies.',
          ['WCAG 2.2 contrast: AA and AAA, large text and graphics',
           'Auto-fix that adjusts the colour until it passes',
-          'Text contrast for whole palettes, right in the palette view' + N,
+          'Text contrast for whole palettes, right in the palette view' + N12,
+          'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N,
           'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'skriftkontrast', None),
         ('Screen, print and 3D printing', 'Display P3 side by side with print profiles, your own ICC profiles and colour libraries – and filament colours for 3D printing.',
          ['Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile',
           'A warning when the colour is out of gamut – and limit colours to a profile if you like',
           'Clean CMYK values: grey components move to black, with as few inks as possible',
           'Colour libraries with named tones: work within them, with tone names shown',
-          'Judge print and images under standard viewing conditions for graphic arts (ISO 3664)' + N,
-          'Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most measured with a colorimeter – find the nearest filament, with a link to the sample (<a href="filament.html">read more</a>)' + N],
+          'Judge print and images under standard viewing conditions for graphic arts (ISO 3664)' + N12,
+          'Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most measured with a colorimeter – find the nearest filament, with a link to the sample (<a href="filament.html">read more</a>)' + N12],
          'studio', ('light.html', 'Read about light and colour measurement')),
         ('Deliver', 'Export and copy colours to other apps, in the format they were made in.',
          ['Export to ASE, ACO, design tokens (DTCG JSON), CSS, SwiftUI, GPL, SVG swatches and hex lists',
           'Colours are exported in the format they were made in – CMYK as CMYK, for example',
-          'Copy colours and gradients straight into design, layout and presentation apps',
+          'Copy colours and gradients straight into design, layout and presentation apps – as shapes and editable gradients, not images' + N,
           'Drag swatches straight into other apps on the Mac – and colours into Kolorist',
           'Print palettes as an A4 PDF with swatches in CIELab, names and values',
-          'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N,
-          'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N,
+          'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N12,
+          'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
           'Siri and Shortcuts: make palettes and gradients, convert colours and check contrast'], None, None),
     ]
     return fagside('en', 'design.html', 'Kolorist for design – palettes, tones, checks and export',
@@ -467,33 +479,33 @@ def arkitektur(lang):
         steg = [
             ('Hent farger fra rom og materialer', 'Telefonen blir et enkelt måleverktøy for farge.',
              ['Kamera med zoom, makrofokus og lykt',
-              'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)' + N,
-              'Mål lyset der du står og lagre det som lysmiljø' + N,
+              'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)' + N12,
+              'Mål lyset der du står og lagre det som lysmiljø' + N12,
               'Dominerende farger i bilder'], None, None),
             ('Spesifiser', 'Angi farger med Munsell-notasjon, CIELab og fargekart.',
-             ['Munsell i trinnene fra Munsell-boka – kulør 2,5, valør 1 og kroma 2 – med Munsell-notasjon' + N,
+             ['Munsell i trinnene fra Munsell-boka – kulør 2,5, valør 1 og kroma 2 – med Munsell-notasjon' + N12,
               'Harmonier på Munsells fargesirkel, med ekte Munsell-farger',
               'Fargekart med navngitte toner: importer dine egne (ASE, ACO, ACB) og finn nærmeste tone',
               'CIELab (D50) og fargeforskjell med ΔE2000'], 'munsell', None),
             ('Se fargene i lyset', 'Simuler farger og hele paletter mot lysmiljøene der de skal brukes.',
-             ['Lysmiljøer for stua om kvelden, kontoret og butikken – eller lyset du har målt på stedet' + N,
-              'Standard betraktningsforhold for arbeidsplasser og skoler (NS-EN 12464-1) og museer (CIE 157)' + N,
-              'Fargen på skjermen og i lyset side om side, og i flere lys med fargeskiftet i hvert' + N,
-              'Hele paletter i lys, rett i palettvisningen' + N,
-              'Farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED' + N],
+             ['Lysmiljøer for stua om kvelden, kontoret og butikken – eller lyset du har målt på stedet' + N12,
+              'Standard betraktningsforhold for arbeidsplasser og skoler (NS-EN 12464-1) og museer (CIE 157)' + N12,
+              'Fargen på skjermen og i lyset side om side, og i flere lys med fargeskiftet i hvert' + N12,
+              'Hele paletter i lys, rett i palettvisningen' + N12,
+              'Farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED' + N12],
              'arkitektur-lys', ('lys.html', 'Les om lys og fargemåling')),
             ('Universell utforming', 'Kontrast mellom flater – dører, vegger, gulv og skilt – ikke bare tekst.',
              ['Lysrefleksjonsverdi (LRV) og kontrast mellom flater etter BS 8300 og NS 11001',
-              'LRV og luminanskontrast i valgt lys – også lysrør og LED' + N,
+              'LRV og luminanskontrast i valgt lys – også lysrør og LED' + N12,
               'WCAG-kontrast for skilt og tekst',
               'Farger og paletter slik de oppleves med fargesynsavvik – og et kamera med fargesynsfilter for omgivelsene'], 'kontrast', None),
             ('Mål og dokumenter', 'Lysforhold og fargevalg dokumentert, klart til å deles.',
-             ['Mål fargetemperatur, belysningsstyrke (lux) og anslått fargegjengivelse med iPhone eller iPad' + N,
+             ['Mål fargetemperatur, belysningsstyrke (lux) og anslått fargegjengivelse med iPhone eller iPad' + N12,
               'Sammenlign med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass',
-              'Lagre målt lys som lysmiljø, og se andre farger i det' + N,
+              'Lagre målt lys som lysmiljø, og se andre farger i det' + N12,
               'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier',
-              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N,
-              'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N,
+              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
+              'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
               'Paletter og lysmiljøer synkroniseres til iPad og Mac via iCloud'], None, None),
         ]
         return fagside('nb', 'arkitektur.html', 'Kolorist for arkitektur og interiørarkitektur',
@@ -504,33 +516,33 @@ def arkitektur(lang):
     steg = [
         ('Take colours from rooms and materials', 'Your phone becomes a simple colour measuring tool.',
          ['Camera with zoom, macro focus and torch',
-          'Compensate picked colours for the light with a grey card or reference card – in photos too (beta)' + N,
-          'Measure the light where you are and save it as a viewing condition' + N,
+          'Compensate picked colours for the light with a grey card or reference card – in photos too (beta)' + N12,
+          'Measure the light where you are and save it as a viewing condition' + N12,
           'Dominant colours in photos'], None, None),
         ('Specify', 'Specify colours with Munsell notation, CIELab and colour libraries.',
-         ['Munsell in the steps of the Munsell book – hue 2.5, value 1 and chroma 2 – with Munsell notation' + N,
+         ['Munsell in the steps of the Munsell book – hue 2.5, value 1 and chroma 2 – with Munsell notation' + N12,
           'Harmonies on the Munsell colour wheel, with real Munsell colours',
           'Colour libraries with named tones: import your own (ASE, ACO, ACB) and find the nearest tone',
           'CIELab (D50) and colour difference with ΔE2000'], 'munsell', None),
         ('See the colours in the light', 'Simulate colours and whole palettes in the viewing conditions where they will be used.',
-         ['Viewing conditions for the living room in the evening, the office and the shop – or the light you measured on site' + N,
-          'Standard viewing conditions for workplaces and schools (EN 12464-1) and museums (CIE 157)' + N,
-          'The colour on screen and in the light side by side, and in several lights with the colour shift in each' + N,
-          'Whole palettes in light, right in the palette view' + N,
-          'Colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting' + N],
+         ['Viewing conditions for the living room in the evening, the office and the shop – or the light you measured on site' + N12,
+          'Standard viewing conditions for workplaces and schools (EN 12464-1) and museums (CIE 157)' + N12,
+          'The colour on screen and in the light side by side, and in several lights with the colour shift in each' + N12,
+          'Whole palettes in light, right in the palette view' + N12,
+          'Colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting' + N12],
          'arkitektur-lys', ('light.html', 'Read about light and colour measurement')),
         ('Universal design', 'Contrast between surfaces – doors, walls, floors and signs – not just text.',
          ['Light reflectance value (LRV) and contrast between surfaces to BS 8300 and NS 11001',
-          'LRV and luminance contrast in the chosen light – including fluorescent and LED' + N,
+          'LRV and luminance contrast in the chosen light – including fluorescent and LED' + N12,
           'WCAG contrast for signs and text',
           'Colours and palettes as they appear with colour vision deficiencies – and a camera with a colour vision filter for your surroundings'], 'kontrast', None),
         ('Measure and document', 'Lighting conditions and colour choices documented, ready to share.',
-         ['Measure colour temperature, illuminance (lux) and estimated colour rendering with iPhone or iPad' + N,
+         ['Measure colour temperature, illuminance (lux) and estimated colour rendering with iPhone or iPad' + N12,
           'Compare with recommended levels, such as 500 lx at a workplace',
-          'Save measured light as a viewing condition, and see other colours in it' + N,
+          'Save measured light as a viewing condition, and see other colours in it' + N12,
           'Print palettes as an A4 PDF with swatches in CIELab, names and values',
-          'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N,
-          'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N,
+          'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N12,
+          'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
           'Palettes and viewing conditions sync to iPad and Mac through iCloud'], None, None),
     ]
     return fagside('en', 'architecture.html', 'Kolorist for architecture and interior architecture',
@@ -619,7 +631,7 @@ def funksjoner(lang):
         grupper = [
             ('fargerom', 'Farger og fargerom', 'Fargerom', None,
              [('Alle fargerom', k['Alle fargerom']), ('ICC-profiler og fargebiblioteker', k['ICC-profiler og fargebiblioteker']),
-              ('Filamentfarger for 3D-print', ul([f'<li>Over 2 200 filamentfarger fra 150 produsenter, i bibliotek per materiale: PLA, PETG, ABS og ASA, TPU og TPE og andre {N}</li>',
+              ('Filamentfarger for 3D-print', ul([f'<li>Over 2 200 filamentfarger fra 150 produsenter, i bibliotek per materiale: PLA, PETG, ABS og ASA, TPU og TPE og andre {N12}</li>',
                                                   '<li>De fleste målt med kolorimeter på utskrevne prøver; resten anslått fra foto og merket slik</li>',
                                                   '<li>Finn nærmeste filament til en farge, eller lås paletter og harmonier til filamenter som finnes</li>',
                                                   '<li>Hver farge lenker til prøven hos <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">om dataene</a></li>',
@@ -632,13 +644,13 @@ def funksjoner(lang):
              [('Tekst og grafikk (WCAG 2.2)', ul([tilg[i] for i in (0, 1, 2, 3, 7)])),
               ('Flater og bygg (LRV)', ul([tilg[i] for i in (4, 5, 6)])),
               ('Fargesyn', ul([tilg[i] for i in (8, 9, 10)]))]),
-            ('lys', f'Lys og fargemåling {N}', 'Lys', lysdel, []),
+            ('lys', 'Lys og fargemåling', 'Lys', lysdel, []),
             ('levere', 'Paletter, eksport og deling', 'Paletter og eksport', None,
              [('Paletter og iCloud', k['Paletter og iCloud']), ('Eksport', k['Eksport']),
-              ('Lagre som', ul([f'<li>Velg formatene etter hvor filene skal brukes – Adobe-programmer, Figma, nett, Apple-utvikling, GIMP og flere – og lagre flere samtidig {N}</li>',
+              ('Lagre som', ul([f'<li>Velg formatene etter hvor filene skal brukes – Adobe-programmer, Figma, nett, Apple-utvikling, GIMP og flere – og lagre flere samtidig {N12}</li>',
                                 '<li>Lagre i en mappe du velger, også i OneDrive, Jottacloud og andre tjenester – eller del filene med e-post, Teams og AirDrop</li>',
                                 '<li>For paletter og enkeltfarger</li>'])),
-              ('Delingslenker', ul([f'<li>Del enkeltfarger, paletter, gradienter og harmonier som lenke {N}</li>',
+              ('Delingslenker', ul([f'<li>Del enkeltfarger, paletter, gradienter og harmonier som lenke {N12}</li>',
                                     '<li>Med Kolorist åpnes lenken i appen, og du velger selv om noe skal lagres</li>',
                                     '<li>Uten appen – også på Windows – vises fargene i nettleseren, med hex, OKLCH, CIELab og Munsell</li>',
                                     '<li>Fargene ligger i selve lenken; ingenting lagres eller sendes via nettstedet</li>',
@@ -649,14 +661,14 @@ def funksjoner(lang):
             ('metoder', 'Metodene', 'Metodene', k['Åpent om metodene'], []),
         ]
         tittel, h1 = 'Alle funksjoner – Kolorist', 'Alle funksjoner'
-        intro = f'Alt Kolorist kan, samlet etter tema. Det som er nytt i versjon 1.2, er merket{N}'
+        intro = f'Alt Kolorist kan, samlet etter tema. Det som er nytt i versjon {VERSJON}, er merket{N}'
         beskr = 'Alle funksjoner i Kolorist: fargerom og ICC, toner, harmonier og overganger, fargeplukking, kontrast og fargesyn, lys og fargemåling, paletter og eksport.'
         innholdsliste = 'Innhold på siden'
     else:
         grupper = [
             ('colour-spaces', 'Colours and colour spaces', 'Colour spaces', None,
              [('Every colour space', k['Every colour space']), ('ICC profiles and colour libraries', k['ICC profiles and colour libraries']),
-              ('Filament colours for 3D printing', ul([f'<li>More than 2,200 filament colours from 150 manufacturers, in a library per material: PLA, PETG, ABS and ASA, TPU and TPE and others {N}</li>',
+              ('Filament colours for 3D printing', ul([f'<li>More than 2,200 filament colours from 150 manufacturers, in a library per material: PLA, PETG, ABS and ASA, TPU and TPE and others {N12}</li>',
                                                        '<li>Most measured with a colorimeter on printed samples; the rest estimated from photos and marked as such</li>',
                                                        '<li>Find the nearest filament to a colour, or lock palettes and harmonies to filaments that exist</li>',
                                                        '<li>Each colour links to the sample at <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">about the data</a></li>',
@@ -669,13 +681,13 @@ def funksjoner(lang):
              [('Text and graphics (WCAG 2.2)', ul([tilg[i] for i in (0, 1, 2, 3, 7)])),
               ('Surfaces and buildings (LRV)', ul([tilg[i] for i in (4, 5, 6)])),
               ('Colour vision', ul([tilg[i] for i in (8, 9, 10)]))]),
-            ('light', f'Light and colour measurement {N}', 'Light', lysdel, []),
+            ('light', 'Light and colour measurement', 'Light', lysdel, []),
             ('deliver', 'Palettes, export and sharing', 'Palettes and export', None,
              [('Palettes and iCloud', k['Palettes and iCloud']), ('Export', k['Export']),
-              ('Save as', ul([f'<li>Choose formats by where the files will be used – Adobe apps, Figma, the web, Apple development, GIMP and more – and save several at once {N}</li>',
+              ('Save as', ul([f'<li>Choose formats by where the files will be used – Adobe apps, Figma, the web, Apple development, GIMP and more – and save several at once {N12}</li>',
                               '<li>Save to a folder you choose, including OneDrive, Jottacloud and other services – or share the files by email, Teams and AirDrop</li>',
                               '<li>For palettes and single colours</li>'])),
-              ('Share links', ul([f'<li>Share single colours, palettes, gradients and harmonies as a link {N}</li>',
+              ('Share links', ul([f'<li>Share single colours, palettes, gradients and harmonies as a link {N12}</li>',
                                   '<li>With Kolorist the link opens in the app, and you decide whether to save anything</li>',
                                   '<li>Without the app – on Windows too – the colours are shown in the browser, with hex, OKLCH, CIELab and Munsell</li>',
                                   '<li>The colours are in the link itself; nothing is stored or sent through the website</li>',
@@ -686,7 +698,7 @@ def funksjoner(lang):
             ('methods', 'The methods', 'The methods', k['Open about methods'], []),
         ]
         tittel, h1 = 'All features – Kolorist', 'All features'
-        intro = f'Everything Kolorist can do, grouped by theme. What’s new in version 1.2 is marked{N}'
+        intro = f'Everything Kolorist can do, grouped by theme. What’s new in version {VERSJON} is marked{N}'
         beskr = 'All features in Kolorist: colour spaces and ICC, tones, harmonies and gradients, colour picking, contrast and colour vision, light and colour measurement, palettes and export.'
         innholdsliste = 'On this page'
 
@@ -745,11 +757,11 @@ def plattformer(lang):
         sammen_tittel = 'Sammen'
         sammen = ['Paletter, enkeltfarger og gradienter følger med mellom enhetene via din egen iCloud',
                   'ICC-profiler og fargekart ligger i appens mappe i iCloud Drive',
-                  'Mål lyset med iPhone eller iPad – og se farger i det samme lyset på Mac' + N,
-                  'Bruk iPhone som kamera på Mac, med kompensasjon for lyset' + N,
+                  'Mål lyset med iPhone eller iPad – og se farger i det samme lyset på Mac' + N12,
+                  'Bruk iPhone som kamera på Mac, med kompensasjon for lyset' + N12,
                   'Oppsettet av visningen følger med',
-                  'Kolleger på Windows: lagre paletter i formatene de bruker, i en mappe i skytjenesten dere deler' + N,
-                  'Delte lenker åpnes i appen på iPhone, iPad og Mac – og i nettleseren ellers, også på Windows' + N]
+                  'Kolleger på Windows: lagre paletter i formatene de bruker, i en mappe i skytjenesten dere deler' + N12,
+                  'Delte lenker åpnes i appen på iPhone, iPad og Mac – og i nettleseren ellers, også på Windows' + N12]
         side_tittel = 'Side om side'
         side_intro = 'Samme verktøy, tilpasset skjermen.'
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmoni'), ('overgang', 'Overgang'), ('kontrast', 'Kontrast')]
@@ -781,11 +793,11 @@ def plattformer(lang):
         sammen_tittel = 'Together'
         sammen = ['Palettes, single colours and gradients follow you between devices through your own iCloud',
                   'ICC profiles and colour libraries live in the app’s folder in iCloud Drive',
-                  'Measure the light with iPhone or iPad – and see colours in the same light on the Mac' + N,
-                  'Use iPhone as the camera on the Mac, with compensation for the light' + N,
+                  'Measure the light with iPhone or iPad – and see colours in the same light on the Mac' + N12,
+                  'Use iPhone as the camera on the Mac, with compensation for the light' + N12,
                   'Your view layout follows along',
-                  'Colleagues on Windows: save palettes in the formats they use, in a folder in the cloud service you share' + N,
-                  'Shared links open in the app on iPhone, iPad and Mac – and in the browser elsewhere, Windows included' + N]
+                  'Colleagues on Windows: save palettes in the formats they use, in a folder in the cloud service you share' + N12,
+                  'Shared links open in the app on iPhone, iPad and Mac – and in the browser elsewhere, Windows included' + N12]
         side_tittel = 'Side by side'
         side_intro = 'The same tools, fitted to the screen.'
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'), ('kontrast', 'Contrast')]
@@ -939,7 +951,7 @@ def filamentside(lang):
     if lang == 'nb':
         steg = [
             ('Finn filamentet', 'Velg «Filament: alle typer» under «Vis som», og se nærmeste filament til fargen din – eller søk innen ett materiale.',
-             [f'Over 2 200 filamentfarger fra 150 produsenter, fra {kilde}' + N,
+             [f'Over 2 200 filamentfarger fra 150 produsenter, fra {kilde}' + N12,
               'Alle typer samlet, eller ett bibliotek per materiale: PLA, PETG, ABS og ASA, TPU og TPE og andre',
               'Nærmeste filament etter ΔE00, med avstanden oppgitt',
               'De fleste fargene er målt med kolorimeter; resten er anslått fra foto og merket slik'], 'filament', None),
@@ -965,7 +977,7 @@ def filamentside(lang):
                        steg, ('Les videre', [('design.html', 'Kolorist for design'), ('plattformer.html#del', 'Del med andre'), ('funksjoner.html', 'Alle funksjoner')]))
     steg = [
         ('Find the filament', 'Choose “Filament: all types” under “Show as”, and see the nearest filament to your colour – or search within one material.',
-         [f'More than 2,200 filament colours from 150 manufacturers, from {kilde}' + N,
+         [f'More than 2,200 filament colours from 150 manufacturers, from {kilde}' + N12,
           'All types together, or one library per material: PLA, PETG, ABS and ASA, TPU and TPE and others',
           'Nearest filament by ΔE00, with the distance shown',
           'Most colours are measured with a colorimeter; the rest are estimated from photos and marked as such'], 'filament', None),

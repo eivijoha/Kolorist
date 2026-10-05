@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Metoder og kilder – Kolorist</title>
+  <meta name="description" content="Metodene og kildene Kolorist bygger på: OKLab, CSS Color 4, CIELab, CIEDE2000, WCAG 2.2, simulering av fargesyn, ICC og det som er utviklet for appen.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="referrer" content="no-referrer">
+  <link rel="icon" href="assets/ikon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/stil.css?v=5">
+  <link rel="canonical" href="https://kolorist.no/methods.html">
+  <link rel="alternate" hreflang="nb" href="https://kolorist.no/methods.html">
+  <link rel="alternate" hreflang="en" href="https://kolorist.no/en/methods.html">
+  <link rel="alternate" hreflang="x-default" href="https://kolorist.no/methods.html">
+</head>
+<body>
+  <a class="hopp" href="#hovedinnhold">Hopp til hovedinnhold</a>
+  <div class="regnbuestripe" aria-hidden="true"></div>
+
+  <header class="topp">
+    <div class="topp-innhold">
+      <a class="merkenavn" href="index.html">
+        <img src="assets/ikon.svg" alt="" width="32" height="32">
+        Kolorist
+      </a>
+      <nav class="hovednav" aria-label="Hovedmeny">
+        <ul>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="arkitektur.html">Arkitektur</a></li>
+          <li><a href="filament.html">3D-print</a></li>
+          <li><a href="plattformer.html">Plattformer</a></li>
+          <li><a href="support.html">Støtte</a></li>
+        </ul>
+      </nav>
+      <nav class="sprakvalg" aria-label="Språk">
+        <span aria-current="true" lang="nb">Norsk</span>
+        <a href="en/methods.html" hreflang="en" lang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="hovedinnhold" class="innhold lesetekst" tabindex="-1">
+    <h1>Metoder og kilder</h1>
+    <p class="ingress">Kolorist bygger på etablert fargefag og åpne standarder. Her står hva appen bruker, hvor det kommer fra, og hva som er utviklet for appen. De samme forklaringene finnes i appen: trykk på «Metode: …» under en seksjon, eller velg <strong>Metoder og kilder</strong> nederst i Paletter.</p>
+    
+    <h2 id="oklab">OKLab og OKLCH</h2>
+    <p>Et perseptuelt fargerom der like tallsteg oppleves som like store fargeforskjeller. Kolorist regner overganger i OKLab, og toneskalaer, lysere/mørkere trinn, harmonier og metning i OKLCH (lyshet, kroma, kulør).</p>
+    <p class="dempet">Kilde: <a href="https://bottosson.github.io/posts/oklab/">Björn Ottosson: «A perceptual color space for image processing» (2020)</a></p>
+    
+    <h2 id="css">CSS Color Module Level 4</h2>
+    <p>Standarden for farger på nettet. Kolorist bruker spesifikasjonens matriser og overføringsfunksjoner for sRGB, Display P3, Adobe RGB, Lab og OKLab, dens gamut-kartlegging (kroma reduseres i OKLCH mens lyshet og kulør bevares) og dens tekstsyntaks for farger.</p>
+    <p class="dempet">Kilde: <a href="https://www.w3.org/TR/css-color-4/">W3C: CSS Color Module Level 4 (Candidate Recommendation)</a></p>
+    
+    <h2 id="cielab">CIELab, CIE LCH og Bradford-tilpasning</h2>
+    <p>CIEs fargerom basert på menneskets fargesyn. Kolorist oppgir Lab og LCH med hvitpunkt D50, som ICC-profiler og Photoshop, og bruker Bradford-transformasjonen mellom D65 og D50.</p>
+    <p class="dempet">Kilde: <a href="https://cie.co.at/publications/colorimetry-4th-edition">CIE 15:2018 Colorimetry; K. M. Lam (1985), Bradford-transformasjonen</a></p>
+    
+    <h2 id="ciede2000">CIEDE2000 (ΔE00)</h2>
+    <p>CIEs formel for opplevd fargeforskjell. Brukes ved sammenligning av farger, gamutavvik og i analysen av farger som blir vanskelige å skille med fargesynsavvik. Implementasjonen er kontrollert mot testdataene i Sharma mfl.</p>
+    <p class="dempet">Kilde: <a href="https://doi.org/10.1002/col.20070">G. Sharma, W. Wu, E. N. Dalal: Color Research &amp; Application 30(1), 2005; CIE 142-2001</a></p>
+    
+    <h2 id="wcag">WCAG 2.2 kontrast</h2>
+    <p>W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt.</p>
+    <p class="dempet">Kilde: <a href="https://www.w3.org/TR/WCAG22/">W3C: Web Content Accessibility Guidelines 2.2, suksesskriterium 1.4.3, 1.4.6 og 1.4.11</a></p>
+
+    <h2 id="apca">Tekst på fargeflater (APCA)</h2>
+    <p>Om teksten på appens egne fargeflater skal være sort eller hvit, avgjøres med APCA-lyshetskontrast, som følger opplevd lesbarhet bedre enn WCAG 2 og gir hvit tekst på flere mellomtoner. Kontrollen av farger mot WCAG-kravene er uendret.</p>
+    <p class="dempet">Kilde: <a href="https://github.com/Myndex/apca-w3">Myndex: APCA (Accessible Perceptual Contrast Algorithm) 0.0.98G-4g</a></p>
+    
+    <h2 id="fargesyn">Simulering av fargesynsavvik</h2>
+    <p>Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i Vurdering › Fargesyn, kontrastforhåndsvisningen og kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.</p>
+    <p class="dempet">Kilde: <a href="https://doi.org/10.1109/TVCG.2009.113">G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009</a></p>
+    
+    <h2 id="icc">ICC-profiler og fargestyring</h2>
+    <p>Konvertering mellom fargerom via ICC-profiler, med valgt gjengivelseshensikt. Gjøres av Apples fargestyring (ColorSync). Profiler følger ikke med appen; Kolorist bruker systemets profiler og profiler du importerer.</p>
+    <p class="dempet">Kilde: <a href="https://www.color.org/specification/ICC.1-2022-05.pdf">International Color Consortium (ICC.1); Apple ColorSync via Core Graphics</a></p>
+    
+    <h2 id="cmyk">Rene CMYK-verdier (UCR/GCR)</h2>
+    <p>Felles grått innslag i C, M og Y flyttes til sort, og Kolorist søker etter separasjonen med færrest trykkfarger som holder seg innenfor 1 ΔE00 av profilens egen separasjon.</p>
+    <p class="dempet">Kilde: Etablert trykkteknikk; søket er utviklet for Kolorist</p>
+    
+    <h2 id="harmonier">Fargesirkler og harmonier</h2>
+    <p>Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell, Herings motfargesirkel eller Goethes sirkel fra Farbenlehre (1810). Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB-, Hering- og Goethe-sirklene er stykkevis lineære avbildninger laget for appen. Monokromatisk harmoni holder kuløren fast og fordeler tonene jevnt langs en strek i lyshet (OKLCH) og metning, regnet som andel av høyeste kroma innenfor gamut ved hver lyshet. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.</p>
+    <p class="dempet">Kilde: Klassisk fargelære (Johannes Itten for RYB); avbildningene er utviklet for Kolorist</p>
+    
+    <h2 id="ki">Fargesemantikk og KI</h2>
+    <p>Paletter fra verdiord og «Beskriv en farge» bygger på en kunnskapsbase med fargebegreper laget for appen. Språkmodellen på enheten tolker ordene og velger kulørfamilier og uttrykk. Selve paletten komponeres deretter etter faste regler i OKLCH: harmoniprinsipp, lik valør eller lik metning, én aksent, lys eller mørk bakgrunn og tekst med minst 7:1 kontrast. Tekst om fargebetydning er konvensjoner, ikke vitenskapelige fakta.</p>
+    <p class="dempet">Kilde: Utviklet for Kolorist; språkmodell fra Apple (Foundation Models)</p>
+    
+    <h2 id="lrv">Lysrefleksjonsverdi og luminanskontrast</h2>
+    <p>LRV er CIE-luminansen Y i prosent – andelen synlig lys en flate reflekterer, slik malingsprodusentene oppgir den. Kolorist regner den for fargen slik den vises i sRGB. Kontrast mellom flater oppgis som forskjell i LRV-poeng (BS 8300: minst 30) og som luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂) etter NS 11001 (0,4 for viktige flater, 0,8 for skilt).</p>
+    <p class="dempet">Kilde: CIE 15 (luminansfaktor Y); BS 8300-2:2018; NS 11001-1:2018 og Byggforsk 220.300</p>
+
+    <h2 id="munsell">Munsell-systemet</h2>
+    <p>Kulør, valør og kroma etter Munsell. Omregningen bruker renotasjonsdataene fra 1943 (CIE xyY under lyskilde C, offentlige data) med interpolasjon i kroma, kulør og valør, Bradford-tilpasning til D65, og ASTM D1535 for sammenhengen mellom valør og luminans. Notasjonen er en tilnærming; fysiske Munsell-prøver kan avvike.</p>
+    <p class="dempet">Kilde: <a href="https://doi.org/10.1364/JOSA.33.000385">Newhall, Nickerson &amp; Judd: «Final Report of the O.S.A. Subcommittee on the Spacing of the Munsell Colors», JOSA 33(7), 1943</a>; ASTM D1535</p>
+
+    <h2 id="cam16">CAM16 og CAT16 – fargeinntrykk i ulikt lys</h2>
+    <p>En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).</p>
+    <p class="dempet">Kilde: <a href="https://doi.org/10.1002/col.22131">C. Li, Z. Li, Z. Wang mfl.: «Comprehensive color solutions: CAM16, CAT16, and CAM16-UCS», Color Research &amp; Application 42(6), 2017</a></p>
+
+    <h2 id="kolorimetri">Spektre, lyskilder og fargetemperatur</h2>
+    <p>Lyskilder beskrives med spektre fra CIE (dagslysserien, standardlys A, lysrør og LED-typer) eller som sortlegemer. Korrelert fargetemperatur og avstand fra Plancks kurve (Duv) regnes etter Ohno. Farger uten målt spekter får det glatteste spekteret som gir fargen i dagslys (Burns). Fargegjengivelse anslås fra referansekortets spektre, sammenlignet med et referanselys med samme fargetemperatur; tallet er skalert så det ligger nær Ra, men er ikke en offisiell fargegjengivelsesindeks. Standard betraktningsforhold følger belysningsstyrken i ISO 3664, NS-EN 12464-1 og CIE 157.</p>
+    <p class="dempet">Kilde: <a href="https://cie.co.at/publications/colorimetry-4th-edition">CIE 15:2018 Colorimetry</a>; Y. Ohno: «Practical use and calculation of CCT and Duv», LEUKOS 10(1), 2014; <a href="https://doi.org/10.1002/col.22437">S. A. Burns: «Numerical methods for smoothest reflectance reconstruction», Color Research &amp; Application 45(1), 2020</a></p>
+
+    <h2 id="kamerakarakterisering">Kamerakarakterisering med referansekort</h2>
+    <p>Med et referansekort i bildet tilpasser Kolorist en tonekurve per kanal fra de grå feltene og deretter en matrise eller et rotpolynom fra kamerafarger til fasiten i dagslys – den modellen som forutsier best. Nøyaktigheten oppgis som snitt og maks ΔE00, kryssvalidert: hvert felt forutsies av en modell tilpasset uten det. En kameraprofil laget én gang gjør at et gråkort holder i nytt lys. Kortet finnes automatisk i bildet (Vision), og lysheten i feltene avgjør hvilken vei det ligger. Referanseverdiene for kortet følger ikke med appen; du importerer dem selv.</p>
+    <p class="dempet">Kilde: <a href="https://doi.org/10.1109/TIP.2015.2405336">G. D. Finlayson, M. Mackiewicz, A. Hurlbert: «Color correction using root-polynomial regression», IEEE TIP 24(5), 2015</a>; ISO 17321-1</p>
+
+    <h2 id="filamentfarger">Filamentfarger fra FilamentColors.xyz</h2>
+    <p>De innebygde filamentfargene kommer fra FilamentColors.xyz, som skriver ut prøver av filament fra mange produsenter og måler dem med kolorimeter. Verdiene er CIELab under D65 med 10°-observatør, slik det står i kildekoden deres. Kolorist regner Lab om til XYZ med D65-hvitpunktet for 10° og tilpasser til 2° med Bradford; forskjellen mellom observatørene kan ikke regnes om nøyaktig uten spektre, men er liten. Eldre prøver uten måling har en farge fra et fotografi og er merket som anslått. Hver farge lenker til prøven hos FilamentColors.xyz. Uttrekket følger med appen og oppdateres med nye versjoner; appen henter ingenting fra nettet. Bilder, kjøpslenker og koblinger til andre fargesystemer er ikke tatt med. Farger varierer mellom produksjonspartier og etter overflate.</p>
+    <p class="dempet">Kilde: <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a>, lisensiert under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Kolorist har valgt ut opplysninger og regnet om fargene, og er ikke tilknyttet FilamentColors.xyz.</p>
+
+    <div class="boks">
+      <h2>Om implementasjonen</h2>
+      <p>Formlene er implementert i appen ut fra de publiserte spesifikasjonene og artiklene over, og kontrollert med tester mot referanseverdier der slike finnes. Har du spørsmål om en metode eller finner du noe som ikke stemmer, send gjerne e-post til <a href="mailto:eivind.johansen@ntnu.no">eivind.johansen@ntnu.no</a>.</p>
+    </div>
+  </main>
+
+  <footer class="bunn">
+    <div class="bunn-innhold">
+      <nav aria-label="Bunnmeny">
+        <ul>
+          <li><a href="index.html">Om appen</a></li>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="arkitektur.html">Arkitektur</a></li>
+          <li><a href="plattformer.html">Plattformer</a></li>
+          <li><a href="filament.html">3D-print</a></li>
+          <li><a href="funksjoner.html">Alle funksjoner</a></li>
+          <li><a href="lys.html">Lys og fargemåling</a></li>
+          <li><a href="support.html">Støtte</a></li>
+          <li><a href="methods.html">Metoder og kilder</a></li>
+          <li><a href="privacy.html">Personvern</a></li>
+          <li><a href="terms.html">Vilkår</a></li>
+          <li><a href="en/methods.html" hreflang="en" lang="en">English</a></li>
+        </ul>
+      </nav>
+      <p class="utvikler">Kolorist er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.</p>
+      <p>© 2026 Eivind Arnstein Johansen. Apple, iPhone, iPad, Mac, iCloud, Siri og Apple Intelligence er varemerker for Apple Inc.</p>
+    </div>
+  </footer>
+</body>
+</html>
