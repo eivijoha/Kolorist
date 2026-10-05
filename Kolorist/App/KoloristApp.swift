@@ -302,7 +302,14 @@ final class Arbeidsbenk {
         var b: Farge
     }
 
-    func tømMålinger() { målinger.removeAll() }
+    /// Tømmer de plukkede fargene; kan angres (de er ikke lagret noe annet sted).
+    func tømMålinger() {
+        guard !målinger.isEmpty else { return }
+        let før = målinger
+        målinger.removeAll()
+        merkEndring("målinger", navn: String(localized: "Tøm plukkede farger"), fra: før,
+                    nå: { [weak self] in self?.målinger ?? [] }, sett: { [weak self] in self?.målinger = $0 })
+    }
     /// Fjerner én måling (indeks i `målinger`, nyeste sist).
     func fjernMåling(_ indeks: Int) { if målinger.indices.contains(indeks) { målinger.remove(at: indeks) } }
 

@@ -115,6 +115,7 @@ struct PlukkedeFargerRad: View {
 
     var body: some View {
         let målinger = arbeidsbenk.målinger
+        HStack(spacing: 4) {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
                 ForEach(Array(målinger.indices.reversed()), id: \.self) { i in
@@ -133,6 +134,19 @@ struct PlukkedeFargerRad: View {
                         .help(String(localized: "\(farge.hex()) – ikke lagret. Klikk for å vise den i Studio."))
                 }
             }
+        }
+        // Nullstill listen (kan angres).
+        if !målinger.isEmpty {
+            Button { withAnimation(.snappy) { arbeidsbenk.tømMålinger() } } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(Color.sekundærTekst)
+                    .minsteTrykkflate()
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Tøm plukkede farger"))
+            .help("Tøm plukkede farger")
+        }
         }
     }
 }

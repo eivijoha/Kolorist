@@ -34,6 +34,11 @@ struct HarmoniSeksjon: View {
     /// (OKLCH-grader). Kuløren huskes for seg, så den ikke forsvinner når grunnfargen er grå.
     @AppStorage("harmoniMonokrom") private var monokromTekst = ""
     @AppStorage("harmoniMonokromKulør") private var monokromKulør = 254.0
+    /// Grunnfargen satt herfra (trykk på en tone, kulørglideren): den skal ikke flytte streken.
+    @State private var egenGrunnfarge: Farge?
+    /// Grunnfargen streken sist ble stilt etter (OKLab som tekst), så en farge valgt mens Harmoni ikke var åpen
+    /// også flytter streken når Harmoni åpnes.
+    @AppStorage("harmoniMonokromGrunn") private var monokromGrunn = ""
 
     /// Felles metning og lyshet for hele harmonien (0…1), som i HSL. `nil` = følg hver farge.
     /// Med HSL- og RYB-sirkelen er det HSL-metning og -lyshet; ellers OKLCH-lyshet og metning som andel av
@@ -241,6 +246,31 @@ struct HarmoniSeksjon: View {
         }
     }
 
+    /// Velger en farge herfra (monokromatisk), så endringen ikke flytter streken (se `grunnfargeEndret`).
+    private func velgHerfra(_ f: Farge) {
+        egenGrunnfarge = f
+        velg(f)
+    }
+
+    /// Monokromatisk: en grunnfarge valgt et annet sted (palett, felt, pipette) flytter streken, så den ene enden
+    /// (grunnfargens ende, `b`) står der fargen er. Tom strek følger grunnfargen av seg selv.
+    private func grunnfargeEndret() {
+        følgGrunnfargensKulør()
+        guard harmoni == .monokrom else { return }
+        let lab = grunnfarge.okLab
+        let nøkkel = String(format: "%.4f %.4f %.4f", lab.l, lab.a, lab.b)
+        guard nøkkel != monokromGrunn else { return }
+        monokromGrunn = nøkkel
+        if let egen = egenGrunnfarge {
+            egenGrunnfarge = nil
+            if egen.avstandOK(til: grunnfarge) < 0.002 { return }
+        }
+        guard var ny = Monokromstrek(tekst: monokromTekst) else { return }
+        let lch = grunnfarge.okLCH
+        ny.b = .fra(lyshet: lch.l, kroma: lch.c, kulør: lch.h, gamut: gamut)
+        monokromTekst = ny.tekst
+    }
+
     /// Monokromatisk: kuløren følger grunnfargen, unntatt når den er (nesten) grå og ikke har noen kulør.
     private func følgGrunnfargensKulør() {
         let lch = grunnfarge.okLCH
@@ -267,7 +297,7 @@ struct HarmoniSeksjon: View {
                 var lch = grunnfarge.okLCH
                 if lch.c > 0.02 {
                     lch.h = h
-                    velg(Farge(okLCH: lch, alfa: grunnfarge.alfa).gamutKartlagt(til: gamut))
+                    velgHerfra(Farge(okLCH: lch, alfa: grunnfarge.alfa).gamutKartlagt(til: gamut))
                 }
             }), område: 0...360,
                         spor: (0..<36).map { sirkel.farge(ref, vinkel: Double($0) * 10, gamut: gamut).swiftUI },
@@ -281,7 +311,7 @@ struct HarmoniSeksjon: View {
                 .frame(width: 48, alignment: .trailing)
         }
         // Kvadratisk, like høy som fargesirkelen i de andre harmoniene.
-        LyshetMetningFlate(kulør: monokromKulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velg)
+        LyshetMetningFlate(kulør: monokromKulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra)
             .frame(width: sirkelhøyde, height: sirkelhøyde)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)
@@ -299,6 +329,7 @@ struct HarmoniSeksjon: View {
                 }
             }
             .onChange(of: harmoni) { _, ny in
+                grunnfargeEndret()
                 if ny.harVinkel { vinkel = ny.standardVinkel }
                 antall = min(max(antall, ny.antallOmråde.lowerBound), ny.antallOmråde.upperBound)
             }
@@ -405,9 +436,9 @@ struct HarmoniSeksjon: View {
         // fargeflaten bare i Harmoni-modus, så gamle verdier gjør ikke noe.
         .onAppear {
             vis(farger, grunnIndeks)
-            følgGrunnfargensKulør()
+            grunnfargeEndret()
         }
-        .onChange(of: grunnfarge) { _, _ in følgGrunnfargensKulør() }
+        .onChange(of: grunnfarge) { _, _ in grunnfargeEndret() }
         .onChange(of: farger) { _, nye in vis(nye, grunnIndeks) }
         // Gliderne betyr noe annet i HSL enn i OKLCH; start på nytt ved bytte av sirkel.
         .onChange(of: sirkel) { _, _ in metning = nil; lyshet = nil }

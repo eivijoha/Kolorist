@@ -7325,6 +7325,16 @@
         }
       }
     },
+    "Tøm plukkede farger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Picked Colours"
+          }
+        }
+      }
+    },
     "UCR/GCR": {
       "localizations": {
         "en": {
