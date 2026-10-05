@@ -481,6 +481,8 @@ struct InnholdsVisning: View {
         .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
         #endif
         .sheet(item: $arbeidsbenk.mottattLenke) { MottattLenkeArk(innhold: $0.innhold) }
+        // «Tilpass listen …» i «Kopier til»-menyene.
+        .sheet(isPresented: Binding(get: { Kopitilpasning.delt.vises }, set: { Kopitilpasning.delt.vises = $0 })) { KopimålArk() }
         .alert("Kunne ikke åpne lenken", isPresented: Binding(get: { arbeidsbenk.lenkefeil != nil },
                                                               set: { if !$0 { arbeidsbenk.lenkefeil = nil } })) {
             Button("OK") {}

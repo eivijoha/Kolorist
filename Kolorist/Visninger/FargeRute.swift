@@ -187,6 +187,8 @@ struct FargeValgBoble: View {
     var ekstra: AnyView? = nil
     var lukk: () -> Void
     @State private var lagret = false
+    @AppStorage(Kopiinnstillinger.rekkefølgeNøkkel) private var rekkefølge = ""
+    @AppStorage(Kopiinnstillinger.skjultNøkkel) private var skjult = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -230,13 +232,18 @@ struct FargeValgBoble: View {
                 }
                 // «Kopier til …»: formatet målprogrammet tar imot (også via universell utklippstavle).
                 Menu {
-                    ForEach(Kopimål.allCases) { mål in
+                    ForEach(Kopiinnstillinger.synlige(Kopimål.allCases.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
+                        .compactMap(Kopimål.init(rawValue:))) { mål in
                         Button {
                             Utklippstavle.kopier([PalettFarge(farge: farge)], navn: "", til: mål)
                             lukk()
                         } label: {
                             Label { Text(mål.navn); Text(mål.forklaring) } icon: { Image(systemName: mål.symbol) }
                         }
+                    }
+                    Button("Tilpass listen …", systemImage: "slider.horizontal.3") {
+                        lukk()
+                        Kopitilpasning.delt.vises = true
                     }
                 } label: {
                     Label("Kopier til", systemImage: "arrow.up.doc.on.clipboard")

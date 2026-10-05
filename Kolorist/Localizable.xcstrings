@@ -5375,6 +5375,16 @@
         }
       }
     },
+    "Målene som er slått på, vises i «Kopier til» for farger, paletter og gradienter, i denne rekkefølgen. Dra for å endre rekkefølgen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The targets that are switched on appear in “Copy To” for colours, palettes and gradients, in this order. Drag to change the order."
+          }
+        }
+      }
+    },
     "Målprofil": {
       "localizations": {
         "en": {
@@ -7355,6 +7365,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reset zoom"
+          }
+        }
+      }
+    },
+    "Tilpass listen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customise List …"
           }
         }
       }

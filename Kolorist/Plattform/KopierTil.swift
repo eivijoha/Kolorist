@@ -70,6 +70,8 @@ struct KopierTilMeny: View {
     var tittel: LocalizedStringKey = "Kopier til"
     /// Som en seksjon i menyen den står i, i stedet for en undermeny (undermenyer lukker seg selv på iOS).
     var inline = false
+    @AppStorage(Kopiinnstillinger.rekkefølgeNøkkel) private var rekkefølge = ""
+    @AppStorage(Kopiinnstillinger.skjultNøkkel) private var skjult = ""
 
     var body: some View {
         if inline {
@@ -79,14 +81,17 @@ struct KopierTilMeny: View {
         }
     }
 
-    private var valg: some View {
-        ForEach(Kopimål.allCases) { mål in
+    /// Målene som er slått på, i valgt rekkefølge (se `KopimålArk`), og til slutt «Tilpass listen …».
+    @ViewBuilder private var valg: some View {
+        ForEach(Kopiinnstillinger.synlige(Kopimål.allCases.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
+            .compactMap(Kopimål.init(rawValue:))) { mål in
             Button {
                 Utklippstavle.kopier(farger, navn: navn, til: mål)
             } label: {
                 Label { Text(mål.navn); Text(mål.forklaring) } icon: { Image(systemName: mål.symbol) }
             }
         }
+        TilpassKopimålKnapp()
     }
 }
 

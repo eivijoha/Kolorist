@@ -100,6 +100,8 @@ struct GradientKopierTilMeny: View {
     var tittel: LocalizedStringKey = "Kopier til"
     /// Som en seksjon i menyen den står i, i stedet for en undermeny (undermenyer lukker seg selv på iOS).
     var inline = false
+    @AppStorage(Kopiinnstillinger.rekkefølgeNøkkel) private var rekkefølge = ""
+    @AppStorage(Kopiinnstillinger.skjultNøkkel) private var skjult = ""
 
     var body: some View {
         if inline {
@@ -109,14 +111,17 @@ struct GradientKopierTilMeny: View {
         }
     }
 
-    private var valg: some View {
-        ForEach(Gradientmål.allCases) { mål in
+    /// Målene som er slått på, i valgt rekkefølge (samme innstilling som for farger), og «Tilpass listen …».
+    @ViewBuilder private var valg: some View {
+        ForEach(Kopiinnstillinger.synlige(Gradientmål.allCases.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
+            .compactMap(Gradientmål.init(rawValue:))) { mål in
             Button {
                 Utklippstavle.kopier(gradient, til: mål)
             } label: {
                 Label { Text(mål.navn); Text(mål.forklaring) } icon: { Image(systemName: mål.symbol) }
             }
         }
+        TilpassKopimålKnapp()
     }
 }
 
