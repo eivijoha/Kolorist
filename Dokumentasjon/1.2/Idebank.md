@@ -198,6 +198,13 @@ kromatisitetsdiagram med gamuter, lyskilder og forvekslingslinjer, og 3D-modelle
 Utredning med kapitler, øvelser, visualiseringskatalog, plassering, forbehold og mulige trinn:
 [Laeringsmodul.md](../Laeringsmodul.md).
 
+## Innleveringsark for undervisning og vurdering (2026-10-05)
+
+Fra Kolorist utdanning: studentene leverer fargearbeid i FeedbackFruits og Wiseflow, og sensor ser det på en ukalibrert
+skjerm. En utskrift/PDF-variant «Innleveringsark» av palett og gruppe: verdier per farge (hex, OKLCH, CIELab, CMYK med
+profil), kontrastforhold, betraktningsforhold, delingslenke eller QR-kode per palett, og plass til begrunnelse. Ingen navn i
+metadata (i dag bare tittel og «Kolorist» som produsent). Se `Kolorist student/Grunnlag.md` i Kolorist-utdanning-repoet.
+
 ## App Clip for delingslenker (vurdert 2026-10-04 – lagt til side)
 
 **Beslutning (Eivind, 2026-10-04): droppet for nå.** Lenkene brukes nok oftest på desktop, der App Clips ikke finnes.
