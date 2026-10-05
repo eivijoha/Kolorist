@@ -213,8 +213,18 @@ def rykk(html, n):
 
 
 def skjermbilder(s, navn, ekstra=''):
+    """Bildestripe. Et navn på formen «kommer:Bildetekst» gir en plassholder («Skjermskudd kommer»)."""
     lis = []
     for n in navn:
+        if n.startswith('kommer:'):
+            kommer = 'Screenshot coming' if '<html lang="en">' in s else 'Skjermskudd kommer'
+            lis.append(f'''        <li>
+          <figure class="skjermbilde">
+            <div class="ramme">{kommer}</div>
+            <figcaption>{n[7:]}</figcaption>
+          </figure>
+        </li>''')
+            continue
         img, tekst = iphonebilde(s, n)
         lis.append(f'''        <li>
           <figure class="skjermbilde">
@@ -336,7 +346,15 @@ def fagside(lang, fil, tittel, beskrivelse, overtittel, h1, ingress, steg, vider
         lis = '\n'.join(f'          <li>{p}</li>' for p in punkter)
         lenke_html = f'\n        <p><a href="{lenke[0]}">{lenke[1]} →</a></p>' if lenke else ''
         figur = ''
-        if bildenavn:
+        if bildenavn and bildenavn.startswith('kommer:'):
+            # Plassholder til skjermbildet er tatt.
+            kommer = 'Screenshot coming' if lang == 'en' else 'Skjermskudd kommer'
+            figur = f'''
+      <figure class="skjermbilde">
+        <div class="ramme">{kommer}</div>
+        <figcaption>{bildenavn[7:]}</figcaption>
+      </figure>'''
+        elif bildenavn:
             img, tekst_b = iphonebilde(s, bildenavn)
             figur = f'''
       <figure class="skjermbilde">
@@ -409,6 +427,7 @@ def design(lang):
               'Varsel når fargen er utenfor fargeområdet – og begrens farger til en profil om du vil',
               'Rene CMYK-verdier: grått innslag flyttes til sort, med færrest mulig trykkfarger',
               'Kildefargerom for CMYK og RGB: angi verdiene i profilen de skal brukes i' + N,
+              'Visningslys: D50 (ICC-standard), D65 eller et lysmiljø – og papirhvitt med absolutt kolorimetrisk' + N,
               'Fargekart med navngitte toner: arbeid innenfor dem, med tonenavn vist',
               'Vurder trykk og bilder under standardlys for grafisk vurdering (ISO 3664)' + N12,
               'Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt med kolorimeter – finn nærmeste filament, med lenke til prøven (<a href="filament.html">les mer</a>)' + N12],
@@ -419,10 +438,10 @@ def design(lang):
               'Kopier farger og gradienter rett inn i design-, layout-, kontor- og presentasjonsprogrammer – som figurer og redigerbare gradienter, ikke bilder' + N,
               'Velg selv hvilke programmer «Kopier til» viser, og i hvilken rekkefølge' + N,
               'Dra fargeprøver rett inn i andre programmer på Mac – og farger inn i Kolorist',
-              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier',
+              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
               'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
-              'Siri og Snarveier: lag paletter og overganger, konverter farger og sjekk kontrast'], None, None),
+              'Siri og Snarveier: lag paletter og overganger, konverter farger og sjekk kontrast'], 'kommer:Palettgrupper – deles, lagres og skrives ut', None),
         ]
         return fagside('nb', 'design.html', 'Kolorist for design – paletter, toner, kontroll og eksport',
                        'Fargeverktøy for design: paletter og harmonier, toneskalaer og gradienter i like opplevde steg, WCAG-kontrast og fargesyn, ICC og trykk, og eksport til designverktøyene.',
@@ -455,6 +474,7 @@ def design(lang):
           'A warning when the colour is out of gamut – and limit colours to a profile if you like',
           'Clean CMYK values: grey components move to black, with as few inks as possible',
           'Source colour space for CMYK and RGB: enter the values in the profile they will be used in' + N,
+          'Viewing light: D50 (ICC standard), D65 or a viewing condition – and paper white with absolute colorimetric' + N,
           'Colour libraries with named tones: work within them, with tone names shown',
           'Judge print and images under standard viewing conditions for graphic arts (ISO 3664)' + N12,
           'Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most measured with a colorimeter – find the nearest filament, with a link to the sample (<a href="filament.html">read more</a>)' + N12],
@@ -465,10 +485,10 @@ def design(lang):
           'Copy colours and gradients straight into design, layout, office and presentation apps – as shapes and editable gradients, not images' + N,
           'Choose which apps “Copy to” shows, and in what order' + N,
           'Drag swatches straight into other apps on the Mac – and colours into Kolorist',
-          'Print palettes as an A4 PDF with swatches in CIELab, names and values',
+          'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N,
           'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N12,
           'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
-          'Siri and Shortcuts: make palettes and gradients, convert colours and check contrast'], None, None),
+          'Siri and Shortcuts: make palettes and gradients, convert colours and check contrast'], 'kommer:Palette groups – shared, saved and printed', None),
     ]
     return fagside('en', 'design.html', 'Kolorist for design – palettes, tones, checks and export',
                    'A colour tool for design: palettes and harmonies, tone scales and gradients in perceptually equal steps, WCAG contrast and colour vision, ICC and print, and export to your design tools.',
@@ -507,7 +527,7 @@ def arkitektur(lang):
              ['Mål fargetemperatur, belysningsstyrke (lux) og anslått fargegjengivelse med iPhone eller iPad' + N12,
               'Sammenlign med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass',
               'Lagre målt lys som lysmiljø, og se andre farger i det' + N12,
-              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier',
+              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
               'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
               'Paletter og lysmiljøer synkroniseres til iPad og Mac via iCloud'], None, None),
@@ -544,7 +564,7 @@ def arkitektur(lang):
          ['Measure colour temperature, illuminance (lux) and estimated colour rendering with iPhone or iPad' + N12,
           'Compare with recommended levels, such as 500 lx at a workplace',
           'Save measured light as a viewing condition, and see other colours in it' + N12,
-          'Print palettes as an A4 PDF with swatches in CIELab, names and values',
+          'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N,
           'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N12,
           'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
           'Palettes and viewing conditions sync to iPad and Mac through iCloud'], None, None),
