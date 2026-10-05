@@ -14,6 +14,20 @@ public enum Fargetolk {
         return tolkEksakt(String(tekst[treff]))
     }
 
+    /// Leser én farge bare når hele teksten er en CSS-farge: sRGB-hex (med eller uten #), et CSS-navn eller en
+    /// CSS Color 4-funksjon (`rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, `color()`).
+    /// Ikke appens egne notasjoner (`hsb()`, `cmyk()`, Munsell) eller farger midt i annen tekst.
+    public static func tolkCSS(_ tekst: String) -> Farge? {
+        let s = tekst.trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: ";"))).lowercased()
+        guard !s.isEmpty, !s.contains("\n") else { return nil }
+        if let f = Farge(hex: s) { return f }
+        if let f = navngitte[s] { return f }
+        guard let parentes = s.firstIndex(of: "("), s.hasSuffix(")") else { return nil }
+        let funksjon = String(s[..<parentes]).trimmingCharacters(in: .whitespaces)
+        guard ["rgb", "rgba", "hsl", "hsla", "hwb", "lab", "lch", "oklab", "oklch", "color"].contains(funksjon) else { return nil }
+        return tolkFunksjon(funksjon, String(s[s.index(after: parentes)..<s.index(before: s.endIndex)]))
+    }
+
     private static func tolkEksakt(_ tekst: String) -> Farge? {
         let s = tekst.trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: ";"))).lowercased()
         if s.isEmpty { return nil }

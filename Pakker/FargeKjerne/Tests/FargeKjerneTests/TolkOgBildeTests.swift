@@ -13,6 +13,20 @@ struct FargetolkTests {
         return f.avstandOK(til: fasit) < tol
     }
 
+    /// Bare CSS-farger og sRGB-hex, og bare når hele teksten er én farge.
+    @Test func tolkCSS() {
+        #expect(Fargetolk.tolkCSS("#2F7FD8")?.hex() == "#2F7FD8")
+        #expect(Fargetolk.tolkCSS(" 2f7fd8 ")?.hex() == "#2F7FD8")
+        #expect(Fargetolk.tolkCSS("rgb(47 127 216)")?.hex() == "#2F7FD8")
+        #expect(Fargetolk.tolkCSS("oklch(0.6 0.15 254)") != nil)
+        #expect(Fargetolk.tolkCSS("rebeccapurple") != nil)
+        #expect(Fargetolk.tolkCSS("cmyk(78% 41% 0% 15%)") == nil)
+        #expect(Fargetolk.tolkCSS("hsb(212 78% 85%)") == nil)
+        #expect(Fargetolk.tolkCSS("5R 4/14") == nil)
+        #expect(Fargetolk.tolkCSS("--merkevare: #2F7FD8;") == nil)
+        #expect(Fargetolk.tolkCSS("#2F7FD8\n#F2B84B") == nil)
+    }
+
     @Test func cssSyntakser() {
         #expect(lik("#2f7fd8", "#2F7FD8"))
         #expect(lik("  2F7FD8 ", "#2F7FD8"))

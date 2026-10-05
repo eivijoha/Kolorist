@@ -2261,6 +2261,36 @@
         }
       }
     },
+    "Flytt bak": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Later"
+          }
+        }
+      }
+    },
+    "Flytt farge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Colour"
+          }
+        }
+      }
+    },
+    "Flytt fram": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Earlier"
+          }
+        }
+      }
+    },
     "Flytt til": {
       "localizations": {
         "en": {

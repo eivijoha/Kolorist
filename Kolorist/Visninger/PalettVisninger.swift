@@ -468,6 +468,8 @@ struct PalettDetalj: View {
     @State private var kiFeil: String?
     @State private var navngisPalettfarge: PalettFarge?
     @State private var slettSpørsmål = false
+    /// Fargen det dras over (for å endre rekkefølge), markert med ramme.
+    @State private var slippMål: UUID?
     @Environment(\.dismiss) private var lukkPalett
     /// I palettkolonnen på Mac: handlingene ligger i en rad under tittelen, ikke i vinduets verktøylinje.
     @Environment(\.iPalettkolonne) private var iKolonne
@@ -486,6 +488,30 @@ struct PalettDetalj: View {
     private var lys: PalettLys? {
         guard visning == .lys, !dokument.farger.isEmpty else { return nil }
         return PalettLys(farger: dokument.farger, miljø: lysbibliotek.gjeldendeLysmiljø, somFoto: somFoto)
+    }
+
+    /// Farger sluppet på fargen `målID`: farger fra paletten flyttes dit (etter målet når de flyttes bakover,
+    /// foran når de flyttes framover), farger fra andre steder settes inn som kopier foran målet.
+    private func slipp(_ farger: [PalettFarge], på målID: UUID) -> Bool {
+        slippMål = nil
+        let ider = Set(farger.map(\.id))
+        guard !ider.contains(målID), let målFør = dokument.farger.firstIndex(where: { $0.id == målID }) else { return false }
+        let flyttes = farger.map { f in dokument.farger.first { $0.id == f.id } ?? f.kopi }
+        let fraFør = dokument.farger.firstIndex { ider.contains($0.id) }
+        var nye = dokument.farger
+        nye.removeAll { ider.contains($0.id) }
+        let mål = nye.firstIndex { $0.id == målID } ?? nye.count
+        let innsett = (fraFør.map { $0 < målFør } ?? false) ? mål + 1 : mål
+        kontekst.angresteg("Flytt farge") {
+            withAnimation(.snappy) { dokument.farger = Array(nye[..<innsett]) + flyttes + Array(nye[innsett...]) }
+        }
+        return true
+    }
+
+    /// Flytter en farge ett steg fram (−1) eller bak (+1), for VoiceOver.
+    private func flyttSteg(_ id: UUID, med steg: Int) {
+        guard let i = dokument.farger.firstIndex(where: { $0.id == id }), dokument.farger.indices.contains(i + steg) else { return }
+        kontekst.angresteg("Flytt farge") { dokument.farger.swapAt(i, i + steg) }
     }
 
     var body: some View {
@@ -557,6 +583,19 @@ struct PalettDetalj: View {
                                 // I palettkolonnen blir du der du er; ellers vises fargen i Studio.
                                 if !iKolonne { arbeidsbenk.valgtFane = .studio }
                             }
+                            // Dra en farge hit for å endre rekkefølgen (eller sette inn en farge fra et annet sted her).
+                            .dropDestination(for: PalettFarge.self) { farger, _ in
+                                slipp(farger, på: pf.id)
+                            } isTargeted: { over in
+                                if over { slippMål = pf.id } else if slippMål == pf.id { slippMål = nil }
+                            }
+                            .overlay {
+                                if slippMål == pf.id {
+                                    RoundedRectangle(cornerRadius: 10).strokeBorder(Color.accentColor, lineWidth: 3)
+                                }
+                            }
+                            .accessibilityAction(named: "Flytt fram") { flyttSteg(pf.id, med: -1) }
+                            .accessibilityAction(named: "Flytt bak") { flyttSteg(pf.id, med: 1) }
                     }
                     LeggTilFelt(farge: arbeidsbenk.fargeÅLeggeTil.farge, navn: arbeidsbenk.fargeÅLeggeTil.navn) {
                         kontekst.angresteg("Legg til farge") { dokument.farger.append(arbeidsbenk.fargeÅLeggeTil.kopi) }

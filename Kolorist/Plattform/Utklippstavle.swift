@@ -24,15 +24,20 @@ enum Utklippstavle {
     #endif
 
     /// Én farge på utklippstavlen, lest bare når det kan gjøres uten å spørre brukeren: innhold kopiert fra Kolorist,
-    /// eller (Mac) når brukeren har satt Kolorist til å alltid få lime inn. Fargeformater som i «Lim inn» (`Fargetolk`).
+    /// eller (Mac) når brukeren har satt Kolorist til å alltid få lime inn. Foreløpig bare tekst som er én CSS-farge
+    /// eller sRGB-hex (`Fargetolk.tolkCSS`).
     static var fargeUtenSpørsmål: Farge? {
         var tillatt = endringsnummer == egenEndring
         #if canImport(AppKit)
         tillatt = tillatt || NSPasteboard.general.accessBehavior == .alwaysAllow
         #endif
         guard tillatt else { return nil }
-        let farger = limInnListe()
-        return farger.count == 1 ? farger[0].farge : nil
+        #if canImport(UIKit)
+        let tekst = UIPasteboard.general.string
+        #elseif canImport(AppKit)
+        let tekst = NSPasteboard.general.string(forType: .string)
+        #endif
+        return tekst.flatMap(Fargetolk.tolkCSS)
     }
 
     /// Om utklippstavlen har farger. På iOS uten å lese innhold fra andre apper (det utløser «Tillat innliming?»):
