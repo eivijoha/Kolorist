@@ -51,6 +51,7 @@ For å unngå at to tråder skriver i samme fil:
 
 ## Til orientering
 
-- **RGB-verdier etter bitdybde (1.3):** Studio, Fargestyring og profilkonvertering kan nå vise RGB som 8 bit (0–255),
-  10 bit (0–1023), 16 bit (0–65 535) eller desimal (0–1), og CMYK, metning og lysstyrke vises i prosent. Kan være nyttig i
-  forelesningen om bitdybde.
+- **Verdier i Studio (1.3):** CMYK, metning og lysstyrke vises i prosent. RGB vises som 0–1, unntatt i sRGB der kanalene
+  vises 0–255 – de samme tallene som i hex. (Et valg av bitdybde ble prøvd og trukket tilbake: for teknisk for mange
+  brukere. Bitdybde hører hjemme i undervisningen, ikke som innstilling i Kolorist.)
+- **Rekkefølgen dere foreslår** (3 → 2a → 1 → 2b → 4) er notert og lagt fram for Eivind.

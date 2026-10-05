@@ -14,6 +14,9 @@ bygges i Kolorist.
 
 Status: **ny** · avklart · i arbeid · ferdig · avslått.
 
+**Utdannings forslag til rekkefølge (2026-10-05, Eivind avgjør):** 3 testvektorer → 2a eget repo for FargeKjerne (passer
+etter at 1.3 er stabil) → 1 visningstilstand og presentasjonsmodus → 2b `KoloristVisninger` → 4 innleveringsark.
+
 ## 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — mottatt, avklares med Eivind
 
 Kolorist lærer har knappen «Åpne i Kolorist» på lysbilder med modeller. I dag sendes en vanlig delingslenke
