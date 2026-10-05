@@ -18,10 +18,11 @@ import AppKit
 /// - Photoshop: PDF (limes inn som formlag, smartobjekt eller piksler – Photoshop spør), PNG som
 ///   reserve, og hex uten «#» som tekst til hex-feltet i fargevelgeren.
 /// - Pages, Keynote, Numbers: figurer med fargefyll i Apples felles utklippsformat (`IWorkUtklipp`), uten tekst.
+/// - Word, Excel, PowerPoint: figurer med fargefyll i Offices utklippsformat (`OfficeUtklipp`), uten tekst.
 /// - CSS og SwiftUI: kode.
 /// De andre målene får i tillegg tekst (hex), så innliming i et tekstfelt også gir mening.
 enum Kopimål: String, CaseIterable, Identifiable {
-    case figma, illustrator, indesign, photoshop, sketchAffinity, iWork, css, swiftUI
+    case figma, illustrator, indesign, photoshop, sketchAffinity, iWork, office, css, swiftUI
 
     var id: String { rawValue }
 
@@ -33,6 +34,7 @@ enum Kopimål: String, CaseIterable, Identifiable {
         case .photoshop: "Photoshop"
         case .sketchAffinity: "Sketch / Affinity"
         case .iWork: "Pages / Keynote / Numbers"
+        case .office: "Word / Excel / PowerPoint"
         case .css: "CSS"
         case .swiftUI: "SwiftUI"
         }
@@ -43,7 +45,7 @@ enum Kopimål: String, CaseIterable, Identifiable {
         case .figma, .sketchAffinity: String(localized: "Som former (SVG)")
         case .illustrator, .indesign: String(localized: "Som vektorformer (PDF), med fargerom og ICC")
         case .photoshop: String(localized: "Som formlag (PDF), og hex til fargevelgeren")
-        case .iWork: String(localized: "Som figurer med fargefyll")
+        case .iWork, .office: String(localized: "Som figurer med fargefyll")
         case .css: String(localized: "Som variabler")
         case .swiftUI: String(localized: "Som Color-konstanter")
         }
@@ -55,6 +57,7 @@ enum Kopimål: String, CaseIterable, Identifiable {
         case .illustrator, .indesign: "doc.richtext"
         case .photoshop: "photo"
         case .iWork: "doc.on.doc"
+        case .office: "rectangle.on.rectangle"
         case .css, .swiftUI: "chevron.left.forwardslash.chevron.right"
         }
     }
@@ -117,6 +120,15 @@ extension Utklippstavle {
                 (IWorkUtklipp.Fyll.farge(pf.farge), CGRect(x: CGFloat(i) * (r + m), y: 0, width: r, height: r))
             }
             if let data = IWorkUtklipp.data(figurer) { typer.append((IWorkUtklipp.type, data)) }
+            tekst = nil
+        case .office:
+            // Figurer med fargefyll og fargens navn (vises i Offices utvalgsrute). Uten tekst, som i Office selv.
+            let r = Fargeprøvepdf.rute, m = Fargeprøvepdf.mellomrom
+            let figurer = farger.enumerated().map { i, pf in
+                (pf.navn.isEmpty ? pf.farge.hex() : pf.navn, OfficeUtklipp.Fyll.farge(pf.farge),
+                 CGRect(x: CGFloat(i) * (r + m), y: 0, width: r, height: r))
+            }
+            typer.append((OfficeUtklipp.type, OfficeUtklipp.data(figurer)))
             tekst = nil
         case .css:
             tekst = String(decoding: Eksportformat.css.data(for: palett), as: UTF8.self)

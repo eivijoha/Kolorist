@@ -52,7 +52,7 @@ struct Gradientkopi {
 
 /// Målene for «Kopier til» med gradient – de som tar imot en gradient ved innliming.
 enum Gradientmål: String, CaseIterable, Identifiable {
-    case figma, sketchAffinity, illustrator, indesign, photoshop, iWork, css, swiftUI
+    case figma, sketchAffinity, illustrator, indesign, photoshop, iWork, office, css, swiftUI
 
     var id: String { rawValue }
 
@@ -64,6 +64,7 @@ enum Gradientmål: String, CaseIterable, Identifiable {
         case .indesign: "InDesign"
         case .photoshop: "Photoshop"
         case .iWork: "Pages / Keynote / Numbers"
+        case .office: "Word / Excel / PowerPoint"
         case .css: "CSS"
         case .swiftUI: "SwiftUI"
         }
@@ -73,7 +74,7 @@ enum Gradientmål: String, CaseIterable, Identifiable {
         switch self {
         case .figma, .sketchAffinity: String(localized: "Som form med gradientfyll (SVG)")
         case .illustrator: String(localized: "Som redigerbar gradient (PDF) i sRGB")
-        case .indesign: String(localized: "Som redigerbar gradient i sRGB")
+        case .indesign, .office: String(localized: "Som redigerbar gradient i sRGB")
         case .photoshop: String(localized: "Som formlag eller bilde (PDF/PNG)")
         case .iWork: String(localized: "Som figur med redigerbar gradient")
         case .css: String(localized: "Som gradient med OKLab og reserve")
@@ -87,6 +88,7 @@ enum Gradientmål: String, CaseIterable, Identifiable {
         case .illustrator, .indesign: "doc.richtext"
         case .photoshop: "photo"
         case .iWork: "doc.on.doc"
+        case .office: "rectangle.on.rectangle"
         case .css, .swiftUI: "chevron.left.forwardslash.chevron.right"
         }
     }
@@ -150,6 +152,18 @@ extension Utklippstavle {
                 if let png = Gradientgrafikk.png(gradient) { typer.append(("public.png", png)) }
             }
             // Uten tekst ved siden av: Numbers og Pages limer heller inn teksten enn figuren eller bildet.
+            tekst = nil
+        case .office:
+            // Figur med redigerbar gradient (lineær eller radiell). Konisk finnes ikke i Office: da vektorbilde (PDF).
+            switch gradient.form {
+            case .lineær:
+                typer.append((OfficeUtklipp.type, OfficeUtklipp.data([(gradient.navn, .lineær(stopp: gradient.stopp, cssVinkel: gradient.vinkel), Gradientgrafikk.flate)])))
+            case .radiell:
+                typer.append((OfficeUtklipp.type, OfficeUtklipp.data([(gradient.navn, .radiell(stopp: gradient.stopp), Gradientgrafikk.flate)])))
+            case .konisk:
+                typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
+                if let png = Gradientgrafikk.png(gradient) { typer.append(("public.png", png)) }
+            }
             tekst = nil
         case .photoshop:
             typer.append(("com.adobe.pdf", Gradientgrafikk.pdf(gradient)))
