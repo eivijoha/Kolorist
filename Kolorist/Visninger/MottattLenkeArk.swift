@@ -146,16 +146,7 @@ struct MottattLenkeArk: View {
         case .harmoni:
             if let h = innhold.harmoni {
                 Button("Åpne i Harmoni", systemImage: "circle.hexagongrid") {
-                    let d = UserDefaults.standard
-                    if let harmoni = Harmoni(rawValue: h.harmoni) { d.set(harmoni.rawValue, forKey: "harmoni") }
-                    if let sirkel = Fargesirkel(rawValue: h.sirkel) { d.set(sirkel.rawValue, forKey: "harmoniSirkel") }
-                    if let antall = h.antall { d.set(antall, forKey: "harmoniAntall") }
-                    if let vinkel = h.vinkel { d.set(vinkel, forKey: "harmoniVinkel") }
-                    d.set((h.lyshetsrekkefølge.flatMap(Lyshetsrekkefølge.init(rawValue:)) ?? .lik).rawValue,
-                          forKey: "harmoniLyshetsrekkefølge")
-                    d.set("harmoni", forKey: "studioModus")
-                    arbeidsbenk.aktivFarge = h.grunn.farge
-                    arbeidsbenk.valgtFane = .studio
+                    arbeidsbenk.åpneHarmoni(h)
                     lukk()
                 }
             }

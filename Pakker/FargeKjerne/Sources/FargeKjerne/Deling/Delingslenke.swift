@@ -36,6 +36,14 @@ public enum Delingslenke {
 
     // MARK: Skriv
 
+    /// Lenke som åpner appen direkte (`kolorist://l#…`) i stedet for nettleseren – f.eks. fra en annen app på samme
+    /// maskin. Samme innhold som `lenke(_:)`.
+    public static func appLenke(_ innhold: DeltInnhold) throws -> URL {
+        let fragment = try kode(innhold)
+        guard let url = URL(string: "\(skjema)://l#\(fragment)") else { throw Feil.skadet }
+        return url
+    }
+
     public static func lenke(_ innhold: DeltInnhold) throws -> URL {
         let fragment = try kode(innhold)
         guard let url = URL(string: "\(nettadresse)#\(fragment)") else { throw Feil.skadet }
@@ -133,19 +141,22 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
     /// Gradientene: én for en gradient, eller palettens gradienter.
     public var gradienter: [DeltGradient]
     public var harmoni: DeltHarmoni?
+    /// Hvordan mottakeren skal åpne innholdet (fane, modus, presentasjon …). Valgfri; eldre versjoner ignorerer den.
+    public var visning: DeltVisning?
 
     public init(slag: Slag, navn: String? = nil, farger: [DeltFarge] = [], gradienter: [DeltGradient] = [],
-                harmoni: DeltHarmoni? = nil) {
+                harmoni: DeltHarmoni? = nil, visning: DeltVisning? = nil) {
         self.versjon = Delingslenke.versjon
         self.slag = slag
         self.navn = navn
         self.farger = farger
         self.gradienter = gradienter
         self.harmoni = harmoni
+        self.visning = visning
     }
 
     enum CodingKeys: String, CodingKey {
-        case versjon = "v", slag = "t", navn = "n", farger = "f", gradienter = "g", harmoni = "h"
+        case versjon = "v", slag = "t", navn = "n", farger = "f", gradienter = "g", harmoni = "h", visning = "vs"
     }
 
     public init(from decoder: Decoder) throws {
@@ -156,6 +167,8 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         farger = try c.decodeIfPresent([DeltFarge].self, forKey: .farger) ?? []
         gradienter = try c.decodeIfPresent([DeltGradient].self, forKey: .gradienter) ?? []
         harmoni = try c.decodeIfPresent(DeltHarmoni.self, forKey: .harmoni)
+        // En skadet eller ukjent visningstilstand skal ikke hindre at innholdet vises.
+        visning = try? c.decodeIfPresent(DeltVisning.self, forKey: .visning)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -166,6 +179,7 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         if !farger.isEmpty { try c.encode(farger, forKey: .farger) }
         if !gradienter.isEmpty { try c.encode(gradienter, forKey: .gradienter) }
         try c.encodeIfPresent(harmoni, forKey: .harmoni)
+        try c.encodeIfPresent(visning, forKey: .visning)
     }
 
     /// Sjekker grensene og rydder tekst, så innholdet trygt kan vises og lagres.
@@ -176,11 +190,14 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
               gradienter.allSatisfy({ $0.stopp.count <= Delingslenke.maksStopp }) else { throw Delingslenke.Feil.forStor }
         guard farger.allSatisfy(\.erGyldig), gradienter.allSatisfy(\.erGyldig), harmoni?.grunn.erGyldig ?? true
         else { throw Delingslenke.Feil.skadet }
+        // Visningstilstanden er bare et ønske om hvordan innholdet åpnes; er den ugyldig, droppes den.
+        let gyldigVisning = visning.flatMap { $0.erGyldig ? $0 : nil }
         switch slag {
         case .farge, .palett, .harmoni: if farger.isEmpty && gradienter.isEmpty { throw Delingslenke.Feil.tom }
         case .gradient: if gradienter.isEmpty { throw Delingslenke.Feil.tom }
         }
         var ny = self
+        ny.visning = gyldigVisning
         ny.navn = navn.map(Self.rensket)
         ny.farger = farger.map { var f = $0; f.rens(); return f }
         ny.gradienter = gradienter.map { g in
@@ -402,6 +419,47 @@ public struct DeltTrinn: Codable, Equatable, Sendable {
     var erGyldig: Bool {
         (0...10).contains(lysere) && (0...10).contains(mørkere)
             && (0...1).contains(lysereSteg) && (0...1).contains(mørkereSteg)
+    }
+}
+
+/// Hvordan mottakeren åpner innholdet: hvilken fane og modus, om innholdet tas i bruk direkte, og om appen skal gå i
+/// presentasjonsmodus. Alle felt er valgfrie, og verdier appen ikke kjenner (fra en nyere versjon) ignoreres – så feltene
+/// kan utvides uten ny formatversjon. Lenker kan lages av hvem som helst: tilstanden endrer bare visningen, og ingenting
+/// lagres av seg selv.
+public struct DeltVisning: Codable, Equatable, Sendable {
+    /// Fanen: `studio`, `paletter`, `overgang`, `utplukk` eller `vurdering`.
+    public var fane: String?
+    /// Modus i Studio: `farge` eller `harmoni`.
+    public var studiomodus: String?
+    /// Fargemodellen i Studio (`Fargemodell.rawValue`, f.eks. `okLCH`, `cieLab`, `rgb`, `cmyk`, `munsell`).
+    public var fargemodell: String?
+    /// Delen av Vurdering: `kontrast`, `sammenlign`, `fargesyn` eller `lys`.
+    public var vurdering: String?
+    /// Bakgrunnsfargen i kontrastsjekken (forgrunnen er innholdets første farge).
+    public var bakgrunn: DeltFarge?
+    /// Ta innholdet i bruk direkte (aktiv farge, harmoni, overgang) i stedet for å vise det i et ark først.
+    /// Paletter vises alltid i ark – de lagres bare når brukeren velger det.
+    public var bruk: Bool?
+    /// Slå presentasjonsmodus på (`true`) eller av (`false`); utelatt = uendret.
+    public var presentasjon: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case fane = "f", studiomodus = "m", fargemodell = "fm", vurdering = "d", bakgrunn = "b", bruk = "u", presentasjon = "p"
+    }
+
+    public init(fane: String? = nil, studiomodus: String? = nil, fargemodell: String? = nil, vurdering: String? = nil,
+                bakgrunn: Farge? = nil, bruk: Bool? = nil, presentasjon: Bool? = nil) {
+        self.fane = fane
+        self.studiomodus = studiomodus
+        self.fargemodell = fargemodell
+        self.vurdering = vurdering
+        self.bakgrunn = bakgrunn.map { DeltFarge($0) }
+        self.bruk = bruk
+        self.presentasjon = presentasjon
+    }
+
+    var erGyldig: Bool {
+        [fane, studiomodus, fargemodell, vurdering].allSatisfy { ($0?.count ?? 0) <= 40 } && (bakgrunn?.erGyldig ?? true)
     }
 }
 

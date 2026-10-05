@@ -6173,6 +6173,16 @@
         }
       }
     },
+    "Presentasjonsmodus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presentation Mode"
+          }
+        }
+      }
+    },
     "Prøvene viser fargen med lysets fulle fargestikk, slik et foto med dagslys-hvitbalanse ville vist den.": {
       "localizations": {
         "en": {

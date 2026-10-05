@@ -6,6 +6,7 @@ import SwiftUI
 
 /// Studio: rediger aktiv farge i valgfri fargemodell, se alle representasjoner.
 struct FargeEditor: View {
+    @Environment(\.presentasjonsmodus) private var presentasjon
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var hexTekst = ""
     @State private var lagreFarger: [PalettFarge]?
@@ -134,8 +135,8 @@ struct FargeEditor: View {
                                leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
                 }
             }
-                // Smal visning: fast høyde øverst. Bred visning: fyller høyden til venstre.
-                .frame(height: bred ? nil : 140)
+                // Smal visning: fast høyde øverst (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
+                .frame(height: bred ? nil : (presentasjon ? 220 : 140))
                 .frame(maxHeight: bred ? .infinity : nil)
             HStack {
                 #if os(macOS)
@@ -363,6 +364,7 @@ struct KomponentGlidere: View {
     /// Meldes når verdier er skrevet inn i profilen, så visningen kan vise nøyaktig de verdiene.
     var profilverdier: (ICCProfil, [Double], Farge) -> Void = { _, _, _ in }
     @State private var verdier: [Double] = []
+    @Environment(\.presentasjonsmodus) private var presentasjon
 
     private func verdier(for f: Farge) -> [Double] {
         if let profil, let k = f.komponenter(i: profil, hensikt: hensikt) { return k.map { min(max($0, 0), 1) } }
@@ -430,10 +432,10 @@ struct KomponentGlidere: View {
             if i < gjeldende.count {
             HStack(spacing: 10) {
                 gliderTittel(k)
-                    .font(.callout)
+                    .koloristFont(.callout)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
-                    .frame(width: 78, alignment: .leading)
+                    .frame(width: presentasjon ? 116 : 78, alignment: .leading)
                 FargeGlider(verdi: Binding(
                     get: { gjeldende[i] },
                     set: { ny in
@@ -452,11 +454,12 @@ struct KomponentGlidere: View {
                    stegForTilgjengelighet: profil == nil && modell == .munsell
                        ? [Munsell.kulørsteg, Munsell.valørsteg, Munsell.kromasteg][min(i, 2)] : nil)
                 Text(verditekst(gjeldende[i], k))
-                    .font(.callout.monospacedDigit())
+                    .koloristFont(.callout)
+                    .monospacedDigit()
                     .foregroundStyle(Color.sekundærTekst)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
-                    .frame(width: 60, alignment: .trailing)
+                    .frame(width: presentasjon ? 84 : 60, alignment: .trailing)
             }
             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             .accessibilityElement(children: .contain)
@@ -514,7 +517,7 @@ struct VerdiRad: View {
 
     private var verdi: some View {
         Text(tekst)
-            .font(.callout.monospaced())
+            .koloristFont(.callout, design: .monospaced)
             .foregroundStyle(Color.sekundærTekst)
             .textSelection(.enabled)
     }
@@ -933,10 +936,10 @@ struct Fargeflate: View {
                          ekstraMeny: AnyView(Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(tekst) }))
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(tittel).font(.caption.weight(.semibold)).lineLimit(2).minimumScaleFactor(0.85)
-                    Text(tekst).font(.caption.monospaced()).lineLimit(2).minimumScaleFactor(0.6)
+                    Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(2).minimumScaleFactor(0.85)
+                    Text(tekst).koloristFont(.caption, design: .monospaced).lineLimit(2).minimumScaleFactor(0.6)
                     if let merknad {
-                        Label(merknad, systemImage: "exclamationmark.triangle.fill").font(.caption2)
+                        Label(merknad, systemImage: "exclamationmark.triangle.fill").koloristFont(.caption2)
                     }
                 }
                 .foregroundStyle(f.lesbarTekstfarge.swiftUI)

@@ -16,6 +16,7 @@ struct KoloristApp: App {
     var body: some Scene {
         WindowGroup {
             InnholdsVisning()
+                .presentasjonsmodus(arbeidsbenk.presentasjon)
                 .environment(arbeidsbenk)
                 .environment(profiler)
                 #if os(macOS)
@@ -66,6 +67,10 @@ final class Arbeidsbenk {
         guard let p = profilverdier, p.profilID == profil.id, p.farge == aktivFarge else { return nil }
         return p.verdier
     }
+
+    /// Presentasjonsmodus: større tekst og kontroller (Vis-menyen, ⌥⌘P, eller en delingslenke). Gjelder økten; lagres
+    /// ikke (startargumentet `-presentasjon YES` slår den på ved oppstart).
+    var presentasjon = UserDefaults.standard.bool(forKey: "presentasjon")
 
     var aktivFarge = Arbeidsbenk.startfarge {
         didSet {
@@ -572,6 +577,9 @@ struct KoloristKommandoer: Commands {
             Button("Overgang") { arbeidsbenk.valgtFane = .overgang }.keyboardShortcut("3", modifiers: .command)
             Button("Utplukk") { arbeidsbenk.valgtFane = .utplukk }.keyboardShortcut("4", modifiers: .command)
             Button("Vurdering") { arbeidsbenk.valgtFane = .vurdering }.keyboardShortcut("5", modifiers: .command)
+            Divider()
+            Toggle("Presentasjonsmodus", isOn: Binding(get: { arbeidsbenk.presentasjon }, set: { arbeidsbenk.presentasjon = $0 }))
+                .keyboardShortcut("p", modifiers: [.command, .option])
             Divider()
         }
     }

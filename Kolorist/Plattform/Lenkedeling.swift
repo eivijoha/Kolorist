@@ -58,14 +58,69 @@ struct MottattLenke: Identifiable {
 }
 
 extension Arbeidsbenk {
-    /// Åpner en lenke fra Kolorist (universell lenke eller `kolorist://`): viser innholdet i et ark, lagrer ingenting.
+    /// Åpner en lenke fra Kolorist (universell lenke eller `kolorist://`). Uten visningstilstand: innholdet vises i et ark.
+    /// Med visningstilstand: appen åpnes i fanen og modusen lenken ber om, og innholdet tas i bruk direkte hvis lenken sier
+    /// det (aktiv farge, harmoni, overgang) – paletter vises alltid i ark. Ingenting lagres av seg selv.
     func åpneLenke(_ url: URL) {
         do {
-            mottattLenke = MottattLenke(innhold: try Delingslenke.les(url))
+            let innhold = try Delingslenke.les(url)
+            guard let visning = innhold.visning else {
+                mottattLenke = MottattLenke(innhold: innhold)
+                return
+            }
+            if visning.bruk == true, innhold.slag != .palett {
+                bruk(innhold)
+            } else {
+                mottattLenke = MottattLenke(innhold: innhold)
+            }
+            anvend(visning)
         } catch Delingslenke.Feil.ikkeKoloristlenke {
             return
         } catch {
             lenkefeil = String(localized: "Lenken kunne ikke leses. Den kan være avkortet, eller laget med en nyere versjon av Kolorist.")
         }
+    }
+
+    /// Tar delt innhold i bruk uten å lagre: en farge blir aktiv farge i Studio, en harmoni åpnes i Harmoni, en gradient i
+    /// Overgang.
+    func bruk(_ innhold: DeltInnhold) {
+        switch innhold.slag {
+        case .harmoni:
+            if let h = innhold.harmoni { åpneHarmoni(h) }
+        case .gradient:
+            if let g = innhold.gradienter.first { åpne(Lenkedeling.oppsett(g, standardtrinn: lyshetstrinn)) }
+        case .farge, .palett:
+            if let f = innhold.farger.first {
+                aktivFarge = f.farge
+                valgtFane = .studio
+            }
+        case nil:
+            break
+        }
+    }
+
+    /// Åpner en delt harmoni i Studio › Harmoni med samme oppsett (harmoni, sirkel, antall, vinkel, lyshetsrekkefølge).
+    func åpneHarmoni(_ h: DeltHarmoni) {
+        let d = UserDefaults.standard
+        if let harmoni = Harmoni(rawValue: h.harmoni) { d.set(harmoni.rawValue, forKey: "harmoni") }
+        if let sirkel = Fargesirkel(rawValue: h.sirkel) { d.set(sirkel.rawValue, forKey: "harmoniSirkel") }
+        if let antall = h.antall { d.set(antall, forKey: "harmoniAntall") }
+        if let vinkel = h.vinkel { d.set(vinkel, forKey: "harmoniVinkel") }
+        d.set((h.lyshetsrekkefølge.flatMap(Lyshetsrekkefølge.init(rawValue:)) ?? .lik).rawValue, forKey: "harmoniLyshetsrekkefølge")
+        d.set("harmoni", forKey: "studioModus")
+        aktivFarge = h.grunn.farge
+        valgtFane = .studio
+    }
+
+    /// Visningstilstanden fra en lenke: fane, modus i Studio, fargemodell, del av Vurdering (med bakgrunn i
+    /// kontrastsjekken; forgrunnen er aktiv farge) og presentasjonsmodus. Verdier appen ikke kjenner, ignoreres.
+    func anvend(_ v: DeltVisning) {
+        let d = UserDefaults.standard
+        if let m = v.studiomodus.flatMap(FargeEditor.Modus.init(rawValue:)) { d.set(m.rawValue, forKey: "studioModus") }
+        if let modell = v.fargemodell.flatMap(Fargemodell.init(rawValue:)), Fargemodell.redigerbare.contains(modell) { self.modell = modell }
+        if let del = v.vurdering.flatMap(VurderingVisning.Del.init(rawValue:)) { d.set(del.rawValue, forKey: "vurderingDel") }
+        if let b = v.bakgrunn?.farge { d.set(b.hex(), forKey: "kontrastBakgrunn") }
+        if let fane = v.fane.flatMap(Fane.init(rawValue:)) { valgtFane = fane }
+        if let p = v.presentasjon { presentasjon = p }
     }
 }

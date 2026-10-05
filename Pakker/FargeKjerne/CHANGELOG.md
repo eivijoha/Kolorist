@@ -2,6 +2,15 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
+## 0.2.0 – 2026-10-05
+
+- **Visningstilstand i delingslenker:** `DeltVisning` og `DeltInnhold.visning` (nøkkel `vs` i lenkeformatet) – fane,
+  modus i Studio, fargemodell, del av Vurdering, bakgrunn i kontrastsjekken, `bruk` (ta innholdet i bruk direkte) og
+  `presentasjon`. Alle felt er valgfrie; ukjente verdier ignoreres, og en ugyldig visningstilstand droppes uten at innholdet
+  går tapt. Formatversjonen er fortsatt 1 – eldre lesere (og visningssiden på kolorist.no) ignorerer feltet.
+- `Delingslenke.appLenke(_:)`: lenke som åpner appen direkte (`kolorist://l#…`), med samme innhold som `lenke(_:)`.
+- `DeltInnhold.init` har fått parameteren `visning:` (standard `nil`) – eksisterende kall virker uendret.
+
 ## 0.1.1 – 2026-10-05
 
 - Filnavn uten æ, ø og å (`Verktoy/`, `FargebibliotekSokTests.swift`), så SwiftPM kan hente pakken over git. 0.1.0 kan
