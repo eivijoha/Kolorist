@@ -157,6 +157,8 @@ def bilde(s, fil):
 
 
 NYE_BILDER = {
+    ('nb', 'palettgrupper'): ('Paletter samlet i palettgruppen Landskap, med menyen for å skrive ut, lagre og kopiere hele gruppen', 'Palettgrupper'),
+    ('en', 'palettgrupper'): ('Palettes gathered in the palette group Landscapes, with the menu for printing, saving and copying the whole group', 'Palette groups'),
     ('nb', 'monokrom'): ('Monokromatisk harmoni: seks toner av oransje langs en strek fra rik oransje til en mørk, mettet tone, i flaten for lyshet og metning', 'Monokromatisk'),
     ('en', 'monokrom'): ('Monochromatic harmony: six tones of orange along a line from rich orange to a dark, saturated tone, in the lightness and saturation field', 'Monochromatic'),
     ('nb', 'harmoni-aksent'): ('Harmoni: analog med komplementær aksent og naturlig lyshetsrekkefølge, vist på fargesirkelen', 'Analog med aksent'),
@@ -443,7 +445,7 @@ def design(lang):
               'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
               'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
-              'Siri og Snarveier: lag paletter og overganger, konverter farger og sjekk kontrast'], 'kommer:Palettgrupper – deles, lagres og skrives ut', None),
+              'Siri og Snarveier: lag paletter og overganger, konverter farger og sjekk kontrast'], 'palettgrupper', None),
         ]
         return fagside('nb', 'design.html', 'Kolorist for design – paletter, toner, kontroll og eksport',
                        'Fargeverktøy for design: paletter og harmonier, toneskalaer og gradienter i like opplevde steg, WCAG-kontrast og fargesyn, ICC og trykk, og eksport til designverktøyene.',
@@ -490,7 +492,7 @@ def design(lang):
           'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N,
           'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N12,
           'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
-          'Siri and Shortcuts: make palettes and gradients, convert colours and check contrast'], 'kommer:Palette groups – shared, saved and printed', None),
+          'Siri and Shortcuts: make palettes and gradients, convert colours and check contrast'], 'palettgrupper', None),
     ]
     return fagside('en', 'design.html', 'Kolorist for design – palettes, tones, checks and export',
                    'A colour tool for design: palettes and harmonies, tone scales and gradients in perceptually equal steps, WCAG contrast and colour vision, ICC and print, and export to your design tools.',
