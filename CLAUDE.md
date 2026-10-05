@@ -5,7 +5,9 @@ Fargepalett-verktøy for designere – iOS, iPadOS og macOS (én multiplattform-
 
 ## Struktur
 
-- `Pakker/FargeKjerne/` – Swift-pakke, ingen UI:
+- `Pakker/FargeKjerne/` – Swift-pakke, ingen UI. Speiles til eget privat repo (github.com/eivijoha/FargeKjerne, brukt av
+  Kolorist utdanning) med `Pakker/publiser_fargekjerne.sh <x.y.z>` (git subtree, versjonsmerke i pakkerepoet). Dette repoet er
+  kilden; skriv API-endringer i `Pakker/FargeKjerne/CHANGELOG.md`.
   - `FargeKjerne`: `Farge` (kanonisk lineær utvidet sRGB), fargerom, gamut-kartlegging,
     `Overgang` (OKLab), `Toneskala`, ICC via CoreGraphics, eksport (ASE, CSS, DTCG, GPL, SwiftUI).
   - `FargeKI`: verdiord → palett og beskrivelse → farge. Kunnskapsbasen `Fargesemantikk.json` (fargebegreper
