@@ -28,6 +28,22 @@ struct MunsellTests {
         }
     }
 
+    /// Goethes sirkel: purpur på 0°, gul på 120° med fiolett som motfarge (300°), blå ↔ oransje.
+    @Test func goethesMotfarger() throws {
+        let purpur = Farge(hex: "#C2185B")!, gul = Farge(hex: "#F9D71C")!, fiolett = Farge(hex: "#6A3D9A")!
+        let v = Fargesirkel.goethe.vinkel(for: purpur)
+        #expect(v < 0.5 || v > 359.5)
+        #expect(abs(Fargesirkel.goethe.vinkel(for: gul) - 120) < 0.5)
+        #expect(abs(Fargesirkel.goethe.vinkel(for: fiolett) - 300) < 0.5)
+        #expect(abs(Goethe.okLCHKulør(forVinkel: 240) - Farge(hex: "#1E63B5")!.okLCH.h) < 0.01)
+        for v in stride(from: 0.0, to: 360, by: 15) {
+            #expect(abs(Goethe.vinkel(forOKLCHKulør: Goethe.okLCHKulør(forVinkel: v)) - v) < 0.01)
+        }
+        // Uavhengig av språk (testene kan kjøre på engelsk).
+        #expect(Goethe.sammensetning(vinkel: 150).hasPrefix("50% ") && Goethe.sammensetning(vinkel: 150).contains(", 50% "))
+        #expect(!Goethe.sammensetning(vinkel: 120).contains("%"))
+    }
+
     /// Munsell-sirkelen: komplementærfargen til 5Y er 5PB (Munsells egne par), og vinkelen går rundt.
     @Test func munsellsirkelensKomplementær() throws {
         let gul = try #require(Farge(munsell: Munsell(kulør: 25, valør: 8, kroma: 8)))   // 5Y 8/8

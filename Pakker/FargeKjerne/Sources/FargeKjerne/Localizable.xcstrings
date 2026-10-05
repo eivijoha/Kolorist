@@ -317,6 +317,26 @@
         }
       }
     },
+    "Goethe (Farbenlehre)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goethe (Theory of Colours)"
+          }
+        }
+      }
+    },
+    "Goethes sirkel fra Farbenlehre (1810) med seks farger: purpur, oransje, gul, grønn, blå og fiolett. Gul er komplementær til fiolett, blå til oransje og purpur til grønn. Lyshet og metning holdes fast.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goethe’s wheel from his Theory of Colours (1810) with six colours: purple, orange, yellow, green, blue and violet. Yellow is complementary to violet, blue to orange and purple to green. Lightness and saturation are kept fixed."
+          }
+        }
+      }
+    },
     "Grafikk og UI AA": {
       "localizations": {
         "en": {
@@ -1203,6 +1223,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "orange"
+          }
+        }
+      }
+    },
+    "purpur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "purple"
           }
         }
       }

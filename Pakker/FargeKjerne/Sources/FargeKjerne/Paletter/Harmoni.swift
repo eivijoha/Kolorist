@@ -155,6 +155,9 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
     /// Herings motfargesirkel: de fire elementærfargene gul, rød, blå og grønn i hver sin kvart (0°, 90°,
     /// 180°, 270°), så gul ↔ blå og rød ↔ grønn er motfarger. Kulørene mellom dem interpoleres i OKLCH.
     case hering
+    /// Goethes sirkel fra *Zur Farbenlehre* (1810): purpur, oransje, gul, grønn, blå og fiolett i hver sin sjettedel,
+    /// så gul ↔ fiolett, blå ↔ oransje og purpur ↔ grønn er motfarger. Kulørene mellom dem interpoleres i OKLCH.
+    case goethe
 
     public var id: String { rawValue }
 
@@ -166,6 +169,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .ryb: String(localized: "RYB (kunstnersirkel)", bundle: .module)
         case .munsell: "Munsell"
         case .hering: String(localized: "Hering (motfarger)", bundle: .module)
+        case .goethe: String(localized: "Goethe (Farbenlehre)", bundle: .module)
         }
     }
 
@@ -176,6 +180,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .hsl: String(localized: "Den tradisjonelle RGB-sirkelen fra skjermverden. Blå er komplementær til gul.", bundle: .module)
         case .ryb: String(localized: "Kunstnersirkelen med rød, gul og blå som primærfarger. Blå er komplementær til oransje.", bundle: .module)
         case .hering: String(localized: "Herings motfargesirkel med de fire elementærfargene gul, rød, blå og grønn i hver sin kvart. Gul er komplementær til blå og rød til grønn. Lyshet og metning holdes fast.", bundle: .module)
+        case .goethe: String(localized: "Goethes sirkel fra Farbenlehre (1810) med seks farger: purpur, oransje, gul, grønn, blå og fiolett. Gul er komplementær til fiolett, blå til oransje og purpur til grønn. Lyshet og metning holdes fast.", bundle: .module)
         case .munsell: String(localized: "Munsells sirkel med ti hovedkulører i like store opplevde steg, mye brukt i arkitektur og fargelære. Valør og kroma holdes fast; gul er komplementær til purpurblå.", bundle: .module)
         }
     }
@@ -201,6 +206,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .hsl: return Fargemodell.hsl.kortTekst(for: farge)
         case .ryb: return "RYB \(String(format: "%.0f", vinkel(for: farge)))°"
         case .hering: return Hering.sammensetning(vinkel: vinkel(for: farge))
+        case .goethe: return Goethe.sammensetning(vinkel: vinkel(for: farge))
         }
     }
 
@@ -213,6 +219,7 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .ryb: RYB.fraRGBKulør(farge.hsl.h)
         case .munsell: farge.munsell.kulør * 3.6
         case .hering: Hering.vinkel(forOKLCHKulør: farge.okLCH.h)
+        case .goethe: Goethe.vinkel(forOKLCHKulør: farge.okLCH.h)
         }
     }
 
@@ -240,6 +247,10 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             var lch = grunn.okLCH
             lch.h = Hering.okLCHKulør(forVinkel: v)
             return Farge(okLCH: lch, alfa: grunn.alfa).gamutKartlagt(til: gamut)
+        case .goethe:
+            var lch = grunn.okLCH
+            lch.h = Goethe.okLCHKulør(forVinkel: v)
+            return Farge(okLCH: lch, alfa: grunn.alfa).gamutKartlagt(til: gamut)
         case .munsell:
             var m = grunn.munsell
             m.kulør = avrundet(v) / 3.6
@@ -262,6 +273,9 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .hering:
             let g = grunn.okLCH
             return Farge(okLCH: OKLCH(l: g.l, c: max(g.c, 0.08), h: Hering.okLCHKulør(forVinkel: vinkel))).gamutKartlagt(til: .displayP3)
+        case .goethe:
+            let g = grunn.okLCH
+            return Farge(okLCH: OKLCH(l: g.l, c: max(g.c, 0.08), h: Goethe.okLCHKulør(forVinkel: vinkel))).gamutKartlagt(til: .displayP3)
         case .munsell:
             // Ekte Munsell-farger med grunnfargens valør og kroma (kroma senket der kuløren ikke når så høyt).
             var m = grunn.munsell
@@ -323,6 +337,59 @@ public enum Hering {
             }
         }
         return 0
+    }
+}
+
+/// Goethes sirkel (*Zur Farbenlehre*, 1810): seks farger i like store sjettedeler – purpur (0°), oransje («gelbrot»,
+/// 60°), gul (120°), grønn (180°), blå (240°) og fiolett («blaurot», 300°). Motfargene står rett overfor hverandre.
+/// Kulørene er tolket som OKLCH-kulører for typiske utgaver av de seks fargene, og kulørene mellom dem interpoleres
+/// stykkevis lineært – en avbildning laget for appen, ikke målt fra Goethes egne akvareller.
+public enum Goethe {
+    /// OKLCH-kulør for purpur, oransje, gul, grønn, blå og fiolett – i den rekkefølgen, på 0°, 60° … 300°.
+    static let farger: [Double] = ["#C2185B", "#EF6C00", "#F9D71C", "#2E9E44", "#1E63B5", "#6A3D9A"].map { Farge(hex: $0)!.okLCH.h }
+
+    /// Ankerpunkter (sirkelvinkel, «utrullet» OKLCH-kulør) – kuløren legges til 360 der det trengs, så den stiger.
+    private static let anker: [(vinkel: Double, kulør: Double)] = {
+        var kulører: [Double] = []
+        for h in farger + [farger[0]] {
+            var k = h
+            while let forrige = kulører.last, k <= forrige { k += 360 }
+            kulører.append(k)
+        }
+        return kulører.enumerated().map { (Double($0.offset) * 60, $0.element) }
+    }()
+
+    public static func okLCHKulør(forVinkel vinkel: Double) -> Double {
+        let v = Harmoni.normaliser(vinkel)
+        for (a, b) in zip(anker, anker.dropFirst()) where v >= a.vinkel && v <= b.vinkel {
+            return Harmoni.normaliser(a.kulør + (v - a.vinkel) / 60 * (b.kulør - a.kulør))
+        }
+        return farger[0]
+    }
+
+    public static func vinkel(forOKLCHKulør kulør: Double) -> Double {
+        for (a, b) in zip(anker, anker.dropFirst()) {
+            var k = kulør
+            while k < a.kulør { k += 360 }
+            while k > b.kulør { k -= 360 }
+            if k >= a.kulør && k <= b.kulør {
+                return Harmoni.normaliser(a.vinkel + (k - a.kulør) / (b.kulør - a.kulør) * 60)
+            }
+        }
+        return 0
+    }
+
+    /// Kuløren som andeler av de to nærmeste av de seks fargene, f.eks. «70% gul, 30% grønn».
+    public static func sammensetning(vinkel: Double) -> String {
+        let navn = [String(localized: "purpur", bundle: .module), String(localized: "oransje", bundle: .module),
+                    String(localized: "gul", bundle: .module), String(localized: "grønn", bundle: .module),
+                    String(localized: "blå", bundle: .module), String(localized: "fiolett", bundle: .module)]
+        let v = Harmoni.normaliser(vinkel)
+        let i = Int(v / 60) % 6
+        let andel = Int(((v - Double(i) * 60) / 60 * 100).rounded())
+        if andel < 5 { return navn[i].capitalized }
+        if andel > 95 { return navn[(i + 1) % 6].capitalized }
+        return String(localized: "\(100 - andel)% \(navn[i]), \(andel)% \(navn[(i + 1) % 6])", bundle: .module)
     }
 }
 
