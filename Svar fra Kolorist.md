@@ -20,6 +20,44 @@ For å unngå at to tråder skriver i samme fil:
 
 ## Levert
 
+### 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — **levert (grunnlaget)** 2026-10-05, FargeKjerne `0.2.0` (Kolorist-commit `d51a846`)
+
+Lenkene kan nå bære **visningstilstand**, og Kolorist har **presentasjonsmodus**. Kolorist-siden er med i 1.3.
+
+**Lage lenken** (FargeKjerne ≥ 0.2.0):
+
+```swift
+let innhold = DeltInnhold(slag: .farge, farger: [DeltFarge(farge)],
+                          visning: DeltVisning(fane: "studio", studiomodus: "farge", fargemodell: "okLCH",
+                                               bruk: true, presentasjon: true))
+let url = try Delingslenke.appLenke(innhold)   // kolorist://l#… – åpner appen direkte
+```
+
+| Felt i `DeltVisning` | Verdier | Virkning i Kolorist |
+|---|---|---|
+| `fane` | `studio`, `paletter`, `overgang`, `utplukk`, `vurdering` | Fanen som vises |
+| `studiomodus` | `farge`, `harmoni` | Modus i Studio |
+| `fargemodell` | `okLCH`, `okLab`, `cieLCH`, `cieLab`, `munsell`, `hsb`, `hsl`, `rgb`, `cmyk` | Fargemodellen i Studio |
+| `vurdering` | `kontrast`, `sammenlign`, `fargesyn`, `lys` | Delen av Vurdering |
+| `bakgrunn` | en farge | Bakgrunnen i kontrastsjekken (forgrunnen er aktiv farge) |
+| `bruk` | `true` | Innholdet tas i bruk direkte: farge → aktiv farge, harmoni → Studio › Harmoni med samme oppsett, gradient → Overgang. **Paletter vises alltid i ark** (lagres bare når brukeren velger det). Uten `bruk`: arket som før, og visningstilstanden settes i tillegg. |
+| `presentasjon` | `true` / `false` | Slår presentasjonsmodus på eller av (utelatt = uendret) |
+
+- Ukjente verdier ignoreres, og en ugyldig visningstilstand droppes uten at innholdet går tapt – så feltene kan utvides
+  senere. Eldre Kolorist (1.2) og visningssiden på kolorist.no viser innholdet som før.
+- Eksempel: harmoni i Studio i presentasjonsmodus → `DeltInnhold(slag: .harmoni, …, harmoni: DeltHarmoni(…),
+  visning: DeltVisning(bruk: true, presentasjon: true))`. Kontrast → `DeltVisning(fane: "vurdering", vurdering: "kontrast",
+  bakgrunn: bakgrunnsfarge, bruk: true)`.
+
+**Presentasjonsmodus** (Vis-menyen, ⌥⌘P, eller lenken): større tekst og kontroller, og større fargeflate i Studio. På
+iPhone/iPad med større dynamisk tekst; på Mac med punkttillegg og store kontroller, etter tekstskaleringen i Studieblikk.
+Kjent grense på Mac: menyvelgere og segmenterte velgere skalerer ikke. Videre forbedringer (flere visninger, færre
+forstyrrende elementer) kommer i Kolorist uten at lenkeformatet endres.
+
+**Ikke med ennå:** App Intents (Snarveier) for det samme – meld i ønskefila om dere trenger det.
+
+**Kvitter** med status **ferdig** på ønske 1 når «Åpne i Kolorist» i Kolorist underviser bruker dette.
+
 ### 2a. FargeKjerne/FargeMaaling i eget repo — **levert (fase 1)** 2026-10-05, versjon `0.1.1`
 
 - Privat repo: **github.com/eivijoha/FargeKjerne** med pakken i roten og historikken med. Produktene er de samme:
@@ -50,8 +88,8 @@ For å unngå at to tråder skriver i samme fil:
 
 ## Beslutninger notert (2026-10-05)
 
-- Rekkefølge etter Eivind: 3 testvektorer (levert) → 2a FargeKjerne/FargeMaaling i eget repo (fase 1 levert – Eivind
-  ville begynne nå i stedet for å vente på at 1.3 er stabil) → 1 «Åpne i Kolorist» med visningstilstand og presentasjonsmodus.
+- Rekkefølge etter Eivind: 3 testvektorer (levert) → 2a FargeKjerne/FargeMaaling i eget repo (levert, kvittert) →
+  1 «Åpne i Kolorist» med visningstilstand og presentasjonsmodus (grunnlaget levert, FargeKjerne 0.2.0).
 - 2b `KoloristVisninger` er trukket. Kolorist varsler her når API-et i pakkene endres.
 - 4 innleveringsark er utsatt.
 

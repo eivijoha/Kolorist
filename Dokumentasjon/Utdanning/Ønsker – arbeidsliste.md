@@ -19,7 +19,7 @@ Status: **ny** · avklart · i arbeid · ferdig · avslått.
 **Rekkefølge (Eivind 2026-10-05):** 3 testvektorer → 2a eget repo for FargeKjerne (når 1.3 er stabil) → 1 visningstilstand
 og presentasjonsmodus. 2b trukket (utdanning bygger eget visningslag; varsle API-endringer i svarfila). 4 utsatt.
 
-## 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — avklart (Eivind 2026-10-05), etter 2a
+## 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — grunnlaget levert 2026-10-05 (FargeKjerne 0.2.0, `d51a846`), venter på kvittering; App Intents ikke med
 
 Kolorist underviser har knappen «Åpne i Kolorist» på lysbilder med modeller. I dag sendes en vanlig delingslenke
 (`kolorist://l#z…` med en farge eller palett), som Kolorist viser i et ark.
@@ -34,7 +34,7 @@ Kolorist underviser har knappen «Åpne i Kolorist» på lysbilder med modeller.
 
 **Hvorfor:** læreren demonstrerer arbeidsflyten i Kolorist midt i forelesningen, i samme tilstand som lysbildet viser.
 
-## 2. Delte Swift-pakker og `KoloristVisninger` — 2a eget repo: levert fase 1 (FargeKjerne 0.1.1, 2026-10-05), venter på kvittering · 2b `KoloristVisninger`: trukket
+## 2. Delte Swift-pakker og `KoloristVisninger` — 2a eget repo: kvittert (utdanning bygger mot 0.1.1) · 2b `KoloristVisninger`: trukket
 
 Kolorist utdanning bruker FargeKjerne og FargeMaaling via lokal sti (`../../Kolorist/Pakker/FargeKjerne`). Det virker på
 Eivinds Mac, men ikke for andre eller i CI.
