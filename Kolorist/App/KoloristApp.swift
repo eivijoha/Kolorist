@@ -541,6 +541,22 @@ struct KoloristKommandoer: Commands {
                 .keyboardShortcut("s", modifiers: [.command, .shift])
                 .disabled(lagring == nil)
         }
+        #if os(macOS)
+        // Rediger › Pipette (⌘I): plukk en farge fra hvor som helst på skjermen og gjør den til aktiv farge, som
+        // pipetteknappen i Studio. Fargen havner også blant de plukkede fargene.
+        CommandGroup(after: .pasteboard) {
+            Divider()
+            Button("Plukk farge fra skjermen", systemImage: "eyedropper") {
+                Task {
+                    if let f = await Pipette.plukkFraSkjerm() {
+                        arbeidsbenk.aktivFarge = f
+                        arbeidsbenk.registrerMåling(f)
+                    }
+                }
+            }
+            .keyboardShortcut("i", modifiers: .command)
+        }
+        #endif
         CommandGroup(before: .toolbar) {
             Button("Studio") { arbeidsbenk.valgtFane = .studio }.keyboardShortcut("1", modifiers: .command)
             Button("Paletter") { arbeidsbenk.valgtFane = .paletter }.keyboardShortcut("2", modifiers: .command).disabled(!palettfane)

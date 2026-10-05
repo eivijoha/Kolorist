@@ -29,7 +29,7 @@ struct PipetteKnapp: View {
         } label: {
             Label("Pipette", systemImage: "eyedropper")
         }
-        .help("Plukk en farge fra hvor som helst på skjermen")
+        .help("Plukk en farge fra hvor som helst på skjermen (⌘I)")
     }
 }
 #endif

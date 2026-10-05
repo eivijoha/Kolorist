@@ -5887,12 +5887,22 @@
         }
       }
     },
-    "Plukk en farge fra hvor som helst på skjermen": {
+    "Plukk en farge fra hvor som helst på skjermen (⌘I)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pick a colour from anywhere on the screen"
+            "value": "Pick a colour from anywhere on screen (⌘I)"
+          }
+        }
+      }
+    },
+    "Plukk farge fra skjermen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick Colour from Screen"
           }
         }
       }
