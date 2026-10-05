@@ -50,16 +50,25 @@ struct FargeEditor: View {
     /// Fargebibliotek valgt under «Vis også» (i stedet for en profil): høyre halvdel viser nærmeste tone.
     private var visOgsåBibliotek: Fargebibliotek? { bibliotek.fargebibliotek(id: visOgsåID) }
 
-    /// Når fargemodellen og valgt ICC-profil er av samme slag (CMYK + CMYK-profil, RGB + RGB-profil),
-    /// angis verdiene direkte i profilen: gliderne er profilens CMYK/RGB, og fargen er alltid innenfor.
-    private var kobletProfil: ICCProfil? {
-        guard visOgsåBibliotek == nil else { return nil }
-        let p = visOgsåProfil
-        switch (arbeidsbenk.modell, p.modell) {
-        case (.cmyk, .cmyk): return p
-        case (.rgb, .rgb): return p.id == ICCProfil.sRGB.id ? nil : p
+    /// Kildefargerommet for CMYK- og RGB-verdiene (velges under Fargemodell; standard Generisk CMYK og sRGB).
+    @AppStorage("kildeprofil.cmyk") private var kildeCMYK = ICCProfil.genericCMYK.id
+    @AppStorage("kildeprofil.rgb") private var kildeRGB = ICCProfil.sRGB.id
+
+    /// CMYK og RGB angis i kildefargerommet: gliderne er profilens CMYK/RGB, og fargen er alltid innenfor det.
+    /// sRGB er modellens egen RGB (ingen profil).
+    private var kildeprofil: ICCProfil? {
+        switch arbeidsbenk.modell {
+        case .cmyk: return bibliotek.profil(id: kildeCMYK).flatMap { $0.modell == .cmyk ? $0 : nil } ?? .genericCMYK
+        case .rgb:
+            let p = bibliotek.profil(id: kildeRGB).flatMap { $0.modell == .rgb ? $0 : nil } ?? .sRGB
+            return p.id == ICCProfil.sRGB.id ? nil : p
         default: return nil
         }
+    }
+
+    /// Verdiene i kildefargerommet: nøyaktig som angitt (uten rundtur), ellers regnet fra fargen.
+    private func kildeverdier(_ farge: Farge) -> [Double]? {
+        kildeprofil.map { arbeidsbenk.profilverdier(for: $0) ?? farge.komponenter(i: $0, hensikt: hensikt) ?? [] }
     }
 
     /// Studio er delt i moduser, så harmoniene ikke gjemmer seg nederst i en lang liste. (Toner er erstattet av den
@@ -110,8 +119,11 @@ struct FargeEditor: View {
                                       tekstfarge: (farger.last ?? farge).lesbarTekstfarge.swiftUI)
                         }
                 } else {
+                    // Samme rom som «Vis som»: én flate med verdiene. Ellers verdiene i kildefargerommet til venstre.
+                    let sammeRom = visOgsåBibliotek == nil && kildeprofil?.id == visOgsåProfil.id
                     Fargeflate(farge: farge, modell: arbeidsbenk.modell, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
-                               kobletVerdier: kobletProfil.map { arbeidsbenk.profilverdier(for: $0) ?? farge.komponenter(i: $0, hensikt: hensikt) ?? [] },
+                               kobletVerdier: sammeRom ? kildeverdier(farge) : nil,
+                               kildeprofil: sammeRom ? nil : kildeprofil, kildeverdier: sammeRom ? nil : kildeverdier(farge),
                                renCMYK: renCMYK,
                                stablet: bred,
                                lagre: { lagreEnkeltfarger([$0], i: kontekst) },
@@ -275,13 +287,19 @@ extension FargeEditor {
             Picker("Fargemodell", selection: $arbeidsbenk.modell) {
                 ForEach(Fargemodell.redigerbare) { Text($0.navn).tag($0) }
             }
-            KomponentGlidere(modell: arbeidsbenk.modell, profil: kobletProfil, hensikt: hensikt,
+            if arbeidsbenk.modell == .cmyk || arbeidsbenk.modell == .rgb {
+                let cmyk = arbeidsbenk.modell == .cmyk
+                Picker("Kildefargerom", selection: cmyk ? $kildeCMYK : $kildeRGB) {
+                    ForEach(bibliotek.alle.filter { $0.modell == (cmyk ? .cmyk : .rgb) }) { Text(bibliotek.visningsnavn($0)).tag($0.id) }
+                }
+            }
+            KomponentGlidere(modell: arbeidsbenk.modell, profil: kildeprofil, hensikt: hensikt,
                              farge: $arbeidsbenk.aktivFarge) { profil, verdier, farge in
                 arbeidsbenk.profilverdier = .init(profilID: profil.id, verdier: verdier, farge: farge)
             }
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
-                if let p = kobletProfil {
+                if let p = kildeprofil {
                     Text("\(arbeidsbenk.modell.navn)-verdiene angis i \(p.navn) og vises slik de gjengis i dette fargerommet.")
                         .foregroundStyle(Color.sekundærTekst)
                 }
@@ -780,6 +798,10 @@ struct Fargeflate: View {
     /// Verdiene i profilen når modellen er koblet til den (CMYK/RGB angitt direkte i profilen).
     /// Da er fargen per definisjon innenfor rommet, og begge halvdeler viser profilverdiene.
     var kobletVerdier: [Double]? = nil
+    /// Kildefargerommet for modellens verdier (CMYK/RGB), når det er et annet enn «Vis som»: venstre halvdel viser
+    /// verdiene der.
+    var kildeprofil: ICCProfil? = nil
+    var kildeverdier: [Double]? = nil
     /// CMYK-profil: vis «rene» verdier (færrest mulig trykkfarger, grått i sort) i stedet for profilens egen separasjon.
     var renCMYK = false
     /// Halvdelene over/under hverandre i stedet for side ved side (bred visning, f.eks. iPad i landskap).
@@ -816,6 +838,18 @@ struct Fargeflate: View {
         return (f, profil.formatert(k), k)
     }
 
+    /// Venstre halvdel: modellens verdier – i kildefargerommet når det er valgt (CMYK/RGB i en ICC-profil).
+    private var venstreside: (PalettFarge, String, String) {
+        if let kilde = kildeprofil, let v = kildeverdier, !v.isEmpty {
+            let tekst = kilde.formatert(v)
+            return (PalettFarge(farge: farge, representasjon: Fargerepresentasjon(rom: .icc(id: kilde.id, navn: kilde.navn),
+                                                                                  verdier: v, tekst: tekst)),
+                    "\(modell.navn) · \(kilde.navn)", tekst)
+        }
+        return (PalettFarge(farge: farge, representasjon: Fargerepresentasjon(modell: modell, farge: farge)), modell.navn,
+                modell.tekst(for: farge))
+    }
+
     private var profiltittel: String {
         renCMYK && profil.modell == .cmyk ? String(localized: "\(profil.navn) · rene farger") : profil.navn
     }
@@ -824,11 +858,11 @@ struct Fargeflate: View {
         let høyre = motpart
         let høyreFarge = PalettFarge(farge: høyre.farge, representasjon: Fargerepresentasjon(
             rom: .icc(id: profil.id, navn: profil.navn), verdier: høyre.verdier, tekst: høyre.tekst))
-        let venstre = PalettFarge(farge: farge, representasjon: Fargerepresentasjon(modell: modell, farge: farge))
+        let (venstre, venstreTittel, venstreTekst) = venstreside
         let oppsett = stablet ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
         oppsett {
             if let fargebibliotek {
-                halvdel(venstre, tittel: modell.navn, tekst: modell.tekst(for: farge),
+                halvdel(venstre, tittel: venstreTittel, tekst: venstreTekst,
                         merknad: farge.erIDisplayP3 ? nil : String(localized: "Utenfor P3"))
                 if let n = fargebibliotek.nærmeste(til: farge) {
                     // Tonen beholder navnet sitt, så den kan lagres og kopieres som bibliotekstone.
@@ -846,7 +880,7 @@ struct Fargeflate: View {
                 halvdel(høyreFarge, tittel: "\(modell.navn) · \(profil.navn)", tekst: høyre.tekst,
                         merknad: farge.erIDisplayP3 ? nil : String(localized: "Utenfor P3"))
             } else {
-                halvdel(venstre, tittel: modell.navn, tekst: modell.tekst(for: farge),
+                halvdel(venstre, tittel: venstreTittel, tekst: venstreTekst,
                         merknad: farge.erIDisplayP3 ? nil : String(localized: "Utenfor P3"))
                 halvdel(høyreFarge, tittel: profiltittel, tekst: høyre.tekst,
                         merknad: farge.erInnenfor(profil, hensikt: hensikt) ? nil

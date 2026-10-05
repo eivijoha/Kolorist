@@ -3485,6 +3485,16 @@
         }
       }
     },
+    "Kildefargerom": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source Colour Space"
+          }
+        }
+      }
+    },
     "Kildeprofil": {
       "localizations": {
         "en": {
