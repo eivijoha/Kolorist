@@ -189,6 +189,15 @@ designprogrammet og ville ha *fargen* i Kolorist – ikke selve objektet. Lim in
   innlimte gradienter forenklet til endepunktene (eller tonene som palett).
 - Testes på samme måte som «Kopier til»: kopier fra programmet, les utklippstavlen og sammenlign med det vi selv lager.
 
+## Læringsmodul: fargeforståelse fra lys til opplevelse (utforsking, 2026-10-05)
+
+Et eget læringsløp i Kolorist – fra Newtons spekter via tappene og motfargene, kromatisitetsdiagrammet og fargerom i 3D,
+fargesyn og forvekslingslinjer, fargens relativitet (Chevreul, Goethe, Albers), betraktningsforhold og metameri, til
+orden og harmoni og veien fra skjerm til materiale. Øvelser i appens egne verktøy, og visualiseringer som
+kromatisitetsdiagram med gamuter, lyskilder og forvekslingslinjer, og 3D-modeller av fargerom og gamut-skall.
+Utredning med kapitler, øvelser, visualiseringskatalog, plassering, forbehold og mulige trinn:
+[Laeringsmodul.md](../Laeringsmodul.md).
+
 ## App Clip for delingslenker (vurdert 2026-10-04 – lagt til side)
 
 **Beslutning (Eivind, 2026-10-04): droppet for nå.** Lenkene brukes nok oftest på desktop, der App Clips ikke finnes.
