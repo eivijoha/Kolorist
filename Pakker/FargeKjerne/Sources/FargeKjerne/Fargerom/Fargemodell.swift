@@ -27,29 +27,40 @@ public enum Fargemodell: String, CaseIterable, Codable, Sendable, Identifiable {
     }
 
     public struct Komponent: Sendable, Hashable {
+        /// Hvordan verdien (0…1 for prosent og kanal) vises for brukeren.
+        public enum Visning: Sendable, Hashable {
+            /// Som tallet selv, med `desimaler`.
+            case tall
+            /// I prosent (CMYK, metning og lysstyrke) – som i trykkfagene og CSS.
+            case prosent
+            /// En RGB-kanal: vises etter brukerens valg av bitdybde (0–255, 0–1023 …) eller som desimal 0–1.
+            case kanal
+        }
+
         public let navn: String
         public let kortnavn: String
         public let område: ClosedRange<Double>
-        /// Antall desimaler som gir meningsfull presisjon i visning.
+        /// Antall desimaler som gir meningsfull presisjon i visning (for `.tall`).
         public let desimaler: Int
         public let erKulør: Bool
+        public let visning: Visning
     }
 
     public var komponenter: [Komponent] {
-        func k(_ n: String, _ kn: String, _ o: ClosedRange<Double>, _ d: Int, kulør: Bool = false) -> Komponent {
-            Komponent(navn: n, kortnavn: kn, område: o, desimaler: d, erKulør: kulør)
+        func k(_ n: String, _ kn: String, _ o: ClosedRange<Double>, _ d: Int, kulør: Bool = false, _ v: Komponent.Visning = .tall) -> Komponent {
+            Komponent(navn: n, kortnavn: kn, område: o, desimaler: d, erKulør: kulør, visning: v)
         }
         switch self {
         case .okLCH: return [k(String(localized: "Lyshet", bundle: .module), "L", 0...1, 3), k(String(localized: "Kroma", bundle: .module), "C", 0...0.4, 3), k(String(localized: "Kulør", bundle: .module), "H", 0...360, 1, kulør: true)]
         case .okLab: return [k(String(localized: "Lyshet", bundle: .module), "L", 0...1, 3), k(String(localized: "Grønn–rød", bundle: .module), "a", -0.4...0.4, 3), k(String(localized: "Blå–gul", bundle: .module), "b", -0.4...0.4, 3)]
         case .cieLCH: return [k(String(localized: "Lyshet", bundle: .module), "L", 0...100, 1), k(String(localized: "Kroma", bundle: .module), "C", 0...150, 1), k(String(localized: "Kulør", bundle: .module), "H", 0...360, 1, kulør: true)]
         case .cieLab: return [k(String(localized: "Lyshet", bundle: .module), "L", 0...100, 1), k(String(localized: "Grønn–rød", bundle: .module), "a", -128...127, 1), k(String(localized: "Blå–gul", bundle: .module), "b", -128...127, 1)]
-        case .hsb: return [k(String(localized: "Kulør", bundle: .module), "H", 0...360, 0, kulør: true), k(String(localized: "Metning", bundle: .module), "S", 0...1, 3), k(String(localized: "Lysstyrke", bundle: .module), "B", 0...1, 3)]
-        case .hsl: return [k(String(localized: "Kulør", bundle: .module), "H", 0...360, 0, kulør: true), k(String(localized: "Metning", bundle: .module), "S", 0...1, 3), k(String(localized: "Lyshet", bundle: .module), "L", 0...1, 3)]
-        case .rgb, .displayP3: return [k(String(localized: "Rød", bundle: .module), "R", 0...1, 3), k(String(localized: "Grønn", bundle: .module), "G", 0...1, 3), k(String(localized: "Blå", bundle: .module), "B", 0...1, 3)]
+        case .hsb: return [k(String(localized: "Kulør", bundle: .module), "H", 0...360, 0, kulør: true), k(String(localized: "Metning", bundle: .module), "S", 0...1, 3, .prosent), k(String(localized: "Lysstyrke", bundle: .module), "B", 0...1, 3, .prosent)]
+        case .hsl: return [k(String(localized: "Kulør", bundle: .module), "H", 0...360, 0, kulør: true), k(String(localized: "Metning", bundle: .module), "S", 0...1, 3, .prosent), k(String(localized: "Lyshet", bundle: .module), "L", 0...1, 3, .prosent)]
+        case .rgb, .displayP3: return [k(String(localized: "Rød", bundle: .module), "R", 0...1, 3, .kanal), k(String(localized: "Grønn", bundle: .module), "G", 0...1, 3, .kanal), k(String(localized: "Blå", bundle: .module), "B", 0...1, 3, .kanal)]
         // Munsell: kulør 0–100 rundt sirkelen (5 = 5R, 15 = 5YR … 95 = 5RP), valør 0–10, kroma 0–30.
         case .munsell: return [k(String(localized: "Kulør", bundle: .module), "H", 0...100, 1, kulør: true), k(String(localized: "Valør", bundle: .module), "V", 0...10, 1), k(String(localized: "Kroma", bundle: .module), "C", 0...30, 1)]
-        case .cmyk: return [k("Cyan", "C", 0...1, 3), k("Magenta", "M", 0...1, 3), k(String(localized: "Gul", bundle: .module), "Y", 0...1, 3), k(String(localized: "Sort", bundle: .module), "K", 0...1, 3)]
+        case .cmyk: return [k("Cyan", "C", 0...1, 3, .prosent), k("Magenta", "M", 0...1, 3, .prosent), k(String(localized: "Gul", bundle: .module), "Y", 0...1, 3, .prosent), k(String(localized: "Sort", bundle: .module), "K", 0...1, 3, .prosent)]
         }
     }
 

@@ -20,6 +20,7 @@ struct FargeEditor: View {
     @AppStorage("visOgsåProfil") private var visOgsåID = ICCProfil.sRGB.id
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     @AppStorage("renCMYK") private var renCMYK = false
+    @AppStorage(RGBSkala.nøkkel) private var rgbSkala: RGBSkala = .åtteBit
     /// Visningslyset for «Vis som» (tom = D50, ICC-standarden – ingen omregning).
     @AppStorage("visningslys") private var visningslysID = ""
     /// Sirkelen valgt i Harmoni (samme lagring som HarmoniSeksjon), for verdiene i harmoniflaten.
@@ -307,6 +308,12 @@ extension FargeEditor {
                     ForEach(bibliotek.alle.filter { $0.modell == (cmyk ? .cmyk : .rgb) }) { Text(bibliotek.visningsnavn($0)).tag($0.id) }
                 }
             }
+            if arbeidsbenk.modell == .rgb {
+                // Bitdybde (heltall) eller desimal 0–1 – gjelder også Fargestyring og profilkonvertering.
+                Picker("Kanalverdier", selection: $rgbSkala) {
+                    ForEach(RGBSkala.allCases) { Text($0.navn).tag($0) }
+                }
+            }
             KomponentGlidere(modell: arbeidsbenk.modell, profil: kildeprofil, hensikt: hensikt,
                              farge: $arbeidsbenk.aktivFarge) { profil, verdier, farge in
                 arbeidsbenk.profilverdier = .init(profilID: profil.id, verdier: verdier, farge: farge)
@@ -363,6 +370,7 @@ struct KomponentGlidere: View {
     /// Meldes når verdier er skrevet inn i profilen, så visningen kan vise nøyaktig de verdiene.
     var profilverdier: (ICCProfil, [Double], Farge) -> Void = { _, _, _ in }
     @State private var verdier: [Double] = []
+    @AppStorage(RGBSkala.nøkkel) private var rgbSkala: RGBSkala = .åtteBit
 
     private func verdier(for f: Farge) -> [Double] {
         if let profil, let k = f.komponenter(i: profil, hensikt: hensikt) { return k.map { min(max($0, 0), 1) } }
@@ -383,15 +391,19 @@ struct KomponentGlidere: View {
         return Text("\(k.navn) \(akse)")
     }
 
-    /// Verdien slik den vises ved glideren. Munsell-kulør vises som notasjon («5.5PB»), ikke som tall 0–100.
+    /// Verdien slik den vises ved glideren: CMYK, metning og lysstyrke i prosent, RGB etter valgt bitdybde (0–255 …)
+    /// eller som desimal. Munsell-kulør vises som notasjon («5.5PB»), ikke som tall 0–100.
     private func verditekst(_ v: Double, _ k: Fargemodell.Komponent) -> String {
         if profil == nil, modell == .munsell, k.erKulør { return Munsell(kulør: v, valør: 5, kroma: 2).kulørnavn }
-        return v.formatted(.number.precision(.fractionLength(k.desimaler)))
+        return k.tekst(v, rgb: rgbSkala)
     }
 
-    /// Munsell i trinn som i Munsell-boka: kulør 2,5 (2.5R, 5R, 7.5R, 10R …), valør 1 og kroma 2.
+    /// Gliderne går i trinnene som vises: hele prosent for CMYK, ett trinn i bitdybden for RGB. Munsell i trinn som i
+    /// Munsell-boka: kulør 2,5 (2.5R, 5R, 7.5R, 10R …), valør 1 og kroma 2.
     private func trinnvis(_ v: Double, komponent i: Int) -> Double {
-        guard profil == nil, modell == .munsell else { return v }
+        guard profil == nil, modell == .munsell else {
+            return modell.komponenter.indices.contains(i) ? modell.komponenter[i].avrundet(v, rgb: rgbSkala) : v
+        }
         switch i {
         case 0: return Munsell.avrundetKulør(v)
         case 1: return Munsell.avrundetValør(v)

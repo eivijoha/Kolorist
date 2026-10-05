@@ -13,6 +13,8 @@ struct ICCSeksjon: View {
     @Binding var visMineFargerom: Bool
     @Environment(ProfilBibliotek.self) private var bibliotek
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
+    /// Tegnes på nytt når RGB-skalaen endres (verdiene vises i den).
+    @AppStorage(RGBSkala.nøkkel) private var rgbSkala: RGBSkala = .åtteBit
     /// Visningslyset for «Vis som» (tom = D50, ICC-standarden).
     @AppStorage("visningslys") private var visningslysID = ""
     @State private var lysbibliotek = Lysbibliotek.delt
@@ -93,16 +95,24 @@ struct ICCSeksjon: View {
 }
 
 extension ICCProfil {
-    /// Visningsskala etter bransjekonvensjon: RGB 0–255, CMYK og grå i prosent.
-    var visningsskala: Double { modell == .rgb ? 255 : 100 }
+    /// Visningsskala etter bransjekonvensjon: CMYK og grå i prosent; RGB etter brukerens valg (8 bit 0–255 som standard,
+    /// annen bitdybde eller desimal 0–1).
+    var visningsskala: Double { modell == .rgb ? RGBSkala.gjeldende.maks : 100 }
+    /// Desimaler i visningen (bare RGB som desimal har desimaler).
+    var visningsdesimaler: Int { modell == .rgb ? RGBSkala.gjeldende.desimaler : 0 }
     /// Enhet som vises etter tallene («%» for CMYK/grå, ingen for RGB).
     var visningsenhet: String { modell == .rgb ? "" : "%" }
+
+    /// Én komponent (0…1) i visningsskalaen.
+    func visningstekst(_ v: Double) -> String {
+        (v * visningsskala).formatted(.number.precision(.fractionLength(visningsdesimaler)).grouping(.never))
+    }
 
     func formatert(_ v: [Double]) -> String {
         switch modell {
         case .lab: return v.map { String(format: "%.1f", $0) }.joined(separator: " / ")
         default:
-            let tall = v.map { String(format: "%.0f", $0 * visningsskala) }.joined(separator: " / ")
+            let tall = v.map { String(format: "%.\(visningsdesimaler)f", $0 * visningsskala) }.joined(separator: " / ")
             return tall + visningsenhet
         }
     }
@@ -113,6 +123,8 @@ private struct ProfilGlidere: View {
     let profil: ICCProfil
     @Binding var farge: Farge
     @State private var verdier: [Double] = []
+    /// Tegnes på nytt når RGB-skalaen endres.
+    @AppStorage(RGBSkala.nøkkel) private var rgbSkala: RGBSkala = .åtteBit
 
     private var gjeldende: [Double] {
         verdier.count == profil.antallKomponenter ? verdier : (farge.komponenter(i: profil) ?? [])
@@ -145,11 +157,13 @@ private struct ProfilGlidere: View {
                         }
                     ), område: 0...1, spor: spor(for: i), gjeldende: farge.swiftUI,
                        tittel: Text(navn),
-                       verdiTekst: (gjeldende[i] * profil.visningsskala).formatted(.number.precision(.fractionLength(0))),
+                       verdiTekst: profil.visningstekst(gjeldende[i]),
                        stegForTilgjengelighet: 0.01)
-                    Text(gjeldende[i] * profil.visningsskala, format: .number.precision(.fractionLength(0)))
+                    Text(profil.visningstekst(gjeldende[i]))
                         .monospacedDigit()
-                        .frame(width: 36, alignment: .trailing)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                        .frame(width: 48, alignment: .trailing)
                 }
             }
         }
