@@ -623,6 +623,36 @@
         }
       }
     },
+    "**Lik:** samme lyshet, så fargene veier likt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Equal:** the same lightness, so the colours carry equal weight."
+          }
+        }
+      }
+    },
+    "**Naturlig:** følger kulørenes egen lyshet – gult lysest, blått og fiolett mørkest – slik vi kjenner det fra naturen. Oppleves ofte som harmonisk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Natural:** follows the hues’ own lightness – yellow lightest, blue and violet darkest – as we know it from nature. Often feels harmonious."
+          }
+        }
+      }
+    },
+    "**Omvendt:** snur dette og gir bevisst spenning.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Reversed:** turns this around for deliberate tension."
+          }
+        }
+      }
+    },
     "1 farge skifter tydelig: %@": {
       "localizations": {
         "en": {
@@ -2869,6 +2899,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "White, movable light panel on the screen as a light source for the camera"
+          }
+        }
+      }
+    },
+    "Hvor lyse fargene i harmonien er i forhold til hverandre (valør).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How light the colours in the harmony are relative to each other (Munsell value)."
+          }
+        }
+      }
+    },
+    "Hvor lyse fargene i harmonien er i forhold til hverandre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How light the colours in the harmony are relative to each other."
           }
         }
       }
@@ -5491,6 +5541,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "OKLab, %lld tones"
+          }
+        }
+      }
+    },
+    "Om lyshetsrekkefølge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About lightness order"
+          }
+        }
+      }
+    },
+    "Om valørrekkefølge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About value order"
           }
         }
       }

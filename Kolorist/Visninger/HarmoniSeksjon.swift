@@ -276,8 +276,24 @@ struct HarmoniSeksjon: View {
             #endif
             glider(brukerMunsell ? "Kroma" : "Metning", verdi: $metning, grunn: grunnMetning, metningsakse: true)
             glider(brukerMunsell ? "Valør" : "Lyshet", verdi: $lyshet, grunn: grunnLyshet, metningsakse: false)
-            Picker(brukerMunsell ? "Valørrekkefølge" : "Lyshetsrekkefølge", selection: $lyshetsrekkefølge) {
-                ForEach(Lyshetsrekkefølge.allCases) { Text($0.navn).tag($0) }
+            HStack(spacing: 4) {
+                Text(brukerMunsell ? "Valørrekkefølge" : "Lyshetsrekkefølge")
+                InfoKnapp(tittel: brukerMunsell ? "Om valørrekkefølge" : "Om lyshetsrekkefølge") {
+                    if brukerMunsell {
+                        Text("Hvor lyse fargene i harmonien er i forhold til hverandre (valør).")
+                    } else {
+                        Text("Hvor lyse fargene i harmonien er i forhold til hverandre.")
+                    }
+                    Text("**Lik:** samme lyshet, så fargene veier likt.")
+                    Text("**Naturlig:** følger kulørenes egen lyshet – gult lysest, blått og fiolett mørkest – slik vi kjenner det fra naturen. Oppleves ofte som harmonisk.")
+                    Text("**Omvendt:** snur dette og gir bevisst spenning.")
+                }
+                Spacer(minLength: 8)
+                Picker(brukerMunsell ? "Valørrekkefølge" : "Lyshetsrekkefølge", selection: $lyshetsrekkefølge) {
+                    ForEach(Lyshetsrekkefølge.allCases) { Text($0.navn).tag($0) }
+                }
+                .labelsHidden()
+                .fixedSize()
             }
             if metning != nil || lyshet != nil {
                 Button("Tilbakestill til grunnfargen", systemImage: "arrow.uturn.backward") {
