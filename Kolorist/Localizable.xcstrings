@@ -1326,6 +1326,16 @@
         }
       }
     },
+    "Del settet som lenke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share the Set as a Link"
+          }
+        }
+      }
+    },
     "Del som lenke": {
       "localizations": {
         "en": {
@@ -3803,6 +3813,16 @@
         }
       }
     },
+    "Kopier settet til": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy the Set To"
+          }
+        }
+      }
+    },
     "Kopier som": {
       "localizations": {
         "en": {
@@ -4771,6 +4791,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Light"
+          }
+        }
+      }
+    },
+    "Lysere og mørkere %@ → %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lysere og mørkere %1$@ → %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lighter and darker %1$@ → %2$@"
           }
         }
       }

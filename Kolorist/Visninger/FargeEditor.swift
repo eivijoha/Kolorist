@@ -881,6 +881,14 @@ struct Fargeflate: View {
                 }
                 .foregroundStyle(f.lesbarTekstfarge.swiftUI)
                 .padding(12)
+                // Plass til lenken nederst til høyre.
+                .padding(.trailing, pf.kilde?.lenke == nil ? 0 : 36)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                // Lenke til kilden (f.eks. filamentprøven hos FilamentColors.xyz).
+                if let kilde = pf.kilde, kilde.lenke != nil {
+                    Kildelenke(kilde: kilde, bareSymbol: true).foregroundStyle(f.lesbarTekstfarge.swiftUI).padding(4)
+                }
             }
             .overlay(alignment: .topTrailing) {
                 LagreMeny(lagre: { lagre(pf) }, leggIPalett: { leggIPalett(pf) }, palettFarge: pf, verdier: tekst)

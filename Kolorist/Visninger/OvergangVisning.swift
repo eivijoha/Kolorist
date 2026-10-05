@@ -162,11 +162,17 @@ struct OvergangVisning: View {
                 start = fra.medOKLCHLyshet(fra.okLCH.l + endring, gamut: arbeidsbenk.gamut)
                 slutt = til.medOKLCHLyshet(til.okLCH.l + endring, gamut: arbeidsbenk.gamut)
             }
-            // Hele settet (alle radene, lysest først) som én palett.
-            Button("Lagre settet som palett …", systemImage: "square.grid.3x3") {
-                somPalett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
+            // Hele settet (alle radene, lysest først): lagre som palett, del som lenke eller kopier til andre programmer.
+            let sett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
+            let settnavn = String(localized: "Lysere og mørkere \(start.hex()) → \(slutt.hex())")
+            Button("Lagre settet som palett …", systemImage: "square.grid.3x3") { somPalett = sett }
+                .disabled(rader.count < 2)
+            DelSomLenke(navn: settnavn, tittel: "Del settet som lenke") {
+                Lenkedeling.palett(navn: settnavn, farger: sett, gradienter: [])
             }
             .disabled(rader.count < 2)
+            KopierTilMeny(farger: sett, navn: settnavn, tittel: "Kopier settet til")
+                .disabled(rader.count < 2)
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 if rader.count > 1 {
