@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Henter filamentfarger fra FilamentColors.xyz (CC BY 4.0) til Kolorists innebygde fargebiblioteker.
 
-    python3 Pakker/FargeKjerne/Verktøy/hent_filamentfarger.py
+    python3 Pakker/FargeKjerne/Verktoy/hent_filamentfarger.py
 
 Skriver Sources/FargeKjerne/Filamentfarger.json. Kjøres ved behov før en ny versjon, og resultatet sjekkes inn,
 så appen aldri henter noe fra nettet selv.

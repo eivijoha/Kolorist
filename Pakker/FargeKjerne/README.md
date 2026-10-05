@@ -17,7 +17,7 @@ Plattformer: iOS, iPadOS, macOS og visionOS 26. Swift 6.2.
 
 ```swift
 dependencies: [
-    .package(url: "git@github.com:eivijoha/FargeKjerne.git", from: "0.1.0"),
+    .package(url: "git@github.com:eivijoha/FargeKjerne.git", from: "0.1.1"),
 ],
 targets: [
     .target(name: "MittMål", dependencies: [
@@ -43,6 +43,8 @@ swift test
 `Testvektorer/Fargeregning.json` har resultater for et fast utvalg farger og fargepar, så andre implementasjoner (f.eks.
 TypeScript) kan testes mot samme regning – se [Testvektorer/README.md](Testvektorer/README.md). Delingslenkene har sine i
 `Tests/FargeKjerneTests/Testlenker.json`.
+
+Filnavn i pakken er uten æ, ø og å (SwiftPM klarer ikke å lese dem fra git).
 
 `swift run kiprove` prøver KI-promptene mot modellen på Macen (utviklerverktøy, ikke et produkt).
 

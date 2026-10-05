@@ -6,7 +6,7 @@ import Foundation
 /// (`filamentcolors/constants.py` i kildekoden til FilamentColors.xyz). Kolorist regner om til sitt eget fargerom:
 /// Lab → XYZ med D65-hvitpunktet for 10°, Bradford-tilpasning til D65-hvitpunktet for 2° (observatørforskjellen kan
 /// ikke regnes om nøyaktig uten spektre, men avviket er lite), og videre som andre farger. Prøver uten målt Lab har
-/// hex fra et fotografi og merkes som anslått. Uttrekket lages med `Verktøy/hent_filamentfarger.py` og følger med
+/// hex fra et fotografi og merkes som anslått. Uttrekket lages med `Verktoy/hent_filamentfarger.py` og følger med
 /// appen; appen henter ingenting fra nettet. Hver tone lenker til prøven hos FilamentColors.xyz.
 public enum Filamentfarger {
     /// Opplysningene om uttrekket (kilde, lisens, dato, endringer).

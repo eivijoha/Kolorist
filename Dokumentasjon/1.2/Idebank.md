@@ -126,7 +126,7 @@ like OKLab-steg mellom dem. Ting å avklare når den tas opp:
 ## Filamentfarger for 3D-print (tatt inn i 1.2, 2026-10-04)
 
 Innebygde bibliotek fra FilamentColors.xyz (CC BY 4.0), ett per materialgruppe, med kilde (produsent, navn,
-materiale, lenke til prøven, målt/anslått, TD) på hver farge. Uttrekk med `Pakker/FargeKjerne/Verktøy/hent_filamentfarger.py`;
+materiale, lenke til prøven, målt/anslått, TD) på hver farge. Uttrekk med `Pakker/FargeKjerne/Verktoy/hent_filamentfarger.py`;
 Lab er D65/10° (fra kildekoden deres). Senere:
 - Import av SpoolmanDB og Open Filament Database (MIT, bare hex – merkes som omtrentlige).
 - Filter på produsent i «Vis som» og ved nærmeste tone (biblioteket har ~150 produsenter).

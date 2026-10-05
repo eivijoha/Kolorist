@@ -2,6 +2,11 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
+## 0.1.1 – 2026-10-05
+
+- Filnavn uten æ, ø og å (`Verktoy/`, `FargebibliotekSokTests.swift`), så SwiftPM kan hente pakken over git. 0.1.0 kan
+  ikke brukes som avhengighet – bruk 0.1.1 eller nyere.
+
 ## 0.1.0 – 2026-10-05
 
 Første utgivelse som egen pakke (speilet fra Kolorist 1.3 under utvikling).
