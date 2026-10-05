@@ -30,6 +30,10 @@ struct HarmoniSeksjon: View {
     @AppStorage("harmoniVinkel") private var vinkel = 30.0
     @AppStorage("harmoniSirkel") private var sirkel: Fargesirkel = .okLCH
     @AppStorage("harmoniLyshetsrekkefølge") private var lyshetsrekkefølge: Lyshetsrekkefølge = .lik
+    /// Monokromatisk: streken i lyshet–metning-planet (tom = standardstreken rundt grunnfargen) og kuløren
+    /// (OKLCH-grader). Kuløren huskes for seg, så den ikke forsvinner når grunnfargen er grå.
+    @AppStorage("harmoniMonokrom") private var monokromTekst = ""
+    @AppStorage("harmoniMonokromKulør") private var monokromKulør = 254.0
 
     /// Felles metning og lyshet for hele harmonien (0…1), som i HSL. `nil` = følg hver farge.
     /// Med HSL- og RYB-sirkelen er det HSL-metning og -lyshet; ellers OKLCH-lyshet og metning som andel av
@@ -56,12 +60,22 @@ struct HarmoniSeksjon: View {
         return harmoni.forskyvninger(antall: antall, vinkel: harmoni.harVinkel ? vinkel : nil).map { $0 == 0 ? basis : sirkel.avrundet(basis + $0) }
     }
 
-    /// Plassen til grunnfargen blant fargene (i midten for analog).
+    /// Plassen til grunnfargen blant fargene (i midten for analog). Monokromatisk: ingen – streken trenger ikke gå
+    /// gjennom grunnfargen.
     private var grunnIndeks: Int? {
-        harmoni.forskyvninger(antall: antall, vinkel: harmoni.harVinkel ? vinkel : nil).firstIndex(of: 0)
+        guard harmoni != .monokrom else { return nil }
+        return harmoni.forskyvninger(antall: antall, vinkel: harmoni.harVinkel ? vinkel : nil).firstIndex(of: 0)
+    }
+
+    private var strek: Binding<Monokromstrek> {
+        Binding(get: { Monokromstrek(tekst: monokromTekst) ?? .standard(for: grunnfarge, gamut: gamut) },
+                set: { monokromTekst = $0.tekst })
     }
 
     private var farger: [Farge] {
+        if harmoni == .monokrom {
+            return strek.wrappedValue.toner(kulør: monokromKulør, antall: antall, gamut: gamut).map(begrens)
+        }
         let justert = råfarger.map(juster)
         var ordnet = lyshetsrekkefølge.anvendt(på: justert, grunn: juster(grunnfarge), gamut: gamut)
         if brukerMunsell {
@@ -227,6 +241,53 @@ struct HarmoniSeksjon: View {
         }
     }
 
+    /// Monokromatisk: kuløren følger grunnfargen, unntatt når den er (nesten) grå og ikke har noen kulør.
+    private func følgGrunnfargensKulør() {
+        let lch = grunnfarge.okLCH
+        if lch.c > 0.02, abs(lch.h - monokromKulør) > 0.01 { monokromKulør = lch.h }
+    }
+
+    /// En farge med kuløren, til å regne vinkelen i valgt fargesirkel og tegne kulørsporet.
+    private func referansefarge(okLCHKulør h: Double) -> Farge {
+        Farge(okLCH: OKLCH(l: 0.68, c: 0.13, h: h)).gamutKartlagt(til: gamut)
+    }
+
+    /// Kulørglider (i valgt fargesirkel) og lyshet–metning-flaten med streken.
+    @ViewBuilder private var monokromKontroller: some View {
+        let ref = referansefarge(okLCHKulør: monokromKulør)
+        let vinkel = sirkel.vinkel(for: ref)
+        let tekst = brukerMunsell ? String(Fargemodell.munsell.kortTekst(for: ref).split(separator: " ").first ?? "")
+                                  : "\(Int(vinkel.rounded()))°"
+        HStack(spacing: 10) {
+            Text("Kulør").lineLimit(1).frame(width: 96, alignment: .leading)
+            FargeGlider(verdi: Binding(get: { vinkel }, set: { ny in
+                let h = sirkel.farge(ref, vinkel: ny, gamut: gamut).okLCH.h
+                monokromKulør = h
+                // Grunnfargen får samme kulør, så resten av Studio følger med (grå grunnfarge har ingen kulør).
+                var lch = grunnfarge.okLCH
+                if lch.c > 0.02 {
+                    lch.h = h
+                    velg(Farge(okLCH: lch, alfa: grunnfarge.alfa).gamutKartlagt(til: gamut))
+                }
+            }), område: 0...360,
+                        spor: (0..<36).map { sirkel.farge(ref, vinkel: Double($0) * 10, gamut: gamut).swiftUI },
+                        gjeldende: ref.swiftUI,
+                        tittel: Text("Kulør"),
+                        verdiTekst: tekst,
+                        stegForTilgjengelighet: sirkel.trinn ?? 5)
+            Text(tekst)
+                .font(.callout.monospacedDigit())
+                .foregroundStyle(Color.sekundærTekst)
+                .frame(width: 48, alignment: .trailing)
+        }
+        LyshetMetningFlate(kulør: monokromKulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velg)
+            .frame(height: sirkelhøyde)
+            .padding(.vertical, 4)
+        if !monokromTekst.isEmpty {
+            Button("Tilbakestill streken", systemImage: "arrow.uturn.backward") { monokromTekst = "" }
+        }
+    }
+
     var body: some View {
         Section {
             Picker("Harmoni", selection: $harmoni) {
@@ -238,7 +299,7 @@ struct HarmoniSeksjon: View {
             }
 
             if harmoni.harAntall {
-                Stepper(harmoni == .analogMedAksent ? "Analoge farger: \(antall)" : "Antall farger: \(antall)",
+                Stepper(harmoni == .analogMedAksent ? "Analoge farger: \(antall)" : harmoni == .monokrom ? "Toner: \(antall)" : "Antall farger: \(antall)",
                         value: $antall, in: harmoni.antallOmråde)
             }
             if harmoni.harVinkel {
@@ -252,6 +313,9 @@ struct HarmoniSeksjon: View {
                 ForEach(Fargesirkel.allCases) { Text($0.navn).tag($0) }
             }
 
+            if harmoni == .monokrom {
+                monokromKontroller
+            } else {
             // Ringen og midten tegnes med gjeldende metning og lyshet, så gliderne under virker direkte på sirkelen.
             Fargesirkelvisning(grunnfarge: grunnfarge, farger: farger, sirkel: sirkel, vinkler: vinkler, grunnIndeks: grunnIndeks,
                                velg: velg, ringfarge: { ringfarge(vinkel: $0) }, midtfarge: juster(grunnfarge).gamutKartlagt(til: gamut),
@@ -301,6 +365,7 @@ struct HarmoniSeksjon: View {
                     lyshet = nil
                 }
             }
+            }
             Button("Legg harmonien i palett", systemImage: "plus.square.on.square") {
                 lagre(farger.map { PalettFarge(farge: $0, opphav: .manuell) }, harmoni.navn)
             }
@@ -314,10 +379,14 @@ struct HarmoniSeksjon: View {
             Text("Fargeharmonier")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
+                if harmoni == .monokrom {
+                    Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Flaten viser fargene innenfor gamut for kuløren.")
+                } else {
                 Text(sirkel.forklaring + " " + (brukerMunsell
                     ? String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.")
                     : String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien."))
                     + lyshetsforklaring)
+                }
                 MetodeHenvisning(.harmonier, .oklab, .cieLab)
             }
         }
@@ -329,7 +398,11 @@ struct HarmoniSeksjon: View {
         #endif
         // Ikke onDisappear: radene i et Form fjernes og lages på nytt ved rulling. Studio viser harmonien i
         // fargeflaten bare i Harmoni-modus, så gamle verdier gjør ikke noe.
-        .onAppear { vis(farger, grunnIndeks) }
+        .onAppear {
+            vis(farger, grunnIndeks)
+            følgGrunnfargensKulør()
+        }
+        .onChange(of: grunnfarge) { _, _ in følgGrunnfargensKulør() }
         .onChange(of: farger) { _, nye in vis(nye, grunnIndeks) }
         // Gliderne betyr noe annet i HSL enn i OKLCH; start på nytt ved bytte av sirkel.
         .onChange(of: sirkel) { _, _ in metning = nil; lyshet = nil }

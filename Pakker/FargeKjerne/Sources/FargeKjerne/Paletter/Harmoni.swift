@@ -18,6 +18,8 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
     case dobbeltKomplementær
     /// `antall` farger jevnt fordelt rundt sirkelen (5 = pentade …).
     case jevn
+    /// Én kulør i `antall` toner langs en strek i lyshet–metning-planet (`Monokromstrek`).
+    case monokrom
 
     public var id: String { rawValue }
 
@@ -31,11 +33,12 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
         case .kvadrat: String(localized: "Kvadrat", bundle: .module)
         case .dobbeltKomplementær: String(localized: "Dobbelt komplementær", bundle: .module)
         case .jevn: String(localized: "Jevn fordeling", bundle: .module)
+        case .monokrom: String(localized: "Monokromatisk", bundle: .module)
         }
     }
 
     /// Om harmonien bruker valgfritt antall farger (for analog med aksent: antall i den analoge gruppen).
-    public var harAntall: Bool { self == .jevn || self == .analog || self == .analogMedAksent }
+    public var harAntall: Bool { self == .jevn || self == .analog || self == .analogMedAksent || self == .monokrom }
     /// Om harmonien bruker en valgfri vinkel.
     public var harVinkel: Bool {
         self == .splittKomplementær || self == .analog || self == .analogMedAksent || self == .dobbeltKomplementær
@@ -44,7 +47,7 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
     /// Tillatt antall farger (se `harAntall`).
     public var antallOmråde: ClosedRange<Int> {
         switch self {
-        case .jevn: 2...12
+        case .jevn, .monokrom: 2...12
         case .analogMedAksent: 2...5
         default: 2...9
         }
@@ -70,6 +73,8 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
         case .jevn: return Self.jevnt(antall)
         case .analog: return Self.analog(antall, v)
         case .analogMedAksent: return Self.analog(antall, v) + [180]
+        // Samme kulør for alle; tonene kommer fra `Monokromstrek`.
+        case .monokrom: return Array(repeating: 0, count: max(antall, 2))
         }
     }
 

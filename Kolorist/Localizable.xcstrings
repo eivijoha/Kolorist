@@ -2407,6 +2407,22 @@
         }
       }
     },
+    "Fra lyshet %lld %% og metning %lld %% til lyshet %lld %% og metning %lld %%": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fra lyshet %1$lld %% og metning %2$lld %% til lyshet %3$lld %% og metning %4$lld %%"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From lightness %lld %% and saturation %lld %% to lightness %lld %% and saturation %lld %%"
+          }
+        }
+      }
+    },
     "Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i Vurdering › Fargesyn, kontrastforhåndsvisningen og kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.": {
       "localizations": {
         "en": {
@@ -3807,6 +3823,16 @@
         }
       }
     },
+    "Kulør": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hue"
+          }
+        }
+      }
+    },
     "Kulør, valør og kroma etter Munsell. Omregningen bruker renotasjonsdataene fra 1943 (CIE xyY under lyskilde C, offentlige data) med interpolasjon i kroma, kulør og valør, Bradford-tilpasning til D65, og ASTM D1535 for sammenhengen mellom valør og luminans. Notasjonen er en tilnærming; fysiske Munsell-prøver kan avvike.": {
       "localizations": {
         "en": {
@@ -4741,6 +4767,16 @@
         }
       }
     },
+    "Lyshet og metning": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lightness and saturation"
+          }
+        }
+      }
+    },
     "Lyshetsrekkefølge": {
       "localizations": {
         "en": {
@@ -4987,6 +5023,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saturation"
+          }
+        }
+      }
+    },
+    "Metning →": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturation →"
           }
         }
       }
@@ -7057,6 +7103,16 @@
         }
       }
     },
+    "Tilbakestill streken": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset the line"
+          }
+        }
+      }
+    },
     "Tilbakestill til grunnfargen": {
       "localizations": {
         "en": {
@@ -8211,6 +8267,16 @@
         }
       }
     },
+    "Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Flaten viser fargene innenfor gamut for kuløren.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One hue in several tones. Drag the end points in the field – lightness vertically, saturation horizontally – and the tones spread evenly along the line. Tap a tone to make it active. The field shows the colours within gamut for the hue."
+          }
+        }
+      }
+    },
     "Øverst i hver rute: fargen på skjermen. Nederst: fargen i lyset, med fargeskiftet.": {
       "localizations": {
         "en": {
@@ -8339,6 +8405,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Δh (hue, degrees)"
+          }
+        }
+      }
+    },
+    "↑ Lyshet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑ Lightness"
           }
         }
       }
