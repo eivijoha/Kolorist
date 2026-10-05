@@ -766,7 +766,38 @@ struct KameraForhåndsvisning: NSViewRepresentable {
         /// til venstre; SwiftUI har origo oppe til venstre.
         private func punkter(_ event: NSEvent) -> (CGPoint, CGPoint) {
             let p = convert(event.locationInWindow, from: nil)
-            return (lag.captureDevicePointConverted(fromLayerPoint: p), CGPoint(x: p.x, y: bounds.height - p.y))
+            return (enhetspunkt(p), CGPoint(x: p.x, y: bounds.height - p.y))
+        }
+
+        /// Punkt i visningen → normalisert punkt i sensorens bilde (origo oppe til venstre, uten rotasjon og speiling).
+        /// Regnes ut her i stedet for med `captureDevicePointConverted`, som ga feil sted på Mac (både innebygd og
+        /// eksternt kamera): bildet fyller visningen (aspect fill, beskåret på midten), kan være speilet (innebygde
+        /// kameraer) og rotert (Continuity-kamera).
+        private func enhetspunkt(_ p: CGPoint) -> CGPoint {
+            guard let enhet = lag.session?.inputs.compactMap({ ($0 as? AVCaptureDeviceInput)?.device }).first else {
+                return lag.captureDevicePointConverted(fromLayerPoint: p)
+            }
+            let mål = CMVideoFormatDescriptionGetDimensions(enhet.activeFormat.formatDescription)
+            let vinkel = (Int((lag.connection?.videoRotationAngle ?? 0).rounded()) % 360 + 360) % 360
+            var (w, h) = (CGFloat(mål.width), CGFloat(mål.height))
+            if vinkel == 90 || vinkel == 270 { swap(&w, &h) }
+            guard w > 0, h > 0, bounds.width > 0, bounds.height > 0 else { return CGPoint(x: 0.5, y: 0.5) }
+            let skala = max(bounds.width / w, bounds.height / h)
+            let (vist, forskyvning) = (CGSize(width: w * skala, height: h * skala),
+                                       CGPoint(x: (bounds.width - w * skala) / 2, y: (bounds.height - h * skala) / 2))
+            // Punktet i det viste bildet, origo oppe til venstre.
+            var u = (p.x - forskyvning.x) / vist.width
+            let v = ((bounds.height - p.y) - forskyvning.y) / vist.height
+            if lag.connection?.isVideoMirrored == true { u = 1 - u }
+            // Tilbake fra visningens rotasjon (med klokka) til sensorens.
+            let sensor: CGPoint
+            switch vinkel {
+            case 90: sensor = CGPoint(x: v, y: 1 - u)
+            case 180: sensor = CGPoint(x: 1 - u, y: 1 - v)
+            case 270: sensor = CGPoint(x: 1 - v, y: u)
+            default: sensor = CGPoint(x: u, y: v)
+            }
+            return CGPoint(x: min(max(sensor.x, 0), 1), y: min(max(sensor.y, 0), 1))
         }
 
         override func mouseDown(with event: NSEvent) { let (e, v) = punkter(event); vedTrykk(e, v) }
