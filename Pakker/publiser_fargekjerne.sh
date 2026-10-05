@@ -22,10 +22,10 @@ if git ls-remote --tags $remote "refs/tags/$versjon" | grep -q .; then
 fi
 
 echo "Tester pakken …"
-(cd $prefix && swift test > /dev/null) || { echo "Testene feilet."; exit 1; }
+(cd $prefix && swift test > /dev/null 2>&1) || { echo "Testene feilet."; exit 1; }
 
 echo "Speiler $prefix …"
 commit=$(git subtree split --prefix=$prefix -q)
-git push $remote "$commit:refs/heads/main"
-git push $remote "$commit:refs/tags/$versjon"
+git push $remote "${commit}:refs/heads/main"
+git push $remote "${commit}:refs/tags/${versjon}"
 echo "Publisert FargeKjerne $versjon ($commit)."
