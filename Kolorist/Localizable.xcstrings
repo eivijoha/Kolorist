@@ -2849,6 +2849,16 @@
         }
       }
     },
+    "Hele settet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whole Set"
+          }
+        }
+      }
+    },
     "Hent fra aktiv farge": {
       "localizations": {
         "en": {
@@ -4797,16 +4807,16 @@
     },
     "Lysere og mørkere %@ → %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Lysere og mørkere %1$@ → %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Lighter and darker %1$@ → %2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lysere og mørkere %1$@ → %2$@"
           }
         }
       }

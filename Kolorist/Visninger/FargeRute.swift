@@ -29,6 +29,8 @@ struct FargeRute: View {
     /// Brukes i lister/skjemaer: der gjelder iOS' kontekstmeny hele raden, så menyen og
     /// forhåndsvisningen kan høre til feil prøve når flere står på samme rad.
     var valgBoble = false
+    /// Ekstra valg nederst i boblen (får en funksjon som lukker boblen). På Mac brukes `ekstraMeny` i stedet.
+    var bobleEkstra: ((@escaping () -> Void) -> AnyView)? = nil
     @State private var visValg = false
     @State private var visLagreSom = false
 
@@ -45,7 +47,8 @@ struct FargeRute: View {
                 .onLongPressGesture(minimumDuration: 0.35) { visValg = true }
                 .sensoryFeedback(.impact(weight: .medium), trigger: visValg) { _, ny in ny }
                 .popover(isPresented: $visValg, arrowEdge: .bottom) {
-                    FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett, åpneIStudio: åpneIStudio) { visValg = false }
+                    FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett, åpneIStudio: åpneIStudio,
+                                   kilde: palettFarge?.kilde, ekstra: bobleEkstra?({ visValg = false })) { visValg = false }
                         .presentationCompactAdaptation(.popover)
                 }
                 .accessibilityAction(named: "Valg for fargen") { visValg = true }
@@ -178,6 +181,10 @@ struct FargeValgBoble: View {
     var lagre: ((Farge) -> Void)?
     var leggIPalett: ((Farge) -> Void)?
     var åpneIStudio: ((Farge) -> Void)? = nil
+    /// Kilden til fargen (f.eks. filamentprøven): lenke til den.
+    var kilde: Fargekilde? = nil
+    /// Ekstra valg nederst (f.eks. for hele settet fargen hører til).
+    var ekstra: AnyView? = nil
     var lukk: () -> Void
     @State private var lagret = false
 
@@ -233,6 +240,11 @@ struct FargeValgBoble: View {
                     }
                 } label: {
                     Label("Kopier til", systemImage: "arrow.up.doc.on.clipboard")
+                }
+                if let kilde { Kildelenke(kilde: kilde) }
+                if let ekstra {
+                    Divider()
+                    ekstra
                 }
             }
             .buttonStyle(.borderless)

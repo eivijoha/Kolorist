@@ -126,6 +126,36 @@ struct OvergangVisning: View {
         }
     }
 
+    /// Fargen som tone i fargebiblioteket appen er begrenset til (f.eks. filament), med navn og kilde – så menyen
+    /// kan lenke til prøven. `nil` uten bibliotek.
+    private func bibliotekstone(_ farge: Farge) -> PalettFarge? {
+        guard let n = arbeidsbenk.bibliotekbegrensning?.nærmeste(til: farge) else { return nil }
+        return PalettFarge(navn: n.tone.navn, farge: n.tone.farge, opphav: .bibliotek, representasjon: n.tone.representasjon,
+                           kilde: n.tone.kilde)
+    }
+
+    /// Valg for hele settet med lysere og mørkere toner (alle radene, lysest først), i menyen på hver farge i det.
+    /// `samlet`: i én undermeny «Hele settet» (boblen på iPhone og iPad har ikke plass til alle valgene).
+    @ViewBuilder private func settvalg(lukk: @escaping () -> Void, samlet: Bool = false) -> some View {
+        let sett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
+        let settnavn = String(localized: "Lysere og mørkere \(start.hex()) → \(slutt.hex())")
+        let valg = Group {
+            Button("Lagre settet som palett …", systemImage: "square.grid.3x3") {
+                lukk()
+                somPalett = sett
+            }
+            DelSomLenke(navn: settnavn, tittel: "Del settet som lenke") {
+                Lenkedeling.palett(navn: settnavn, farger: sett, gradienter: [])
+            }
+            KopierTilMeny(farger: sett, navn: settnavn, tittel: "Kopier settet til", inline: samlet)
+        }
+        if samlet {
+            Menu { valg } label: { Label("Hele settet", systemImage: "square.grid.3x3") }
+        } else {
+            valg
+        }
+    }
+
     /// Lysere og mørkere varianter av hver tone (overgangsraden markert med ramme), over trinnkontrollene.
     private var lysereMørkerePanel: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
@@ -137,7 +167,9 @@ struct OvergangVisning: View {
                         GridRow {
                             ForEach(Array(rad.enumerated()), id: \.offset) { _, farge in
                                 FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett,
-                                          åpneIStudio: { arbeidsbenk.visIStudio($0) }, valgBoble: true)
+                                          åpneIStudio: { arbeidsbenk.visIStudio($0) }, palettFarge: bibliotekstone(farge),
+                                          ekstraMeny: AnyView(settvalg(lukk: {})), valgBoble: true,
+                                          bobleEkstra: { lukk in AnyView(settvalg(lukk: lukk, samlet: true)) })
                                     .frame(minHeight: 36)
                                     .overlay {
                                         if r == midtrad {
@@ -162,17 +194,7 @@ struct OvergangVisning: View {
                 start = fra.medOKLCHLyshet(fra.okLCH.l + endring, gamut: arbeidsbenk.gamut)
                 slutt = til.medOKLCHLyshet(til.okLCH.l + endring, gamut: arbeidsbenk.gamut)
             }
-            // Hele settet (alle radene, lysest først): lagre som palett, del som lenke eller kopier til andre programmer.
-            let sett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
-            let settnavn = String(localized: "Lysere og mørkere \(start.hex()) → \(slutt.hex())")
-            Button("Lagre settet som palett …", systemImage: "square.grid.3x3") { somPalett = sett }
-                .disabled(rader.count < 2)
-            DelSomLenke(navn: settnavn, tittel: "Del settet som lenke") {
-                Lenkedeling.palett(navn: settnavn, farger: sett, gradienter: [])
-            }
-            .disabled(rader.count < 2)
-            KopierTilMeny(farger: sett, navn: settnavn, tittel: "Kopier settet til")
-                .disabled(rader.count < 2)
+
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 if rader.count > 1 {
