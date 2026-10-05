@@ -35,6 +35,7 @@ struct PalettListe: View {
     @State private var flyttesTilNyGruppe: PalettDokument?
     @State private var omdøpesGruppe: PalettGruppe?
     @State private var slettesGruppe: PalettGruppe?
+    @State private var lagresGruppe: PalettGruppe?
     /// Gruppen en palett dras over (`nil`-gruppen er «Uten gruppe»), markert med ramme.
     @State private var gruppemål: UUID??
 
@@ -286,6 +287,17 @@ struct PalettListe: View {
                                         gruppenavn = g.navn
                                         omdøpesGruppe = g
                                     }
+                                    Divider()
+                                    // Hele gruppen: skriv ut (hver palett på egne sider), lagre som filer eller kopier.
+                                    Button("Skriv ut gruppen …", systemImage: "printer") {
+                                        PalettUtskrift.skrivUt(iGruppen.map { ($0.palett, $0.gradienter) }, navn: g.navn)
+                                    }
+                                    .disabled(iGruppen.isEmpty)
+                                    Button("Lagre gruppen som …", systemImage: "square.and.arrow.down") { lagresGruppe = g }
+                                        .disabled(iGruppen.isEmpty)
+                                    KopierTilMeny(farger: iGruppen.flatMap(\.farger), navn: g.navn, tittel: "Kopier gruppen til")
+                                        .disabled(iGruppen.isEmpty)
+                                    Divider()
                                     Button("Slett gruppe …", systemImage: "trash", role: .destructive) { slettesGruppe = g }
                                 } label: {
                                     Image(systemName: "ellipsis.circle").minsteTrykkflate()
@@ -334,6 +346,9 @@ struct PalettListe: View {
             // Test: `-lagreSomTest` åpner «Lagre som» for første palett.
             .task { if UserDefaults.standard.bool(forKey: "lagreSomTest") { lagresSom = paletter.first } }
             #endif
+            .sheet(item: $lagresGruppe) { g in
+                LagreSomArk(innhold: .gruppe(navn: g.navn, paletter: ordnet(paletter.filter { $0.gruppeID == g.id })))
+            }
             .sheet(item: $lagresSom) { p in
                 LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter))
             }

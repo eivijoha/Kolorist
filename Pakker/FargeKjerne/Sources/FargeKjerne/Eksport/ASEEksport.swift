@@ -5,7 +5,20 @@ import Foundation
 /// Farger lagret i CMYK (modell eller CMYK-profil) skrives som `CMYK` med de lagrede verdiene,
 /// farger lagret i CIELab/LCH og farger utenfor sRGB som `LAB ` (D50), ellers `RGB `.
 enum ASEEksport {
-    static func data(for palett: Palett) -> Data {
+    static func data(for palett: Palett) -> Data { data(for: [palett]) }
+
+    /// Flere paletter i én fil, én fargegruppe per palett (f.eks. en palettgruppe).
+    static func data(for paletter: [Palett]) -> Data {
+        var blokker: [Data] = []
+        for palett in paletter { blokker += gruppeblokker(palett) }
+        var data = Data("ASEF".utf8)
+        data.append(uint16(1)); data.append(uint16(0))
+        data.append(uint32(UInt32(blokker.count)))
+        blokker.forEach { data.append($0) }
+        return data
+    }
+
+    private static func gruppeblokker(_ palett: Palett) -> [Data] {
         var blokker: [Data] = []
         blokker.append(blokk(type: 0xC001, innhold: tekst(palett.navn)))  // gruppestart
         for f in palett.farger {
@@ -27,12 +40,7 @@ enum ASEEksport {
             blokker.append(blokk(type: 0x0001, innhold: innhold))
         }
         blokker.append(blokk(type: 0xC002, innhold: Data()))  // gruppeslutt
-
-        var data = Data("ASEF".utf8)
-        data.append(uint16(1)); data.append(uint16(0))
-        data.append(uint32(UInt32(blokker.count)))
-        blokker.forEach { data.append($0) }
-        return data
+        return blokker
     }
 
     private static func blokk(type: UInt16, innhold: Data) -> Data {

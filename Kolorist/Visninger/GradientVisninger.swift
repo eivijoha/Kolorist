@@ -44,6 +44,10 @@ struct GradientSeksjon: View {
                                 DelSomLenke(navn: navn) { Lenkedeling.gradient(oppsett, navn: navn) }
                                 Button("Lagre farger som palett …", systemImage: "swatchpalette") { somPalett = g }
                             Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = g }
+                                Button("Skriv ut …", systemImage: "printer") {
+                                    PalettUtskrift.skrivUt(Palett(navn: g.navn, farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) }),
+                                                           gradienter: [PalettGradient(navn: g.navn, oppsett: oppsett)])
+                                }
                                 Button("Slett gradient", systemImage: "trash", role: .destructive) { slettes = g }
                             }
                         }

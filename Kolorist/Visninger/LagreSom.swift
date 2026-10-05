@@ -61,6 +61,14 @@ struct Lagringsinnhold {
     var navn: String
     var farger: [PalettFarge]
     var gradienter: [PalettGradient] = []
+    /// Flere paletter (en palettgruppe): ASE får én fargegruppe per palett og PDF én palett per side. Tom for én palett.
+    var deler: [(palett: Palett, gradienter: [PalettGradient])] = []
+
+    /// En palettgruppe: alle fargene og gradientene, og palettene hver for seg.
+    static func gruppe(navn: String, paletter: [PalettDokument]) -> Lagringsinnhold {
+        Lagringsinnhold(navn: navn, farger: paletter.flatMap(\.farger), gradienter: paletter.flatMap(\.gradienter),
+                        deler: paletter.map { ($0.palett, $0.gradienter) })
+    }
 }
 
 /// Formatene brukeren valgte sist (huskes på enheten).
@@ -158,7 +166,11 @@ struct LagreSomArk: View {
                 let url = mappe.appendingPathComponent("\(filnavn).\(f.filendelse)")
                 let data: Data
                 switch f {
-                case .pdf: data = PalettUtskrift.pdf(for: palett, gradienter: innhold.gradienter)
+                case .pdf:
+                    data = innhold.deler.isEmpty ? PalettUtskrift.pdf(for: palett, gradienter: innhold.gradienter)
+                                                 : PalettUtskrift.pdf(for: innhold.deler)
+                case .ase where !innhold.deler.isEmpty:
+                    data = Eksportformat.ase.data(for: innhold.deler.map(\.palett), navn: innhold.navn)
                 case .indesign:
                     // Fargene som fargeprøver og ruter, gradientene som ekte gradienter (dra inn eller plasser i InDesign).
                     let gradienter = innhold.gradienter.map {

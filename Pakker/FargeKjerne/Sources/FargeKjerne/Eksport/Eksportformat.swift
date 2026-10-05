@@ -68,6 +68,13 @@ public enum Eksportformat: String, CaseIterable, Codable, Sendable, Identifiable
         }
     }
 
+    /// Flere paletter i én fil (en palettgruppe): ASE får én fargegruppe per palett; de andre formatene får alle
+    /// fargene i én liste.
+    public func data(for paletter: [Palett], navn: String) -> Data {
+        if self == .ase { return ASEEksport.data(for: paletter) }
+        return data(for: Palett(navn: navn, farger: paletter.flatMap(\.farger)))
+    }
+
     public func data(for palett: Palett) -> Data {
         switch self {
         case .ase: ASEEksport.data(for: palett)

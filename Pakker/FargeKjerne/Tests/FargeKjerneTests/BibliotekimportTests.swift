@@ -29,6 +29,18 @@ struct BibliotekimportTests {
         #expect(throws: (any Error).self) { try Bibliotekimport.aseSomPaletter(Data("tull".utf8), filnavn: "x.ase") }
     }
 
+    /// En palettgruppe som ASE: én fargegruppe per palett, som leses tilbake som like mange paletter.
+    @Test func aseMedFlereGrupper() throws {
+        let a = Palett(navn: "Hav", farger: [PalettFarge(navn: "Dyp", farge: Farge(hex: "#1B3A6B")!)])
+        let b = Palett(navn: "Sand", farger: [PalettFarge(navn: "Lys", farge: Farge(hex: "#F2E6C8")!),
+                                              PalettFarge(navn: "Mørk", farge: Farge(hex: "#B08B4F")!)])
+        let paletter = try Bibliotekimport.aseSomPaletter(Eksportformat.ase.data(for: [a, b], navn: "Kyst"), filnavn: "Kyst.ase")
+        #expect(paletter.map { $0.navn } == ["Hav", "Sand"])
+        #expect(paletter.map { $0.farger.count } == [1, 2])
+        // Andre formater får alle fargene i én liste.
+        #expect(String(decoding: Eksportformat.hexListe.data(for: [a, b], navn: "Kyst"), as: UTF8.self).split(separator: "\n").count == 3)
+    }
+
     @Test func formatGjenkjennesFraInnholdet() throws {
         #expect(Bibliotekimport.endelse(for: Eksportformat.ase.data(for: palett)) == "ase")
         #expect(Bibliotekimport.endelse(for: Eksportformat.aco.data(for: palett)) == "aco")

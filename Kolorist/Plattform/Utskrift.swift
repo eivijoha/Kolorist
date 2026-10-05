@@ -81,10 +81,30 @@ enum PalettUtskrift {
     static func pdf(for dokument: PalettDokument) -> Data { pdf(for: dokument.palett, gradienter: dokument.gradienter) }
     static func skrivUt(_ dokument: PalettDokument) { skrivUt(dokument.palett, gradienter: dokument.gradienter) }
 
+    /// Flere paletter i én PDF (en palettgruppe): hver palett på egne sider, etter hverandre.
+    static func pdf(for deler: [(palett: Palett, gradienter: [PalettGradient])]) -> Data {
+        guard let første = deler.first, let samlet = PDFDocument(data: pdf(for: første.palett, gradienter: første.gradienter))
+        else { return Data() }
+        for del in deler.dropFirst() {
+            guard let neste = PDFDocument(data: pdf(for: del.palett, gradienter: del.gradienter)) else { continue }
+            for i in 0..<neste.pageCount {
+                if let side = neste.page(at: i) { samlet.insert(side, at: samlet.pageCount) }
+            }
+        }
+        return samlet.dataRepresentation() ?? Data()
+    }
+
+    /// Skriv ut flere paletter (en palettgruppe), hver på egne sider.
+    static func skrivUt(_ deler: [(palett: Palett, gradienter: [PalettGradient])], navn: String) {
+        skrivUt(data: pdf(for: deler), jobb: navn.isEmpty ? String(localized: "Paletter") : navn)
+    }
+
     /// Systemets utskriftsdialog for PDF-en (på Mac også med «Arkiver som PDF»).
     static func skrivUt(_ palett: Palett, gradienter: [PalettGradient] = []) {
-        let data = pdf(for: palett, gradienter: gradienter)
-        let jobb = palett.navn.isEmpty ? String(localized: "Palett") : palett.navn
+        skrivUt(data: pdf(for: palett, gradienter: gradienter), jobb: palett.navn.isEmpty ? String(localized: "Palett") : palett.navn)
+    }
+
+    private static func skrivUt(data: Data, jobb: String) {
         #if canImport(UIKit)
         let info = UIPrintInfo(dictionary: nil)
         info.jobName = jobb

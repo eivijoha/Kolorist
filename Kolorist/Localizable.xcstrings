@@ -3823,6 +3823,16 @@
         }
       }
     },
+    "Kopier gruppen til": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy the Group To"
+          }
+        }
+      }
+    },
     "Kopier hex": {
       "localizations": {
         "en": {
@@ -4339,6 +4349,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save Gradient …"
+          }
+        }
+      }
+    },
+    "Lagre gruppen som …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the Group As …"
           }
         }
       }
@@ -6579,12 +6599,42 @@
         }
       }
     },
+    "Skriv ut gruppen …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print the Group …"
+          }
+        }
+      }
+    },
+    "Skriv ut harmonien …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print the Harmony …"
+          }
+        }
+      }
+    },
     "Skriv ut paletten (A4, fargeflater i CIELab)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Print the palette (A4, swatches in CIELab)"
+          }
+        }
+      }
+    },
+    "Skriv ut settet …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print the Set …"
           }
         }
       }

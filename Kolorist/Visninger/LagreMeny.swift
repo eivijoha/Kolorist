@@ -56,12 +56,17 @@ struct RekkeMeny: View {
     var lenketittel: LocalizedStringKey = "Del som lenke"
     let lenke: @Sendable () -> DeltInnhold
     var tekstfarge: Color = .primary
+    /// Gradienter som skrives ut sammen med fargene (f.eks. selve overgangen).
+    var gradienter: [PalettGradient] = []
 
     var body: some View {
         Menu {
             Section {
                 Button("Lagre som palett …", systemImage: "swatchpalette", action: lagreSomPalett)
                 if let flereLagringsvalg { flereLagringsvalg }
+                Button("Skriv ut …", systemImage: "printer") {
+                    PalettUtskrift.skrivUt(Palett(navn: navn, farger: farger), gradienter: gradienter)
+                }
             }
             Section {
                 DelSomLenke(navn: navn, tittel: lenketittel, innhold: lenke)
