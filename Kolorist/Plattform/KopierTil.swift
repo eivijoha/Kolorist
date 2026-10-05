@@ -134,6 +134,7 @@ extension Utklippstavle {
         for (type, data) in typer { tavle.setData(data, forType: NSPasteboard.PasteboardType(type)) }
         if let tekst { tavle.setString(tekst, forType: .string) }
         #endif
+        merkEgen()
     }
 }
 

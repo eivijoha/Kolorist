@@ -69,7 +69,10 @@ final class Arbeidsbenk {
 
     var aktivFarge = Arbeidsbenk.startfarge {
         didSet {
-            if oldValue != aktivFarge { merkForAngring(fra: oldValue) }
+            if oldValue != aktivFarge {
+                merkForAngring(fra: oldValue)
+                aktivFargeEndret = .now
+            }
             // Unngå løkke: begrens bare når fargen faktisk er utenfor.
             // Verdier angitt direkte i begrensningsprofilen er innenfor per definisjon (en rundtur kan
             // likevel gi små avvik, særlig i mørke CMYK-farger).
@@ -106,18 +109,32 @@ final class Arbeidsbenk {
     /// Aktiv farge slik «Vis som» viser den – det som legges til med «Legg til»-feltet i paletter: nærmeste tone i et
     /// fargebibliotek (f.eks. filament, med produsent, navn og lenke), fargen gjengitt i en ICC-profil med verdiene
     /// der, eller fargen som den er (sRGB).
-    var aktivFargeSomVistSom: PalettFarge {
-        let farge = aktivFarge
+    /// Fargen «Legg til»-feltene legger til: den nyeste av aktiv farge og fargen på utklippstavlen (når den kan leses
+    /// uten å spørre, se `Utklippstavle.fargeUtenSpørsmål`) – slik den vises i «Vis som».
+    var fargeÅLeggeTil: PalettFarge {
+        let vakt = Utklippstavlevakt.delt
+        if let kopiert = vakt.farge, vakt.fargeEndret > aktivFargeEndret { return somVistSom(kopiert) }
+        return aktivFargeSomVistSom
+    }
+    /// Når aktiv farge sist ble endret (se `fargeÅLeggeTil`).
+    private(set) var aktivFargeEndret = Date.distantPast
+
+    var aktivFargeSomVistSom: PalettFarge { somVistSom(aktivFarge) }
+
+    /// En farge slik den vises i «Vis som» (nærmeste tone i et fargebibliotek, eller gjengitt i en ICC-profil).
+    func somVistSom(_ farge: Farge) -> PalettFarge {
         let hensikt = UserDefaults.standard.string(forKey: "gjengivelseshensikt").flatMap(Gjengivelseshensikt.init(rawValue:))
             ?? .relativKolorimetrisk
         // Søket i et stort bibliotek (filament: over 2 200 toner) gjøres bare når fargen eller «Vis som» endres.
         let nøkkel = "\(farge.hex(medAlfa: true))|\(begrensBibliotek?.id ?? begrensProfil.id)|\(hensikt.rawValue)"
-        if let lagret = vistSomMellomlager, lagret.nøkkel == nøkkel { return lagret.farge }
+        if let lagret = vistSomMellomlager[nøkkel] { return lagret }
         let resultat = beregnSomVistSom(farge, hensikt: hensikt)
-        vistSomMellomlager = (nøkkel, resultat)
+        // Noen få farger holder (aktiv farge og fargen på utklippstavlen); tøm når det blir for mange.
+        if vistSomMellomlager.count > 8 { vistSomMellomlager.removeAll() }
+        vistSomMellomlager[nøkkel] = resultat
         return resultat
     }
-    @ObservationIgnored private var vistSomMellomlager: (nøkkel: String, farge: PalettFarge)?
+    @ObservationIgnored private var vistSomMellomlager: [String: PalettFarge] = [:]
 
     private func beregnSomVistSom(_ farge: Farge, hensikt: Gjengivelseshensikt) -> PalettFarge {
         if let bibliotek = begrensBibliotek, let n = bibliotek.nærmeste(til: farge) {

@@ -301,8 +301,8 @@ struct EnkeltfargerRad: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     // Nyeste først, så den nye fargen havner der feltet står.
-                    LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn, hjørne: 6, visTekst: false) {
-                        kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([arbeidsbenk.aktivFargeSomVistSom], i: kontekst) }
+                    LeggTilFelt(farge: arbeidsbenk.fargeÅLeggeTil.farge, navn: arbeidsbenk.fargeÅLeggeTil.navn, hjørne: 6, visTekst: false) {
+                        kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([arbeidsbenk.fargeÅLeggeTil], i: kontekst) }
                     }
                     .frame(width: 44, height: 44)
                     ForEach(farger.prefix(60)) { pf in
@@ -337,8 +337,8 @@ struct EnkeltfargerVisning: View {
         ScrollView {
             LazyVGrid(columns: rutenett, spacing: 10) {
                 // Nyeste først, så den nye fargen havner der feltet står.
-                LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn) {
-                    kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([arbeidsbenk.aktivFargeSomVistSom], i: kontekst) }
+                LeggTilFelt(farge: arbeidsbenk.fargeÅLeggeTil.farge, navn: arbeidsbenk.fargeÅLeggeTil.navn) {
+                    kontekst.angresteg("Legg til farge") { lagreEnkeltfarger([arbeidsbenk.fargeÅLeggeTil], i: kontekst) }
                 }
                 .aspectRatio(1, contentMode: .fit)
                 ForEach(lagrede) { lagret in
@@ -558,8 +558,8 @@ struct PalettDetalj: View {
                                 if !iKolonne { arbeidsbenk.valgtFane = .studio }
                             }
                     }
-                    LeggTilFelt(farge: arbeidsbenk.aktivFargeSomVistSom.farge, navn: arbeidsbenk.aktivFargeSomVistSom.navn) {
-                        kontekst.angresteg("Legg til farge") { dokument.farger.append(arbeidsbenk.aktivFargeSomVistSom.kopi) }
+                    LeggTilFelt(farge: arbeidsbenk.fargeÅLeggeTil.farge, navn: arbeidsbenk.fargeÅLeggeTil.navn) {
+                        kontekst.angresteg("Legg til farge") { dokument.farger.append(arbeidsbenk.fargeÅLeggeTil.kopi) }
                     }
                     .aspectRatio(1, contentMode: .fit)
                 }

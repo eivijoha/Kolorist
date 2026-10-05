@@ -12,11 +12,28 @@ import AppKit
 /// Kopiering etter plattformkonvensjon: ett element med både fargeobjekt
 /// (limes inn som farge i Keynote, Pages, Figma m.fl.) og tekst (limes inn i kode).
 enum Utklippstavle {
-    #if canImport(UIKit)
-    /// `changeCount` etter siste kopiering fra Kolorist. Eget innhold kan leses uten at iOS spør «Tillat innliming?».
+    /// `changeCount` etter siste kopiering fra Kolorist. Eget innhold kan leses uten at systemet spør om lov
+    /// («Tillat innliming?» på iOS, varsel om innliming på Mac).
     private static var egenEndring = -1
-    private static func merkEgen() { egenEndring = UIPasteboard.general.changeCount }
+    #if canImport(UIKit)
+    static func merkEgen() { egenEndring = UIPasteboard.general.changeCount }
+    static var endringsnummer: Int { UIPasteboard.general.changeCount }
+    #elseif canImport(AppKit)
+    static func merkEgen() { egenEndring = NSPasteboard.general.changeCount }
+    static var endringsnummer: Int { NSPasteboard.general.changeCount }
     #endif
+
+    /// Én farge på utklippstavlen, lest bare når det kan gjøres uten å spørre brukeren: innhold kopiert fra Kolorist,
+    /// eller (Mac) når brukeren har satt Kolorist til å alltid få lime inn. Fargeformater som i «Lim inn» (`Fargetolk`).
+    static var fargeUtenSpørsmål: Farge? {
+        var tillatt = endringsnummer == egenEndring
+        #if canImport(AppKit)
+        tillatt = tillatt || NSPasteboard.general.accessBehavior == .alwaysAllow
+        #endif
+        guard tillatt else { return nil }
+        let farger = limInnListe()
+        return farger.count == 1 ? farger[0].farge : nil
+    }
 
     /// Om utklippstavlen har farger. På iOS uten å lese innhold fra andre apper (det utløser «Tillat innliming?»):
     /// fargeobjekter (fra Kolorist, Keynote, Figma o.l.) og farger kopiert fra Kolorist. Hex-tekst fra andre apper
@@ -37,23 +54,23 @@ enum Utklippstavle {
         let leverandør = NSItemProvider(object: farge.plattform)
         leverandør.registerObject(tekst as NSString, visibility: .all)
         UIPasteboard.general.itemProviders = [leverandør]
-        merkEgen()
         #elseif canImport(AppKit)
         let tavle = NSPasteboard.general
         tavle.clearContents()
         tavle.writeObjects([farge.plattform])
         tavle.setString(tekst, forType: .string)
         #endif
+        merkEgen()
     }
 
     static func kopierTekst(_ tekst: String) {
         #if canImport(UIKit)
         UIPasteboard.general.string = tekst
-        merkEgen()
         #elseif canImport(AppKit)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(tekst, forType: .string)
         #endif
+        merkEgen()
     }
 
     /// Kopierer en hel palett som tekstlinjer (én farge per linje).
@@ -64,11 +81,11 @@ enum Utklippstavle {
         }.joined(separator: "\n")
         #if canImport(UIKit)
         UIPasteboard.general.string = linjer
-        merkEgen()
         #elseif canImport(AppKit)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(linjer, forType: .string)
         #endif
+        merkEgen()
     }
 
     /// Leser flere farger: fargeobjekter hvis det er flere, ellers én farge per tekstlinje.
@@ -100,25 +117,52 @@ enum Utklippstavle {
     }
 }
 
-/// Følger utklippstavlen (iPhone og iPad), så «Lim inn farger» bare vises når det er farger å lime inn.
+/// Følger utklippstavlen, så «Lim inn farger» bare vises når det er farger å lime inn (iPhone og iPad), og «Legg til»-
+/// feltene kan vise fargen som ligger der (`farge`, se `Utklippstavle.fargeUtenSpørsmål`).
 @Observable
 final class Utklippstavlevakt {
     static let delt = Utklippstavlevakt()
     private(set) var harFarger = false
+    /// Fargen på utklippstavlen, når den kan leses uten å spørre brukeren.
+    private(set) var farge: Farge?
+    /// Når `farge` sist ble endret.
+    private(set) var fargeEndret = Date.distantPast
+    @ObservationIgnored private var sistSett = -1
 
     private init() {
-        #if canImport(UIKit)
         oppdater()
+        #if canImport(UIKit)
         // Endringer i appen, og når man kommer tilbake fra en annen app som kan ha kopiert noe.
         for navn in [UIPasteboard.changedNotification, UIApplication.didBecomeActiveNotification] {
             NotificationCenter.default.addObserver(forName: navn, object: nil, queue: .main) { [weak self] _ in
                 MainActor.assumeIsolated { self?.oppdater() }
             }
         }
+        #elseif canImport(AppKit)
+        // Mac varsler ikke om endringer: sjekk endringsnummeret (uten å lese innholdet) når appen blir aktiv og
+        // jevnlig mens den er det.
+        NotificationCenter.default.addObserver(forName: NSApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.oppdater() }
+        }
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { if NSApp.isActive { self?.oppdater() } }
+        }
         #endif
     }
 
-    func oppdater() { harFarger = Utklippstavle.harFarger }
+    func oppdater() {
+        let nummer = Utklippstavle.endringsnummer
+        guard nummer != sistSett else { return }
+        sistSett = nummer
+        #if canImport(UIKit)
+        harFarger = Utklippstavle.harFarger
+        #endif
+        let ny = Utklippstavle.fargeUtenSpørsmål
+        if ny != farge {
+            farge = ny
+            fargeEndret = .now
+        }
+    }
 }
 
 /// «Lim inn farger» på iPhone og iPad: vises bare når utklippstavlen har farger (se `Utklippstavle.harFarger`).
