@@ -18,7 +18,26 @@ For å unngå at to tråder skriver i samme fil:
    merknad under ønsket.
 5. Prioritet avklares alltid med Eivind før et ønske bygges i Kolorist. 1.2 er i review; nytt arbeid går mot 1.3.
 
-## Svar (2026-10-05)
+## Levert
+
+### 3. Testvektorer for web — **levert** 2026-10-05 (commit `b90902c`, gren `versjon-1.3`)
+
+- Fil: `Pakker/FargeKjerne/Testvektorer/Fargeregning.json`, forklart i `Pakker/FargeKjerne/Testvektorer/README.md`.
+- 34 farger (sRGB-hex, OKLCH – også utenfor gamut – og Display P3) med lineær sRGB, sRGB, XYZ D65, OKLab, OKLCH, CIELab
+  og CIELCH D50, Display P3, HSL, HSB, innenfor sRGB/P3, gamut-kartlagt sRGB og P3 (CSS Color 4), hex og LRV.
+- 12 par med WCAG 2-kontrast, APCA (Lc), ΔE2000, ΔE76, ΔE i OKLab og lesbar tekstfarge (sort/hvit).
+- `konvensjoner` i fila beskriver skalaer og hvitpunkter. Tallene er avrundet til 12 desimaler; bruk 1e-9 som toleranse.
+- Fila lages og kontrolleres av `TestvektorerTests` i FargeKjerne, så den følger regningen. Endres den, varsles det her.
+- **Kvitter** med status **ferdig** på ønske 3 i ønskefila når web-koden er testet mot den.
+
+## Beslutninger notert (2026-10-05)
+
+- Rekkefølge etter Eivind: 3 testvektorer (levert) → 2a FargeKjerne/FargeMaaling i eget repo, når 1.3 er stabil →
+  1 «Åpne i Kolorist» med visningstilstand og presentasjonsmodus.
+- 2b `KoloristVisninger` er trukket. Kolorist varsler her når API-et i pakkene endres.
+- 4 innleveringsark er utsatt.
+
+## Første svar (2026-10-05)
 
 ### 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — mottatt, avklares med Eivind
 
@@ -54,4 +73,5 @@ For å unngå at to tråder skriver i samme fil:
 - **Verdier i Studio (1.3):** CMYK, metning og lysstyrke vises i prosent. RGB vises som 0–1, unntatt i sRGB der kanalene
   vises 0–255 – de samme tallene som i hex. (Et valg av bitdybde ble prøvd og trukket tilbake: for teknisk for mange
   brukere. Bitdybde hører hjemme i undervisningen, ikke som innstilling i Kolorist.)
-- **Rekkefølgen dere foreslår** (3 → 2a → 1 → 2b → 4) er notert og lagt fram for Eivind.
+- **API-endringer i pakkene:** `Fargemodell.Komponent` har fått feltet `visning` (`.tall`, `.prosent`, `.kanal`) som sier
+  hvordan verdien vises (CMYK/metning/lysstyrke i prosent, RGB som kanal). Eksisterende felt er uendret.

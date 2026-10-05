@@ -14,10 +14,10 @@ bygges i Kolorist.
 
 Status: **ny** · avklart · i arbeid · ferdig · avslått.
 
-**Utdannings forslag til rekkefølge (2026-10-05, Eivind avgjør):** 3 testvektorer → 2a eget repo for FargeKjerne (passer
-etter at 1.3 er stabil) → 1 visningstilstand og presentasjonsmodus → 2b `KoloristVisninger` → 4 innleveringsark.
+**Rekkefølge (Eivind 2026-10-05):** 3 testvektorer → 2a eget repo for FargeKjerne (når 1.3 er stabil) → 1 visningstilstand
+og presentasjonsmodus. 2b trukket (utdanning bygger eget visningslag; varsle API-endringer i svarfila). 4 utsatt.
 
-## 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — mottatt, avklares med Eivind
+## 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — avklart (Eivind 2026-10-05), etter 2a
 
 Kolorist lærer har knappen «Åpne i Kolorist» på lysbilder med modeller. I dag sendes en vanlig delingslenke
 (`kolorist://l#z…` med en farge eller palett), som Kolorist viser i et ark.
@@ -32,7 +32,7 @@ Kolorist lærer har knappen «Åpne i Kolorist» på lysbilder med modeller. I d
 
 **Hvorfor:** læreren demonstrerer arbeidsflyten i Kolorist midt i forelesningen, i samme tilstand som lysbildet viser.
 
-## 2. Delte Swift-pakker og `KoloristVisninger` — mottatt, avklares med Eivind
+## 2. Delte Swift-pakker og `KoloristVisninger` — 2a eget repo: avklart, når 1.3 er stabil · 2b `KoloristVisninger`: trukket
 
 Kolorist utdanning bruker FargeKjerne og FargeMaaling via lokal sti (`../../Kolorist/Pakker/FargeKjerne`). Det virker på
 Eivinds Mac, men ikke for andre eller i CI.
@@ -43,14 +43,14 @@ Eivinds Mac, men ikke for andre eller i CI.
 - På sikt: utvalgte Kolorist-visninger trukket ut i en pakke `KoloristVisninger` (Studio-flaten, harmonisirkelen, den
   monokrome flaten, kontrastmatrisen, fargesyn), så lærer-appen kan bygge dem inn i lysbilder.
 
-## 3. Testvektorer for web — mottatt, avklares med Eivind (liten jobb, foreslått som neste)
+## 3. Testvektorer for web — levert 2026-10-05 (`b90902c`), venter på kvittering
 
 Kolorist student (web) skal regne likt med Kolorist (TypeScript). `Testlenker.json` finnes for delingslenker.
 
 **Ønske:** en fil med testvektorer for fargeregningen (sRGB ↔ lineær, OKLab/OKLCH, CIELab D50, ΔE00, gamut-kartlegging
 etter CSS Color 4, WCAG/APCA-kontrast, LRV) som web-koden kan testes mot.
 
-## 4. Innleveringsark — mottatt, lav prioritet (i idébanken)
+## 4. Innleveringsark — utsatt (Eivind 2026-10-05)
 
 Se idébanken (`Dokumentasjon/1.2/Idebank.md`, «Innleveringsark for undervisning og vurdering»): PDF av palett/gruppe med
 verdier, kontrast, delingslenke/QR og plass til begrunnelse, uten navn i metadata. Lav prioritet nå (vurdering tas i en
