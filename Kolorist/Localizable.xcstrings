@@ -1336,16 +1336,6 @@
         }
       }
     },
-    "Del tonene som lenke": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share tones as link"
-          }
-        }
-      }
-    },
     "Del …": {
       "localizations": {
         "en": {
@@ -4475,16 +4465,6 @@
         }
       }
     },
-    "Legg raden i palett": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add the row to a palette"
-          }
-        }
-      }
-    },
     "Legg til": {
       "localizations": {
         "en": {
@@ -4661,26 +4641,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Light"
-          }
-        }
-      }
-    },
-    "Lysere og mørkere": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lighter and darker"
-          }
-        }
-      }
-    },
-    "Lysere og mørkere %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lighter and darker %@"
           }
         }
       }
@@ -7163,42 +7123,12 @@
         }
       }
     },
-    "Tonene vises i feltene øverst, med grunnfargen merket. Trykk på en tone for å gjøre den til aktiv farge, eller trykk og hold (høyreklikk på Mac) for å lagre, kopiere eller dele den. + øverst gjelder hele rekken.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The tones are shown in the swatches at the top, with the base colour marked. Tap a tone to make it the active colour, or touch and hold (right-click on the Mac) to save, copy or share it. + at the top applies to the whole row."
-          }
-        }
-      }
-    },
     "Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold (høyreklikk på Mac) for å lagre, kopiere eller dele den.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The tones are shown in the swatches at the top. Tap a tone to make it active, or touch and hold (right-click on the Mac) to save, copy or share it."
-          }
-        }
-      }
-    },
-    "Toner": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tones"
-          }
-        }
-      }
-    },
-    "Toner %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tones %@"
           }
         }
       }
