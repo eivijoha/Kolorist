@@ -607,6 +607,7 @@ nonisolated private final class BufferLeser: NSObject, AVCaptureVideoDataOutputS
             return (mål, ventendeFangst, false)
         }
         guard !forTidlig, let buffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        let punktIBufferen = Self.iBufferen(punkt, vinkel: connection.videoRotationAngle, speilet: connection.isVideoMirrored)
 
         CVPixelBufferLockBaseAddress(buffer, .readOnly)
         defer { CVPixelBufferUnlockBaseAddress(buffer, .readOnly) }
@@ -617,8 +618,8 @@ nonisolated private final class BufferLeser: NSObject, AVCaptureVideoDataOutputS
 
         // Gjennomsnitt i lineært lys over et 9×9-felt rundt målpunktet.
         let halv = 4
-        let cx = min(max(Int(punkt.x * Double(bredde)), halv), bredde - 1 - halv)
-        let cy = min(max(Int(punkt.y * Double(høyde)), halv), høyde - 1 - halv)
+        let cx = min(max(Int(punktIBufferen.x * Double(bredde)), halv), bredde - 1 - halv)
+        let cy = min(max(Int(punktIBufferen.y * Double(høyde)), halv), høyde - 1 - halv)
         var sum = (r: 0.0, g: 0.0, b: 0.0), antall = 0.0
         for y in (cy - halv)...(cy + halv) {
             for x in (cx - halv)...(cx + halv) {
@@ -635,6 +636,21 @@ nonisolated private final class BufferLeser: NSObject, AVCaptureVideoDataOutputS
             ? Farge(displayP3: DisplayP3(r: r, g: g, b: b))
             : Farge(sRGB: SRGB(r: r, g: g, b: b))
         vedFarge?(farge, fangst)
+    }
+
+    /// Målpunktet (sensorens koordinater, uten rotasjon og speiling – som `captureDevicePointConverted` gir) i
+    /// bufferen. Bufferne er vanligvis urørte, men forbindelsen kan rotere eller speile dem (eksterne kameraer og
+    /// Continuity-kamera på Mac); da må punktet roteres og speiles likt, ellers leses fargen fra feil sted.
+    private static func iBufferen(_ p: CGPoint, vinkel: CGFloat, speilet: Bool) -> CGPoint {
+        var q: CGPoint
+        switch (Int(vinkel.rounded()) % 360 + 360) % 360 {
+        case 90: q = CGPoint(x: 1 - p.y, y: p.x)
+        case 180: q = CGPoint(x: 1 - p.x, y: 1 - p.y)
+        case 270: q = CGPoint(x: p.y, y: 1 - p.x)
+        default: q = p
+        }
+        if speilet { q.x = 1 - q.x }
+        return q
     }
 
     private static func lineær(_ v: UInt8) -> Double {
