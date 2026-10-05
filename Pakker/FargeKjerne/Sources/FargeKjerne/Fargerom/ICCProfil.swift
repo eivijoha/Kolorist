@@ -126,9 +126,11 @@ public extension Farge {
         return CGColor(colorSpace: rom, components: [r, g, b, alfa])!
     }
 
-    init?(cgFarge: CGColor) {
+    /// - Parameter hensikt: gjengivelseshensikten fra fargens rom. Absolutt kolorimetrisk beholder rommets hvitpunkt
+    ///   (f.eks. papirhvitt i en CMYK-profil); de andre tilpasser det til hvitt.
+    init?(cgFarge: CGColor, hensikt: Gjengivelseshensikt = .relativKolorimetrisk) {
         guard let rom = CGColorSpace(name: CGColorSpace.extendedLinearSRGB),
-              let c = cgFarge.converted(to: rom, intent: .relativeColorimetric, options: nil),
+              let c = cgFarge.converted(to: rom, intent: hensikt.cg, options: nil),
               let k = c.components, k.count >= 3
         else { return nil }
         self.init(lineærR: k[0], g: k[1], b: k[2], alfa: k.count > 3 ? k[3] : 1)
@@ -174,12 +176,14 @@ public extension Farge {
     }
 
     /// Lager en farge fra komponenter i en profil (f.eks. CMYK-verdier fra et trykkeri).
-    init?(komponenter: [Double], i profil: ICCProfil, alfa: Double = 1) {
+    /// Fargen for komponentverdier i en profil. Med absolutt kolorimetrisk følger profilens hvitpunkt med, så f.eks.
+    /// CMYK 0/0/0/0 blir papirets farge og ikke rent hvitt.
+    init?(komponenter: [Double], i profil: ICCProfil, alfa: Double = 1, hensikt: Gjengivelseshensikt = .relativKolorimetrisk) {
         guard komponenter.count == profil.antallKomponenter,
               let rom = profil.fargerom,
               let cg = CGColor(colorSpace: rom, components: komponenter.map { CGFloat($0) } + [alfa])
         else { return nil }
-        self.init(cgFarge: cg)
+        self.init(cgFarge: cg, hensikt: hensikt)
     }
 }
 #endif

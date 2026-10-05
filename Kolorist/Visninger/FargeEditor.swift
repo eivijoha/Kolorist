@@ -226,6 +226,16 @@ struct FargeEditor: View {
         .background(Color.skjemabakgrunn)
         }
         .navigationTitle("Studio")
+        // Ny gjengivelseshensikt: behold verdiene i kildefargerommet og regn fargen om, så f.eks. CMYK 0/0/0/0 blir
+        // papirhvitt med absolutt kolorimetrisk (og hvitt igjen med relativ).
+        .onChange(of: hensikt) { gammel, ny in
+            guard let p = kildeprofil else { return }
+            let farge = arbeidsbenk.aktivFarge
+            guard let verdier = arbeidsbenk.profilverdier(for: p) ?? farge.komponenter(i: p, hensikt: gammel),
+                  let ny = Farge(komponenter: verdier, i: p, alfa: farge.alfa, hensikt: ny) else { return }
+            arbeidsbenk.aktivFarge = ny
+            arbeidsbenk.profilverdier = .init(profilID: p.id, verdier: verdier, farge: ny)
+        }
         // iPad og Mac: Farge | Harmoni midt i verktøylinjen, som velgerne i Utplukk og Vurdering.
         .toolbar {
             if velgerIVerktøylinje {
@@ -356,7 +366,8 @@ struct KomponentGlidere: View {
     }
 
     private func farge(fra v: [Double], alfa: Double) -> Farge {
-        if let profil, let f = Farge(komponenter: v, i: profil, alfa: alfa) { return f }
+        // Med absolutt kolorimetrisk følger profilens hvitpunkt med (CMYK 0/0/0/0 blir papirets farge).
+        if let profil, let f = Farge(komponenter: v, i: profil, alfa: alfa, hensikt: hensikt) { return f }
         return modell.farge(fra: v, alfa: alfa)
     }
 
@@ -829,11 +840,11 @@ struct Fargeflate: View {
             return (s, s.hex(), [v.r, v.g, v.b])
         }
         if let nøkkel = renNøkkel, let ren, ren.nøkkel == nøkkel,
-           let f = Farge(komponenter: ren.verdier, i: profil, alfa: farge.alfa) {
+           let f = Farge(komponenter: ren.verdier, i: profil, alfa: farge.alfa, hensikt: hensikt) {
             return (f, profil.formatert(ren.verdier), ren.verdier)
         }
         guard let k = farge.komponenter(i: profil, hensikt: hensikt),
-              let f = Farge(komponenter: k, i: profil, alfa: farge.alfa)
+              let f = Farge(komponenter: k, i: profil, alfa: farge.alfa, hensikt: hensikt)
         else { return (farge, "–", []) }
         return (f, profil.formatert(k), k)
     }

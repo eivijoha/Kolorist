@@ -144,7 +144,7 @@ final class Arbeidsbenk {
         let profil = begrensProfil
         guard profil.id != ICCProfil.sRGB.id else { return PalettFarge(farge: farge) }
         guard let k = farge.komponenter(i: profil, hensikt: hensikt),
-              let gjengitt = Farge(komponenter: k, i: profil, alfa: farge.alfa) else { return PalettFarge(farge: farge) }
+              let gjengitt = Farge(komponenter: k, i: profil, alfa: farge.alfa, hensikt: hensikt) else { return PalettFarge(farge: farge) }
         return PalettFarge(farge: gjengitt, representasjon: Fargerepresentasjon(
             rom: .icc(id: profil.id, navn: profil.navn), verdier: k, tekst: profil.formatert(k)))
     }
