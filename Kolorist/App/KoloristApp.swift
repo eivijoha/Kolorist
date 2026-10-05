@@ -266,7 +266,16 @@ final class Arbeidsbenk {
     }
 
     /// Siste målte farger (kamera, bilde, pipette), nyeste sist – brukes i sammenligning.
-    private(set) var målinger: [Farge] = []
+    private(set) var målinger: [Farge] = Arbeidsbenk.startmålinger
+
+    /// Debug: `-plukkedeFarger "#1B3A6B,#F2B84B"` starter med plukkede farger (til test og skjermbilder).
+    private static var startmålinger: [Farge] {
+        #if DEBUG
+        (UserDefaults.standard.string(forKey: "plukkedeFarger") ?? "").split(separator: ",").compactMap { Farge(hex: String($0)) }
+        #else
+        []
+        #endif
+    }
     /// Åpent sammenligningsark (A/B med ΔE2000), hvis noe.
     var sammenligning: Sammenligningspar?
 

@@ -739,6 +739,10 @@ struct VelgPalettArk: View {
     var foreslåttNavn: String = ""
     /// Vis «Lagre uten palett» (skjules når kilden allerede er enkeltfargene).
     var tilbyEnkeltfarger = true
+    /// Sett navnefeltet for ny palett i fokus med en gang (når målet er en ny palett).
+    var nyPalett = false
+    /// Kalles når fargene er lagret (ikke ved Avbryt).
+    var lagret: () -> Void = {}
     @Environment(\.modelContext) private var kontekst
     @Environment(\.dismiss) private var lukk
     @Query(sort: \PalettDokument.opprettet, order: .reverse) private var paletter: [PalettDokument]
@@ -756,6 +760,7 @@ struct VelgPalettArk: View {
                         Button(farger.count == 1 ? "Lagre som enkeltfarge" : "Lagre som \(farger.count) enkeltfarger",
                                systemImage: "plus.square") {
                             lagreEnkeltfarger(farger, i: kontekst)
+                            lagret()
                             lukk()
                         }
                     } footer: { Group {
@@ -775,6 +780,7 @@ struct VelgPalettArk: View {
                         ForEach(paletter) { p in
                             Button {
                                 p.farger += farger.map(\.kopi)
+                                lagret()
                                 lukk()
                             } label: {
                                 HStack {
@@ -796,7 +802,7 @@ struct VelgPalettArk: View {
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Avbryt") { lukk() } } }
             .onAppear {
                 nyttNavn = foreslåttNavn
-                if paletter.isEmpty { navnIFokus = true }
+                if paletter.isEmpty || nyPalett { navnIFokus = true }
             }
         }
         .presentationDetents([.medium, .large])
@@ -806,6 +812,7 @@ struct VelgPalettArk: View {
         let navn = nyttNavn.trimmingCharacters(in: .whitespaces)
         guard !navn.isEmpty else { return }
         kontekst.insert(PalettDokument(navn: navn, farger: farger.map(\.kopi)))
+        lagret()
         lukk()
     }
 }

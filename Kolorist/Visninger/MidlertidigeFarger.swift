@@ -8,9 +8,13 @@ import SwiftUI
 struct PlukkedeFargerValg: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.modelContext) private var kontekst
+    @State private var somPalett: [PalettFarge]?
 
     var body: some View {
         Menu {
+            Button("Legg alle i ny palett …", systemImage: "swatchpalette") {
+                somPalett = arbeidsbenk.målinger.reversed().map { PalettFarge(farge: $0, opphav: .kamera) }
+            }
             Button("Lagre alle som enkeltfarger", systemImage: "square.and.arrow.down") {
                 let farger = arbeidsbenk.målinger.reversed().map { PalettFarge(farge: $0, opphav: .kamera) }
                 lagreEnkeltfarger(farger, i: kontekst, navngi: false)
@@ -23,6 +27,12 @@ struct PlukkedeFargerValg: View {
         .menuIndicator(.hidden)
         .fixedSize()
         .accessibilityLabel("Valg for plukkede farger")
+        // Arket henger på menyen, ikke på menyvalget (iOS viser ikke ark fra et menyvalg som lukkes).
+        // Når fargene er lagt i en palett, tømmes listen, som ved «Lagre alle som enkeltfarger».
+        .sheet(isPresented: Binding(get: { somPalett != nil }, set: { if !$0 { somPalett = nil } })) {
+            VelgPalettArk(farger: somPalett ?? [], foreslåttNavn: String(localized: "Plukkede farger"),
+                          tilbyEnkeltfarger: false, nyPalett: true, lagret: { arbeidsbenk.tømMålinger() })
+        }
     }
 }
 
