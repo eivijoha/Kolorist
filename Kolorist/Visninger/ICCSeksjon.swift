@@ -13,8 +13,6 @@ struct ICCSeksjon: View {
     @Binding var visMineFargerom: Bool
     @Environment(ProfilBibliotek.self) private var bibliotek
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
-    /// Tegnes på nytt når RGB-skalaen endres (verdiene vises i den).
-    @AppStorage(RGBSkala.nøkkel) private var rgbSkala: RGBSkala = .åtteBit
     /// Visningslyset for «Vis som» (tom = D50, ICC-standarden).
     @AppStorage("visningslys") private var visningslysID = ""
     @State private var lysbibliotek = Lysbibliotek.delt
@@ -95,11 +93,10 @@ struct ICCSeksjon: View {
 }
 
 extension ICCProfil {
-    /// Visningsskala etter bransjekonvensjon: CMYK og grå i prosent; RGB etter brukerens valg (8 bit 0–255 som standard,
-    /// annen bitdybde eller desimal 0–1).
-    var visningsskala: Double { modell == .rgb ? RGBSkala.gjeldende.maks : 100 }
-    /// Desimaler i visningen (bare RGB som desimal har desimaler).
-    var visningsdesimaler: Int { modell == .rgb ? RGBSkala.gjeldende.desimaler : 0 }
+    /// Visningsskala: CMYK og grå i prosent; RGB 0–255 i sRGB (som hex) og 0–1 i andre rom.
+    var visningsskala: Double { modell == .rgb ? (id == ICCProfil.sRGB.id ? 255 : 1) : 100 }
+    /// Desimaler i visningen (RGB utenfor sRGB vises med tre desimaler).
+    var visningsdesimaler: Int { modell == .rgb && id != ICCProfil.sRGB.id ? 3 : 0 }
     /// Enhet som vises etter tallene («%» for CMYK/grå, ingen for RGB).
     var visningsenhet: String { modell == .rgb ? "" : "%" }
 
@@ -123,8 +120,6 @@ private struct ProfilGlidere: View {
     let profil: ICCProfil
     @Binding var farge: Farge
     @State private var verdier: [Double] = []
-    /// Tegnes på nytt når RGB-skalaen endres.
-    @AppStorage(RGBSkala.nøkkel) private var rgbSkala: RGBSkala = .åtteBit
 
     private var gjeldende: [Double] {
         verdier.count == profil.antallKomponenter ? verdier : (farge.komponenter(i: profil) ?? [])

@@ -10,7 +10,6 @@ struct ProfilkonverteringVisning: View {
     @AppStorage("konverterTil") private var tilID = ICCProfil.genericCMYK.id
     @AppStorage("konverterHensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     @State private var verdier: [Double] = []
-    @AppStorage(RGBSkala.nøkkel) private var rgbSkala: RGBSkala = .åtteBit
 
     private var fra: ICCProfil { bibliotek.profil(id: fraID) ?? .sRGB }
     private var til: ICCProfil { bibliotek.profil(id: tilID) ?? .genericCMYK }
@@ -35,11 +34,6 @@ struct ProfilkonverteringVisning: View {
                 }
                 Button("Hent fra aktiv farge", systemImage: "arrow.down.circle") {
                     verdier = arbeidsbenk.aktivFarge.komponenter(i: fra) ?? []
-                }
-                if fra.modell == .rgb || til.modell == .rgb {
-                    Picker("Kanalverdier", selection: $rgbSkala) {
-                        ForEach(RGBSkala.allCases) { Text($0.navn).tag($0) }
-                    }
                 }
             }
 

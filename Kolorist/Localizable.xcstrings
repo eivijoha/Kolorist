@@ -693,42 +693,12 @@
         }
       }
     },
-    "10 bit (0–1023)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "10-bit (0–1023)"
-          }
-        }
-      }
-    },
     "100 % er fullstendig avvik (dikromasi). Lavere verdier tilsvarer delvis avvik (anomal trikromasi), som er vanligere.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "100 % is complete deficiency (dichromacy). Lower values correspond to partial deficiency (anomalous trichromacy), which is more common."
-          }
-        }
-      }
-    },
-    "16 bit (0–65535)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "16-bit (0–65535)"
-          }
-        }
-      }
-    },
-    "8 bit (0–255)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "8-bit (0–255)"
           }
         }
       }
@@ -1482,16 +1452,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Partial deficiency (anomalous trichromacy). 100 % is complete deficiency."
-          }
-        }
-      }
-    },
-    "Desimal (0–1)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Decimal (0–1)"
           }
         }
       }
@@ -3571,16 +3531,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Camera characterisation with a reference card"
-          }
-        }
-      }
-    },
-    "Kanalverdier": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Channel values"
           }
         }
       }
