@@ -66,8 +66,8 @@ struct LysVurdering: View {
                 }
                 .buttonStyle(Flatetrykk())
                 .menuIndicator(.hidden)
-                .accessibilityLabel("Lysmiljø: \(miljø.navn)")
-                .accessibilityHint("Velg lysmiljøet fargen vises i")
+                .accessibilityLabel("Betraktningsforhold: \(miljø.navn)")
+                .accessibilityHint("Velg betraktningsforholdet fargen vises under")
             }
             .frame(height: 140)
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -96,7 +96,7 @@ struct LysVurdering: View {
     private func fargeseksjon(_ farge: Farge, _ miljøer: [Lysmiljø], _ aktiv: Binding<Farge>) -> some View {
         PanelSeksjon(panel: .fargeILys) {
             if miljøer.isEmpty {
-                Text("Merk flere lysmiljøer med haken i lista under for å sammenligne.")
+                Text("Merk flere betraktningsforhold med haken i lista under for å sammenligne.")
                     .font(.callout).foregroundStyle(Color.sekundærTekst)
             } else {
                 // To prøver i bredden på iPhone, flere på iPad og Mac.

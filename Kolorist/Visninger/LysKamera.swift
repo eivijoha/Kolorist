@@ -61,7 +61,7 @@ struct LyskompensasjonMeny: View {
                                 referansekort: { kalibrerMed = $0 })
             if let måling = plukker.lysmåling {
                 Section {
-                    Button("Lagre lyset som lysmiljø …", systemImage: "lightbulb.2") {
+                    Button("Lagre lyset som betraktningsforhold …", systemImage: "lightbulb.2") {
                         lagreLysmiljø = Lysmiljø(navn: String(localized: "Målt lys"), lyskilde: måling.lyskilde,
                                                  lux: måling.lux.map(LysmiljøRedigering.rundet) ?? 300, måling: måling)
                     }
@@ -498,7 +498,7 @@ struct ReferansekortDetalj: View {
                 Section {
                     Group {
                         #if os(macOS)
-                        Text("Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lysmiljøer med Kolorist på iPhone, så kommer de hit via iCloud.")
+                        Text("Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lyset med Kolorist på iPhone og lagre det som betraktningsforhold, så kommer det hit via iCloud.")
                         #else
                         Text("Bruk kortet under Utplukk › Lys › Med referansekort: hold kortet i samme lys som fargene, og plasser hjørnene i bildet.")
                         #endif

@@ -954,7 +954,7 @@ struct PalettDetalj: View {
         }
         .toggleStyle(.button)
         .disabled(dokument.farger.isEmpty)
-        .help(visning == .lys ? "Vis fargene uten lys" : "Se fargene i et lysmiljø")
+        .help(visning == .lys ? "Vis fargene uten lys" : "Se fargene under andre betraktningsforhold")
         Button {
             Task { await vurder() }
         } label: {

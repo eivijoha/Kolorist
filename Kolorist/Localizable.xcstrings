@@ -1013,6 +1013,36 @@
         }
       }
     },
+    "Betraktningsforhold": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewing conditions"
+          }
+        }
+      }
+    },
+    "Betraktningsforhold målt på iPhone og iPad kommer hit via iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewing conditions measured on iPhone and iPad arrive here via iCloud."
+          }
+        }
+      }
+    },
+    "Betraktningsforhold: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewing condition: %@"
+          }
+        }
+      }
+    },
     "Bilde": {
       "localizations": {
         "en": {
@@ -1043,12 +1073,12 @@
         }
       }
     },
-    "Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lysmiljøer med Kolorist på iPhone, så kommer de hit via iCloud.": {
+    "Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lyset med Kolorist på iPhone og lagre det som betraktningsforhold, så kommer det hit via iCloud.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use the card under Pick › Light › With reference card, with iPhone as the camera (Continuity). The light cannot be measured from the Mac; measure viewing conditions with Kolorist on iPhone and they arrive here via iCloud."
+            "value": "Use the card under Pick › Light › With reference card, with iPhone as the camera (Continuity). The light can’t be measured from the Mac; measure it with Kolorist on iPhone and save it as viewing conditions, and it arrives here via iCloud."
           }
         }
       }
@@ -1256,12 +1286,12 @@
         }
       }
     },
-    "D50 (ICC-standard)": {
+    "D50 (ICC-referanse)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "D50 (ICC standard)"
+            "value": "D50 (ICC reference)"
           }
         }
       }
@@ -2281,7 +2311,7 @@
         }
       }
     },
-    "Flere lysmiljøer": {
+    "Flere betraktningsforhold": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -3039,7 +3069,7 @@
         }
       }
     },
-    "Hvordan fargene holder seg i ulike lys: fargeskift over 3 ΔE00, og fargepar som skilles godt på skjermen men nesten ikke i lyset. Egne lysmiljøer tas med.": {
+    "Hvordan fargene holder seg i ulike lys: fargeskift over 3 ΔE00, og fargepar som skilles godt på skjermen men nesten ikke i lyset. Egne betraktningsforhold tas med.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -3071,6 +3101,16 @@
           "stringUnit": {
             "state": "new",
             "value": "I lyset: %1$@, fargeskift %2$@"
+          }
+        }
+      }
+    },
+    "ICC-fargestyring regner med D50 som referanse for betraktningsforholdene, og det er standard her. Med andre betraktningsforhold vises fargen til høyre i fargefeltet slik den oppleves der; verdiene er de samme.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ICC colour management uses D50 as the reference viewing conditions, and that is the default here. With other viewing conditions, the colour on the right of the colour field is shown as it appears there; the values stay the same."
           }
         }
       }
@@ -3963,7 +4003,7 @@
         }
       }
     },
-    "Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer i valgt lysmiljø – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.": {
+    "Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer under valgte betraktningsforhold – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4393,7 +4433,7 @@
         }
       }
     },
-    "Lagre lyset som lysmiljø …": {
+    "Lagre lyset som betraktningsforhold …": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4475,6 +4515,16 @@
         }
       }
     },
+    "Lagre som betraktningsforhold …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as viewing condition …"
+          }
+        }
+      }
+    },
     "Lagre som enkeltfarge": {
       "localizations": {
         "en": {
@@ -4491,16 +4541,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save as camera profile"
-          }
-        }
-      }
-    },
-    "Lagre som lysmiljø …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save as viewing condition …"
           }
         }
       }
@@ -4923,7 +4963,7 @@
         }
       }
     },
-    "Lyset er målt. Lagre det som lysmiljø, eller mål på nytt. Med et grått eller hvitt kort blir også lysstyrken målt.": {
+    "Lyset er målt. Lagre det som betraktningsforhold, eller mål på nytt. Med et grått eller hvitt kort blir også lysstyrken målt.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4989,46 +5029,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Light sources are described by CIE spectra (the daylight series, illuminant A, fluorescent and LED types) or as blackbodies. Correlated colour temperature and distance from the Planckian locus (Duv) are calculated after Ohno. Colours without a measured spectrum get the smoothest spectrum that gives the colour in daylight (Burns). Colour rendering is estimated from the reference card’s spectra, compared with a reference light of the same colour temperature; the figure is scaled to lie close to Ra, but is not an official colour rendering index. Standard viewing conditions follow the illuminance in ISO 3664, EN 12464-1 and CIE 157."
-          }
-        }
-      }
-    },
-    "Lysmiljø": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Viewing condition"
-          }
-        }
-      }
-    },
-    "Lysmiljø: %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Viewing condition: %@"
-          }
-        }
-      }
-    },
-    "Lysmiljøer": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Viewing conditions"
-          }
-        }
-      }
-    },
-    "Lysmiljøer målt på iPhone og iPad kommer hit via iCloud.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Viewing conditions measured on iPhone and iPad arrive here via iCloud."
           }
         }
       }
@@ -5193,7 +5193,7 @@
         }
       }
     },
-    "Merk flere lysmiljøer med haken i lista under for å sammenligne.": {
+    "Merk flere betraktningsforhold med haken i lista under for å sammenligne.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -5305,6 +5305,16 @@
         }
       }
     },
+    "Mine betraktningsforhold": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My viewing conditions"
+          }
+        }
+      }
+    },
     "Mine fargerom": {
       "localizations": {
         "en": {
@@ -5321,16 +5331,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "My colour spaces …"
-          }
-        }
-      }
-    },
-    "Mine lysmiljøer": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My viewing conditions"
           }
         }
       }
@@ -5717,6 +5717,16 @@
         }
       }
     },
+    "Nytt betraktningsforhold": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New viewing condition"
+          }
+        }
+      }
+    },
     "Nytt bilde": {
       "localizations": {
         "en": {
@@ -5733,16 +5743,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "New suggestion"
-          }
-        }
-      }
-    },
-    "Nytt lysmiljø": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "New viewing condition"
           }
         }
       }
@@ -6383,12 +6383,12 @@
         }
       }
     },
-    "Se fargene i et lysmiljø": {
+    "Se fargene under andre betraktningsforhold": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "See the colours in a viewing condition"
+            "value": "See the colours in other viewing conditions"
           }
         }
       }
@@ -6529,6 +6529,16 @@
         }
       }
     },
+    "Skjul betraktningsforholdet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide the viewing condition"
+          }
+        }
+      }
+    },
     "Skjul det du ikke bruker med øyet til høyre.": {
       "localizations": {
         "en": {
@@ -6545,16 +6555,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hide light panel"
-          }
-        }
-      }
-    },
-    "Skjul lysmiljøet": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hide the viewing condition"
           }
         }
       }
@@ -6579,7 +6579,7 @@
         }
       }
     },
-    "Skjulte lysmiljøer": {
+    "Skjulte betraktningsforhold": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -6589,7 +6589,7 @@
         }
       }
     },
-    "Skjulte lysmiljøer vises ikke i valgene for lysmiljø og i vurderingen av paletter.": {
+    "Skjulte betraktningsforhold vises ikke i valgene for betraktningsforhold og i vurderingen av paletter.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -6689,6 +6689,16 @@
         }
       }
     },
+    "Slett betraktningsforhold": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete viewing condition"
+          }
+        }
+      }
+    },
     "Slett biblioteket": {
       "localizations": {
         "en": {
@@ -6735,16 +6745,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete Group …"
-          }
-        }
-      }
-    },
-    "Slett lysmiljø": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delete viewing condition"
           }
         }
       }
@@ -7907,6 +7907,16 @@
         }
       }
     },
+    "Velg betraktningsforholdet fargen vises under": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the viewing condition the colour is shown in"
+          }
+        }
+      }
+    },
     "Velg et foto eller skjermbilde. Fargene leses med bildets egen fargeprofil.": {
       "localizations": {
         "en": {
@@ -7983,16 +7993,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a camera. With iPhone as the camera (Continuity), the colours can be compensated for the light with a grey card or reference card."
-          }
-        }
-      }
-    },
-    "Velg lysmiljøet fargen vises i": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose the viewing condition the colour is shown in"
           }
         }
       }
@@ -8269,26 +8269,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shows the section"
-          }
-        }
-      }
-    },
-    "Visningslys": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Viewing Light"
-          }
-        }
-      }
-    },
-    "Visningslys: ICC-fargestyring regner i D50, som er standard. Med et annet lys vises fargen til høyre i fargefeltet slik den oppleves i det lyset; verdiene er de samme.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Viewing light: ICC colour management works in D50, which is the default. With another light, the colour on the right of the colour field is shown as it appears in that light; the values stay the same."
           }
         }
       }

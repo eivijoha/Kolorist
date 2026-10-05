@@ -167,9 +167,9 @@ final class Lysbibliotek {
                 if varValgt { bibliotek.valgtLysmiljø = miljø.id }
                 bibliotek.skriv()
                 angring.registerUndo(withTarget: bibliotek) { $0.slett(miljø) }
-                angring.setActionName(String(localized: "Slett lysmiljø"))
+                angring.setActionName(String(localized: "Slett betraktningsforhold"))
             }
-            angring.setActionName(String(localized: "Slett lysmiljø"))
+            angring.setActionName(String(localized: "Slett betraktningsforhold"))
         }
     }
 

@@ -324,7 +324,7 @@ struct FlatekontrastSeksjon: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.")
                 if lysmiljø != nil {
-                    Text("Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer i valgt lysmiljø – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.")
+                    Text("Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer under valgte betraktningsforhold – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.")
                 }
                 MetodeHenvisning(.lrv, .oklab)
             }

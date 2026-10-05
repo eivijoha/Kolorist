@@ -46,11 +46,11 @@ final class Panelinnstillinger {
             case .overgangstoner: String(localized: "Overgang")
             case .lysereMørkere: String(localized: "Lysere og mørkere toner")
             case .gradient: String(localized: "Gradient")
-            case .fargeILys: String(localized: "Flere lysmiljøer")
-            case .mineLysmiljøer: String(localized: "Mine lysmiljøer")
-            case .lysmiljøer: String(localized: "Lysmiljøer")
+            case .fargeILys: String(localized: "Flere betraktningsforhold")
+            case .mineLysmiljøer: String(localized: "Mine betraktningsforhold")
+            case .lysmiljøer: String(localized: "Betraktningsforhold")
             case .lysstandarder: String(localized: "Standarder")
-            case .skjulteLysmiljøer: String(localized: "Skjulte lysmiljøer")
+            case .skjulteLysmiljøer: String(localized: "Skjulte betraktningsforhold")
             }
         }
     }

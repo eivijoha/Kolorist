@@ -151,7 +151,7 @@ struct LysmiljøSeksjon: View {
                         }
                     }
                 } fot: {
-                    Text("Skjulte lysmiljøer vises ikke i valgene for lysmiljø og i vurderingen av paletter.")
+                    Text("Skjulte betraktningsforhold vises ikke i valgene for betraktningsforhold og i vurderingen av paletter.")
                 }
             }
         default: EmptyView()
@@ -164,8 +164,8 @@ struct LysmiljøSeksjon: View {
             #if os(iOS)
             Button("Mål lyset med kameraet …", systemImage: "camera.metering.center.weighted", action: målLys)
             #endif
-            Button("Nytt lysmiljø", systemImage: "plus") {
-                redigerer = Lysmiljø(navn: String(localized: "Nytt lysmiljø"), lyskilde: .sortlegeme(kelvin: 3000), lux: 300)
+            Button("Nytt betraktningsforhold", systemImage: "plus") {
+                redigerer = Lysmiljø(navn: String(localized: "Nytt betraktningsforhold"), lyskilde: .sortlegeme(kelvin: 3000), lux: 300)
             }
             ForEach(bibliotek.lysmiljøer) { miljø in
                 HStack {
@@ -178,7 +178,7 @@ struct LysmiljøSeksjon: View {
             }
         } fot: {
             #if os(macOS)
-            Text("Lysmiljøer målt på iPhone og iPad kommer hit via iCloud.")
+            Text("Betraktningsforhold målt på iPhone og iPad kommer hit via iCloud.")
             #else
             Text("Lyset der fargene skal brukes – stua, kontoret, butikken.")
             #endif
@@ -206,7 +206,7 @@ struct LysmiljøSeksjon: View {
             Button("Skjul", systemImage: "eye.slash", action: skjul)
                 .labelStyle(.iconOnly)
                 .buttonStyle(.borderless)
-                .help("Skjul lysmiljøet")
+                .help("Skjul betraktningsforholdet")
             #endif
         }
         .swipeActions { Button("Skjul", systemImage: "eye.slash", action: skjul).tint(.gray) }

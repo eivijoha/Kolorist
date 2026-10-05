@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Velger av lysmiljø: egne, standarder og eksempler.
 struct LysmiljøVelger: View {
-    var tittel: LocalizedStringKey = "Lysmiljø"
+    var tittel: LocalizedStringKey = "Betraktningsforhold"
     @Binding var valgt: UUID?
     /// Med et valg for «ingen» (f.eks. «Dagslys, som LRV»).
     var ingen: LocalizedStringKey? = nil
@@ -14,12 +14,12 @@ struct LysmiljøVelger: View {
         Picker(tittel, selection: $valgt) {
             if let ingen { Text(ingen).tag(UUID?.none) }
             if !bibliotek.lysmiljøer.isEmpty {
-                Section("Mine lysmiljøer") {
+                Section("Mine betraktningsforhold") {
                     ForEach(bibliotek.lysmiljøer) { Text($0.navn).tag(Optional($0.id)) }
                 }
             }
             if !bibliotek.synligeEksempler.isEmpty {
-                Section("Lysmiljøer") {
+                Section("Betraktningsforhold") {
                     ForEach(bibliotek.synligeEksempler) { Text($0.navn).tag(Optional($0.id)) }
                 }
             }
@@ -38,8 +38,8 @@ struct LysmiljøMenyvalg: View {
     @State private var bibliotek = Lysbibliotek.delt
 
     var body: some View {
-        gruppe("Mine lysmiljøer", bibliotek.lysmiljøer)
-        gruppe("Lysmiljøer", bibliotek.synligeEksempler)
+        gruppe("Mine betraktningsforhold", bibliotek.lysmiljøer)
+        gruppe("Betraktningsforhold", bibliotek.synligeEksempler)
         gruppe("Standarder", bibliotek.synligeStandarder)
     }
 
@@ -102,7 +102,7 @@ struct PalettLysValg: View {
                     .contentShape(Rectangle())
                 }
                 .menuIndicator(.hidden)
-                .accessibilityLabel("Lysmiljø: \(lys.miljø.navn)")
+                .accessibilityLabel("Betraktningsforhold: \(lys.miljø.navn)")
                 .layoutPriority(1)
                 Spacer(minLength: 0)
                 InfoKnapp {
@@ -232,7 +232,7 @@ struct LysVurderingSeksjon: View {
             Text("Lys")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Hvordan fargene holder seg i ulike lys: fargeskift over 3 ΔE00, og fargepar som skilles godt på skjermen men nesten ikke i lyset. Egne lysmiljøer tas med.")
+                Text("Hvordan fargene holder seg i ulike lys: fargeskift over 3 ΔE00, og fargepar som skilles godt på skjermen men nesten ikke i lyset. Egne betraktningsforhold tas med.")
                 MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
             }
         }

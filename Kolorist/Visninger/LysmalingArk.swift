@@ -68,7 +68,7 @@ struct LysmålingArk: View {
                         lagreLysmiljø = Lysmiljø(navn: String(localized: "Målt lys"), lyskilde: m.lyskilde,
                                                  lux: m.lux.map(LysmiljøRedigering.rundet) ?? 300, måling: m)
                     } label: {
-                        Label("Lagre som lysmiljø …", systemImage: "lightbulb.2").frame(maxWidth: .infinity)
+                        Label("Lagre som betraktningsforhold …", systemImage: "lightbulb.2").frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(plukker.lysmåling == nil)
@@ -106,7 +106,7 @@ struct LysmålingArk: View {
 
     private var veiledning: LocalizedStringKey {
         if plukker.venterPåGråkort { return "Trykk på kortet i bildet. Kortet må ligge i lyset du måler, uten skygge eller gjenskinn." }
-        if plukker.lysmåling != nil { return "Lyset er målt. Lagre det som lysmiljø, eller mål på nytt. Med et grått eller hvitt kort blir også lysstyrken målt." }
+        if plukker.lysmåling != nil { return "Lyset er målt. Lagre det som betraktningsforhold, eller mål på nytt. Med et grått eller hvitt kort blir også lysstyrken målt." }
         return "Stå der fargene skal brukes og mål lyset. Kameraet gir lysets farge og anslår lysstyrken; med et grått eller hvitt kort i lyset blir den målt."
     }
 }
