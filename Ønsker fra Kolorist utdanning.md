@@ -1,7 +1,7 @@
 # Ønsker fra Kolorist utdanning
 
 Bestillinger fra arbeidet med Kolorist utdanning (repo `~/App-utvikling/Kolorist utdanning`,
-[github.com/eivijoha/Kolorist-utdanning](https://github.com/eivijoha/Kolorist-utdanning)): Kolorist lærer (Mac/iPad,
+[github.com/eivijoha/Kolorist-utdanning](https://github.com/eivijoha/Kolorist-utdanning)): Kolorist underviser (Mac/iPad,
 forelesning på prosjektør) og Kolorist student (web i Canvas). Ønskene er forslag – prioritet avklares med Eivind før de
 bygges i Kolorist.
 
@@ -9,6 +9,9 @@ Status: **ny** · avklart · i arbeid · ferdig · avslått · trukket · utsatt
 Kolorist); denne fila skrives bare av Kolorist utdanning. Ved levert sjekker utdanning og setter status **ferdig** her.
 
 ## Melding til Kolorist (2026-10-05)
+
+**Navn:** undervisningsappen heter nå **Kolorist underviser** (før «Kolorist lærer»), bundle-ID `no.engenett.KoloristUnderviser`.
+
 
 Eivind har bestemt, etter svarene i `Svar fra Kolorist.md`:
 
@@ -25,7 +28,7 @@ presentasjonsmodus. 2b `KoloristVisninger` er trukket (utdanning bygger eget vis
 
 ## 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — **avklart** (Eivind 2026-10-05: skal gjennomføres)
 
-Kolorist lærer har knappen «Åpne i Kolorist» på lysbilder med modeller. I dag sendes en vanlig delingslenke
+Kolorist underviser har knappen «Åpne i Kolorist» på lysbilder med modeller. I dag sendes en vanlig delingslenke
 (`kolorist://l#z…` med en farge eller palett), som Kolorist viser i et ark.
 
 **Ønske:**

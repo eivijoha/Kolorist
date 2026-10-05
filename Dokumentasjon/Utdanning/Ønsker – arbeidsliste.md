@@ -8,18 +8,20 @@
 
 
 Bestillinger fra arbeidet med Kolorist utdanning (repo `~/App-utvikling/Kolorist utdanning`,
-[github.com/eivijoha/Kolorist-utdanning](https://github.com/eivijoha/Kolorist-utdanning)): Kolorist lærer (Mac/iPad,
+[github.com/eivijoha/Kolorist-utdanning](https://github.com/eivijoha/Kolorist-utdanning)): Kolorist underviser (Mac/iPad,
 forelesning på prosjektør) og Kolorist student (web i Canvas). Ønskene er forslag – prioritet avklares med Eivind før de
 bygges i Kolorist.
 
 Status: **ny** · avklart · i arbeid · ferdig · avslått.
+
+**Navn:** undervisningsappen heter Kolorist underviser (før «Kolorist lærer»), bundle-ID `no.engenett.KoloristUnderviser`.
 
 **Rekkefølge (Eivind 2026-10-05):** 3 testvektorer → 2a eget repo for FargeKjerne (når 1.3 er stabil) → 1 visningstilstand
 og presentasjonsmodus. 2b trukket (utdanning bygger eget visningslag; varsle API-endringer i svarfila). 4 utsatt.
 
 ## 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — avklart (Eivind 2026-10-05), etter 2a
 
-Kolorist lærer har knappen «Åpne i Kolorist» på lysbilder med modeller. I dag sendes en vanlig delingslenke
+Kolorist underviser har knappen «Åpne i Kolorist» på lysbilder med modeller. I dag sendes en vanlig delingslenke
 (`kolorist://l#z…` med en farge eller palett), som Kolorist viser i et ark.
 
 **Ønske:**
