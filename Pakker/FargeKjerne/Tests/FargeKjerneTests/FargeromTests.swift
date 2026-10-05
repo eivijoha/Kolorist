@@ -81,6 +81,18 @@ struct FargeromTests {
         #expect(nær(hvit.wcagKontrast(mot: sort), 21, 1e-6))
         #expect(Farge(hex: "#FFFF00")!.lesbarTekstfarge == sort)
     }
+
+    /// Referanseverdier fra APCA 0.0.98G-4g (apcacontrast.com).
+    @Test func apca() {
+        let hvit = Farge(hex: "#FFFFFF")!, sort = Farge(hex: "#000000")!
+        #expect(nær(hvit.apcaKontrast(tekst: sort), 106.04, 0.05))
+        #expect(nær(sort.apcaKontrast(tekst: hvit), -107.88, 0.05))
+        #expect(nær(hvit.apcaKontrast(tekst: Farge(hex: "#888888")!), 63.06, 0.05))
+        // Mellomtoner får hvit tekst (WCAG 2 ville valgt sort for #777777 og #8A8A8A); lyse toner sort.
+        #expect(Farge(hex: "#777777")!.lesbarTekstfarge == hvit)
+        #expect(Farge(hex: "#8A8A8A")!.lesbarTekstfarge == hvit)
+        #expect(Farge(hex: "#AAAAAA")!.lesbarTekstfarge == sort)
+    }
 }
 
 @Suite("Paletter")
