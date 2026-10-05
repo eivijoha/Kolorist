@@ -157,6 +157,8 @@ def bilde(s, fil):
 
 
 NYE_BILDER = {
+    ('nb', 'monokrom'): ('Monokromatisk harmoni: seks toner av oransje langs en strek fra rik oransje til en mørk, mettet tone, i flaten for lyshet og metning', 'Monokromatisk'),
+    ('en', 'monokrom'): ('Monochromatic harmony: six tones of orange along a line from rich orange to a dark, saturated tone, in the lightness and saturation field', 'Monochromatic'),
     ('nb', 'harmoni-aksent'): ('Harmoni: analog med komplementær aksent og naturlig lyshetsrekkefølge, vist på fargesirkelen', 'Analog med aksent'),
     ('en', 'harmoni-aksent'): ('Harmony: analogous with a complementary accent and natural lightness order, shown on the colour wheel', 'Analogous with accent'),
     ('nb', 'munsell'): ('Studio med en teglrød farge i Munsell-notasjon, 10R 5/8 – kulør, valør og kroma', 'Munsell'),
@@ -409,7 +411,7 @@ def design(lang):
               'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N,
               'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N,
               'Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning' + N12,
-              'Plukk farger fra bilder og kamera – og fra hele skjermen på Mac'], 'harmoni-aksent', None),
+              'Plukk farger fra bilder og kamera – og fra hele skjermen på Mac'], 'monokrom', None),
             ('Bygg fargesystemet', 'Toner og overganger i like perseptuelle steg, så trinnene oppleves jevne.',
              ['Toneskalaer fra 50 til 950',
               'Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell' + N12,
@@ -456,7 +458,7 @@ def design(lang):
           'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N,
           'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N,
           'Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension' + N12,
-          'Pick colours from photos and the camera – and from anywhere on screen on the Mac'], 'harmoni-aksent', None),
+          'Pick colours from photos and the camera – and from anywhere on screen on the Mac'], 'monokrom', None),
         ('Build the colour system', 'Tones and gradients in perceptually equal steps, so the steps look even.',
          ['Tone scales from 50 to 950',
           'Lighter and darker tones in equal or easing steps, with values in the chosen colour model' + N12,
