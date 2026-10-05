@@ -198,6 +198,52 @@ kromatisitetsdiagram med gamuter, lyskilder og forvekslingslinjer, og 3D-modelle
 Utredning med kapitler, øvelser, visualiseringskatalog, plassering, forbehold og mulige trinn:
 [Laeringsmodul.md](../Laeringsmodul.md).
 
+## Bauhaus som historisk referanse (utforsking, 2026-10-05)
+
+Bauhaus gir to ting Goethe og Albers ikke gir alene: **undervisningsformen** (forkurset – eksperiment før teori,
+verkstedet med verktøyet i sentrum) og **fargen i bruk** (arkitektur, tekstil, grafisk form). Gjelder både Kolorist og
+Kolorist utdanning (se [Laeringsmodul.md](../Laeringsmodul.md) og Kolorist-utdanning-repoet).
+
+**Personer og hva vi kan bruke**
+
+- **Johannes Itten** (forkurset, *Kunst der Farbe*): *de sju kontrastene* – kulør i seg selv, lys–mørk, kald–varm,
+  komplementær, simultan, kvalitet (metning) og kvantitet (proporsjon) – passer nesten rett på det Kolorist måler i
+  OKLCH. Fargekula fra 1921 (etter Runge) er en tidlig 3D-fargemodell å stille ved siden av OKLab. Den subjektive
+  fargeklangen og fargetypene («årstider») er ikke faglig holdbare; brukes kritisk, som diskusjon i fargesemantikk.
+- **Wassily Kandinsky:** spørreskjemaet fra 1923 (gul trekant, rød firkant, blå sirkel). Senere forsøk har i liten grad
+  bekreftet at sammenhengene er allmenne – nettopp derfor en god øvelse: lært eller medfødt?
+- **Paul Klee:** fargeforelesningene i Weimar og systematisk gradering («Stufung»); rutenettbildene som utgangspunkt for
+  palettøvelser.
+- **Josef Albers:** student og lærer ved Bauhaus; *Interaction of Color* kom senere, men metoden har røtter i forkurset.
+- **Hinnerk Scheper og veggmaleriverkstedet:** farge som organiserer rom og orientering (Dessau-byggene) – forløper til
+  fargeplanlegging, kontrast og ledelinjer i universell utforming for arkitekter.
+- **Vevverkstedet** (Gunta Stölzl, Anni Albers): optisk blanding i garn og vev – samme prinsipp som rastrering i trykk.
+- **Ludwig Hirschfeld-Mack:** de refleksive fargelysspillene – additivt farget lys i bevegelse; lys og
+  betraktningsforhold, og et historisk forbilde for undervisning på prosjektør.
+- **Gertrud Grunow:** harmoniseringslæren (farge, lyd, bevegelse) – viser koblingen mellom det sanselige og det
+  kroppslige; leses med samme forbehold som Itten.
+
+**Idéer for Kolorist**
+
+- **Kontrastanalyse av en palett etter Itten**, beregnet i OKLCH: spenn i lyshet, balanse kald–varm, om det finnes
+  komplementærpar, kontrast i metning, og proporsjon når arealer er angitt. Vises som en kort beskrivelse av paletten
+  («stor lys–mørk-kontrast, varm overvekt, ingen komplementærpar»).
+- **Ittens sirkel ved siden av de andre:** den tolvdelte sirkelen bygger på rød–gul–blå (som RYB-sirkelen i appen);
+  komplementærparene der skiller seg fra de perseptuelle (OKLCH) og motfargene (Hering). Samme sammenligning som for
+  Goethe – eventuelt med Itten nevnt i metodeteksten for RYB.
+
+**Idéer for Kolorist utdanning**
+
+- **De sju kontrastene som serie** av lysbilder, med én modell per kontrast: lyshetstrapp, monokrom flate, harmoni,
+  simultankontrast (bakgrunn), kroma og arealbalanse – det meste finnes eller er planlagt i FargeModeller.
+- **Kandinsky i plenum:** spørreskjemaet som første økt med svar fra studentene, sammenlignet med Bauhaus-svarene – den
+  enkleste konkrete grunnen til å bygge økter i plenum.
+- **Klee-rutenett:** bygg et rutenett fra en palett med jevne trinn i OKLab (palettøvelse i Canvas).
+- **Vev og raster:** optisk blanding i tekstil og trykk i samme modell (modulene om materialer og digitale flater).
+- **Scheper:** farge og orientering i bygg som historisk inngang til universell utforming for arkitekter.
+- **Undervisningsformen:** forkursets «utforsk først, sett navn etterpå» er tanken bak samspillet mellom lærer-appen og
+  studentdelen.
+
 ## Innleveringsark for undervisning og vurdering (2026-10-05)
 
 Fra Kolorist utdanning: studentene leverer fargearbeid i FeedbackFruits og Wiseflow, og sensor ser det på en ukalibrert
