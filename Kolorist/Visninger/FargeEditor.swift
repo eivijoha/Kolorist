@@ -1,5 +1,6 @@
 import FargeKI
 import FargeKjerne
+import FargeMaaling
 import SwiftData
 import SwiftUI
 
@@ -19,6 +20,8 @@ struct FargeEditor: View {
     @AppStorage("visOgsåProfil") private var visOgsåID = ICCProfil.sRGB.id
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     @AppStorage("renCMYK") private var renCMYK = false
+    /// Visningslyset for «Vis som» (tom = D50, ICC-standarden – ingen omregning).
+    @AppStorage("visningslys") private var visningslysID = ""
     /// Sirkelen valgt i Harmoni (samme lagring som HarmoniSeksjon), for verdiene i harmoniflaten.
     @AppStorage("harmoniSirkel") private var harmonisirkel: Fargesirkel = .okLCH
     @AppStorage("harmoni") private var harmonitype: Harmoni = .splittKomplementær
@@ -124,6 +127,7 @@ struct FargeEditor: View {
                     Fargeflate(farge: farge, modell: arbeidsbenk.modell, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                                kobletVerdier: sammeRom ? kildeverdier(farge) : nil,
                                kildeprofil: sammeRom ? nil : kildeprofil, kildeverdier: sammeRom ? nil : kildeverdier(farge),
+                               visningslys: Lysbibliotek.delt.visningslys(id: visningslysID),
                                renCMYK: renCMYK,
                                stablet: bred,
                                lagre: { lagreEnkeltfarger([$0], i: kontekst) },
@@ -813,6 +817,8 @@ struct Fargeflate: View {
     /// verdiene der.
     var kildeprofil: ICCProfil? = nil
     var kildeverdier: [Double]? = nil
+    /// Lyset fargen i «Vis som»-halvdelen vises i (`nil` = D50, ICC-standarden).
+    var visningslys: Lysmiljø? = nil
     /// CMYK-profil: vis «rene» verdier (færrest mulig trykkfarger, grått i sort) i stedet for profilens egen separasjon.
     var renCMYK = false
     /// Halvdelene over/under hverandre i stedet for side ved side (bred visning, f.eks. iPad i landskap).
@@ -867,7 +873,9 @@ struct Fargeflate: View {
 
     var body: some View {
         let høyre = motpart
-        let høyreFarge = PalettFarge(farge: høyre.farge, representasjon: Fargerepresentasjon(
+        // I valgt visningslys: fargen slik den oppleves der (verdiene er de samme).
+        let høyreVist = visningslys.map { $0.sett(høyre.farge) } ?? høyre.farge
+        let høyreFarge = PalettFarge(farge: høyreVist, representasjon: Fargerepresentasjon(
             rom: .icc(id: profil.id, navn: profil.navn), verdier: høyre.verdier, tekst: høyre.tekst))
         let (venstre, venstreTittel, venstreTekst) = venstreside
         let oppsett = stablet ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
@@ -893,7 +901,7 @@ struct Fargeflate: View {
             } else {
                 halvdel(venstre, tittel: venstreTittel, tekst: venstreTekst,
                         merknad: farge.erIDisplayP3 ? nil : String(localized: "Utenfor P3"))
-                halvdel(høyreFarge, tittel: profiltittel, tekst: høyre.tekst,
+                halvdel(høyreFarge, tittel: visningslys.map { "\(profiltittel) · \($0.navn)" } ?? profiltittel, tekst: høyre.tekst,
                         merknad: farge.erInnenfor(profil, hensikt: hensikt) ? nil
                             : String(localized: "Utenfor gamut · ΔE00 \(String(format: "%.1f", høyre.farge.deltaE2000(til: farge)))"))
             }

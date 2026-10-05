@@ -55,6 +55,18 @@ final class Lysbibliotek {
     static let museumLysfølsomme = Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-000000030005")!,
         navn: String(localized: "Museum, lysfølsomme gjenstander (CIE 157)"), lyskilde: .sortlegeme(kelvin: 3000), lux: 50)
 
+    /// Visningslys i Studio (Fargestyring): D50 er ICC-standarden og standardvalget (ingen omregning); D65 og
+    /// lysmiljøene viser fargen til høyre i fargefeltet slik den oppleves i lyset.
+    static let d65Visning = Lysmiljø(id: UUID(uuidString: "6C1E0000-0000-4000-8000-0000000D6500")!,
+                                     navn: String(localized: "D65 (dagslys)"), lyskilde: .d65, lux: 1000)
+
+    /// Visningslyset for en lagret id; `nil` er D50 (ICC-standarden, ingen omregning).
+    func visningslys(id: String) -> Lysmiljø? {
+        guard let uuid = UUID(uuidString: id) else { return nil }
+        if uuid == Self.d65Visning.id { return Self.d65Visning }
+        return alleLysmiljøer.first { $0.id == uuid }
+    }
+
     /// Ferdige eksempler på hverdagslys, med faste id-er.
     static let innebygde: [Lysmiljø] = [
         stueOmKvelden, varmhvitLED, lysrør,

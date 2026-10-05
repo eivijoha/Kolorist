@@ -1256,6 +1256,26 @@
         }
       }
     },
+    "D50 (ICC-standard)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D50 (ICC standard)"
+          }
+        }
+      }
+    },
+    "D65 (dagslys)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D65 (daylight)"
+          }
+        }
+      }
+    },
     "Dagslys (LRV)": {
       "localizations": {
         "en": {
@@ -8249,6 +8269,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shows the section"
+          }
+        }
+      }
+    },
+    "Visningslys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewing Light"
+          }
+        }
+      }
+    },
+    "Visningslys: ICC-fargestyring regner i D50, som er standard. Med et annet lys vises fargen til høyre i fargefeltet slik den oppleves i det lyset; verdiene er de samme.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Viewing light: ICC colour management works in D50, which is the default. With another light, the colour on the right of the colour field is shown as it appears in that light; the values stay the same."
           }
         }
       }

@@ -1,4 +1,5 @@
 import FargeKjerne
+import FargeMaaling
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -12,6 +13,9 @@ struct ICCSeksjon: View {
     @Binding var visMineFargerom: Bool
     @Environment(ProfilBibliotek.self) private var bibliotek
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
+    /// Visningslyset for «Vis som» (tom = D50, ICC-standarden).
+    @AppStorage("visningslys") private var visningslysID = ""
+    @State private var lysbibliotek = Lysbibliotek.delt
 
     private var profil: ICCProfil { bibliotek.profil(id: profilID) ?? .sRGB }
 
@@ -19,6 +23,21 @@ struct ICCSeksjon: View {
         PanelSeksjon(panel: .fargestyring) {
             Picker("Gjengivelse", selection: $hensikt) {
                 ForEach(Gjengivelseshensikt.allCases, id: \.self) { Text($0.visningsnavn).tag($0) }
+            }
+            // Lyset fargen til høyre i fargefeltet («Vis som») vises i. D50 er standard i ICC-fargestyring.
+            LabeledContent("Visningslys") {
+                Menu {
+                    Toggle("D50 (ICC-standard)", isOn: Binding(get: { visningslysID.isEmpty }, set: { if $0 { visningslysID = "" } }))
+                    Toggle(Lysbibliotek.d65Visning.navn, isOn: Binding(get: { visningslysID == Lysbibliotek.d65Visning.id.uuidString },
+                                                                      set: { if $0 { visningslysID = Lysbibliotek.d65Visning.id.uuidString } }))
+                    Divider()
+                    LysmiljøMenyvalg(valgt: Binding(get: { UUID(uuidString: visningslysID) },
+                                                    set: { visningslysID = $0?.uuidString ?? "" }))
+                } label: {
+                    Text(lysbibliotek.visningslys(id: visningslysID)?.navn ?? String(localized: "D50 (ICC-standard)"))
+                        .lineLimit(1)
+                }
+                .fixedSize()
             }
 
             if let verdier = farge.komponenter(i: profil, hensikt: hensikt) {
@@ -56,6 +75,7 @@ struct ICCSeksjon: View {
             }
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
+                Text("Visningslys: ICC-fargestyring regner i D50, som er standard. Med et annet lys vises fargen til høyre i fargefeltet slik den oppleves i det lyset; verdiene er de samme.")
                 MetodeHenvisning(.icc, .renCMYK, .ciede2000)
                 Text(bibliotek.brukerICloud
                      ? "Importerte ICC-profiler og fargebiblioteker ligger i iCloud Drive › Kolorist › Profiler og synkroniseres mellom enhetene. Du kan også legge filer der fra Filer eller Finder."
