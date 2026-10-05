@@ -161,7 +161,7 @@ NYE_BILDER = {
     ('en', 'harmoni-aksent'): ('Harmony: analogous with a complementary accent and natural lightness order, shown on the colour wheel', 'Analogous with accent'),
     ('nb', 'munsell'): ('Studio med en teglrød farge i Munsell-notasjon, 10R 5/8 – kulør, valør og kroma', 'Munsell'),
     ('en', 'munsell'): ('Studio with a brick-red colour in Munsell notation, 10R 5/8 – hue, value and chroma', 'Munsell'),
-    ('nb', 'arkitektur-lys'): ('Lys under Vurdering: en teglrød farge på skjermen og i stua om kvelden, og i flere lysmiljøer med fargeskiftet for hvert', 'Fargen i lysmiljøer'),
+    ('nb', 'arkitektur-lys'): ('Lys under Vurdering: en teglrød farge på skjermen og i stua om kvelden, og under flere betraktningsforhold med fargeskiftet for hvert', 'Fargen under ulike betraktningsforhold'),
     ('en', 'arkitektur-lys'): ('Light under Assess: a brick-red colour on screen and in the living room in the evening, and in more viewing conditions with the colour shift for each', 'The colour in viewing conditions'),
     ('nb', 'palett-lys'): ('En palett i lys: fargen på skjermen øverst og i stua om kvelden nederst i hver rute, med fargeskiftet', 'Paletten i lys'),
     ('en', 'palett-lys'): ('A palette in light: the colour on screen at the top and in the living room in the evening at the bottom of each tile, with the colour shift', 'Palette in light'),
@@ -181,7 +181,7 @@ NYE_BILDER.update({
 # Bilder med annen sti eller størrelse enn iPhone-skjermbildene.
 NYE_STIER = {'del-web-filament': ('ipad/skjermbilde-del-web-filament.png', 1032, 1376)}
 NYE_ALT = {
-    ('nb', 'lys'): 'Lys under Vurdering: fargen på skjermen og i stua om kvelden, og i flere lysmiljøer med fargeskiftet for hvert',
+    ('nb', 'lys'): 'Lys under Vurdering: fargen på skjermen og i stua om kvelden, og under flere betraktningsforhold med fargeskiftet for hvert',
     ('en', 'lys'): 'Light under Assess: the colour on screen and in the living room in the evening, and in more viewing conditions with the colour shift for each',
 }
 
@@ -249,7 +249,7 @@ def startside(lang):
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.'),
                    ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG og LRV, og farger slik de oppleves med fargesynsavvik.'),
-                   ('Farger i ulikt lys', 'Simuler farger mot andre lysmiljøer, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
+                   ('Farger i ulikt lys', 'Simuler farger under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
                    ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac. Bruk den du har, eller flere, med alt synkronisert via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter kontrollert for skjerm og trykk – levert rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
@@ -427,7 +427,7 @@ def design(lang):
               'Varsel når fargen er utenfor fargeområdet – og begrens farger til en profil om du vil',
               'Rene CMYK-verdier: grått innslag flyttes til sort, med færrest mulig trykkfarger',
               'Kildefargerom for CMYK og RGB: angi verdiene i profilen de skal brukes i' + N,
-              'Visningslys: D50 (ICC-standard), D65 eller et lysmiljø – og papirhvitt med absolutt kolorimetrisk' + N,
+              'Betraktningsforhold for visningen: D50 (ICC-referanse), D65 eller andre – og papirhvitt med absolutt kolorimetrisk' + N,
               'Fargekart med navngitte toner: arbeid innenfor dem, med tonenavn vist',
               'Vurder trykk og bilder under standardlys for grafisk vurdering (ISO 3664)' + N12,
               'Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt med kolorimeter – finn nærmeste filament, med lenke til prøven (<a href="filament.html">les mer</a>)' + N12],
@@ -504,15 +504,15 @@ def arkitektur(lang):
             ('Hent farger fra rom og materialer', 'Telefonen blir et enkelt måleverktøy for farge.',
              ['Kamera med zoom, makrofokus og lykt',
               'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)' + N12,
-              'Mål lyset der du står og lagre det som lysmiljø' + N12,
+              'Mål lyset der du står og lagre det som betraktningsforhold' + N12,
               'Dominerende farger i bilder'], None, None),
             ('Spesifiser', 'Angi farger med Munsell-notasjon, CIELab og fargekart.',
              ['Munsell i trinnene fra Munsell-boka – kulør 2,5, valør 1 og kroma 2 – med Munsell-notasjon' + N12,
               'Harmonier på Munsells fargesirkel, med ekte Munsell-farger',
               'Fargekart med navngitte toner: importer dine egne (ASE, ACO, ACB) og finn nærmeste tone',
               'CIELab (D50) og fargeforskjell med ΔE2000'], 'munsell', None),
-            ('Se fargene i lyset', 'Simuler farger og hele paletter mot lysmiljøene der de skal brukes.',
-             ['Lysmiljøer for stua om kvelden, kontoret og butikken – eller lyset du har målt på stedet' + N12,
+            ('Se fargene i lyset', 'Simuler farger og hele paletter under betraktningsforholdene der de skal brukes.',
+             ['Betraktningsforhold for stua om kvelden, kontoret og butikken – eller lyset du har målt på stedet' + N12,
               'Standard betraktningsforhold for arbeidsplasser og skoler (NS-EN 12464-1) og museer (CIE 157)' + N12,
               'Fargen på skjermen og i lyset side om side, og i flere lys med fargeskiftet i hvert' + N12,
               'Hele paletter i lys, rett i palettvisningen' + N12,
@@ -526,11 +526,11 @@ def arkitektur(lang):
             ('Mål og dokumenter', 'Lysforhold og fargevalg dokumentert, klart til å deles.',
              ['Mål fargetemperatur, belysningsstyrke (lux) og anslått fargegjengivelse med iPhone eller iPad' + N12,
               'Sammenlign med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass',
-              'Lagre målt lys som lysmiljø, og se andre farger i det' + N12,
+              'Lagre målt lys som betraktningsforhold, og se andre farger i det' + N12,
               'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
               'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
-              'Paletter og lysmiljøer synkroniseres til iPad og Mac via iCloud'], None, None),
+              'Paletter og betraktningsforhold synkroniseres til iPad og Mac via iCloud'], None, None),
         ]
         return fagside('nb', 'arkitektur.html', 'Kolorist for arkitektur og interiørarkitektur',
                        'Fargeverktøy for arkitektur og interiørarkitektur: plukk farger fra rom og materialer, spesifiser i Munsell, se farger i lyset der de skal brukes, og kontroller LRV og kontrast for universell utforming.',
@@ -626,9 +626,9 @@ def funksjoner(lang):
     N = f'<span class="nytt">{t["nytt"]}</span>'
     nb = lang == 'nb'
     tilg = lier(k['Tilgjengelighet' if nb else 'Accessibility'])
-    lysliste = (['Se farger og hele paletter i lysmiljøer og standard betraktningsforhold – paletter rett i palettvisningen',
+    lysliste = (['Se farger og hele paletter under egne og standardiserte betraktningsforhold – paletter rett i palettvisningen',
                  'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)',
-                 'Mål lyset med kameraet og lagre det som lysmiljø – lysstyrken anslås, eller måles med et kort',
+                 'Mål lyset med kameraet og lagre det som betraktningsforhold – lysstyrken anslås, eller måles med et kort',
                  'Mål fargetemperatur, belysningsstyrke og anslått fargegjengivelse',
                  'Importer referanseverdiene for ditt eget kort'] if nb else
                 ['See colours and whole palettes in viewing conditions and standard viewing conditions – palettes right in the palette view',
@@ -636,7 +636,7 @@ def funksjoner(lang):
                  'Measure the light with the camera and save it as a viewing condition – the illuminance is estimated, or measured with a card',
                  'Measure colour temperature, illuminance and estimated colour rendering',
                  'Import the reference values for your own card'])
-    lysdel = ('<p>Simuler farger og paletter mot andre lysmiljøer, og kompenser plukkede farger for lyset de ble fotografert i. Et gråkort eller et referansekort gjør telefonen til et enkelt måleverktøy for farge og lys.</p>'
+    lysdel = ('<p>Simuler farger og paletter under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i. Et gråkort eller et referansekort gjør telefonen til et enkelt måleverktøy for farge og lys.</p>'
               if nb else
               '<p>Simulate colours and palettes in other viewing conditions, and compensate picked colours for the light they were photographed in. A grey card or a reference card turns your phone into a simple measuring tool for colour and light.</p>')
     lysdel += '\n<ul>\n' + '\n'.join(f'  <li>{p}</li>' for p in lysliste) + '\n</ul>\n'
@@ -771,11 +771,11 @@ def plattformer(lang):
     nei = '<span aria-hidden="true">–</span><span class="visuelt-skjult">' + ('Nei' if nb else 'No') + '</span>'
     if nb:
         tittel = 'iPhone, iPad og Mac – Kolorist'
-        beskr = 'Kolorist er én app for iPhone, iPad og Mac. Bruk én eller flere – palettene, lysmiljøene og profilene følger med via iCloud.'
+        beskr = 'Kolorist er én app for iPhone, iPad og Mac. Bruk én eller flere – palettene, betraktningsforholdene og profilene følger med via iCloud.'
         h1 = 'iPhone, iPad og Mac'
-        ingress = 'Én app for iPhone, iPad og Mac. Bruk den på enheten du har – eller på flere, med palettene, lysmiljøene og profilene dine synkronisert via iCloud.'
+        ingress = 'Én app for iPhone, iPad og Mac. Bruk den på enheten du har – eller på flere, med palettene, betraktningsforholdene og profilene dine synkronisert via iCloud.'
         styrker_tittel = 'Hver enhet sin styrke'
-        styrker = [('iPhone', 'Alltid med deg: plukk farger med kameraet, mål lyset og simuler farger mot andre lysmiljøer.'),
+        styrker = [('iPhone', 'Alltid med deg: plukk farger med kameraet, mål lyset og simuler farger under andre betraktningsforhold.'),
                    ('iPad', 'Mer plass: i liggende format ligger fargeflatene ved siden av verktøyene, og på store iPader er palettene for hånden.'),
                    ('Mac', 'Bredt vindu: pipette for hele skjermen og fargeprøver du drar rett inn i andre programmer.')]
         sammen_tittel = 'Sammen'
@@ -793,7 +793,7 @@ def plattformer(lang):
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
                  ('Kontrast (WCAG og LRV) og fargesyn', ja, ja, ja),
-                 ('Simuler farger og paletter i andre lysmiljøer', ja, ja, ja),
+                 ('Simuler farger og paletter under andre betraktningsforhold', ja, ja, ja),
                  ('Fargeflatene ved siden av verktøyene', nei, 'I liggende format', 'I bredt vindu'),
                  ('Palettene for hånden, med dra og slipp', nei, 'På store iPader', ja),
                  ('Plukk farger med kameraet', ja, ja, 'Innebygd kamera eller iPhone'),
