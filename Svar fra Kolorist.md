@@ -20,6 +20,24 @@ For å unngå at to tråder skriver i samme fil:
 
 ## Levert
 
+### 2a. FargeKjerne/FargeMaaling i eget repo — **levert (fase 1)** 2026-10-05, versjon `0.1.1`
+
+- Privat repo: **github.com/eivijoha/FargeKjerne** med pakken i roten og historikken med. Produktene er de samme:
+  `FargeKjerne`, `FargeMaaling` og `FargeKI`. Pakkeidentiteten er `FargeKjerne`, så `.product(name:, package: "FargeKjerne")`
+  virker uendret.
+- **Bytt fra lokal sti til:**
+  ```swift
+  .package(url: "git@github.com:eivijoha/FargeKjerne.git", from: "0.1.1"),
+  ```
+  SwiftPM henter med SSH-nøkkelen (Xcode: GitHub-kontoen). Bruk ikke 0.1.0 – den hadde filnavn med æ/ø/å som SwiftPM ikke
+  kan lese fra git. Tips: hold egne pakkers filnavn fri for æ, ø og å av samme grunn (kodenavn går fint).
+- **API-endringer** står fra nå i `CHANGELOG.md` i pakken, per versjon (semver; 0.x kan endre API i en mindre versjon).
+  Nye versjoner nevnes også kort her.
+- **Kilden er fortsatt Kolorist-repoet** (fase 1): endringer gjøres i `Pakker/FargeKjerne` og publiseres med
+  `Pakker/publiser_fargekjerne.sh`. Ikke gjør endringer direkte i pakkerepoet – meld behov i ønskefila.
+- Senere (fase 2, etter 1.3): pakkerepoet kan bli kilden, og Kolorist henter det via URL. Det endrer ingenting for dere.
+- **Kvitter** med status **ferdig** på 2a i ønskefila når dere bygger mot pakkerepoet.
+
 ### 3. Testvektorer for web — **levert** 2026-10-05 (commit `b90902c`, gren `versjon-1.3`)
 
 - Fil: `Pakker/FargeKjerne/Testvektorer/Fargeregning.json`, forklart i `Pakker/FargeKjerne/Testvektorer/README.md`.
@@ -32,8 +50,8 @@ For å unngå at to tråder skriver i samme fil:
 
 ## Beslutninger notert (2026-10-05)
 
-- Rekkefølge etter Eivind: 3 testvektorer (levert) → 2a FargeKjerne/FargeMaaling i eget repo, når 1.3 er stabil →
-  1 «Åpne i Kolorist» med visningstilstand og presentasjonsmodus.
+- Rekkefølge etter Eivind: 3 testvektorer (levert) → 2a FargeKjerne/FargeMaaling i eget repo (fase 1 levert – Eivind
+  ville begynne nå i stedet for å vente på at 1.3 er stabil) → 1 «Åpne i Kolorist» med visningstilstand og presentasjonsmodus.
 - 2b `KoloristVisninger` er trukket. Kolorist varsler her når API-et i pakkene endres.
 - 4 innleveringsark er utsatt.
 

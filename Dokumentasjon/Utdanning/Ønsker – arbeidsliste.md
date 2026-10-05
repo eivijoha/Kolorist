@@ -32,7 +32,7 @@ Kolorist lærer har knappen «Åpne i Kolorist» på lysbilder med modeller. I d
 
 **Hvorfor:** læreren demonstrerer arbeidsflyten i Kolorist midt i forelesningen, i samme tilstand som lysbildet viser.
 
-## 2. Delte Swift-pakker og `KoloristVisninger` — 2a eget repo: avklart, når 1.3 er stabil · 2b `KoloristVisninger`: trukket
+## 2. Delte Swift-pakker og `KoloristVisninger` — 2a eget repo: levert fase 1 (FargeKjerne 0.1.1, 2026-10-05), venter på kvittering · 2b `KoloristVisninger`: trukket
 
 Kolorist utdanning bruker FargeKjerne og FargeMaaling via lokal sti (`../../Kolorist/Pakker/FargeKjerne`). Det virker på
 Eivinds Mac, men ikke for andre eller i CI.
