@@ -44,12 +44,16 @@ struct LeggGradientIPalettMeny: View {
 struct PalettGradientListe: View {
     @Bindable var dokument: PalettDokument
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.modelContext) private var kontekst
+    @State private var slettes: PalettGradient?
 
     var body: some View {
         if !dokument.gradienter.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Gradienter").font(.headline)
                 ForEach(dokument.gradienter) { g in
+                    // Sveip til venstre for å slette (iPhone/iPad).
+                    SveipForÅSlette(slett: { slettes = g }) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(g.navn.isEmpty ? String(localized: "Uten navn") : g.navn).font(.subheadline.weight(.semibold)).lineLimit(1)
                         GradientStripe(oppsett: g.oppsett, hjørne: 8).frame(height: 44)
@@ -67,17 +71,33 @@ struct PalettGradientListe: View {
                         Button("Åpne i Overgang", systemImage: "arrow.up.forward.app") { åpne(g) }
                         GradientKopierTilMeny(gradient: Gradientkopi(farger: [g.oppsett.fra, g.oppsett.til], navn: g.navn))
                         DelSomLenke(navn: g.navn) { Lenkedeling.gradient(g.oppsett, navn: g.navn) }
-                        Button("Slett", systemImage: "trash", role: .destructive) {
-                            dokument.gradienter.removeAll { $0.id == g.id }
-                        }
+                        Button("Slett", systemImage: "trash", role: .destructive) { slettes = g }
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityAddTraits(.isButton)
                     .accessibilityAction(named: "Åpne i Overgang") { åpne(g) }
+                    // Bakgrunn, så slett-knappen ikke skinner gjennom mens raden glir.
+                    .background(Color.skjemabakgrunn)
+                    }
                 }
             }
             .padding(.horizontal)
             .padding(.bottom)
+            .alert("Slette «\(slettes.map { $0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn } ?? "")»?",
+                   isPresented: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } })) {
+                Button("Avbryt", role: .cancel) {}
+                Button("Slett gradient", role: .destructive) {
+                    if let id = slettes?.id {
+                        kontekst.angresteg("Slett gradient") { dokument.gradienter.removeAll { $0.id == id } }
+                    }
+                }
+            } message: {
+                #if os(macOS)
+                Text("Du kan angre med ⌘Z.")
+                #else
+                Text("Rist for å angre.")
+                #endif
+            }
         }
     }
 

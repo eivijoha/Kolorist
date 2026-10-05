@@ -24,6 +24,8 @@ struct GradientSeksjon: View {
                       alignment: .leading, spacing: 12) {
                 ForEach(gradienter) { g in
                     if let oppsett = g.oppsett {
+                        // Sveip til venstre for å slette (iPhone/iPad), som palettkortene.
+                        SveipForÅSlette(slett: { slettes = g }) {
                         GradientKort(navn: g.navn, oppsett: oppsett)
                             .onTapGesture { arbeidsbenk.åpne(oppsett) }
                             .accessibilityAction { arbeidsbenk.åpne(oppsett) }
@@ -44,6 +46,7 @@ struct GradientSeksjon: View {
                             Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = g }
                                 Button("Slett gradient", systemImage: "trash", role: .destructive) { slettes = g }
                             }
+                        }
                     }
                 }
             }
@@ -56,8 +59,9 @@ struct GradientSeksjon: View {
                 if let omdøpes, !rent.isEmpty { omdøpes.navn = rent; omdøpes.endret = .now }
             }
         }
-        .confirmationDialog("Slette «\(slettes?.navn ?? "")»?", isPresented: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } }),
-                            titleVisibility: .visible) {
+        // Varsel midt på skjermen (ikke en popover som havner der kortet sto på iPad).
+        .alert("Slette «\(slettes?.navn ?? "")»?", isPresented: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } })) {
+            Button("Avbryt", role: .cancel) {}
             Button("Slett gradient", role: .destructive) {
                 if let slettes { kontekst.angresteg("Slett gradient") { kontekst.delete(slettes) } }
             }
