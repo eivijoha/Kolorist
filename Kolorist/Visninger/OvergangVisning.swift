@@ -136,8 +136,7 @@ struct OvergangVisning: View {
 
     /// Valg for hele settet med lysere og mørkere toner (alle radene, lysest først), i menyen på hver farge i det.
     /// `samlet`: i én undermeny «Hele settet» (boblen på iPhone og iPad har ikke plass til alle valgene).
-    @ViewBuilder private func settvalg(lukk: @escaping () -> Void, samlet: Bool = false) -> some View {
-        let sett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
+    @ViewBuilder private func settvalg(_ sett: [PalettFarge], lukk: @escaping () -> Void, samlet: Bool = false) -> some View {
         let settnavn = String(localized: "Lysere og mørkere \(start.hex()) → \(slutt.hex())")
         let valg = Group {
             Button("Lagre settet som palett …", systemImage: "square.grid.3x3") {
@@ -159,6 +158,9 @@ struct OvergangVisning: View {
     /// Lysere og mørkere varianter av hver tone (overgangsraden markert med ramme), over trinnkontrollene.
     private var lysereMørkerePanel: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
+        // Radene regnes én gang per oppdatering (med et fargebibliotek som begrensning er hver tone et søk).
+        let rader = self.rader
+        let sett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
         return PanelSeksjon(panel: .lysereMørkere) {
             if rader.count > 1 {
                 Grid(horizontalSpacing: 3, verticalSpacing: 3) {
@@ -168,8 +170,8 @@ struct OvergangVisning: View {
                             ForEach(Array(rad.enumerated()), id: \.offset) { _, farge in
                                 FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett,
                                           åpneIStudio: { arbeidsbenk.visIStudio($0) }, palettFarge: bibliotekstone(farge),
-                                          ekstraMeny: AnyView(settvalg(lukk: {})), valgBoble: true,
-                                          bobleEkstra: { lukk in AnyView(settvalg(lukk: lukk, samlet: true)) })
+                                          ekstraMeny: AnyView(settvalg(sett, lukk: {})), valgBoble: true,
+                                          bobleEkstra: { lukk in AnyView(settvalg(sett, lukk: lukk, samlet: true)) })
                                     .frame(minHeight: 36)
                                     .overlay {
                                         if r == midtrad {
