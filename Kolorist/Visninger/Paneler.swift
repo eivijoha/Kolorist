@@ -137,13 +137,25 @@ struct TilpasningArk: View {
 /// Seksjon i en rullbar liste (Paletter): overskrift med pil som legger seksjonen sammen, og valgfrie knapper til
 /// høyre. Hvilke seksjoner som er lagt sammen, huskes på enheten.
 struct Listeseksjon<Innhold: View, Tillegg: View>: View {
-    let tittel: LocalizedStringKey
+    let tittel: Text
+    /// Underseksjon (f.eks. en palettgruppe inne i Paletter): mindre overskrift.
+    var undernivå = false
+    /// Symbol foran tittelen (SF Symbols).
+    var ikon: String?
     @ViewBuilder var tillegg: Tillegg
     @ViewBuilder var innhold: Innhold
     @AppStorage private var sammen: Bool
 
     init(_ id: String, tittel: LocalizedStringKey, @ViewBuilder tillegg: () -> Tillegg, @ViewBuilder innhold: () -> Innhold) {
+        self.init(id, tittel: Text(tittel), tillegg: tillegg, innhold: innhold)
+    }
+
+    /// Med ferdig tekst som tittel (f.eks. et navn brukeren har gitt, som ikke skal oversettes).
+    init(_ id: String, tittel: Text, undernivå: Bool = false, ikon: String? = nil, @ViewBuilder tillegg: () -> Tillegg,
+         @ViewBuilder innhold: () -> Innhold) {
         self.tittel = tittel
+        self.undernivå = undernivå
+        self.ikon = ikon
         self.tillegg = tillegg()
         self.innhold = innhold()
         _sammen = AppStorage(wrappedValue: false, "listeseksjon.sammen.\(id)")
@@ -154,7 +166,8 @@ struct Listeseksjon<Innhold: View, Tillegg: View>: View {
             HStack(spacing: 8) {
                 Button { withAnimation(.snappy) { sammen.toggle() } } label: {
                     HStack(spacing: 6) {
-                        Text(tittel).font(.title3.weight(.semibold)).foregroundStyle(Color.primary)
+                        if let ikon { Image(systemName: ikon).foregroundStyle(Color.sekundærTekst).accessibilityHidden(true) }
+                        tittel.font(undernivå ? .headline : .title3.weight(.semibold)).foregroundStyle(Color.primary).lineLimit(1)
                         Image(systemName: "chevron.down")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(Color.sekundærTekst)

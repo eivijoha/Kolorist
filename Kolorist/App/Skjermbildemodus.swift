@@ -72,10 +72,18 @@ enum Skjermbildemodus {
             ("Nordisk kyst", "Nordic coast", ["#1F3A4D", "#3E6A80", "#8FB3C2", "#E6DCC8", "#C8553D"]),
         ]
         let nå = Date.now
+        // `-eksempelgruppe YES`: «Soloppgang» og «Skog» i en palettgruppe (test av palettgrupper).
+        var gruppe: UUID?
+        if UserDefaults.standard.bool(forKey: "eksempelgruppe") {
+            let g = PalettGruppe(navn: engelsk ? "Landscapes" : "Landskap")
+            kontekst.insert(g)
+            gruppe = g.id
+        }
         for (i, (nb, en, hex)) in paletter.enumerated() {
             let p = PalettDokument(navn: engelsk ? en : nb,
                                    farger: hex.map { PalettFarge(farge: Farge(hex: $0)!, opphav: .manuell) })
             p.opprettet = nå.addingTimeInterval(Double(i - 10) * 60)
+            if i < 2 { p.gruppeID = gruppe }
             if i == 2 {   // «Nordisk kyst» får en gradient, så gradienter i paletter vises
                 p.gradienter = [PalettGradient(navn: engelsk ? "Coast at dusk" : "Kyst i skumring",
                                                oppsett: Gradientoppsett(fra: Farge(hex: "#1F3A4D")!, til: Farge(hex: "#C8553D")!,

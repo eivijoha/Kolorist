@@ -2291,12 +2291,32 @@
         }
       }
     },
+    "Flytt palett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Palette"
+          }
+        }
+      }
+    },
     "Flytt til": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Move to"
+          }
+        }
+      }
+    },
+    "Flytt til gruppe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to Group"
           }
         }
       }
@@ -2479,6 +2499,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name the gradient"
+          }
+        }
+      }
+    },
+    "Gi gruppen nytt navn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename Group"
+          }
+        }
+      }
+    },
+    "Gi gruppen nytt navn …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename Group …"
           }
         }
       }
@@ -3261,6 +3301,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "No palettes yet. Tap + for an empty palette or one from value words, or create one from Studio, Gradient or Pick."
+          }
+        }
+      }
+    },
+    "Ingen paletter i gruppen ennå. Flytt paletter hit med «Flytt til gruppe» i menyen på hver palett.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No palettes in the group yet. Move palettes here with “Move to Group” in the menu on each palette."
           }
         }
       }
@@ -5471,6 +5521,16 @@
         }
       }
     },
+    "Ny gruppe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Group …"
+          }
+        }
+      }
+    },
     "Ny palett": {
       "localizations": {
         "en": {
@@ -5507,6 +5567,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "New palette …"
+          }
+        }
+      }
+    },
+    "Ny palettgruppe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Palette Group"
+          }
+        }
+      }
+    },
+    "Ny palettgruppe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Palette Group …"
           }
         }
       }
@@ -5823,6 +5903,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The palette needs at least two colours."
+          }
+        }
+      }
+    },
+    "Palettene i gruppen beholdes og flyttes til «Uten gruppe».": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The palettes in the group are kept and moved to “No Group”."
           }
         }
       }
@@ -6483,6 +6573,26 @@
         }
       }
     },
+    "Slett gruppe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Group"
+          }
+        }
+      }
+    },
+    "Slett gruppe …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Group …"
+          }
+        }
+      }
+    },
     "Slett lysmiljø": {
       "localizations": {
         "en": {
@@ -6513,6 +6623,16 @@
         }
       }
     },
+    "Slett palettgruppe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Palette Group"
+          }
+        }
+      }
+    },
     "Slett profilen": {
       "localizations": {
         "en": {
@@ -6529,6 +6649,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete reference card"
+          }
+        }
+      }
+    },
+    "Slette gruppen «%@»?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the group “%@”?"
           }
         }
       }
@@ -7395,6 +7525,16 @@
         }
       }
     },
+    "Uten gruppe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Group"
+          }
+        }
+      }
+    },
     "Uten navn": {
       "localizations": {
         "en": {
@@ -7527,6 +7667,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour options"
+          }
+        }
+      }
+    },
+    "Valg for gruppen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group options"
           }
         }
       }
@@ -8227,18 +8377,28 @@
         }
       }
     },
+    "«%@» flyttes til den nye gruppen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” is moved to the new group."
+          }
+        }
+      }
+    },
     "«%@» kunne ikke leses: %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "«%1$@» kunne ikke leses: %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "“%1$@” couldn’t be read: %2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "«%1$@» kunne ikke leses: %2$@"
           }
         }
       }

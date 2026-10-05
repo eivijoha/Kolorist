@@ -15,6 +15,7 @@ struct PalettListe: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Query(sort: \PalettDokument.opprettet, order: .reverse) private var paletter: [PalettDokument]
     @Query(sort: \LagretFarge.opprettet, order: .reverse) private var enkeltfarger: [LagretFarge]
+    @Query(sort: \PalettGruppe.opprettet) private var grupper: [PalettGruppe]
     /// Navigasjonssti: oversikten fyller hele hovedvisningen (også på Mac og iPad), valgt palett åpnes over.
     @State private var sti: [Valg] = []
     @State private var målrettet: Valg?
@@ -28,6 +29,96 @@ struct PalettListe: View {
     @State private var nyPalettNavn = ""
     @State private var importererASE = false
     @State private var importfeil: String?
+    /// Palettgrupper: ny gruppe (ev. med en palett som skal flyttes dit), nytt navn og sletting.
+    @State private var visNyGruppe = false
+    @State private var gruppenavn = ""
+    @State private var flyttesTilNyGruppe: PalettDokument?
+    @State private var omdøpesGruppe: PalettGruppe?
+    @State private var slettesGruppe: PalettGruppe?
+
+    /// Gruppene sortert etter navn.
+    private var sorterteGrupper: [PalettGruppe] {
+        grupper.sorted { $0.navn.localizedStandardCompare($1.navn) == .orderedAscending }
+    }
+
+    /// Paletter uten gruppe – også de som peker på en gruppe som er slettet (f.eks. på en annen enhet).
+    private var paletterUtenGruppe: [PalettDokument] {
+        let ider = Set(grupper.map(\.id))
+        return paletter.filter { $0.gruppeID.map { !ider.contains($0) } ?? true }
+    }
+
+    private func flyttPalett(_ p: PalettDokument, til gruppe: UUID?) {
+        kontekst.angresteg("Flytt palett") { p.gruppeID = gruppe }
+    }
+
+    private func opprettGruppe() {
+        let navn = gruppenavn.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !navn.isEmpty else { return }
+        kontekst.angresteg("Ny palettgruppe") {
+            let g = PalettGruppe(navn: navn)
+            kontekst.insert(g)
+            flyttesTilNyGruppe?.gruppeID = g.id
+        }
+        flyttesTilNyGruppe = nil
+    }
+
+    /// Menyen for å flytte en palett til en gruppe (eller ut av den).
+    @ViewBuilder private func flyttTilGruppeMeny(_ p: PalettDokument) -> some View {
+        Menu("Flytt til gruppe", systemImage: "folder") {
+            ForEach(sorterteGrupper) { g in
+                Button(g.navn.isEmpty ? String(localized: "Uten navn") : g.navn) { flyttPalett(p, til: g.id) }
+                    .disabled(p.gruppeID == g.id)
+            }
+            if p.gruppeID != nil {
+                Button("Uten gruppe", systemImage: "tray") { flyttPalett(p, til: nil) }
+            }
+            Divider()
+            Button("Ny gruppe …", systemImage: "folder.badge.plus") {
+                gruppenavn = ""
+                flyttesTilNyGruppe = p
+                visNyGruppe = true
+            }
+        }
+    }
+
+    /// Palettkortene i et rutenett som tilpasser seg bredden: én kolonne på iPhone, flere på iPad og Mac.
+    private func palettRutenett(_ liste: [PalettDokument]) -> some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)],
+                  alignment: .leading, spacing: 12) {
+            ForEach(liste) { p in
+                SveipForÅSlette(slett: { slettes = p }) {
+                    kort(.palett(p)) {
+                        PalettRad(dokument: p, velg: velgFarge)
+                    } slipp: { farger in
+                        flytt(farger, til: p, i: kontekst)
+                    }
+                    .contextMenu {
+                        Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
+                            .disabled(p.farger.isEmpty)
+                        Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
+                            .disabled(p.farger.count < 2)
+                        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
+                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
+                        Divider()
+                        Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
+                        flyttTilGruppeMeny(p)
+                        KopierTilMeny(farger: p.farger, navn: p.navn)
+                        let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
+                        DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
+                            .disabled(farger.isEmpty && gradienter.isEmpty)
+                        Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = p }
+                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
+                        Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
+                    }
+                }
+            }
+        }
+    }
+
+    /// Antall paletter, til høyre i en gruppeoverskrift.
+    private func antall(_ n: Int) -> some View {
+        Text("\(n)").font(.callout).foregroundStyle(Color.sekundærTekst).monospacedDigit()
+    }
 
     enum Valg: Hashable {
         case enkeltfarger
@@ -42,24 +133,44 @@ struct PalettListe: View {
             }
             Button("Ny palett fra verdiord (KI)", systemImage: "sparkles") { visVerdiord = true }
             Button("Importer fra ASE …", systemImage: "square.and.arrow.down") { importererASE = true }
+            Divider()
+            Button("Ny palettgruppe …", systemImage: "folder.badge.plus") {
+                gruppenavn = ""
+                flyttesTilNyGruppe = nil
+                visNyGruppe = true
+            }
         }
     }
 
     /// ASE-filer som nye paletter: én palett per fargegruppe i filen (se `Bibliotekimport.aseSomPaletter`).
     private func importerASE(_ urler: [URL]) {
-        var nye: [Palett] = []
+        // Per fil: flere fargegrupper blir en palettgruppe med filnavnet, én gruppe blir bare én palett.
+        var filer: [(navn: String, paletter: [Palett])] = []
         for url in urler {
             let tilgang = url.startAccessingSecurityScopedResource()
             defer { if tilgang { url.stopAccessingSecurityScopedResource() } }
             do {
-                nye += try Bibliotekimport.aseSomPaletter(Data(contentsOf: url), filnavn: url.lastPathComponent)
+                filer.append((url.deletingPathExtension().lastPathComponent,
+                              try Bibliotekimport.aseSomPaletter(Data(contentsOf: url), filnavn: url.lastPathComponent)))
             } catch {
                 importfeil = String(localized: "«\(url.lastPathComponent)» kunne ikke leses: \(error.localizedDescription)")
             }
         }
-        guard !nye.isEmpty else { return }
+        guard !filer.isEmpty else { return }
         kontekst.angresteg("Importer paletter") {
-            for p in nye { kontekst.insert(PalettDokument(navn: p.navn, farger: p.farger)) }
+            for fil in filer {
+                var gruppe: UUID?
+                if fil.paletter.count > 1 {
+                    let g = PalettGruppe(navn: fil.navn)
+                    kontekst.insert(g)
+                    gruppe = g.id
+                }
+                for p in fil.paletter {
+                    let dokument = PalettDokument(navn: p.navn, farger: p.farger)
+                    dokument.gruppeID = gruppe
+                    kontekst.insert(dokument)
+                }
+            }
         }
     }
 
@@ -99,34 +210,42 @@ struct PalettListe: View {
                                 .font(.callout)
                                 .foregroundStyle(Color.sekundærTekst)
                         }
-                        // Rutenett som tilpasser seg bredden: én kolonne på iPhone, flere på iPad og Mac.
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)],
-                                  alignment: .leading, spacing: 12) {
-                            ForEach(paletter) { p in
-                                SveipForÅSlette(slett: { slettes = p }) {
-                                    kort(.palett(p)) {
-                                        PalettRad(dokument: p, velg: velgFarge)
-                                    } slipp: { farger in
-                                        flytt(farger, til: p, i: kontekst)
+                        // Palettgrupper (sammenleggbare), deretter paletter uten gruppe.
+                        ForEach(sorterteGrupper) { g in
+                            let iGruppen = paletter.filter { $0.gruppeID == g.id }
+                            Listeseksjon("gruppe.\(g.id.uuidString)",
+                                         tittel: Text(verbatim: g.navn.isEmpty ? String(localized: "Uten navn") : g.navn),
+                                         undernivå: true, ikon: "folder") {
+                                antall(iGruppen.count)
+                                Menu {
+                                    Button("Gi gruppen nytt navn …", systemImage: "character.cursor.ibeam") {
+                                        gruppenavn = g.navn
+                                        omdøpesGruppe = g
                                     }
-                                    .contextMenu {
-                                        Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
-                                            .disabled(p.farger.isEmpty)
-                                        Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
-                                            .disabled(p.farger.count < 2)
-                                        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
-                                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                                        Divider()
-                                        Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
-                                        KopierTilMeny(farger: p.farger, navn: p.navn)
-                                        let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
-                                        DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
-                                            .disabled(farger.isEmpty && gradienter.isEmpty)
-                                        Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = p }
-                                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                                        Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
-                                    }
+                                    Button("Slett gruppe …", systemImage: "trash", role: .destructive) { slettesGruppe = g }
+                                } label: {
+                                    Image(systemName: "ellipsis.circle").minsteTrykkflate()
                                 }
+                                .menuIndicator(.hidden)
+                                .fixedSize()
+                                .accessibilityLabel(Text("Valg for gruppen"))
+                            } innhold: {
+                                if iGruppen.isEmpty {
+                                    Text("Ingen paletter i gruppen ennå. Flytt paletter hit med «Flytt til gruppe» i menyen på hver palett.")
+                                        .font(.callout)
+                                        .foregroundStyle(Color.sekundærTekst)
+                                }
+                                palettRutenett(iGruppen)
+                            }
+                        }
+                        let uten = paletterUtenGruppe
+                        if grupper.isEmpty {
+                            palettRutenett(uten)
+                        } else if !uten.isEmpty {
+                            Listeseksjon("gruppe.ingen", tittel: Text("Uten gruppe"), undernivå: true, ikon: "tray") {
+                                antall(uten.count)
+                            } innhold: {
+                                palettRutenett(uten)
                             }
                         }
                     }
@@ -157,6 +276,34 @@ struct PalettListe: View {
             .fileImporter(isPresented: $importererASE, allowedContentTypes: [UTType(filenameExtension: "ase") ?? .data, .data],
                           allowsMultipleSelection: true) { resultat in
                 if let urler = try? resultat.get() { importerASE(urler) }
+            }
+            .alert("Ny palettgruppe", isPresented: $visNyGruppe) {
+                TextField("Navn", text: $gruppenavn)
+                Button("Avbryt", role: .cancel) { flyttesTilNyGruppe = nil }
+                Button("Opprett", action: opprettGruppe)
+            } message: {
+                if let p = flyttesTilNyGruppe { Text("«\(p.navn)» flyttes til den nye gruppen.") }
+            }
+            .alert("Gi gruppen nytt navn", isPresented: Binding(get: { omdøpesGruppe != nil }, set: { if !$0 { omdøpesGruppe = nil } })) {
+                TextField("Navn", text: $gruppenavn)
+                Button("Avbryt", role: .cancel) {}
+                Button("Lagre") {
+                    let navn = gruppenavn.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if let g = omdøpesGruppe, !navn.isEmpty { kontekst.angresteg("Gi gruppen nytt navn") { g.navn = navn } }
+                }
+            }
+            .alert("Slette gruppen «\(slettesGruppe?.navn ?? "")»?", isPresented: Binding(get: { slettesGruppe != nil }, set: { if !$0 { slettesGruppe = nil } })) {
+                Button("Avbryt", role: .cancel) {}
+                Button("Slett gruppe", role: .destructive) {
+                    if let g = slettesGruppe {
+                        kontekst.angresteg("Slett palettgruppe") {
+                            for p in paletter where p.gruppeID == g.id { p.gruppeID = nil }
+                            kontekst.delete(g)
+                        }
+                    }
+                }
+            } message: {
+                Text("Palettene i gruppen beholdes og flyttes til «Uten gruppe».")
             }
             .alert("Importen mislyktes", isPresented: Binding(get: { importfeil != nil }, set: { if !$0 { importfeil = nil } })) {
                 Button("OK", role: .cancel) {}

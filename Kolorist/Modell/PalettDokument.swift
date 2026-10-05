@@ -12,6 +12,9 @@ final class PalettDokument {
     var opprettet: Date = Date.now
     var endret: Date = Date.now
     private var fargeData: Data = Data()
+    /// Gruppen paletten ligger i (`PalettGruppe.id`), eller `nil` (fra 1.3). En id i stedet for en relasjon: en
+    /// gruppe slettet på en annen enhet gir bare en palett uten gruppe, og eldre versjoner lar feltet være i fred.
+    var gruppeID: UUID?
 
     init(navn: String, farger: [PalettFarge] = []) {
         self.id = UUID()
@@ -47,6 +50,19 @@ final class PalettDokument {
             gradientData = data
             endret = .now
         }
+    }
+}
+
+/// En palettgruppe (mappe, ett nivå) under Paletter (fra 1.3). Palettene peker hit med `PalettDokument.gruppeID`.
+@Model
+final class PalettGruppe {
+    var id: UUID = UUID()
+    var navn: String = ""
+    var opprettet: Date = Date.now
+
+    init(navn: String) {
+        self.id = UUID()
+        self.navn = navn
     }
 }
 
@@ -125,7 +141,7 @@ final class LagretGradient {
 /// har standardverdier, ingen unike begrensninger og ingen påkrevde relasjoner.
 enum Lagring {
     static let containerID = "iCloud.no.engenett.Kolorist"
-    private static let skjema = Schema([PalettDokument.self, LagretFarge.self, LagretGradient.self])
+    private static let skjema = Schema([PalettDokument.self, LagretFarge.self, LagretGradient.self, PalettGruppe.self])
 
     /// Om lageret synkroniseres via iCloud (for visning i appen).
     private(set) static var synkroniserer = false
