@@ -132,10 +132,18 @@ func dragLeverandør(farge: Farge, palettFarge: PalettFarge?) -> NSItemProvider 
 }
 #endif
 
+/// En palett som dras til en palettgruppe: bare id-en, så den ikke kan forveksles med farger eller tekst.
+nonisolated struct PalettReferanse: Codable, Transferable {
+    let id: UUID
+    static var transferRepresentation: some TransferRepresentation { CodableRepresentation(contentType: .koloristPalett) }
+}
+
 nonisolated extension UTType {
     /// Deklarert som eksportert type i Info.plist.
     static let koloristFarge = UTType(exportedAs: "no.engenett.kolorist.farge")
     static let koloristPalettfarge = UTType(exportedAs: "no.engenett.kolorist.palettfarge")
+    /// En palett som dras innad i appen (til en palettgruppe).
+    static let koloristPalett = UTType(exportedAs: "no.engenett.kolorist.palett")
     #if os(macOS)
     /// AppKits utklippstavletype for `NSColor` (deklarert av systemet).
     static let macFarge = UTType(NSPasteboard.PasteboardType.color.rawValue)!

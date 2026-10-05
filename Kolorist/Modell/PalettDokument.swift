@@ -15,6 +15,12 @@ final class PalettDokument {
     /// Gruppen paletten ligger i (`PalettGruppe.id`), eller `nil` (fra 1.3). En id i stedet for en relasjon: en
     /// gruppe slettet på en annen enhet gir bare en palett uten gruppe, og eldre versjoner lar feltet være i fred.
     var gruppeID: UUID?
+    /// Plassen i gruppen (eller blant paletter uten gruppe) når brukeren har ordnet dem selv (fra 1.3). `nil`: etter
+    /// opprettelse, nyeste først. Navn uten «ø», siden feltet også er et CloudKit-felt.
+    var sortering: Double?
+
+    /// Sorteringsnøkkel: egen plass, ellers nyeste først (negativt tidspunkt, så nye paletter havner øverst).
+    var sorteringsnøkkel: Double { sortering ?? -opprettet.timeIntervalSince1970 }
 
     init(navn: String, farger: [PalettFarge] = []) {
         self.id = UUID()

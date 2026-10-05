@@ -3325,12 +3325,12 @@
         }
       }
     },
-    "Ingen paletter i gruppen ennå. Flytt paletter hit med «Flytt til gruppe» i menyen på hver palett.": {
+    "Ingen paletter i gruppen ennå. Dra paletter hit, eller bruk «Flytt til gruppe» i menyen på hver palett.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No palettes in the group yet. Move palettes here with “Move to Group” in the menu on each palette."
+            "value": "No palettes in the group yet. Drag palettes here, or use “Move to Group” in the menu on each palette."
           }
         }
       }

@@ -60,6 +60,16 @@
 			<key>UTTypeIdentifier</key>
 			<string>no.engenett.kolorist.palettfarge</string>
 		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Kolorist-palett</string>
+			<key>UTTypeIdentifier</key>
+			<string>no.engenett.kolorist.palett</string>
+		</dict>
 	</array>
 </dict>
 </plist>

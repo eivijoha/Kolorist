@@ -35,6 +35,61 @@ struct PalettListe: View {
     @State private var flyttesTilNyGruppe: PalettDokument?
     @State private var omdøpesGruppe: PalettGruppe?
     @State private var slettesGruppe: PalettGruppe?
+    /// Gruppen en palett dras over (`nil`-gruppen er «Uten gruppe»), markert med ramme.
+    @State private var gruppemål: UUID??
+
+    /// Paletter i rekkefølge: egen plass først der den er satt, ellers nyeste først.
+    private func ordnet(_ liste: [PalettDokument]) -> [PalettDokument] {
+        liste.sorted { $0.sorteringsnøkkel < $1.sorteringsnøkkel }
+    }
+
+    /// Paletter sluppet på paletten `mål`: de flyttes til målets plass (etter målet når de flyttes nedover, foran
+    /// når de flyttes oppover) og inn i målets gruppe. Plassene i gruppen skrives på nytt (0, 1, 2 …).
+    private func slipp(_ referanser: [PalettReferanse], på mål: PalettDokument) -> Bool {
+        let ider = Set(referanser.map(\.id))
+        guard !ider.contains(mål.id) else { return false }
+        let gyldige = Set(grupper.map(\.id))
+        let gruppe = mål.gruppeID.flatMap { gyldige.contains($0) ? $0 : nil }
+        let iGruppen = ordnet(paletter.filter { ($0.gruppeID.flatMap { gyldige.contains($0) ? $0 : nil }) == gruppe })
+        let flyttes = paletter.filter { ider.contains($0.id) }
+        guard !flyttes.isEmpty, let målFør = iGruppen.firstIndex(where: { $0.id == mål.id }) else { return false }
+        let fraFør = iGruppen.firstIndex { ider.contains($0.id) }
+        var nye = iGruppen.filter { !ider.contains($0.id) }
+        let plass = nye.firstIndex { $0.id == mål.id } ?? nye.count
+        let innsett = (fraFør.map { $0 < målFør } ?? false) ? plass + 1 : plass
+        nye.insert(contentsOf: flyttes, at: innsett)
+        kontekst.angresteg("Flytt palett") {
+            withAnimation(.snappy) {
+                for (i, p) in nye.enumerated() {
+                    p.sortering = Double(i)
+                    p.gruppeID = gruppe
+                }
+            }
+        }
+        return true
+    }
+
+    /// Gjør en gruppe (eller «Uten gruppe») til slippmål for paletter som dras dit.
+    private func tarImotPaletter(til gruppe: UUID?, _ innhold: some View) -> some View {
+        innhold
+            .padding(6)
+            .overlay {
+                if gruppemål == .some(gruppe) {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(Color.accentColor, lineWidth: 3)
+                }
+            }
+            .padding(-6)
+            .dropDestination(for: PalettReferanse.self) { referanser, _ in
+                gruppemål = nil
+                let ider = Set(referanser.map(\.id))
+                let flyttes = paletter.filter { ider.contains($0.id) && $0.gruppeID != gruppe }
+                guard !flyttes.isEmpty else { return false }
+                kontekst.angresteg("Flytt palett") { withAnimation(.snappy) { for p in flyttes { p.gruppeID = gruppe } } }
+                return true
+            } isTargeted: { over in
+                if over { gruppemål = .some(gruppe) } else if gruppemål == .some(gruppe) { gruppemål = nil }
+            }
+    }
 
     /// Gruppene sortert etter navn.
     private var sorterteGrupper: [PalettGruppe] {
@@ -91,6 +146,15 @@ struct PalettListe: View {
                         PalettRad(dokument: p, velg: velgFarge)
                     } slipp: { farger in
                         flytt(farger, til: p, i: kontekst)
+                    } slippPalett: { referanser in
+                        // En annen palett sluppet her flyttes til denne plassen (og gruppen).
+                        slipp(referanser, på: p)
+                    }
+                    // Dra paletten til en annen plass, en palettgruppe eller «Uten gruppe».
+                    .draggable(PalettReferanse(id: p.id)) {
+                        Label(p.navn.isEmpty ? String(localized: "Uten navn") : p.navn, systemImage: "swatchpalette")
+                            .padding(10)
+                            .background(.regularMaterial, in: Capsule())
                     }
                     .contextMenu {
                         Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
@@ -212,8 +276,8 @@ struct PalettListe: View {
                         }
                         // Palettgrupper (sammenleggbare), deretter paletter uten gruppe.
                         ForEach(sorterteGrupper) { g in
-                            let iGruppen = paletter.filter { $0.gruppeID == g.id }
-                            Listeseksjon("gruppe.\(g.id.uuidString)",
+                            let iGruppen = ordnet(paletter.filter { $0.gruppeID == g.id })
+                            tarImotPaletter(til: g.id, Listeseksjon("gruppe.\(g.id.uuidString)",
                                          tittel: Text(verbatim: g.navn.isEmpty ? String(localized: "Uten navn") : g.navn),
                                          undernivå: true, ikon: "folder") {
                                 antall(iGruppen.count)
@@ -231,22 +295,22 @@ struct PalettListe: View {
                                 .accessibilityLabel(Text("Valg for gruppen"))
                             } innhold: {
                                 if iGruppen.isEmpty {
-                                    Text("Ingen paletter i gruppen ennå. Flytt paletter hit med «Flytt til gruppe» i menyen på hver palett.")
+                                    Text("Ingen paletter i gruppen ennå. Dra paletter hit, eller bruk «Flytt til gruppe» i menyen på hver palett.")
                                         .font(.callout)
                                         .foregroundStyle(Color.sekundærTekst)
                                 }
                                 palettRutenett(iGruppen)
-                            }
+                            })
                         }
-                        let uten = paletterUtenGruppe
+                        let uten = ordnet(paletterUtenGruppe)
                         if grupper.isEmpty {
                             palettRutenett(uten)
                         } else if !uten.isEmpty {
-                            Listeseksjon("gruppe.ingen", tittel: Text("Uten gruppe"), undernivå: true, ikon: "tray") {
+                            tarImotPaletter(til: nil, Listeseksjon("gruppe.ingen", tittel: Text("Uten gruppe"), undernivå: true, ikon: "tray") {
                                 antall(uten.count)
                             } innhold: {
                                 palettRutenett(uten)
-                            }
+                            })
                         }
                     }
                     Label(Lagring.synkroniserer ? "Paletter, gradienter og enkeltfarger synkroniseres via iCloud."
@@ -390,7 +454,8 @@ struct PalettListe: View {
 
     /// Kort som kan trykkes (åpner) og som tar imot slippede farger.
     private func kort<Innhold: View>(_ v: Valg, @ViewBuilder innhold: () -> Innhold,
-                                     slipp: @escaping ([PalettFarge]) -> Bool) -> some View {
+                                     slipp: @escaping ([PalettFarge]) -> Bool,
+                                     slippPalett: (([PalettReferanse]) -> Bool)? = nil) -> some View {
         HStack(alignment: .center, spacing: 8) {
             innhold()
             Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Color.tertiærTekst)
@@ -404,6 +469,26 @@ struct PalettListe: View {
         }
         .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .onTapGesture { velg(v) }
+        // Paletter (for å endre rekkefølgen) – innerst, så fargemottaket under ikke fanger dem opp.
+        .onDrop(of: slippPalett == nil ? [] : [.koloristPalett], isTargeted: Binding(get: { målrettet == v }, set: { over in
+            målrettet = over ? v : (målrettet == v ? nil : målrettet)
+        })) { leverandører in
+            guard let slippPalett else { return false }
+            Task {
+                var referanser: [PalettReferanse] = []
+                for leverandør in leverandører {
+                    let data: Data? = await withCheckedContinuation { fortsett in
+                        _ = leverandør.loadDataRepresentation(for: .koloristPalett) { data, _ in fortsett.resume(returning: data) }
+                    }
+                    if let data,
+                       let referanse = try? JSONDecoder().decode(PalettReferanse.self, from: data) {
+                        referanser.append(referanse)
+                    }
+                }
+                if !referanser.isEmpty { _ = slippPalett(referanser) }
+            }
+            return true
+        }
         .tarImotFarger { farger in
             slipp(farger)
         } isTargeted: { over in
