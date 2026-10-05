@@ -292,8 +292,11 @@ struct HarmoniSeksjon: View {
 
     var body: some View {
         Section {
+            // Gruppert med skillelinjer: én kulør, naboer, motsatte kulører, jevnt rundt sirkelen.
             Picker("Harmoni", selection: $harmoni) {
-                ForEach(Harmoni.allCases) { Text($0.navn).tag($0) }
+                ForEach(Harmoni.grupper, id: \.self) { gruppe in
+                    Section { ForEach(gruppe) { Text($0.navn).tag($0) } }
+                }
             }
             .onChange(of: harmoni) { _, ny in
                 if ny.harVinkel { vinkel = ny.standardVinkel }

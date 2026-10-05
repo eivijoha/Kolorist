@@ -35,6 +35,10 @@ struct MonokromTests {
         #expect(Monokromstrek(tekst: "tull") == nil)
     }
 
+    @Test func grupperDekkerAlleHarmonieneIRekkefølge() {
+        #expect(Harmoni.grupper.flatMap { $0 } == Harmoni.allCases)
+    }
+
     @Test func harmonienHarAntallMenIkkeVinkel() {
         #expect(Harmoni.monokrom.harAntall && !Harmoni.monokrom.harVinkel)
         #expect(Harmoni.monokrom.forskyvninger(antall: 5) == [0, 0, 0, 0, 0])

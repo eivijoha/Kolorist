@@ -1,25 +1,36 @@
 import Foundation
 
-/// Klassiske fargeharmonier: farger valgt ut fra kulørvinkler rundt fargesirkelen.
+/// Fargeharmonier: farger valgt ut fra kulørvinkler rundt fargesirkelen, eller toner av én kulør (monokrom).
+/// Rekkefølgen går fra rolig til kontrastrik: én kulør, naboer, motsatte kulører og kulører jevnt rundt sirkelen
+/// (se `grupper`).
 public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
-    /// Grunnfarge + motsatt kulør (180°).
-    case komplementær
-    /// Grunnfarge + de to naboene til komplementærfargen (180° ± vinkel).
-    case splittKomplementær
+    /// Én kulør i `antall` toner langs en strek i lyshet–metning-planet (`Monokromstrek`).
+    case monokrom
     /// Naboer på samme side av sirkelen, med `vinkel` mellom hver.
     case analog
     /// En analog gruppe (`antall` farger, `vinkel` mellom hver) og grunnfargens komplementærfarge som aksent.
     case analogMedAksent
+    /// Grunnfarge + motsatt kulør (180°).
+    case komplementær
+    /// Grunnfarge + de to naboene til komplementærfargen (180° ± vinkel).
+    case splittKomplementær
+    /// To komplementærpar (rektangel): 0°, vinkel, 180°, 180° + vinkel.
+    case dobbeltKomplementær
     /// Tre farger jevnt fordelt (0°, 120°, 240°).
     case triade
     /// Fire farger jevnt fordelt (0°, 90°, 180°, 270°).
     case kvadrat
-    /// To komplementærpar (rektangel): 0°, vinkel, 180°, 180° + vinkel.
-    case dobbeltKomplementær
     /// `antall` farger jevnt fordelt rundt sirkelen (5 = pentade …).
     case jevn
-    /// Én kulør i `antall` toner langs en strek i lyshet–metning-planet (`Monokromstrek`).
-    case monokrom
+
+    /// Harmoniene i grupper, til valglister med skillelinjer: én kulør, naboer, motsatte kulører og kulører
+    /// jevnt rundt sirkelen.
+    public static let grupper: [[Harmoni]] = [
+        [.monokrom],
+        [.analog, .analogMedAksent],
+        [.komplementær, .splittKomplementær, .dobbeltKomplementær],
+        [.triade, .kvadrat, .jevn],
+    ]
 
     public var id: String { rawValue }
 
