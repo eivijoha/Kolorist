@@ -1934,6 +1934,16 @@
         }
       }
     },
+    "Fargen er plukket med kamera eller fra bilde uten gråkort eller referansekort. Kameraet stiller selv inn eksponering og hvitbalanse, så en flate kan bli lysere eller mørkere enn den er, og LRV blir et anslag.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colour was picked with the camera or from an image without a grey card or reference card. The camera sets exposure and white balance by itself, so a surface can come out lighter or darker than it is, and the LRV becomes an estimate."
+          }
+        }
+      }
+    },
     "Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. Regelverket for universell utforming viser til WCAG 2.": {
       "localizations": {
         "en": {
@@ -3693,16 +3703,6 @@
         }
       }
     },
-    "Kameraet stiller selv inn eksponering og hvitbalanse, så en flate kan bli lysere eller mørkere enn den er. LRV fra kamera eller bilde er derfor et anslag til fargen er målt mot en kjent referanse.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The camera sets exposure and white balance by itself, so a surface can come out lighter or darker than it is. LRV from the camera or an image is therefore an estimate until the colour is measured against a known reference."
-          }
-        }
-      }
-    },
     "Kamerakarakterisering": {
       "localizations": {
         "en": {
@@ -4261,6 +4261,16 @@
         }
       }
     },
+    "Kun veiledende": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicative only"
+          }
+        }
+      }
+    },
     "Kunne ikke importere": {
       "localizations": {
         "en": {
@@ -4397,12 +4407,12 @@
         }
       }
     },
-    "LRV merket ≈ er plukket med kamera eller fra bilde uten gråkort eller referansekort, og er bare veiledende: kameraets eksponering og hvitbalanse bestemmer hvor lys fargen blir. Bruk gråkort eller referansekort, eller produsentens oppgitte LRV, når kontrasten skal dokumenteres.": {
+    "LRV merket ≈ er kun veiledende.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "LRV marked ≈ was picked with the camera or from an image without a grey card or reference card, and is only indicative: the camera’s exposure and white balance decide how light the colour comes out. Use a grey card or reference card, or the manufacturer’s stated LRV, when the contrast must be documented."
+            "value": "LRV marked ≈ is indicative only."
           }
         }
       }
@@ -8267,16 +8277,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warm white LED"
-          }
-        }
-      }
-    },
-    "Veiledende – plukket uten gråkort eller referansekort": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Indicative – picked without a grey card or reference card"
           }
         }
       }

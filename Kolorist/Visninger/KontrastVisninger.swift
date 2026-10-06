@@ -251,42 +251,53 @@ struct Kontrastflate: View {
     /// Én av de to LRV-flatene: navn, LRV og hex i flatens farge. Hele flaten åpner valgene for fargen.
     private func lrvFelt(_ tittel: String, farge: Binding<Farge>, vist: Farge, visAktivFarge: Bool = true,
                          visHvitOgSort: Bool = false) -> some View {
+        // Plukket med kamera eller fra bilde uten referanse: LRV er bare et anslag.
+        let ukalibrert = arbeidsbenk.erUkalibrert(farge.wrappedValue)
+        let lesbar = vist.lesbarTekstfarge.swiftUI
         // Fargen som eget lag bak menyen, så flatene møtes i en rett kant (menyen avrunder både etiketten og
         // bakgrunner lagt på den på iOS 26).
-        ZStack(alignment: .topTrailing) {
-        vist.swiftUI
-        FargeVelgerMeny(tittel: tittel, farge: farge, visAktivFarge: visAktivFarge, visHvitOgSort: visHvitOgSort) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(1).minimumScaleFactor(0.8)
-                // Plukket med kamera eller fra bilde uten referanse: LRV er bare et anslag.
-                let ukalibrert = arbeidsbenk.erUkalibrert(farge.wrappedValue)
-                Text("LRV \(ukalibrert ? "≈ " : "")\(farge.wrappedValue.lrv, format: .number.precision(.fractionLength(0)))")
-                    .koloristFont(.title2, weight: .bold).monospacedDigit()
-                Spacer(minLength: 4)
-                if ukalibrert {
-                    Text("Veiledende – plukket uten gråkort eller referansekort")
-                        .koloristFont(.caption2)
-                        .lineLimit(3)
-                        .minimumScaleFactor(0.8)
-                        .opacity(0.9)
+        return ZStack {
+            vist.swiftUI
+            FargeVelgerMeny(tittel: tittel, farge: farge, visAktivFarge: visAktivFarge, visHvitOgSort: visHvitOgSort) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(1).minimumScaleFactor(0.8)
+                    Text("LRV \(ukalibrert ? "≈ " : "")\(farge.wrappedValue.lrv, format: .number.precision(.fractionLength(0)))")
+                        .koloristFont(.title2, weight: .bold).monospacedDigit()
+                    Spacer(minLength: 4)
+                    if ukalibrert {
+                        // Plassholder: den synlige raden (med ⓘ) legges over menyen, så ⓘ ikke åpner fargemenyen.
+                        veiledendeRad(lesbar).hidden().anchorPreference(key: VeiledendeAnker.self, value: .bounds) { $0 }
+                    }
+                    HStack(spacing: 4) {
+                        Text(farge.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
+                        Image(systemName: "chevron.up.chevron.down").font(.caption2)
+                    }
+                    .opacity(0.85)
                 }
-                HStack(spacing: 4) {
-                    Text(farge.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
-                    Image(systemName: "chevron.up.chevron.down").font(.caption2)
-                }
-                .opacity(0.85)
+                .foregroundStyle(lesbar)
+                .padding(12)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .contentShape(Rectangle())
             }
-            .foregroundStyle(vist.lesbarTekstfarge.swiftUI)
-            .padding(12)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .contentShape(Rectangle())
         }
-        // ⓘ utenfor menyen (et trykk i menyens etikett åpner menyen): hvordan LRV fra kamera blir mer pålitelig.
-        if arbeidsbenk.erUkalibrert(farge.wrappedValue) {
-            LRVPålitelighetInfo()
-                .tint(vist.lesbarTekstfarge.swiftUI)
-                .padding(10)
+        .overlayPreferenceValue(VeiledendeAnker.self) { anker in
+            GeometryReader { geo in
+                if let anker {
+                    let ramme = geo[anker]
+                    veiledendeRad(lesbar)
+                        .frame(width: ramme.width, height: ramme.height, alignment: .leading)
+                        .offset(x: ramme.minX, y: ramme.minY)
+                }
+            }
         }
+    }
+
+    /// «Kun veiledende» med ⓘ om hvordan LRV fra kamera blir mer pålitelig.
+    private func veiledendeRad(_ farge: Color) -> some View {
+        // Fargen settes på teksten og symbolet, ikke på raden: ellers arver boblen med forklaringen den.
+        HStack(spacing: 6) {
+            Text("Kun veiledende").koloristFont(.caption, weight: .semibold).foregroundStyle(farge)
+            LRVPålitelighetInfo().tint(farge)
         }
     }
 
@@ -593,7 +604,7 @@ struct FlatekontrastSeksjon: View {
                 Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.")
                 if arbeidsbenk.erUkalibrert(flate) || arbeidsbenk.erUkalibrert(bakgrunn) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Label("LRV merket ≈ er plukket med kamera eller fra bilde uten gråkort eller referansekort, og er bare veiledende: kameraets eksponering og hvitbalanse bestemmer hvor lys fargen blir. Bruk gråkort eller referansekort, eller produsentens oppgitte LRV, når kontrasten skal dokumenteres.", systemImage: "exclamationmark.triangle")
+                        Label("LRV merket ≈ er kun veiledende.", systemImage: "exclamationmark.triangle")
                         LRVPålitelighetInfo()
                     }
                 }
@@ -615,12 +626,18 @@ struct FlatekontrastSeksjon: View {
     }
 }
 
+/// Plassholderen for «Kun veiledende» i en LRV-flate (se `Kontrastflate.lrvFelt`).
+private struct VeiledendeAnker: PreferenceKey {
+    static let defaultValue: Anchor<CGRect>? = nil
+    static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) { value = value ?? nextValue() }
+}
+
 /// ⓘ: hvordan LRV fra kamera eller bilde blir mer pålitelig.
 struct LRVPålitelighetInfo: View {
     var body: some View {
         InfoKnapp(tittel: "Slik blir LRV fra kamera mer pålitelig") {
             Text("Slik blir LRV fra kamera mer pålitelig").font(.headline)
-            Text("Kameraet stiller selv inn eksponering og hvitbalanse, så en flate kan bli lysere eller mørkere enn den er. LRV fra kamera eller bilde er derfor et anslag til fargen er målt mot en kjent referanse.")
+            Text("Fargen er plukket med kamera eller fra bilde uten gråkort eller referansekort. Kameraet stiller selv inn eksponering og hvitbalanse, så en flate kan bli lysere eller mørkere enn den er, og LRV blir et anslag.")
             Label("Ha et gråkort (18 %) eller hvitt kort i samme lys som flaten, og velg det under Lys før du plukker. Da regnes lysheten ut fra kortet.", systemImage: "square.fill")
             Label("Et referansekort med kjente farger retter også fargestikk fra lyset.", systemImage: "square.grid.3x2")
             Label("Mål i jevnt, mykt lys uten gjenskinn og skygger, med kameraet rett mot flaten, og mål begge flatene i samme lys.", systemImage: "sun.max")

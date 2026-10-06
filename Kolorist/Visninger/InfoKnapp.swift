@@ -19,6 +19,9 @@ struct InfoKnapp<Innhold: View>: View {
         .popover(isPresented: $vis) {
             VStack(alignment: .leading, spacing: 10) { innhold }
                 .font(.callout)
+                // Egen tekstfarge og aksent i boblen, så den ikke arver fargene fra stedet knappen står (f.eks. en fargeflate).
+                .foregroundStyle(Color.primary)
+                .tint(Color.accentColor)
                 .frame(width: 320, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding()
