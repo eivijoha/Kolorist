@@ -523,38 +523,6 @@
         }
       }
     },
-    "%lld av %lld krav": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld of %2$lld requirements"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld av %2$lld krav"
-          }
-        }
-      }
-    },
-    "%lld av %lld krav i WCAG 2.2": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld of %2$lld WCAG 2.2 requirements"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld av %2$lld krav i WCAG 2.2"
-          }
-        }
-      }
-    },
     "%lld fargepar blir vanskelige å skille: %@": {
       "localizations": {
         "en": {
@@ -1077,6 +1045,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Description"
+          }
+        }
+      }
+    },
+    "Består ikke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Does not pass"
           }
         }
       }

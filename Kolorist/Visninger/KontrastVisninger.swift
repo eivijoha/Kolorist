@@ -40,7 +40,7 @@ struct KontrastSeksjon: View {
     var body: some View {
         let test = Kontrasttest(forgrunn: forgrunn, bakgrunn: bakgrunn)
         Section {
-            ForEach(WCAGKrav.allCases) { krav in
+            ForEach(WCAGKrav.strengestFørst) { krav in
                 KravRad(krav: krav, test: test) { forgrunn = test.rettet(for: krav) }
             }
         } header: {
@@ -163,67 +163,78 @@ struct Kontrastflate: View {
     private var forgrunnTittel: String { type == .lrv ? String(localized: "Flate") : String(localized: "Tekst eller grafikk") }
     private var bakgrunnTittel: String { type == .lrv ? String(localized: "Tilstøtende flate") : String(localized: "Bakgrunn") }
 
+    /// Tallet, det strengeste kravet fargen består (eller «Består ikke») og hva kravet sier.
     private var nøkkeltall: (tall: String, vurdering: String, detalj: String) {
+        let ikke = String(localized: "Består ikke")
         switch type {
         case .wcag:
             let test = Kontrasttest(forgrunn: forgrunn, bakgrunn: bakgrunn)
-            let bestått = WCAGKrav.allCases.filter(test.består).count
-            return (test.formatert, test.sammendrag,
-                    String(localized: "\(bestått) av \(WCAGKrav.allCases.count) krav i WCAG 2.2"))
+            func krav(_ k: WCAGKrav) -> String {
+                String(localized: "\(k.suksesskriterium) · minst \(k.minimum, format: .number.precision(.fractionLength(1))):1")
+            }
+            if let strengest = WCAGKrav.strengestFørst.first(where: test.består) {
+                return (test.formatert, strengest.navn, krav(strengest))
+            }
+            return (test.formatert, ikke, krav(WCAGKrav.strengestFørst.last!))
         case .apca:
             let lc = bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn))
-            return (APCANivå.formatert(lc), APCANivå.bruk(lc), APCANivå.retning(lc))
+            let nivå = APCANivå.nådd(lc) ?? APCANivå.allCases.last!
+            return (APCANivå.formatert(lc), APCANivå.bruk(lc),
+                    String(localized: "minst Lc \(Int(nivå.rawValue))") + " · " + APCANivå.retning(lc))
         case .lrv:
             let k = Flatekontrast(forgrunn, bakgrunn)
-            let krav = metode.krav
-            let bestått = krav.filter(k.består).count
             // Plukket uten referanse: kontrasten er et anslag (≈).
             let anslag = arbeidsbenk.erUkalibrert(forgrunn) || arbeidsbenk.erUkalibrert(bakgrunn) ? "≈ " : ""
-            return (anslag + metode.formatert(k.verdi(metode)), String(localized: "\(bestått) av \(krav.count) krav"),
-                    metode.navn)
+            let tall = anslag + metode.formatert(k.verdi(metode))
+            // Kravene står mildeste først.
+            if let strengest = metode.krav.reversed().first(where: k.består) {
+                return (tall, strengest.navn, "\(strengest.kilde) · \(strengest.kravtekst)")
+            }
+            let mildest = metode.krav[0]
+            return (tall, ikke, "\(mildest.kilde) · \(mildest.kravtekst)")
         }
     }
 
     var body: some View {
         let f = fargesyn.map { forgrunn.simulert($0) } ?? forgrunn
         let b = fargesyn.map { bakgrunn.simulert($0) } ?? bakgrunn
-        if type == .lrv {
-            // LRV: tallene over to likeverdige flater side om side; trykk på en flate for å velge fargen.
-            VStack(spacing: 0) {
-                topptekst
-                    .foregroundStyle(Color.primary)
-                    .padding(.horizontal, 16)
-                    .padding(.top, 14)
-                    .padding(.bottom, 10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                // Rette kanter der flatene møtes, avrundet ytterst (som ett felt delt i to).
+        // Utdraget av vurderingen over fargefeltet, på kortets bakgrunn; fargefeltet med rette hjørner (kortet rundt
+        // er avrundet).
+        VStack(spacing: 0) {
+            topptekst
+                .foregroundStyle(Color.primary)
+                .padding(.horizontal, 16)
+                .padding(.top, 14)
+                .padding(.bottom, 10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            if type == .lrv {
+                // To likeverdige flater side om side; trykk på en flate for å velge fargen.
                 HStack(spacing: 0) {
                     lrvFelt(forgrunnTittel, farge: $forgrunn, vist: f, visAktivFarge: false)
                     lrvFelt(bakgrunnTittel, farge: $bakgrunn, vist: b, visHvitOgSort: true)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .background(Color.kortbakgrunn)
-        } else {
-            VStack(alignment: .leading, spacing: 4) {
-                topptekst
-                Spacer(minLength: 6)
-                FargeVelgerMeny(tittel: forgrunnTittel, farge: $forgrunn, visAktivFarge: false) {
-                    prøvetekst.foregroundStyle(f.swiftUI).contentShape(Rectangle())
+            } else {
+                // Fargen som eget lag bak innholdet: en bakgrunn lagt på en visning med meny blir avrundet på iOS 26.
+                ZStack {
+                b.swiftUI
+                VStack(alignment: .leading, spacing: 4) {
+                    FargeVelgerMeny(tittel: forgrunnTittel, farge: $forgrunn, visAktivFarge: false) {
+                        prøvetekst.foregroundStyle(f.swiftUI).contentShape(Rectangle())
+                    }
+                    Spacer(minLength: 6)
+                    // Med korte etiketter når det er plass, ellers bare fargeprøve og hex.
+                    ViewThatFits(in: .horizontal) {
+                        fargeknapper(f, b, merket: true)
+                        fargeknapper(f, b, merket: false)
+                    }
                 }
-                // Med korte etiketter når det er plass, ellers bare fargeprøve og hex.
-                ViewThatFits(in: .horizontal) {
-                    fargeknapper(f, b, merket: true)
-                    fargeknapper(f, b, merket: false)
+                .padding(12)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 }
-                .padding(.top, 6)
             }
-            .foregroundStyle(b.lesbarTekstfarge.swiftUI)
-            .padding(16)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .background(b.swiftUI)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color.kortbakgrunn)
     }
 
     /// Nøkkeltallet med vurdering og detaljer øverst i flaten.
@@ -577,7 +588,7 @@ struct FlatekontrastSeksjon: View {
                 }
                 .padding(.vertical, 4)
             }
-            ForEach(metode.krav) { krav in
+            ForEach(metode.krav.reversed()) { krav in
                 let bestått = k.består(krav)
                 HStack {
                     Image(systemName: bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -702,4 +713,10 @@ extension Flatekontrastmetode {
             String(localized: "Michelson: |Y₁ − Y₂| / (Y₁ + Y₂), som ISO 21542 bruker. Kravene (30 % for store flater og orientering, 60 % for fare, små elementer og tekst) er hentet fra det kanadiske standardutkastet CAN-ASC-2.4, som bygger på ISO 21542, og gjelder matte flater.")
         }
     }
+}
+
+extension WCAGKrav {
+    /// Kravene med det strengeste først: tekst AAA (7:1), tekst AA og stor tekst AAA (4,5:1), stor tekst AA og
+    /// grafikk (3:1).
+    static let strengestFørst: [WCAGKrav] = [.aaaTekst, .aaTekst, .aaaStorTekst, .aaStorTekst, .aaGrafikk]
 }
