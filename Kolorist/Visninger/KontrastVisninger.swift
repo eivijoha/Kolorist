@@ -263,11 +263,12 @@ struct Kontrastflate: View {
                     Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(1).minimumScaleFactor(0.8)
                     Text("LRV \(ukalibrert ? "≈ " : "")\(farge.wrappedValue.lrv, format: .number.precision(.fractionLength(0)))")
                         .koloristFont(.title2, weight: .bold).monospacedDigit()
-                    Spacer(minLength: 4)
                     if ukalibrert {
-                        // Plassholder: den synlige raden (med ⓘ) legges over menyen, så ⓘ ikke åpner fargemenyen.
+                        // Rett under verdien den gjelder. Plassholder: den synlige raden (med ⓘ) legges over menyen,
+                        // så ⓘ ikke åpner fargemenyen.
                         veiledendeRad(lesbar).hidden().anchorPreference(key: VeiledendeAnker.self, value: .bounds) { $0 }
                     }
+                    Spacer(minLength: 4)
                     HStack(spacing: 4) {
                         Text(farge.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
                         Image(systemName: "chevron.up.chevron.down").font(.caption2)
