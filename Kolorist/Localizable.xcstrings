@@ -1049,6 +1049,16 @@
         }
       }
     },
+    "Består AA-kravene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passes the AA requirements"
+          }
+        }
+      }
+    },
     "Består alle krav": {
       "localizations": {
         "en": {

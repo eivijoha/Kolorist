@@ -164,18 +164,21 @@ struct Kontrastflate: View {
     private var bakgrunnTittel: String { type == .lrv ? String(localized: "Tilstøtende flate") : String(localized: "Bakgrunn") }
 
     /// Tallet og det strengeste kravet fargen ikke klarer – eller, når alle bestås, det strengeste kravet – med hva kravet
-    /// sier. Kravene står strengeste først.
+    /// sier. Kravene står strengeste først; for WCAG gjelder toppen bare AA.
     private var nøkkeltall: (tall: String, bestått: Bool, vurdering: String, detalj: String) {
-        func utdrag<K>(_ krav: [K], _ består: (K) -> Bool, navn: (K) -> String, tekst: (K) -> String) -> (Bool, String, String) {
+        func utdrag<K>(_ krav: [K], _ består: (K) -> Bool, alle: String = String(localized: "Består alle krav"),
+                       navn: (K) -> String, tekst: (K) -> String) -> (Bool, String, String) {
             if let ikke = krav.first(where: { !består($0) }) {
                 return (false, navn(ikke), String(localized: "Består ikke") + " · " + tekst(ikke))
             }
-            return (true, navn(krav[0]), String(localized: "Består alle krav") + " · " + tekst(krav[0]))
+            return (true, navn(krav[0]), alle + " · " + tekst(krav[0]))
         }
         switch type {
         case .wcag:
             let test = Kontrasttest(forgrunn: forgrunn, bakgrunn: bakgrunn)
-            let (ok, navn, detalj) = utdrag(WCAGKrav.strengestFørst, test.består, navn: \.navn) {
+            // Bare AA i toppen: AA er det lovpålagte nivået (i Norge, og i EU gjennom EN 301 549); AAA står i listen under.
+            let (ok, navn, detalj) = utdrag(WCAGKrav.strengestFørst.filter { $0.nivå == "AA" }, test.består,
+                                            alle: String(localized: "Består AA-kravene"), navn: \.navn) {
                 String(localized: "\($0.suksesskriterium) · minst \($0.minimum, format: .number.precision(.fractionLength(1))):1")
             }
             return (test.formatert, ok, navn, detalj)
@@ -242,12 +245,13 @@ struct Kontrastflate: View {
         return VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 // Tallet kortes aldri ned; vurderingen brytes eller krymper.
+                // Kryss (eller hake) foran verdien: om det viste kravet bestås.
+                Image(systemName: n.bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .foregroundStyle(n.bestått ? Color.suksess : Color.feil)
+                    .koloristFont(.title)
                 Text(n.tall).koloristFont(.largeTitle, weight: .bold).monospacedDigit()
                     .fixedSize()
                     .layoutPriority(1)
-                Image(systemName: n.bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundStyle(n.bestått ? Color.suksess : Color.feil)
-                    .koloristFont(.headline)
                 Text(n.vurdering).koloristFont(.headline).lineLimit(2).minimumScaleFactor(0.8)
                 Spacer(minLength: 0)
             }
