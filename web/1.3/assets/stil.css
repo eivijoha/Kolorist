@@ -1246,6 +1246,11 @@ thead th {
 .sammenligning-bilder .iphone img { border-radius: 18px; }
 .sammenligning-bilder .ipad img { border-radius: 14px; }
 
+/* Plassholdere til skjermbildene er tatt, i hver plattforms format */
+.sammenligning-bilder .iphone .ramme { aspect-ratio: 1284 / 2778; border-radius: 18px; }
+.sammenligning-bilder .ipad .ramme { aspect-ratio: 1032 / 1376; border-radius: 14px; }
+.sammenligning-bilder .mac .ramme { aspect-ratio: 1920 / 1200; border-radius: 10px; }
+
 .plattformtabell td {
   text-align: center;
 }

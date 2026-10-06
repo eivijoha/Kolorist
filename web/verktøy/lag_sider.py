@@ -102,7 +102,7 @@ def side(lang, fil, tittel, beskrivelse, innhold, karusell=False):
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="{p}assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="{p}assets/stil.css?v=5">
+  <link rel="stylesheet" href="{p}assets/stil.css?v=6">
   <link rel="canonical" href="{egen}">
   <link rel="alternate" hreflang="nb" href="{nburl}">
   <link rel="alternate" hreflang="en" href="{enurl}">
@@ -817,7 +817,10 @@ def plattformer(lang):
                   'Delte lenker åpnes i appen på iPhone, iPad og Mac – og i nettleseren ellers, også på Windows' + N12]
         side_tittel = 'Side om side'
         side_intro = 'Samme verktøy, tilpasset skjermen.'
-        visninger = [('studio', 'Studio'), ('harmoni', 'Harmoni'), ('overgang', 'Overgang'), ('kontrast', 'Kontrast')]
+        # None: skjermbildene er ikke tatt ennå (plassholder for hver plattform).
+        visninger = [('studio', 'Studio'), ('harmoni', 'Harmoni'), ('overgang', 'Overgang'),
+                     (None, 'Kontrast: WCAG, APCA eller LRV'), (None, 'Plukk farge fra et fargefelt'),
+                     (None, 'Presentasjonsmodus')]
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
@@ -854,7 +857,9 @@ def plattformer(lang):
                   'Shared links open in the app on iPhone, iPad and Mac – and in the browser elsewhere, Windows included' + N12]
         side_tittel = 'Side by side'
         side_intro = 'The same tools, fitted to the screen.'
-        visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'), ('kontrast', 'Contrast')]
+        visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'),
+                     (None, 'Contrast: WCAG, APCA or LRV'), (None, 'Pick a colour from a colour field'),
+                     (None, 'Presentation mode')]
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
@@ -881,14 +886,21 @@ def plattformer(lang):
         </li>""" for n, tx in styrker)
     sammen_html = '\n'.join(f'        <li>{x}</li>' for x in sammen)
     rader_vis = []
+    kommer = 'Skjermskudd kommer' if nb else 'Screenshot coming'
     for navn, vis in visninger:
-        iph, _ = iphonebilde(s, navn)
-        mac = macbilde(s, navn)
-        iph = re.sub(r'alt="[^"]*"', f'alt="{vis} – iPhone"', iph)
-        mac = re.sub(r'alt="[^"]*"', f'alt="{vis} – Mac"', mac)
-        ipad = f'<img src="{ipadmappe}/skjermbilde-{navn}.png?v=6" alt="{vis} – iPad" width="1032" height="1376" loading="lazy">'
-        rader_vis.append(f"""      <section class="sammenligning" aria-labelledby="vis-{navn}">
-        <h3 id="vis-{navn}">{vis}</h3>
+        if navn is None:
+            # Plassholder til skjermbildene er tatt, i hver plattforms format.
+            iph, ipad, mac = (f'<div class="ramme">{kommer}</div>',) * 3
+            id_ = re.sub(r'[^a-z0-9]+', '-', vis.lower().translate(str.maketrans('æøå', 'eoa'))).strip('-')
+        else:
+            iph, _ = iphonebilde(s, navn)
+            mac = macbilde(s, navn)
+            iph = re.sub(r'alt="[^"]*"', f'alt="{vis} – iPhone"', iph)
+            mac = re.sub(r'alt="[^"]*"', f'alt="{vis} – Mac"', mac)
+            ipad = f'<img src="{ipadmappe}/skjermbilde-{navn}.png?v=6" alt="{vis} – iPad" width="1032" height="1376" loading="lazy">'
+            id_ = navn
+        rader_vis.append(f"""      <section class="sammenligning" aria-labelledby="vis-{id_}">
+        <h3 id="vis-{id_}">{vis}</h3>
         <div class="sammenligning-bilder">
           <figure class="skjermbilde iphone">
             {iph}
@@ -1088,7 +1100,7 @@ for lang, mappe in (('nb', ''), ('en', 'en/')):
         h = open(sti).read()
         h = re.sub(r'<nav class="hovednav".*?</nav>', hovednav(lang, fil), h, count=1, flags=re.S)
         h = re.sub(r'<nav aria-label="(Bunnmeny|Footer menu)">.*?</nav>', bunnnav(lang, fil), h, count=1, flags=re.S)
-        h = h.replace('stil.css?v=4', 'stil.css?v=5')
+        h = re.sub(r'stil\.css\?v=\d+', 'stil.css?v=6', h)
         h = h.replace('index.html#lys', 'lys.html' if lang == 'nb' else 'light.html')
         open(sti, 'w').write(h)
 
