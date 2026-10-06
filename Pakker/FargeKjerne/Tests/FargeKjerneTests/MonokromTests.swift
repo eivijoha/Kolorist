@@ -44,20 +44,27 @@ struct MonokromTests {
         #expect(Harmoni.monokrom.forskyvninger(antall: 5) == [0, 0, 0, 0, 0])
     }
 
-    /// Tonebane: kuløren går i bue den korteste veien (her over 0°), og lyshet og metning følger streken som i monokrom.
-    @Test func tonebaneGårIBue() {
+    /// Tonebane: kuløren går spennet i valgt retning (ikke korteste vei), opptil en hel runde, og lyshet og metning
+    /// følger streken som i monokrom.
+    @Test func tonebaneGårIValgtRetning() {
         let strek = Monokromstrek(a: .init(lyshet: 0.8, metning: 0.4), b: .init(lyshet: 0.45, metning: 0.9))
-        let toner = strek.toner(fraKulør: 330, tilKulør: 30, antall: 5, gamut: .sRGB)
-        #expect(toner.count == 5)
-        let kulører = toner.map(\.okLCH.h)
-        // 330 → 345 → 0 → 15 → 30 (gamut-kartlegging kan flytte kuløren et par grader).
-        for (h, mål) in zip(kulører, [330.0, 345, 0, 15, 30]) {
+        func nær(_ h: Double, _ mål: Double) -> Bool {
             var d = abs(h - mål).truncatingRemainder(dividingBy: 360); if d > 180 { d = 360 - d }
-            #expect(d < 3, "kulør \(h), forventet \(mål)")
+            return d < 3
         }
+        // 330° og +60°: over 0° til 30°.
+        let kort = strek.toner(fraKulør: 330, spenn: 60, antall: 5, gamut: .sRGB).map(\.okLCH.h)
+        #expect(zip(kort, [330.0, 345, 0, 15, 30]).allSatisfy { nær($0, $1) }, "\(kort)")
+        // Samme endepunkter den lange veien (−300°): gjennom 180°.
+        let lang = strek.toner(fraKulør: 330, spenn: -300, antall: 5, gamut: .sRGB).map(\.okLCH.h)
+        #expect(zip(lang, [330.0, 255, 180, 105, 30]).allSatisfy { nær($0, $1) }, "\(lang)")
+        // En hel runde: start- og sluttkulør er like, mellomtonene går rundt.
+        let runde = strek.toner(fraKulør: 0, spenn: 360, antall: 5, gamut: .sRGB).map(\.okLCH.h)
+        #expect(nær(runde[0], 0) && nær(runde[2], 180) && nær(runde[4], 0), "\(runde)")
+        let toner = strek.toner(fraKulør: 330, spenn: 60, antall: 5, gamut: .sRGB)
         #expect(abs(toner[0].okLCH.l - 0.8) < 0.01 && abs(toner[4].okLCH.l - 0.45) < 0.01)
-        // Samme kulør i begge ender gir samme toner som monokrom.
-        let lik = strek.toner(fraKulør: 200, tilKulør: 200, antall: 4, gamut: .sRGB)
+        // Spenn 0 gir samme toner som monokrom.
+        let lik = strek.toner(fraKulør: 200, spenn: 0, antall: 4, gamut: .sRGB)
         #expect(zip(lik, strek.toner(kulør: 200, antall: 4, gamut: .sRGB)).allSatisfy { $0.avstandOK(til: $1) < 1e-9 })
         #expect(Harmoni.grupper[0] == [.monokrom, .tonebane])
     }

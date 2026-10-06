@@ -4,9 +4,9 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
-- `Harmoni.tonebane` (i første gruppe sammen med `.monokrom`) og `Monokromstrek.toner(fraKulør:tilKulør:antall:gamut:)`:
-  toner langs streken i lyshet–metning-planet der kuløren også går fra start- til sluttkulør, i bue den korteste veien
-  rundt OKLCH-sirkelen. Brytende for uttømmende `switch` på `Harmoni`.
+- `Harmoni.tonebane` (i første gruppe sammen med `.monokrom`) og `Monokromstrek.toner(fraKulør:spenn:antall:gamut:)`:
+  toner langs streken i lyshet–metning-planet der kuløren også går `spenn` grader rundt OKLCH-sirkelen fra startkuløren,
+  i retningen fortegnet sier og opptil en hel runde (ikke korteste vei). Brytende for uttømmende `switch` på `Harmoni`.
 
 ## 0.3.0 – 2026-10-06
 

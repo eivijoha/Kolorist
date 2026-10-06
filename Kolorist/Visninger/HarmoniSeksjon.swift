@@ -34,9 +34,13 @@ struct HarmoniSeksjon: View {
     /// (OKLCH-grader). Kuløren huskes for seg, så den ikke forsvinner når grunnfargen er grå.
     @AppStorage("harmoniMonokrom") private var monokromTekst = ""
     @AppStorage("harmoniMonokromKulør") private var monokromKulør = 254.0
-    /// Tonebane: kuløren i startenden (`a`); sluttenden bruker `monokromKulør`. Negativ = 60° før sluttkuløren.
+    /// Tonebane: kuløren i startenden (`a`, negativ = spennet før sluttkuløren) og spennet i grader med fortegn, opptil en
+    /// hel runde. Sluttkuløren er start + spenn, og grunnfargen følger den (som `monokromKulør`).
     @AppStorage("harmoniTonebaneStartKulør") private var tonebaneStart = -1.0
-    private var startKulør: Double { tonebaneStart >= 0 ? tonebaneStart : (monokromKulør + 300).truncatingRemainder(dividingBy: 360) }
+    @AppStorage("harmoniTonebaneSpenn") private var tonebaneSpenn = 60.0
+    private var startKulør: Double {
+        tonebaneStart >= 0 ? tonebaneStart : TonebaneRing<EmptyView>.normaliser(monokromKulør - tonebaneSpenn)
+    }
     /// Monokromatisk og tonebane: tonene ligger langs en strek i lyshet–metning-flaten.
     private var erStrek: Bool { harmoni == .monokrom || harmoni == .tonebane }
     /// Grunnfargen satt herfra (trykk på en tone, kulørglideren): den skal ikke flytte streken.
@@ -87,7 +91,7 @@ struct HarmoniSeksjon: View {
             return strek.wrappedValue.toner(kulør: monokromKulør, antall: antall, gamut: gamut).map(begrens)
         }
         if harmoni == .tonebane {
-            return strek.wrappedValue.toner(fraKulør: startKulør, tilKulør: monokromKulør, antall: antall, gamut: gamut).map(begrens)
+            return strek.wrappedValue.toner(fraKulør: startKulør, spenn: tonebaneSpenn, antall: antall, gamut: gamut).map(begrens)
         }
         let justert = råfarger.map(juster)
         var ordnet = lyshetsrekkefølge.anvendt(på: justert, grunn: juster(grunnfarge), gamut: gamut)
@@ -279,10 +283,20 @@ struct HarmoniSeksjon: View {
         monokromTekst = ny.tekst
     }
 
-    /// Monokromatisk: kuløren følger grunnfargen, unntatt når den er (nesten) grå og ikke har noen kulør.
+    /// Monokromatisk: kuløren følger grunnfargen, unntatt når den er (nesten) grå og ikke har noen kulør. Tonebane: sluttenden
+    /// følger grunnfargen, og startkuløren står stille (spennet endres like mye).
     private func følgGrunnfargensKulør() {
         let lch = grunnfarge.okLCH
-        if lch.c > 0.02, abs(lch.h - monokromKulør) > 0.01 { monokromKulør = lch.h }
+        guard lch.c > 0.02, abs(lch.h - monokromKulør) > 0.01 else { return }
+        if harmoni == .tonebane {
+            let start = startKulør
+            var d = (lch.h - (start + tonebaneSpenn)).truncatingRemainder(dividingBy: 360)
+            if d > 180 { d -= 360 }
+            if d < -180 { d += 360 }
+            tonebaneStart = start
+            tonebaneSpenn = min(max(tonebaneSpenn + d, -360), 360)
+        }
+        monokromKulør = lch.h
     }
 
     /// En farge med kuløren, til å regne vinkelen i valgt fargesirkel og tegne kulørsporet.
@@ -323,66 +337,50 @@ struct HarmoniSeksjon: View {
         }
     }
 
-    /// Kuløren midt på tonebanen (bue den korteste veien), som flaten vises i.
-    private var midtkulør: Double {
-        var d = (monokromKulør - startKulør).truncatingRemainder(dividingBy: 360)
-        if d > 180 { d -= 360 }
-        if d < -180 { d += 360 }
-        let h = (startKulør + d / 2).truncatingRemainder(dividingBy: 360)
-        return h < 0 ? h + 360 : h
-    }
+    /// Kuløren midt på tonebanen, som flaten vises i.
+    private var midtkulør: Double { TonebaneRing<EmptyView>.normaliser(startKulør + tonebaneSpenn / 2) }
 
-    /// Tonebane: start- og sluttkulør som to håndtak i samme kulørspor, med buen mellom dem under sporet.
-    @ViewBuilder private var tonebaneglider: some View {
-        let refA = referansefarge(okLCHKulør: startKulør), refB = referansefarge(okLCHKulør: monokromKulør)
-        let tekst: (Farge) -> String = { ref in
-            brukerMunsell ? String(Fargemodell.munsell.kortTekst(for: ref).split(separator: " ").first ?? "")
-                          : "\(Int(sirkel.vinkel(for: ref).rounded()))°"
-        }
-        // Retningen rundt sirkelen tonene går (den korteste i OKLCH), vist som retning i valgt fargesirkel: buen går
-        // den veien som passerer kuløren midt på banen.
-        let midtVinkel = sirkel.vinkel(for: referansefarge(okLCHKulør: midtkulør))
-        let va = sirkel.vinkel(for: refA), vb = sirkel.vinkel(for: refB)
-        let framover = Self.mellom(midtVinkel, fra: va, til: vb)
-        HStack(spacing: 10) {
-            Text("Kulør").lineLimit(1).frame(width: 96, alignment: .leading)
-            ToHåndtakGlider(start: Binding(get: { va }, set: { tonebaneStart = sirkel.farge(refA, vinkel: $0, gamut: gamut).okLCH.h }),
-                            slutt: Binding(get: { vb }, set: { settSluttkulør(sirkel.farge(refB, vinkel: $0, gamut: gamut).okLCH.h) }),
-                            område: 0...360,
-                            spor: (0..<36).map { sirkel.farge(refA, vinkel: Double($0) * 10, gamut: gamut).swiftUI },
-                            startfarge: refA.swiftUI, sluttfarge: refB.swiftUI,
-                            retning: framover ? 1 : -1,
-                            startTittel: Text("Kulør, start"), sluttTittel: Text("Kulør, slutt"),
-                            startTekst: tekst(refA), sluttTekst: tekst(refB),
-                            stegForTilgjengelighet: sirkel.trinn ?? 5)
-            Text("\(tekst(refA))\n\(tekst(refB))")
-                .font(.callout.monospacedDigit())
-                .foregroundStyle(Color.sekundærTekst)
-                .multilineTextAlignment(.trailing)
-                .frame(width: 48, alignment: .trailing)
-        }
-    }
-
-    /// Om vinkelen `v` ligger på veien fra `a` til `b` mot høyere vinkler (rundt 360°).
-    private static func mellom(_ v: Double, fra a: Double, til b: Double) -> Bool {
-        let spenn = (b - a + 360).truncatingRemainder(dividingBy: 360)
-        let til = (v - a + 360).truncatingRemainder(dividingBy: 360)
-        return til <= spenn
-    }
 
     /// Kulørglider(e) (i valgt fargesirkel) og lyshet–metning-flaten med streken. Tonebane har en kulør per endepunkt.
     @ViewBuilder private var monokromKontroller: some View {
         if harmoni == .tonebane {
-            tonebaneglider
-        } else {
-            kulørglider(String(localized: "Kulør"), kulør: monokromKulør, sett: settSluttkulør)
-        }
-        // Kvadratisk, like høy som fargesirkelen i de andre harmoniene.
-        LyshetMetningFlate(kulør: harmoni == .tonebane ? midtkulør : monokromKulør, gamut: gamut, strek: strek, toner: farger,
-                           grunnfarge: grunnfarge, velg: velgHerfra)
-            .frame(width: sirkelhøyde, height: sirkelhøyde)
+            // Kulørringen rundt flaten: start og slutt som håndtak, banen som bue med pil (opptil en hel runde).
+            let ref = referansefarge(okLCHKulør: startKulør)
+            let tekst: (Double) -> String = { v in
+                brukerMunsell ? String(Fargemodell.munsell.kortTekst(for: sirkel.farge(ref, vinkel: v, gamut: gamut)).split(separator: " ").first ?? "")
+                              : "\(Int(v.rounded()))°"
+            }
+            TonebaneRing(start: startKulør, spenn: tonebaneSpenn,
+                         ringfarge: { sirkel.farge(ref, vinkel: $0, gamut: gamut).swiftUI },
+                         farge: { referansefarge(okLCHKulør: $0).swiftUI },
+                         vinkel: { sirkel.vinkel(for: referansefarge(okLCHKulør: $0)) },
+                         kulør: { sirkel.farge(ref, vinkel: $0, gamut: gamut).okLCH.h },
+                         tekst: tekst,
+                         stegForTilgjengelighet: sirkel.trinn ?? 5,
+                         endre: { nyStart, nyttSpenn in
+                             tonebaneStart = nyStart
+                             tonebaneSpenn = nyttSpenn
+                             settSluttkulør(TonebaneRing<EmptyView>.normaliser(nyStart + nyttSpenn))
+                         }) {
+                LyshetMetningFlate(kulør: midtkulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra)
+            }
+            .frame(width: sirkelhøyde + 100, height: sirkelhøyde + 100)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)
+            let va = sirkel.vinkel(for: referansefarge(okLCHKulør: startKulør))
+            let vb = sirkel.vinkel(for: referansefarge(okLCHKulør: TonebaneRing<EmptyView>.normaliser(startKulør + tonebaneSpenn)))
+            LabeledContent("Kulør") {
+                Text("\(tekst(va)) → \(tekst(vb)) · \(tonebaneSpenn >= 0 ? "+" : "−")\(Int(abs(tonebaneSpenn).rounded()))°")
+                    .monospacedDigit()
+            }
+        } else {
+            kulørglider(String(localized: "Kulør"), kulør: monokromKulør, sett: settSluttkulør)
+            // Kvadratisk, like høy som fargesirkelen i de andre harmoniene.
+            LyshetMetningFlate(kulør: monokromKulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra)
+                .frame(width: sirkelhøyde, height: sirkelhøyde)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 4)
+        }
         if !monokromTekst.isEmpty {
             Button("Tilbakestill streken", systemImage: "arrow.uturn.backward") { monokromTekst = "" }
         }
@@ -489,7 +487,7 @@ struct HarmoniSeksjon: View {
                 if harmoni == .monokrom {
                     Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.")
                 } else if harmoni == .tonebane {
-                    Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Kuløren går i bue den korteste veien rundt sirkelen (OKLCH), så tonene ikke passerer grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren midt på banen.")
+                    Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren midt på banen.")
                 } else {
                 Text(sirkel.forklaring + " " + (brukerMunsell
                     ? String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.")

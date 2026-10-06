@@ -6,8 +6,9 @@ import Foundation
 public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
     /// Én kulør i `antall` toner langs en strek i lyshet–metning-planet (`Monokromstrek`).
     case monokrom
-    /// Som monokrom, men hvert endepunkt har sin egen kulør: tonene går i bue rundt kulørsirkelen (OKLCH) samtidig som
-    /// lyshet og metning følger streken – en bane gjennom alle tre dimensjonene (`Monokromstrek.toner(fraKulør:tilKulør:)`).
+    /// Som monokrom, men hvert endepunkt har sin egen kulør: tonene går i bue rundt kulørsirkelen (OKLCH), i valgt
+    /// retning og opptil en hel runde, samtidig som lyshet og metning følger streken – en bane gjennom alle tre
+    /// dimensjonene (`Monokromstrek.toner(fraKulør:spenn:)`).
     case tonebane
     /// Naboer på samme side av sirkelen, med `vinkel` mellom hver.
     case analog
