@@ -105,6 +105,7 @@ struct FargeVelgerMeny<Etikett: View>: View {
                 }
             }
             Section {
+                Button("Vis farge", systemImage: "slider.horizontal.3") { Arbeidsbenk.delt.visIStudio(farge) }
                 Button("Kopier \(farge.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(farge) }
             }
         } label: {

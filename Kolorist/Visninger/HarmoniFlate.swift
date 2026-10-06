@@ -105,8 +105,10 @@ struct HarmoniFlate: View {
     private func flate(_ m: Motpart, original: Farge, sirkeltekst: String?, erGrunn: Bool, visTekst: Bool, kompakt: Bool,
                        hjørner: (venstre: CGFloat, høyre: CGFloat)) -> some View {
         let tekstfarge = m.farge.farge.lesbarTekstfarge.swiftUI
+        // «Vis farge» viser harmoniens egen farge, ikke tonen i «Vis som»-rommet.
         return FargeRute(farge: m.farge.farge, visTekst: false, hjørne: 0, visMerke: false,
-                         lagre: { _ in lagre(m.farge) }, leggIPalett: { _ in leggIPalett(m.farge) }, palettFarge: m.farge,
+                         lagre: { _ in lagre(m.farge) }, leggIPalett: { _ in leggIPalett(m.farge) },
+                         åpneIStudio: { _ in Arbeidsbenk.delt.visIStudio(original) }, palettFarge: m.farge,
                          ekstraMeny: AnyView(Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(m.tekst) }))
             .overlay {
                 if erGrunn && rammeRundtGrunn {

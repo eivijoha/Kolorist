@@ -935,7 +935,7 @@ struct Fargeflate: View {
         let f = pf.farge
         // Fargerutens egen meny overstyrer en ytre meny, så alle valgene sendes inn i den.
         return FargeRute(farge: f, visTekst: false, hjørne: 0, visMerke: false,
-                         lagre: { _ in lagre(pf) }, leggIPalett: { _ in leggIPalett(pf) }, palettFarge: pf,
+                         lagre: { _ in lagre(pf) }, leggIPalett: { _ in leggIPalett(pf) }, visFarge: false, palettFarge: pf,
                          ekstraMeny: AnyView(Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(tekst) }))
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 1) {

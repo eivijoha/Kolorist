@@ -115,7 +115,10 @@ struct VerdiordVisning: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture { arbeidsbenk.aktivFarge = f.farge }
-                .contextMenu { KopierMeny(farge: f.farge) }
+                .contextMenu {
+                    Button("Vis farge", systemImage: "slider.horizontal.3") { arbeidsbenk.visIStudio(f.farge) }
+                    KopierMeny(farge: f.farge)
+                }
                 .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         } header: { Group {

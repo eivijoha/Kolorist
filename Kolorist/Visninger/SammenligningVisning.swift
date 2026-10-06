@@ -125,6 +125,7 @@ struct FargeflateVelger: View {
         .hoverEffect(.highlight)
         #endif
         .contextMenu {
+            Button("Vis farge", systemImage: "slider.horizontal.3") { arbeidsbenk.visIStudio(farge) }
             Button("Velg farge …", systemImage: "square.grid.2x2") { visVelger = true }
             Button("Aktiv farge", systemImage: "slider.horizontal.3") { farge = arbeidsbenk.aktivFarge }
             Button("Lim inn", systemImage: "doc.on.clipboard") { if let f = Utklippstavle.limInn() { farge = f } }

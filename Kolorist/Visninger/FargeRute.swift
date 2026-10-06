@@ -16,8 +16,11 @@ struct FargeRute: View {
     /// Valgfrie handlinger i kontekstmenyen (trykk og hold / høyreklikk).
     var lagre: ((Farge) -> Void)? = nil
     var leggIPalett: ((Farge) -> Void)? = nil
-    /// «Åpne i Studio» for prøver utenfor Studio (f.eks. toner i Overgang).
+    /// «Vis farge»: åpner fargen i Studio (Farge). Standard er å vise nettopp denne fargen; sett en egen handling når
+    /// prøven viser en annen tone enn fargen den står for (f.eks. nærmeste tone i et fargekart).
     var åpneIStudio: ((Farge) -> Void)? = nil
+    /// Med «Vis farge» i menyen (ikke for Studios egen fargeflate).
+    var visFarge = true
     var fjern: (() -> Void)? = nil
     var navngi: (() -> Void)? = nil
     /// Når satt, dras fargen med navn (mellom paletter); ellers som ren farge.
@@ -47,7 +50,7 @@ struct FargeRute: View {
                 .onLongPressGesture(minimumDuration: 0.35) { visValg = true }
                 .sensoryFeedback(.impact(weight: .medium), trigger: visValg) { _, ny in ny }
                 .popover(isPresented: $visValg, arrowEdge: .bottom) {
-                    FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett, åpneIStudio: åpneIStudio,
+                    FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett, åpneIStudio: visFarge ? visIStudio : nil,
                                    kilde: palettFarge?.kilde, ekstra: bobleEkstra?({ visValg = false })) { visValg = false }
                         .presentationCompactAdaptation(.popover)
                 }
@@ -67,11 +70,13 @@ struct FargeRute: View {
         }
     }
 
+    private var visIStudio: (Farge) -> Void { åpneIStudio ?? { Arbeidsbenk.delt.visIStudio($0) } }
+
     private var medMeny: some View {
         rute
             .contextMenu {
-                if let åpneIStudio {
-                    Button("Åpne i Studio", systemImage: "slider.horizontal.3") { åpneIStudio(farge) }
+                if visFarge {
+                    Button("Vis farge", systemImage: "slider.horizontal.3") { visIStudio(farge) }
                 }
                 if let navngi {
                     Button("Gi navn …", systemImage: "character.cursor.ibeam", action: navngi)
@@ -205,7 +210,7 @@ struct FargeValgBoble: View {
                 }
             VStack(alignment: .leading, spacing: 4) {
                 if let åpneIStudio {
-                    Button("Åpne i Studio", systemImage: "slider.horizontal.3") {
+                    Button("Vis farge", systemImage: "slider.horizontal.3") {
                         lukk()
                         åpneIStudio(farge)
                     }
