@@ -362,7 +362,8 @@ struct HarmoniSeksjon: View {
                              tonebaneSpenn = nyttSpenn
                              settSluttkulør(TonebaneRing<EmptyView>.normaliser(nyStart + nyttSpenn))
                          }) {
-                LyshetMetningFlate(kulør: midtkulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra)
+                LyshetMetningFlate(kulør: midtkulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra,
+                                   visAkser: false)
             }
             .frame(width: sirkelhøyde + 100, height: sirkelhøyde + 100)
             .frame(maxWidth: .infinity)

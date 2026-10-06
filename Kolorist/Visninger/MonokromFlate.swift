@@ -12,6 +12,8 @@ struct LyshetMetningFlate: View {
     /// Grunnfargen, vist som en liten ring for å orientere seg.
     let grunnfarge: Farge
     var velg: (Farge) -> Void = { _ in }
+    /// «↑ Lyshet» og «Metning →» ved kantene (ikke inni kulørringen for tonebane, der kvadratet heller får plassen).
+    var visAkser = true
 
     /// Endepunktet som dras (a eller b), valgt ved starten av bevegelsen.
     @State private var drar: WritableKeyPath<Monokromstrek, Monokromstrek.Punkt>?
@@ -94,12 +96,16 @@ struct LyshetMetningFlate: View {
                     }
             )
             .overlay(alignment: .bottomTrailing) {
-                Text("Metning →").font(.caption2).foregroundStyle(Color.sekundærTekst).padding(.trailing, marg).padding(.bottom, 0)
-                    .offset(y: marg - 2)
+                if visAkser {
+                    Text("Metning →").font(.caption2).foregroundStyle(Color.sekundærTekst).padding(.trailing, marg).padding(.bottom, 0)
+                        .offset(y: marg - 2)
+                }
             }
             .overlay(alignment: .topLeading) {
-                Text("↑ Lyshet").font(.caption2).foregroundStyle(Color.sekundærTekst).padding(.leading, marg)
-                    .offset(y: -2)
+                if visAkser {
+                    Text("↑ Lyshet").font(.caption2).foregroundStyle(Color.sekundærTekst).padding(.leading, marg)
+                        .offset(y: -2)
+                }
             }
         }
         .accessibilityElement()

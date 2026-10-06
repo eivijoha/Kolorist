@@ -99,8 +99,10 @@ struct TonebaneRing<Midt: View>: View {
                             .onChanged { g in dra(til: g.location, senter: senter) }
                             .onEnded { _ in drar = nil; sisteKulør = nil }
                     )
+                // Kvadratet så stort som ringen gir plass til: hjørnene innenfor den indre kanten (flaten har 14 pt marg
+                // rundt for håndtakene).
                 midt
-                    .frame(width: indre * 1.36, height: indre * 1.36)
+                    .frame(width: indre * 1.41 + 24, height: indre * 1.41 + 24)
                     .position(senter)
                 håndtak(kulør: start, tittel: Text("Kulør, start"), senter: senter, radius: ringR) { endre(Self.normaliser(start + $0), spenn - $0) }
                 håndtak(kulør: slutt, tittel: Text("Kulør, slutt"), senter: senter, radius: ringR) { endre(start, min(max(spenn + $0, -360), 360)) }
