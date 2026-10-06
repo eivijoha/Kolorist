@@ -2,7 +2,7 @@ import FargeKjerne
 import SwiftUI
 
 /// Kulørring for en tonebane: ringen viser kulørene i valgt fargesirkel, med to håndtak for start- og sluttkuløren og en
-/// bue med pil som viser banen fra start til slutt. Banen går i den retningen man drar, og kan gå helt rundt (opptil
+/// bue med pil utenfor ringen som viser banen fra start til slutt. Banen går i den retningen man drar, og kan gå helt rundt (opptil
 /// 360°) – den snur ikke til korteste vei. Flytter man det ene håndtaket, står det andre stille. Midten (flaten for
 /// lyshet og metning) legges inni ringen.
 struct TonebaneRing<Midt: View>: View {
@@ -54,10 +54,10 @@ struct TonebaneRing<Midt: View>: View {
         GeometryReader { geo in
             let side = min(geo.size.width, geo.size.height)
             let senter = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
-            let ytre = side / 2 - tommel / 2
-            let ringR = ytre - bånd / 2
-            let baneR = ytre - bånd - 8
-            let indre = baneR - 6
+            // Utenfra og inn: banen med pil, ringen (med håndtakene på) og kvadratet, som får plassen innenfor ringen.
+            let baneR = side / 2 - 5
+            let ringR = baneR - 12 - bånd / 2
+            let indre = ringR - bånd / 2 - 3
             ZStack {
                 Canvas { ctx, _ in
                     // Ringen, i 2°-stykker.
