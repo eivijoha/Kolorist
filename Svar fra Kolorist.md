@@ -134,5 +134,8 @@ forstyrrende elementer) kommer i Kolorist uten at lenkeformatet endres.
 - **Kontrastsjekken (1.3, 2026-10-06):** stor flate øverst med nøkkeltallet, og et valg mellom WCAG 2.2, APCA og LRV
   (lagret i `UserDefaults` som `kontrastType`: `wcag`, `apca`, `lrv`). `DeltVisning` har ikke felt for dette ennå – si
   fra hvis Kolorist underviser vil åpne kontrastsjekken på en bestemt type, så legges det til.
-- **Ny i FargeKjerne (ikke publisert ennå):** `Farge.medAPCA(mot:minst:)` – «Rett opp» etter APCA, som
-  `medKontrast(mot:minst:)` for WCAG 2. Kommer i neste versjon.
+- **FargeKjerne 0.3.0 (2026-10-06):** luminanskontrasten for flater er rettet til norsk praksis (Weber, |Yo − Yb| / Yb
+  med bakgrunnen som referanse, etter TEK17/NS 11001) – før ble Michelson brukt. Ny `Flatekontrastmetode` (LRV-forskjell,
+  Weber, Michelson) med egne krav; `Flatekrav.allCases` har nå krav for alle metodene, så bruk `metode.krav`.
+  `Farge.medAPCA(mot:minst:)` er med. Testvektorene har fått `lrvForskjell`, `weberFlatePaaBakgrunn` og `michelson`.
+  Se CHANGELOG. Bruker Kolorist student/underviser luminanskontrast, bør det oppdateres.

@@ -2,10 +2,20 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
-## Ikke publisert
+## 0.3.0 – 2026-10-06
 
+- **Rettet: luminanskontrast etter norsk praksis.** `Flatekrav.luminans04`/`.luminans08` regnes nå med Weber,
+  |Yo − Yb| / Yb med bakgrunnen (`b`) som referanse, slik TEK17, NS 11001 og Byggforsk 220.114 gjør (kontrollert mot
+  NBKF Faglig veileder 3-2024). Før ble Michelson brukt, som ga andre svar. Kravene har fått riktige navn: 0,4 for
+  orientering og veifinning, 0,8 for trapp, håndløper og farefelt (ikke «skilt og tekst»).
+- `Flatekontrastmetode` (`.lrvForskjell`, `.weber`, `.michelson`) med `navn`, `formel` og `krav`;
+  `Flatekontrast.weber`, `.verdi(_:)` og de statiske `weber(objekt:bakgrunn:)` og `michelson(_:_:)`.
+- Nye krav: `Flatekrav.lrv20` (BS 8300: store flater eller over 200 lux), `.michelson30` og `.michelson60`
+  (ISO 21542, verdier etter CAN-ASC-2.4-utkastet). `Flatekrav.metode` og `.minimum`. **Merk:** `Flatekrav.allCases`
+  inneholder nå krav for alle metodene – bruk `metode.krav` for kravene til én metode.
 - `Farge.medAPCA(mot:minst:)`: justerer lysheten (OKLCH) til APCA-lesekontrasten |Lc| når et mål, med minst mulig
   endring – som `medKontrast(mot:minst:)` gjør for WCAG 2.
+- Testvektorene har fått `lrvForskjell`, `weberFlatePaaBakgrunn` og `michelson` for hvert par.
 
 ## 0.2.0 – 2026-10-05
 

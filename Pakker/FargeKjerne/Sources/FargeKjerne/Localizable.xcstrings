@@ -197,6 +197,16 @@
         }
       }
     },
+    "Fare, små elementer og tekst, 60 %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hazards, small items and text, 60 %"
+          }
+        }
+      }
+    },
     "Fargebiblioteket kunne ikke leses.": {
       "localizations": {
         "en": {
@@ -537,6 +547,16 @@
         }
       }
     },
+    "LRV-forskjell (BS 8300)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LRV difference (BS 8300)"
+          }
+        }
+      }
+    },
     "Lab-basert sirkel, som i Photoshop og fargemåling. Lyshet og kroma holdes fast.": {
       "localizations": {
         "en": {
@@ -563,6 +583,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Linear"
+          }
+        }
+      }
+    },
+    "Luminanskontrast, Michelson (ISO 21542)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luminance contrast, Michelson (ISO 21542)"
+          }
+        }
+      }
+    },
+    "Luminanskontrast, Weber (TEK17, NS 11001)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luminance contrast, Weber (TEK17, NS 11001)"
           }
         }
       }
@@ -747,6 +787,16 @@
         }
       }
     },
+    "Orientering og veifinning, 0,4": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orientation and wayfinding, 0.4"
+          }
+        }
+      }
+    },
     "Perseptuelt like vinkler, og lyshet og metning holdes fast, så fargene veier likt.": {
       "localizations": {
         "en": {
@@ -847,16 +897,6 @@
         }
       }
     },
-    "Skilt og tekst, 0,8": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Signage and text, 0.8"
-          }
-        }
-      }
-    },
     "Sort": {
       "localizations": {
         "en": {
@@ -897,6 +937,26 @@
         }
       }
     },
+    "Store flater eller over 200 lux, 20 LRV-poeng": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large surfaces or above 200 lux, 20 LRV points"
+          }
+        }
+      }
+    },
+    "Store flater og orientering, 30 %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large surfaces and orientation, 30 %"
+          }
+        }
+      }
+    },
     "Tekst AA": {
       "localizations": {
         "en": {
@@ -913,6 +973,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text AAA"
+          }
+        }
+      }
+    },
+    "Trapp, håndløper og farefelt, 0,8": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stairs, handrails and hazard fields, 0.8"
           }
         }
       }
@@ -983,16 +1053,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warmer"
-          }
-        }
-      }
-    },
-    "Viktige flater, 0,4": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Important surfaces, 0.4"
           }
         }
       }
@@ -1157,22 +1217,42 @@
         }
       }
     },
-    "luminanskontrast minst 0,4": {
+    "luminanskontrast minst 0,4 mot bakgrunnen": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "luminance contrast at least 0.4"
+            "value": "luminance contrast at least 0.4 against the background"
           }
         }
       }
     },
-    "luminanskontrast minst 0,8": {
+    "luminanskontrast minst 0,8 mot bakgrunnen": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "luminance contrast at least 0.8"
+            "value": "luminance contrast at least 0.8 against the background"
+          }
+        }
+      }
+    },
+    "luminanskontrast minst 30 %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "luminance contrast at least 30 %"
+          }
+        }
+      }
+    },
+    "luminanskontrast minst 60 %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "luminance contrast at least 60 %"
           }
         }
       }
@@ -1193,6 +1273,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "magenta"
+          }
+        }
+      }
+    },
+    "minst 20 poeng forskjell i LRV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at least 20 points difference in LRV"
           }
         }
       }

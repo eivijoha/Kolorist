@@ -1284,6 +1284,16 @@
     "CC BY 4.0": {
       "shouldTranslate": false
     },
+    "CIE 15 (luminansfaktor Y); BS 8300-2:2018; TEK17 med veiledning, NS 11001-1:2018 og Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (utkast 2026)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CIE 15 (luminance factor Y); BS 8300-2:2018; TEK17 with guidance, NS 11001-1:2018 and Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (draft 2026)"
+          }
+        }
+      }
+    },
     "CIE-kolorimetri": {
       "localizations": {
         "en": {
@@ -2519,12 +2529,12 @@
         }
       }
     },
-    "For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.": {
+    "For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "For walls, floors, doors and handrails: the light reflectance value (LRV) is the share of light a surface reflects, as given on paint charts. BS 8300 asks for at least 30 points difference between adjacent surfaces; NS 11001 uses luminance contrast (Y₁ − Y₂)/(Y₁ + Y₂), at least 0.4 for important surfaces and 0.8 for signage."
+            "value": "For walls, floors, doors and handrails: the light reflectance value (LRV) is the share of light the surface reflects, as on paint charts."
           }
         }
       }
@@ -2575,16 +2585,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Difference"
-          }
-        }
-      }
-    },
-    "Forskjell i LRV · luminanskontrast %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "LRV difference · luminance contrast %@"
           }
         }
       }
@@ -4377,12 +4377,12 @@
         }
       }
     },
-    "LRV er CIE-luminansen Y i prosent – andelen synlig lys en flate reflekterer, slik malingsprodusentene oppgir den. Kolorist regner den for fargen slik den vises i sRGB. Kontrast mellom flater oppgis som forskjell i LRV-poeng (BS 8300: minst 30) og som luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂) etter NS 11001 (0,4 for viktige flater, 0,8 for skilt). «Rett opp» endrer bare lysheten i OKLCH.": {
+    "LRV er CIE-luminansen Y i prosent – andelen synlig lys en flate reflekterer, slik malingsprodusentene oppgir den. Kolorist regner den for fargen slik den vises i sRGB. Kontrasten mellom flater regnes etter valgt metode, hver med sine egne krav: forskjell i LRV-poeng (BS 8300: minst 30, eller 20 for store flater og over 200 lux); luminanskontrast etter Weber, |Yo − Yb| / Yb med bakgrunnen som referanse, slik TEK17 og NS 11001 bruker den (0,4 for orientering og veifinning, 0,8 for trappeneser, håndløper og farefelt); og Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), etter ISO 21542 (30 % for store flater, 60 % for fare og tekst, med verdier fra det kanadiske utkastet CAN-ASC-2.4). Tallene kan ikke sammenlignes på tvers av metodene. LRV fra kamera eller bilde uten gråkort eller referansekort er bare veiledende. «Rett opp» endrer bare lysheten i OKLCH.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "LRV is the CIE luminance Y in per cent – the share of visible light a surface reflects, as paint manufacturers state it. Kolorist computes it for the colour as shown in sRGB. Contrast between surfaces is given as a difference in LRV points (BS 8300: at least 30) and as luminance contrast (Y₁ − Y₂)/(Y₁ + Y₂) per NS 11001 (0.4 for important surfaces, 0.8 for signage). “Fix” changes only lightness in OKLCH."
+            "value": "LRV is the CIE luminance Y in per cent – the share of visible light a surface reflects, as paint manufacturers state it. Kolorist computes it for the colour as shown in sRGB. Contrast between surfaces is calculated with the chosen method, each with its own requirements: difference in LRV points (BS 8300: at least 30, or 20 for large surfaces and above 200 lux); Weber luminance contrast, |Yo − Yb| / Yb with the background as reference, as used by the Norwegian building regulations TEK17 and NS 11001 (0.4 for orientation and wayfinding, 0.8 for stair nosings, handrails and hazard fields); and Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), per ISO 21542 (30 % for large surfaces, 60 % for hazards and text, with values from the Canadian draft CAN-ASC-2.4). The figures cannot be compared across methods. LRV from the camera or an image without a grey card or reference card is only indicative. “Fix” changes only the lightness in OKLCH."
           }
         }
       }
@@ -4413,6 +4413,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "LRV marked ≈ is indicative only."
+          }
+        }
+      }
+    },
+    "LRV-forskjell (BS 8300)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LRV difference (BS 8300)"
+          }
+        }
+      }
+    },
+    "LRV-forskjell: |Y₁ − Y₂| i poeng. BS 8300 ber om minst 30 poeng mellom tilstøtende flater; 20 poeng kan godtas for store flater eller der belysningen er over 200 lux.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LRV difference: |Y₁ − Y₂| in points. BS 8300 asks for at least 30 points between adjacent surfaces; 20 points may be accepted for large surfaces or where the illuminance is above 200 lux."
           }
         }
       }
@@ -5119,16 +5139,6 @@
         }
       }
     },
-    "Luminanskontrast": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Luminance contrast"
-          }
-        }
-      }
-    },
     "Lykt": {
       "localizations": {
         "en": {
@@ -5545,6 +5555,16 @@
           "stringUnit": {
             "state": "new",
             "value": "Metoder: %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Michelson: |Y₁ − Y₂| / (Y₁ + Y₂), som ISO 21542 bruker. Kravene (30 % for store flater og orientering, 60 % for fare, små elementer og tekst) er hentet fra det kanadiske standardutkastet CAN-ASC-2.4, som bygger på ISO 21542, og gjelder matte flater.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Michelson: |Y₁ − Y₂| / (Y₁ + Y₂), as used by ISO 21542. The requirements (30 % for large surfaces and orientation, 60 % for hazards, small items and text) come from the Canadian draft standard CAN-ASC-2.4, which builds on ISO 21542, and apply to matte surfaces."
           }
         }
       }
@@ -8743,6 +8763,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "WCAG 2.2 contrast between all colour pairs, and how many can be used for text (4.5:1)."
+          }
+        }
+      }
+    },
+    "Weber, slik TEK17 og NS 11001 bruker det: |Yo − Yb| / Yb, med bakgrunnen (hovedflaten) som referanse. Minst 0,4 for orientering og veifinning (ledelinjer, dør mot vegg, toalettrom) og 0,8 for trappeneser, håndløper og farefelt. En lys flate på mørk bakgrunn gir høyere tall enn omvendt, og tallet kan bli over 1.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weber, as used by the Norwegian regulations TEK17 and NS 11001: |Yo − Yb| / Yb, with the background (main surface) as reference. At least 0.4 for orientation and wayfinding (guide lines, door against wall, toilet rooms) and 0.8 for stair nosings, handrails and hazard fields. A light surface on a dark background gives a higher figure than the reverse, and the figure can exceed 1."
           }
         }
       }

@@ -2440,10 +2440,13 @@
     "hsl/hsb" : "på sRGB klippet til 0–1; kulør i grader, metning/lyshet 0–1",
     "lineærSRGB" : "utvidet lineær sRGB, fargens kanoniske form i Kolorist",
     "lrv" : "lysrefleksjonsverdi i prosent: Y × 100 av sRGB-klippet farge",
+    "lrvForskjell" : "|LRV tekst − LRV bakgrunn| i poeng (BS 8300)",
+    "michelson" : "|Y1 − Y2| / (Y1 + Y2) (ISO 21542)",
     "oklab/oklch" : "Björn Ottosson 2020; L 0–1, kulør i grader",
     "sRGB og Display P3" : "gamma-kodet, 0–1, ikke klippet (verdier utenfor 0–1 betyr utenfor gamut)",
     "toleranse" : "tallene er avrundet til 12 desimaler; 1e-9 er en rimelig toleranse",
     "wcagKontrast" : "WCAG 2.x, (L1 + 0,05) / (L2 + 0,05) på sRGB-klippet luminans",
+    "weberFlatePaaBakgrunn" : "|Yo − Yb| / Yb med «tekst» som flate og bakgrunnen som referanse (TEK17, NS 11001); Yb minst 0,5",
     "xyzD65" : "CIE XYZ, D65, Y = 1 for hvitt"
   },
   "par" : [
@@ -2454,8 +2457,11 @@
       "deltaE2000" : 100,
       "deltaEOK" : 0.99999999347400004,
       "lesbarTekstfargePåBakgrunn" : "#000000",
+      "lrvForskjell" : 100,
+      "michelson" : 1,
       "tekst" : "#000000",
-      "wcagKontrast" : 21
+      "wcagKontrast" : 21,
+      "weberFlatePaaBakgrunn" : 1
     },
     {
       "apcaLc" : -107.88473318309801,
@@ -2464,8 +2470,11 @@
       "deltaE2000" : 100,
       "deltaEOK" : 0.99999999347400004,
       "lesbarTekstfargePåBakgrunn" : "#FFFFFF",
+      "lrvForskjell" : 100,
+      "michelson" : 1,
       "tekst" : "#FFFFFF",
-      "wcagKontrast" : 21
+      "wcagKontrast" : 21,
+      "weberFlatePaaBakgrunn" : 200
     },
     {
       "apcaLc" : 71.572391222465001,
@@ -2474,8 +2483,11 @@
       "deltaE2000" : 36.858776257022001,
       "deltaEOK" : 0.43416366636699999,
       "lesbarTekstfargePåBakgrunn" : "#000000",
+      "lrvForskjell" : 81.883575575014007,
+      "michelson" : 0.69324461838100004,
       "tekst" : "#767676",
-      "wcagKontrast" : 4.5422249596049999
+      "wcagKontrast" : 4.5422249596049999,
+      "weberFlatePaaBakgrunn" : 0.81883575575000001
     },
     {
       "apcaLc" : -75.498448845320993,
@@ -2484,8 +2496,11 @@
       "deltaE2000" : 40.826408909346,
       "deltaEOK" : 0.43390233563000002,
       "lesbarTekstfargePåBakgrunn" : "#FFFFFF",
+      "lrvForskjell" : 80.861109795326996,
+      "michelson" : 0.67871296817000004,
       "tekst" : "#FFFFFF",
-      "wcagKontrast" : 4.3498271506980002
+      "wcagKontrast" : 4.3498271506980002,
+      "weberFlatePaaBakgrunn" : 4.2249633563169997
     },
     {
       "apcaLc" : 34.069611740512997,
@@ -2494,8 +2509,11 @@
       "deltaE2000" : 41.489331717803999,
       "deltaEOK" : 0.58393980139099999,
       "lesbarTekstfargePåBakgrunn" : "#FFFFFF",
+      "lrvForskjell" : 19.138890204673,
+      "michelson" : 1,
       "tekst" : "#000000",
-      "wcagKontrast" : 4.8277780409349997
+      "wcagKontrast" : 4.8277780409349997,
+      "weberFlatePaaBakgrunn" : 1
     },
     {
       "apcaLc" : -46.065670836472997,
@@ -2504,8 +2522,11 @@
       "deltaE2000" : 29.548616068394001,
       "deltaEOK" : 0.256529121621,
       "lesbarTekstfargePåBakgrunn" : "#000000",
+      "lrvForskjell" : 55.562633041787002,
+      "michelson" : 0.38468323129900001,
       "tekst" : "#FFFFFF",
-      "wcagKontrast" : 2.1238995209590001
+      "wcagKontrast" : 2.1238995209590001,
+      "weberFlatePaaBakgrunn" : 1.250358354806
     },
     {
       "apcaLc" : 49.430541346039,
@@ -2514,8 +2535,11 @@
       "deltaE2000" : 37.292224754414001,
       "deltaEOK" : 0.333214726578,
       "lesbarTekstfargePåBakgrunn" : "#000000",
+      "lrvForskjell" : 53.064711398508997,
+      "michelson" : 0.58124355795100002,
       "tekst" : "#C8553D",
-      "wcagKontrast" : 3.2004661401750001
+      "wcagKontrast" : 3.2004661401750001,
+      "weberFlatePaaBakgrunn" : 0.73517271267700002
     },
     {
       "apcaLc" : 51.220142683508001,
@@ -2524,8 +2548,11 @@
       "deltaE2000" : 46.695216588428003,
       "deltaEOK" : 0.41114333560799998,
       "lesbarTekstfargePåBakgrunn" : "#000000",
+      "lrvForskjell" : 38.349476481018002,
+      "michelson" : 0.83267628162200003,
       "tekst" : "#1F3A4D",
-      "wcagKontrast" : 5.3317547713350004
+      "wcagKontrast" : 5.3317547713350004,
+      "weberFlatePaaBakgrunn" : 0.90869979599999995
     },
     {
       "apcaLc" : 38.042456877074002,
@@ -2534,8 +2561,11 @@
       "deltaE2000" : 32.700363608055,
       "deltaEOK" : 0.28848547217199999,
       "lesbarTekstfargePåBakgrunn" : "#000000",
+      "lrvForskjell" : 31.113606864878999,
+      "michelson" : 0.63133880522399999,
       "tekst" : "#555555",
-      "wcagKontrast" : 3.20911877621
+      "wcagKontrast" : 3.20911877621,
+      "weberFlatePaaBakgrunn" : 0.77401310286000002
     },
     {
       "apcaLc" : 0,
@@ -2544,8 +2574,11 @@
       "deltaE2000" : 45.708281213119001,
       "deltaEOK" : 0.26966519939200001,
       "lesbarTekstfargePåBakgrunn" : "#FFFFFF",
+      "lrvForskjell" : 1.8466147741059999,
+      "michelson" : 0.046592716839999999,
       "tekst" : "#2F7FD8",
-      "wcagKontrast" : 1.077286034421
+      "wcagKontrast" : 1.077286034421,
+      "weberFlatePaaBakgrunn" : 0.097739376786000004
     },
     {
       "apcaLc" : 0,
@@ -2554,8 +2587,11 @@
       "deltaE2000" : 0.58057396924299998,
       "deltaEOK" : 0.0015277377659999999,
       "lesbarTekstfargePåBakgrunn" : "#FFFFFF",
+      "lrvForskjell" : 0.026463534265000001,
+      "michelson" : 0.000612602181,
       "tekst" : "#808080",
-      "wcagKontrast" : 1.0009953917279999
+      "wcagKontrast" : 1.0009953917279999,
+      "weberFlatePaaBakgrunn" : 0.0012244542590000001
     },
     {
       "apcaLc" : 44.612325556298003,
@@ -2564,8 +2600,11 @@
       "deltaE2000" : 84.306863290959001,
       "deltaEOK" : 0.51981288926699998,
       "lesbarTekstfargePåBakgrunn" : "#000000",
+      "lrvForskjell" : 50.252967289624998,
+      "michelson" : 0.54163128977700004,
       "tekst" : "#FF0000",
-      "wcagKontrast" : 2.913385527899
+      "wcagKontrast" : 2.913385527899,
+      "weberFlatePaaBakgrunn" : 0.70267293271599995
     }
   ],
   "versjon" : 1

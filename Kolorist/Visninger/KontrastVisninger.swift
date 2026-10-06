@@ -153,6 +153,7 @@ struct KontrastVisMedSeksjon: View {
 /// eller fargeknappene (tekst) eller på en av flatene (LRV). Tallene står i en lesbar farge, prøvene i fargen som testes.
 struct Kontrastflate: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @AppStorage("flatekontrastmetode") private var metode: Flatekontrastmetode = .standard
     let type: Kontrasttype
     @Binding var forgrunn: Farge
     @Binding var bakgrunn: Farge
@@ -174,13 +175,12 @@ struct Kontrastflate: View {
             return (APCANivå.formatert(lc), APCANivå.bruk(lc), APCANivå.retning(lc))
         case .lrv:
             let k = Flatekontrast(forgrunn, bakgrunn)
-            let bestått = Flatekrav.allCases.filter(k.består).count
-            let poeng = k.lrvForskjell.formatted(.number.precision(.fractionLength(0)))
-            let luminans = k.michelson.formatted(.number.precision(.fractionLength(2)))
-            // Plukket uten referanse: forskjellen er et anslag (≈).
+            let krav = metode.krav
+            let bestått = krav.filter(k.består).count
+            // Plukket uten referanse: kontrasten er et anslag (≈).
             let anslag = arbeidsbenk.erUkalibrert(forgrunn) || arbeidsbenk.erUkalibrert(bakgrunn) ? "≈ " : ""
-            return (anslag + String(localized: "\(poeng) poeng"), String(localized: "\(bestått) av \(Flatekrav.allCases.count) krav"),
-                    String(localized: "Forskjell i LRV · luminanskontrast \(luminans)"))
+            return (anslag + metode.formatert(k.verdi(metode)), String(localized: "\(bestått) av \(krav.count) krav"),
+                    metode.navn)
         }
     }
 
@@ -546,6 +546,7 @@ struct FlatekontrastSeksjon: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Binding var flate: Farge
     let bakgrunn: Farge
+    @AppStorage("flatekontrastmetode") private var metode: Flatekontrastmetode = .standard
     /// Lysmiljøet flatene ses i (nil = dagslys, som LRV er definert for).
     @AppStorage("lrvLysmiljø") private var lysmiljøID = ""
     @State private var lys = Lysbibliotek.delt
@@ -558,25 +559,25 @@ struct FlatekontrastSeksjon: View {
             HStack(spacing: 0) {
                 verdi(String(localized: "LRV flate"), flate.lrv.formatted(.number.precision(.fractionLength(0))))
                 verdi(String(localized: "LRV bakgrunn"), bakgrunn.lrv.formatted(.number.precision(.fractionLength(0))))
-                verdi(String(localized: "Forskjell"), k.lrvForskjell.formatted(.number.precision(.fractionLength(0))) + " p.")
-                verdi(String(localized: "Luminanskontrast"), k.michelson.formatted(.number.precision(.fractionLength(2))))
+                verdi(metode.kortnavn, metode.formatert(k.verdi(metode)))
             }
             .padding(.vertical, 4)
+            Picker("Metode", selection: $metode) {
+                ForEach(Flatekontrastmetode.allCases) { Text($0.valgnavn).tag($0) }
+            }
             LysmiljøVelger(tittel: "Lys", valgt: Binding(get: { lysmiljø?.id }, set: { lysmiljøID = $0?.uuidString ?? "" }),
                            ingen: "Dagslys (LRV)")
             if let miljø = lysmiljø {
                 // Refleksjonen under lyset: spektralt for lysrør og LED, så flater kan få en annen kontrast enn LRV tilsier.
                 let yf = miljø.xyzUnderLyset(flate).y * 100, yb = miljø.xyzUnderLyset(bakgrunn).y * 100
-                let kontrast = yf + yb > 0 ? abs(yf - yb) / (yf + yb) : 0
                 HStack(spacing: 0) {
                     verdi(String(localized: "Flate i lyset"), yf.formatted(.number.precision(.fractionLength(0))))
                     verdi(String(localized: "Bakgrunn i lyset"), yb.formatted(.number.precision(.fractionLength(0))))
-                    verdi(String(localized: "Forskjell"), abs(yf - yb).formatted(.number.precision(.fractionLength(0))) + " p.")
-                    verdi(String(localized: "Luminanskontrast"), kontrast.formatted(.number.precision(.fractionLength(2))))
+                    verdi(metode.kortnavn, metode.formatert(metode.verdi(flate: yf, bakgrunn: yb)))
                 }
                 .padding(.vertical, 4)
             }
-            ForEach(Flatekrav.allCases) { krav in
+            ForEach(metode.krav) { krav in
                 let bestått = k.består(krav)
                 HStack {
                     Image(systemName: bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -602,7 +603,8 @@ struct FlatekontrastSeksjon: View {
             Text("Flater (LRV)")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.")
+                Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart.")
+                Text(metode.forklaring)
                 if arbeidsbenk.erUkalibrert(flate) || arbeidsbenk.erUkalibrert(bakgrunn) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Label("LRV merket ≈ er kun veiledende.", systemImage: "exclamationmark.triangle")
@@ -643,6 +645,61 @@ struct LRVPålitelighetInfo: View {
             Label("Et referansekort med kjente farger retter også fargestikk fra lyset.", systemImage: "square.grid.3x2")
             Label("Mål i jevnt, mykt lys uten gjenskinn og skygger, med kameraet rett mot flaten, og mål begge flatene i samme lys.", systemImage: "sun.max")
             Label("Skal kontrasten dokumenteres, bruk produsentens oppgitte LRV eller en LRV-måler.", systemImage: "checkmark.seal")
+        }
+    }
+}
+
+extension Flatekontrastmetode {
+    /// Standard: norsk praksis (Weber, TEK17) med norsk region, ellers LRV-forskjell (BS 8300), som er mest brukt
+    /// internasjonalt og står på malingskart.
+    static var standard: Flatekontrastmetode { Locale.current.region?.identifier == "NO" ? .weber : .lrvForskjell }
+
+    /// Kort navn i metodevalget (får plass på iPhone).
+    var valgnavn: String {
+        switch self {
+        case .lrvForskjell: String(localized: "LRV-forskjell (BS 8300)")
+        case .weber: "Weber (TEK17)"
+        case .michelson: "Michelson (ISO 21542)"
+        }
+    }
+
+    var kortnavn: String {
+        switch self {
+        case .lrvForskjell: String(localized: "Forskjell")
+        case .weber: "Weber"
+        case .michelson: "Michelson"
+        }
+    }
+
+    /// Kontrasten formatert i metodens enhet, kuttet (ikke rundet opp), så tallet aldri viser et krav som ikke er nådd.
+    func formatert(_ v: Double) -> String {
+        switch self {
+        case .lrvForskjell:
+            String(localized: "\(v.rounded(.down).formatted(.number.precision(.fractionLength(0)))) poeng")
+        case .weber:
+            ((v * 100).rounded(.down) / 100).formatted(.number.precision(.fractionLength(2)))
+        case .michelson:
+            ((v * 100).rounded(.down) / 100).formatted(.percent.precision(.fractionLength(0)))
+        }
+    }
+
+    /// Kontrasten for to Y-verdier (0–100), f.eks. refleksjonen under valgte betraktningsforhold.
+    func verdi(flate yf: Double, bakgrunn yb: Double) -> Double {
+        switch self {
+        case .lrvForskjell: abs(yf - yb)
+        case .weber: Flatekontrast.weber(objekt: yf, bakgrunn: yb)
+        case .michelson: Flatekontrast.michelson(yf, yb)
+        }
+    }
+
+    var forklaring: String {
+        switch self {
+        case .lrvForskjell:
+            String(localized: "LRV-forskjell: |Y₁ − Y₂| i poeng. BS 8300 ber om minst 30 poeng mellom tilstøtende flater; 20 poeng kan godtas for store flater eller der belysningen er over 200 lux.")
+        case .weber:
+            String(localized: "Weber, slik TEK17 og NS 11001 bruker det: |Yo − Yb| / Yb, med bakgrunnen (hovedflaten) som referanse. Minst 0,4 for orientering og veifinning (ledelinjer, dør mot vegg, toalettrom) og 0,8 for trappeneser, håndløper og farefelt. En lys flate på mørk bakgrunn gir høyere tall enn omvendt, og tallet kan bli over 1.")
+        case .michelson:
+            String(localized: "Michelson: |Y₁ − Y₂| / (Y₁ + Y₂), som ISO 21542 bruker. Kravene (30 % for store flater og orientering, 60 % for fare, små elementer og tekst) er hentet fra det kanadiske standardutkastet CAN-ASC-2.4, som bygger på ISO 21542, og gjelder matte flater.")
         }
     }
 }

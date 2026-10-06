@@ -91,8 +91,8 @@
     <p class="dempet">Source: Developed for Kolorist; language model from Apple (Foundation Models)</p>
     
     <h2 id="lrv">Light reflectance value and luminance contrast</h2>
-    <p>LRV is the CIE luminance Y in per cent – the share of visible light a surface reflects, as paint manufacturers state it. Kolorist computes it for the colour as shown in sRGB. Contrast between surfaces is given as a difference in LRV points (BS 8300: at least 30) and as luminance contrast (Y₁ − Y₂)/(Y₁ + Y₂) per NS 11001 (0.4 for important surfaces, 0.8 for signage).</p>
-    <p class="dempet">Source: CIE 15 (luminance factor Y); BS 8300-2:2018; NS 11001-1:2018 and Byggforsk 220.300</p>
+    <p>LRV is the CIE luminance Y in per cent – the share of visible light a surface reflects, as paint manufacturers state it. Kolorist computes it for the colour as shown in sRGB. Contrast between surfaces is calculated with the chosen method, each with its own requirements: difference in LRV points (BS 8300: at least 30, or 20 for large surfaces and above 200 lux); Weber luminance contrast, |Yo − Yb| / Yb with the background as reference, as used by the Norwegian building regulations TEK17 and NS 11001 (0.4 for orientation and wayfinding, 0.8 for stair nosings, handrails and hazard fields); and Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), per ISO 21542 (30 % for large surfaces, 60 % for hazards and text, with values from the Canadian draft CAN-ASC-2.4). The figures cannot be compared across methods. LRV from the camera or an image without a grey card or reference card is only indicative.</p>
+    <p class="dempet">Source: CIE 15 (luminance factor Y); BS 8300-2:2018; TEK17 with guidance, NS 11001-1:2018 and Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (draft 2026)</p>
 
     <h2 id="munsell">The Munsell system</h2>
     <p>Hue, value and chroma after Munsell. The conversion uses the 1943 renotation data (CIE xyY under illuminant C, public data) with interpolation in chroma, hue and value, Bradford adaptation to D65, and ASTM D1535 for the relation between value and luminance. The notation is an approximation; physical Munsell chips may differ.</p>

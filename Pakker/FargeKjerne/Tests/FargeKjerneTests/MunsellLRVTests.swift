@@ -106,13 +106,30 @@ struct LRVTests {
         #expect(Farge(hex: "#000000")!.lrv == 0)
         #expect(abs(Farge(hex: "#808080")!.lrv - 21.6) < 0.2)
         let k = Flatekontrast(Farge(hex: "#FFFFFF")!, Farge(hex: "#808080")!)
-        #expect(k.består(.lrv30) && k.består(.luminans04))
-        #expect(!k.består(.luminans08))
+        #expect(k.består(.lrv30) && k.består(.luminans04) && k.består(.michelson60))
+        // Weber med mørkere bakgrunn som referanse: (100 − 21,6) / 21,6 ≈ 3,6.
+        #expect(abs(k.weber - 3.63) < 0.05 && k.består(.luminans08))
+        // Omvendt (grå flate på hvit bakgrunn): (100 − 21,6) / 100 ≈ 0,78 – under 0,8.
+        let omvendt = Flatekontrast(Farge(hex: "#808080")!, Farge(hex: "#FFFFFF")!)
+        #expect(omvendt.består(.luminans04) && !omvendt.består(.luminans08))
+        #expect(abs(omvendt.michelson - k.michelson) < 1e-12)
         let lik = Flatekontrast(Farge(hex: "#2F7FD8")!, Farge(hex: "#3A86DE")!)
         #expect(!lik.består(.lrv30))
         let rettet = lik.rettet(for: .lrv30, gamut: .sRGB)
         #expect(Flatekontrast(rettet, Farge(hex: "#3A86DE")!).består(.lrv30))
         // Kuløren bevares når lysheten endres.
         #expect(abs(rettet.okLCH.h - Farge(hex: "#2F7FD8")!.okLCH.h) < 8)  // gamut-kartlegging kan flytte kuløren litt
+        let rettetWeber = lik.rettet(for: .luminans08, gamut: .sRGB)
+        #expect(Flatekontrast(rettetWeber, Farge(hex: "#3A86DE")!).består(.luminans08))
+    }
+
+    /// Regneeksemplet i NBKF Faglig veileder 3-2024 (luminanskontrast etter TEK17): Y 43 mot 13.
+    @Test func weberSomINorskPraksis() {
+        #expect(abs(Flatekontrast.weber(objekt: 43, bakgrunn: 13) - 2.31) < 0.005)
+        #expect(abs(Flatekontrast.weber(objekt: 13, bakgrunn: 43) - 0.70) < 0.005)
+        #expect(Flatekontrast.weber(objekt: 20, bakgrunn: 0) == 40)  // sort bakgrunn: referansen er minst 0,5
+        #expect(abs(Flatekontrast.michelson(43, 13) - 30.0 / 56.0) < 1e-12)
+        #expect(Flatekontrastmetode.weber.krav == [.luminans04, .luminans08])
+        #expect(Flatekontrastmetode.lrvForskjell.krav == [.lrv20, .lrv30])
     }
 }
