@@ -149,8 +149,8 @@ struct KontrastVisMedSeksjon: View {
 }
 
 /// Den store flaten øverst i kontrastsjekken: bakgrunnen med fargen som tekst og grafikk (WCAG, APCA) eller som
-/// tilstøtende flate (LRV), og nøkkeltallet for valgt sjekk. Fargene velges rett i flaten: trykk på prøven (teksten eller
-/// flaten) eller på fargeknappene nederst. Tallene står i en lesbar farge, prøvene i fargen som testes.
+/// to likeverdige flater side om side (LRV), og nøkkeltallet for valgt sjekk. Fargene velges rett i flaten: trykk på prøven
+/// eller fargeknappene (tekst) eller på en av flatene (LRV). Tallene står i en lesbar farge, prøvene i fargen som testes.
 struct Kontrastflate: View {
     let type: Kontrasttype
     @Binding var forgrunn: Farge
@@ -184,70 +184,95 @@ struct Kontrastflate: View {
     var body: some View {
         let f = fargesyn.map { forgrunn.simulert($0) } ?? forgrunn
         let b = fargesyn.map { bakgrunn.simulert($0) } ?? bakgrunn
-        let n = nøkkeltall
-        VStack(alignment: .leading, spacing: 4) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    // Tallet kortes aldri ned; vurderingen brytes eller krymper.
-                    Text(n.tall).koloristFont(.largeTitle, weight: .bold).monospacedDigit()
-                        .fixedSize()
-                        .layoutPriority(1)
-                    Text(n.vurdering).koloristFont(.headline).lineLimit(2).minimumScaleFactor(0.8)
-                    Spacer(minLength: 0)
+        if type == .lrv {
+            // LRV: tallene over to likeverdige flater side om side; trykk på en flate for å velge fargen.
+            VStack(spacing: 0) {
+                topptekst
+                    .foregroundStyle(Color.primary)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 14)
+                    .padding(.bottom, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(spacing: 0) {
+                    lrvFelt(forgrunnTittel, farge: $forgrunn, vist: f, visAktivFarge: false)
+                    lrvFelt(bakgrunnTittel, farge: $bakgrunn, vist: b, visHvitOgSort: true)
                 }
-                HStack(spacing: 8) {
-                    Text(n.detalj).lineLimit(2).opacity(0.8)
-                    if let fargesyn { Label(fargesyn.navn, systemImage: "eye").lineLimit(1).fontWeight(.semibold) }
-                }
-                .koloristFont(.subheadline)
             }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(type.navn): \(n.tall), \(n.vurdering). \(n.detalj)")
-            if type == .lrv {
-                // Flaten (dør, list, felt) mot bakgrunnen, med LRV for begge; trykk på flaten for å velge fargen.
-                HStack(alignment: .bottom) {
-                    Text("LRV \(bakgrunn.lrv, format: .number.precision(.fractionLength(0)))")
-                        .koloristFont(.callout, weight: .semibold).monospacedDigit()
-                        .padding(.bottom, 4)
-                    Spacer(minLength: 0)
-                    FargeVelgerMeny(tittel: forgrunnTittel, farge: $forgrunn, visAktivFarge: false) {
-                        VStack {
-                            Spacer(minLength: 0)
-                            Text("LRV \(forgrunn.lrv, format: .number.precision(.fractionLength(0)))")
-                                .koloristFont(.callout, weight: .semibold).monospacedDigit()
-                                .foregroundStyle(f.lesbarTekstfarge.swiftUI)
-                                .padding(.bottom, 10)
-                        }
-                        .frame(width: 120)
-                        .frame(maxHeight: .infinity)
-                        .background(f.swiftUI, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
-                        .contentShape(Rectangle())
-                    }
-                }
-                .padding(.top, 6)
-                .frame(maxHeight: .infinity)
-            } else {
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background(Color.kortbakgrunn)
+        } else {
+            VStack(alignment: .leading, spacing: 4) {
+                topptekst
                 Spacer(minLength: 6)
                 FargeVelgerMeny(tittel: forgrunnTittel, farge: $forgrunn, visAktivFarge: false) {
                     prøvetekst.foregroundStyle(f.swiftUI).contentShape(Rectangle())
                 }
+                // Med korte etiketter når det er plass, ellers bare fargeprøve og hex.
+                ViewThatFits(in: .horizontal) {
+                    fargeknapper(f, b, merket: true)
+                    fargeknapper(f, b, merket: false)
+                }
+                .padding(.top, 6)
             }
-            // Med korte etiketter når det er plass, ellers bare fargeprøve og hex.
-            ViewThatFits(in: .horizontal) {
-                fargeknapper(f, b, merket: true)
-                fargeknapper(f, b, merket: false)
-            }
-            .padding(.top, 6)
+            .foregroundStyle(b.lesbarTekstfarge.swiftUI)
+            .padding(16)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .background(b.swiftUI)
         }
-        .foregroundStyle(b.lesbarTekstfarge.swiftUI)
-        .padding(16)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(b.swiftUI)
+    }
+
+    /// Nøkkeltallet med vurdering og detaljer øverst i flaten.
+    private var topptekst: some View {
+        let n = nøkkeltall
+        return VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                // Tallet kortes aldri ned; vurderingen brytes eller krymper.
+                Text(n.tall).koloristFont(.largeTitle, weight: .bold).monospacedDigit()
+                    .fixedSize()
+                    .layoutPriority(1)
+                Text(n.vurdering).koloristFont(.headline).lineLimit(2).minimumScaleFactor(0.8)
+                Spacer(minLength: 0)
+            }
+            HStack(spacing: 8) {
+                Text(n.detalj).lineLimit(2).opacity(0.8)
+                if let fargesyn { Label(fargesyn.navn, systemImage: "eye").lineLimit(1).fontWeight(.semibold) }
+            }
+            .koloristFont(.subheadline)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(type.navn): \(n.tall), \(n.vurdering). \(n.detalj)")
+    }
+
+    /// Én av de to LRV-flatene: navn, LRV og hex i flatens farge. Hele flaten åpner valgene for fargen.
+    private func lrvFelt(_ tittel: String, farge: Binding<Farge>, vist: Farge, visAktivFarge: Bool = true,
+                         visHvitOgSort: Bool = false) -> some View {
+        // Fargen som eget lag bak menyen, så flatene møtes i en rett kant (menyen avrunder både etiketten og
+        // bakgrunner lagt på den på iOS 26).
+        ZStack {
+        vist.swiftUI
+        FargeVelgerMeny(tittel: tittel, farge: farge, visAktivFarge: visAktivFarge, visHvitOgSort: visHvitOgSort) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(1).minimumScaleFactor(0.8)
+                Text("LRV \(farge.wrappedValue.lrv, format: .number.precision(.fractionLength(0)))")
+                    .koloristFont(.title2, weight: .bold).monospacedDigit()
+                Spacer(minLength: 4)
+                HStack(spacing: 4) {
+                    Text(farge.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
+                    Image(systemName: "chevron.up.chevron.down").font(.caption2)
+                }
+                .opacity(0.85)
+            }
+            .foregroundStyle(vist.lesbarTekstfarge.swiftUI)
+            .padding(12)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .contentShape(Rectangle())
+        }
+        }
     }
 
     private func fargeknapper(_ f: Farge, _ b: Farge, merket: Bool) -> some View {
         HStack(spacing: 8) {
-            fargeknapp(forgrunnTittel, merke: merket ? (type == .lrv ? String(localized: "Flate") : String(localized: "Tekst")) : nil,
+            fargeknapp(forgrunnTittel, merke: merket ? String(localized: "Tekst") : nil,
                        farge: $forgrunn, vist: f, visAktivFarge: false)
             fargeknapp(bakgrunnTittel, merke: merket ? String(localized: "Bakgrunn") : nil,
                        farge: $bakgrunn, vist: b, visHvitOgSort: true)
