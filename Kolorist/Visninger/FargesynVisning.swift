@@ -17,9 +17,9 @@ struct FargesynVurdering: View {
     }
 
     @Environment(\.presentasjonsmodus) private var presentasjon
-    /// Hvilket syn fargefeltet øverst viser («normalt» = normalt syn).
-    @AppStorage("fargesynVis") private var visTekst = "normalt"
-    private var vis: Fargesynstype? { Fargesynstype(rawValue: visTekst) }
+    /// Avviket fargefeltet sammenligner med normalt syn (deutan, det vanligste, som standard).
+    @AppStorage("fargesynVis") private var visTekst = Fargesynstype.deutan.rawValue
+    private var vis: Fargesynstype { Fargesynstype(rawValue: visTekst) ?? .deutan }
 
     var body: some View {
         if paletter.isEmpty {
@@ -92,10 +92,8 @@ struct FargesynVurdering: View {
     /// fargesynsavvik simulert), og valg av palett og syn. Samme oppbygning som kontrastsjekken.
     private func kort(_ valgt: PalettDokument, analyse: [(Fargesynstype, [Forveksling])], bred: Bool) -> some View {
         let farger = valgt.farger
-        let vist = vis.map { type in farger.map { $0.farge.simulert(type, grad: grad) } } ?? farger.map(\.farge)
-        // Normalt syn: fargepar som blir vanskelige med minst ett avvik (hvert par telles én gang). Ellers bare det valgte avviket.
-        let antall = vis.map { type in analyse.first { $0.0 == type }?.1.count ?? 0 }
-            ?? Set(analyse.flatMap { $0.1.map { [$0.i, $0.j] } }).count
+        let vist = farger.map { $0.farge.simulert(vis, grad: grad) }
+        let antall = analyse.first { $0.0 == vis }?.1.count ?? 0
         return VStack(spacing: 0) {
             // Bare tittelen med antall vanskelige par (detaljene står lenger ned), og palettvalget nederst til høyre,
             // rett over paletten det styrer (nærhet).
@@ -127,28 +125,34 @@ struct FargesynVurdering: View {
             .padding(.top, 14)
             .padding(.bottom, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            // Paletten: én kolonne per farge, med navn eller hex når det er plass.
+            // Paletten med normalt syn øverst og valgt avvik under, så de sammenlignes direkte. Én kolonne per farge,
+            // med navn eller hex i den øverste når det er plass.
             GeometryReader { geo in
                 let bredde = geo.size.width / CGFloat(max(vist.count, 1))
-                HStack(spacing: 0) {
-                    ForEach(Array(vist.enumerated()), id: \.offset) { i, f in
-                        ZStack(alignment: .bottomLeading) {
-                            f.swiftUI
-                            if bredde >= 56 {
-                                Text(farger[i].navn.isEmpty ? farger[i].farge.hex() : farger[i].navn)
-                                    .koloristFont(.caption2, weight: .medium)
-                                    .lineLimit(2)
-                                    .minimumScaleFactor(0.8)
-                                    .foregroundStyle(f.lesbarTekstfarge.swiftUI)
-                                    .padding(6)
+                VStack(spacing: 0) {
+                    HStack(spacing: 0) {
+                        ForEach(Array(farger.enumerated()), id: \.offset) { _, pf in
+                            ZStack(alignment: .bottomLeading) {
+                                pf.farge.swiftUI
+                                if bredde >= 56 {
+                                    Text(pf.navn.isEmpty ? pf.farge.hex() : pf.navn)
+                                        .koloristFont(.caption2, weight: .medium)
+                                        .lineLimit(2)
+                                        .minimumScaleFactor(0.8)
+                                        .foregroundStyle(pf.farge.lesbarTekstfarge.swiftUI)
+                                        .padding(6)
+                                }
                             }
                         }
+                    }
+                    HStack(spacing: 0) {
+                        ForEach(Array(vist.enumerated()), id: \.offset) { _, f in f.swiftUI }
                     }
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(String(localized: "Paletten \(valgt.navn)"))
-            // Fanerad under fargefeltet: normalt syn og de fire avvikene (fulle navn når det er plass).
+            .accessibilityLabel(String(localized: "Paletten \(valgt.navn), med normalt syn øverst og \(grad >= 1 ? vis.navn : vis.delvisNavn) under"))
+            // Fanerad under fargefeltet: de fire avvikene (fulle navn når det er plass).
             ViewThatFits(in: .horizontal) {
                 synsvalg(kort: false)
                 synsvalg(kort: true)
@@ -169,8 +173,7 @@ struct FargesynVurdering: View {
 
     /// Faner for synet fargefeltet viser.
     private func synsvalg(kort: Bool) -> some View {
-        Picker("Vis med", selection: $visTekst) {
-            Text(kort ? String(localized: "Normalt") : String(localized: "Normalt syn")).tag("normalt")
+        Picker("Fargesynsavvik", selection: Binding(get: { vis.rawValue }, set: { visTekst = $0 })) {
             ForEach(Fargesynstype.allCases) { type in
                 Text(kort ? type.kortnavn : (grad >= 1 ? type.navn : type.delvisNavn)).tag(type.rawValue)
             }

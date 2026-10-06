@@ -2198,6 +2198,16 @@
         }
       }
     },
+    "Fargesynsavvik": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour vision deficiency"
+          }
+        }
+      }
+    },
     "Fargetemperatur": {
       "localizations": {
         "en": {
@@ -5919,16 +5929,6 @@
         }
       }
     },
-    "Normalt": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Normal"
-          }
-        }
-      }
-    },
     "Normalt syn": {
       "localizations": {
         "en": {
@@ -6325,12 +6325,18 @@
         }
       }
     },
-    "Paletten %@": {
+    "Paletten %@, med normalt syn øverst og %@ under": {
       "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Paletten %1$@, med normalt syn øverst og %2$@ under"
+          }
+        },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The palette %@"
+            "value": "The palette %1$@, with normal vision at the top and %2$@ below"
           }
         }
       }
