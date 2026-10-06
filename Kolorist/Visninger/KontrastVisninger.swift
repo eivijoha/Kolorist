@@ -243,9 +243,9 @@ struct Kontrastflate: View {
     private var topptekst: some View {
         let n = nøkkeltall
         return VStack(alignment: .leading, spacing: 4) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
-                // Tallet kortes aldri ned; vurderingen brytes eller krymper.
-                // Kryss (eller hake) foran verdien: om det viste kravet bestås.
+            // Verdien følger grunnlinjen til den nederste linjen i vurderingen (som kan gå over to linjer). Tallet kortes
+            // aldri ned; vurderingen brytes eller krymper. Krysset (eller haken) foran verdien sier om kravet bestås.
+            HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Image(systemName: n.bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
                     .foregroundStyle(n.bestått ? Color.suksess : Color.feil)
                     .koloristFont(.title)
