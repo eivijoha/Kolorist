@@ -51,7 +51,7 @@
   <main id="hovedinnhold" class="innhold" tabindex="-1">
     <header class="sidetopp">
       <h1>Alle funksjoner</h1>
-      <p class="dempet">Alt Kolorist kan, samlet etter tema. Det som er nytt i versjon 1.3, er merket<span class="nytt">Nytt i 1.3</span></p>
+      <p class="dempet">Alt Kolorist kan, samlet etter tema. Det som er nytt i versjon 1.3, er merket med <span class="nytt">Nytt i 1.3</span></p>
       <nav class="innholdsliste" aria-label="Innhold på siden">
         <ul>
           <li><a href="#fargerom">Fargerom</a></li>
@@ -78,11 +78,11 @@
             <li>Varsel når fargen er utenfor fargeområdet</li>
             <li>Begrens farger til en valgt profil om du vil</li>
             <li>Velg kildefargerom for CMYK og RGB – Generisk CMYK og sRGB som standard, eller en hvilken som helst ICC-profil <span class="nytt">Nytt i 1.3</span></li>
-            <li>Lagre en farge i fargemodellen eller i profilen – eksporten følger formatet</li>
+            <li>Lagre farger i fargemodellen eller profilen – eksporten bruker samme format</li>
             <li>Rene CMYK-verdier: grått innslag flyttes til sort (UCR/GCR), med færrest mulig trykkfarger</li>
             <li>Betraktningsforhold for visningen: D50 (ICC-referanse), D65 eller et av de andre betraktningsforholdene <span class="nytt">Nytt i 1.3</span></li>
             <li>Absolutt kolorimetrisk tar med papirhvitt fra CMYK-profilen – 0/0/0/0 vises som papiret <span class="nytt">Nytt i 1.3</span></li>
-            <li>CMYK i prosent, og RGB som 0–255 i sRGB – de samme tallene som i hex – og 0–1 i andre fargerom <span class="nytt">Nytt i 1.3</span></li>
+            <li>CMYK i prosent; RGB som 0–255 i sRGB (de samme tallene som i hex) og 0–1 i andre fargerom <span class="nytt">Nytt i 1.3</span></li>
           </ul>
         </div>
         <div>
@@ -98,7 +98,7 @@
         <div>
           <h3>Filamentfarger for 3D-print</h3>
           <ul>
-            <li>Over 2 200 filamentfarger fra 150 produsenter, i bibliotek per materiale: PLA, PETG, ABS og ASA, TPU og TPE og andre </li>
+            <li>Over 2 200 filamentfarger fra 150 produsenter, i ett bibliotek per materiale: PLA, PETG, ABS og ASA, TPU og TPE og andre </li>
             <li>De fleste målt med kolorimeter på utskrevne prøver; resten anslått fra foto og merket slik</li>
             <li>Finn nærmeste filament til en farge, eller lås paletter og harmonier til filamenter som finnes</li>
             <li>Hver farge lenker til prøven hos <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">om dataene</a></li>
@@ -118,12 +118,12 @@
             <li>Monokromatisk: én kulør i toner langs en strek du former fritt i lyshet og metning <span class="nytt">Nytt i 1.3</span></li>
             <li>Analog med komplementær aksent – en rolig gruppe og én farge som skiller seg ut</li>
             <li>Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning</li>
-            <li>På fargesirkel i OKLCH, CIE LCH, HSL eller RYB</li>
+            <li>På fargesirkler i OKLCH, CIE LCH, HSL eller RYB</li>
             <li>Munsells fargesirkel med ekte Munsell-farger, og Herings motfargesirkel</li>
             <li>Goethes fargesirkel fra Farbenlehre (1810): purpur, oransje, gul, grønn, blå og fiolett <span class="nytt">Nytt i 1.3</span></li>
             <li>Harmoniene ordnet fra rolige til kontrastrike: én kulør, naboer, motsatte kulører og jevnt rundt sirkelen <span class="nytt">Nytt i 1.3</span></li>
-            <li>Metning og lyshet for hele harmonier, vist direkte i fargesirkelen</li>
-            <li>Se hele harmonier i valgt fargerom eller fargebibliotek, med grunnfarger tydelig merket</li>
+            <li>Endre metning og lyshet for hele harmonier rett i fargesirkelen</li>
+            <li>Se hele harmonier i valgt fargerom eller fargebibliotek, med grunnfargen tydelig merket</li>
             <li>Verdiene fra fargesirkelen for hver farge i harmonien – Munsell-notasjon, OKLCH, LCH, HSL, RYB eller Herings elementærfarger</li>
             <li>Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell</li>
                         </ul>
@@ -178,9 +178,9 @@
           <ul>
             <li>WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk</li>
             <li>Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner <span class="nytt">Nytt i 1.3</span></li>
-            <li>Lesekontrast etter APCA (Lc) ved siden av WCAG – med hva kontrasten holder til: brødtekst, overskrifter eller grafikk <span class="nytt">Nytt i 1.3</span></li>
-            <li>Velg kontrastsjekk – WCAG 2.2, APCA eller LRV: øverst tallet og det strengeste kravet fargen ikke klarer (for WCAG AA-kravene), over en flate der du velger tekst og bakgrunn direkte <span class="nytt">Nytt i 1.3</span></li>
-            <li>«Rett opp» som justerer fargen til den består – også etter APCA og LRV</li>
+            <li>Lesekontrast etter APCA (Lc), med hva kontrasten holder til: brødtekst, overskrifter eller grafikk <span class="nytt">Nytt i 1.3</span></li>
+            <li>Kontrastsjekk etter WCAG 2.2, APCA eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten <span class="nytt">Nytt i 1.3</span></li>
+            <li>«Rett opp» endrer lysheten til fargen består – også etter APCA og LRV</li>
             <li>Skriftkontrast for hele paletter, rett i palettvisningen</li>
             <li>Vurderinger viser hva de bygger på</li>
             <li>Forskjellen mellom to farger med ΔE2000</li>
@@ -225,7 +225,7 @@
           <p>Samle farger i paletter, lagre enkeltfarger og hele gradienter. Gi dem navn, flytt farger mellom paletter, og vurder og kontroller kontrast for hele paletter.</p>
           <ul>
             <li>Gradienter i paletter</li>
-            <li>Samle paletter i grupper som kan legges sammen – dra palettene inn og i den rekkefølgen du vil <span class="nytt">Nytt i 1.3</span></li>
+            <li>Samle paletter i grupper som kan legges sammen – dra paletter inn og ordne dem som du vil <span class="nytt">Nytt i 1.3</span></li>
             <li>Skriv ut, lagre og kopier hele palettgrupper – ASE-filer får én fargegruppe per palett <span class="nytt">Nytt i 1.3</span></li>
             <li>Importer ASE-filer som paletter – fargegruppene i filen blir en palettgruppe <span class="nytt">Nytt i 1.3</span></li>
             <li>Endre rekkefølgen på farger i en palett ved å dra dem <span class="nytt">Nytt i 1.3</span></li>
@@ -235,7 +235,7 @@
             <li>Legg til den aktive fargen rett i lista</li>
             <li>Skriv ut paletter på A4 – fargeflater i CIELab med navn og verdier</li>
             <li>Angre det du gjør</li>
-            <li>Tilpass visningen til arbeidet ditt</li>
+            <li>Velg rekkefølgen på panelene, og legg sammen dem du ikke bruker</li>
           </ul>
           <p>Alt synkroniseres via din egen, private iCloud.</p>
         </div>
@@ -247,7 +247,7 @@
           <p>Farger eksporteres i formatet de er lagret i – for eksempel CMYK til Adobe.</p>
           <p><strong>Kopier til …</strong> Figma, Illustrator, InDesign, Photoshop, Sketch og Affinity, Pages, Keynote og Numbers, Word, Excel og PowerPoint, CSS eller SwiftUI – i formatet hvert program tar imot. Det gjelder både enkeltfarger og hele paletter. Velg selv hvilke programmer som vises, og i hvilken rekkefølge. <span class="nytt">Nytt i 1.3</span></p>
           <p>På Mac kan du dra fargeprøver rett inn i andre programmer – og dra farger inn i Kolorist fra fargepanelet og fargebrønner i andre programmer</p>
-          <p><strong>Fargebiblioteker:</strong> importer egne fargekart i ASE, ACO eller ACB (Adobe Color Book) med navngitte toner, og vis nærmeste fargetoner innenfor dem: farger, toner og harmonier holdes altså til fargesettets referansefarger.</p>
+          <p><strong>Fargebiblioteker:</strong> importer egne fargekart i ASE, ACO eller ACB (Adobe Color Book) med navngitte toner, og vis nærmeste tone i kartet – farger, toner og harmonier holder seg da til tonene i kartet.</p>
         </div>
         <div>
           <h3>Lagre som</h3>
@@ -282,12 +282,12 @@
     </section>
     <section class="funksjonsgruppe" id="plattformer" aria-labelledby="plattformer-tittel">
       <h2 id="plattformer-tittel">iPhone, iPad og Mac</h2>
-      <p class="lesetekst">Kolorist er laget for iPhone først. På iPad og Mac får du mer plass – i liggende format på iPad og i et bredt Mac-vindu ligger fargeflatene ved siden av verktøyene – og på Mac en pipette som plukker farger fra hele skjermen. På Mac og store iPader har du palettene for hånden mens du jobber, og flytter farger dit du trenger dem med dra og slipp. Farger du plukker fra kamera og bilder, tas vare på – tydelig merket som ikke lagret – til du bestemmer deg.</p>
+      <p class="lesetekst">Kolorist er laget for iPhone først. På iPad og Mac får du mer plass – i liggende format på iPad og i et bredt Mac-vindu ligger fargeflatene ved siden av verktøyene – og på Mac en pipette som plukker farger fra hele skjermen. På Mac og store iPader har du palettene for hånden mens du jobber, og flytter farger dit du trenger dem med dra og slipp. Farger du plukker med kameraet eller fra bilder, tas vare på – tydelig merket som ikke lagret – til du bestemmer deg.</p>
       <p><a href="plattformer.html">Se forskjellene, med skjermbilder fra hver plattform →</a></p>
     </section>
     <section class="funksjonsgruppe" id="metoder" aria-labelledby="metoder-tittel">
       <h2 id="metoder-tittel">Metodene</h2>
-      <p>Hver del av appen viser hvilke metoder den bygger på – OKLab, CSS Color 4, CIEDE2000, CAM16, WCAG, simulering av fargesyn, ICC – med kilde og forklaring. Det som er utviklet for Kolorist, er merket som det.</p>
+      <p>Hver del av appen viser hvilke metoder den bygger på – OKLab, CSS Color 4, CIEDE2000, CAM16, WCAG, APCA, LRV, simulering av fargesynsavvik, ICC – med kilde og forklaring. Det som er utviklet for Kolorist, er merket som det.</p>
       <p><a href="methods.html">Les om metodene og kildene</a></p>
     </section>
   </main>

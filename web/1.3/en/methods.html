@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Methods and sources – Kolorist</title>
-  <meta name="description" content="The methods and sources Kolorist builds on: OKLab, CSS Color 4, CIELab, CIEDE2000, WCAG 2.2, colour vision simulation, ICC, and what was developed for the app.">
+  <meta name="description" content="The methods and sources Kolorist builds on: OKLab, CSS Color 4, CIELab, CIEDE2000, WCAG 2.2, APCA, LRV, simulation of colour vision deficiencies, ICC, and what was developed for the app.">
   <meta name="color-scheme" content="light dark">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
@@ -66,12 +66,12 @@
 
     <h2 id="apca">Reading contrast by APCA</h2>
     <p>APCA (Accessible Perceptual Contrast Algorithm) was developed as the basis for contrast in WCAG 3, which is still a draft. It gives reading contrast as Lc from about −108 to 106 – positive for dark text on a light background, negative for light text on a dark one – and accounts for the eye perceiving light and dark colours differently. It follows perceived legibility better than WCAG 2, especially for dark and saturated colours.</p>
-    <p>How much is needed depends on font size and weight: Lc 90 is preferred and 75 the minimum for body text, 60 for larger text, 45 for large or bold headlines, 30 for non-essential text and 15 for icons and graphics. The contrast check shows Lc next to the WCAG requirements, with what the contrast is good for. Whether text on the app’s own colour fields is black or white is also decided with APCA, which gives white text on more mid-tones.</p>
-    <p>Accessibility regulations still refer to WCAG 2. Use APCA as a supplement; the WCAG 2.2 requirements are shown and calculated as before.</p>
+    <p>How much is needed depends on font size and weight: Lc 90 is preferred and 75 the minimum for body text, 60 for larger text, 45 for large or bold headlines, 30 for non-essential text and 15 for icons and graphics. Choose APCA in the contrast check to see Lc and what the contrast is good for. Whether text on the app’s own colour fields is black or white is also decided with APCA, which gives white text on more mid-tones.</p>
+    <p>Accessibility regulations still refer to WCAG 2. Use APCA as a supplement to WCAG 2.2, which is the requirement in the regulations.</p>
     <p class="dempet">Source: <a href="https://github.com/Myndex/apca-w3">Myndex: APCA (Accessible Perceptual Contrast Algorithm) 0.0.98G-4g</a></p>
     
     <h2 id="fargesyn">Colour vision deficiency simulation</h2>
-    <p>A physiologically based model of protan, deutan and tritan deficiencies, with matrices in linear sRGB and severity as a blend with normal vision. Achromatopsia is shown as luminance alone. Used in Assess › Colour vision, the contrast preview and the camera filter. The simulation is an approximation; experience varies between people.</p>
+    <p>A physiologically based model of protan, deutan and tritan deficiencies, with matrices in linear sRGB and severity as a blend with normal vision. Achromatopsia is shown as luminance alone. Used in the colour vision assessment, in the colour field of the contrast check and in the camera filter. The simulation is an approximation; experience varies between people.</p>
     <p class="dempet">Source: <a href="https://doi.org/10.1109/TVCG.2009.113">G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009</a></p>
     
     <h2 id="icc">ICC profiles and colour management</h2>
@@ -99,7 +99,7 @@
     <p class="dempet">Source: <a href="https://doi.org/10.1364/JOSA.33.000385">Newhall, Nickerson &amp; Judd: “Final Report of the O.S.A. Subcommittee on the Spacing of the Munsell Colors”, JOSA 33(7), 1943</a>; ASTM D1535</p>
 
     <h2 id="cam16">CAM16 and CAT16 – colour appearance in different light</h2>
-    <p>A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light and dim light makes colours less colourful. Finally it shows the screen colour with the same lightness and colourfulness. Light compensation uses CAT16 with full adaptation to daylight (D65).</p>
+    <p>A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light, and where colours look less vivid in dim light. Finally it shows the screen colour with the same lightness and colourfulness. Light compensation uses CAT16 with full adaptation to daylight (D65).</p>
     <p class="dempet">Source: <a href="https://doi.org/10.1002/col.22131">C. Li, Z. Li, Z. Wang et al.: “Comprehensive color solutions: CAM16, CAT16, and CAM16-UCS”, Color Research &amp; Application 42(6), 2017</a></p>
 
     <h2 id="kolorimetri">Spectra, light sources and colour temperature</h2>

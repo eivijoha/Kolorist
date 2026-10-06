@@ -1702,12 +1702,12 @@
         }
       }
     },
-    "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
+    "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge, og der fargene blir mindre fargesterke i svakt lys. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light and dim light makes colours less colourful. Finally it shows the screen colour with the same lightness and colourfulness. Light compensation uses CAT16 with full adaptation to daylight (D65)."
+            "value": "A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light, and where colours look less vivid in dim light. Finally it shows the screen colour with the same lightness and colourfulness. Light compensation uses CAT16 with full adaptation to daylight (D65)."
           }
         }
       }
@@ -2669,12 +2669,12 @@
         }
       }
     },
-    "Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i Vurdering › Fargesyn, kontrastforhåndsvisningen og kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.": {
+    "Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i fargesynsvurderingen, i fargeflaten i kontrastsjekken og i kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A physiologically based model of protan, deutan and tritan deficiencies, with matrices in linear sRGB and severity as a blend with normal vision. Achromatopsia is shown as luminance alone. Used in Assess › Colour vision, the contrast preview and the camera filter. The simulation is an approximation; experience varies between people."
+            "value": "A physiologically based model of protan, deutan and tritan deficiencies, with matrices in linear sRGB and severity as a blend with normal vision. Achromatopsia is shown as luminance alone. Used in the colour vision assessment, in the colour field of the contrast check and in the camera filter. The simulation is an approximation; experience varies between people."
           }
         }
       }

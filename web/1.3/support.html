@@ -74,7 +74,7 @@
       </details>
 
       <details>
-        <summary>Hva er forskjellen på Display P3 og sRGB?</summary>
+        <summary>Hva er forskjellen mellom Display P3 og sRGB?</summary>
         <div class="svar">
           <p>Display P3 er et bredere fargeområde enn sRGB. Skjermene på nyere iPhone, iPad og Mac kan vise P3, og spesielt mettede røde, oransje og grønne farger kan ligge utenfor det sRGB rommer. Mye på nettet, i eldre programvare og i en del arbeidsflyter er fortsatt sRGB.</p>
           <p>Kolorist viser fargen i Display P3 side om side med et annet fargerom – sRGB, Adobe RGB, CMYK eller en installert ICC-profil – og varsler når fargen er utenfor det fargerommet. Når en farge må inn i et mindre fargerom, reduseres metningen (kroma) mens lysheten og kuløren bevares, i stedet for at verdiene klippes. Du kan også velge å begrense fargene til en bestemt profil med <strong>Begrens farger til …</strong>.</p>
@@ -102,7 +102,13 @@
         <summary>Hva er LRV, og hvordan sjekker jeg kontrast mellom flater?</summary>
         <div class="svar">
           <p>Lysrefleksjonsverdi (LRV) er hvor mye lys en flate reflekterer, fra 0 (sort) til 100 (hvitt), slik malingsprodusentene oppgir den. Du finner den under <strong>Verdier</strong> i Studio.</p>
-          <p>Under <strong>Vurdering › Kontrast › Flater (LRV)</strong> sammenligner du to flater, for eksempel dør og vegg: forskjell i LRV-poeng (BS 8300: minst 30) og luminanskontrast etter NS 11001 (minst 0,4 for viktige flater, 0,8 for skilt). «Rett opp» endrer bare lysheten. Verdiene gjelder fargen slik den vises på skjerm; den ferdige malingen kan avvike.</p>
+          <p>Under <strong>Vurdering › Kontrast › LRV</strong> sammenligner du to flater, for eksempel dør og vegg. Velg beregningsmetode etter regelverket du skal følge:</p>
+          <ul>
+            <li><strong>LRV-forskjell</strong> (BS 8300): minst 30 poeng, eller 20 for store flater og der belysningen er over 200 lux.</li>
+            <li><strong>Weber</strong> (TEK17, NS 11001): luminanskontrast mot bakgrunnen, minst 0,4 for orientering og veifinning og 0,8 for trapp, håndløper og farefelt.</li>
+            <li><strong>Michelson</strong> (ISO 21542): minst 30 % for store flater og 60 % for fare og tekst.</li>
+          </ul>
+          <p>«Rett opp» endrer bare lysheten. Verdiene gjelder fargen slik den vises på skjermen; ferdig maling kan avvike. Har du plukket fargen med kameraet uten gråkort eller referansekort, merkes LRV «Kun veiledende».</p>
         </div>
       </details>
 
@@ -111,7 +117,7 @@
         <div class="svar">
           <p><strong>Mac:</strong> Når vinduet er bredt nok, ligger Paletter fast til høyre, og Paletter-valget forsvinner fra menyen til venstre. Gjør du vinduet smalere, flytter Paletter tilbake inn i menyen.</p>
           <p><strong>Store iPader i liggende format (13"):</strong> Palettene vises i en kolonne til høyre i Studio, Overgang, Utplukk og Vurdering. Vis eller skjul den med knappen øverst til høyre.</p>
-          <p>Trykk på en farge for å gjøre den aktiv, og dra farger inn i en palett eller til et fargevalg – for eksempel <strong>Fra</strong> og <strong>Til</strong> i Overgang, eller fargene i Kontrast og Forskjell. Farger du har plukket fra kamera, bilder eller skjermen, ligger øverst under <strong>Plukkede farger</strong>. De er ikke lagret og forsvinner når appen lukkes, til du drar dem til en palett eller lagrer dem.</p>
+          <p>Trykk på en farge for å gjøre den aktiv, og dra farger inn i en palett eller til et fargevalg – for eksempel <strong>Fra</strong> og <strong>Til</strong> i Overgang, eller fargene i Kontrast og Forskjell. Farger du har plukket med kameraet, fra bilder eller fra skjermen, ligger øverst under <strong>Plukkede farger</strong>. De er ikke lagret, og de forsvinner når appen lukkes, med mindre du drar dem til en palett eller lagrer dem.</p>
         </div>
       </details>
 
@@ -169,7 +175,7 @@
             <li><strong>iPhone og iPad:</strong> Innstillinger › Personvern og sikkerhet › Kamera › slå på Kolorist.</li>
             <li><strong>Mac:</strong> Systeminnstillinger › Personvern og sikkerhet › Kamera › slå på Kolorist.</li>
           </ul>
-          <p>Kameraet brukes bare direkte på enheten for å plukke farger, måle lys og for fargesynsfilteret. Ingen bilder lagres eller sendes.</p>
+          <p>Kameraet brukes bare på enheten: til å plukke farger, måle lys og vise fargesynsfilteret. Ingen bilder lagres eller sendes.</p>
           <p>Du kan også plukke farger fra bilder du velger selv, uten kameratilgang.</p>
         </div>
       </details>
