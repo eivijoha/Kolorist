@@ -82,28 +82,77 @@ extension VurderingVisning {
     }
 }
 
-/// WCAG-kontrast for aktiv farge mot en valgt bakgrunn.
+/// Kontrast for aktiv farge mot en valgt bakgrunn: en stor flate øverst med nøkkeltallet for valgt sjekk (WCAG 2.2,
+/// APCA eller LRV), og fargene og kravene under. Bred visning: flaten til venstre, som i Studio.
 private struct KontrastVurdering: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
-    @State private var innstillinger = Panelinnstillinger.delt
+    @Environment(\.presentasjonsmodus) private var presentasjon
     @AppStorage("kontrastBakgrunn") private var bakgrunnHex = "#FFFFFF"
+    @AppStorage("kontrastType") private var type: Kontrasttype = .wcag
+    @AppStorage("kontrastFargesyn") private var fargesyn = "normalt"
+
+    private var bakgrunn: Farge { Kontrastbakgrunn.farge(bakgrunnHex) }
 
     var body: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
-        Form {
-            KontrastFargerSeksjon(forgrunn: $arbeidsbenk.aktivFarge)
-            // Panelene i brukerens rekkefølge; begge bruker fargene over.
-            ForEach(innstillinger.paneler(for: .kontrast)) { panel in
-                switch panel {
-                case .wcag: KontrastSeksjon(forgrunn: $arbeidsbenk.aktivFarge)
-                case .lrv: FlatekontrastSeksjon(flate: $arbeidsbenk.aktivFarge, bakgrunn: Fargetolk.tolk(bakgrunnHex) ?? Farge(hex: "#FFFFFF")!)
-                default: EmptyView()
+        GeometryReader { geo in
+            let bred = Breddeoppsett.erBred(geo.size)
+            // AnyLayout bevarer skjemaets tilstand når enheten roteres.
+            let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
+            oppsett {
+                kort(bred: bred)
+                    .frame(width: bred ? geo.size.width / 2 : nil)
+                Form {
+                    KontrastFargerSeksjon(forgrunn: $arbeidsbenk.aktivFarge, type: type)
+                    switch type {
+                    case .wcag: KontrastSeksjon(forgrunn: $arbeidsbenk.aktivFarge)
+                    case .apca: APCASeksjon(forgrunn: $arbeidsbenk.aktivFarge)
+                    case .lrv: FlatekontrastSeksjon(flate: $arbeidsbenk.aktivFarge, bakgrunn: bakgrunn)
+                    }
                 }
+                .formStyle(.grouped)
+                #if os(iOS)
+                .listSectionSpacing(.compact)
+                #endif
+                .contentMargins(.top, 0, for: .scrollContent)
             }
-            TilpassKnapp(skjerm: .kontrast)
+            .background(Color.skjemabakgrunn)
         }
-        .formStyle(.grouped)
         .navigationTitle("Kontrast")
+    }
+
+    /// Flaten med valget av kontrastsjekk under – fast øverst mens skjemaet ruller.
+    private func kort(bred: Bool) -> some View {
+        VStack(spacing: 0) {
+            Kontrastflate(type: type, forgrunn: arbeidsbenk.aktivFarge, bakgrunn: bakgrunn,
+                          fargesyn: Fargesynstype(rawValue: fargesyn))
+                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: bred ? 0 : 20, style: .continuous))
+                // Smal visning: fast høyde (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
+                .frame(height: bred ? nil : (presentasjon ? 280 : 200))
+                .frame(maxHeight: bred ? .infinity : nil)
+            HStack(spacing: 12) {
+                Picker("Kontrastsjekk", selection: $type) {
+                    ForEach(Kontrasttype.allCases) { Text(verbatim: $0.navn).help($0.hjelp).tag($0) }
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                Button("Bytt tekst og bakgrunn", systemImage: "arrow.up.arrow.down") {
+                    let gammel = bakgrunn
+                    bakgrunnHex = Kontrastbakgrunn.tekst(arbeidsbenk.aktivFarge)
+                    arbeidsbenk.aktivFarge = gammel
+                }
+                .labelStyle(.iconOnly)
+                .help("Bytt tekst og bakgrunn")
+            }
+            .padding(.horizontal, 16)
+            .frame(minHeight: 48)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .padding(.leading, 16)
+        .padding(.trailing, bred ? 0 : 16)
+        .padding(.top, bred ? 16 : 4)
+        .padding(.bottom, bred ? 16 : 8)
     }
 }
 

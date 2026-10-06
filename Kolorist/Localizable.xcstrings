@@ -157,6 +157,16 @@
         }
       }
     },
+    "%@ poeng": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ points"
+          }
+        }
+      }
+    },
     "%@ på %@": {
       "localizations": {
         "en": {
@@ -283,6 +293,16 @@
         }
       }
     },
+    "%@ – klikk for å bruke den.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ – click to use it."
+          }
+        }
+      }
+    },
     "%@ – utenfor gamut": {
       "localizations": {
         "en": {
@@ -379,6 +399,22 @@
           "stringUnit": {
             "state": "new",
             "value": "%1$@: %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "%@: %@, %@. %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: %2$@, %3$@. %4$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: %2$@, %3$@. %4$@"
           }
         }
       }
@@ -483,6 +519,38 @@
           "stringUnit": {
             "state": "new",
             "value": "%1$lld av %2$lld fargepar består"
+          }
+        }
+      }
+    },
+    "%lld av %lld krav": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av %2$lld krav"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld requirements"
+          }
+        }
+      }
+    },
+    "%lld av %lld krav i WCAG 2.2": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av %2$lld krav i WCAG 2.2"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld WCAG 2.2 requirements"
           }
         }
       }
@@ -703,12 +771,12 @@
         }
       }
     },
-    "APCA (WCAG 3-utkast)": {
+    "APCA er forslaget til lesekontrast i WCAG 3 og følger opplevd lesbarhet bedre enn WCAG 2, særlig for lys tekst på mørk bakgrunn. Lc er positiv for mørk tekst på lys bakgrunn og negativ for lys tekst på mørk. Nivåene er veiledende og gjelder tekst i vanlig vekt; tynnere og mindre tekst trenger mer. «Rett opp» endrer bare lysheten. Regelverket viser fortsatt til WCAG 2.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "APCA (WCAG 3 draft)"
+            "value": "APCA is the proposed readability contrast for WCAG 3 and follows perceived legibility better than WCAG 2, especially for light text on dark backgrounds. Lc is positive for dark text on a light background and negative for light text on dark. The levels are guidelines for text at regular weight; thinner and smaller text needs more. “Fix” changes only the lightness. Regulations still refer to WCAG 2."
           }
         }
       }
@@ -909,16 +977,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Background"
-          }
-        }
-      }
-    },
-    "Bakgrunn eller tilstøtende flate": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Background or adjacent surface"
           }
         }
       }
@@ -1163,22 +1221,22 @@
         }
       }
     },
+    "Brødtekst i vanlig størrelse.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body text at regular size."
+          }
+        }
+      }
+    },
     "Bygger på: %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Based on: %@"
-          }
-        }
-      }
-    },
-    "Bytt": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Swap"
           }
         }
       }
@@ -1203,12 +1261,12 @@
         }
       }
     },
-    "Bytt tekstfarge og bakgrunn": {
+    "Bytt tekst og bakgrunn": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Swap text colour and background"
+            "value": "Swap text and background"
           }
         }
       }
@@ -1806,16 +1864,6 @@
         }
       }
     },
-    "Farge som testes": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Colour under test"
-          }
-        }
-      }
-    },
     "Fargebibliotek: %@": {
       "localizations": {
         "en": {
@@ -1876,12 +1924,12 @@
         }
       }
     },
-    "Fargen testes som tekst/grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. «Vis med» simulerer et fargesynsavvik i forhåndsvisningen; WCAG-kravene gjelder alltid de faktiske fargene. APCA (WCAG 3-utkastet) er et supplement som følger opplevd lesbarhet bedre; regelverket viser fortsatt til WCAG 2.": {
+    "Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. Regelverket for universell utforming viser til WCAG 2.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The colour is tested as text/graphics against the background. “Fix” changes only the lightness and keeps hue and saturation. “Show with” simulates a colour vision deficiency in the preview; the WCAG requirements always apply to the actual colours. APCA (the WCAG 3 draft) is a supplement that follows perceived legibility better; regulations still refer to WCAG 2."
+            "value": "The colour is tested as text and graphics against the background. “Fix” changes only the lightness, keeping hue and chroma. Accessibility regulations refer to WCAG 2."
           }
         }
       }
@@ -2331,6 +2379,16 @@
         }
       }
     },
+    "Flate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surface"
+          }
+        }
+      }
+    },
     "Flate i lyset": {
       "localizations": {
         "en": {
@@ -2347,6 +2405,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Surfaces (LRV)"
+          }
+        }
+      }
+    },
+    "Flater for bygg og universell utforming (LRV og luminanskontrast)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surfaces in buildings and universal design (LRV and luminance contrast)"
           }
         }
       }
@@ -2487,6 +2555,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Difference"
+          }
+        }
+      }
+    },
+    "Forskjell i LRV · luminanskontrast %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LRV difference · luminance contrast %@"
           }
         }
       }
@@ -3079,12 +3157,12 @@
         }
       }
     },
-    "Hvit": {
+    "Hvit bakgrunn": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "White"
+            "value": "White background"
           }
         }
       }
@@ -3813,6 +3891,16 @@
         }
       }
     },
+    "Kontrastsjekk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast check"
+          }
+        }
+      }
+    },
     "Konverter ${farge} til ${modell}": {
       "localizations": {
         "en": {
@@ -4219,6 +4307,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "LCH"
+          }
+        }
+      }
+    },
+    "LRV %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LRV %@"
           }
         }
       }
@@ -4715,16 +4813,6 @@
         }
       }
     },
-    "Lc %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lc %@"
-          }
-        }
-      }
-    },
     "Legg aktiv farge i en palett": {
       "localizations": {
         "en": {
@@ -4911,6 +4999,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Read the source"
+          }
+        }
+      }
+    },
+    "Lesekontrast (APCA)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Readability contrast (APCA)"
           }
         }
       }
@@ -5947,6 +6045,16 @@
         }
       }
     },
+    "Opplevd lesekontrast etter APCA (WCAG 3-utkast)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perceived readability contrast by APCA (WCAG 3 draft)"
+          }
+        }
+      }
+    },
     "Opprett": {
       "localizations": {
         "en": {
@@ -6233,6 +6341,26 @@
         }
       }
     },
+    "Plukk farge – %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick colour – %@"
+          }
+        }
+      }
+    },
+    "Plukk fargene med kamera eller fra et bilde med kameraknappen. «Vis med» simulerer et fargesynsavvik i flaten øverst; kravene gjelder alltid de faktiske fargene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick the colours with the camera or from an image using the camera button. “Show with” simulates a colour vision deficiency in the field at the top; the requirements always apply to the actual colours."
+          }
+        }
+      }
+    },
     "Plukk farger fra et bilde": {
       "localizations": {
         "en": {
@@ -6249,6 +6377,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pick from screen"
+          }
+        }
+      }
+    },
+    "Plukk med kamera eller fra bilde": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick with camera or from image"
           }
         }
       }
@@ -7169,12 +7307,12 @@
         }
       }
     },
-    "Sort": {
+    "Sort bakgrunn": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Black"
+            "value": "Black background"
           }
         }
       }
@@ -7429,12 +7567,32 @@
         }
       }
     },
-    "Tekst og grafikk (WCAG 2.2 og APCA)": {
+    "Tekst eller grafikk": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Text and graphics (WCAG 2.2 and APCA)"
+            "value": "Text or graphics"
+          }
+        }
+      }
+    },
+    "Tekst og grafikk (WCAG 2.2)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text and graphics (WCAG 2.2)"
+          }
+        }
+      }
+    },
+    "Tekst og grafikk etter WCAG 2.2 (kontrastforhold)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text and graphics by WCAG 2.2 (contrast ratio)"
           }
         }
       }
@@ -7595,6 +7753,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Customise view …"
+          }
+        }
+      }
+    },
+    "Tilstøtende flate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adjacent surface"
           }
         }
       }
@@ -8569,6 +8737,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "light text on dark background"
+          }
+        }
+      }
+    },
+    "minst Lc %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at least Lc %lld"
           }
         }
       }

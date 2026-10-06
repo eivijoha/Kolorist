@@ -2,75 +2,273 @@ import FargeKjerne
 import FargeMaaling
 import SwiftUI
 
-/// WCAG-kontrasttest i Studio: aktiv farge som forgrunn mot en valgt bakgrunn.
+/// Hvilken kontrastsjekk som vises i Vurdering › Kontrast: tekst og grafikk etter WCAG 2.2, lesekontrast etter APCA
+/// (WCAG 3-utkastet), eller flater etter lysrefleksjonsverdi (LRV).
+enum Kontrasttype: String, CaseIterable, Identifiable {
+    case wcag, apca, lrv
+    var id: String { rawValue }
+    var navn: String {
+        switch self {
+        case .wcag: "WCAG 2.2"
+        case .apca: "APCA"
+        case .lrv: "LRV"
+        }
+    }
+    var hjelp: String {
+        switch self {
+        case .wcag: String(localized: "Tekst og grafikk etter WCAG 2.2 (kontrastforhold)")
+        case .apca: String(localized: "Opplevd lesekontrast etter APCA (WCAG 3-utkast)")
+        case .lrv: String(localized: "Flater for bygg og universell utforming (LRV og luminanskontrast)")
+        }
+    }
+}
+
+/// Kontrastbakgrunnen lagres som tekst: sRGB-hex, ellers CSS i Display P3, så P3-bakgrunner ikke rundes av til sRGB.
+enum Kontrastbakgrunn {
+    static let standard = Farge(hex: "#FFFFFF")!
+    static func farge(_ tekst: String) -> Farge { Fargetolk.tolk(tekst) ?? standard }
+    static func tekst(_ farge: Farge) -> String { farge.erISRGB ? farge.hex() : Fargemodell.displayP3.tekst(for: farge) }
+}
+
+/// WCAG 2.2-kravene for fargen som tekst/grafikk mot bakgrunnen, med «Rett opp».
 struct KontrastSeksjon: View {
     @Binding var forgrunn: Farge
     @AppStorage("kontrastBakgrunn") private var bakgrunnHex = "#FFFFFF"
-    /// Vis forhåndsvisningen slik den ser ut med et fargesynsavvik («normalt» = ingen simulering).
-    @AppStorage("kontrastFargesyn") private var fargesyn = "normalt"
 
-    private var fargesynstype: Fargesynstype? { Fargesynstype(rawValue: fargesyn) }
-
-    private var bakgrunn: Farge { Fargetolk.tolk(bakgrunnHex) ?? Farge(hex: "#FFFFFF")! }
+    private var bakgrunn: Farge { Kontrastbakgrunn.farge(bakgrunnHex) }
 
     var body: some View {
         let test = Kontrasttest(forgrunn: forgrunn, bakgrunn: bakgrunn)
-        PanelSeksjon(panel: .wcag) {
-            Picker("Vis med", selection: $fargesyn) {
-                Text("Normalt syn").tag("normalt")
-                ForEach(Fargesynstype.allCases) { Text($0.navn).tag($0.rawValue) }
-            }
-            if let type = fargesynstype {
-                let f = forgrunn.simulert(type), b = bakgrunn.simulert(type)
-                KontrastForhåndsvisning(forgrunn: f, bakgrunn: b, test: Kontrasttest(forgrunn: f, bakgrunn: b),
-                                        merknad: type.navn)
-            } else {
-                KontrastForhåndsvisning(forgrunn: forgrunn, bakgrunn: bakgrunn, test: test)
-            }
-
+        Section {
             ForEach(WCAGKrav.allCases) { krav in
                 KravRad(krav: krav, test: test) { forgrunn = test.rettet(for: krav) }
             }
-            APCARad(lc: bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn)))
-        } fot: {
+        } header: {
+            Text("Tekst og grafikk (WCAG 2.2)")
+        } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Fargen testes som tekst/grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. «Vis med» simulerer et fargesynsavvik i forhåndsvisningen; WCAG-kravene gjelder alltid de faktiske fargene. APCA (WCAG 3-utkastet) er et supplement som følger opplevd lesbarhet bedre; regelverket viser fortsatt til WCAG 2.")
-                MetodeHenvisning(.wcag, .apca, .oklab, .machado)
+                Text("Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. Regelverket for universell utforming viser til WCAG 2.")
+                MetodeHenvisning(.wcag, .oklab)
             }
         }
     }
 }
 
-/// Fargen som testes og bakgrunnen (tilstøtende flate), felles for WCAG- og LRV-panelet.
-struct KontrastFargerSeksjon: View {
+/// APCAs veiledende nivåer for lesekontrast (|Lc|), for tekst i vanlig vekt.
+enum APCANivå: Double, CaseIterable, Identifiable {
+    case lc90 = 90, lc75 = 75, lc60 = 60, lc45 = 45, lc30 = 30, lc15 = 15
+    var id: Double { rawValue }
+
+    var bruk: String {
+        switch self {
+        case .lc90: String(localized: "Godt nok for all tekst, også brødtekst")
+        case .lc75: String(localized: "Brødtekst (minimum)")
+        case .lc60: String(localized: "Større tekst, ikke brødtekst")
+        case .lc45: String(localized: "Store eller fete overskrifter")
+        case .lc30: String(localized: "Ikke-viktig tekst, som plassholdere")
+        case .lc15: String(localized: "Ikoner og grafikk, ikke tekst")
+        }
+    }
+
+    /// Det høyeste nivået Lc når, eller nil når den er for lav til tekst og grafikk.
+    static func nådd(_ lc: Double) -> APCANivå? { allCases.first { abs(lc) >= $0.rawValue } }
+
+    static func bruk(_ lc: Double) -> String { nådd(lc)?.bruk ?? String(localized: "For lav til tekst og grafikk") }
+
+    static func retning(_ lc: Double) -> String {
+        lc >= 0 ? String(localized: "mørk tekst på lys bakgrunn") : String(localized: "lys tekst på mørk bakgrunn")
+    }
+
+    /// «Lc 75» – kuttet mot null, så tallet aldri viser et nivå som ikke er nådd (som WCAG-forholdet).
+    static func formatert(_ lc: Double) -> String {
+        "Lc " + lc.rounded(.towardZero).formatted(.number.precision(.fractionLength(0)))
+    }
+}
+
+/// Lesekontrast etter APCA: nivåene fargen når som tekst på bakgrunnen, med «Rett opp».
+struct APCASeksjon: View {
     @Binding var forgrunn: Farge
     @AppStorage("kontrastBakgrunn") private var bakgrunnHex = "#FFFFFF"
 
-    private var bakgrunn: Farge { Fargetolk.tolk(bakgrunnHex) ?? Farge(hex: "#FFFFFF")! }
+    private var bakgrunn: Farge { Kontrastbakgrunn.farge(bakgrunnHex) }
+
+    var body: some View {
+        let lc = bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn))
+        Section {
+            ForEach(APCANivå.allCases) { nivå in
+                let bestått = abs(lc) >= nivå.rawValue
+                HStack {
+                    Image(systemName: bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .foregroundStyle(bestått ? Color.suksess : Color.feil)
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(nivå.bruk)
+                        Text("minst Lc \(Int(nivå.rawValue))")
+                            .font(.caption)
+                            .foregroundStyle(Color.sekundærTekst)
+                    }
+                    Spacer()
+                    if !bestått {
+                        Button("Rett opp") { forgrunn = forgrunn.medAPCA(mot: bakgrunn, minst: nivå.rawValue) }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                    }
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityValue(bestått ? "Bestått" : "Ikke bestått")
+            }
+        } header: {
+            Text("Lesekontrast (APCA)")
+        } footer: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("APCA er forslaget til lesekontrast i WCAG 3 og følger opplevd lesbarhet bedre enn WCAG 2, særlig for lys tekst på mørk bakgrunn. Lc er positiv for mørk tekst på lys bakgrunn og negativ for lys tekst på mørk. Nivåene er veiledende og gjelder tekst i vanlig vekt; tynnere og mindre tekst trenger mer. «Rett opp» endrer bare lysheten. Regelverket viser fortsatt til WCAG 2.")
+                MetodeHenvisning(.apca, .oklab)
+            }
+        }
+    }
+}
+
+/// Fargen som testes og bakgrunnen (tilstøtende flate), felles for alle kontrastsjekkene.
+struct KontrastFargerSeksjon: View {
+    @Binding var forgrunn: Farge
+    var type: Kontrasttype = .wcag
+    @AppStorage("kontrastBakgrunn") private var bakgrunnHex = "#FFFFFF"
+    /// Vis flaten øverst slik den ser ut med et fargesynsavvik («normalt» = ingen simulering).
+    @AppStorage("kontrastFargesyn") private var fargesyn = "normalt"
+
+    private var bakgrunn: Farge { Kontrastbakgrunn.farge(bakgrunnHex) }
 
     var body: some View {
         Section {
-            FargeValgRad(tittel: String(localized: "Farge som testes"), farge: $forgrunn)
-            // Lagres som CSS-tekst i Display P3, så P3-bakgrunner ikke rundes av til sRGB-hex.
-            FargeValgRad(tittel: String(localized: "Bakgrunn eller tilstøtende flate"), farge: Binding(
-                get: { bakgrunn },
-                set: { bakgrunnHex = $0.erISRGB ? $0.hex() : Fargemodell.displayP3.tekst(for: $0) }
-            ))
+            FargeValgRad(tittel: type == .lrv ? String(localized: "Flate") : String(localized: "Tekst eller grafikk"),
+                         farge: $forgrunn)
+            FargeValgRad(tittel: type == .lrv ? String(localized: "Tilstøtende flate") : String(localized: "Bakgrunn"),
+                         farge: Binding(get: { bakgrunn }, set: { bakgrunnHex = Kontrastbakgrunn.tekst($0) }))
             HStack(spacing: 8) {
-                Button("Hvit") { bakgrunnHex = "#FFFFFF" }
-                Button("Sort") { bakgrunnHex = "#000000" }
-                Spacer()
-                Button("Bytt", systemImage: "arrow.up.arrow.down") {
-                    let gammel = bakgrunn
-                    bakgrunnHex = forgrunn.erISRGB ? forgrunn.hex() : Fargemodell.displayP3.tekst(for: forgrunn)
-                    forgrunn = gammel
-                }
-                .help("Bytt tekstfarge og bakgrunn")
+                Button("Hvit bakgrunn") { bakgrunnHex = "#FFFFFF" }
+                Button("Sort bakgrunn") { bakgrunnHex = "#000000" }
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
-
+            Picker("Vis med", selection: $fargesyn) {
+                Text("Normalt syn").tag("normalt")
+                ForEach(Fargesynstype.allCases) { Text($0.navn).tag($0.rawValue) }
+            }
+        } footer: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Plukk fargene med kamera eller fra et bilde med kameraknappen. «Vis med» simulerer et fargesynsavvik i flaten øverst; kravene gjelder alltid de faktiske fargene.")
+                MetodeHenvisning(.machado)
+            }
         }
+    }
+}
+
+/// Den store flaten øverst i kontrastsjekken: bakgrunnen med fargen som tekst og grafikk (WCAG, APCA) eller som
+/// tilstøtende flate (LRV), og nøkkeltallet for valgt sjekk. Tallene står i en lesbar farge, prøvene i fargen som testes.
+struct Kontrastflate: View {
+    let type: Kontrasttype
+    let forgrunn: Farge
+    let bakgrunn: Farge
+    /// Simulert fargesynsavvik i flaten (tallene gjelder de faktiske fargene).
+    var fargesyn: Fargesynstype? = nil
+
+    private var nøkkeltall: (tall: String, vurdering: String, detalj: String) {
+        switch type {
+        case .wcag:
+            let test = Kontrasttest(forgrunn: forgrunn, bakgrunn: bakgrunn)
+            let bestått = WCAGKrav.allCases.filter(test.består).count
+            return (test.formatert, test.sammendrag,
+                    String(localized: "\(bestått) av \(WCAGKrav.allCases.count) krav i WCAG 2.2"))
+        case .apca:
+            let lc = bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn))
+            return (APCANivå.formatert(lc), APCANivå.bruk(lc), APCANivå.retning(lc))
+        case .lrv:
+            let k = Flatekontrast(forgrunn, bakgrunn)
+            let bestått = Flatekrav.allCases.filter(k.består).count
+            let poeng = k.lrvForskjell.formatted(.number.precision(.fractionLength(0)))
+            let luminans = k.michelson.formatted(.number.precision(.fractionLength(2)))
+            return (String(localized: "\(poeng) poeng"), String(localized: "\(bestått) av \(Flatekrav.allCases.count) krav"),
+                    String(localized: "Forskjell i LRV · luminanskontrast \(luminans)"))
+        }
+    }
+
+    var body: some View {
+        let f = fargesyn.map { forgrunn.simulert($0) } ?? forgrunn
+        let b = fargesyn.map { bakgrunn.simulert($0) } ?? bakgrunn
+        let lesbar = b.lesbarTekstfarge.swiftUI
+        let n = nøkkeltall
+        ZStack(alignment: .topLeading) {
+            b.swiftUI
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    // Tallet kortes aldri ned; vurderingen brytes eller krymper.
+                    Text(n.tall).koloristFont(.largeTitle, weight: .bold).monospacedDigit()
+                        .fixedSize()
+                        .layoutPriority(1)
+                    Text(n.vurdering).koloristFont(.headline).lineLimit(2).minimumScaleFactor(0.8)
+                    Spacer(minLength: 0)
+                }
+                Text(n.detalj).koloristFont(.subheadline).opacity(0.8).lineLimit(2)
+                Spacer(minLength: 8)
+                if type == .lrv {
+                    HStack(alignment: .bottom) {
+                        Text("LRV \(bakgrunn.lrv, format: .number.precision(.fractionLength(0)))")
+                            .koloristFont(.callout, weight: .semibold).monospacedDigit()
+                        Spacer(minLength: 0)
+                    }
+                } else {
+                    prøvetekst.foregroundStyle(f.swiftUI)
+                }
+            }
+            .foregroundStyle(lesbar)
+            .padding(16)
+            if type == .lrv { flate(f) }
+        }
+        .overlay(alignment: type == .lrv ? .topTrailing : .bottomTrailing) {
+            if let fargesyn {
+                Label(fargesyn.navn, systemImage: "eye")
+                    .koloristFont(.caption, weight: .semibold)
+                    .lineLimit(1)
+                    .padding(.horizontal, 8).padding(.vertical, 4)
+                    .background(.regularMaterial, in: Capsule())
+                    .padding(12)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(type.navn): \(n.tall), \(n.vurdering). \(n.detalj)")
+    }
+
+    /// Tekst i stor og vanlig størrelse og grafikk, i fargen som testes.
+    private var prøvetekst: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Stor tekst").koloristFont(.title)
+            Text("Brødtekst i vanlig størrelse.").koloristFont(.body).lineLimit(1)
+            HStack(spacing: 10) {
+                Image(systemName: "heart.fill")
+                Image(systemName: "star.fill")
+                RoundedRectangle(cornerRadius: 4).strokeBorder(lineWidth: 2).frame(width: 36, height: 20)
+            }
+            .koloristFont(.title3)
+            .accessibilityHidden(true)
+        }
+    }
+
+    /// LRV: fargen som en tilstøtende flate (dør, list, felt) mot bakgrunnen, med sin LRV.
+    private func flate(_ f: Farge) -> some View {
+        GeometryReader { geo in
+            let bredde = min(geo.size.width * 0.3, 160)
+            VStack {
+                Spacer(minLength: 0)
+                Text("LRV \(forgrunn.lrv, format: .number.precision(.fractionLength(0)))")
+                    .koloristFont(.callout, weight: .semibold).monospacedDigit()
+                    .foregroundStyle(f.lesbarTekstfarge.swiftUI)
+                    .padding(.bottom, 12)
+            }
+            .frame(width: bredde, height: geo.size.height * 0.5)
+            .background(f.swiftUI, in: UnevenRoundedRectangle(topLeadingRadius: 6, topTrailingRadius: 6, style: .continuous))
+            .position(x: geo.size.width - bredde / 2 - 24, y: geo.size.height - geo.size.height * 0.25)
+        }
+        .accessibilityHidden(true)
     }
 }
 
@@ -117,45 +315,6 @@ struct KontrastForhåndsvisning: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(merknad.map { String(localized: "\($0): kontrast \(test.formatert), \(test.sammendrag)") }
                             ?? String(localized: "Kontrast \(test.formatert), \(test.sammendrag)"))
-    }
-}
-
-/// APCA-lesekontrasten (Lc) for fargen som tekst på bakgrunnen, med hva den holder til etter APCAs veiledende nivåer.
-struct APCARad: View {
-    let lc: Double
-
-    private var bruk: String {
-        switch abs(lc) {
-        case 90...: String(localized: "Godt nok for all tekst, også brødtekst")
-        case 75..<90: String(localized: "Brødtekst (minimum)")
-        case 60..<75: String(localized: "Større tekst, ikke brødtekst")
-        case 45..<60: String(localized: "Store eller fete overskrifter")
-        case 30..<45: String(localized: "Ikke-viktig tekst, som plassholdere")
-        case 15..<30: String(localized: "Ikoner og grafikk, ikke tekst")
-        default: String(localized: "For lav til tekst og grafikk")
-        }
-    }
-
-    private var retning: String {
-        lc >= 0 ? String(localized: "mørk tekst på lys bakgrunn") : String(localized: "lys tekst på mørk bakgrunn")
-    }
-
-    var body: some View {
-        HStack {
-            Image(systemName: "textformat.size")
-                .foregroundStyle(Color.sekundærTekst)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 0) {
-                Text("APCA (WCAG 3-utkast)")
-                Text("\(bruk) · \(retning)")
-                    .font(.caption)
-                    .foregroundStyle(Color.sekundærTekst)
-            }
-            Spacer()
-            Text("Lc \(lc, format: .number.precision(.fractionLength(0)))")
-                .font(.body.monospacedDigit().weight(.semibold))
-        }
-        .accessibilityElement(children: .combine)
     }
 }
 
@@ -316,7 +475,7 @@ struct FlatekontrastSeksjon: View {
 
     var body: some View {
         let k = Flatekontrast(flate, bakgrunn)
-        PanelSeksjon(panel: .lrv) {
+        Section {
             HStack(spacing: 0) {
                 verdi(String(localized: "LRV flate"), flate.lrv.formatted(.number.precision(.fractionLength(0))))
                 verdi(String(localized: "LRV bakgrunn"), bakgrunn.lrv.formatted(.number.precision(.fractionLength(0))))
@@ -360,7 +519,9 @@ struct FlatekontrastSeksjon: View {
                 .accessibilityElement(children: .combine)
                 .accessibilityValue(bestått ? "Bestått" : "Ikke bestått")
             }
-        } fot: {
+        } header: {
+            Text("Flater (LRV)")
+        } footer: {
             VStack(alignment: .leading, spacing: 6) {
                 Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.")
                 if lysmiljø != nil {

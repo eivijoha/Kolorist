@@ -106,11 +106,13 @@ struct PlukkedeFargerRad: View {
     let opphav: PalettFarge.Opphav
     var størrelse: CGFloat = 36
     var leggIPalett: (Farge) -> Void
+    /// Utplukk for ett fargefelt: trykk velger fargen til feltet i stedet for å vise den i Studio.
+    var velg: ((Farge) -> Void)? = nil
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.modelContext) private var kontekst
 
     private func visIStudio(_ farge: Farge) {
-        arbeidsbenk.visIStudio(farge)
+        if let velg { velg(farge) } else { arbeidsbenk.visIStudio(farge) }
     }
 
     var body: some View {
@@ -130,8 +132,9 @@ struct PlukkedeFargerRad: View {
                             .strokeBorder(Color.sekundærTekst.opacity(0.6), style: StrokeStyle(lineWidth: 1, dash: [3, 2])))
                         // Trykk tar den fangede fargen rett til Studio.
                         .onTapGesture { visIStudio(farge) }
-                        .accessibilityAction(named: "Vis i Studio") { visIStudio(farge) }
-                        .help(String(localized: "\(farge.hex()) – ikke lagret. Klikk for å vise den i Studio."))
+                        .accessibilityAction(named: velg == nil ? String(localized: "Vis i Studio") : String(localized: "Bruk")) { visIStudio(farge) }
+                        .help(velg == nil ? String(localized: "\(farge.hex()) – ikke lagret. Klikk for å vise den i Studio.")
+                                          : String(localized: "\(farge.hex()) – klikk for å bruke den."))
                 }
             }
         }

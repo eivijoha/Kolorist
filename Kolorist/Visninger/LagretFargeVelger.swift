@@ -3,7 +3,8 @@ import SwiftData
 import SwiftUI
 
 /// Rad for å velge en farge (f.eks. forgrunn, bakgrunn, A eller B). Trykk på prøven eller «Velg»
-/// åpner lagrede farger; menyen har også lim inn og (på Mac) skjermpipette.
+/// åpner lagrede farger; kameraknappen plukker med kamera eller fra bilde; menyen har også lim inn og (på Mac)
+/// skjermpipette.
 struct FargeValgRad: View {
     let tittel: String
     @Binding var farge: Farge
@@ -27,6 +28,9 @@ struct FargeValgRad: View {
                 Text(verditekst(farge)).font(.callout.monospaced()).lineLimit(1).minimumScaleFactor(0.7)
             }
             Spacer()
+            UtplukkKnapp(tittel: tittel) { farge = $0 }
+                .labelStyle(.iconOnly)
+                .buttonStyle(.borderless)
             Button("Velg") { visVelger = true }
                 .buttonStyle(.bordered)
                 .controlSize(.small)

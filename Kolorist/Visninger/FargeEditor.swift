@@ -147,6 +147,9 @@ struct FargeEditor: View {
                 }
                 .labelStyle(.iconOnly)
                 #endif
+                // Kamera eller bilde, uten å gå til Utplukk-fanen.
+                UtplukkKnapp(tittel: String(localized: "Aktiv farge")) { arbeidsbenk.aktivFarge = $0 }
+                    .labelStyle(.iconOnly)
                 TextField("Hex, CSS eller beskrivelse", text: $hexTekst)
                     .font(.body.monospaced())
                     .frame(minWidth: 96)

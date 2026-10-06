@@ -119,7 +119,7 @@ extension Arbeidsbenk {
         if let m = v.studiomodus.flatMap(FargeEditor.Modus.init(rawValue:)) { d.set(m.rawValue, forKey: "studioModus") }
         if let modell = v.fargemodell.flatMap(Fargemodell.init(rawValue:)), Fargemodell.redigerbare.contains(modell) { self.modell = modell }
         if let del = v.vurdering.flatMap(VurderingVisning.Del.init(rawValue:)) { d.set(del.rawValue, forKey: "vurderingDel") }
-        if let b = v.bakgrunn?.farge { d.set(b.hex(), forKey: "kontrastBakgrunn") }
+        if let b = v.bakgrunn?.farge { d.set(Kontrastbakgrunn.tekst(b), forKey: "kontrastBakgrunn") }
         if let fane = v.fane.flatMap(Fane.init(rawValue:)) { valgtFane = fane }
         if let p = v.presentasjon { presentasjon = p }
     }

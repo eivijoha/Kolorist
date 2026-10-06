@@ -7,22 +7,32 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 /// Utplukk-fanen: kamera eller bilde. Bilde er iOS-alternativet til skjermpipette –
-/// ta et skjermbilde, åpne det her og plukk fargene.
+/// ta et skjermbilde, åpne det her og plukk fargene. Med `velg` er det utplukk for ett fargefelt (`FargeutplukkArk`):
+/// fangsten går til feltet i stedet for til aktiv farge, og lagring og paletter er tatt bort.
 struct UtplukkVisning: View {
     enum Kilde: Hashable { case kamera, bilde }
-    @State private var kilde: Kilde = .kamera
+    /// Kamera eller bilde huskes, så utplukk fra et felt åpner der man sist plukket.
+    @AppStorage("utplukkKilde") private var kildeNavn = "kamera"
+    private var kilde: Kilde { kildeNavn == "bilde" ? .bilde : .kamera }
     /// Kameraet eies her, så kameravalget (Mac) kan stå i verktøylinjen ved siden av Kamera/Bilde.
     @State private var plukker = KameraFargeplukker()
+    private let tittel: String?
+    private let velg: ((Farge) -> Void)?
+
+    init(tittel: String? = nil, velg: ((Farge) -> Void)? = nil) {
+        self.tittel = tittel
+        self.velg = velg
+    }
 
     var body: some View {
         Group {
             switch kilde {
-            case .kamera: KameraVisning(plukker: plukker)
-            case .bilde: BildeVisning()
+            case .kamera: KameraVisning(plukker: plukker, velg: velg)
+            case .bilde: BildeVisning(velg: velg)
             }
         }
         // Egen tittel, ellers viser Mac-vinduet tittelen fra palettkolonnen («Paletter»).
-        .navigationTitle("Utplukk")
+        .navigationTitle(tittel.map { String(localized: "Plukk farge – \($0)") } ?? String(localized: "Utplukk"))
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
@@ -33,7 +43,7 @@ struct UtplukkVisning: View {
                     // Kameravalget (innebygd, eksterne og iPhone som Continuity-kamera) til venstre for Kamera/Bilde.
                     if kilde == .kamera { KameraMeny(plukker: plukker) }
                     #endif
-                    Picker("Kilde", selection: $kilde) {
+                    Picker("Kilde", selection: Binding(get: { kilde }, set: { kildeNavn = $0 == .bilde ? "bilde" : "kamera" })) {
                         Label("Kamera", systemImage: "camera").tag(Kilde.kamera)
                         Label("Bilde", systemImage: "photo").tag(Kilde.bilde)
                     }
@@ -46,6 +56,8 @@ struct UtplukkVisning: View {
 }
 
 struct BildeVisning: View {
+    /// Utplukk for ett fargefelt: «Bruk» sender fargen dit (se `UtplukkVisning`).
+    var velg: ((Farge) -> Void)? = nil
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var bildevalg: PhotosPickerItem?
     @State private var velgerFil = false
@@ -261,7 +273,8 @@ struct BildeVisning: View {
                 beregnKlynger()
                 return
             }
-            if let målt = gjeldende {
+            // Utplukk for et felt: slipp flytter bare lupen; «Bruk» velger fargen.
+            if velg == nil, let målt = gjeldende {
                 let f = arbeidsbenk.begrens(målt)
                 arbeidsbenk.aktivFarge = f
                 arbeidsbenk.registrerMåling(f)
@@ -306,6 +319,21 @@ struct BildeVisning: View {
 
     private var verktøylinje: some View {
         VStack(spacing: 10) {
+            if let velg {
+                HStack(spacing: 12) {
+                    FargeRute(farge: gjeldende ?? Farge(hex: "#808080")!, hjørne: 10)
+                        .frame(width: 88, height: 56)
+                    PlukkedeFargerRad(opphav: .bilde, leggIPalett: { _ in }, velg: velg)
+                    Button("Bruk") {
+                        guard let målt = gjeldende else { return }
+                        let f = arbeidsbenk.begrens(målt)
+                        arbeidsbenk.registrerMåling(f)
+                        velg(f)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(gjeldende == nil)
+                }
+            } else {
             HStack(spacing: 12) {
                 FargeRute(farge: gjeldende ?? Farge(hex: "#808080")!, hjørne: 10,
                           leggIPalett: { lagre = [PalettFarge(farge: $0, opphav: .bilde)] })
@@ -335,6 +363,7 @@ struct BildeVisning: View {
                 .labelStyle(.iconOnly)
                 .disabled(arbeidsbenk.målinger.isEmpty)
             }
+            }
 
             HStack(spacing: 8) {
                 Text("Dominerende").font(.caption).foregroundStyle(Color.sekundærTekst)
@@ -343,17 +372,19 @@ struct BildeVisning: View {
                         ForEach(klynger, id: \.self) { k in
                             Rectangle().fill(k.farge.swiftUI)
                                 .frame(width: geo.size.width * k.andel)
-                                .onTapGesture { arbeidsbenk.aktivFarge = k.farge }
+                                .onTapGesture { if let velg { velg(k.farge) } else { arbeidsbenk.aktivFarge = k.farge } }
                         }
                     }
                 }
                 .frame(height: 28)
                 .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                 Stepper("Antall: \(antallKlynger)", value: $antallKlynger, in: 2...12).labelsHidden()
-                Button("Bruk som palett", systemImage: "swatchpalette") {
-                    lagre = klynger.map { PalettFarge(farge: $0.farge, opphav: .bilde) }
+                if velg == nil {
+                    Button("Bruk som palett", systemImage: "swatchpalette") {
+                        lagre = klynger.map { PalettFarge(farge: $0.farge, opphav: .bilde) }
+                    }
+                    .labelStyle(.iconOnly)
                 }
-                .labelStyle(.iconOnly)
             }
         }
         .padding()

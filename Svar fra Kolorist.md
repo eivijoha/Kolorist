@@ -131,3 +131,8 @@ forstyrrende elementer) kommer i Kolorist uten at lenkeformatet endres.
   brukere. Bitdybde hører hjemme i undervisningen, ikke som innstilling i Kolorist.)
 - **API-endringer i pakkene:** `Fargemodell.Komponent` har fått feltet `visning` (`.tall`, `.prosent`, `.kanal`) som sier
   hvordan verdien vises (CMYK/metning/lysstyrke i prosent, RGB som kanal). Eksisterende felt er uendret.
+- **Kontrastsjekken (1.3, 2026-10-06):** stor flate øverst med nøkkeltallet, og et valg mellom WCAG 2.2, APCA og LRV
+  (lagret i `UserDefaults` som `kontrastType`: `wcag`, `apca`, `lrv`). `DeltVisning` har ikke felt for dette ennå – si
+  fra hvis Kolorist underviser vil åpne kontrastsjekken på en bestemt type, så legges det til.
+- **Ny i FargeKjerne (ikke publisert ennå):** `Farge.medAPCA(mot:minst:)` – «Rett opp» etter APCA, som
+  `medKontrast(mot:minst:)` for WCAG 2. Kommer i neste versjon.

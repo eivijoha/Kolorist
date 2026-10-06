@@ -13,6 +13,8 @@ struct KameraVisning: View {
     }
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State var plukker = KameraFargeplukker()
+    /// Utplukk for ett fargefelt: fangsten sendes dit (se `UtplukkVisning`).
+    var velg: ((Farge) -> Void)? = nil
     @State private var lagre: [PalettFarge]?
     @Environment(\.modelContext) private var kontekst
     /// Slukk lykt/lysfelt når en farge er fanget (lyset trengs bare under målingen).
@@ -80,6 +82,7 @@ struct KameraVisning: View {
                 // (ellers avbrytes trykk i knapper og ark).
                 LevendeKamerafarge(plukker: plukker) { lagre = [PalettFarge(farge: $0, opphav: .kamera)] }
                     .frame(width: 88, height: 64)
+                if velg == nil {
                 LagreMeny(lagre: {
                     guard let f = arbeidsbenk.målinger.last ?? plukker.gjeldende else { return }
                     lagreEnkeltfarger([PalettFarge(farge: arbeidsbenk.begrens(f), opphav: .kamera)], i: kontekst)
@@ -89,7 +92,9 @@ struct KameraVisning: View {
                 .font(.title2)
                 .foregroundStyle(.tint)
                 .help("Lagre sist fangede farge")
-                PlukkedeFargerRad(opphav: .kamera, størrelse: 40) { lagre = [PalettFarge(farge: $0, opphav: .kamera)] }
+                }
+                PlukkedeFargerRad(opphav: .kamera, størrelse: 40, leggIPalett: { lagre = [PalettFarge(farge: $0, opphav: .kamera)] },
+                                  velg: velg)
                 Button {
                     plukker.fang()
                 } label: {
@@ -108,10 +113,12 @@ struct KameraVisning: View {
                 if plukker.erIPhoneKamera {
                     LyskompensasjonMeny(plukker: plukker, kalibrerMed: $kalibrerMed, lagreLysmiljø: $lagreLysmiljø)
                 }
-                Button("Legg alle i palett", systemImage: "square.and.arrow.down.on.square") {
-                    lagre = arbeidsbenk.målinger.map { PalettFarge(farge: $0, opphav: .kamera) }
+                if velg == nil {
+                    Button("Legg alle i palett", systemImage: "square.and.arrow.down.on.square") {
+                        lagre = arbeidsbenk.målinger.map { PalettFarge(farge: $0, opphav: .kamera) }
+                    }
+                    .disabled(arbeidsbenk.målinger.isEmpty)
                 }
-                .disabled(arbeidsbenk.målinger.isEmpty)
             }
         }
         .sheet(isPresented: Binding(get: { lagre != nil }, set: { if !$0 { lagre = nil } })) {
@@ -151,7 +158,7 @@ struct KameraVisning: View {
         .task {
             plukker.vedFangst = { målt in
                 let farge = arbeidsbenk.begrens(målt)
-                arbeidsbenk.aktivFarge = farge
+                if velg == nil { arbeidsbenk.aktivFarge = farge }
                 arbeidsbenk.registrerMåling(farge)
                 // Klar for neste farge: punktet tilbake i midten (på Mac følger det pekeren).
                 if !erMac { plukker.tilbakestillMarkør() }
@@ -161,6 +168,7 @@ struct KameraVisning: View {
                     if Lysfelt.delt.erSynlig { Lysfelt.delt.skjul() }
                     #endif
                 }
+                velg?(farge)
             }
             await plukker.start()
         }

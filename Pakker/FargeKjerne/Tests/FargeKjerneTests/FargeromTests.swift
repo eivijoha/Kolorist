@@ -93,6 +93,20 @@ struct FargeromTests {
         #expect(Farge(hex: "#8A8A8A")!.lesbarTekstfarge == hvit)
         #expect(Farge(hex: "#AAAAAA")!.lesbarTekstfarge == sort)
     }
+
+    /// «Rett opp» for APCA: når målet med minst mulig endring i lyshet, og lar farger som holder, være.
+    @Test func apcaRettOpp() {
+        let hvit = Farge(hex: "#FFFFFF")!, blå = Farge(hex: "#537BB0")!
+        #expect(blå.medAPCA(mot: hvit, minst: 30) == blå)
+        let rettet = blå.medAPCA(mot: hvit, minst: 75)
+        #expect(abs(hvit.apcaKontrast(tekst: rettet)) >= 75)
+        #expect(abs(hvit.apcaKontrast(tekst: rettet)) < 78)
+        #expect(abs(rettet.okLCH.h - blå.okLCH.h) < 2)
+        // Lc 90 kan ikke nås på en mellomtone: svaret blir sort eller hvitt, det som gir mest kontrast.
+        let grå = Farge(hex: "#808080")!
+        let umulig = Farge(hex: "#707070")!.medAPCA(mot: grå, minst: 90)
+        #expect(umulig == Farge(lineærR: 0, g: 0, b: 0) || umulig == Farge(lineærR: 1, g: 1, b: 1))
+    }
 }
 
 @Suite("Paletter")

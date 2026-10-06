@@ -2,6 +2,11 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
+## Ikke publisert
+
+- `Farge.medAPCA(mot:minst:)`: justerer lysheten (OKLCH) til APCA-lesekontrasten |Lc| når et mål, med minst mulig
+  endring – som `medKontrast(mot:minst:)` gjør for WCAG 2.
+
 ## 0.2.0 – 2026-10-05
 
 - **Visningstilstand i delingslenker:** `DeltVisning` og `DeltInnhold.visning` (nøkkel `vs` i lenkeformatet) – fane,
