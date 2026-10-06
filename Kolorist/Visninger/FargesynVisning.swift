@@ -16,59 +16,158 @@ struct FargesynVurdering: View {
         paletter.first { $0.id.uuidString == valgtIDTekst } ?? paletter.first
     }
 
+    @Environment(\.presentasjonsmodus) private var presentasjon
+    /// Hvilket syn fargefeltet øverst viser («normalt» = normalt syn).
+    @AppStorage("fargesynVis") private var visTekst = "normalt"
+    private var vis: Fargesynstype? { Fargesynstype(rawValue: visTekst) }
+
     var body: some View {
-        Form {
-            if paletter.isEmpty {
-                ContentUnavailableView("Ingen paletter", systemImage: "swatchpalette",
-                                       description: Text("Lag en palett først, så kan den vurderes her."))
-            } else if let valgt {
-                let farger = valgt.farger
-                Section {
-                    Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
-                        ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
-                    }
-                    HStack(spacing: 10) {
-                        Text("Grad")
-                        Slider(value: $grad, in: 0.1...1, step: 0.1)
-                        Text(grad, format: .percent.precision(.fractionLength(0)))
-                            .font(.callout.monospacedDigit())
-                            .foregroundStyle(Color.sekundærTekst)
-                            .frame(width: 48, alignment: .trailing)
-                    }
-                } footer: { Group {
-                    Text(grad >= 1 ? "100 % er fullstendig avvik (dikromasi). Lavere verdier tilsvarer delvis avvik (anomal trikromasi), som er vanligere."
-                                   : "Delvis avvik (anomal trikromasi). 100 % er fullstendig avvik.")
-                }.foregroundStyle(Color.sekundærTekst) }
-
-                // Analysen (O(n²) per type) regnes én gang per tegning og deles av begge seksjonene.
-                let analyse = Fargesynstype.allCases.map {
-                    ($0, Fargesynsanalyse.forvekslinger(i: farger.map(\.farge), type: $0, grad: grad))
-                }
-                Section {
-                    stripe(String(localized: "Normalt syn"), undertekst: nil, farger: farger.map(\.farge), antall: nil, kamera: nil)
-                    // Etter utbredelse, vanligst først.
-                    ForEach(analyse, id: \.0) { type, forvekslinger in
-                        stripe(grad >= 1 ? type.navn : type.delvisNavn, undertekst: "\(type.beskrivelse). \(type.utbredelse).",
-                               farger: farger.map { $0.farge.simulert(type, grad: grad) }, antall: forvekslinger.count,
-                               kamera: { kameratype = type })
-                    }
-                } header: {
-                    Text("Slik ser paletten ut").foregroundStyle(Color.sekundærTekst)
-                } footer: {
-                    Text("Typene står etter hvor vanlige de er. Tallene gjelder personer av nordeuropeisk opprinnelse og omfatter både delvis og fullstendig avvik; delvis avvik er langt vanligst. Kilde: J. Birch, JOSA A 29(3), 2012.")
-                        .foregroundStyle(Color.sekundærTekst)
-                }
-
-                forvekslingsseksjon(farger, alle: analyse.flatMap(\.1))
+        if paletter.isEmpty {
+            ContentUnavailableView("Ingen paletter", systemImage: "swatchpalette",
+                                   description: Text("Lag en palett først, så kan den vurderes her."))
+                .navigationTitle("Fargesyn")
+        } else if let valgt {
+            let farger = valgt.farger
+            // Analysen (O(n²) per type) regnes én gang per tegning og deles av fargefeltet og seksjonene.
+            let analyse = Fargesynstype.allCases.map {
+                ($0, Fargesynsanalyse.forvekslinger(i: farger.map(\.farge), type: $0, grad: grad))
             }
+            GeometryReader { geo in
+                let bred = Breddeoppsett.erBred(geo.size)
+                // AnyLayout bevarer skjemaets tilstand når enheten roteres.
+                let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
+                oppsett {
+                    kort(valgt, analyse: analyse, bred: bred)
+                        .frame(width: bred ? geo.size.width / 2 : nil)
+                    Form {
+                        Section {
+                            HStack(spacing: 10) {
+                                Text("Grad")
+                                Slider(value: $grad, in: 0.1...1, step: 0.1)
+                                Text(grad, format: .percent.precision(.fractionLength(0)))
+                                    .font(.callout.monospacedDigit())
+                                    .foregroundStyle(Color.sekundærTekst)
+                                    .frame(width: 48, alignment: .trailing)
+                            }
+                        } footer: { Group {
+                            Text(grad >= 1 ? "100 % er fullstendig avvik (dikromasi). Lavere verdier tilsvarer delvis avvik (anomal trikromasi), som er vanligere."
+                                           : "Delvis avvik (anomal trikromasi). 100 % er fullstendig avvik.")
+                        }.foregroundStyle(Color.sekundærTekst) }
+
+                        Section {
+                            stripe(String(localized: "Normalt syn"), undertekst: nil, farger: farger.map(\.farge), antall: nil, kamera: nil)
+                            // Etter utbredelse, vanligst først.
+                            ForEach(analyse, id: \.0) { type, forvekslinger in
+                                stripe(grad >= 1 ? type.navn : type.delvisNavn, undertekst: "\(type.beskrivelse). \(type.utbredelse).",
+                                       farger: farger.map { $0.farge.simulert(type, grad: grad) }, antall: forvekslinger.count,
+                                       kamera: { kameratype = type })
+                            }
+                        } header: {
+                            Text("Slik ser paletten ut").foregroundStyle(Color.sekundærTekst)
+                        } footer: {
+                            Text("Typene står etter hvor vanlige de er. Tallene gjelder personer av nordeuropeisk opprinnelse og omfatter både delvis og fullstendig avvik; delvis avvik er langt vanligst. Kilde: J. Birch, JOSA A 29(3), 2012.")
+                                .foregroundStyle(Color.sekundærTekst)
+                        }
+
+                        forvekslingsseksjon(farger, alle: analyse.flatMap(\.1))
+                    }
+                    .formStyle(.grouped)
+                    #if os(iOS)
+                    .listSectionSpacing(.compact)
+                    #endif
+                    .contentMargins(.top, 0, for: .scrollContent)
+                }
+                .background(Color.skjemabakgrunn)
+            }
+            .navigationTitle("Fargesyn")
+            #if os(iOS)
+            .fullScreenCover(item: $kameratype) { FargesynKamera(type: $0) }
+            #else
+            .sheet(item: $kameratype) { FargesynKamera(type: $0) }
+            #endif
         }
-        .formStyle(.grouped)
-        .navigationTitle("Fargesyn")
-        #if os(iOS)
-        .fullScreenCover(item: $kameratype) { FargesynKamera(type: $0) }
-        #else
-        .sheet(item: $kameratype) { FargesynKamera(type: $0) }
-        #endif
+    }
+
+    /// Kortet øverst: hvor mange fargepar som blir vanskelige å skille, paletten i et stort fargefelt (med valgt
+    /// fargesynsavvik simulert), og valg av palett og syn. Samme oppbygning som kontrastsjekken.
+    private func kort(_ valgt: PalettDokument, analyse: [(Fargesynstype, [Forveksling])], bred: Bool) -> some View {
+        let farger = valgt.farger
+        let vist = vis.map { type in farger.map { $0.farge.simulert(type, grad: grad) } } ?? farger.map(\.farge)
+        // Normalt syn: fargepar som blir vanskelige med minst ett avvik (hvert par telles én gang). Ellers bare det valgte avviket.
+        let antall = vis.map { type in analyse.first { $0.0 == type }?.1.count ?? 0 }
+            ?? Set(analyse.flatMap { $0.1.map { [$0.i, $0.j] } }).count
+        let detalj: String = {
+            if let vis { return "\(grad >= 1 ? vis.navn : vis.delvisNavn) · \(vis.utbredelse)" }
+            return analyse.map { "\(grad >= 1 ? $0.0.navn : $0.0.delvisNavn) \($0.1.count)" }.joined(separator: " · ")
+        }()
+        return VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .lastTextBaseline, spacing: 8) {
+                    Image(systemName: antall == 0 ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .foregroundStyle(antall == 0 ? Color.suksess : Color.feil)
+                        .koloristFont(.title)
+                    Text(antall == 0 ? String(localized: "Ingen vanskelige par")
+                                     : (antall == 1 ? String(localized: "1 vanskelig par") : String(localized: "\(antall) vanskelige par")))
+                        .koloristFont(.title2, weight: .bold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                    Spacer(minLength: 0)
+                }
+                Text(detalj).koloristFont(.subheadline).opacity(0.8).lineLimit(2)
+            }
+            .foregroundStyle(Color.primary)
+            .padding(.horizontal, 16)
+            .padding(.top, 14)
+            .padding(.bottom, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine)
+            // Paletten: én kolonne per farge, med navn eller hex når det er plass.
+            GeometryReader { geo in
+                let bredde = geo.size.width / CGFloat(max(vist.count, 1))
+                HStack(spacing: 0) {
+                    ForEach(Array(vist.enumerated()), id: \.offset) { i, f in
+                        ZStack(alignment: .bottomLeading) {
+                            f.swiftUI
+                            if bredde >= 56 {
+                                Text(farger[i].navn.isEmpty ? farger[i].farge.hex() : farger[i].navn)
+                                    .koloristFont(.caption2, weight: .medium)
+                                    .lineLimit(2)
+                                    .minimumScaleFactor(0.8)
+                                    .foregroundStyle(f.lesbarTekstfarge.swiftUI)
+                                    .padding(6)
+                            }
+                        }
+                    }
+                }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(String(localized: "Paletten \(valgt.navn)"))
+            HStack(spacing: 12) {
+                Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
+                    ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
+                }
+                .labelsHidden()
+                .fixedSize()
+                Spacer(minLength: 0)
+                Picker("Vis med", selection: $visTekst) {
+                    Text("Normalt syn").tag("normalt")
+                    ForEach(Fargesynstype.allCases) { Text(grad >= 1 ? $0.navn : $0.delvisNavn).tag($0.rawValue) }
+                }
+                .labelsHidden()
+                .fixedSize()
+            }
+            .padding(.horizontal, 12)
+            .frame(minHeight: 48)
+        }
+        .frame(height: bred ? nil : (presentasjon ? 330 : 250))
+        .frame(maxHeight: bred ? .infinity : nil)
+        .frame(maxWidth: .infinity)
+        .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .clipShape(Kortform.fargepanel(bred: bred))
+        .padding(.leading, 16)
+        .padding(.trailing, bred ? 0 : 16)
+        .padding(.top, bred ? 16 : 4)
+        .padding(.bottom, bred ? 16 : 8)
     }
 
     private func stripe(_ tittel: String, undertekst: String?, farger: [Farge], antall: Int?, kamera: (() -> Void)?) -> some View {

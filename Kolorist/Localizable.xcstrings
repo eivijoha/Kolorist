@@ -3581,6 +3581,16 @@
         }
       }
     },
+    "Ingen vanskelige par": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hard-to-tell pairs"
+          }
+        }
+      }
+    },
     "Innebygde": {
       "localizations": {
         "en": {
@@ -6291,6 +6301,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Palette · 1 colour"
+          }
+        }
+      }
+    },
+    "Paletten %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The palette %@"
           }
         }
       }

@@ -448,7 +448,7 @@ def design(lang):
               'Velg selv hvilke programmer «Kopier til» viser, og i hvilken rekkefølge' + N,
               'Dra fargeprøver rett inn i andre programmer på Mac – og farger inn i Kolorist',
               'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
-              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
+              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i en skytjeneste – eller del filene direkte' + N12,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
               'Siri og Snarveier: lag paletter og overganger, konverter farger og sjekk kontrast'], 'palettgrupper', None),
         ]
@@ -498,7 +498,7 @@ def design(lang):
           'Choose which apps “Copy to” shows, and in what order' + N,
           'Drag swatches straight into other apps on the Mac – and colours into Kolorist',
           'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N,
-          'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N12,
+          'Save as: palettes and colours in several formats at once – in a folder you choose, including a cloud service – or share the files directly' + N12,
           'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
           'Siri and Shortcuts: make palettes and gradients, convert colours and check contrast'], 'palettgrupper', None),
     ]
@@ -543,7 +543,7 @@ def arkitektur(lang):
               'Sammenlign med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass',
               'Lagre målt lys som betraktningsforhold, og se andre farger under det' + N12,
               'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
-              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i OneDrive – eller del filene direkte' + N12,
+              'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i en skytjeneste – eller del filene direkte' + N12,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
               'Paletter og betraktningsforhold synkroniseres til iPad og Mac via iCloud'], None, None),
         ]
@@ -583,7 +583,7 @@ def arkitektur(lang):
           'Compare with recommended levels, such as 500 lx at a workplace',
           'Save measured light as a viewing condition, and see other colours under it' + N12,
           'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N,
-          'Save as: palettes and colours in several formats at once – in a folder you choose, including OneDrive – or share the files directly' + N12,
+          'Save as: palettes and colours in several formats at once – in a folder you choose, including a cloud service – or share the files directly' + N12,
           'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
           'Palettes and viewing conditions sync to iPad and Mac through iCloud'], None, None),
     ]
@@ -700,12 +700,12 @@ def funksjoner(lang):
             ('lys', 'Lys og fargemåling', 'Lys', lysdel, []),
             ('levere', 'Paletter, eksport og deling', 'Paletter og eksport', None,
              [('Paletter og iCloud', k['Paletter og iCloud']), ('Eksport', k['Eksport']),
-              ('Lagre som', ul([f'<li>Velg formatene etter hvor filene skal brukes – Adobe-programmer, Figma, nett, Apple-utvikling, GIMP og flere – og lagre flere samtidig {N12}</li>',
-                                '<li>Lagre i en mappe du velger, også i OneDrive, Jottacloud og andre tjenester – eller del filene med e-post, Teams og AirDrop</li>',
+              ('Lagre som', ul([f'<li>Velg formatene etter hvor filene skal brukes – designprogrammer, nett, apputvikling og andre – og lagre flere samtidig {N12}</li>',
+                                '<li>Lagre i en mappe du velger, også i skytjenester – eller del filene med e-post, meldinger og deling i nærheten</li>',
                                 '<li>For paletter og enkeltfarger</li>'])),
               ('Delingslenker', ul([f'<li>Del enkeltfarger, paletter, gradienter og harmonier som lenke {N12}</li>',
                                     '<li>Med Kolorist åpnes lenken i appen, og du velger selv om noe skal lagres</li>',
-                                    '<li>Uten appen – også på Windows – vises fargene i nettleseren, med hex, OKLCH, CIELab og Munsell</li>',
+                                    '<li>Uten appen – også på PC – vises fargene i nettleseren, med hex, OKLCH, CIELab og Munsell</li>',
                                     '<li>Fargene ligger i selve lenken; ingenting lagres eller sendes via nettstedet</li>',
                                     '<li>Tonenavn fra fargekart du har importert, tas ikke med – bare fargeverdiene deles</li>',
                                     '<li><a href="https://kolorist.no/l#znZJLTsMwEIavYlliFxw_M-PuaEpZVLAoK4S6CCWUkL6UtIiq6nE4CRdjnAfKmo09Htuf5v9nzvyNj57PvKRVCmMSqaJrKaQ2XWCVShYR3xz5iCs5ZlqY2AjLI76lzOS0Z28fu-qVzl_hxdTc2Am_RD3RKatNAzI-cS0Rve6JINyYWUJaAR1ydqoPL-uf745opsktugERLEjf1uhtGxh0dlgjEE71FRZ1sWLvxWaTrzskTscmhQESPSgVEUhqMGHXCL4HauGeGAqM1Z_qx2zbC75NJmmKQ8FeIxJDaZANEw2agdw5c7GSwneoh-xYHyiuKC6Wy1GZ3qW79a563GfL_C7f5lWxTO-fZuFJeN-m6pL1yUOjmcUMkBbUtOircPFJ5SgZAUaoo2B4KDdF5wz1h46rpu8ZH0EnqjxuqmK7or91c0WD8a-5GM5B8GXAAaCeBVPAtbvXSg2NnjMQOsY_zlR7cpg4i1ByYxgNW9Bfnhrfgvx9ts4P4UCS1eUX">Åpne en delt eksempelpalett</a> – og se <a href="plattformer.html#del">hvordan deling fungerer</a></li>'])),
@@ -737,12 +737,12 @@ def funksjoner(lang):
             ('light', 'Light and colour measurement', 'Light', lysdel, []),
             ('deliver', 'Palettes, export and sharing', 'Palettes and export', None,
              [('Palettes and iCloud', k['Palettes and iCloud']), ('Export', k['Export']),
-              ('Save as', ul([f'<li>Choose formats by where the files will be used – Adobe apps, Figma, the web, Apple development, GIMP and more – and save several at once {N12}</li>',
-                              '<li>Save to a folder you choose, including OneDrive, Jottacloud and other services – or share the files by email, Teams and AirDrop</li>',
+              ('Save as', ul([f'<li>Choose formats by where the files will be used – design apps, the web, app development and more – and save several at once {N12}</li>',
+                              '<li>Save to a folder you choose, including cloud services – or share the files by email, messages and nearby sharing</li>',
                               '<li>For palettes and single colours</li>'])),
               ('Share links', ul([f'<li>Share single colours, palettes, gradients and harmonies as a link {N12}</li>',
                                   '<li>With Kolorist the link opens in the app, and you decide whether to save anything</li>',
-                                  '<li>Without the app – on Windows too – the colours are shown in the browser, with hex, OKLCH, CIELab and Munsell</li>',
+                                  '<li>Without the app – on PCs too – the colours are shown in the browser, with hex, OKLCH, CIELab and Munsell</li>',
                                   '<li>The colours are in the link itself; nothing is stored or sent through the website</li>',
                                   '<li>Tone names from colour charts you have imported are left out – only the colour values are shared</li>',
                                   '<li><a href="https://kolorist.no/l#znZJLTsMwEIavYlliFxw_M-PuaEpZVLAoK4S6CCWUkL6UtIiq6nE4CRdjnAfKmo09Htuf5v9nzvyNj57PvKRVCmMSqaJrKaQ2XWCVShYR3xz5iCs5ZlqY2AjLI76lzOS0Z28fu-qVzl_hxdTc2Am_RD3RKatNAzI-cS0Rve6JINyYWUJaAR1ydqoPL-uf745opsktugERLEjf1uhtGxh0dlgjEE71FRZ1sWLvxWaTrzskTscmhQESPSgVEUhqMGHXCL4HauGeGAqM1Z_qx2zbC75NJmmKQ8FeIxJDaZANEw2agdw5c7GSwneoh-xYHyiuKC6Wy1GZ3qW79a563GfL_C7f5lWxTO-fZuFJeN-m6pL1yUOjmcUMkBbUtOircPFJ5SgZAUaoo2B4KDdF5wz1h46rpu8ZH0EnqjxuqmK7or91c0WD8a-5GM5B8GXAAaCeBVPAtbvXSg2NnjMQOsY_zlR7cpg4i1ByYxgNW9Bfnhrfgvx9ts4P4UCS1eUX">Open a shared example palette</a> – and see <a href="platforms.html#del">how sharing works</a></li>'])),
@@ -813,8 +813,8 @@ def plattformer(lang):
                   'Mål lyset med iPhone eller iPad – og se farger i det samme lyset på Mac' + N12,
                   'Bruk iPhone som kamera på Mac, med kompensasjon for lyset' + N12,
                   'Oppsettet av visningen følger med',
-                  'Kolleger på Windows: lagre paletter i formatene de bruker, i en mappe i skytjenesten dere deler' + N12,
-                  'Delte lenker åpnes i appen på iPhone, iPad og Mac – og i nettleseren ellers, også på Windows' + N12]
+                  'Kolleger på PC: lagre paletter i formatene de bruker, i en mappe i skytjenesten dere deler' + N12,
+                  'Delte lenker åpnes i appen på iPhone, iPad og Mac – og i nettleseren ellers, også på PC' + N12]
         side_tittel = 'Side om side'
         side_intro = 'Samme verktøy, tilpasset skjermen.'
         # None: skjermbildene er ikke tatt ennå (plassholder for hver plattform).
@@ -853,8 +853,8 @@ def plattformer(lang):
                   'Measure the light with iPhone or iPad – and see colours in the same light on the Mac' + N12,
                   'Use iPhone as the camera on the Mac, with compensation for the light' + N12,
                   'Your view layout follows along',
-                  'Colleagues on Windows: save palettes in the formats they use, in a folder in the cloud service you share' + N12,
-                  'Shared links open in the app on iPhone, iPad and Mac – and in the browser elsewhere, Windows included' + N12]
+                  'Colleagues on PCs: save palettes in the formats they use, in a folder in the cloud service you share' + N12,
+                  'Shared links open in the app on iPhone, iPad and Mac – and in the browser elsewhere, PCs included' + N12]
         side_tittel = 'Side by side'
         side_intro = 'The same tools, fitted to the screen.'
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'),
@@ -920,7 +920,7 @@ def plattformer(lang):
     if nb:
         del_tittel, del_ingress = 'Del med andre – også uten appen', 'Farger, paletter, gradienter og harmonier kan deles som lenke. Fargene ligger i selve lenken – kolorist.no lagrer og ser ingenting.'
         del_punkter = ['Med Kolorist åpnes lenken i appen på iPhone, iPad og Mac, med forhåndsvisning – ingenting lagres før du velger det',
-                       'Uten appen – også på Windows – vises fargene i nettleseren, med hex, OKLCH, CIELab og Munsell, klare til å kopieres',
+                       'Uten appen – også på PC – vises fargene i nettleseren, med hex, OKLCH, CIELab og Munsell, klare til å kopieres',
                        'Filamentfarger lenker videre til prøven hos kilden',
                        'Tonenavn fra fargekart du har importert, tas ikke med – bare fargeverdiene deles',
                        'Lagre som: filer i formatene du velger, i en mappe du velger – eller del dem direkte']
@@ -928,7 +928,7 @@ def plattformer(lang):
     else:
         del_tittel, del_ingress = 'Share with others – even without the app', 'Colours, palettes, gradients and harmonies can be shared as a link. The colours are in the link itself – kolorist.no stores and sees nothing.'
         del_punkter = ['With Kolorist the link opens in the app on iPhone, iPad and Mac, with a preview – nothing is saved until you choose',
-                       'Without the app – on Windows too – the colours are shown in the browser, with hex, OKLCH, CIELab and Munsell, ready to copy',
+                       'Without the app – on PCs too – the colours are shown in the browser, with hex, OKLCH, CIELab and Munsell, ready to copy',
                        'Filament colours link on to the sample at the source',
                        'Tone names from colour charts you have imported are left out – only the colour values are shared',
                        'Save as: files in the formats you choose, in a folder you choose – or share them directly']
@@ -1029,7 +1029,7 @@ def filamentside(lang):
               'Fargene varierer mellom produksjonspartier og etter overflate – se på en fysisk prøve før du bestemmer deg'], None, None),
             ('Del med lenke', 'Del en palett med filamentfarger som lenke. Mottakere uten appen ser fargene i nettleseren, med vei videre til hver prøve.',
              ['Med Kolorist åpnes lenken i appen, og du velger selv hva som lagres',
-              'Uten appen – også på Windows – vises fargene på kolorist.no, med produsent, materiale og lenke til kilden',
+              'Uten appen – også på PC – vises fargene på kolorist.no, med produsent, materiale og lenke til kilden',
               'Kilden og lisensen oppgis på siden'], 'del-web-filament', (FIL, 'Se eksempelet «Nordisk kyst i PLA»')),
             ('Åpent om dataene', 'Hvor fargene kommer fra, og hva Kolorist gjør med dem.',
              [f'Kilde: {kilde}, lisensiert under {lisens} – Kolorist har valgt ut opplysninger og regnet om fargene',
@@ -1055,7 +1055,7 @@ def filamentside(lang):
           'Colours vary between production batches and with surface finish – look at a physical sample before you decide'], None, None),
         ('Share with a link', 'Share a palette of filament colours as a link. Recipients without the app see the colours in their browser, with a way on to each sample.',
          ['With Kolorist the link opens in the app, and you decide what to save',
-          'Without the app – on Windows too – the colours are shown at kolorist.no, with manufacturer, material and a link to the source',
+          'Without the app – on PCs too – the colours are shown at kolorist.no, with manufacturer, material and a link to the source',
           'The source and licence are stated on the page'], 'del-web-filament', (FIL, 'See the example “Nordisk kyst in PLA”')),
         ('Open about the data', 'Where the colours come from, and what Kolorist does with them.',
          [f'Source: {kilde}, licensed under {lisens} – Kolorist has selected information and converted the colours',
