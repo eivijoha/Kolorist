@@ -36,13 +36,7 @@ struct FargeValgRad: View {
                 .controlSize(.small)
                 .lineLimit(1)
             Menu("Mer", systemImage: "ellipsis.circle") {
-                Button("Aktiv farge", systemImage: "slider.horizontal.3") { farge = arbeidsbenk.aktivFarge }
-                Button("Lim inn", systemImage: "doc.on.clipboard") { if let f = Utklippstavle.limInn() { farge = f } }
-                #if os(macOS)
-                Button("Plukk fra skjermen", systemImage: "eyedropper") {
-                    Task { if let f = await Pipette.plukkFraSkjerm() { farge = f; arbeidsbenk.registrerMåling(f) } }
-                }
-                #endif
+                FargehentingValg(farge: $farge)
             }
             .labelStyle(.iconOnly)
         }
@@ -61,6 +55,78 @@ struct FargeValgRad: View {
         .sheet(isPresented: $visVelger) {
             LagretFargeArk(tittel: tittel) { farge = $0 }
         }
+    }
+}
+
+/// Hent en farge fra aktiv farge, utklippstavlen eller (på Mac) skjermen – felles for fargevalgene.
+struct FargehentingValg: View {
+    @Binding var farge: Farge
+    var visAktivFarge = true
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+
+    var body: some View {
+        if visAktivFarge {
+            Button("Aktiv farge", systemImage: "slider.horizontal.3") { farge = arbeidsbenk.aktivFarge }
+        }
+        Button("Lim inn", systemImage: "doc.on.clipboard") { if let f = Utklippstavle.limInn() { farge = f } }
+        #if os(macOS)
+        Button("Plukk fra skjermen", systemImage: "eyedropper") {
+            Task { if let f = await Pipette.plukkFraSkjerm() { farge = f; arbeidsbenk.registrerMåling(f) } }
+        }
+        #endif
+    }
+}
+
+/// Velg en farge rett fra en fargeflate: etiketten (prøven i flaten, eller en fargeknapp) åpner en meny med lagrede
+/// farger og kjent verdi, kamera eller bilde, lim inn og (på Mac) skjermpipette. En farge som slippes på etiketten, brukes.
+struct FargeVelgerMeny<Etikett: View>: View {
+    let tittel: String
+    @Binding var farge: Farge
+    /// «Aktiv farge» i menyen – ikke når feltet selv er aktiv farge.
+    var visAktivFarge = true
+    /// Hvit og sort som snarveier (for bakgrunner).
+    var visHvitOgSort = false
+    @ViewBuilder var etikett: Etikett
+    @State private var visLagret = false
+    @State private var visUtplukk = false
+    @State private var målrettet = false
+
+    var body: some View {
+        Menu {
+            Section(tittel) {
+                Button("Lagrede farger eller kjent verdi …", systemImage: "swatchpalette") { visLagret = true }
+                Button("Plukk med kamera eller fra bilde", systemImage: "camera") { visUtplukk = true }
+                FargehentingValg(farge: $farge, visAktivFarge: visAktivFarge)
+            }
+            if visHvitOgSort {
+                Section {
+                    Button("Hvit") { farge = Farge(hex: "#FFFFFF")! }
+                    Button("Sort") { farge = Farge(hex: "#000000")! }
+                }
+            }
+            Section {
+                Button("Kopier \(farge.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(farge) }
+            }
+        } label: {
+            etikett
+                .overlay {
+                    if målrettet {
+                        RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.accentColor, lineWidth: 2).padding(-4)
+                    }
+                }
+        }
+        .menuStyle(.button)
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
+        .accessibilityLabel("\(tittel): \(farge.hex())")
+        .accessibilityHint("Velg farge")
+        .tarImotFarger { farger in
+            guard let f = farger.first else { return false }
+            farge = f.farge
+            return true
+        } isTargeted: { målrettet = $0 }
+        .sheet(isPresented: $visLagret) { LagretFargeArk(tittel: tittel) { farge = $0 } }
+        .sheet(isPresented: $visUtplukk) { FargeutplukkArk(tittel: tittel) { farge = $0 } }
     }
 }
 

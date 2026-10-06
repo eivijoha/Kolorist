@@ -405,15 +405,15 @@
     },
     "%@: %@, %@. %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@: %2$@, %3$@. %4$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
+            "value": "%1$@: %2$@, %3$@. %4$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
             "value": "%1$@: %2$@, %3$@. %4$@"
           }
         }
@@ -525,32 +525,32 @@
     },
     "%lld av %lld krav": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld av %2$lld krav"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld of %2$lld requirements"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av %2$lld krav"
           }
         }
       }
     },
     "%lld av %lld krav i WCAG 2.2": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld av %2$lld krav i WCAG 2.2"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld of %2$lld WCAG 2.2 requirements"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av %2$lld krav i WCAG 2.2"
           }
         }
       }
@@ -3157,12 +3157,12 @@
         }
       }
     },
-    "Hvit bakgrunn": {
+    "Hvit": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "White background"
+            "value": "White"
           }
         }
       }
@@ -4773,6 +4773,16 @@
         }
       }
     },
+    "Lagrede farger eller kjent verdi …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved colours or known value …"
+          }
+        }
+      }
+    },
     "Lagres uten palett, under «Enkeltfarger» i Paletter.": {
       "localizations": {
         "en": {
@@ -6351,16 +6361,6 @@
         }
       }
     },
-    "Plukk fargene med kamera eller fra et bilde med kameraknappen. «Vis med» simulerer et fargesynsavvik i flaten øverst; kravene gjelder alltid de faktiske fargene.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pick the colours with the camera or from an image using the camera button. “Show with” simulates a colour vision deficiency in the field at the top; the requirements always apply to the actual colours."
-          }
-        }
-      }
-    },
     "Plukk farger fra et bilde": {
       "localizations": {
         "en": {
@@ -7307,12 +7307,12 @@
         }
       }
     },
-    "Sort bakgrunn": {
+    "Sort": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Black background"
+            "value": "Black"
           }
         }
       }
@@ -7563,6 +7563,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The figures are calculated exactly in the app. Apple Intelligence on the device writes the assessment from them and does no calculating itself."
+          }
+        }
+      }
+    },
+    "Tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text"
           }
         }
       }
@@ -8215,6 +8225,16 @@
         }
       }
     },
+    "Velg farge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose colour"
+          }
+        }
+      }
+    },
     "Velg farge – %@": {
       "localizations": {
         "en": {
@@ -8231,6 +8251,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose colour …"
+          }
+        }
+      }
+    },
+    "Velg fargene rett i flaten øverst: trykk på teksten eller fargeknappene for lagrede farger, kjent verdi, kamera eller bilde. «Vis med» simulerer et fargesynsavvik i flaten; kravene gjelder alltid de faktiske fargene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the colours right in the field at the top: tap the text or the colour buttons for saved colours, a known value, the camera or an image. “Show with” simulates a colour vision deficiency in the field; the requirements always apply to the actual colours."
           }
         }
       }

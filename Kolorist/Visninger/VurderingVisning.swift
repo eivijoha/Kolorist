@@ -83,7 +83,7 @@ extension VurderingVisning {
 }
 
 /// Kontrast for aktiv farge mot en valgt bakgrunn: en stor flate øverst med nøkkeltallet for valgt sjekk (WCAG 2.2,
-/// APCA eller LRV), kravene rett under og fargene nederst. Bred visning: flaten til venstre, som i Studio.
+/// APCA eller LRV) og fargevalgene i flaten, og kravene rett under. Bred visning: flaten til venstre, som i Studio.
 private struct KontrastVurdering: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.presentasjonsmodus) private var presentasjon
@@ -103,13 +103,13 @@ private struct KontrastVurdering: View {
                 kort(bred: bred)
                     .frame(width: bred ? geo.size.width / 2 : nil)
                 Form {
-                    // Vurderingen rett under flaten og typevalget; fargene under den.
+                    // Vurderingen rett under flaten og typevalget (fargene velges i flaten).
                     switch type {
                     case .wcag: KontrastSeksjon(forgrunn: $arbeidsbenk.aktivFarge)
                     case .apca: APCASeksjon(forgrunn: $arbeidsbenk.aktivFarge)
                     case .lrv: FlatekontrastSeksjon(flate: $arbeidsbenk.aktivFarge, bakgrunn: bakgrunn)
                     }
-                    KontrastFargerSeksjon(forgrunn: $arbeidsbenk.aktivFarge, type: type)
+                    KontrastVisMedSeksjon()
                 }
                 .formStyle(.grouped)
                 #if os(iOS)
@@ -124,12 +124,14 @@ private struct KontrastVurdering: View {
 
     /// Flaten med valget av kontrastsjekk under – fast øverst mens skjemaet ruller.
     private func kort(bred: Bool) -> some View {
-        VStack(spacing: 0) {
-            Kontrastflate(type: type, forgrunn: arbeidsbenk.aktivFarge, bakgrunn: bakgrunn,
+        @Bindable var arbeidsbenk = arbeidsbenk
+        return VStack(spacing: 0) {
+            Kontrastflate(type: type, forgrunn: $arbeidsbenk.aktivFarge,
+                          bakgrunn: Binding(get: { bakgrunn }, set: { bakgrunnHex = Kontrastbakgrunn.tekst($0) }),
                           fargesyn: Fargesynstype(rawValue: fargesyn))
                 .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: bred ? 0 : 20, style: .continuous))
                 // Smal visning: fast høyde (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
-                .frame(height: bred ? nil : (presentasjon ? 280 : 200))
+                .frame(height: bred ? nil : (presentasjon ? 330 : 250))
                 .frame(maxHeight: bred ? .infinity : nil)
             HStack(spacing: 12) {
                 Picker("Kontrastsjekk", selection: $type) {
