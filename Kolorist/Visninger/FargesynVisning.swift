@@ -102,7 +102,7 @@ struct FargesynVurdering: View {
         }()
         return VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .lastTextBaseline, spacing: 8) {
+                HStack(alignment: .center, spacing: 8) {
                     Image(systemName: antall == 0 ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundStyle(antall == 0 ? Color.suksess : Color.feil)
                         .koloristFont(.title)
@@ -111,16 +111,23 @@ struct FargesynVurdering: View {
                         .koloristFont(.title2, weight: .bold)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
-                    Spacer(minLength: 0)
+                    Spacer(minLength: 8)
+                    // Palettvalget oppe til høyre.
+                    Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
+                        ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
                 }
                 Text(detalj).koloristFont(.subheadline).opacity(0.8).lineLimit(2)
+                    .padding(.trailing, 8)
             }
             .foregroundStyle(Color.primary)
-            .padding(.horizontal, 16)
+            .padding(.leading, 16)
+            .padding(.trailing, 8)
             .padding(.top, 14)
             .padding(.bottom, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
             // Paletten: én kolonne per farge, med navn eller hex når det er plass.
             GeometryReader { geo in
                 let bredde = geo.size.width / CGFloat(max(vist.count, 1))
@@ -142,19 +149,10 @@ struct FargesynVurdering: View {
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(String(localized: "Paletten \(valgt.navn)"))
-            HStack(spacing: 12) {
-                Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
-                    ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
-                }
-                .labelsHidden()
-                .fixedSize()
-                Spacer(minLength: 0)
-                Picker("Vis med", selection: $visTekst) {
-                    Text("Normalt syn").tag("normalt")
-                    ForEach(Fargesynstype.allCases) { Text(grad >= 1 ? $0.navn : $0.delvisNavn).tag($0.rawValue) }
-                }
-                .labelsHidden()
-                .fixedSize()
+            // Fanerad under fargefeltet: normalt syn og de fire avvikene (fulle navn når det er plass).
+            ViewThatFits(in: .horizontal) {
+                synsvalg(kort: false)
+                synsvalg(kort: true)
             }
             .padding(.horizontal, 12)
             .frame(minHeight: 48)
@@ -168,6 +166,19 @@ struct FargesynVurdering: View {
         .padding(.trailing, bred ? 0 : 16)
         .padding(.top, bred ? 16 : 4)
         .padding(.bottom, bred ? 16 : 8)
+    }
+
+    /// Faner for synet fargefeltet viser.
+    private func synsvalg(kort: Bool) -> some View {
+        Picker("Vis med", selection: $visTekst) {
+            Text(kort ? String(localized: "Normalt") : String(localized: "Normalt syn")).tag("normalt")
+            ForEach(Fargesynstype.allCases) { type in
+                Text(kort ? type.kortnavn : (grad >= 1 ? type.navn : type.delvisNavn)).tag(type.rawValue)
+            }
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+        .fixedSize(horizontal: !kort, vertical: false)
     }
 
     private func stripe(_ tittel: String, undertekst: String?, farger: [Farge], antall: Int?, kamera: (() -> Void)?) -> some View {
@@ -252,5 +263,17 @@ struct FargesynVurdering: View {
             }
         }
         .accessibilityElement(children: .combine)
+    }
+}
+
+extension Fargesynstype {
+    /// Kort navn til fanene under fargefeltet i Fargesyn.
+    var kortnavn: String {
+        switch self {
+        case .deutan: "Deutan"
+        case .protan: "Protan"
+        case .tritan: "Tritan"
+        case .akromatopsi: String(localized: "Akromat.")
+        }
     }
 }

@@ -789,6 +789,16 @@
         }
       }
     },
+    "Akromat.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achromat."
+          }
+        }
+      }
+    },
     "Aktiv farge": {
       "localizations": {
         "en": {
@@ -5905,6 +5915,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Some colours were made in an ICC profile you don’t have. The colours come along, but not the values in the profile."
+          }
+        }
+      }
+    },
+    "Normalt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
           }
         }
       }

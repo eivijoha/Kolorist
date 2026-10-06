@@ -81,7 +81,7 @@ struct SammenligningVisning: View {
             }
         }
         .formStyle(.grouped)
-        .navigationTitle("Forskjell")
+        .navigationTitle(Text(verbatim: "ΔE"))
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
