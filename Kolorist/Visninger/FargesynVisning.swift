@@ -96,13 +96,9 @@ struct FargesynVurdering: View {
         // Normalt syn: fargepar som blir vanskelige med minst ett avvik (hvert par telles én gang). Ellers bare det valgte avviket.
         let antall = vis.map { type in analyse.first { $0.0 == type }?.1.count ?? 0 }
             ?? Set(analyse.flatMap { $0.1.map { [$0.i, $0.j] } }).count
-        let detalj: String = {
-            // Avviket står i fanen under; her står utbredelsen, eller antallet per avvik med fanenes korte navn.
-            if let vis { return vis.utbredelse }
-            return analyse.map { "\($0.0.kortnavn) \($0.1.count)" }.joined(separator: " · ")
-        }()
         return VStack(spacing: 0) {
-            // Palettvalget nederst til høyre, rett over paletten det styrer (nærhet).
+            // Bare tittelen med antall vanskelige par (detaljene står lenger ned), og palettvalget nederst til høyre,
+            // rett over paletten det styrer (nærhet).
             HStack(alignment: .bottom, spacing: 8) {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(alignment: .center, spacing: 8) {
@@ -115,7 +111,6 @@ struct FargesynVurdering: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
                     }
-                    Text(detalj).koloristFont(.subheadline).opacity(0.8).lineLimit(3)
                 }
                 Spacer(minLength: 0)
                 Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
