@@ -163,35 +163,34 @@ struct Kontrastflate: View {
     private var forgrunnTittel: String { type == .lrv ? String(localized: "Flate") : String(localized: "Tekst eller grafikk") }
     private var bakgrunnTittel: String { type == .lrv ? String(localized: "Tilstøtende flate") : String(localized: "Bakgrunn") }
 
-    /// Tallet, det strengeste kravet fargen består (eller «Består ikke») og hva kravet sier.
-    private var nøkkeltall: (tall: String, vurdering: String, detalj: String) {
-        let ikke = String(localized: "Består ikke")
+    /// Tallet og det strengeste kravet fargen ikke klarer – eller, når alle bestås, det strengeste kravet – med hva kravet
+    /// sier. Kravene står strengeste først.
+    private var nøkkeltall: (tall: String, bestått: Bool, vurdering: String, detalj: String) {
+        func utdrag<K>(_ krav: [K], _ består: (K) -> Bool, navn: (K) -> String, tekst: (K) -> String) -> (Bool, String, String) {
+            if let ikke = krav.first(where: { !består($0) }) {
+                return (false, navn(ikke), String(localized: "Består ikke") + " · " + tekst(ikke))
+            }
+            return (true, navn(krav[0]), String(localized: "Består alle krav") + " · " + tekst(krav[0]))
+        }
         switch type {
         case .wcag:
             let test = Kontrasttest(forgrunn: forgrunn, bakgrunn: bakgrunn)
-            func krav(_ k: WCAGKrav) -> String {
-                String(localized: "\(k.suksesskriterium) · minst \(k.minimum, format: .number.precision(.fractionLength(1))):1")
+            let (ok, navn, detalj) = utdrag(WCAGKrav.strengestFørst, test.består, navn: \.navn) {
+                String(localized: "\($0.suksesskriterium) · minst \($0.minimum, format: .number.precision(.fractionLength(1))):1")
             }
-            if let strengest = WCAGKrav.strengestFørst.first(where: test.består) {
-                return (test.formatert, strengest.navn, krav(strengest))
-            }
-            return (test.formatert, ikke, krav(WCAGKrav.strengestFørst.last!))
+            return (test.formatert, ok, navn, detalj)
         case .apca:
             let lc = bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn))
-            let nivå = APCANivå.nådd(lc) ?? APCANivå.allCases.last!
-            return (APCANivå.formatert(lc), APCANivå.bruk(lc),
-                    String(localized: "minst Lc \(Int(nivå.rawValue))") + " · " + APCANivå.retning(lc))
+            let (ok, navn, detalj) = utdrag(APCANivå.allCases, { abs(lc) >= $0.rawValue }, navn: \.bruk) {
+                String(localized: "minst Lc \(Int($0.rawValue))")
+            }
+            return (APCANivå.formatert(lc), ok, navn, detalj + " · " + APCANivå.retning(lc))
         case .lrv:
             let k = Flatekontrast(forgrunn, bakgrunn)
             // Plukket uten referanse: kontrasten er et anslag (≈).
             let anslag = arbeidsbenk.erUkalibrert(forgrunn) || arbeidsbenk.erUkalibrert(bakgrunn) ? "≈ " : ""
-            let tall = anslag + metode.formatert(k.verdi(metode))
-            // Kravene står mildeste først.
-            if let strengest = metode.krav.reversed().first(where: k.består) {
-                return (tall, strengest.navn, "\(strengest.kilde) · \(strengest.kravtekst)")
-            }
-            let mildest = metode.krav[0]
-            return (tall, ikke, "\(mildest.kilde) · \(mildest.kravtekst)")
+            let (ok, navn, detalj) = utdrag(Array(metode.krav.reversed()), k.består, navn: \.navn) { "\($0.kilde) · \($0.kravtekst)" }
+            return (anslag + metode.formatert(k.verdi(metode)), ok, navn, detalj)
         }
     }
 
@@ -246,6 +245,9 @@ struct Kontrastflate: View {
                 Text(n.tall).koloristFont(.largeTitle, weight: .bold).monospacedDigit()
                     .fixedSize()
                     .layoutPriority(1)
+                Image(systemName: n.bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .foregroundStyle(n.bestått ? Color.suksess : Color.feil)
+                    .koloristFont(.headline)
                 Text(n.vurdering).koloristFont(.headline).lineLimit(2).minimumScaleFactor(0.8)
                 Spacer(minLength: 0)
             }

@@ -1049,6 +1049,16 @@
         }
       }
     },
+    "Består alle krav": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passes all requirements"
+          }
+        }
+      }
+    },
     "Består ikke": {
       "localizations": {
         "en": {
