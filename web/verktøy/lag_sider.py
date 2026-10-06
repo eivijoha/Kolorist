@@ -303,7 +303,9 @@ def startside(lang):
           </div>
           {img}
         </article>''')
-    bilder = skjermbilder(s, ['studio', 'overgang', 'kontrast'], ' tre').format(tekster['rull'])
+    # Plassholder: kontrastsjekken har fått ny utforming i 1.3 (stor flate, valg av WCAG, APCA eller LRV).
+    kontrast = 'kommer:' + ('Kontrast: WCAG, APCA eller LRV' if lang == 'nb' else 'Contrast: WCAG, APCA or LRV')
+    bilder = skjermbilder(s, ['studio', 'overgang', kontrast], ' tre').format(tekster['rull'])
     innhold = f'''{helt}
 
     <section class="seksjon" aria-labelledby="kort-fortalt">
@@ -413,7 +415,7 @@ def design(lang):
               'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N,
               'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N,
               'Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning' + N12,
-              'Plukk farger fra bilder og kamera – og fra hele skjermen på Mac'], 'monokrom', None),
+              'Plukk farger fra bilder og kamera – rett fra fargefeltene – og fra hele skjermen på Mac' + N], 'monokrom', None),
             ('Bygg fargesystemet', 'Toner og overganger i like perseptuelle steg, så trinnene oppleves jevne.',
              ['Toneskalaer fra 50 til 950',
               'Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell' + N12,
@@ -422,6 +424,7 @@ def design(lang):
               'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'overgang', None),
             ('Kontroller', 'Kontroller kontrast og lesbarhet, også med fargesynsavvik.',
              ['WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk',
+              'Velg kontrastsjekk – WCAG 2.2, APCA eller LRV – med tallet og vurderingen i en stor flate, der du velger tekst og bakgrunn direkte' + N,
               '«Rett opp» som justerer fargen til den består',
               'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
               'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N,
@@ -462,7 +465,7 @@ def design(lang):
           'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N,
           'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N,
           'Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension' + N12,
-          'Pick colours from photos and the camera – and from anywhere on screen on the Mac'], 'monokrom', None),
+          'Pick colours from photos and the camera – right from the colour fields – and from anywhere on screen on the Mac' + N], 'monokrom', None),
         ('Build the colour system', 'Tones and gradients in perceptually equal steps, so the steps look even.',
          ['Tone scales from 50 to 950',
           'Lighter and darker tones in equal or easing steps, with values in the chosen colour model' + N12,
@@ -471,6 +474,7 @@ def design(lang):
           'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'overgang', None),
         ('Check', 'Check contrast and legibility, including with colour vision deficiencies.',
          ['WCAG 2.2 contrast: AA and AAA, large text and graphics',
+          'Choose the contrast check – WCAG 2.2, APCA or LRV – with the figure and verdict in a large field where you pick text and background directly' + N,
           'Auto-fix that adjusts the colour until it passes',
           'Text contrast for whole palettes, right in the palette view' + N12,
           'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N,
@@ -527,10 +531,13 @@ def arkitektur(lang):
               'Farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED' + N12],
              'arkitektur-lys', ('lys.html', 'Les om lys og fargemåling')),
             ('Universell utforming', 'Kontrast mellom flater – dører, vegger, gulv og skilt – ikke bare tekst.',
-             ['Lysrefleksjonsverdi (LRV) og kontrast mellom flater etter BS 8300 og NS 11001',
+             ['Lysrefleksjonsverdi (LRV) og kontrast mellom flater, side om side i en stor flate' + N,
+              'Velg beregningsmetode: LRV-forskjell (BS 8300), Weber (TEK17, NS 11001) eller Michelson (ISO 21542) – hver med sine krav' + N,
+              'Plukk begge flatene med kameraet; uten gråkort eller referansekort merkes LRV som veiledende' + N,
               'LRV og luminanskontrast i valgt lys – også lysrør og LED' + N12,
               'WCAG-kontrast for skilt og tekst',
-              'Farger og paletter slik de oppleves med fargesynsavvik – og et kamera med fargesynsfilter for omgivelsene'], 'kontrast', None),
+              'Farger og paletter slik de oppleves med fargesynsavvik – og et kamera med fargesynsfilter for omgivelsene'],
+             'kommer:Kontrast mellom flater: to flater side om side med LRV og valgt metode', None),
             ('Mål og dokumenter', 'Lysforhold og fargevalg dokumentert, klart til å deles.',
              ['Mål fargetemperatur, belysningsstyrke (lux) og anslått fargegjengivelse med iPhone eller iPad' + N12,
               'Sammenlign med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass',
@@ -564,10 +571,13 @@ def arkitektur(lang):
           'Colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting' + N12],
          'arkitektur-lys', ('light.html', 'Read about light and colour measurement')),
         ('Universal design', 'Contrast between surfaces – doors, walls, floors and signs – not just text.',
-         ['Light reflectance value (LRV) and contrast between surfaces to BS 8300 and NS 11001',
+         ['Light reflectance value (LRV) and contrast between surfaces, side by side in a large field' + N,
+          'Choose the method: LRV difference (BS 8300), Weber (Norwegian TEK17, NS 11001) or Michelson (ISO 21542) – each with its own requirements' + N,
+          'Pick both surfaces with the camera; without a grey card or reference card the LRV is marked as indicative' + N,
           'LRV and luminance contrast in the chosen light – including fluorescent and LED' + N12,
           'WCAG contrast for signs and text',
-          'Colours and palettes as they appear with colour vision deficiencies – and a camera with a colour vision filter for your surroundings'], 'kontrast', None),
+          'Colours and palettes as they appear with colour vision deficiencies – and a camera with a colour vision filter for your surroundings'],
+         'kommer:Contrast between surfaces: two surfaces side by side with LRV and the chosen method', None),
         ('Measure and document', 'Lighting conditions and colour choices documented, ready to share.',
          ['Measure colour temperature, illuminance (lux) and estimated colour rendering with iPhone or iPad' + N12,
           'Compare with recommended levels, such as 500 lx at a workplace',
@@ -627,11 +637,12 @@ def lysside(lang):
 
 # ---------- Alle funksjoner ----------
 
-# Tilgjengelighet-kortet: 0 WCAG, 1 APCA på fargeflater, 2 APCA-lesekontrast, 3 Rett opp, 4 skriftkontrast i paletter,
-# 5 vurderinger viser grunnlaget, 6 LRV, 7 LRV i lys, 8 paletter i ulike lys, 9 ΔE2000, 10 fargesyn, 11 utbredelse, 12 kamera.
-TILG_TEKST = (0, 1, 2, 3, 4, 5, 9)
-TILG_FLATER = (6, 7, 8)
-TILG_FARGESYN = (10, 11, 12)
+# Tilgjengelighet-kortet: 0 WCAG, 1 APCA på fargeflater, 2 APCA-lesekontrast, 3 valg av kontrastsjekk, 4 Rett opp,
+# 5 skriftkontrast i paletter, 6 vurderinger viser grunnlaget, 7 LRV og metoder, 8 LRV i lys, 9 veiledende LRV fra kamera,
+# 10 paletter i ulike lys, 11 ΔE2000, 12 fargesyn, 13 utbredelse, 14 kamera.
+TILG_TEKST = (0, 1, 2, 3, 4, 5, 6, 11)
+TILG_FLATER = (7, 8, 9, 10)
+TILG_FARGESYN = (12, 13, 14)
 
 
 def funksjoner(lang):
@@ -642,7 +653,7 @@ def funksjoner(lang):
     nb = lang == 'nb'
     tilg = lier(k['Tilgjengelighet' if nb else 'Accessibility'])
     # Punktene i Tilgjengelighet-kortet på forsiden, fordelt på gruppene. Settes et punkt inn i kortet, må tallene følge med.
-    assert len(tilg) == 13, f'Tilgjengelighet-kortet har {len(tilg)} punkter – oppdater TILG_* i funksjoner()'
+    assert len(tilg) == 15, f'Tilgjengelighet-kortet har {len(tilg)} punkter – oppdater TILG_* i funksjoner()'
     lysliste = (['Se farger og hele paletter under egne og standardiserte betraktningsforhold – paletter rett i palettvisningen',
                  'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)',
                  'Mål lyset med kameraet og lagre det som betraktningsforhold – lysstyrken anslås, eller måles med et kort',
@@ -665,7 +676,8 @@ def funksjoner(lang):
     plukk = k['Plukk farger' if nb else 'Pick colours'].replace('href="#lys"', f'href="{"lys.html" if nb else "light.html"}"')
     plattform_tekst = re.search(r'<p class="lesetekst">(.*?)</p>', seksjon(s, 'funksjoner'), re.S).group(1).strip()
     mac = re.search(r'(<h3 class="skjermbilder-tittel">Mac</h3>.*?</div>)\s*$', seksjon(s, 'skjermbilder'), re.S).group(1)
-    iphone = skjermbilder(s, ['studio', 'harmoni', 'overgang', 'kontrast', 'fargesyn', 'lys']).format(
+    kontrast = 'kommer:' + ('Kontrast: WCAG, APCA eller LRV' if nb else 'Contrast: WCAG, APCA or LRV')
+    iphone = skjermbilder(s, ['studio', 'harmoni', 'overgang', kontrast, 'fargesyn', 'lys']).format(
         'Skjermbilder – rull sidelengs' if nb else 'Screenshots – scroll sideways')
 
     if nb:
