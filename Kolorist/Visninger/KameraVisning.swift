@@ -159,7 +159,7 @@ struct KameraVisning: View {
             plukker.vedFangst = { målt in
                 let farge = arbeidsbenk.begrens(målt)
                 if velg == nil { arbeidsbenk.aktivFarge = farge }
-                arbeidsbenk.registrerMåling(farge)
+                arbeidsbenk.registrerMåling(farge, ukalibrert: plukker.kompensasjon == nil)
                 // Klar for neste farge: punktet tilbake i midten (på Mac følger det pekeren).
                 if !erMac { plukker.tilbakestillMarkør() }
                 if slukkEtterFangst {

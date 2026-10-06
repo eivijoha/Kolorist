@@ -1794,6 +1794,16 @@
         }
       }
     },
+    "Et referansekort med kjente farger retter også fargestikk fra lyset.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A reference card with known colours also corrects colour casts from the light."
+          }
+        }
+      }
+    },
     "Etablert trykkteknikk; søket er utviklet for Kolorist": {
       "localizations": {
         "en": {
@@ -3017,6 +3027,16 @@
         }
       }
     },
+    "Ha et gråkort (18 %) eller hvitt kort i samme lys som flaten, og velg det under Lys før du plukker. Da regnes lysheten ut fra kortet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place a grey card (18 %) or white card in the same light as the surface, and choose it under Light before you pick. The lightness is then calculated from the card."
+          }
+        }
+      }
+    },
     "Harmoni": {
       "localizations": {
         "en": {
@@ -3673,6 +3693,16 @@
         }
       }
     },
+    "Kameraet stiller selv inn eksponering og hvitbalanse, så en flate kan bli lysere eller mørkere enn den er. LRV fra kamera eller bilde er derfor et anslag til fargen er målt mot en kjent referanse.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The camera sets exposure and white balance by itself, so a surface can come out lighter or darker than it is. LRV from the camera or an image is therefore an estimate until the colour is measured against a known reference."
+          }
+        }
+      }
+    },
     "Kamerakarakterisering": {
       "localizations": {
         "en": {
@@ -4311,12 +4341,18 @@
         }
       }
     },
-    "LRV %@": {
+    "LRV %@%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "LRV %@"
+            "value": "LRV %1$@%2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "LRV %1$@%2$@"
           }
         }
       }
@@ -4357,6 +4393,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "LRV in per cent"
+          }
+        }
+      }
+    },
+    "LRV merket ≈ er plukket med kamera eller fra bilde uten gråkort eller referansekort, og er bare veiledende: kameraets eksponering og hvitbalanse bestemmer hvor lys fargen blir. Bruk gråkort eller referansekort, eller produsentens oppgitte LRV, når kontrasten skal dokumenteres.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LRV marked ≈ was picked with the camera or from an image without a grey card or reference card, and is only indicative: the camera’s exposure and white balance decide how light the colour comes out. Use a grey card or reference card, or the manufacturer’s stated LRV, when the contrast must be documented."
           }
         }
       }
@@ -5603,6 +5649,16 @@
         }
       }
     },
+    "Mål i jevnt, mykt lys uten gjenskinn og skygger, med kameraet rett mot flaten, og mål begge flatene i samme lys.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measure in even, soft light without glare or shadows, with the camera square to the surface, and measure both surfaces in the same light."
+          }
+        }
+      }
+    },
     "Mål lyset": {
       "localizations": {
         "en": {
@@ -6747,6 +6803,16 @@
         }
       }
     },
+    "Skal kontrasten dokumenteres, bruk produsentens oppgitte LRV eller en LRV-måler.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If the contrast must be documented, use the manufacturer’s stated LRV or an LRV meter."
+          }
+        }
+      }
+    },
     "Skjul": {
       "localizations": {
         "en": {
@@ -7053,6 +7119,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete “%@”?"
+          }
+        }
+      }
+    },
+    "Slik blir LRV fra kamera mer pålitelig": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to make camera LRV more reliable"
           }
         }
       }
@@ -8191,6 +8267,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warm white LED"
+          }
+        }
+      }
+    },
+    "Veiledende – plukket uten gråkort eller referansekort": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indicative – picked without a grey card or reference card"
           }
         }
       }

@@ -367,10 +367,25 @@ final class Arbeidsbenk {
     }
 
 
-    func registrerMåling(_ farge: Farge) {
+    func registrerMåling(_ farge: Farge, ukalibrert: Bool = false) {
         målinger.append(farge)
         if målinger.count > 20 { målinger.removeFirst(målinger.count - 20) }
+        if ukalibrert {
+            let nøkkel = farge.hex(medAlfa: true)
+            ukalibrerte.removeAll { $0 == nøkkel }
+            ukalibrerte.append(nøkkel)
+            if ukalibrerte.count > 50 { ukalibrerte.removeFirst(ukalibrerte.count - 50) }
+            UserDefaults.standard.set(ukalibrerte, forKey: "ukalibrerteMålinger")
+        }
     }
+
+    /// Farger plukket med kamera eller fra bilde uten gråkort eller referansekort (hex med alfa). Lysrefleksjonsverdien
+    /// (LRV) for dem er bare veiledende: kameraets eksponering og hvitbalanse bestemmer hvor lys fargen blir. Huskes
+    /// mellom oppstarter, siden bakgrunnen i kontrastsjekken også gjør det.
+    private(set) var ukalibrerte: [String] = UserDefaults.standard.stringArray(forKey: "ukalibrerteMålinger") ?? []
+
+    /// Om fargen er plukket med kamera eller fra bilde uten referanse (se `ukalibrerte`).
+    func erUkalibrert(_ farge: Farge) -> Bool { ukalibrerte.contains(farge.hex(medAlfa: true)) }
 
     /// Åpner sammenligning; uten argumenter brukes de to siste målingene (eller aktiv farge).
     func sammenlign(_ a: Farge? = nil, _ b: Farge? = nil) {

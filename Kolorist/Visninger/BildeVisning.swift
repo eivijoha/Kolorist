@@ -277,7 +277,7 @@ struct BildeVisning: View {
             if velg == nil, let målt = gjeldende {
                 let f = arbeidsbenk.begrens(målt)
                 arbeidsbenk.aktivFarge = f
-                arbeidsbenk.registrerMåling(f)
+                arbeidsbenk.registrerMåling(f, ukalibrert: kompensasjon == nil)
             }
         case .avbrutt:
             drar = false
@@ -327,7 +327,7 @@ struct BildeVisning: View {
                     Button("Bruk") {
                         guard let målt = gjeldende else { return }
                         let f = arbeidsbenk.begrens(målt)
-                        arbeidsbenk.registrerMåling(f)
+                        arbeidsbenk.registrerMåling(f, ukalibrert: kompensasjon == nil)
                         velg(f)
                     }
                     .buttonStyle(.borderedProminent)
@@ -351,7 +351,7 @@ struct BildeVisning: View {
                 Button("Fang", systemImage: "plus.circle.fill") {
                     if let målt = gjeldende {
                         let f = arbeidsbenk.begrens(målt)
-                        arbeidsbenk.registrerMåling(f)
+                        arbeidsbenk.registrerMåling(f, ukalibrert: kompensasjon == nil)
                     }
                 }
                 .labelStyle(.iconOnly)

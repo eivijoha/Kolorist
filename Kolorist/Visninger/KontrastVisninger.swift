@@ -152,6 +152,7 @@ struct KontrastVisMedSeksjon: View {
 /// to likeverdige flater side om side (LRV), og nøkkeltallet for valgt sjekk. Fargene velges rett i flaten: trykk på prøven
 /// eller fargeknappene (tekst) eller på en av flatene (LRV). Tallene står i en lesbar farge, prøvene i fargen som testes.
 struct Kontrastflate: View {
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
     let type: Kontrasttype
     @Binding var forgrunn: Farge
     @Binding var bakgrunn: Farge
@@ -176,7 +177,9 @@ struct Kontrastflate: View {
             let bestått = Flatekrav.allCases.filter(k.består).count
             let poeng = k.lrvForskjell.formatted(.number.precision(.fractionLength(0)))
             let luminans = k.michelson.formatted(.number.precision(.fractionLength(2)))
-            return (String(localized: "\(poeng) poeng"), String(localized: "\(bestått) av \(Flatekrav.allCases.count) krav"),
+            // Plukket uten referanse: forskjellen er et anslag (≈).
+            let anslag = arbeidsbenk.erUkalibrert(forgrunn) || arbeidsbenk.erUkalibrert(bakgrunn) ? "≈ " : ""
+            return (anslag + String(localized: "\(poeng) poeng"), String(localized: "\(bestått) av \(Flatekrav.allCases.count) krav"),
                     String(localized: "Forskjell i LRV · luminanskontrast \(luminans)"))
         }
     }
@@ -250,14 +253,23 @@ struct Kontrastflate: View {
                          visHvitOgSort: Bool = false) -> some View {
         // Fargen som eget lag bak menyen, så flatene møtes i en rett kant (menyen avrunder både etiketten og
         // bakgrunner lagt på den på iOS 26).
-        ZStack {
+        ZStack(alignment: .topTrailing) {
         vist.swiftUI
         FargeVelgerMeny(tittel: tittel, farge: farge, visAktivFarge: visAktivFarge, visHvitOgSort: visHvitOgSort) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(1).minimumScaleFactor(0.8)
-                Text("LRV \(farge.wrappedValue.lrv, format: .number.precision(.fractionLength(0)))")
+                // Plukket med kamera eller fra bilde uten referanse: LRV er bare et anslag.
+                let ukalibrert = arbeidsbenk.erUkalibrert(farge.wrappedValue)
+                Text("LRV \(ukalibrert ? "≈ " : "")\(farge.wrappedValue.lrv, format: .number.precision(.fractionLength(0)))")
                     .koloristFont(.title2, weight: .bold).monospacedDigit()
                 Spacer(minLength: 4)
+                if ukalibrert {
+                    Text("Veiledende – plukket uten gråkort eller referansekort")
+                        .koloristFont(.caption2)
+                        .lineLimit(3)
+                        .minimumScaleFactor(0.8)
+                        .opacity(0.9)
+                }
                 HStack(spacing: 4) {
                     Text(farge.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
                     Image(systemName: "chevron.up.chevron.down").font(.caption2)
@@ -268,6 +280,12 @@ struct Kontrastflate: View {
             .padding(12)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .contentShape(Rectangle())
+        }
+        // ⓘ utenfor menyen (et trykk i menyens etikett åpner menyen): hvordan LRV fra kamera blir mer pålitelig.
+        if arbeidsbenk.erUkalibrert(farge.wrappedValue) {
+            LRVPålitelighetInfo()
+                .tint(vist.lesbarTekstfarge.swiftUI)
+                .padding(10)
         }
         }
     }
@@ -513,6 +531,7 @@ extension Kontrasttest: @retroactive Identifiable {
 /// Kontrast mellom flater for bygg og universell utforming: forskjell i lysrefleksjonsverdi (LRV)
 /// og luminanskontrast, slik arkitekter og NS 11001 / BS 8300 bruker det.
 struct FlatekontrastSeksjon: View {
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Binding var flate: Farge
     let bakgrunn: Farge
     /// Lysmiljøet flatene ses i (nil = dagslys, som LRV er definert for).
@@ -572,6 +591,12 @@ struct FlatekontrastSeksjon: View {
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
                 Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.")
+                if arbeidsbenk.erUkalibrert(flate) || arbeidsbenk.erUkalibrert(bakgrunn) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Label("LRV merket ≈ er plukket med kamera eller fra bilde uten gråkort eller referansekort, og er bare veiledende: kameraets eksponering og hvitbalanse bestemmer hvor lys fargen blir. Bruk gråkort eller referansekort, eller produsentens oppgitte LRV, når kontrasten skal dokumenteres.", systemImage: "exclamationmark.triangle")
+                        LRVPålitelighetInfo()
+                    }
+                }
                 if lysmiljø != nil {
                     Text("Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer under valgte betraktningsforhold – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.")
                 }
@@ -587,5 +612,19 @@ struct FlatekontrastSeksjon: View {
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// ⓘ: hvordan LRV fra kamera eller bilde blir mer pålitelig.
+struct LRVPålitelighetInfo: View {
+    var body: some View {
+        InfoKnapp(tittel: "Slik blir LRV fra kamera mer pålitelig") {
+            Text("Slik blir LRV fra kamera mer pålitelig").font(.headline)
+            Text("Kameraet stiller selv inn eksponering og hvitbalanse, så en flate kan bli lysere eller mørkere enn den er. LRV fra kamera eller bilde er derfor et anslag til fargen er målt mot en kjent referanse.")
+            Label("Ha et gråkort (18 %) eller hvitt kort i samme lys som flaten, og velg det under Lys før du plukker. Da regnes lysheten ut fra kortet.", systemImage: "square.fill")
+            Label("Et referansekort med kjente farger retter også fargestikk fra lyset.", systemImage: "square.grid.3x2")
+            Label("Mål i jevnt, mykt lys uten gjenskinn og skygger, med kameraet rett mot flaten, og mål begge flatene i samme lys.", systemImage: "sun.max")
+            Label("Skal kontrasten dokumenteres, bruk produsentens oppgitte LRV eller en LRV-måler.", systemImage: "checkmark.seal")
+        }
     }
 }
