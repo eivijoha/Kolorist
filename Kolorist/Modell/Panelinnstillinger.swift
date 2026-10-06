@@ -41,7 +41,7 @@ final class Panelinnstillinger {
             case .fargemodell: String(localized: "Fargemodell")
             case .verdier: String(localized: "Verdier")
             case .fargestyring: String(localized: "Fargestyring (ICC)")
-            case .wcag: String(localized: "Tekst og grafikk (WCAG 2.2)")
+            case .wcag: String(localized: "Tekst og grafikk (WCAG 2.2 og APCA)")
             case .lrv: String(localized: "Flater (LRV)")
             case .overgangstoner: String(localized: "Overgang")
             case .lysereMørkere: String(localized: "Lysere og mørkere toner")

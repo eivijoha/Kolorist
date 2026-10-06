@@ -703,6 +703,26 @@
         }
       }
     },
+    "APCA (WCAG 3-utkast)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APCA (WCAG 3 draft)"
+          }
+        }
+      }
+    },
+    "APCA – opplevd lesekontrast (WCAG 3-utkast)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APCA – perceived reading contrast (WCAG 3 draft)"
+          }
+        }
+      }
+    },
     "Aa": {
       "localizations": {
         "en": {
@@ -1119,6 +1139,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "User"
+          }
+        }
+      }
+    },
+    "Brødtekst (minimum)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body text (minimum)"
           }
         }
       }
@@ -1596,6 +1626,16 @@
         }
       }
     },
+    "En kontrastmodell utviklet som grunnlag for WCAG 3, som fortsatt er et utkast. Den gir lesekontrast som Lc fra omtrent −108 til 106: positiv for mørk tekst på lys bakgrunn, negativ for lys tekst på mørk. Den tar hensyn til at øyet opplever lyse og mørke farger ulikt, og følger opplevd lesbarhet bedre enn WCAG 2 – særlig for mørke og mettede farger. Hvor mye som trengs, avhenger av skriftstørrelse og vekt: Lc 90 er foretrukket og 75 minimum for brødtekst, 60 for større tekst, 45 for store overskrifter, 30 for ikke-viktig tekst og 15 for ikoner og grafikk. Kolorist viser Lc i kontrastsjekken og velger sort eller hvit tekst på fargefelt etter APCA. Regelverket for universell utforming viser fortsatt til WCAG 2, så bruk APCA som et supplement.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A contrast model developed as the basis for WCAG 3, which is still a draft. It gives reading contrast as Lc from about −108 to 106: positive for dark text on a light background, negative for light text on a dark one. It accounts for the eye perceiving light and dark colours differently, and follows perceived legibility better than WCAG 2 – especially for dark and saturated colours. How much is needed depends on font size and weight: Lc 90 is preferred and 75 the minimum for body text, 60 for larger text, 45 for large headlines, 30 for non-essential text and 15 for icons and graphics. Kolorist shows Lc in the contrast check and chooses black or white text on colour swatches by APCA. Accessibility regulations still refer to WCAG 2, so use APCA as a supplement."
+          }
+        }
+      }
+    },
     "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
       "localizations": {
         "en": {
@@ -1836,12 +1876,12 @@
         }
       }
     },
-    "Fargen testes som tekst/grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. «Vis med» simulerer et fargesynsavvik i forhåndsvisningen; WCAG-kravene gjelder alltid de faktiske fargene.": {
+    "Fargen testes som tekst/grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. «Vis med» simulerer et fargesynsavvik i forhåndsvisningen; WCAG-kravene gjelder alltid de faktiske fargene. APCA (WCAG 3-utkastet) er et supplement som følger opplevd lesbarhet bedre; regelverket viser fortsatt til WCAG 2.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The colour is tested as text/graphics against the background. “Fix” only changes lightness and keeps hue and saturation. “Show with” simulates a colour vision deficiency in the preview; the WCAG requirements always apply to the actual colours."
+            "value": "The colour is tested as text/graphics against the background. “Fix” changes only the lightness and keeps hue and saturation. “Show with” simulates a colour vision deficiency in the preview; the WCAG requirements always apply to the actual colours. APCA (the WCAG 3 draft) is a supplement that follows perceived legibility better; regulations still refer to WCAG 2."
           }
         }
       }
@@ -2381,6 +2421,16 @@
         }
       }
     },
+    "For lav til tekst og grafikk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too low for text and graphics"
+          }
+        }
+      }
+    },
     "For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart. BS 8300 ber om minst 30 poeng forskjell mellom tilstøtende flater; NS 11001 bruker luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂), minst 0,4 for viktige flater og 0,8 for skilt.": {
       "localizations": {
         "en": {
@@ -2699,6 +2749,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forget the camera profile"
+          }
+        }
+      }
+    },
+    "Godt nok for all tekst, også brødtekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enough for all text, including body text"
           }
         }
       }
@@ -3171,6 +3231,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Don’t show the colour in this light"
+          }
+        }
+      }
+    },
+    "Ikke-viktig tekst, som plassholdere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non-essential text, such as placeholders"
+          }
+        }
+      }
+    },
+    "Ikoner og grafikk, ikke tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icons and graphics, not text"
           }
         }
       }
@@ -4631,6 +4711,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loading image …"
+          }
+        }
+      }
+    },
+    "Lc %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lc %@"
           }
         }
       }
@@ -7199,6 +7289,16 @@
         }
       }
     },
+    "Store eller fete overskrifter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large or bold headlines"
+          }
+        }
+      }
+    },
     "Strekene viser hvor godt lyset er kjent:": {
       "localizations": {
         "en": {
@@ -7245,6 +7345,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stand where the colours will be used and measure the light. The camera gives the colour of the light and estimates the illuminance; with a grey or white card in the light it is measured."
+          }
+        }
+      }
+    },
+    "Større tekst, ikke brødtekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Larger text, not body text"
           }
         }
       }
@@ -7319,12 +7429,12 @@
         }
       }
     },
-    "Tekst og grafikk (WCAG 2.2)": {
+    "Tekst og grafikk (WCAG 2.2 og APCA)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Text and graphics (WCAG 2.2)"
+            "value": "Text and graphics (WCAG 2.2 and APCA)"
           }
         }
       }
@@ -8453,12 +8563,32 @@
         }
       }
     },
+    "lys tekst på mørk bakgrunn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light text on dark background"
+          }
+        }
+      }
+    },
     "målt med kameraet, lysstyrken anslått": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "measured with the camera, illuminance estimated"
+          }
+        }
+      }
+    },
+    "mørk tekst på lys bakgrunn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dark text on light background"
           }
         }
       }

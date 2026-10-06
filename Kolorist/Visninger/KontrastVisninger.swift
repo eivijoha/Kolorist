@@ -31,10 +31,11 @@ struct KontrastSeksjon: View {
             ForEach(WCAGKrav.allCases) { krav in
                 KravRad(krav: krav, test: test) { forgrunn = test.rettet(for: krav) }
             }
+            APCARad(lc: bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn)))
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Fargen testes som tekst/grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. «Vis med» simulerer et fargesynsavvik i forhåndsvisningen; WCAG-kravene gjelder alltid de faktiske fargene.")
-                MetodeHenvisning(.wcag, .oklab, .machado)
+                Text("Fargen testes som tekst/grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. «Vis med» simulerer et fargesynsavvik i forhåndsvisningen; WCAG-kravene gjelder alltid de faktiske fargene. APCA (WCAG 3-utkastet) er et supplement som følger opplevd lesbarhet bedre; regelverket viser fortsatt til WCAG 2.")
+                MetodeHenvisning(.wcag, .apca, .oklab, .machado)
             }
         }
     }
@@ -116,6 +117,45 @@ struct KontrastForhåndsvisning: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(merknad.map { String(localized: "\($0): kontrast \(test.formatert), \(test.sammendrag)") }
                             ?? String(localized: "Kontrast \(test.formatert), \(test.sammendrag)"))
+    }
+}
+
+/// APCA-lesekontrasten (Lc) for fargen som tekst på bakgrunnen, med hva den holder til etter APCAs veiledende nivåer.
+struct APCARad: View {
+    let lc: Double
+
+    private var bruk: String {
+        switch abs(lc) {
+        case 90...: String(localized: "Godt nok for all tekst, også brødtekst")
+        case 75..<90: String(localized: "Brødtekst (minimum)")
+        case 60..<75: String(localized: "Større tekst, ikke brødtekst")
+        case 45..<60: String(localized: "Store eller fete overskrifter")
+        case 30..<45: String(localized: "Ikke-viktig tekst, som plassholdere")
+        case 15..<30: String(localized: "Ikoner og grafikk, ikke tekst")
+        default: String(localized: "For lav til tekst og grafikk")
+        }
+    }
+
+    private var retning: String {
+        lc >= 0 ? String(localized: "mørk tekst på lys bakgrunn") : String(localized: "lys tekst på mørk bakgrunn")
+    }
+
+    var body: some View {
+        HStack {
+            Image(systemName: "textformat.size")
+                .foregroundStyle(Color.sekundærTekst)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 0) {
+                Text("APCA (WCAG 3-utkast)")
+                Text("\(bruk) · \(retning)")
+                    .font(.caption)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
+            Spacer()
+            Text("Lc \(lc, format: .number.precision(.fractionLength(0)))")
+                .font(.body.monospacedDigit().weight(.semibold))
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 
