@@ -64,8 +64,10 @@
     <p>The W3C requirements for contrast between text/graphics and background, computed from relative luminance. “Fix” changes only lightness (OKLCH) until the requirement is met.</p>
     <p class="dempet">Source: <a href="https://www.w3.org/TR/WCAG22/">W3C: Web Content Accessibility Guidelines 2.2, success criteria 1.4.3, 1.4.6 and 1.4.11</a></p>
 
-    <h2 id="apca">Text on colour fields (APCA)</h2>
-    <p>Whether text on the app’s own colour fields is black or white is decided with APCA lightness contrast, which follows perceived legibility better than WCAG 2 and gives white text on more mid-tones. Checking colours against the WCAG requirements is unchanged.</p>
+    <h2 id="apca">Reading contrast by APCA</h2>
+    <p>APCA (Accessible Perceptual Contrast Algorithm) was developed as the basis for contrast in WCAG 3, which is still a draft. It gives reading contrast as Lc from about −108 to 106 – positive for dark text on a light background, negative for light text on a dark one – and accounts for the eye perceiving light and dark colours differently. It follows perceived legibility better than WCAG 2, especially for dark and saturated colours.</p>
+    <p>How much is needed depends on font size and weight: Lc 90 is preferred and 75 the minimum for body text, 60 for larger text, 45 for large or bold headlines, 30 for non-essential text and 15 for icons and graphics. The contrast check shows Lc next to the WCAG requirements, with what the contrast is good for. Whether text on the app’s own colour fields is black or white is also decided with APCA, which gives white text on more mid-tones.</p>
+    <p>Accessibility regulations still refer to WCAG 2. Use APCA as a supplement; the WCAG 2.2 requirements are shown and calculated as before.</p>
     <p class="dempet">Source: <a href="https://github.com/Myndex/apca-w3">Myndex: APCA (Accessible Perceptual Contrast Algorithm) 0.0.98G-4g</a></p>
     
     <h2 id="fargesyn">Colour vision deficiency simulation</h2>

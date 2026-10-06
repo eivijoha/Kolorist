@@ -64,8 +64,10 @@
     <p>W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt.</p>
     <p class="dempet">Kilde: <a href="https://www.w3.org/TR/WCAG22/">W3C: Web Content Accessibility Guidelines 2.2, suksesskriterium 1.4.3, 1.4.6 og 1.4.11</a></p>
 
-    <h2 id="apca">Tekst på fargeflater (APCA)</h2>
-    <p>Om teksten på appens egne fargeflater skal være sort eller hvit, avgjøres med APCA-lyshetskontrast, som følger opplevd lesbarhet bedre enn WCAG 2 og gir hvit tekst på flere mellomtoner. Kontrollen av farger mot WCAG-kravene er uendret.</p>
+    <h2 id="apca">Lesekontrast etter APCA</h2>
+    <p>APCA (Accessible Perceptual Contrast Algorithm) er utviklet som grunnlag for kontrast i WCAG 3, som fortsatt er et utkast. Den gir lesekontrast som Lc fra omtrent −108 til 106 – positiv for mørk tekst på lys bakgrunn, negativ for lys tekst på mørk – og tar hensyn til at øyet opplever lyse og mørke farger ulikt. Den følger opplevd lesbarhet bedre enn WCAG 2, særlig for mørke og mettede farger.</p>
+    <p>Hvor mye som trengs, avhenger av skriftstørrelse og vekt: Lc 90 er foretrukket og 75 minimum for brødtekst, 60 for større tekst, 45 for store eller fete overskrifter, 30 for ikke-viktig tekst og 15 for ikoner og grafikk. Kontrastsjekken viser Lc ved siden av WCAG-kravene, med hva kontrasten holder til. Om teksten på appens egne fargeflater skal være sort eller hvit, avgjøres også med APCA, som gir hvit tekst på flere mellomtoner.</p>
+    <p>Regelverket for universell utforming viser fortsatt til WCAG 2. Bruk APCA som et supplement; kravene etter WCAG 2.2 vises og regnes som før.</p>
     <p class="dempet">Kilde: <a href="https://github.com/Myndex/apca-w3">Myndex: APCA (Accessible Perceptual Contrast Algorithm) 0.0.98G-4g</a></p>
     
     <h2 id="fargesyn">Simulering av fargesynsavvik</h2>

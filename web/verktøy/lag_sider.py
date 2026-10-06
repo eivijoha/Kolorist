@@ -425,12 +425,14 @@ def design(lang):
               '«Rett opp» som justerer fargen til den består',
               'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
               'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N,
+              'Lesekontrast etter APCA (Lc) ved siden av WCAG – med hva kontrasten holder til: brødtekst, overskrifter eller grafikk' + N,
               'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'skriftkontrast', None),
             ('Skjerm, trykk og 3D-print', 'Display P3 side om side med trykkprofiler, egne ICC-profiler og fargekart – og filamentfarger for 3D-print.',
              ['Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil',
               'Varsel når fargen er utenfor fargeområdet – og begrens farger til en profil om du vil',
               'Rene CMYK-verdier: grått innslag flyttes til sort, med færrest mulig trykkfarger',
               'Kildefargerom for CMYK og RGB: angi verdiene i profilen de skal brukes i' + N,
+              'CMYK i prosent, og RGB som 0–255 i sRGB – de samme tallene som i hex – og 0–1 i andre fargerom' + N,
               'Betraktningsforhold for visningen: D50 (ICC-referanse), D65 eller andre – og papirhvitt med absolutt kolorimetrisk' + N,
               'Fargekart med navngitte toner: arbeid innenfor dem, med tonenavn vist',
               'Vurder trykk og bilder under standardlys for grafisk vurdering (ISO 3664)' + N12,
@@ -472,12 +474,14 @@ def design(lang):
           'Auto-fix that adjusts the colour until it passes',
           'Text contrast for whole palettes, right in the palette view' + N12,
           'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N,
+          'Reading contrast by APCA (Lc) next to WCAG – with what the contrast is good for: body text, headlines or graphics' + N,
           'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'skriftkontrast', None),
         ('Screen, print and 3D printing', 'Display P3 side by side with print profiles, your own ICC profiles and colour libraries – and filament colours for 3D printing.',
          ['Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile',
           'A warning when the colour is out of gamut – and limit colours to a profile if you like',
           'Clean CMYK values: grey components move to black, with as few inks as possible',
           'Source colour space for CMYK and RGB: enter the values in the profile they will be used in' + N,
+          'CMYK in percent, and RGB as 0–255 in sRGB – the same numbers as in hex – and 0–1 in other colour spaces' + N,
           'Viewing light: D50 (ICC standard), D65 or a viewing condition – and paper white with absolute colorimetric' + N,
           'Colour libraries with named tones: work within them, with tone names shown',
           'Judge print and images under standard viewing conditions for graphic arts (ISO 3664)' + N12,
@@ -623,6 +627,13 @@ def lysside(lang):
 
 # ---------- Alle funksjoner ----------
 
+# Tilgjengelighet-kortet: 0 WCAG, 1 APCA på fargeflater, 2 APCA-lesekontrast, 3 Rett opp, 4 skriftkontrast i paletter,
+# 5 vurderinger viser grunnlaget, 6 LRV, 7 LRV i lys, 8 paletter i ulike lys, 9 ΔE2000, 10 fargesyn, 11 utbredelse, 12 kamera.
+TILG_TEKST = (0, 1, 2, 3, 4, 5, 9)
+TILG_FLATER = (6, 7, 8)
+TILG_FARGESYN = (10, 11, 12)
+
+
 def funksjoner(lang):
     s = kilde[lang]
     k = kort(s)
@@ -630,6 +641,8 @@ def funksjoner(lang):
     N = f'<span class="nytt">{t["nytt"]}</span>'
     nb = lang == 'nb'
     tilg = lier(k['Tilgjengelighet' if nb else 'Accessibility'])
+    # Punktene i Tilgjengelighet-kortet på forsiden, fordelt på gruppene. Settes et punkt inn i kortet, må tallene følge med.
+    assert len(tilg) == 13, f'Tilgjengelighet-kortet har {len(tilg)} punkter – oppdater TILG_* i funksjoner()'
     lysliste = (['Se farger og hele paletter under egne og standardiserte betraktningsforhold – paletter rett i palettvisningen',
                  'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)',
                  'Mål lyset med kameraet og lagre det som betraktningsforhold – lysstyrken anslås, eller måles med et kort',
@@ -669,9 +682,9 @@ def funksjoner(lang):
             ('hent', 'Hent farger', 'Hent farger', None,
              [('Plukk farger', plukk), ('Apple Intelligence på enheten', k['Apple Intelligence på enheten'])]),
             ('kontrast', 'Kontrast og fargesyn', 'Kontrast og fargesyn', None,
-             [('Tekst og grafikk (WCAG 2.2)', ul([tilg[i] for i in (0, 1, 2, 3, 7)])),
-              ('Flater og bygg (LRV)', ul([tilg[i] for i in (4, 5, 6)])),
-              ('Fargesyn', ul([tilg[i] for i in (8, 9, 10)]))]),
+             [('Tekst og grafikk (WCAG 2.2 og APCA)', ul([tilg[i] for i in TILG_TEKST])),
+              ('Flater og bygg (LRV)', ul([tilg[i] for i in TILG_FLATER])),
+              ('Fargesyn', ul([tilg[i] for i in TILG_FARGESYN]))]),
             ('lys', 'Lys og fargemåling', 'Lys', lysdel, []),
             ('levere', 'Paletter, eksport og deling', 'Paletter og eksport', None,
              [('Paletter og iCloud', k['Paletter og iCloud']), ('Eksport', k['Eksport']),
@@ -706,9 +719,9 @@ def funksjoner(lang):
             ('getting-colours', 'Getting colours', 'Getting colours', None,
              [('Pick colours', plukk), ('Apple Intelligence on device', k['Apple Intelligence on device'])]),
             ('contrast', 'Contrast and colour vision', 'Contrast and colour vision', None,
-             [('Text and graphics (WCAG 2.2)', ul([tilg[i] for i in (0, 1, 2, 3, 7)])),
-              ('Surfaces and buildings (LRV)', ul([tilg[i] for i in (4, 5, 6)])),
-              ('Colour vision', ul([tilg[i] for i in (8, 9, 10)]))]),
+             [('Text and graphics (WCAG 2.2 and APCA)', ul([tilg[i] for i in TILG_TEKST])),
+              ('Surfaces and buildings (LRV)', ul([tilg[i] for i in TILG_FLATER])),
+              ('Colour vision', ul([tilg[i] for i in TILG_FARGESYN]))]),
             ('light', 'Light and colour measurement', 'Light', lysdel, []),
             ('deliver', 'Palettes, export and sharing', 'Palettes and export', None,
              [('Palettes and iCloud', k['Palettes and iCloud']), ('Export', k['Export']),
@@ -796,7 +809,8 @@ def plattformer(lang):
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
-                 ('Kontrast (WCAG og LRV) og fargesyn', ja, ja, ja),
+                 ('Kontrast (WCAG, APCA og LRV) og fargesyn', ja, ja, ja),
+                 ('Presentasjonsmodus: større tekst og kontroller for prosjektør og skjermdeling' + N, ja, ja, ja),
                  ('Simuler farger og paletter under andre betraktningsforhold', ja, ja, ja),
                  ('Fargeflatene ved siden av verktøyene', nei, 'I liggende format', 'I bredt vindu'),
                  ('Palettene for hånden, med dra og slipp', nei, 'På store iPader', ja),
@@ -832,7 +846,8 @@ def plattformer(lang):
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
-                 ('Contrast (WCAG and LRV) and colour vision', ja, ja, ja),
+                 ('Contrast (WCAG, APCA and LRV) and colour vision', ja, ja, ja),
+                 ('Presentation mode: larger text and controls for projectors and screen sharing' + N, ja, ja, ja),
                  ('Simulate colours and palettes in other viewing conditions', ja, ja, ja),
                  ('Swatches beside the tools', nei, 'In landscape', 'In a wide window'),
                  ('Palettes at hand, with drag and drop', nei, 'On large iPads', ja),

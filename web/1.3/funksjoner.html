@@ -82,6 +82,7 @@
             <li>Rene CMYK-verdier: grått innslag flyttes til sort (UCR/GCR), med færrest mulig trykkfarger</li>
             <li>Betraktningsforhold for visningen: D50 (ICC-referanse), D65 eller et av de andre betraktningsforholdene <span class="nytt">Nytt i 1.3</span></li>
             <li>Absolutt kolorimetrisk tar med papirhvitt fra CMYK-profilen – 0/0/0/0 vises som papiret <span class="nytt">Nytt i 1.3</span></li>
+            <li>CMYK i prosent, og RGB som 0–255 i sRGB – de samme tallene som i hex – og 0–1 i andre fargerom <span class="nytt">Nytt i 1.3</span></li>
           </ul>
         </div>
         <div>
@@ -172,29 +173,31 @@
       <h2 id="kontrast-tittel">Kontrast og fargesyn</h2>
       <div class="underpunkter">
         <div>
-          <h3>Tekst og grafikk (WCAG 2.2)</h3>
+          <h3>Tekst og grafikk (WCAG 2.2 og APCA)</h3>
           <ul>
             <li>WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk</li>
             <li>Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner <span class="nytt">Nytt i 1.3</span></li>
+            <li>Lesekontrast etter APCA (Lc) ved siden av WCAG – med hva kontrasten holder til: brødtekst, overskrifter eller grafikk <span class="nytt">Nytt i 1.3</span></li>
             <li>«Rett opp» som justerer fargen til den består</li>
             <li>Skriftkontrast for hele paletter, rett i palettvisningen</li>
-            <li>Vurdering av paletter i ulike lys: farger som skifter karakter, og fargepar som blir vanskelige å skille</li>
+            <li>Vurderinger viser hva de bygger på</li>
+            <li>Forskjellen mellom to farger med ΔE2000</li>
           </ul>
         </div>
         <div>
           <h3>Flater og bygg (LRV)</h3>
           <ul>
-            <li>Vurderinger viser hva de bygger på</li>
             <li>Lysrefleksjonsverdi (LRV) og kontrast mellom flater for bygg og interiør – BS 8300 og NS 11001</li>
             <li>LRV og luminanskontrast i valgt lys – også lysrør og LED</li>
+            <li>Vurdering av paletter i ulike lys: farger som skifter karakter, og fargepar som blir vanskelige å skille</li>
           </ul>
         </div>
         <div>
           <h3>Fargesyn</h3>
           <ul>
-            <li>Forskjellen mellom to farger med ΔE2000</li>
             <li>Se paletter med protan-, deutan- og tritanavvik og akromatopsi, med valgfri alvorlighetsgrad – og hvilke farger som blir vanskelige å skille</li>
             <li>Fargesynsavvikene står etter hvor vanlige de er, med anslått utbredelse</li>
+            <li>Kamera med fargesynsfilter: se omgivelsene slik de kan oppleves med hvert avvik</li>
           </ul>
         </div>
       </div>
