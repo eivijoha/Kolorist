@@ -97,31 +97,35 @@ struct FargesynVurdering: View {
         let antall = vis.map { type in analyse.first { $0.0 == type }?.1.count ?? 0 }
             ?? Set(analyse.flatMap { $0.1.map { [$0.i, $0.j] } }).count
         let detalj: String = {
-            if let vis { return "\(grad >= 1 ? vis.navn : vis.delvisNavn) · \(vis.utbredelse)" }
-            return analyse.map { "\(grad >= 1 ? $0.0.navn : $0.0.delvisNavn) \($0.1.count)" }.joined(separator: " · ")
+            // Avviket står i fanen under; her står utbredelsen, eller antallet per avvik med fanenes korte navn.
+            if let vis { return vis.utbredelse }
+            return analyse.map { "\($0.0.kortnavn) \($0.1.count)" }.joined(separator: " · ")
         }()
         return VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .center, spacing: 8) {
-                    Image(systemName: antall == 0 ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundStyle(antall == 0 ? Color.suksess : Color.feil)
-                        .koloristFont(.title)
-                    Text(antall == 0 ? String(localized: "Ingen vanskelige par")
-                                     : (antall == 1 ? String(localized: "1 vanskelig par") : String(localized: "\(antall) vanskelige par")))
-                        .koloristFont(.title2, weight: .bold)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                    Spacer(minLength: 8)
-                    // Palettvalget oppe til høyre.
-                    Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
-                        ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
+            // Palettvalget nederst til høyre, rett over paletten det styrer (nærhet).
+            HStack(alignment: .bottom, spacing: 8) {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(alignment: .center, spacing: 8) {
+                        Image(systemName: antall == 0 ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundStyle(antall == 0 ? Color.suksess : Color.feil)
+                            .koloristFont(.title)
+                        Text(antall == 0 ? String(localized: "Ingen vanskelige par")
+                                         : (antall == 1 ? String(localized: "1 vanskelig par") : String(localized: "\(antall) vanskelige par")))
+                            .koloristFont(.title2, weight: .bold)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
-                    .labelsHidden()
-                    .fixedSize()
+                    Text(detalj).koloristFont(.subheadline).opacity(0.8).lineLimit(3)
                 }
-                Text(detalj).koloristFont(.subheadline).opacity(0.8).lineLimit(2)
-                    .padding(.trailing, 8)
+                Spacer(minLength: 0)
+                Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
+                    ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
+                }
+                .labelsHidden()
+                .fixedSize()
             }
+            // Toppen får høyden den trenger; fargefeltet tar resten.
+            .fixedSize(horizontal: false, vertical: true)
             .foregroundStyle(Color.primary)
             .padding(.leading, 16)
             .padding(.trailing, 8)
