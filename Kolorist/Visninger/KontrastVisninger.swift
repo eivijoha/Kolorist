@@ -193,10 +193,12 @@ struct Kontrastflate: View {
                     .padding(.top, 14)
                     .padding(.bottom, 10)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                // Rette kanter der flatene møtes, avrundet ytterst (som ett felt delt i to).
                 HStack(spacing: 0) {
                     lrvFelt(forgrunnTittel, farge: $forgrunn, vist: f, visAktivFarge: false)
                     lrvFelt(bakgrunnTittel, farge: $bakgrunn, vist: b, visHvitOgSort: true)
                 }
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .background(Color.kortbakgrunn)
