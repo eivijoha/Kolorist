@@ -23,15 +23,15 @@
     },
     "%@\n%@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@\n%2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
+            "value": "%1$@\n%2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
             "value": "%1$@\n%2$@"
           }
         }
@@ -3827,12 +3827,12 @@
         }
       }
     },
-    "Klassisk fargelære (Johannes Itten for RYB); D. B. Judd og G. Wyszecki: «Color in Business, Science, and Industry» (naturlig fargeorden); avbildningene er utviklet for Kolorist": {
+    "Klassisk fargelære (Johannes Itten for RYB); D. B. Judd og G. Wyszecki: «Color in Business, Science, and Industry» (naturlig fargeorden); A. Zeileis, K. Hornik, P. Murrell: «Escaping RGBland: Selecting colors for statistical graphics», Computational Statistics & Data Analysis 53(9), 2009, og D. A. Green: «A colour scheme for the display of astronomical intensity images», Bulletin of the Astronomical Society of India 39, 2011 (tonebane); avbildningene er utviklet for Kolorist": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Classical colour theory (Johannes Itten for RYB); D. B. Judd and G. Wyszecki: “Color in Business, Science, and Industry” (natural colour order); the mappings were developed for Kolorist"
+            "value": "Classical colour theory (Johannes Itten for RYB); D. B. Judd and G. Wyszecki: “Color in Business, Science, and Industry” (natural colour order); A. Zeileis, K. Hornik, P. Murrell: “Escaping RGBland: Selecting colors for statistical graphics”, Computational Statistics & Data Analysis 53(9), 2009, and D. A. Green: “A colour scheme for the display of astronomical intensity images”, Bulletin of the Astronomical Society of India 39, 2011 (tone path); the mappings were developed for Kolorist"
           }
         }
       }
@@ -3903,12 +3903,12 @@
         }
       }
     },
-    "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell, Herings motfargesirkel eller Goethes sirkel fra Farbenlehre (1810). Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB-, Hering- og Goethe-sirklene er stykkevis lineære avbildninger laget for appen. Monokromatisk harmoni holder kuløren fast og fordeler tonene jevnt langs en strek i lyshet (OKLCH) og metning, regnet som andel av høyeste kroma innenfor gamut ved hver lyshet. Tonebane gjør det samme, men gir hvert endepunkt sin kulør og fordeler også kuløren jevnt, i bue den korteste veien rundt OKLCH-sirkelen – i motsetning til overganger, som går i rett linje i OKLab og kan passere grått mellom motfarger. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.": {
+    "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell, Herings motfargesirkel eller Goethes sirkel fra Farbenlehre (1810). Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB-, Hering- og Goethe-sirklene er stykkevis lineære avbildninger laget for appen. Monokromatisk harmoni holder kuløren fast og fordeler tonene jevnt langs en strek i lyshet (OKLCH) og metning, regnet som andel av høyeste kroma innenfor gamut ved hver lyshet. Tonebane gjør det samme, men gir hvert endepunkt sin kulør og fordeler også kuløren jevnt, i bue den korteste veien rundt OKLCH-sirkelen – i motsetning til overganger, som går i rett linje i OKLab og kan passere grått mellom motfarger. Prinsippet er kjent fra sekvensielle paletter i HCL (Zeileis mfl.) og cubehelix (Green); flaten og de to kulørhåndtakene er laget for Kolorist. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distribution are calculated as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell, Hering’s opponent-colour wheel or Goethe’s wheel from his Theory of Colours (1810). With Munsell, real Munsell colours in the book’s steps are used (hue 2.5, value 1, chroma 2). The RYB, Hering and Goethe wheels are piecewise linear mappings made for the app. The monochromatic harmony keeps the hue fixed and spreads the tones evenly along a line in lightness (OKLCH) and saturation, taken as a share of the highest chroma within the gamut at each lightness. The tone path does the same, but gives each end point its own hue and spreads the hue evenly too, in an arc the shortest way around the OKLCH wheel – unlike gradients, which run in a straight line in OKLab and can pass through grey between opposite colours. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift."
+            "value": "Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distribution are calculated as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell, Hering’s opponent-colour wheel or Goethe’s wheel from his Theory of Colours (1810). With Munsell, real Munsell colours in the book’s steps are used (hue 2.5, value 1, chroma 2). The RYB, Hering and Goethe wheels are piecewise linear mappings made for the app. The monochromatic harmony keeps the hue fixed and spreads the tones evenly along a line in lightness (OKLCH) and saturation, taken as a share of the highest chroma within the gamut at each lightness. The tone path does the same, but gives each end point its own hue and spreads the hue evenly too, in an arc the shortest way around the OKLCH wheel – unlike gradients, which run in a straight line in OKLab and can pass through grey between opposite colours. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift. The principle is known from sequential palettes in HCL (Zeileis et al.) and cubehelix (Green); the field and the two hue handles were made for Kolorist."
           }
         }
       }
