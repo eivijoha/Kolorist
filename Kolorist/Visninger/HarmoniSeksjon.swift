@@ -332,11 +332,48 @@ struct HarmoniSeksjon: View {
         return h < 0 ? h + 360 : h
     }
 
+    /// Tonebane: start- og sluttkulør som to håndtak i samme kulørspor, med buen mellom dem under sporet.
+    @ViewBuilder private var tonebaneglider: some View {
+        let refA = referansefarge(okLCHKulør: startKulør), refB = referansefarge(okLCHKulør: monokromKulør)
+        let tekst: (Farge) -> String = { ref in
+            brukerMunsell ? String(Fargemodell.munsell.kortTekst(for: ref).split(separator: " ").first ?? "")
+                          : "\(Int(sirkel.vinkel(for: ref).rounded()))°"
+        }
+        // Retningen rundt sirkelen tonene går (den korteste i OKLCH), vist som retning i valgt fargesirkel: buen går
+        // den veien som passerer kuløren midt på banen.
+        let midtVinkel = sirkel.vinkel(for: referansefarge(okLCHKulør: midtkulør))
+        let va = sirkel.vinkel(for: refA), vb = sirkel.vinkel(for: refB)
+        let framover = Self.mellom(midtVinkel, fra: va, til: vb)
+        HStack(spacing: 10) {
+            Text("Kulør").lineLimit(1).frame(width: 96, alignment: .leading)
+            ToHåndtakGlider(start: Binding(get: { va }, set: { tonebaneStart = sirkel.farge(refA, vinkel: $0, gamut: gamut).okLCH.h }),
+                            slutt: Binding(get: { vb }, set: { settSluttkulør(sirkel.farge(refB, vinkel: $0, gamut: gamut).okLCH.h) }),
+                            område: 0...360,
+                            spor: (0..<36).map { sirkel.farge(refA, vinkel: Double($0) * 10, gamut: gamut).swiftUI },
+                            startfarge: refA.swiftUI, sluttfarge: refB.swiftUI,
+                            retning: framover ? 1 : -1,
+                            startTittel: Text("Kulør, start"), sluttTittel: Text("Kulør, slutt"),
+                            startTekst: tekst(refA), sluttTekst: tekst(refB),
+                            stegForTilgjengelighet: sirkel.trinn ?? 5)
+            Text("\(tekst(refA))\n\(tekst(refB))")
+                .font(.callout.monospacedDigit())
+                .foregroundStyle(Color.sekundærTekst)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 48, alignment: .trailing)
+        }
+    }
+
+    /// Om vinkelen `v` ligger på veien fra `a` til `b` mot høyere vinkler (rundt 360°).
+    private static func mellom(_ v: Double, fra a: Double, til b: Double) -> Bool {
+        let spenn = (b - a + 360).truncatingRemainder(dividingBy: 360)
+        let til = (v - a + 360).truncatingRemainder(dividingBy: 360)
+        return til <= spenn
+    }
+
     /// Kulørglider(e) (i valgt fargesirkel) og lyshet–metning-flaten med streken. Tonebane har en kulør per endepunkt.
     @ViewBuilder private var monokromKontroller: some View {
         if harmoni == .tonebane {
-            kulørglider(String(localized: "Kulør, start"), kulør: startKulør) { tonebaneStart = $0 }
-            kulørglider(String(localized: "Kulør, slutt"), kulør: monokromKulør, sett: settSluttkulør)
+            tonebaneglider
         } else {
             kulørglider(String(localized: "Kulør"), kulør: monokromKulør, sett: settSluttkulør)
         }
