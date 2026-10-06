@@ -66,6 +66,22 @@ public struct Monokromstrek: Equatable, Sendable {
         }
     }
 
+    /// Tonebane: `antall` toner fra `a` til `b` der kuløren også går fra `kulørA` til `kulørB` (OKLCH-grader), i bue den
+    /// korteste veien rundt sirkelen. Lyshet, metningsandel og kulør fordeles jevnt, så banen går gjennom alle tre
+    /// dimensjonene. Metningen er andel av høyeste kroma ved hver tones egen lyshet og kulør, som i monokrom.
+    public func toner(fraKulør kulørA: Double, tilKulør kulørB: Double, antall: Int, gamut: Gamut = .displayP3) -> [Farge] {
+        let n = max(antall, 2)
+        var d = (kulørB - kulørA).truncatingRemainder(dividingBy: 360)
+        if d > 180 { d -= 360 }
+        if d < -180 { d += 360 }
+        return (0..<n).map { i in
+            let t = Double(i) / Double(n - 1)
+            let p = Punkt(lyshet: a.lyshet + (b.lyshet - a.lyshet) * t, metning: a.metning + (b.metning - a.metning) * t)
+            let h = (kulørA + d * t).truncatingRemainder(dividingBy: 360)
+            return p.farge(kulør: h < 0 ? h + 360 : h, gamut: gamut)
+        }
+    }
+
     /// Som tekst til lagring («l1 m1 l2 m2»).
     public var tekst: String {
         [a.lyshet, a.metning, b.lyshet, b.metning].map { String(format: "%.4f", $0) }.joined(separator: " ")

@@ -977,6 +977,16 @@
         }
       }
     },
+    "Tonebane": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tone path"
+          }
+        }
+      }
+    },
     "Trapp, håndløper og farefelt, 0,8": {
       "localizations": {
         "en": {

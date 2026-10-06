@@ -6,6 +6,9 @@ import Foundation
 public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
     /// Én kulør i `antall` toner langs en strek i lyshet–metning-planet (`Monokromstrek`).
     case monokrom
+    /// Som monokrom, men hvert endepunkt har sin egen kulør: tonene går i bue rundt kulørsirkelen (OKLCH) samtidig som
+    /// lyshet og metning følger streken – en bane gjennom alle tre dimensjonene (`Monokromstrek.toner(fraKulør:tilKulør:)`).
+    case tonebane
     /// Naboer på samme side av sirkelen, med `vinkel` mellom hver.
     case analog
     /// En analog gruppe (`antall` farger, `vinkel` mellom hver) og grunnfargens komplementærfarge som aksent.
@@ -23,10 +26,10 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
     /// `antall` farger jevnt fordelt rundt sirkelen (5 = pentade …).
     case jevn
 
-    /// Harmoniene i grupper, til valglister med skillelinjer: én kulør, naboer, motsatte kulører og kulører
-    /// jevnt rundt sirkelen.
+    /// Harmoniene i grupper, til valglister med skillelinjer: toner langs en strek (én kulør, eller en bue mellom to),
+    /// naboer, motsatte kulører og kulører jevnt rundt sirkelen.
     public static let grupper: [[Harmoni]] = [
-        [.monokrom],
+        [.monokrom, .tonebane],
         [.analog, .analogMedAksent],
         [.komplementær, .splittKomplementær, .dobbeltKomplementær],
         [.triade, .kvadrat, .jevn],
@@ -45,11 +48,12 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
         case .dobbeltKomplementær: String(localized: "Dobbelt komplementær", bundle: .module)
         case .jevn: String(localized: "Jevn fordeling", bundle: .module)
         case .monokrom: String(localized: "Monokromatisk", bundle: .module)
+        case .tonebane: String(localized: "Tonebane", bundle: .module)
         }
     }
 
     /// Om harmonien bruker valgfritt antall farger (for analog med aksent: antall i den analoge gruppen).
-    public var harAntall: Bool { self == .jevn || self == .analog || self == .analogMedAksent || self == .monokrom }
+    public var harAntall: Bool { self == .jevn || self == .analog || self == .analogMedAksent || self == .monokrom || self == .tonebane }
     /// Om harmonien bruker en valgfri vinkel.
     public var harVinkel: Bool {
         self == .splittKomplementær || self == .analog || self == .analogMedAksent || self == .dobbeltKomplementær
@@ -58,7 +62,7 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
     /// Tillatt antall farger (se `harAntall`).
     public var antallOmråde: ClosedRange<Int> {
         switch self {
-        case .jevn, .monokrom: 2...12
+        case .jevn, .monokrom, .tonebane: 2...12
         case .analogMedAksent: 2...5
         default: 2...9
         }
@@ -85,7 +89,7 @@ public enum Harmoni: String, CaseIterable, Codable, Sendable, Identifiable {
         case .analog: return Self.analog(antall, v)
         case .analogMedAksent: return Self.analog(antall, v) + [180]
         // Samme kulør for alle; tonene kommer fra `Monokromstrek`.
-        case .monokrom: return Array(repeating: 0, count: max(antall, 2))
+        case .monokrom, .tonebane: return Array(repeating: 0, count: max(antall, 2))
         }
     }
 

@@ -43,4 +43,22 @@ struct MonokromTests {
         #expect(Harmoni.monokrom.harAntall && !Harmoni.monokrom.harVinkel)
         #expect(Harmoni.monokrom.forskyvninger(antall: 5) == [0, 0, 0, 0, 0])
     }
+
+    /// Tonebane: kuløren går i bue den korteste veien (her over 0°), og lyshet og metning følger streken som i monokrom.
+    @Test func tonebaneGårIBue() {
+        let strek = Monokromstrek(a: .init(lyshet: 0.8, metning: 0.4), b: .init(lyshet: 0.45, metning: 0.9))
+        let toner = strek.toner(fraKulør: 330, tilKulør: 30, antall: 5, gamut: .sRGB)
+        #expect(toner.count == 5)
+        let kulører = toner.map(\.okLCH.h)
+        // 330 → 345 → 0 → 15 → 30 (gamut-kartlegging kan flytte kuløren et par grader).
+        for (h, mål) in zip(kulører, [330.0, 345, 0, 15, 30]) {
+            var d = abs(h - mål).truncatingRemainder(dividingBy: 360); if d > 180 { d = 360 - d }
+            #expect(d < 3, "kulør \(h), forventet \(mål)")
+        }
+        #expect(abs(toner[0].okLCH.l - 0.8) < 0.01 && abs(toner[4].okLCH.l - 0.45) < 0.01)
+        // Samme kulør i begge ender gir samme toner som monokrom.
+        let lik = strek.toner(fraKulør: 200, tilKulør: 200, antall: 4, gamut: .sRGB)
+        #expect(zip(lik, strek.toner(kulør: 200, antall: 4, gamut: .sRGB)).allSatisfy { $0.avstandOK(til: $1) < 1e-9 })
+        #expect(Harmoni.grupper[0] == [.monokrom, .tonebane])
+    }
 }

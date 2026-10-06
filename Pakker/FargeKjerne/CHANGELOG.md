@@ -2,6 +2,12 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
+## Ikke publisert
+
+- `Harmoni.tonebane` (i første gruppe sammen med `.monokrom`) og `Monokromstrek.toner(fraKulør:tilKulør:antall:gamut:)`:
+  toner langs streken i lyshet–metning-planet der kuløren også går fra start- til sluttkulør, i bue den korteste veien
+  rundt OKLCH-sirkelen. Brytende for uttømmende `switch` på `Harmoni`.
+
 ## 0.3.0 – 2026-10-06
 
 - **Rettet: luminanskontrast etter norsk praksis.** `Flatekrav.luminans04`/`.luminans08` regnes nå med Weber,
