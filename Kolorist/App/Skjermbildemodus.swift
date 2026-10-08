@@ -20,6 +20,15 @@ enum Skjermbildemodus {
         palett.farger = farger.map { PalettFarge(farge: $0, opphav: .manuell) }
         try? kontekst.save()
         UserDefaults.standard.set(palett.id.uuidString, forKey: "vurderingPalett")
+        // `-eksempeldesignsystem YES`: et lagret designsystem fra paletten, med info som egen rolle (`-visDesignsystem YES`
+        // åpner det i Paletter).
+        if UserDefaults.standard.bool(forKey: "eksempeldesignsystem"),
+           ((try? kontekst.fetchCount(FetchDescriptor<DesignsystemDokument>())) ?? 0) == 0 {
+            var ds = Designsystem(fra: palett.palett)
+            ds.egneRoller = [.info]
+            kontekst.insert(DesignsystemDokument(ds, palettID: palett.id))
+            try? kontekst.save()
+        }
         // `-testmaalinger YES`: noen plukkede farger, som om de kom fra kamera og bilder.
         if UserDefaults.standard.bool(forKey: "testmaalinger") {
             for hex in ["#C4553B", "#E8B04A", "#3F7D5A", "#2E5E8C", "#D9CBB4"] { Arbeidsbenk.delt.registrerMåling(Farge(hex: hex)!) }

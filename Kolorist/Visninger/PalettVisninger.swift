@@ -16,6 +16,7 @@ struct PalettListe: View {
     @Query(sort: \PalettDokument.opprettet, order: .reverse) private var paletter: [PalettDokument]
     @Query(sort: \LagretFarge.opprettet, order: .reverse) private var enkeltfarger: [LagretFarge]
     @Query(sort: \PalettGruppe.opprettet) private var grupper: [PalettGruppe]
+    @Query(sort: \DesignsystemDokument.opprettet, order: .reverse) private var designsystemer: [DesignsystemDokument]
     /// Navigasjonssti: oversikten fyller hele hovedvisningen (også på Mac og iPad), valgt palett åpnes over.
     @State private var sti: [Valg] = []
     @State private var målrettet: Valg?
@@ -352,6 +353,12 @@ struct PalettListe: View {
             #if DEBUG
             // Test: `-lagreSomTest` åpner «Lagre som» for første palett.
             .task { if UserDefaults.standard.bool(forKey: "lagreSomTest") { lagresSom = paletter.first } }
+            // Skjermbilder: `-visDesignsystem YES` åpner det første designsystemet.
+            .task(id: designsystemer.count) {
+                if UserDefaults.standard.bool(forKey: "visDesignsystem"), sti.isEmpty, let d = designsystemer.first {
+                    åpneDesignsystem(d)
+                }
+            }
             #endif
             .sheet(item: $lagresGruppe) { g in
                 LagreSomArk(innhold: .gruppe(navn: g.navn, paletter: ordnet(paletter.filter { $0.gruppeID == g.id })))

@@ -102,7 +102,7 @@ def side(lang, fil, tittel, beskrivelse, innhold, karusell=False):
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="{p}assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="{p}assets/stil.css?v=6">
+  <link rel="stylesheet" href="{p}assets/stil.css?v=7">
   <link rel="canonical" href="{egen}">
   <link rel="alternate" hreflang="nb" href="{nburl}">
   <link rel="alternate" hreflang="en" href="{enurl}">
@@ -182,6 +182,20 @@ NYE_BILDER.update({
     ('nb', 'del-web-filament'): ('En delt filamentpalett i nettleseren på iPad, med lenke til hver prøve hos FilamentColors.xyz', 'Filament i nettleseren'),
     ('en', 'del-web-filament'): ('A shared filament palette in the browser on iPad, with a link to each sample at FilamentColors.xyz', 'Filament in the browser'),
 })
+NYE_BILDER.update({
+    ('nb', 'kontrast'): ('Kontrastsjekk etter WCAG 2.2: blå tekst på hvitt, 4,07:1 med kryss for Tekst AA, tekst og bakgrunn valgt rett i fargeflaten', 'Kontrast: WCAG, APCA eller LRV'),
+    ('en', 'kontrast'): ('Contrast check by WCAG 2.2: blue text on white, 4.07:1 with a cross for Text AA, text and background chosen right in the colour field', 'Contrast: WCAG, APCA or LRV'),
+    ('nb', 'flatekontrast'): ('Kontrast mellom flater: en teglrød flate og en hvit flate side om side, LRV 20 og 100, luminanskontrast 0,80 etter Weber, og kravene fra TEK17 og NS 11001', 'Kontrast mellom flater (LRV)'),
+    ('en', 'flatekontrast'): ('Contrast between surfaces: a brick-red and a white surface side by side, LRV 20 and 100, luminance contrast 0.80 by Weber, and the requirements', 'Contrast between surfaces (LRV)'),
+    ('nb', 'designsystem'): ('Designsystem fra en palett: knapper, felt, bryter, varsler og fanelinje i lys modus, og «Alle fargepar holder kravet»', 'Designsystem: komponenter'),
+    ('en', 'designsystem'): ('Design system from a palette: buttons, fields, switch, alerts and tab bar in light mode, and “All colour pairs meet the requirement”', 'Design system: components'),
+    ('nb', 'toneskala'): ('Toneskala med lik kontrast: elleve trinn av en blågrå farge, med WCAG-forhold og APCA mot hvit og sort tekst for hvert trinn', 'Toneskala med kontrast per trinn'),
+    ('en', 'toneskala'): ('Tone scale with consistent contrast: eleven steps of a blue-grey colour, with WCAG ratio and APCA against white and black text for each step', 'Tone scale with contrast per step'),
+    ('nb', 'fargefelt'): ('Fargemenyen på et fargefelt i kontrastsjekken: lagrede farger eller kjent verdi, plukk med kamera eller fra bilde, lim inn', 'Plukk farge fra et fargefelt'),
+    ('en', 'fargefelt'): ('The colour menu on a colour field in the contrast check: saved colours or known value, pick with camera or from image, paste', 'Pick a colour from a colour field'),
+    ('nb', 'presentasjon'): ('Studio i presentasjonsmodus: større tekst og kontroller for prosjektør og skjermdeling', 'Presentasjonsmodus'),
+    ('en', 'presentasjon'): ('Studio in presentation mode: larger text and controls for projectors and screen sharing', 'Presentation mode'),
+})
 # Bilder med annen sti eller størrelse enn iPhone-skjermbildene.
 NYE_STIER = {'del-web-filament': ('ipad/skjermbilde-del-web-filament.png', 1032, 1376)}
 NYE_ALT = {
@@ -255,6 +269,16 @@ def startside(lang):
                    ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG, APCA og LRV, og farger slik de ser ut med fargesynsavvik.'),
                    ('Farger i ulikt lys', 'Simuler farger under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
                    ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
+            oppgaver_tittel='Dette kan du gjøre',
+            oppgaver=[('design.html#finn-fargene', 'Lag en palett', 'Fra et ord, et bilde eller en farge du allerede har.'),
+                      ('design.html#bygg-fargesystemet', 'Bygg toneskalaer med lik kontrast', 'Trinnene holder de samme kontrastkravene for alle kulører.'),
+                      ('design.html#bygg-fargesystemet', 'Gjør paletten om til et designsystem', 'Med farger for lys og mørk modus, og filer til apputvikling, Figma og nettet.'),
+                      ('design.html#kontroller', 'Sjekk kontrasten på tekst og knapper', 'Etter WCAG, APCA eller LRV – og rett opp farger som ikke holder kravet.'),
+                      ('funksjoner.html#kontrast', 'Se fargene med fargesynsavvik', 'Og finn fargepar som blir vanskelige å skille.'),
+                      ('arkitektur.html', 'Velg farger til vegger, gulv og dører', 'Med nok kontrast mellom flatene for universell utforming.'),
+                      ('lys.html', 'Se fargene i lyset der de skal brukes', 'Og kompenser farger du plukker for lyset de ble fotografert i.'),
+                      ('filament.html', 'Finn filament til 3D-print', 'Den nærmeste fargen blant over 2 200 filamenter, de fleste målt.'),
+                      ('design.html#lever', 'Få fargene ut', 'I designprogrammer, trykk og kode – eller del dem som lenke.')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter for skjerm og trykk – rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
                    ('arkitektur.html', 'Arkitektur', 'Hent farger fra rommet, angi dem i Munsell, se dem under andre betraktningsforhold og kontroller kontrasten mellom flater.', 'Kolorist for arkitektur og interiør', 'arkitektur-lys')],
@@ -274,6 +298,16 @@ def startside(lang):
                    ('Contrast and colour vision', 'Contrast for text and surfaces by WCAG, APCA and LRV, and colours as they appear with colour vision deficiencies.'),
                    ('Colours in different light', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
                    ('One app – one or more devices', 'The same app on iPhone, iPad and Mac. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
+            oppgaver_tittel='What you can do',
+            oppgaver=[('design.html#find-the-colours', 'Make a palette', 'From a word, a photo or a colour you already have.'),
+                      ('design.html#build-the-colour-system', 'Build tone scales with consistent contrast', 'The steps meet the same contrast requirements for every hue.'),
+                      ('design.html#build-the-colour-system', 'Turn a palette into a design system', 'With colours for light and dark mode, and files for app development, Figma and the web.'),
+                      ('design.html#check', 'Check the contrast of text and buttons', 'By WCAG, APCA or LRV – and fix colours that fall short.'),
+                      ('features.html#contrast', 'See colours with colour vision deficiencies', 'And find colour pairs that become hard to tell apart.'),
+                      ('architecture.html', 'Choose colours for walls, floors and doors', 'With enough contrast between surfaces for universal design.'),
+                      ('light.html', 'See colours in the light where they will be used', 'And compensate colours you pick for the light they were photographed in.'),
+                      ('filament.html', 'Find filament for 3D printing', 'The nearest colour among more than 2,200 filaments, most of them measured.'),
+                      ('design.html#deliver', 'Get your colours out', 'Into design apps, print and code – or share them as a link.')],
             fagfelt='Two fields',
             dører=[('design.html', 'Design', 'Palettes, tone scales and gradients for screen and print – straight into your design tools.', 'Kolorist for design', 'harmoni'),
                    ('architecture.html', 'Architecture', 'Take colours from the room, specify them in Munsell, see them in other viewing conditions and check the contrast between surfaces.', 'Kolorist for architecture and interiors', 'arkitektur-lys')],
@@ -291,6 +325,12 @@ def startside(lang):
           <h3>{tt}</h3>
           <p>{tx}</p>
         </li>''' for tt, tx in tekster['poeng'])
+    oppgaver = '\n'.join(f'''        <li>
+          <a href="{href}">
+            <h3>{tt}</h3>
+            <p>{tx}</p>
+          </a>
+        </li>''' for href, tt, tx in tekster['oppgaver'])
     dører = []
     for href, tt, tx, videre, b in tekster['dører']:
         img, _ = iphonebilde(s, b)
@@ -304,15 +344,20 @@ def startside(lang):
           {img}
         </article>''')
     # Plassholder: kontrastsjekken har fått ny utforming i 1.3 (stor flate, valg av WCAG, APCA eller LRV).
-    kontrast = 'kommer:' + ('Kontrast: WCAG, APCA eller LRV' if lang == 'nb' else 'Contrast: WCAG, APCA or LRV')
-    designsystem = 'kommer:' + ('Designsystem: komponenter i lys og mørk modus' if lang == 'nb' else 'Design system: components in light and dark mode')
-    bilder = skjermbilder(s, ['studio', designsystem, kontrast], ' tre').format(tekster['rull'])
+    bilder = skjermbilder(s, ['studio', 'designsystem', 'kontrast'], ' tre').format(tekster['rull'])
     innhold = f'''{helt}
 
     <section class="seksjon" aria-labelledby="kort-fortalt">
       <h2 id="kort-fortalt">{tekster['kort']}</h2>
       <ul class="poeng">
 {poeng}
+      </ul>
+    </section>
+
+    <section class="seksjon" aria-labelledby="oppgaver">
+      <h2 id="oppgaver">{tekster['oppgaver_tittel']}</h2>
+      <ul class="oppgaver">
+{oppgaver}
       </ul>
     </section>
 
@@ -425,7 +470,7 @@ def design(lang):
               'Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell' + N12,
               'Overganger i OKLab, med lysere og mørkere rader',
               'Dra på lyshetsstigen for å gjøre hele rekken lysere eller mørkere' + N12,
-              'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'kommer:Toneskala med kontrast per trinn', None),
+              'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'toneskala', None),
             ('Kontroller', 'Kontroller kontrast og lesbarhet, også med fargesynsavvik.',
              ['WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk',
               'Kontrastsjekk etter WCAG 2.2, APCA eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N,
@@ -434,7 +479,7 @@ def design(lang):
               'Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG' + N,
               'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N,
               'Lesekontrast etter APCA (Lc), med hva kontrasten holder til: brødtekst, overskrifter eller grafikk' + N,
-              'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'kommer:Komponenter med kontrast per fargepar', None),
+              'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'designsystem', None),
             ('Skjerm, trykk og 3D-print', 'Display P3 side om side med trykkprofiler, egne ICC-profiler og fargekart – og filamentfarger for 3D-print.',
              ['Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil',
               'Varsel når fargen er utenfor fargeområdet – og begrens farger til en profil om du vil',
@@ -480,7 +525,7 @@ def design(lang):
           'Lighter and darker tones in equal or easing steps, with values in the chosen colour model' + N12,
           'Gradients in OKLab, with lighter and darker rows',
           'Drag on the lightness ladder to make the whole row lighter or darker' + N12,
-          'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'kommer:Tone scale with contrast per step', None),
+          'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'toneskala', None),
         ('Check', 'Check contrast and legibility, including with colour vision deficiencies.',
          ['WCAG 2.2 contrast: AA and AAA, large text and graphics',
           'Contrast check by WCAG 2.2, APCA or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N,
@@ -489,7 +534,7 @@ def design(lang):
           'Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement' + N,
           'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N,
           'Reading contrast by APCA (Lc), with what the contrast is good for: body text, headlines or graphics' + N,
-          'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'kommer:Components with contrast per colour pair', None),
+          'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'designsystem', None),
         ('Screen, print and 3D printing', 'Display P3 side by side with print profiles, your own ICC profiles and colour libraries – and filament colours for 3D printing.',
          ['Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile',
           'A warning when the colour is out of gamut – and limit colours to a profile if you like',
@@ -548,7 +593,7 @@ def arkitektur(lang):
               'LRV og luminanskontrast i valgt lys – også lysrør og LED' + N12,
               'WCAG-kontrast for skilt og tekst',
               'Farger og paletter slik de oppleves med fargesynsavvik – og et kamera med fargesynsfilter for omgivelsene'],
-             'kommer:Kontrast mellom flater: to flater side om side med LRV og valgt metode', None),
+             'flatekontrast', None),
             ('Mål og dokumenter', 'Dokumenter lysforhold og fargevalg, og del dem.',
              ['Mål fargetemperatur, belysningsstyrke (lux) og anslått fargegjengivelse med iPhone eller iPad' + N12,
               'Sammenlign med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass',
@@ -588,7 +633,7 @@ def arkitektur(lang):
           'LRV and luminance contrast in the chosen light – including fluorescent and LED' + N12,
           'WCAG contrast for signs and text',
           'Colours and palettes as they appear with colour vision deficiencies – and a camera with a colour vision filter for your surroundings'],
-         'kommer:Contrast between surfaces: two surfaces side by side with LRV and the chosen method', None),
+         'flatekontrast', None),
         ('Measure and document', 'Document lighting conditions and colour choices, and share them.',
          ['Measure colour temperature, illuminance (lux) and estimated colour rendering with iPhone or iPad' + N12,
           'Compare with recommended levels, such as 500 lx at a workplace',
@@ -687,8 +732,7 @@ def funksjoner(lang):
     plukk = k['Plukk farger' if nb else 'Pick colours'].replace('href="#lys"', f'href="{"lys.html" if nb else "light.html"}"')
     plattform_tekst = re.search(r'<p class="lesetekst">(.*?)</p>', seksjon(s, 'funksjoner'), re.S).group(1).strip()
     mac = re.search(r'(<h3 class="skjermbilder-tittel">Mac</h3>.*?</div>)\s*$', seksjon(s, 'skjermbilder'), re.S).group(1)
-    kontrast = 'kommer:' + ('Kontrast: WCAG, APCA eller LRV' if nb else 'Contrast: WCAG, APCA or LRV')
-    iphone = skjermbilder(s, ['studio', 'harmoni', 'overgang', kontrast, 'fargesyn', 'lys']).format(
+    iphone = skjermbilder(s, ['studio', 'harmoni', 'overgang', 'kontrast', 'fargesyn', 'lys']).format(
         'Skjermbilder – rull sidelengs' if nb else 'Screenshots – scroll sideways')
 
     if nb:
@@ -798,6 +842,10 @@ def funksjoner(lang):
 
 # ---------- Plattformer ----------
 
+# Mac-skjermbilder som mangler for 1.3 (kontrast i kildesiden er fra 1.2).
+MAC_KOMMER = {'kontrast', 'fargefelt', 'presentasjon', 'designsystem'}
+
+
 def macbilde(s, navn):
     return re.search(r'<img src="[^"]*assets/(?:en/)?mac/skjermbilde-' + navn + r'\.png[^"]*"[^>]*>', s).group(0)
 
@@ -830,8 +878,8 @@ def plattformer(lang):
         side_intro = 'Samme verktøy, tilpasset skjermen.'
         # None: skjermbildene er ikke tatt ennå (plassholder for hver plattform).
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmoni'), ('overgang', 'Overgang'),
-                     (None, 'Kontrast: WCAG, APCA eller LRV'), (None, 'Plukk farge fra et fargefelt'),
-                     (None, 'Presentasjonsmodus'), (None, 'Designsystem: komponenter')]
+                     ('kontrast', 'Kontrast: WCAG, APCA eller LRV'), ('fargefelt', 'Plukk farge fra et fargefelt'),
+                     ('presentasjon', 'Presentasjonsmodus'), ('designsystem', 'Designsystem: komponenter')]
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
@@ -870,8 +918,8 @@ def plattformer(lang):
         side_tittel = 'Side by side'
         side_intro = 'The same tools, fitted to the screen.'
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'),
-                     (None, 'Contrast: WCAG, APCA or LRV'), (None, 'Pick a colour from a colour field'),
-                     (None, 'Presentation mode'), (None, 'Design system: components')]
+                     ('kontrast', 'Contrast: WCAG, APCA or LRV'), ('fargefelt', 'Pick a colour from a colour field'),
+                     ('presentasjon', 'Presentation mode'), ('designsystem', 'Design system: components')]
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
@@ -907,10 +955,13 @@ def plattformer(lang):
             id_ = re.sub(r'[^a-z0-9]+', '-', vis.lower().translate(str.maketrans('æøå', 'eoa'))).strip('-')
         else:
             iph, _ = iphonebilde(s, navn)
-            mac = macbilde(s, navn)
             iph = re.sub(r'alt="[^"]*"', f'alt="{vis} – iPhone"', iph)
-            mac = re.sub(r'alt="[^"]*"', f'alt="{vis} – Mac"', mac)
-            ipad = f'<img src="{ipadmappe}/skjermbilde-{navn}.png?v=6" alt="{vis} – iPad" width="1032" height="1376" loading="lazy">'
+            # Mac-bilder som ikke er tatt for 1.3 ennå (eller viser 1.2-utformingen), står som plassholder.
+            if navn in MAC_KOMMER:
+                mac = f'<div class="ramme">{kommer}</div>'
+            else:
+                mac = re.sub(r'alt="[^"]*"', f'alt="{vis} – Mac"', macbilde(s, navn))
+            ipad = f'<img src="{ipadmappe}/skjermbilde-{navn}.png?v=8" alt="{vis} – iPad" width="1032" height="1376" loading="lazy">'
             id_ = navn
         rader_vis.append(f"""      <section class="sammenligning" aria-labelledby="vis-{id_}">
         <h3 id="vis-{id_}">{vis}</h3>
@@ -1113,7 +1164,7 @@ for lang, mappe in (('nb', ''), ('en', 'en/')):
         h = open(sti).read()
         h = re.sub(r'<nav class="hovednav".*?</nav>', hovednav(lang, fil), h, count=1, flags=re.S)
         h = re.sub(r'<nav aria-label="(Bunnmeny|Footer menu)">.*?</nav>', bunnnav(lang, fil), h, count=1, flags=re.S)
-        h = re.sub(r'stil\.css\?v=\d+', 'stil.css?v=6', h)
+        h = re.sub(r'stil\.css\?v=\d+', 'stil.css?v=7', h)
         h = h.replace('index.html#lys', 'lys.html' if lang == 'nb' else 'light.html')
         open(sti, 'w').write(h)
 
