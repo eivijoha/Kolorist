@@ -137,3 +137,46 @@ struct DesignsystemAvsenderTests {
         }
     }
 }
+
+@Suite("Designsystem i Display P3")
+struct DesignsystemP3Tests {
+    private func kontrast(_ a: Farge, _ b: Farge) -> Double {
+        let ya = max(a.luminans, 0), yb = max(b.luminans, 0)
+        return (max(ya, yb) + 0.05) / (min(ya, yb) + 0.05)
+    }
+
+    /// P3-temaene holder kravene med kontrast regnet av den faktiske luminansen (uten klipping til sRGB).
+    @Test(arguments: [25.0, 145, 200, 330])
+    func p3HolderKravene(kulør: Double) {
+        let grunn = Farge(okLCH: OKLCH(l: 0.62, c: 0.3, h: kulør)).gamutKartlagt(til: .displayP3)
+        let ds = Designsystem(fra: Palett(navn: "T", farger: [PalettFarge(farge: grunn)]), gamut: .displayP3)
+        for modus in Designmodus.allCases {
+            for tilstand in Komponenttilstand.allCases {
+                for s in ds.tema(modus, gamut: .displayP3).sjekker(tilstand) {
+                    if let m = s.krav.minimum { #expect(kontrast(s.forgrunn, s.bakgrunn) >= m, "\(modus) \(tilstand) \(s.par)") }
+                }
+            }
+        }
+    }
+
+    @Test func cssMedP3OgReserve() {
+        let grønn = Farge(okLCH: OKLCH(l: 0.62, c: 0.28, h: 145)).gamutKartlagt(til: .displayP3)
+        #expect(!grønn.erInnenfor(.sRGB))
+        let ds = Designsystem(navn: "P3", roller: [.aksent: grønn, .sekundær: grønn], lysTekst: Farge(hex: "#FAFAFA")!, mørkTekst: Farge(hex: "#141414")!)
+        let css = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "P3")["p3.css"]!, as: UTF8.self)
+        #expect(css.contains("--accent: light-dark(#"))
+        #expect(css.contains("@supports (color: color(display-p3 0 0 0))"))
+        #expect(css.contains("@media (color-gamut: p3)"))
+        #expect(css.contains("--accent: light-dark(color(display-p3 "))
+        // Nøytralene er like i begge og står bare i sRGB-delen.
+        #expect(!css.contains("--surface: light-dark(color(display-p3"))
+    }
+
+    /// En merkefarge i sRGB står bare i sRGB-delen; statusfargene (standard) og nøytralene står der de skiller seg.
+    @Test func merkefargeISRGBUtenP3() {
+        let ds = Designsystem(fra: Palett(navn: "Grå", farger: [PalettFarge(farge: Farge(hex: "#336699")!)]))
+        let css = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "Grå")["gra.css"]!, as: UTF8.self)
+        #expect(!css.contains("--accent: light-dark(color(display-p3"))
+        #expect(!css.contains("--text: light-dark(color(display-p3"))
+    }
+}

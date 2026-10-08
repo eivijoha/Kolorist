@@ -2779,12 +2779,12 @@
         }
       }
     },
-    "Filene legges i mappa «%@». Fargene er i sRGB, som nettet og Figma bruker, og som kontrasten regnes i.": {
+    "Filene legges i mappa «%@», med en README som forklarer systemet og bruken. Fargene er i sRGB, som alle skjermer og Figma forstår. CSS-fila har i tillegg Display P3 der fargene går utenfor sRGB.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The files go in the folder “%@”. The colours are in sRGB, which the web and Figma use and which contrast is calculated in."
+            "value": "The files go in the folder “%@”, with a README that explains the system and how to use it. The colours are in sRGB, which every screen and Figma understand. The CSS file also has Display P3 where the colours go beyond sRGB."
           }
         }
       }
@@ -5989,12 +5989,12 @@
         }
       }
     },
-    "Lys og mørk med light-dark(); økt kontrast med prefers-contrast.": {
+    "Lys og mørk med light-dark(), økt kontrast med prefers-contrast, og Display P3 med sRGB som reserve.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Light and dark with light-dark(); increased contrast with prefers-contrast."
+            "value": "Light and dark with light-dark(), increased contrast with prefers-contrast, and Display P3 with sRGB as fallback."
           }
         }
       }

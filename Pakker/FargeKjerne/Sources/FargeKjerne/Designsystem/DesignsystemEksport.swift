@@ -56,7 +56,8 @@ public enum DesignsystemEksport {
         if formater.contains(.designTokens) { ut.merge(designTokens(ds, temaer, avsender: avsender)) { $1 } }
         if formater.contains(.figma) { ut.merge(figma(temaer, avsender: avsender)) { $1 } }
         if formater.contains(.css) {
-            ut["\(Identifikator.kebab(navn, reserve: "designsystem")).css"] = Data(css(temaer, navn: navn, avsender: avsender).utf8)
+            let p3 = Designmodus.allCases.map { ds.tema($0, gamut: .displayP3) }
+            ut["\(Identifikator.kebab(navn, reserve: "designsystem")).css"] = Data(css(temaer, p3: p3, navn: navn, avsender: avsender).utf8)
         }
         if !formater.isEmpty {
             ut["README.md"] = Data(readme(ds, temaer, formater: formater, navn: navn, dato: dato, avsender: avsender).utf8)
@@ -198,16 +199,20 @@ public enum DesignsystemEksport {
 
     // MARK: CSS
 
-    static func css(_ temaer: [Designtema], navn: String, avsender: Avsender) -> String {
-        func tema(_ m: Designmodus) -> Designtema? { temaer.first { $0.modus == m } }
-        guard let lys = tema(.lys), let mørk = tema(.mørk), let lysØK = tema(.lysØktKontrast), let mørkØK = tema(.mørkØktKontrast)
+    /// `p3`: temaene utledet mot Display P3 (samme L* som i sRGB, så kontrasten er den samme). Fargene som går merkbart
+    /// utenfor sRGB, skrives i en egen blokk bak `@supports (color: color(display-p3 …))` og `@media (color-gamut: p3)`;
+    /// nettlesere og skjermer uten P3 bruker sRGB-verdiene over.
+    static func css(_ temaer: [Designtema], p3: [Designtema] = [], navn: String, avsender: Avsender) -> String {
+        func tema(_ m: Designmodus, _ liste: [Designtema]) -> Designtema? { liste.first { $0.modus == m } }
+        guard let lys = tema(.lys, temaer), let mørk = tema(.mørk, temaer), let lysØK = tema(.lysØktKontrast, temaer),
+              let mørkØK = tema(.mørkØktKontrast, temaer)
         else { return "" }
         func linjer(_ a: Designtema, _ b: Designtema, innrykk: String) -> String {
             zip(a.tokens, b.tokens).map { x, y in
                 "\(innrykk)--\(x.navn): light-dark(\(x.farge.hex()), \(y.farge.hex()));"
             }.joined(separator: "\n")
         }
-        return """
+        var tekst = """
         /* \(navn) – designsystem fra \(avsender.tekst).
            Lys og mørk modus med light-dark(); økt kontrast med prefers-contrast. Sett color-scheme: light eller dark på
            et element for å låse modusen der. */
@@ -223,6 +228,54 @@ public enum DesignsystemEksport {
         }
 
         """
+        if let p3Lys = tema(.lys, p3), let p3Mørk = tema(.mørk, p3), let p3LysØK = tema(.lysØktKontrast, p3),
+           let p3MørkØK = tema(.mørkØktKontrast, p3) {
+            let par = [(lys, p3Lys), (mørk, p3Mørk), (lysØK, p3LysØK), (mørkØK, p3MørkØK)]
+            // Tokenene der minst én modus har en P3-farge som skiller seg fra sRGB-fargen. Samme sett i begge blokkene,
+            // så P3-blokken uten økt kontrast aldri overstyrer sRGB-verdiene for økt kontrast.
+            let med = lys.tokens.indices.filter { i in
+                par.contains { s, p in Self.skillerSegIP3(sRGB: s.tokens[i].farge, p3: p.tokens[i].farge) }
+            }
+            if !med.isEmpty {
+                func p3Linjer(_ a: Designtema, _ b: Designtema, innrykk: String) -> String {
+                    med.map { i in
+                        "\(innrykk)--\(a.tokens[i].navn): light-dark(\(Self.cssP3(a.tokens[i].farge)), \(Self.cssP3(b.tokens[i].farge)));"
+                    }.joined(separator: "\n")
+                }
+                tekst += """
+
+                /* Display P3 for skjermer og nettlesere som støtter det. Samme lyshet (L*) som sRGB-verdiene over, så
+                   kontrasten er den samme. */
+                @supports (color: color(display-p3 0 0 0)) {
+                  @media (color-gamut: p3) {
+                    :root {
+                \(p3Linjer(p3Lys, p3Mørk, innrykk: "      "))
+                    }
+                  }
+                  @media (color-gamut: p3) and (prefers-contrast: more) {
+                    :root {
+                \(p3Linjer(p3LysØK, p3MørkØK, innrykk: "      "))
+                    }
+                  }
+                }
+
+                """
+            }
+        }
+        return tekst
+    }
+
+    /// P3-fargen ligger utenfor sRGB og er merkbart forskjellig fra sRGB-varianten (OKLab-avstand over 0,004).
+    static func skillerSegIP3(sRGB: Farge, p3: Farge) -> Bool {
+        guard !p3.erInnenfor(.sRGB) else { return false }
+        let a = sRGB.okLab, b = p3.okLab
+        return ((a.l - b.l) * (a.l - b.l) + (a.a - b.a) * (a.a - b.a) + (a.b - b.b) * (a.b - b.b)).squareRoot() > 0.004
+    }
+
+    static func cssP3(_ f: Farge) -> String {
+        let v = f.gamutKartlagt(til: .displayP3).displayP3
+        func k(_ x: Double) -> String { String(format: "%.4f", min(max(x, 0), 1)) }
+        return "color(display-p3 \(k(v.r)) \(k(v.g)) \(k(v.b)))"
     }
 
     // MARK: Hjelp

@@ -16,6 +16,9 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
   farger per modus med bruk, kontrollen av kontrasten med eventuelle avvik, skalaer og bruk av hver fil).
   `DesignsystemEksport.Avsender` (app, lenke, utvikler) skrives inn i alle filene: README, CSS-kommentar, `$description` og
   `$extensions` i tokenfilene, `description` i resolver.json og `author` i asset catalog.
+- CSS-eksporten av designsystemet har Display P3 der fargene går merkbart utenfor sRGB (`tema(_:gamut: .displayP3)`, samme
+  L* som sRGB, så kontrasten er den samme), i en blokk bak `@supports (color: color(display-p3 0 0 0))` og
+  `@media (color-gamut: p3)`. sRGB-verdiene står foran som reserve.
 
 - **Skriftfarger i paletter:** `Palett.tekstfarger` (valgfritt, kodes bare når det finnes; eldre data leses) og
   `PalettFarge.tekstfarge: UUID?` (valgt skriftfarge, `nil` = automatisk). `Skriftfarger.beste(for:blant:)` velger den som

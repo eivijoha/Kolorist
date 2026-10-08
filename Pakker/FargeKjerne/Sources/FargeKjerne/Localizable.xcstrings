@@ -287,6 +287,16 @@
         }
       }
     },
+    "CSS-fila har i tillegg Display P3 der fargene går utenfor sRGB.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CSS file also has Display P3 where the colours go beyond sRGB."
+          }
+        }
+      }
+    },
     "CSS-variabler (.css)": {
       "localizations": {
         "en": {
@@ -417,12 +427,12 @@
         }
       }
     },
-    "Fargene er i sRGB, som nettet og Figma bruker, og som WCAG-kontrasten regnes i.": {
+    "Fargene er i sRGB, som alle skjermer og Figma forstår, og som WCAG-kontrasten regnes i.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The colours are in sRGB, which the web and Figma use and which WCAG contrast is calculated in."
+            "value": "The colours are in sRGB, which every screen and Figma understand and which WCAG contrast is calculated in."
           }
         }
       }
@@ -989,32 +999,32 @@
     },
     "Laget med %@ av %@, %@, fra en palett.": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Laget med %1$@ av %2$@, %3$@, fra en palett."
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Made with %1$@ by %2$@, %3$@, from a palette."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Laget med %1$@ av %2$@, %3$@, fra en palett."
           }
         }
       }
     },
     "Laget med %@, %@, fra en palett.": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Laget med %1$@, %2$@, fra en palett."
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Made with %1$@, %2$@, from a palette."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Laget med %1$@, %2$@, fra en palett."
           }
         }
       }
@@ -1245,6 +1255,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Natural"
+          }
+        }
+      }
+    },
+    "Når fargene går utenfor sRGB, står de også i Display P3 nederst i fila, bak `@supports (color: color(display-p3 0 0 0))` og `@media (color-gamut: p3)`. Nettlesere og skjermer uten P3 bruker sRGB-verdiene. P3-fargene har samme lyshet (L*) som sRGB-fargene, så kontrasten er den samme.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where the colours go beyond sRGB, they are also given in Display P3 at the end of the file, behind `@supports (color: color(display-p3 0 0 0))` and `@media (color-gamut: p3)`. Browsers and screens without P3 use the sRGB values. The P3 colours have the same lightness (L*) as the sRGB colours, so the contrast is the same."
           }
         }
       }
@@ -1531,16 +1551,16 @@
     },
     "Skriftfarger: lys `%@` (tekst i mørk modus) og mørk `%@` (tekst i lys modus).": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Skriftfarger: lys `%1$@` (tekst i mørk modus) og mørk `%2$@` (tekst i lys modus)."
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Text colours: light `%1$@` (text in dark mode) and dark `%2$@` (text in light mode)."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Skriftfarger: lys `%1$@` (tekst i mørk modus) og mørk `%2$@` (tekst i lys modus)."
           }
         }
       }
@@ -1977,16 +1997,16 @@
     },
     "krav %@:1, WCAG %@": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "krav %1$@:1, WCAG %2$@"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "requirement %1$@:1, WCAG %2$@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "krav %1$@:1, WCAG %2$@"
           }
         }
       }

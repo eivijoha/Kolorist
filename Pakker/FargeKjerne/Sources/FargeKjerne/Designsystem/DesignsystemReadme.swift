@@ -18,7 +18,10 @@ extension DesignsystemEksport {
         } else {
             l.append(String(localized: "Laget med \(app), \(dag), fra en palett.", bundle: .module))
         }
-        l.append(t("Fargene er i sRGB, som nettet og Figma bruker, og som WCAG-kontrasten regnes i."))
+        l.append(t("Fargene er i sRGB, som alle skjermer og Figma forstår, og som WCAG-kontrasten regnes i."))
+        if formater.contains(.css) {
+            l.append(t("CSS-fila har i tillegg Display P3 der fargene går utenfor sRGB."))
+        }
         l.append("")
 
         // Roller
@@ -137,6 +140,8 @@ extension DesignsystemEksport {
             l.append("```")
             l.append("")
             l.append(t("Sett `color-scheme: light` eller `color-scheme: dark` på et element for å låse modusen der."))
+            l.append("")
+            l.append(t("Når fargene går utenfor sRGB, står de også i Display P3 nederst i fila, bak `@supports (color: color(display-p3 0 0 0))` og `@media (color-gamut: p3)`. Nettlesere og skjermer uten P3 bruker sRGB-verdiene. P3-fargene har samme lyshet (L*) som sRGB-fargene, så kontrasten er den samme."))
             l.append("")
         }
         l.append("## \(t("Gode råd"))")

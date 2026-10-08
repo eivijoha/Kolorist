@@ -766,7 +766,7 @@ extension DesignsystemEksport.Format {
         case .xcode: "Ett fargesett per farge, med lys, mørk og økt kontrast. Dra mappa inn i Xcode-prosjektet."
         case .designTokens: "Skalaer og farger som primitiver, én fil per modus med alias, og resolver.json."
         case .figma: "Dra filene inn i Variables-panelet. Hver fil blir en modus."
-        case .css: "Lys og mørk med light-dark(); økt kontrast med prefers-contrast."
+        case .css: "Lys og mørk med light-dark(), økt kontrast med prefers-contrast, og Display P3 med sRGB som reserve."
         }
     }
 }
@@ -806,7 +806,7 @@ struct DesignsystemEksportArk: View {
                         }
                     }
                 } footer: {
-                    Text("Filene legges i mappa «\(mappenavn)». Fargene er i sRGB, som nettet og Figma bruker, og som kontrasten regnes i.")
+                    Text("Filene legges i mappa «\(mappenavn)», med en README som forklarer systemet og bruken. Fargene er i sRGB, som alle skjermer og Figma forstår. CSS-fila har i tillegg Display P3 der fargene går utenfor sRGB.")
                 }
             }
             .formStyle(.grouped)
