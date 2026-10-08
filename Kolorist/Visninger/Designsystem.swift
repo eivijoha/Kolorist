@@ -8,9 +8,19 @@ import AppKit
 // Designsystem fra en palett (fra 1.3): roller, skalaer, komponenter med kontrollpunkter, og eksport. Valgfritt – inngangen
 // er «Lag designsystem» i palettens meny, og seksjonen i Paletter vises bare når det finnes designsystemer.
 
+/// Åpner et designsystem i palettlistens navigasjon. Alltid lik ved sammenligning: handlingen er den samme hver gang
+/// (den legger til i palettlistens sti), så visningene som leser den, tegnes ikke på nytt for en ny closure.
+struct ÅpneDesignsystem: Equatable {
+    let åpne: (DesignsystemDokument) -> Void
+
+    func callAsFunction(_ d: DesignsystemDokument) { åpne(d) }
+
+    static func == (_: ÅpneDesignsystem, _: ÅpneDesignsystem) -> Bool { true }
+}
+
 extension EnvironmentValues {
-    /// Åpner et designsystem i palettlistens navigasjon (satt av `PalettListe`).
-    @Entry var åpneDesignsystem: ((DesignsystemDokument) -> Void)? = nil
+    /// Satt av `PalettListe`.
+    @Entry var åpneDesignsystem: ÅpneDesignsystem? = nil
 }
 
 /// Et nytt designsystem fra en palett (rollene fordeles automatisk). Det lagres ikke: visningen er en forhåndsvisning til

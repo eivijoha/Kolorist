@@ -438,7 +438,7 @@ struct PalettListe: View {
                     }
                 }
                 .environment(\.iPalettkolonne, iKolonne)
-                .environment(\.åpneDesignsystem) { d in sti.append(.designsystem(d)) }
+                .environment(\.åpneDesignsystem, ÅpneDesignsystem { d in sti.append(.designsystem(d)) })
                 // Vinduets egen tilbakepil (fra kolonnens navigasjon) skjules; knappen over brukes i stedet.
                 .navigationBarBackButtonHidden(iKolonne)
                 // I palettkolonnen på Mac vises ingen navigasjonslinje med tilbakeknapp; lag en selv.
