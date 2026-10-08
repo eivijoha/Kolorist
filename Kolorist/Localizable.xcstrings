@@ -59,13 +59,13 @@
     },
     "%@ %@ · Lc %lld": {
       "localizations": {
-        "nb": {
+        "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ %2$@ · Lc %3$lld"
           }
         },
-        "en": {
+        "nb": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ %2$@ · Lc %3$lld"
@@ -157,6 +157,16 @@
           "stringUnit": {
             "state": "new",
             "value": "%1$@ K, Duv %2$@"
+          }
+        }
+      }
+    },
+    "%@ designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ design system"
           }
         }
       }
@@ -601,6 +611,16 @@
         }
       }
     },
+    "%lld fargepar holder ikke kravet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld colour pairs fail the requirement"
+          }
+        }
+      }
+    },
     "%lld farger": {
       "localizations": {
         "en": {
@@ -851,12 +871,42 @@
         }
       }
     },
+    "Advarsel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warning"
+          }
+        }
+      }
+    },
+    "Advarsler: gul flate med mørk tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warnings: yellow surface with dark text"
+          }
+        }
+      }
+    },
     "Akromat.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Achromat."
+          }
+        }
+      }
+    },
+    "Aksent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accent"
           }
         }
       }
@@ -877,6 +927,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "All colour pairs"
+          }
+        }
+      }
+    },
+    "Alle fargepar holder kravet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All colour pairs meet the requirement"
           }
         }
       }
@@ -1051,6 +1111,16 @@
         }
       }
     },
+    "Bakgrunn, flater, tekst, kanter og skillelinjer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Background, surfaces, text, borders and separators"
+          }
+        }
+      }
+    },
     "Bare lysets farge er kjent": {
       "localizations": {
         "en": {
@@ -1067,6 +1137,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Limit colours to %@"
+          }
+        }
+      }
+    },
+    "Bekreftelse": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmation"
+          }
+        }
+      }
+    },
+    "Bekreftelser": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmations"
           }
         }
       }
@@ -1291,6 +1381,26 @@
         }
       }
     },
+    "Bryter som er på": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch that is on"
+          }
+        }
+      }
+    },
+    "Brytere som er på": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switches that are on"
+          }
+        }
+      }
+    },
     "Brødtekst (minimum)": {
       "localizations": {
         "en": {
@@ -1474,6 +1584,16 @@
         }
       }
     },
+    "CSS med light-dark()": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSS with light-dark()"
+          }
+        }
+      }
+    },
     "D50 (ICC-referanse)": {
       "localizations": {
         "en": {
@@ -1530,6 +1650,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Date"
+          }
+        }
+      }
+    },
+    "Deaktivert": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disabled"
           }
         }
       }
@@ -1654,6 +1784,26 @@
         }
       }
     },
+    "Design tokens (DTCG) med alias og resolver": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design tokens (DTCG) with aliases and resolver"
+          }
+        }
+      }
+    },
+    "Designsystemer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design systems"
+          }
+        }
+      }
+    },
     "Detaljer": {
       "localizations": {
         "en": {
@@ -1680,6 +1830,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dominant"
+          }
+        }
+      }
+    },
+    "Dra filene inn i Variables-panelet. Hver fil blir en modus.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag the files into the Variables panel. Each file becomes a mode."
           }
         }
       }
@@ -1784,12 +1944,52 @@
         }
       }
     },
+    "Eksempel på komponenter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Example components"
+          }
+        }
+      }
+    },
     "Eksisterende paletter": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Existing palettes"
+          }
+        }
+      }
+    },
+    "Eksporter designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export design system"
+          }
+        }
+      }
+    },
+    "Eksporter designsystemet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export the design system"
+          }
+        }
+      }
+    },
+    "Eksporter …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export …"
           }
         }
       }
@@ -1884,12 +2084,32 @@
         }
       }
     },
+    "Endre rolle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change role"
+          }
+        }
+      }
+    },
     "Endre skriftfarge": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Change text colour"
+          }
+        }
+      }
+    },
+    "Endringene er lagret": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your changes are saved"
           }
         }
       }
@@ -1930,6 +2150,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Established print technique; the search was developed for Kolorist"
+          }
+        }
+      }
+    },
+    "Ett fargesett per farge, med lys, mørk og økt kontrast. Dra mappa inn i Xcode-prosjektet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One color set per colour, with light, dark and increased contrast. Drag the folder into your Xcode project."
           }
         }
       }
@@ -2320,6 +2550,36 @@
         }
       }
     },
+    "Feil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
+        }
+      }
+    },
+    "Feilmelding": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error message"
+          }
+        }
+      }
+    },
+    "Feilmeldinger og slettehandlinger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error messages and delete actions"
+          }
+        }
+      }
+    },
     "Felles grått innslag i C, M og Y flyttes til sort, og Kolorist søker etter separasjonen med færrest trykkfarger som holder seg innenfor 1 ΔE00 av profilens egen separasjon.": {
       "localizations": {
         "en": {
@@ -2366,6 +2626,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Figma"
+          }
+        }
+      }
+    },
+    "Figma-variabler (én fil per modus)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Figma variables (one file per mode)"
           }
         }
       }
@@ -2505,6 +2775,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The files are stored on this device (iCloud Drive is not available)."
+          }
+        }
+      }
+    },
+    "Filene legges i mappa «%@». Fargene er i sRGB, som nettet og Figma bruker, og som kontrasten regnes i.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files go in the folder “%@”. The colours are in sRGB, which the web and Figma use and which contrast is calculated in."
           }
         }
       }
@@ -2669,6 +2949,26 @@
         }
       }
     },
+    "Fokus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus"
+          }
+        }
+      }
+    },
+    "Fokusring": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus ring"
+          }
+        }
+      }
+    },
     "For lav til tekst og grafikk": {
       "localizations": {
         "en": {
@@ -2685,6 +2985,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "For walls, floors, doors and handrails: the light reflectance value (LRV) is the share of light the surface reflects, as on paint charts."
+          }
+        }
+      }
+    },
+    "Fordel rollene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assign roles"
+          }
+        }
+      }
+    },
+    "Fordel rollene på nytt fra «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reassign roles from “%@”"
           }
         }
       }
@@ -2841,6 +3161,16 @@
         }
       }
     },
+    "Fra «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From “%@”"
+          }
+        }
+      }
+    },
     "Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i fargesynsvurderingen, i fargeflaten i kontrastsjekken og i kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.": {
       "localizations": {
         "en": {
@@ -2917,6 +3247,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name …"
+          }
+        }
+      }
+    },
+    "Gi nytt navn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
           }
         }
       }
@@ -3307,6 +3647,26 @@
         }
       }
     },
+    "Hjelpetekst på bakgrunnen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Helper text on the background"
+          }
+        }
+      }
+    },
+    "Hjem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        }
+      }
+    },
     "Hjørne %lld": {
       "localizations": {
         "en": {
@@ -3323,6 +3683,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skip"
+          }
+        }
+      }
+    },
+    "Hovedknapp, lenker, valgt fane og fokusring": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary button, links, selected tab and focus ring"
           }
         }
       }
@@ -3823,6 +4193,16 @@
         }
       }
     },
+    "Innstillinger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
     "Installert på denne Macen": {
       "localizations": {
         "en": {
@@ -3929,6 +4309,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Camera characterisation with a reference card"
+          }
+        }
+      }
+    },
+    "Kant på tekstfelt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text field border"
+          }
+        }
+      }
+    },
+    "Kari": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kari"
           }
         }
       }
@@ -4075,6 +4475,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distribution are calculated as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell, Hering’s opponent-colour wheel or Goethe’s wheel from his Theory of Colours (1810). With Munsell, real Munsell colours in the book’s steps are used (hue 2.5, value 1, chroma 2). The RYB, Hering and Goethe wheels are piecewise linear mappings made for the app. The monochromatic harmony keeps the hue fixed and spreads the tones evenly along a line in lightness (OKLCH) and saturation, taken as a share of the highest chroma within the gamut at each lightness. The tone path does the same, but gives each end point its own hue and spreads the hue evenly too, in an arc around the OKLCH wheel in the direction and as far as the user chooses, up to a full turn – unlike gradients, which run in a straight line in OKLab and can pass through grey between opposite colours. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift. The principle is known from sequential palettes in HCL (Zeileis et al.) and cubehelix (Green); the field and the two hue handles were made for Kolorist."
+          }
+        }
+      }
+    },
+    "Komponenter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Components"
+          }
+        }
+      }
+    },
+    "Konto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
           }
         }
       }
@@ -4431,6 +4851,16 @@
         }
       }
     },
+    "Kravene er fra WCAG 2 (AA). 1.4.3 gjelder tekst og finnes i WCAG 2.0 og nyere. 1.4.11 gjelder kanter og kontroller og kom i WCAG 2.1. Offentlig sektor i Norge skal følge WCAG 2.1. For private virksomheter er kravet WCAG 2.0, uten 1.4.11. Deaktiverte kontroller er unntatt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The requirements are from WCAG 2 (AA). 1.4.3 covers text and is in WCAG 2.0 and later. 1.4.11 covers borders and controls and was added in WCAG 2.1. Check which version applies where you work. Disabled controls are exempt."
+          }
+        }
+      }
+    },
     "Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer under valgte betraktningsforhold – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.": {
       "localizations": {
         "en": {
@@ -4697,12 +5127,32 @@
         }
       }
     },
+    "Lag designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make design system"
+          }
+        }
+      }
+    },
     "Lag en palett først, så kan den vurderes her.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Create a palette first, then it can be critiqued here."
+          }
+        }
+      }
+    },
+    "Lag et designsystem med roller, komponenter og eksport fra paletten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make a design system with roles, components and export from the palette"
           }
         }
       }
@@ -5129,6 +5579,16 @@
         }
       }
     },
+    "Lagringsplassen er snart full": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage is almost full"
+          }
+        }
+      }
+    },
     "Lagt sammen": {
       "localizations": {
         "en": {
@@ -5319,6 +5779,16 @@
         }
       }
     },
+    "Lenke på bakgrunnen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link on the background"
+          }
+        }
+      }
+    },
     "Lenken er laget med en nyere versjon av Kolorist. Noe kan mangle.": {
       "localizations": {
         "en": {
@@ -5345,6 +5815,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Read the source"
+          }
+        }
+      }
+    },
+    "Les mer om personvern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read more about privacy"
           }
         }
       }
@@ -5425,6 +5905,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Light"
+          }
+        }
+      }
+    },
+    "Lys og mørk med light-dark(); økt kontrast med prefers-contrast.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light and dark with light-dark(); increased contrast with prefers-contrast."
+          }
+        }
+      }
+    },
+    "Lys tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light text"
+          }
+        }
+      }
+    },
+    "Lys+": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light+"
           }
         }
       }
@@ -6079,6 +6589,36 @@
         }
       }
     },
+    "Mørk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark"
+          }
+        }
+      }
+    },
+    "Mørk tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark text"
+          }
+        }
+      }
+    },
+    "Mørk+": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark+"
+          }
+        }
+      }
+    },
     "Mørkere: %lld steg": {
       "localizations": {
         "en": {
@@ -6141,6 +6681,16 @@
         }
       }
     },
+    "Navnet mangler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name is missing"
+          }
+        }
+      }
+    },
     "Nesten like": {
       "localizations": {
         "en": {
@@ -6167,6 +6717,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Some colours were made in an ICC profile you don’t have. The colours come along, but not the values in the profile."
+          }
+        }
+      }
+    },
+    "Normal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
           }
         }
       }
@@ -6317,6 +6877,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Accuracy"
+          }
+        }
+      }
+    },
+    "Nøytral": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neutral"
           }
         }
       }
@@ -6583,6 +7153,16 @@
         }
       }
     },
+    "Paletten det ble laget fra, beholdes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The palette it was made from is kept."
+          }
+        }
+      }
+    },
     "Paletten er komponert etter harmoniprinsippet, med lik valør eller lik metning i hovedfargene. Teksten har minst 7:1 kontrast mot bakgrunnen, og hovedfargene minst 3:1 der kuløren tillater det. Tallet ved hver farge er kontrasten mot bakgrunnen.": {
       "localizations": {
         "en": {
@@ -6699,6 +7279,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Place the corners again"
+          }
+        }
+      }
+    },
+    "Plassholder i tekstfelt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placeholder in text field"
           }
         }
       }
@@ -6943,6 +7533,16 @@
         }
       }
     },
+    "Roller": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roles"
+          }
+        }
+      }
+    },
     "Roter": {
       "localizations": {
         "en": {
@@ -7043,6 +7643,16 @@
         }
       }
     },
+    "Sekundær": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secondary"
+          }
+        }
+      }
+    },
     "Send": {
       "localizations": {
         "en": {
@@ -7125,6 +7735,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "If the contrast must be documented, use the manufacturer’s stated LRV or an LRV meter."
+          }
+        }
+      }
+    },
+    "Skalaer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scales"
+          }
+        }
+      }
+    },
+    "Skalaer og farger som primitiver, én fil per modus med alias, og resolver.json.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scales and colours as primitives, one file per mode with aliases, and resolver.json."
           }
         }
       }
@@ -7399,6 +8029,16 @@
         }
       }
     },
+    "Slett designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete design system"
+          }
+        }
+      }
+    },
     "Slett farge": {
       "localizations": {
         "en": {
@@ -7435,6 +8075,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete Group …"
+          }
+        }
+      }
+    },
+    "Slett konto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete account"
           }
         }
       }
@@ -7489,6 +8139,26 @@
         }
       }
     },
+    "Slette designsystemet «%@»?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the design system “%@”?"
+          }
+        }
+      }
+    },
+    "Slette designsystemet?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the design system?"
+          }
+        }
+      }
+    },
     "Slette gruppen «%@»?": {
       "localizations": {
         "en": {
@@ -7505,6 +8175,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete “%@”?"
+          }
+        }
+      }
+    },
+    "Slettehandling på bakgrunnen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete action on the background"
           }
         }
       }
@@ -7959,6 +8639,16 @@
         }
       }
     },
+    "Suksess": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Success"
+          }
+        }
+      }
+    },
     "Svakheter": {
       "localizations": {
         "en": {
@@ -7985,6 +8675,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "System"
+          }
+        }
+      }
+    },
+    "Søk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
           }
         }
       }
@@ -8049,6 +8749,26 @@
         }
       }
     },
+    "Tekst i lys modus og på lyse flater": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text in light mode and on light surfaces"
+          }
+        }
+      }
+    },
+    "Tekst i mørk modus og på mørke flater": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text in dark mode and on dark surfaces"
+          }
+        }
+      }
+    },
     "Tekst og grafikk (WCAG 2.2)": {
       "localizations": {
         "en": {
@@ -8065,6 +8785,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text and graphics by WCAG 2.2 (contrast ratio)"
+          }
+        }
+      }
+    },
+    "Tekst på flate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text on surface"
+          }
+        }
+      }
+    },
+    "Tekst på hovedknapp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text on primary button"
+          }
+        }
+      }
+    },
+    "Tekst på sekundærknapp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text on secondary button"
           }
         }
       }
@@ -8229,6 +8979,16 @@
         }
       }
     },
+    "Tilstand": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "State"
+          }
+        }
+      }
+    },
     "Tilstøtende flate": {
       "localizations": {
         "en": {
@@ -8299,6 +9059,16 @@
         }
       }
     },
+    "Trinnene har samme lyshet (L*) i alle roller, så kontrasten er lik: 400 holder minst 3:1 og 600 minst 4,5:1 mot hvitt. Skalaene følger med i design tokens.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The steps have the same lightness (L*) in every role, so the contrast is the same: 400 holds at least 3:1 and 600 at least 4.5:1 against white. The scales are included in the design tokens."
+          }
+        }
+      }
+    },
     "Trinnvis (harde overganger, %lld bånd)": {
       "localizations": {
         "en": {
@@ -8341,6 +9111,16 @@
         }
       }
     },
+    "Trykk på en farge for å bytte den. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a colour to change it. Your brand colour is used unchanged in each mode where it meets the requirements; otherwise it keeps its hue at the lightness needed. Light+ and Dark+ are increased contrast."
+          }
+        }
+      }
+    },
     "Trykk på en rute for kontrasten mot alle kravene og forslag til en farge som består.": {
       "localizations": {
         "en": {
@@ -8367,6 +9147,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tap the card in the image. The card must be in the light you are measuring, without shadow or glare."
+          }
+        }
+      }
+    },
+    "Trykket": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pressed"
           }
         }
       }
@@ -8447,6 +9237,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Below 4000 K the light is treated as incandescent (blackbody), above as daylight. Fluorescent and LED lights have uneven spectra that can change some colours more than the colour temperature suggests."
+          }
+        }
+      }
+    },
+    "Unntatt (deaktivert)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exempt (disabled)"
           }
         }
       }
@@ -8677,6 +9477,26 @@
         }
       }
     },
+    "Varsler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        }
+      }
+    },
+    "Varsler vises også på låseskjermen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications also appear on the Lock Screen."
+          }
+        }
+      }
+    },
     "Velg": {
       "localizations": {
         "en": {
@@ -8793,6 +9613,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a camera. With iPhone as the camera (Continuity), the colours can be compensated for the light with a grey card or reference card."
+          }
+        }
+      }
+    },
+    "Velg mappa designsystemet skal lagres i.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the folder to save the design system in."
           }
         }
       }
@@ -9193,6 +10023,16 @@
         }
       }
     },
+    "Xcode: fargesett (asset catalog)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xcode: color sets (asset catalog)"
+          }
+        }
+      }
+    },
     "bare lysets farge": {
       "localizations": {
         "en": {
@@ -9485,6 +10325,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "One hue in several tones. Drag the end points in the field – lightness vertically, saturation horizontally – and the tones spread evenly along the line. Tap a tone to make it active. Saturation runs from grey to as saturated as the hue can be at each lightness."
+          }
+        }
+      }
+    },
+    "Økt kontrast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Increased contrast"
+          }
+        }
+      }
+    },
+    "Økt kontrast (tilgjengelighetsinnstillingen)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Increased contrast (the accessibility setting)"
           }
         }
       }

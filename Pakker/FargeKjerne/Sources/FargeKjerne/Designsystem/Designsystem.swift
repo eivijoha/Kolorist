@@ -359,7 +359,7 @@ public enum Komponentkrav: Sendable, Hashable {
 
 /// Fargeparene i komponentvisningen som kontrolleres.
 public enum Komponentpar: String, CaseIterable, Sendable, Identifiable {
-    case tekst, sekundærtekst, plassholder, lenke, knappetekst, tonetKnapp, feltkant, bryter, fokusring
+    case tekst, sekundærtekst, plassholder, lenke, destruktiv, knappetekst, tonetKnapp, feltkant, bryter, fokusring
     case feilvarsel, suksessvarsel, advarselvarsel
     public var id: String { rawValue }
 }
@@ -390,6 +390,8 @@ public extension Designtema {
             av ? Komponentsjekk(par: .plassholder, forgrunn: deaktivertTekst, bakgrunn: flate, krav: .unntatt)
                : Komponentsjekk(par: .plassholder, forgrunn: plassholder, bakgrunn: flate, krav: .tekst),
             Komponentsjekk(par: .lenke, forgrunn: aksent, bakgrunn: bakgrunn, krav: .tekst),
+            av ? Komponentsjekk(par: .destruktiv, forgrunn: deaktivertTekst, bakgrunn: bakgrunn, krav: .unntatt)
+               : Komponentsjekk(par: .destruktiv, forgrunn: status(.feil).tekst, bakgrunn: bakgrunn, krav: .tekst),
         ]
         switch tilstand {
         case .deaktivert:

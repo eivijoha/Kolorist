@@ -86,6 +86,39 @@ final class PalettGruppe {
     }
 }
 
+/// Et designsystem laget fra en palett (fra 1.3): rollene og skriftfargene som JSON (`Designsystem`), resten utledes.
+/// Nytt felt i CloudKit-skjemaet (må publiseres til produksjon).
+@Model
+final class DesignsystemDokument {
+    var id: UUID = UUID()
+    var navn: String = ""
+    var opprettet: Date = Date.now
+    var endret: Date = Date.now
+    /// Paletten designsystemet ble laget fra (rollene kan velges blant fargene der), eller `nil`.
+    var palettID: UUID?
+    private var data: Data = Data()
+
+    init(_ designsystem: Designsystem, palettID: UUID?) {
+        self.id = UUID()
+        self.navn = designsystem.navn
+        self.palettID = palettID
+        self.designsystem = designsystem
+    }
+
+    var designsystem: Designsystem {
+        get {
+            var ds = (try? JSONDecoder().decode(Designsystem.self, from: data))
+                ?? Designsystem(navn: navn, roller: [:], lysTekst: Farge(lineærR: 1, g: 1, b: 1), mørkTekst: Farge(lineærR: 0, g: 0, b: 0))
+            ds.navn = navn
+            return ds
+        }
+        set {
+            data = (try? JSONEncoder().encode(newValue)) ?? data
+            endret = .now
+        }
+    }
+}
+
 /// En enkeltfarge lagret uten palett («Enkeltfarger»).
 @Model
 final class LagretFarge {
@@ -161,7 +194,8 @@ final class LagretGradient {
 /// har standardverdier, ingen unike begrensninger og ingen påkrevde relasjoner.
 enum Lagring {
     static let containerID = "iCloud.no.engenett.Kolorist"
-    private static let skjema = Schema([PalettDokument.self, LagretFarge.self, LagretGradient.self, PalettGruppe.self])
+    private static let skjema = Schema([PalettDokument.self, LagretFarge.self, LagretGradient.self, PalettGruppe.self,
+                                        DesignsystemDokument.self])
 
     /// Om lageret synkroniseres via iCloud (for visning i appen).
     private(set) static var synkroniserer = false

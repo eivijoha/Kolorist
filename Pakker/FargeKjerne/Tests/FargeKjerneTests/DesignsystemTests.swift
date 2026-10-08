@@ -54,3 +54,47 @@ struct DesignsystemTests {
         #expect(lest == ds)
     }
 }
+
+@Suite("Designsystem-eksport")
+struct DesignsystemEksportTests {
+    private let ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!),
+                                                                    PalettFarge(farge: Farge(hex: "#C95530")!)]))
+
+    @Test func xcodeHarFireVarianterPerFarge() throws {
+        let filer = DesignsystemEksport.filer(ds, formater: [.xcode], navn: "Hav")
+        #expect(filer["Hav.xcassets/Contents.json"] != nil)
+        let sett = filer.keys.filter { $0.hasSuffix(".colorset/Contents.json") }
+        #expect(sett.count == ds.tema(.lys).tokens.count)
+        #expect(sett.contains("Hav.xcassets/onAccent.colorset/Contents.json"))
+        let json = try #require(JSONSerialization.jsonObject(with: filer["Hav.xcassets/accent.colorset/Contents.json"]!) as? [String: Any])
+        let farger = try #require(json["colors"] as? [[String: Any]])
+        #expect(farger.count == 4)
+        let utseender = farger.compactMap { $0["appearances"] as? [[String: String]] }.flatMap { $0 }
+        #expect(utseender.contains { $0["appearance"] == "contrast" && $0["value"] == "high" })
+    }
+
+    @Test func aliasPekerPåPrimitiver() throws {
+        let filer = DesignsystemEksport.filer(ds, formater: [.designTokens], navn: "Hav")
+        let prim = try #require(JSONSerialization.jsonObject(with: filer["tokens/primitives.tokens.json"]!) as? [String: Any])
+        let farge = try #require(prim["color"] as? [String: Any])
+        for modus in Designmodus.allCases {
+            let fil = try #require(filer["tokens/\(modus.tokennavn).tokens.json"])
+            let sem = try #require((JSONSerialization.jsonObject(with: fil) as? [String: Any])?["semantic"] as? [String: Any])
+            for (navn, token) in sem where navn != "$type" {
+                let verdi = (token as? [String: Any])?["$value"]
+                let alias = try #require(verdi as? String, "\(modus) \(navn) er ikke alias")
+                let sti = alias.dropFirst().dropLast().split(separator: ".").map(String.init)
+                #expect(sti.count == 3 && sti[0] == "color")
+                #expect((farge[sti[1]] as? [String: Any])?[sti[2]] != nil, "\(alias) finnes ikke")
+            }
+        }
+        #expect(filer["tokens/resolver.json"] != nil)
+    }
+
+    @Test func cssMedLightDark() {
+        let css = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "Hav")["hav.css"]!, as: UTF8.self)
+        #expect(css.contains("color-scheme: light dark;"))
+        #expect(css.contains("--accent: light-dark(#"))
+        #expect(css.contains("@media (prefers-contrast: more)"))
+    }
+}

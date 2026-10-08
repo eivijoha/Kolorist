@@ -137,13 +137,16 @@ verktøyene (skalaer, kontrast) ligger der de er.
    (`ToneskalaArk`, fra fargens meny i paletten), ikke i Overgang › Lysere og mørkere, der trinnene er relative til én
    grunnfarge. OKLCH L løses per kulør til trinnets L* (`Farge.lStjerne`, D65-luminans; 97/93/86/76/61/54/48/38/28/18/10:
    400 ≥ 3:1 og 600 ≥ 4,5:1 mot hvit for alle kulører), med WCAG-forhold og Lc mot hvit og sort per trinn.
-3. **«Komponenter» som fjerde visning av en palett** (ved siden av Farger, Lys, Skriftkontrast): roller fordelt
-   automatisk og kan byttes; mini-iOS-skjerm (navigasjon, liste/kort, knapper, tekstfelt, bryter, varsel, lenke) i
-   Lys/Mørk/Økt kontrast og stil Apple/Web; tilstander normal/trykket/fokus/deaktivert (hover bare med peker);
-   kravmerking per WCAG-kriterium (privat sektor i Norge: WCAG 2.0, uten 1.4.11).
-4. **Designsystem-dokument** i Paletter («Lag designsystem» fra palett, Studio-farge eller harmoni): Roller · Skalaer ·
-   Komponenter · Eksport; eksport til Xcode Color Set (lys/mørk/økt kontrast – nøkkelen bekreftes i Xcode), DTCG med
-   alias og resolver, Figma (én fil per modus), CSS `light-dark()`. Ny SwiftData-modell → CloudKit-skjema.
+3. (Gjort, som del av designsystem-dokumentet i stedet for en fjerde palettvisning, så paletten ikke får enda en knapp.)
+   **«Komponenter»**: roller fordelt automatisk og kan byttes; mini-iOS-skjerm (tittel, gruppert liste med bryter,
+   tekstfelt, knapper, lenke, slettehandling, varsler, fanelinje) i Lys/Mørk og økt kontrast; tilstander
+   normal/trykket/fokus/deaktivert; kontrollpunkt per fargepar med WCAG-kriterium (privat sektor i Norge: WCAG 2.0, uten
+   1.4.11). Gjenstår: stil Web, hover med peker, ekte Liquid Glass-kontroller.
+4. **Designsystem-dokument** i Paletter (gjort fra palett: «Lag designsystem» i palettens …-meny og i menyen på
+   palettkortet; egen seksjon «Designsystemer» bare når det finnes ett). Faner Komponenter · Roller · Skalaer, eksport i
+   verktøylinjen. `DesignsystemDokument` er en ny modell → CloudKit-skjemaet må publiseres. Gjenstår: fra Studio-farge
+   eller harmoni. Eksport (gjort): Xcode-fargesett med lys/mørk/økt kontrast (`contrast: high` bekreftet med `actool`),
+   DTCG med primitiver, alias og resolver, Figma (én fil per modus), CSS `light-dark()`.
 5. Senere: Web-stil, Tokens Studio, Compose; tonebane/monokrom som nøytral skala.
 
 ### Semantisk grunnlag for KI (2026-09-30)

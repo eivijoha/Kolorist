@@ -4,6 +4,16 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Designsystem fra palett** (`Designsystem/`): `Designrolle` (aksent, sekundær, nøytral, feil, suksess, advarsel),
+  `Designmodus` (lys, mørk, og begge med økt kontrast), `Komponenttilstand`. `Designsystem(fra:)` fordeler palettens
+  farger på rollene (`automatiskeRoller(for:)`) og tar skriftfargene med; `tema(_:)` gir de semantiske fargene i en modus
+  (`Designtema`, med `tokens`), og `skala(for:)` rollens toneskala 50–950. Lysheten styres med L*-områder per modus, så
+  merkefargen beholdes der den holder; alt ligger i sRGB. `Designtema.sjekker(_:)` gir fargeparene i komponentene med
+  kravet etter WCAG 2 (`Komponentkrav`: 1.4.3, 1.4.11, unntatt for deaktivert) – alle holder for alle kulører (testet).
+- `DesignsystemEksport.filer(_:formater:navn:)`: asset catalog for Xcode (lys, mørk, `contrast: high`, kontrollert med
+  `actool`), DTCG 2025.10 med primitiver, én fil per modus med alias og `resolver.json`, Figma (én fil per modus med
+  verdier) og CSS med `light-dark()` og `prefers-contrast: more`.
+
 - **Skriftfarger i paletter:** `Palett.tekstfarger` (valgfritt, kodes bare når det finnes; eldre data leses) og
   `PalettFarge.tekstfarge: UUID?` (valgt skriftfarge, `nil` = automatisk). `Skriftfarger.beste(for:blant:)` velger den som
   leses best etter APCA blant dem som når 4,5:1 (WCAG), ellers høyest WCAG-forhold; `Skriftfarger.vurdering`,

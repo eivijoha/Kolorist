@@ -164,6 +164,8 @@ struct PalettListe: View {
                             .disabled(p.farger.count < 2)
                         Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                             .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
+                        Button("Lag designsystem", systemImage: "square.stack.3d.up") { velg(.designsystem(lagDesignsystem(fra: p, i: kontekst))) }
+                            .disabled(p.farger.isEmpty)
                         Divider()
                         Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
                         flyttTilGruppeMeny(p)
@@ -188,6 +190,7 @@ struct PalettListe: View {
     enum Valg: Hashable {
         case enkeltfarger
         case palett(PalettDokument)
+        case designsystem(DesignsystemDokument)
     }
 
     private var nyPalettMeny: some View {
@@ -325,6 +328,7 @@ struct PalettListe: View {
                             })
                         }
                     }
+                    DesignsystemSeksjon { velg(.designsystem($0)) }
                     Label(Lagring.synkroniserer ? "Paletter, gradienter og enkeltfarger synkroniseres via iCloud."
                                                 : "Paletter, gradienter og enkeltfarger lagres bare på denne enheten.",
                           systemImage: Lagring.synkroniserer ? "icloud" : "iphone")
@@ -430,9 +434,11 @@ struct PalettListe: View {
                     switch v {
                     case .enkeltfarger: EnkeltfargerVisning()
                     case .palett(let p): PalettDetalj(dokument: p)
+                    case .designsystem(let d): DesignsystemVisning(dokument: d)
                     }
                 }
                 .environment(\.iPalettkolonne, iKolonne)
+                .environment(\.åpneDesignsystem) { d in sti.append(.designsystem(d)) }
                 // Vinduets egen tilbakepil (fra kolonnens navigasjon) skjules; knappen over brukes i stedet.
                 .navigationBarBackButtonHidden(iKolonne)
                 // I palettkolonnen på Mac vises ingen navigasjonslinje med tilbakeknapp; lag en selv.
@@ -750,6 +756,7 @@ struct PalettDetalj: View {
     @Environment(\.dismiss) private var lukkPalett
     /// I palettkolonnen på Mac: handlingene ligger i en rad under tittelen, ikke i vinduets verktøylinje.
     @Environment(\.iPalettkolonne) private var iKolonne
+    @Environment(\.åpneDesignsystem) private var åpneDesignsystem
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var bredde
     /// På iPhone ligger utskrift i …-menyen, ikke som egen knapp i verktøylinjen.
@@ -946,6 +953,7 @@ struct PalettDetalj: View {
                 if utskriftIMeny {
                     ToolbarItem(placement: .secondaryAction) { utskriftsknapp }
                 }
+                ToolbarItem(placement: .secondaryAction) { designsystemknapp }
             }
         }
         .sheet(item: $visSkala) { pf in
@@ -1018,8 +1026,20 @@ struct PalettDetalj: View {
             KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
         }
         .help("Lagre som, del og kopier")
+        // I palettkolonnen finnes ingen …-meny i verktøylinjen.
+        if iKolonne { designsystemknapp }
         Button("Slett palett", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
             .help("Slett paletten")
+    }
+
+    /// Lager et designsystem fra paletten og åpner det (valgfritt; ligger i …-menyen).
+    private var designsystemknapp: some View {
+        Button("Lag designsystem", systemImage: "square.stack.3d.up") {
+            let d = lagDesignsystem(fra: dokument, i: kontekst)
+            åpneDesignsystem?(d)
+        }
+        .disabled(dokument.farger.isEmpty)
+        .help("Lag et designsystem med roller, komponenter og eksport fra paletten")
     }
 
     private var utskriftsknapp: some View {
