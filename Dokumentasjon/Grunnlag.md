@@ -124,7 +124,7 @@ Gjenstår i disse sporene: Adobe Color-tema direkte (krever Adobe-konto/API), Fi
 - iCloud-synk (CloudKit) og deling av paletter
 - Widget og Kontrollsenter-kontroll (siste palett, rask pipette/kamera)
 
-**1.4 – fra palett til designsystem** (bestemt 2026-10-08; grunnlag: `reports/Farger for designsystemer.md`, notater i
+**1.3 – fra palett til designsystem** (bestemt 2026-10-08, først lagt til 1.4 og samme dag flyttet til 1.3; grunnlag: `reports/Farger for designsystemer.md`, notater i
 `research_notes/Farger for designsystemer/`). iOS først. Ingen ny fane: designsystemet er et dokument i Paletter, og
 verktøyene (skalaer, kontrast) ligger der de er.
 1. **Skriftfarger i paletten:** et eget lag ved siden av fargene (`Palett.tekstfarger`, høyst fire; standard «Lys tekst»
