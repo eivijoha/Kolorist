@@ -6059,6 +6059,16 @@
         }
       }
     },
+    "Legg toneskalaen i palett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add the tone scale to a palette"
+          }
+        }
+      }
+    },
     "Legger panelet sammen": {
       "localizations": {
         "en": {
@@ -9399,6 +9409,16 @@
         }
       }
     },
+    "Toneskala %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tone scale %@"
+          }
+        }
+      }
+    },
     "Trinn: %lld": {
       "localizations": {
         "en": {
@@ -10943,6 +10963,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "≈ %@ lx estimated"
+          }
+        }
+      }
+    },
+    "Faste trinn fra lyst til mørkt for designsystemer. Hvert trinn har samme lyshet (L*) for alle kulører, så kontrasten blir lik: med 11 trinn holder 400 minst 3:1 mot hvit (kanter og ikoner) og 600 minst 4,5:1 (tekst og knapper). «Lysere og mørkere toner» under Farge gir i stedet trinn rundt fargen selv.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fixed steps from light to dark for design systems. Each step has the same lightness (L*) for every hue, so contrast is consistent: with 11 steps, 400 holds at least 3:1 against white (borders and icons) and 600 at least 4.5:1 (text and buttons). “Lighter and darker tones” under Colour gives steps around the colour itself instead."
           }
         }
       }

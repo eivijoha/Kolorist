@@ -1276,25 +1276,17 @@ struct ToneskalaArk: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     var leggTil: ([PalettFarge]) -> Void
     @Environment(\.dismiss) private var lukk
-    @State private var antall = 11
-    @State private var demping = 0.6
+    @AppStorage("toneskala.antall") private var antall = 11
+    @AppStorage("toneskala.demping") private var demping = 0.6
     /// Kontrast (L*): hvert trinn får fast lyshet i luminans, så kontrasten mot hvit og sort er lik for alle kulører.
     /// Jevn: like steg i OKLab-lyshet (som før 1.3).
     @AppStorage("toneskala.kontrast") private var kontrast = true
 
-    /// Trinnavn 50, 100 … 900, 950 for 11 trinn; ellers 1, 2, 3 …
-    private func trinnavn(_ i: Int) -> String {
-        antall == 11 ? ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"][i] : "\(i + 1)"
-    }
+    private func trinnavn(_ i: Int) -> String { Toneskalavalg.trinnavn(i, antall: antall) }
 
     private var toner: [Farge] {
-        let skala = Toneskala(kromaDemping: demping, gamut: arbeidsbenk.gamut)
-        if kontrast {
-            let lStjerne = antall == 11 ? Toneskala.kontrastLStjerne : Toneskala.jevnLStjerne(antall: antall)
-            return skala.toner(for: grunnfarge.farge, lStjerne: lStjerne).map(arbeidsbenk.begrens)
-        }
-        let lysheter = antall == 11 ? Toneskala.standardLysheter : Toneskala.jevn(antall: antall)
-        return Toneskala(lysheter: lysheter, kromaDemping: demping, gamut: arbeidsbenk.gamut).toner(for: grunnfarge.farge).map(arbeidsbenk.begrens)
+        Toneskalavalg.toner(for: grunnfarge.farge, antall: antall, demping: demping, kontrast: kontrast,
+                            gamut: arbeidsbenk.gamut, begrens: arbeidsbenk.begrens)
     }
 
     var body: some View {
@@ -1346,8 +1338,29 @@ struct ToneskalaArk: View {
     }
 }
 
+/// Beregningen av toneskalaen, felles for Studio › Toneskala og «Lag toneskala» i paletten.
+enum Toneskalavalg {
+    /// Trinnavn 50, 100 … 900, 950 for 11 trinn; ellers 1, 2, 3 …
+    static func trinnavn(_ i: Int, antall: Int) -> String {
+        antall == 11 ? Designsystem.trinnavn[i] : "\(i + 1)"
+    }
+
+    /// Kontrast (L*): hvert trinn får fast lyshet i luminans, så kontrasten mot hvit og sort er lik for alle kulører.
+    /// Ellers like steg i OKLab-lyshet.
+    static func toner(for grunn: Farge, antall: Int, demping: Double, kontrast: Bool, gamut: Gamut,
+                      begrens: (Farge) -> Farge) -> [Farge] {
+        let skala = Toneskala(kromaDemping: demping, gamut: gamut)
+        if kontrast {
+            let lStjerne = antall == 11 ? Toneskala.kontrastLStjerne : Toneskala.jevnLStjerne(antall: antall)
+            return skala.toner(for: grunn, lStjerne: lStjerne).map(begrens)
+        }
+        let lysheter = antall == 11 ? Toneskala.standardLysheter : Toneskala.jevn(antall: antall)
+        return Toneskala(lysheter: lysheter, kromaDemping: demping, gamut: gamut).toner(for: grunn).map(begrens)
+    }
+}
+
 /// Ett trinn i toneskalaen: fargen med trinnavnet, hex og kontrasten for hvit og sort tekst på trinnet.
-private struct ToneskalaTrinn: View {
+struct ToneskalaTrinn: View {
     let navn: String
     let farge: Farge
 

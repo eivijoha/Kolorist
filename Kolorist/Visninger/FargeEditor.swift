@@ -78,22 +78,33 @@ struct FargeEditor: View {
     /// Studio er delt i moduser, så harmoniene ikke gjemmer seg nederst i en lang liste. (Toner er erstattet av den
     /// monokromatiske harmonien.)
     enum Modus: String, CaseIterable, Identifiable {
-        case farge, harmoni
+        case farge, harmoni, toneskala
         var id: String { rawValue }
         var navn: String {
             switch self {
             case .farge: String(localized: "Farge")
             case .harmoni: String(localized: "Harmoni")
+            case .toneskala: String(localized: "Toneskala")
             }
         }
         var symbol: String {
             switch self {
             case .farge: "slider.horizontal.3"
             case .harmoni: "circle.hexagongrid"
+            case .toneskala: "square.3.layers.3d"
             }
         }
     }
 
+
+    @AppStorage("toneskala.antall") private var toneskalaAntall = 11
+    @AppStorage("toneskala.demping") private var toneskalaDemping = 0.6
+    @AppStorage("toneskala.kontrast") private var toneskalaKontrast = true
+
+    private func toneskala(_ farge: Farge) -> [Farge] {
+        Toneskalavalg.toner(for: farge, antall: toneskalaAntall, demping: toneskalaDemping, kontrast: toneskalaKontrast,
+                            gamut: arbeidsbenk.gamut, begrens: arbeidsbenk.begrens)
+    }
 
     /// Fargeflaten med feltet for verdi og «Vis også» – fast øverst mens resten ruller.
     @ViewBuilder
@@ -101,7 +112,15 @@ struct FargeEditor: View {
         @Bindable var arbeidsbenk = arbeidsbenk
         VStack(spacing: 0) {
             Group {
-                if modus == .harmoni, !harmonifarger.isEmpty {
+                if modus == .toneskala {
+                    // Toneskala: trinnene 50–950 i «Vis også»-rommet. Trykk endrer ikke grunnfargen (skalaen ville drive).
+                    HarmoniFlate(farger: toneskala(farge), grunnIndeks: nil, profil: visOgsåProfil,
+                                 fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
+                                 romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
+                                 verditekst: { _ in "" }, stablet: bred, rammeRundtGrunn: false,
+                                 lagre: { lagreEnkeltfarger([$0], i: kontekst) },
+                                 leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+                } else if modus == .harmoni, !harmonifarger.isEmpty {
                     // Harmoni: alle fargene i «Vis også»-rommet, med grunnfargen merket.
                     HarmoniFlate(farger: harmonifarger, grunnIndeks: harmoniGrunn, profil: visOgsåProfil,
                                  fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
@@ -214,6 +233,11 @@ struct FargeEditor: View {
             }
             switch modus {
             case .farge: fargeModus(farge)
+            case .toneskala:
+                ToneskalaSeksjon(grunnfarge: farge, lagre: { farger, navn in
+                    lagreFarger = farger
+                    lagreNavn = navn
+                })
             case .harmoni:
                 HarmoniSeksjon(grunnfarge: farge, gamut: arbeidsbenk.gamut, begrens: arbeidsbenk.begrens,
                                velg: { arbeidsbenk.aktivFarge = $0 },
