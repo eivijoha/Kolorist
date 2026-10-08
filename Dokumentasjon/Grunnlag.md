@@ -124,6 +124,27 @@ Gjenstår i disse sporene: Adobe Color-tema direkte (krever Adobe-konto/API), Fi
 - iCloud-synk (CloudKit) og deling av paletter
 - Widget og Kontrollsenter-kontroll (siste palett, rask pipette/kamera)
 
+**1.4 – fra palett til designsystem** (bestemt 2026-10-08; grunnlag: `reports/Farger for designsystemer.md`, notater i
+`research_notes/Farger for designsystemer/`). iOS først. Ingen ny fane: designsystemet er et dokument i Paletter, og
+verktøyene (skalaer, kontrast) ligger der de er.
+1. **Skriftfarger i paletten:** et eget lag ved siden av fargene (`Palett.tekstfarger`, høyst fire; standard «Lys tekst»
+   nær hvit og «Mørk tekst» nær sort, «Foreslå fra paletten» med svakt kulørpreg, L* ≈ 97/14). Hver palettfarge får
+   skriftfarge automatisk (APCA velger, WCAG 4,5:1 som gulv) eller overstyrt (`PalettFarge.tekstfarge: UUID?`), vist som
+   «Aa» med kontrastmerke og «Rett opp». Skriftkontrast-visningen får «Skriftfarger mot paletten». Følger med i
+   DTCG (`text.light`/`text.dark` + `on`-alias per farge), CSS, SwiftUI, ASE (egen gruppe), PDF og delingslenker.
+   `PalettDokument.tekstfargeData` er et nytt felt → CloudKit-skjemaet må publiseres til produksjon.
+2. **Toneskala forankret i CIE L\***: valg «Jevn / Kontrast (L*)» i Overgang › Lysere og mørkere; OKLCH L løses per kulør
+   til trinnets L*-mål (forslag 97/93/86/76/61/54/48/38/28/18/10: 400 ≈ 3:1, 600 ≈ 4,8:1 mot hvit), kontrastmerker
+   (WCAG og Lc begge veier) per trinn i `ToneskalaArk`.
+3. **«Komponenter» som fjerde visning av en palett** (ved siden av Farger, Lys, Skriftkontrast): roller fordelt
+   automatisk og kan byttes; mini-iOS-skjerm (navigasjon, liste/kort, knapper, tekstfelt, bryter, varsel, lenke) i
+   Lys/Mørk/Økt kontrast og stil Apple/Web; tilstander normal/trykket/fokus/deaktivert (hover bare med peker);
+   kravmerking per WCAG-kriterium (privat sektor i Norge: WCAG 2.0, uten 1.4.11).
+4. **Designsystem-dokument** i Paletter («Lag designsystem» fra palett, Studio-farge eller harmoni): Roller · Skalaer ·
+   Komponenter · Eksport; eksport til Xcode Color Set (lys/mørk/økt kontrast – nøkkelen bekreftes i Xcode), DTCG med
+   alias og resolver, Figma (én fil per modus), CSS `light-dark()`. Ny SwiftData-modell → CloudKit-skjema.
+5. Senere: Web-stil, Tokens Studio, Compose; tonebane/monokrom som nøytral skala.
+
 ### Semantisk grunnlag for KI (2026-09-30)
 
 - `Fargesemantikk.json`: ~115 begreper (fargeord, natur, tid, materialer, verdier, stiler) med norske og engelske
