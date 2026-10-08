@@ -3059,6 +3059,16 @@
         }
       }
     },
+    "Forhåndsvisning. Se gjennom rollene og komponentene, og lagre for å beholde designsystemet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview. Look through the roles and components, and save to keep the design system."
+          }
+        }
+      }
+    },
     "Form": {
       "localizations": {
         "en": {
@@ -5297,6 +5307,36 @@
         }
       }
     },
+    "Lagre designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save design system"
+          }
+        }
+      }
+    },
+    "Lagre designsystemet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the design system"
+          }
+        }
+      }
+    },
+    "Lagre designsystemet under Designsystemer i Paletter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the design system under Design systems in Palettes"
+          }
+        }
+      }
+    },
     "Lagre eller del alle fargene": {
       "localizations": {
         "en": {
@@ -5575,6 +5615,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saved"
+          }
+        }
+      }
+    },
+    "Lagret. Du finner det under Designsystemer i Paletter.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved. You’ll find it under Design systems in Palettes."
           }
         }
       }

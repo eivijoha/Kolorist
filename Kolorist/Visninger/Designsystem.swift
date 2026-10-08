@@ -13,12 +13,11 @@ extension EnvironmentValues {
     @Entry var åpneDesignsystem: ((DesignsystemDokument) -> Void)? = nil
 }
 
-/// Lager et designsystem fra en palett (rollene fordeles automatisk) og legger det i lageret.
+/// Et nytt designsystem fra en palett (rollene fordeles automatisk). Det lagres ikke: visningen er en forhåndsvisning til
+/// brukeren trykker «Lagre» (se `DesignsystemVisning`).
 @MainActor
-func lagDesignsystem(fra p: PalettDokument, i kontekst: ModelContext) -> DesignsystemDokument {
-    let d = DesignsystemDokument(Designsystem(fra: p.palett), palettID: p.id)
-    kontekst.angresteg("Lag designsystem") { kontekst.insert(d) }
-    return d
+func nyttDesignsystem(fra p: PalettDokument) -> DesignsystemDokument {
+    DesignsystemDokument(Designsystem(fra: p.palett), palettID: p.id)
 }
 
 extension Designrolle {
@@ -114,11 +113,14 @@ struct DesignsystemSeksjon: View {
             } innhold: {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)], alignment: .leading, spacing: 12) {
                     ForEach(designsystemer) { d in
-                        DesignsystemKort(dokument: d)
-                            .onTapGesture { åpne(d) }
-                            .contextMenu {
-                                Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
-                            }
+                        // Sveip fra høyre for å slette, som palettene.
+                        SveipForÅSlette(slett: { slettes = d }) {
+                            DesignsystemKort(dokument: d)
+                                .onTapGesture { åpne(d) }
+                                .contextMenu {
+                                    Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
+                                }
+                        }
                     }
                 }
             }
@@ -199,6 +201,11 @@ struct DesignsystemVisning: View {
     @State private var slettSpørsmål = false
     @State private var omdøper = false
     @State private var nyttNavn = ""
+    /// Lagret i denne visningen (bekreftelsen står så lenge visningen er åpen).
+    @State private var nettoppLagret = false
+
+    /// Lagret i lageret; ellers er visningen en forhåndsvisning.
+    private var erLagret: Bool { dokument.modelContext != nil }
 
     /// Paletten designsystemet ble laget fra, når den finnes.
     private var palett: PalettDokument? { paletter.first { $0.id == dokument.palettID } }
@@ -210,6 +217,7 @@ struct DesignsystemVisning: View {
                 Text(verbatim: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn)
                     .font(.title2.weight(.semibold))
                     .padding(.top, 12)
+                lagringsstatus
                 Picker("Vis", selection: $del) {
                     ForEach(Del.allCases) { Text($0.navn).tag($0) }
                 }
@@ -233,6 +241,12 @@ struct DesignsystemVisning: View {
             if del == .komponenter { modusvalg }
         }
         .toolbar {
+            if !erLagret {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Lagre", action: lagre)
+                        .help("Lagre designsystemet under Designsystemer i Paletter")
+                }
+            }
             ToolbarItem {
                 Button("Eksporter …", systemImage: "square.and.arrow.up") { visEksport = true }
                     .help("Eksporter designsystemet")
@@ -243,8 +257,10 @@ struct DesignsystemVisning: View {
                     omdøper = true
                 }
             }
-            ToolbarItem(placement: .secondaryAction) {
-                Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
+            if erLagret {
+                ToolbarItem(placement: .secondaryAction) {
+                    Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
+                }
             }
         }
         .sheet(isPresented: $visEksport) { DesignsystemEksportArk(designsystem: dokument.designsystem, navn: dokument.navn) }
@@ -270,6 +286,40 @@ struct DesignsystemVisning: View {
     }
 
     private var modus: Designmodus { Designmodus(mørk: mørk, øktKontrast: øktKontrast) }
+
+    private func lagre() {
+        kontekst.angresteg("Lagre designsystem") { kontekst.insert(dokument) }
+        withAnimation { nettoppLagret = true }
+    }
+
+    /// Forhåndsvisning med «Lagre», eller bekreftelse rett etter lagring.
+    @ViewBuilder private var lagringsstatus: some View {
+        if !erLagret {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Image(systemName: "eye")
+                    .foregroundStyle(Color.accentColor)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Forhåndsvisning. Se gjennom rollene og komponentene, og lagre for å beholde designsystemet.")
+                        .font(.callout)
+                    Button("Lagre designsystemet", systemImage: "checkmark", action: lagre)
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(12)
+            .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        } else if nettoppLagret {
+            Label("Lagret. Du finner det under Designsystemer i Paletter.", systemImage: "checkmark.circle.fill")
+                .font(.callout)
+                .foregroundStyle(Color.primary)
+                .symbolRenderingMode(.multicolor)
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .transition(.opacity)
+        }
+    }
 
     /// Komponentene i valgt modus og tilstand, med kontrollpunktene under.
     @ViewBuilder private func komponenter(_ ds: Designsystem) -> some View {

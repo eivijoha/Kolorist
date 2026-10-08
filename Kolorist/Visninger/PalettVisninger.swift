@@ -164,7 +164,7 @@ struct PalettListe: View {
                             .disabled(p.farger.count < 2)
                         Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                             .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                        Button("Lag designsystem", systemImage: "square.stack.3d.up") { velg(.designsystem(lagDesignsystem(fra: p, i: kontekst))) }
+                        Button("Lag designsystem", systemImage: "square.stack.3d.up") { velg(.designsystem(nyttDesignsystem(fra: p))) }
                             .disabled(p.farger.isEmpty)
                         Divider()
                         Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
@@ -1035,7 +1035,7 @@ struct PalettDetalj: View {
     /// Lager et designsystem fra paletten og åpner det (valgfritt; ligger i …-menyen).
     private var designsystemknapp: some View {
         Button("Lag designsystem", systemImage: "square.stack.3d.up") {
-            let d = lagDesignsystem(fra: dokument, i: kontekst)
+            let d = nyttDesignsystem(fra: dokument)
             åpneDesignsystem?(d)
         }
         .disabled(dokument.farger.isEmpty)
