@@ -43,12 +43,14 @@ extension DesignsystemEksport {
         l.append("")
         l.append(t("Bruk disse navnene i koden, ikke grunnfargene: de bytter riktig mellom lys og mørk modus og ved økt kontrast."))
         l.append("")
-        l.append("| Token | \(t("Brukes til")) | " + temaer.map(\.modus.readmeNavn).joined(separator: " | ") + " |")
-        l.append("|---|---|" + temaer.map { _ in "---|" }.joined())
+        let medFigma = formater.contains(.figma)
+        l.append("| Token | " + (medFigma ? "Figma | " : "") + "\(t("Brukes til")) | " + temaer.map(\.modus.readmeNavn).joined(separator: " | ") + " |")
+        l.append("|---|---|" + (medFigma ? "---|" : "") + temaer.map { _ in "---|" }.joined())
         if let første = temaer.first {
             for (i, token) in første.tokens.enumerated() {
                 let verdier = temaer.map { "`\($0.tokens[i].farge.hex())`" }.joined(separator: " | ")
-                l.append("| `\(token.navn)` | \(Self.bruk(token.navn)) | \(verdier) |")
+                let figma = medFigma ? "`\(Self.figmanavn(token.navn))` | " : ""
+                l.append("| `\(token.navn)` | \(figma)\(Self.bruk(token.navn)) | \(verdier) |")
             }
         }
         l.append("")
@@ -120,7 +122,7 @@ extension DesignsystemEksport {
             l.append(t("2. Lag en ny samling i den visningen."))
             l.append(t("3. Dra alle fire filene i `figma/` inn i visningen samtidig. Hver fil blir en modus: light, dark, light-ic og dark-ic."))
             l.append("")
-            l.append(t("Fargene ligger under `color`, i gruppene background, text, border, accent, control og status (med danger, success og warning). Navnene er de samme som i CSS og Xcode: `color/text/text-secondary` i Figma er `--text-secondary` i CSS og `textSecondary` i Xcode."))
+            l.append(t("Fargene ligger under `color`, gruppert etter bruk med korte navn til slutt, som i Apples egne tokens: `color/text/secondary`, `color/status/danger/bg` og så videre. Kolonnen Figma i tabellen over viser hvilket navn hver farge har i CSS og Xcode."))
             l.append("")
             l.append(t("Fire moduser krever et betalt Figma-abonnement eller Education. Med gratisabonnementet kan en samling bare ha én modus: importer da `light.tokens.json` alene. Vil du oppdatere en samling som finnes, høyreklikker du en modus og velger «Import mode»."))
             l.append("")

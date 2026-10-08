@@ -193,7 +193,7 @@ struct DesignsystemFigmaTests {
             let data = try #require(filer["figma/\(modus.tokennavn).tokens.json"])
             let rot = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
             let farger = try #require(rot["color"] as? [String: Any])
-            #expect(Set(farger.keys) == ["background", "text", "border", "accent", "control", "status"])
+            #expect(Set(farger.keys) == ["background", "text", "border", "accent", "control", "disabled", "status"])
             // Går gjennom gruppene: et token har `$type` og `$value`, en gruppe har bare undergrupper og tokens.
             var navn = Set<String>()
             func gå(_ gruppe: [String: Any], _ sti: String) throws {
@@ -213,8 +213,10 @@ struct DesignsystemFigmaTests {
             }
             try gå(farger, "color/")
             #expect(navn.count == ds.tema(modus).tokens.count)
-            #expect(navn.contains("color/text/text-secondary"))
-            #expect(navn.contains("color/status/danger/danger-bg"))
+            #expect(navn.contains("color/text/secondary"))
+            #expect(navn.contains("color/status/danger/bg"))
+            #expect(navn.contains("color/status/warning/label"))
+            #expect(Set(ds.tema(modus).tokens.map { DesignsystemEksport.figmanavn($0.navn) }) == navn)
             navnesett.append(navn)
         }
         #expect(Set(navnesett).count == 1)

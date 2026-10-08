@@ -467,12 +467,12 @@
         }
       }
     },
-    "Fargene ligger under `color`, i gruppene background, text, border, accent, control og status (med danger, success og warning). Navnene er de samme som i CSS og Xcode: `color/text/text-secondary` i Figma er `--text-secondary` i CSS og `textSecondary` i Xcode.": {
+    "Fargene ligger under `color`, gruppert etter bruk med korte navn til slutt, som i Apples egne tokens: `color/text/secondary`, `color/status/danger/bg` og så videre. Kolonnen Figma i tabellen over viser hvilket navn hver farge har i CSS og Xcode.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The colours sit under `color`, in the groups background, text, border, accent, control and status (with danger, success and warning). The names are the same as in CSS and Xcode: `color/text/text-secondary` in Figma is `--text-secondary` in CSS and `textSecondary` in Xcode."
+            "value": "The colours sit under `color`, grouped by use with short names at the end, as in Apple’s own tokens: `color/text/secondary`, `color/status/danger/bg` and so on. The Figma column in the table above shows the name each colour has in CSS and Xcode."
           }
         }
       }

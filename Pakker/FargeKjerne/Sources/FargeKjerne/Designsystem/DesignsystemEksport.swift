@@ -192,12 +192,12 @@ public enum DesignsystemEksport {
         for tema in temaer {
             // Figma krever `$type` på hvert token (arver ikke fra gruppen) og får ingen andre felt, så importen ikke
             // hopper over noe. Opphavet står i README.
-            // Gruppene blir grupper i Variables-visningen, som i Apples egne tokens: «color» øverst (plass til andre
-            // typer senere), så bruk («color/text/text-secondary», «color/status/danger/danger-bg»). Navnet beholdes, så
-            // det stemmer med CSS-variablene og fargesettene.
+            // Som i Apples egne tokens: «color» øverst (plass til andre typer senere), gruppene etter bruk, og korte navn
+            // nederst («color/text/secondary», «color/status/danger/bg»). README viser hvilket CSS-navn hvert svarer til.
             var farger: [String: Any] = [:]
             for (navn, f) in tema.tokens {
-                legg(["$type": "color", "$value": dtcgVerdi(f)], navn: navn, i: figmagruppe(navn), under: &farger)
+                let sti = figmasti(navn)
+                legg(["$type": "color", "$value": dtcgVerdi(f)], navn: sti.last ?? navn, i: Array(sti.dropLast()), under: &farger)
             }
             ut["figma/\(tema.modus.tokennavn).tokens.json"] = json(["color": farger])
         }
@@ -211,19 +211,36 @@ public enum DesignsystemEksport {
         gruppe[første] = under
     }
 
-    /// Gruppene en semantisk farge hører til i Figma, etter bruk.
-    static func figmagruppe(_ token: String) -> [String] {
+    /// Stien til en semantisk farge i Figma (under «color»): gruppe etter bruk og et kort navn til slutt.
+    static func figmasti(_ token: String) -> [String] {
         switch token {
-        case "bg", "surface": ["background"]
-        case "text", "text-secondary", "placeholder": ["text"]
-        case "border", "separator": ["border"]
-        case "accent", "accent-pressed", "on-accent", "accent-subtle": ["accent"]
-        case "secondary", "disabled-bg", "disabled-text": ["control"]
-        case let t where t.hasPrefix("danger"): ["status", "danger"]
-        case let t where t.hasPrefix("success"): ["status", "success"]
-        default: ["status", "warning"]
+        case "bg": ["background", "page"]
+        case "surface": ["background", "surface"]
+        case "text": ["text", "primary"]
+        case "text-secondary": ["text", "secondary"]
+        case "placeholder": ["text", "placeholder"]
+        case "border": ["border", "control"]
+        case "separator": ["border", "separator"]
+        case "accent": ["accent", "default"]
+        case "accent-pressed": ["accent", "pressed"]
+        case "on-accent": ["accent", "label"]
+        case "accent-subtle": ["accent", "subtle"]
+        case "secondary": ["control", "switch-on"]
+        case "disabled-bg": ["disabled", "bg"]
+        case "disabled-text": ["disabled", "label"]
+        default: statussti(token)
         }
     }
+
+    /// danger-text → status/danger/label, danger-bg → status/danger/bg (og success, warning).
+    private static func statussti(_ token: String) -> [String] {
+        guard let skille = token.lastIndex(of: "-") else { return [token] }
+        let status = String(token[..<skille]), del = String(token[token.index(after: skille)...])
+        return ["status", status, del == "text" ? "label" : del]
+    }
+
+    /// Hele Figma-navnet, slik Variables-visningen viser det («color/text/secondary»).
+    static func figmanavn(_ token: String) -> String { (["color"] + figmasti(token)).joined(separator: "/") }
 
     // MARK: CSS
 
