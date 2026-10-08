@@ -19,6 +19,8 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 - CSS-eksporten av designsystemet har Display P3 der fargene går merkbart utenfor sRGB (`tema(_:gamut: .displayP3)`, samme
   L* som sRGB, så kontrasten er den samme), i en blokk bak `@supports (color: color(display-p3 0 0 0))` og
   `@media (color-gamut: p3)`. sRGB-verdiene står foran som reserve.
+- Tokenfilene (DTCG og Figma) har `$type` på hvert token, ikke bare på gruppen: Figma arver ikke `$type` og hoppet over
+  alle fargene. Figma-filene har ellers bare `$value` (opphavet står i README), og README har trinnene for importen.
 
 - **Skriftfarger i paletter:** `Palett.tekstfarger` (valgfritt, kodes bare når det finnes; eldre data leses) og
   `PalettFarge.tekstfarge: UUID?` (valgt skriftfarge, `nil` = automatisk). `Skriftfarger.beste(for:blant:)` velger den som

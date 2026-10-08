@@ -867,7 +867,7 @@ extension DesignsystemEksport.Format {
         switch self {
         case .xcode: "Ett fargesett per farge, med lys, mørk og økt kontrast. Dra mappa inn i Xcode-prosjektet."
         case .designTokens: "Skalaer og farger som primitiver, én fil per modus med alias, og resolver.json."
-        case .figma: "Dra filene inn i Variables-panelet. Hver fil blir en modus."
+        case .figma: "Åpne Variables-visningen, lag en ny samling og dra de fire filene inn. Hver fil blir en modus. README-en har trinnene."
         case .css: "Lys og mørk med light-dark(), økt kontrast med prefers-contrast, og Display P3 med sRGB som reserve."
         }
     }

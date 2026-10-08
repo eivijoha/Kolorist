@@ -67,6 +67,36 @@
         }
       }
     },
+    "1. Velg ingenting på lerretet, og klikk «Open variables» i panelet til høyre. Variables-visningen åpnes i et eget vindu.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Select nothing on the canvas and click Open variables in the right panel. The Variables view opens in its own window."
+          }
+        }
+      }
+    },
+    "2. Lag en ny samling i den visningen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Create a new collection in that view."
+          }
+        }
+      }
+    },
+    "3. Dra alle fire filene i `figma/` inn i visningen samtidig. Hver fil blir en modus: light, dark, light-ic og dark-ic.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Drag all four files in `figma/` into the view at once. Each file becomes a mode: light, dark, light-ic and dark-ic."
+          }
+        }
+      }
+    },
     "AA stor tekst": {
       "localizations": {
         "en": {
@@ -563,6 +593,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file is not an ASE, ACO or ACB colour library."
+          }
+        }
+      }
+    },
+    "Filene har fargeverdiene direkte (ikke alias), fordi Figma bare importerer variabler som finnes i alle filene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files have the colour values directly (no aliases), because Figma only imports variables that exist in every file."
+          }
+        }
+      }
+    },
+    "Fire moduser krever et betalt Figma-abonnement eller Education. Med gratisabonnementet kan en samling bare ha én modus: importer da `light.tokens.json` alene. Vil du oppdatere en samling som finnes, høyreklikker du en modus og velger «Import mode».": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Four modes need a paid Figma plan or Education. On the free plan a collection can only have one mode: import `light.tokens.json` on its own. To update an existing collection, right-click a mode and choose Import mode."
           }
         }
       }
@@ -2217,16 +2267,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "wine red"
-          }
-        }
-      }
-    },
-    "Åpne Variables-panelet og dra alle fire filene i `figma/` inn samtidig. De blir én samling med fire moduser. Filene har fargeverdiene direkte (ikke alias), fordi Figma bare importerer variabler som finnes i alle filene.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open the Variables panel and drag all four files in `figma/` in at once. They become one collection with four modes. The files have the colour values directly (no aliases), because Figma only imports variables that exist in every file."
           }
         }
       }

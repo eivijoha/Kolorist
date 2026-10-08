@@ -7,7 +7,7 @@ import Foundation
 /// - Design tokens (DTCG 2025.10): `primitives.tokens.json` med skalaene og fargene som brukes, én fil per modus der de
 ///   semantiske tokenene er alias til primitivene, og `resolver.json` (Resolver-modulen 2025.10) som binder dem sammen.
 /// - Figma: én fil per modus med verdiene (sRGB og hex), som Figma importerer som én modus per fil. Alias brukes ikke, siden
-///   Figma bare importerer tokens som finnes i alle filene.
+///   Figma bare importerer tokens som finnes i alle filene, og hvert token har sin egen `$type` (Figma arver den ikke).
 /// - CSS: custom properties med `light-dark()` og `color-scheme: light dark`, og økt kontrast under
 ///   `@media (prefers-contrast: more)`.
 public enum DesignsystemEksport {
@@ -153,14 +153,14 @@ public enum DesignsystemEksport {
         var farge: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
         for (gruppe, liste) in grupper {
             var g: [String: Any] = [:]
-            for (n, f) in liste { g[n] = ["$value": dtcgVerdi(f)] }
+            for (n, f) in liste { g[n] = ["$type": "color", "$value": dtcgVerdi(f)] }
             farge[gruppe] = g
         }
         var ut: [String: Data] = ["tokens/primitives.tokens.json": json(["color": farge])]
         for tema in temaer {
             var semantisk: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
             for (navn, f) in tema.tokens {
-                semantisk[navn] = ["$value": alias[f.hex()].map { $0 as Any } ?? dtcgVerdi(f)]
+                semantisk[navn] = ["$type": "color", "$value": alias[f.hex()].map { $0 as Any } ?? dtcgVerdi(f)]
             }
             ut["tokens/\(tema.modus.tokennavn).tokens.json"] = json(["semantic": semantisk])
         }
@@ -190,8 +190,10 @@ public enum DesignsystemEksport {
     static func figma(_ temaer: [Designtema], avsender: Avsender) -> [String: Data] {
         var ut: [String: Data] = [:]
         for tema in temaer {
-            var g: [String: Any] = ["$type": "color", "$description": avsender.tekst]
-            for (navn, f) in tema.tokens { g[navn] = ["$value": dtcgVerdi(f)] }
+            // Figma krever `$type` på hvert token (arver ikke fra gruppen) og får ingen andre felt, så importen ikke
+            // hopper over noe. Opphavet står i README.
+            var g: [String: Any] = [:]
+            for (navn, f) in tema.tokens { g[navn] = ["$type": "color", "$value": dtcgVerdi(f)] }
             ut["figma/\(tema.modus.tokennavn).tokens.json"] = json(["color": g])
         }
         return ut

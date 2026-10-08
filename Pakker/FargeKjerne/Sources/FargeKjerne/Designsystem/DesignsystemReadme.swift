@@ -116,7 +116,13 @@ extension DesignsystemEksport {
         if formater.contains(.figma) {
             l.append("### Figma")
             l.append("")
-            l.append(t("Åpne Variables-panelet og dra alle fire filene i `figma/` inn samtidig. De blir én samling med fire moduser. Filene har fargeverdiene direkte (ikke alias), fordi Figma bare importerer variabler som finnes i alle filene."))
+            l.append(t("1. Velg ingenting på lerretet, og klikk «Open variables» i panelet til høyre. Variables-visningen åpnes i et eget vindu."))
+            l.append(t("2. Lag en ny samling i den visningen."))
+            l.append(t("3. Dra alle fire filene i `figma/` inn i visningen samtidig. Hver fil blir en modus: light, dark, light-ic og dark-ic."))
+            l.append("")
+            l.append(t("Fire moduser krever et betalt Figma-abonnement eller Education. Med gratisabonnementet kan en samling bare ha én modus: importer da `light.tokens.json` alene. Vil du oppdatere en samling som finnes, høyreklikker du en modus og velger «Import mode»."))
+            l.append("")
+            l.append(t("Filene har fargeverdiene direkte (ikke alias), fordi Figma bare importerer variabler som finnes i alle filene."))
             l.append("")
         }
         if formater.contains(.css) {

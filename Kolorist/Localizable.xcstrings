@@ -1854,16 +1854,6 @@
         }
       }
     },
-    "Dra filene inn i Variables-panelet. Hver fil blir en modus.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drag the files into the Variables panel. Each file becomes a mode."
-          }
-        }
-      }
-    },
     "Dra for å endre rekkefølgen under «Verdier». Du kan også skjule en verdi ved å sveipe fra høyre på den. Oppsettet synkroniseres via iCloud.": {
       "localizations": {
         "en": {
@@ -10445,6 +10435,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Expanded"
+          }
+        }
+      }
+    },
+    "Åpne Variables-visningen, lag en ny samling og dra de fire filene inn. Hver fil blir en modus. README-en har trinnene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Variables view, create a new collection and drag the four files in. Each file becomes a mode. The README has the steps."
           }
         }
       }

@@ -131,7 +131,8 @@ struct DesignsystemAvsenderTests {
         let readme = String(decoding: filer["README.md"]!, as: UTF8.self)
         #expect(readme.contains("[Kolorist 1.3](https://kolorist.no)"))
         #expect(readme.contains("Eivind Arnstein Johansen"))
-        for sti in ["hav.css", "tokens/primitives.tokens.json", "tokens/light.tokens.json", "tokens/resolver.json", "figma/dark.tokens.json", "Hav.xcassets/Contents.json"] {
+        // Figma-filene holdes fri for andre felt enn $type og $value; der står opphavet i README.
+        for sti in ["hav.css", "tokens/primitives.tokens.json", "tokens/light.tokens.json", "tokens/resolver.json", "Hav.xcassets/Contents.json"] {
             let innhold = String(decoding: try #require(filer[sti]), as: UTF8.self)
             #expect(innhold.contains("Kolorist 1.3"), "\(sti)")
         }
@@ -178,5 +179,30 @@ struct DesignsystemP3Tests {
         let css = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "Grå")["gra.css"]!, as: UTF8.self)
         #expect(!css.contains("--accent: light-dark(color(display-p3"))
         #expect(!css.contains("--text: light-dark(color(display-p3"))
+    }
+}
+
+@Suite("Designsystem for Figma")
+struct DesignsystemFigmaTests {
+    /// Figma krever `$type` og `$value` på hvert token og like tokennavn i alle filene.
+    @Test func hvertTokenHarTypeOgVerdi() throws {
+        let ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)]))
+        let filer = DesignsystemEksport.filer(ds, formater: [.figma], navn: "Hav")
+        var navnesett: [Set<String>] = []
+        for modus in Designmodus.allCases {
+            let data = try #require(filer["figma/\(modus.tokennavn).tokens.json"])
+            let rot = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+            let gruppe = try #require(rot["color"] as? [String: Any])
+            #expect(!gruppe.keys.contains { $0.hasPrefix("$") })
+            for (_, token) in gruppe {
+                let t = try #require(token as? [String: Any])
+                #expect(t["$type"] as? String == "color")
+                let v = try #require(t["$value"] as? [String: Any])
+                #expect(v["colorSpace"] as? String == "srgb")
+                #expect((v["hex"] as? String)?.count == 7)
+            }
+            navnesett.append(Set(gruppe.keys))
+        }
+        #expect(Set(navnesett).count == 1)
     }
 }
