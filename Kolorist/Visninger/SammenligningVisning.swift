@@ -11,80 +11,155 @@ struct SammenligningVisning: View {
     /// Innebygd i en fane (uten egen navigasjon og «Ferdig»), i stedet for som ark.
     var innebygd = false
 
+    @Environment(\.presentasjonsmodus) private var presentasjon
+
     var body: some View {
         if innebygd {
             // Fanen holdes i live, og @State beholder første verdi: A følger aktiv farge når den endres.
-            skjema.onChange(of: arbeidsbenk.aktivFarge) { _, ny in a = ny }
+            fane.onChange(of: arbeidsbenk.aktivFarge) { _, ny in a = ny }
         } else {
             NavigationStack {
-                skjema
-                    .toolbar {
-                        ToolbarItem(placement: .confirmationAction) { Button("Ferdig") { lukk() } }
-                    }
+                ScrollView {
+                    kort(bred: false)
+                    detaljer.padding(.horizontal, 16)
+                }
+                .background(Color.skjemabakgrunn)
+                .navigationTitle(Text(verbatim: "ΔE"))
+                #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+                #endif
+                .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Ferdig") { lukk() } } }
             }
         }
     }
 
-    private var skjema: some View {
-        let de00 = a.deltaE2000(til: b)
-        return Form {
-            Section {
-                // De store flatene er selve velgerne: trykk for å endre, slipp en farge på dem, eller hold inne for mer.
-                HStack(spacing: 0) {
-                    FargeflateVelger(bokstav: "A", tittel: String(localized: "Farge A"), farge: $a, kant: .leading)
-                    FargeflateVelger(bokstav: "B", tittel: String(localized: "Farge B"), farge: $b, kant: .trailing)
-                }
-                .frame(height: 140)
-                // Bytt A og B midt mellom flatene.
-                .overlay {
-                    Button { swap(&a, &b) } label: {
-                        Image(systemName: "arrow.left.arrow.right")
-                            .font(.callout.weight(.semibold))
-                            .frame(width: 44, height: 44)
-                            .background(.regularMaterial, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .help("Bytt A og B")
-                    .accessibilityLabel("Bytt A og B")
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                // Tynn kant, så hvite og svært lyse flater synes mot kortet.
-                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(.secondary.opacity(0.3), lineWidth: 1))
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
-
-                VStack(spacing: 2) {
-                    Text("ΔE00 \(de00, format: .number.precision(.fractionLength(2)))")
-                        .font(.largeTitle.weight(.semibold).monospacedDigit())
-                    Text(Fargeavstand.tolkning(de00)).font(.headline).foregroundStyle(Color.sekundærTekst)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 6)
-                .accessibilityElement(children: .combine)
+    /// Som Kontrast: kortet med verdien og de to fargene øverst (til venstre i bred visning), detaljene under.
+    private var fane: some View {
+        GeometryReader { geo in
+            let bred = Breddeoppsett.erBred(geo.size)
+            let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
+            oppsett {
+                kort(bred: bred).frame(width: bred ? geo.size.width / 2 : nil)
+                Form { detaljseksjon }
+                    .formStyle(.grouped)
+                    #if os(iOS)
+                    .listSectionSpacing(.compact)
+                    #endif
+                    .contentMargins(.top, 0, for: .scrollContent)
             }
+            .background(Color.skjemabakgrunn)
+        }
+        .navigationTitle(Text(verbatim: "ΔE"))
+    }
 
-            Section {
-                let la = a.cieLab, lb = b.cieLab, ca = a.cieLCH, cb = b.cieLCH
-                rad("ΔE00 (CIEDE2000)", de00, 2)
-                rad("ΔE76 (CIELab)", Fargeavstand.deltaE76(la, lb), 2)
-                rad("ΔE OK (OKLab)", a.avstandOK(til: b), 4)
-                rad("ΔL* (lyshet)", lb.l - la.l, 2)
-                rad("ΔC* (kroma)", cb.c - ca.c, 2)
-                rad("Δh (kulør, grader)", kulørforskjell(ca.h, cb.h), 1)
-            } header: { Group {
-                Text("Detaljer")
-            }.foregroundStyle(Color.sekundærTekst) } footer: {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse.")
-                    MetodeHenvisning(.ciede2000, .cieLab)
+    /// Verdien og hvor synlig forskjellen er over de to fargene, som i kontrastsjekken. Fargene er likeverdige flater med
+    /// rette hjørner der de møtes; trykk på en flate for å velge fargen.
+    private func kort(bred: Bool) -> some View {
+        let de00 = a.deltaE2000(til: b)
+        return VStack(spacing: 0) {
+            VStack(spacing: 0) {
+                topptekst(de00)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 14)
+                    .padding(.bottom, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(spacing: 0) {
+                    felt("A", String(localized: "Farge A"), farge: $a)
+                    felt("B", String(localized: "Farge B"), farge: $b)
                 }
+            }
+            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: bred ? 0 : 20, style: .continuous))
+            .frame(height: bred ? nil : (presentasjon ? 330 : 250))
+            .frame(maxHeight: bred ? .infinity : nil)
+            HStack {
+                Button("Bytt A og B", systemImage: "arrow.left.arrow.right") { swap(&a, &b) }
+                    .help("Bytt A og B")
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .frame(minHeight: 48)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .padding(.leading, 16)
+        .padding(.trailing, bred ? 0 : 16)
+        .padding(.top, bred ? 16 : 4)
+        .padding(.bottom, bred ? 16 : 8)
+    }
+
+    /// ΔE00 stort, med hvor synlig forskjellen er til høyre (på samme grunnlinje), og forskjellen i lyshet, kroma og
+    /// kulør under.
+    private func topptekst(_ de00: Double) -> some View {
+        let la = a.cieLCH, lb = b.cieLCH
+        let detalj = String(localized: "ΔL* \(lb.l - la.l, format: .number.precision(.fractionLength(1))) · ΔC* \(lb.c - la.c, format: .number.precision(.fractionLength(1))) · Δh \(kulørforskjell(la.h, lb.h), format: .number.precision(.fractionLength(0)))°")
+        return VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .lastTextBaseline, spacing: 8) {
+                Text(verbatim: "ΔE00").koloristFont(.title2, weight: .semibold).foregroundStyle(Color.sekundærTekst)
+                Text(de00, format: .number.precision(.fractionLength(2)))
+                    .koloristFont(.largeTitle, weight: .bold).monospacedDigit()
+                    .fixedSize()
+                    .layoutPriority(1)
+                Text(Fargeavstand.tolkning(de00)).koloristFont(.headline).lineLimit(2).minimumScaleFactor(0.8)
+                Spacer(minLength: 0)
+            }
+            Text(detalj).koloristFont(.subheadline).opacity(0.8).lineLimit(1).minimumScaleFactor(0.8)
+        }
+        .foregroundStyle(Color.primary)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: "ΔE00 \(de00.formatted(.number.precision(.fractionLength(2)))), \(Fargeavstand.tolkning(de00)). \(detalj)"))
+    }
+
+    /// Én av de to fargene: bokstav og hex i flatens farge. Hele flaten åpner valgene for fargen.
+    private func felt(_ bokstav: String, _ tittel: String, farge: Binding<Farge>) -> some View {
+        let lesbar = farge.wrappedValue.lesbarTekstfarge.swiftUI
+        // Fargen som eget lag bak menyen, så flatene møtes i en rett kant (menyen avrunder på iOS 26).
+        return ZStack {
+            farge.wrappedValue.swiftUI
+            FargeVelgerMeny(tittel: tittel, farge: farge, visHvitOgSort: true) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(verbatim: bokstav).koloristFont(.title2, weight: .bold)
+                    Spacer(minLength: 4)
+                    HStack(spacing: 4) {
+                        Text(farge.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
+                        Image(systemName: "chevron.up.chevron.down").font(.caption2)
+                    }
+                    .opacity(0.85)
+                }
+                .foregroundStyle(lesbar)
+                .padding(12)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .contentShape(Rectangle())
             }
         }
-        .formStyle(.grouped)
-        .navigationTitle(Text(verbatim: "ΔE"))
-        #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
+        .tarImotFarger { farger in
+            guard let f = farger.first else { return false }
+            farge.wrappedValue = f.farge
+            return true
+        }
+    }
+
+    private var detaljer: some View {
+        Form { detaljseksjon }.formStyle(.grouped).frame(minHeight: 420).scrollDisabled(true)
+    }
+
+    @ViewBuilder private var detaljseksjon: some View {
+        let de00 = a.deltaE2000(til: b)
+        Section {
+            let la = a.cieLab, lb = b.cieLab, ca = a.cieLCH, cb = b.cieLCH
+            rad("ΔE00 (CIEDE2000)", de00, 2)
+            rad("ΔE76 (CIELab)", Fargeavstand.deltaE76(la, lb), 2)
+            rad("ΔE OK (OKLab)", a.avstandOK(til: b), 4)
+            rad("ΔL* (lyshet)", lb.l - la.l, 2)
+            rad("ΔC* (kroma)", cb.c - ca.c, 2)
+            rad("Δh (kulør, grader)", kulørforskjell(ca.h, cb.h), 1)
+        } header: {
+            Text("Detaljer")
+        } footer: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse.")
+                MetodeHenvisning(.ciede2000, .cieLab)
+            }
+        }
     }
 
     private func rad(_ navn: LocalizedStringKey, _ verdi: Double, _ desimaler: Int) -> some View {
