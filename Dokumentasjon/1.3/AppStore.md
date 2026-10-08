@@ -230,10 +230,7 @@ colour,color,palette,design system,tokens,OKLCH,CMYK,Munsell,contrast,WCAG,APCA,
 
 ## 3. Mac – norsk (bokmål)
 
-> **Merk (2026-10-08):** iOS og iPadOS er på 1.2, mens Mac fortsatt er på 1.1. Kommer ikke Mac 1.2 ut før 1.3, hopper
-> Mac-brukerne fra 1.1 til 1.3. Da må «Nytt i denne versjonen» for Mac også ta med nyhetene fra 1.2: se i lys og
-> betraktningsforhold, skriftkontrast i paletter, LRV i valgt lys, del som lenke, «Lagre som», filamentfarger, nye
-> harmonier og naturlig lyshetsrekkefølge (`Dokumentasjon/1.2/AppStore.md`, Mac-avsnittet).
+> **Merk:** Mac går rett fra 1.1 til 1.3 (Eivind 2026-10-08), så teksten under tar med nyhetene fra både 1.2 og 1.3.
 
 **Reklametekst (170)**
 
@@ -241,12 +238,42 @@ colour,color,palette,design system,tokens,OKLCH,CMYK,Munsell,contrast,WCAG,APCA,
 Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus, kontroll etter WCAG, APCA og LRV – plukk fra hele skjermen og dra fargene videre.
 ```
 
-**Nytt i denne versjonen (4000)** – som for iPhone og iPad, med disse i tillegg:
+**Nytt i denne versjonen (4000)** – Mac hopper fra 1.1, så nyhetene fra 1.2 er med
 
 ```
-• Designsystemer har egen plass i sidepanelet når vinduet er bredt, så de får hele bredden.
-• Skjermpipette også med ⌘I.
-• Palettene i spalten til høyre har tydeligere valg: visning med tekst, og «Mer» for lagre, dele, skrive ut og lage designsystem.
+Kolorist 1.3 for Mac tar paletten helt fram til designsystemet – og tar lyset med i regnestykket.
+
+FRA PALETT TIL DESIGNSYSTEM
+• Designsystem fra en palett: roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast. Se dem på knapper, felt, brytere og varsler, med kontrasten for hvert fargepar og kravet i WCAG. Legg til egne roller, for eksempel info.
+• Eksporter designsystemet som fargesett for apputvikling, design tokens med alias og én fil per modus, og CSS med lys og mørk modus og Display P3 – med en README som forklarer systemet.
+• Toneskalaer med lik kontrast for alle kulører, og skriftfarger i paletten om du vil.
+
+KONTRAST
+• Ny kontrastsjekk: velg WCAG 2.2, APCA eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
+• Skriftkontrast rett i palettene: hver farge som tekst på de andre.
+• Kontrast mellom flater med valgfri metode: LRV-forskjell, Weber (TEK17, NS 11001) eller Michelson – også i valgt lys.
+
+LYS
+• Se farger og hele paletter slik de oppleves under andre betraktningsforhold – egne eller standardiserte for grafisk vurdering, arbeidsplasser, skoler og museer.
+• Betraktningsforhold du har målt med iPhone og iPad, følger med til Macen via iCloud.
+• Med iPhone som kamera kan farger kompenseres for lyset med gråkort eller referansekort (beta).
+
+FARGER OG HARMONIER
+• Nye harmonier: monokromatisk, tonebane, triade, kvadrat og analog med komplementær aksent – på fargesirkler med Goethe og Munsell, og med naturlig lyshetsrekkefølge.
+• Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament.
+• Kildefargerom for CMYK og RGB, papirhvitt og valgfritt betraktningsforhold for visningen.
+
+PALETTER, DELING OG EKSPORT
+• Palettgrupper: samle paletter i grupper, og skriv ut, lagre og kopier hele grupper. Importer ASE-filer som paletter.
+• Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren.
+• Lagre som: velg formater etter hvor filene skal brukes, og lagre dem i en mappe eller del dem.
+• Kopier gradienter som redigerbare gradienter til design-, layout- og presentasjonsprogrammer.
+• Endre rekkefølgen på farger ved å dra dem, og plukk farge rett fra fargefeltene.
+
+PÅ MACEN
+• Designsystemer får egen plass i sidepanelet når vinduet er bredt.
+• Palettene i spalten til høyre har tydeligere valg, med tekst på visningene.
+• Skjermpipette også med ⌘I, og hurtigtaster: ⌘N ny palett, ⇧⌘S lagre som, ⌘1–5 for fanene.
 ```
 
 **Beskrivelse (4000)** – som for iPhone og iPad, med «PLUKK OG DRA» i stedet for «PLUKK FARGER»:
@@ -280,12 +307,42 @@ brukes til de nye er klare.
 From palette to design system: tone scales with consistent contrast, light and dark mode, checks by WCAG, APCA and LRV – pick from anywhere on screen and drag colours on.
 ```
 
-**What’s New (4000)** – as for iPhone and iPad, plus:
+**What’s New (4000)** – the Mac skips 1.2, so the 1.2 news is included
 
 ```
-• Design systems get their own place in the sidebar when the window is wide, so they get the full width.
-• Screen eyedropper with ⌘I too.
-• Palettes in the right-hand column have clearer controls: views with labels, and “More” for saving, sharing, printing and making a design system.
+Kolorist 1.3 for Mac takes your palette all the way to a design system – and brings light into the equation.
+
+FROM PALETTE TO DESIGN SYSTEM
+• Design system from a palette: roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast. See them on buttons, fields, switches and alerts, with the contrast for each colour pair and the WCAG requirement. Add your own roles, such as info.
+• Export the design system as colour sets for app development, design tokens with aliases and one file per mode, and CSS with light and dark mode and Display P3 – with a README that explains the system.
+• Tone scales with the same contrast for every hue, and text colours in the palette if you want them.
+
+CONTRAST
+• New contrast check: choose WCAG 2.2, APCA or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
+• Text contrast right in your palettes: each colour as text on the others.
+• Contrast between surfaces with a choice of method: LRV difference, Weber or Michelson – in the chosen light too.
+
+LIGHT
+• See colours and whole palettes as they appear in other viewing conditions – your own or standard ones for graphic arts, workplaces, schools and museums.
+• Viewing conditions you measured with iPhone and iPad follow you to the Mac through iCloud.
+• With iPhone as the camera, colours can be compensated for the light with a grey card or reference card (beta).
+
+COLOURS AND HARMONIES
+• New harmonies: monochromatic, tone path, triad, square and analogous with a complementary accent – on colour wheels including Goethe and Munsell, with natural lightness order.
+• Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament.
+• Source colour space for CMYK and RGB, paper white and a choice of viewing condition for the display.
+
+PALETTES, SHARING AND EXPORT
+• Palette groups: gather palettes in groups, and print, save and copy whole groups. Import ASE files as palettes.
+• Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser.
+• Save as: choose formats by where the files will be used, and save them to a folder or share them.
+• Copy gradients as editable gradients to design, layout and presentation apps.
+• Reorder colours by dragging them, and pick a colour right from the colour fields.
+
+ON THE MAC
+• Design systems get their own place in the sidebar when the window is wide.
+• Palettes in the right-hand column have clearer controls, with labelled views.
+• Screen eyedropper with ⌘I too, and keyboard shortcuts: ⌘N new palette, ⇧⌘S Save as, ⌘1–5 for the tabs.
 ```
 
 **Description (4000)** – as for iPhone and iPad, with “PICK AND DRAG” instead of “PICK COLOURS”:
