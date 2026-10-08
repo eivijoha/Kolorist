@@ -81,7 +81,9 @@
         <h2 id="build-the-colour-system">Build the colour system</h2>
         <p class="lesetekst">Tones and gradients in perceptually equal steps, so the steps look even.</p>
         <ul>
-          <li>Tone scales from 50 to 950</li>
+          <li>Tone scales from 50 to 950 with the same contrast for every hue: step 400 holds at least 3:1 and step 600 at least 4.5:1 against white <span class="nytt">New in 1.3</span></li>
+          <li>From palette to design system: roles for accent, neutral and status in light and dark mode, with and without increased contrast. Your brand colour is kept wherever it meets the requirements <span class="nytt">New in 1.3</span></li>
+          <li>Text colours in the palette if you want them: one near white and one near black, tinted with the palette’s hue <span class="nytt">New in 1.3</span></li>
           <li>Lighter and darker tones in equal or easing steps, with values in the chosen colour model</li>
           <li>Gradients in OKLab, with lighter and darker rows</li>
           <li>Drag on the lightness ladder to make the whole row lighter or darker</li>
@@ -89,8 +91,8 @@
         </ul>
       </div>
       <figure class="skjermbilde">
-        <img src="../assets/en/skjermbilde-overgang.png?v=8" alt="Gradient between two colours in equal perceptual steps, with lighter and darker rows" width="1284" height="2778" loading="lazy">
-        <figcaption>Gradient</figcaption>
+        <div class="ramme">Screenshot coming</div>
+        <figcaption>Tone scale with contrast per step</figcaption>
       </figure>
     </section>
     <section class="fagsteg med-bilde" aria-labelledby="check">
@@ -102,14 +104,15 @@
           <li>Contrast check by WCAG 2.2, APCA or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field <span class="nytt">New in 1.3</span></li>
           <li>Auto-fix changes the lightness until the colour passes</li>
           <li>Text contrast for whole palettes, right in the palette view</li>
+          <li>Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement <span class="nytt">New in 1.3</span></li>
           <li>Text on colour fields in black or white by perceived legibility (APCA), mid-tones included <span class="nytt">New in 1.3</span></li>
           <li>Reading contrast by APCA (Lc), with what the contrast is good for: body text, headlines or graphics <span class="nytt">New in 1.3</span></li>
           <li>Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart</li>
         </ul>
       </div>
       <figure class="skjermbilde">
-        <img src="../assets/en/skjermbilde-skriftkontrast.png?v=8" alt="Text contrast in a palette: each colour as text on the others, with WCAG contrast and how many colour pairs pass" width="1284" height="2778" loading="lazy">
-        <figcaption>Text contrast</figcaption>
+        <div class="ramme">Screenshot coming</div>
+        <figcaption>Components with contrast per colour pair</figcaption>
       </figure>
     </section>
     <section class="fagsteg med-bilde" aria-labelledby="screen-print-and-3d-printing">
@@ -140,6 +143,7 @@
         <p class="lesetekst">Export and copy colours to other apps, in the format they were made in.</p>
         <ul>
           <li>Export to ASE, ACO, design tokens (DTCG JSON), CSS, SwiftUI, GPL, SVG swatches and hex lists</li>
+          <li>The design system as colour sets for app development (light, dark and increased contrast), design tokens with aliases and one file per mode, and CSS with light-dark() <span class="nytt">New in 1.3</span></li>
           <li>Colours are exported in the format they were made in – CMYK as CMYK, for example</li>
           <li>Copy colours and gradients straight into design, layout, office and presentation apps – as shapes and editable gradients, not images <span class="nytt">New in 1.3</span></li>
           <li>Choose which apps “Copy to” shows, and in what order <span class="nytt">New in 1.3</span></li>

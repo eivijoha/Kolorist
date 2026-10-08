@@ -81,7 +81,9 @@
         <h2 id="bygg-fargesystemet">Bygg fargesystemet</h2>
         <p class="lesetekst">Toner og overganger i like perseptuelle steg, så trinnene oppleves jevne.</p>
         <ul>
-          <li>Toneskalaer fra 50 til 950</li>
+          <li>Toneskalaer fra 50 til 950 med lik kontrast for alle kulører: trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt <span class="nytt">Nytt i 1.3</span></li>
+          <li>Fra palett til designsystem: roller for aksent, nøytral og status i lys og mørk modus, med og uten økt kontrast. Merkefargen beholdes der den holder kravene <span class="nytt">Nytt i 1.3</span></li>
+          <li>Skriftfarger i paletten om du vil: én nær hvit og én nær sort, med palettens kulørpreg <span class="nytt">Nytt i 1.3</span></li>
           <li>Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell</li>
           <li>Overganger i OKLab, med lysere og mørkere rader</li>
           <li>Dra på lyshetsstigen for å gjøre hele rekken lysere eller mørkere</li>
@@ -89,8 +91,8 @@
         </ul>
       </div>
       <figure class="skjermbilde">
-        <img src="assets/skjermbilde-overgang.png?v=8" alt="Overgang mellom to farger i like perseptuelle steg, med lysere og mørkere rader" width="1284" height="2778" loading="lazy">
-        <figcaption>Overgang</figcaption>
+        <div class="ramme">Skjermskudd kommer</div>
+        <figcaption>Toneskala med kontrast per trinn</figcaption>
       </figure>
     </section>
     <section class="fagsteg med-bilde" aria-labelledby="kontroller">
@@ -102,14 +104,15 @@
           <li>Kontrastsjekk etter WCAG 2.2, APCA eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten <span class="nytt">Nytt i 1.3</span></li>
           <li>«Rett opp» endrer lysheten til fargen består</li>
           <li>Skriftkontrast for hele paletter, rett i palettvisningen</li>
+          <li>Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG <span class="nytt">Nytt i 1.3</span></li>
           <li>Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner <span class="nytt">Nytt i 1.3</span></li>
           <li>Lesekontrast etter APCA (Lc), med hva kontrasten holder til: brødtekst, overskrifter eller grafikk <span class="nytt">Nytt i 1.3</span></li>
           <li>Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille</li>
         </ul>
       </div>
       <figure class="skjermbilde">
-        <img src="assets/skjermbilde-skriftkontrast.png?v=8" alt="Skriftkontrast i en palett: hver farge som tekst på de andre, med WCAG-kontrast og hvor mange fargepar som består" width="1284" height="2778" loading="lazy">
-        <figcaption>Skriftkontrast</figcaption>
+        <div class="ramme">Skjermskudd kommer</div>
+        <figcaption>Komponenter med kontrast per fargepar</figcaption>
       </figure>
     </section>
     <section class="fagsteg med-bilde" aria-labelledby="skjerm-trykk-og-3d-print">
@@ -140,6 +143,7 @@
         <p class="lesetekst">Eksporter og kopier farger til andre programmer, i formatet de ble laget i.</p>
         <ul>
           <li>Eksport til ASE, ACO, design tokens (DTCG-JSON), CSS, SwiftUI, GPL, SVG-fargeprøver og hex-lister</li>
+          <li>Designsystemet som fargesett for apputvikling (lys, mørk og økt kontrast), design tokens med alias og én fil per modus, og CSS med light-dark() <span class="nytt">Nytt i 1.3</span></li>
           <li>Farger eksporteres i formatet de er laget i – for eksempel CMYK som CMYK</li>
           <li>Kopier farger og gradienter rett inn i design-, layout-, kontor- og presentasjonsprogrammer – som figurer og redigerbare gradienter, ikke bilder <span class="nytt">Nytt i 1.3</span></li>
           <li>Velg selv hvilke programmer «Kopier til» viser, og i hvilken rekkefølge <span class="nytt">Nytt i 1.3</span></li>

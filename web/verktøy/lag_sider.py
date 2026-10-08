@@ -248,7 +248,7 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="design.html">Kontrastsjekk etter WCAG, APCA eller LRV, monokromatiske paletter, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG, APCA eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.'),
@@ -267,7 +267,7 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="design.html">A contrast check by WCAG, APCA or LRV, monochromatic palettes, and colours and gradients you copy straight into your design apps</a></p>'
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">From palette to design system, a contrast check by WCAG, APCA or LRV, and colours and gradients you copy straight into your design apps</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, Munsell and every colour space and ICC profile.'),
@@ -305,7 +305,8 @@ def startside(lang):
         </article>''')
     # Plassholder: kontrastsjekken har fått ny utforming i 1.3 (stor flate, valg av WCAG, APCA eller LRV).
     kontrast = 'kommer:' + ('Kontrast: WCAG, APCA eller LRV' if lang == 'nb' else 'Contrast: WCAG, APCA or LRV')
-    bilder = skjermbilder(s, ['studio', 'overgang', kontrast], ' tre').format(tekster['rull'])
+    designsystem = 'kommer:' + ('Designsystem: komponenter i lys og mørk modus' if lang == 'nb' else 'Design system: components in light and dark mode')
+    bilder = skjermbilder(s, ['studio', designsystem, kontrast], ' tre').format(tekster['rull'])
     innhold = f'''{helt}
 
     <section class="seksjon" aria-labelledby="kort-fortalt">
@@ -418,19 +419,22 @@ def design(lang):
               'Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning' + N12,
               'Plukk farger med kameraet eller fra bilder rett fra fargefeltene – og fra hele skjermen på Mac' + N], 'monokrom', None),
             ('Bygg fargesystemet', 'Toner og overganger i like perseptuelle steg, så trinnene oppleves jevne.',
-             ['Toneskalaer fra 50 til 950',
+             ['Toneskalaer fra 50 til 950 med lik kontrast for alle kulører: trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt' + N,
+              'Fra palett til designsystem: roller for aksent, nøytral og status i lys og mørk modus, med og uten økt kontrast. Merkefargen beholdes der den holder kravene' + N,
+              'Skriftfarger i paletten om du vil: én nær hvit og én nær sort, med palettens kulørpreg' + N,
               'Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell' + N12,
               'Overganger i OKLab, med lysere og mørkere rader',
               'Dra på lyshetsstigen for å gjøre hele rekken lysere eller mørkere' + N12,
-              'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'overgang', None),
+              'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'kommer:Toneskala med kontrast per trinn', None),
             ('Kontroller', 'Kontroller kontrast og lesbarhet, også med fargesynsavvik.',
              ['WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk',
               'Kontrastsjekk etter WCAG 2.2, APCA eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N,
               '«Rett opp» endrer lysheten til fargen består',
               'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
+              'Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG' + N,
               'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N,
               'Lesekontrast etter APCA (Lc), med hva kontrasten holder til: brødtekst, overskrifter eller grafikk' + N,
-              'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'skriftkontrast', None),
+              'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'kommer:Komponenter med kontrast per fargepar', None),
             ('Skjerm, trykk og 3D-print', 'Display P3 side om side med trykkprofiler, egne ICC-profiler og fargekart – og filamentfarger for 3D-print.',
              ['Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil',
               'Varsel når fargen er utenfor fargeområdet – og begrens farger til en profil om du vil',
@@ -444,6 +448,7 @@ def design(lang):
              'studio', ('lys.html', 'Les om lys og fargemåling')),
             ('Levér', 'Eksporter og kopier farger til andre programmer, i formatet de ble laget i.',
              ['Eksport til ASE, ACO, design tokens (DTCG-JSON), CSS, SwiftUI, GPL, SVG-fargeprøver og hex-lister',
+              'Designsystemet som fargesett for apputvikling (lys, mørk og økt kontrast), design tokens med alias og én fil per modus, og CSS med light-dark()' + N,
               'Farger eksporteres i formatet de er laget i – for eksempel CMYK som CMYK',
               'Kopier farger og gradienter rett inn i design-, layout-, kontor- og presentasjonsprogrammer – som figurer og redigerbare gradienter, ikke bilder' + N,
               'Velg selv hvilke programmer «Kopier til» viser, og i hvilken rekkefølge' + N,
@@ -469,19 +474,22 @@ def design(lang):
           'Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension' + N12,
           'Pick colours with the camera or from photos right from the colour fields – and from anywhere on screen on the Mac' + N], 'monokrom', None),
         ('Build the colour system', 'Tones and gradients in perceptually equal steps, so the steps look even.',
-         ['Tone scales from 50 to 950',
+         ['Tone scales from 50 to 950 with the same contrast for every hue: step 400 holds at least 3:1 and step 600 at least 4.5:1 against white' + N,
+          'From palette to design system: roles for accent, neutral and status in light and dark mode, with and without increased contrast. Your brand colour is kept wherever it meets the requirements' + N,
+          'Text colours in the palette if you want them: one near white and one near black, tinted with the palette’s hue' + N,
           'Lighter and darker tones in equal or easing steps, with values in the chosen colour model' + N12,
           'Gradients in OKLab, with lighter and darker rows',
           'Drag on the lightness ladder to make the whole row lighter or darker' + N12,
-          'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'overgang', None),
+          'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'kommer:Tone scale with contrast per step', None),
         ('Check', 'Check contrast and legibility, including with colour vision deficiencies.',
          ['WCAG 2.2 contrast: AA and AAA, large text and graphics',
           'Contrast check by WCAG 2.2, APCA or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N,
           'Auto-fix changes the lightness until the colour passes',
           'Text contrast for whole palettes, right in the palette view' + N12,
+          'Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement' + N,
           'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N,
           'Reading contrast by APCA (Lc), with what the contrast is good for: body text, headlines or graphics' + N,
-          'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'skriftkontrast', None),
+          'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'kommer:Components with contrast per colour pair', None),
         ('Screen, print and 3D printing', 'Display P3 side by side with print profiles, your own ICC profiles and colour libraries – and filament colours for 3D printing.',
          ['Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile',
           'A warning when the colour is out of gamut – and limit colours to a profile if you like',
@@ -495,6 +503,7 @@ def design(lang):
          'studio', ('light.html', 'Read about light and colour measurement')),
         ('Deliver', 'Export and copy colours to other apps, in the format they were made in.',
          ['Export to ASE, ACO, design tokens (DTCG JSON), CSS, SwiftUI, GPL, SVG swatches and hex lists',
+          'The design system as colour sets for app development (light, dark and increased contrast), design tokens with aliases and one file per mode, and CSS with light-dark()' + N,
           'Colours are exported in the format they were made in – CMYK as CMYK, for example',
           'Copy colours and gradients straight into design, layout, office and presentation apps – as shapes and editable gradients, not images' + N,
           'Choose which apps “Copy to” shows, and in what order' + N,
@@ -822,10 +831,11 @@ def plattformer(lang):
         # None: skjermbildene er ikke tatt ennå (plassholder for hver plattform).
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmoni'), ('overgang', 'Overgang'),
                      (None, 'Kontrast: WCAG, APCA eller LRV'), (None, 'Plukk farge fra et fargefelt'),
-                     (None, 'Presentasjonsmodus')]
+                     (None, 'Presentasjonsmodus'), (None, 'Designsystem: komponenter')]
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
+                 ('Designsystem fra en palett, med komponenter og eksport' + N, ja, ja, ja),
                  ('Kontrast (WCAG, APCA og LRV) og fargesyn', ja, ja, ja),
                  ('Presentasjonsmodus: større tekst og kontroller for prosjektør og skjermdeling' + N, ja, ja, ja),
                  ('Simuler farger og paletter under andre betraktningsforhold', ja, ja, ja),
@@ -861,10 +871,11 @@ def plattformer(lang):
         side_intro = 'The same tools, fitted to the screen.'
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'),
                      (None, 'Contrast: WCAG, APCA or LRV'), (None, 'Pick a colour from a colour field'),
-                     (None, 'Presentation mode')]
+                     (None, 'Presentation mode'), (None, 'Design system: components')]
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
+                 ('Design system from a palette, with components and export' + N, ja, ja, ja),
                  ('Contrast (WCAG, APCA and LRV) and colour vision', ja, ja, ja),
                  ('Presentation mode: larger text and controls for projectors and screen sharing' + N, ja, ja, ja),
                  ('Simulate colours and palettes in other viewing conditions', ja, ja, ja),
