@@ -756,8 +756,10 @@ struct DesignsystemRoller: View {
         let ds = dokument.designsystem
         return Menu("Bytt med", systemImage: "arrow.left.arrow.right") {
             ForEach(Designrolle.allCases.filter { $0 != rolle }) { annen in
+                // To tekster i et menyvalg blir tittel og undertittel.
                 Button { bytt(rolle, annen) } label: {
-                    Text(annen.navn) + Text(verbatim: "  \(ds[annen].hex())")
+                    Text(annen.navn)
+                    Text(verbatim: ds[annen].hex())
                 }
             }
         }
