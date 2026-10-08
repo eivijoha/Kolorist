@@ -12,7 +12,10 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
   kravet etter WCAG 2 (`Komponentkrav`: 1.4.3, 1.4.11, unntatt for deaktivert) – alle holder for alle kulører (testet).
 - `DesignsystemEksport.filer(_:formater:navn:)`: asset catalog for Xcode (lys, mørk, `contrast: high`, kontrollert med
   `actool`), DTCG 2025.10 med primitiver, én fil per modus med alias og `resolver.json`, Figma (én fil per modus med
-  verdier) og CSS med `light-dark()` og `prefers-contrast: more`.
+  verdier) og CSS med `light-dark()` og `prefers-contrast: more`. Med minst ett format følger en `README.md` (roller,
+  farger per modus med bruk, kontrollen av kontrasten med eventuelle avvik, skalaer og bruk av hver fil).
+  `DesignsystemEksport.Avsender` (app, lenke, utvikler) skrives inn i alle filene: README, CSS-kommentar, `$description` og
+  `$extensions` i tokenfilene, `description` i resolver.json og `author` i asset catalog.
 
 - **Skriftfarger i paletter:** `Palett.tekstfarger` (valgfritt, kodes bare når det finnes; eldre data leses) og
   `PalettFarge.tekstfarge: UUID?` (valgt skriftfarge, `nil` = automatisk). `Skriftfarger.beste(for:blant:)` velger den som

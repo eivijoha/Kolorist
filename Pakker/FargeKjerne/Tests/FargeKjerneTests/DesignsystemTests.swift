@@ -80,7 +80,7 @@ struct DesignsystemEksportTests {
         for modus in Designmodus.allCases {
             let fil = try #require(filer["tokens/\(modus.tokennavn).tokens.json"])
             let sem = try #require((JSONSerialization.jsonObject(with: fil) as? [String: Any])?["semantic"] as? [String: Any])
-            for (navn, token) in sem where navn != "$type" {
+            for (navn, token) in sem where !navn.hasPrefix("$") {
                 let verdi = (token as? [String: Any])?["$value"]
                 let alias = try #require(verdi as? String, "\(modus) \(navn) er ikke alias")
                 let sti = alias.dropFirst().dropLast().split(separator: ".").map(String.init)
@@ -96,5 +96,44 @@ struct DesignsystemEksportTests {
         #expect(css.contains("color-scheme: light dark;"))
         #expect(css.contains("--accent: light-dark(#"))
         #expect(css.contains("@media (prefers-contrast: more)"))
+    }
+}
+
+@Suite("Designsystem-README")
+struct DesignsystemReadmeTests {
+    @Test func readmeMedRollerFargerOgBruk() throws {
+        let ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)]))
+        let filer = DesignsystemEksport.filer(ds, formater: [.xcode, .css], navn: "Hav")
+        let tekst = String(decoding: try #require(filer["README.md"]), as: UTF8.self)
+        #expect(tekst.contains("#2F7FD8"))
+        #expect(tekst.contains("`on-accent`"))
+        #expect(tekst.contains("Hav.xcassets"))
+        #expect(tekst.contains("hav.css"))
+        #expect(!tekst.contains("figma/"))
+        #expect(DesignsystemEksport.filer(ds, formater: [], navn: "Hav").isEmpty)
+    }
+
+    @Test func avvikListesNårRollenEndres() {
+        var ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)]))
+        // En skriftfarge som ikke holder på aksenten.
+        ds.lysTekst = Farge(hex: "#8899AA")!
+        let tekst = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "Hav")["README.md"]!, as: UTF8.self)
+        #expect(tekst.contains("`on-accent` / `accent`"))
+    }
+}
+
+@Suite("Designsystem-avsender")
+struct DesignsystemAvsenderTests {
+    @Test func avsenderIAlleFiler() throws {
+        let ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)]))
+        let avsender = DesignsystemEksport.Avsender(app: "Kolorist 1.3", lenke: URL(string: "https://kolorist.no"), utvikler: "Eivind Arnstein Johansen")
+        let filer = DesignsystemEksport.filer(ds, formater: Set(DesignsystemEksport.Format.allCases), navn: "Hav", avsender: avsender)
+        let readme = String(decoding: filer["README.md"]!, as: UTF8.self)
+        #expect(readme.contains("[Kolorist 1.3](https://kolorist.no)"))
+        #expect(readme.contains("Eivind Arnstein Johansen"))
+        for sti in ["hav.css", "tokens/primitives.tokens.json", "tokens/light.tokens.json", "tokens/resolver.json", "figma/dark.tokens.json", "Hav.xcassets/Contents.json"] {
+            let innhold = String(decoding: try #require(filer[sti]), as: UTF8.self)
+            #expect(innhold.contains("Kolorist 1.3"), "\(sti)")
+        }
     }
 }

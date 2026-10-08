@@ -203,9 +203,17 @@ struct DesignsystemVisning: View {
     @State private var nyttNavn = ""
     /// Lagret i denne visningen (bekreftelsen står så lenge visningen er åpen).
     @State private var nettoppLagret = false
+    /// Lagret i lageret; ellers er visningen en forhåndsvisning. Egen tilstand, siden SwiftUI ikke følger
+    /// `modelContext` på modellen.
+    @State private var erLagret: Bool
+    @State private var lagrer = false
+    /// Navnevalget før lagring.
+    @State private var velgerNavn = false
 
-    /// Lagret i lageret; ellers er visningen en forhåndsvisning.
-    private var erLagret: Bool { dokument.modelContext != nil }
+    init(dokument: DesignsystemDokument) {
+        self.dokument = dokument
+        _erLagret = State(initialValue: dokument.modelContext != nil)
+    }
 
     /// Paletten designsystemet ble laget fra, når den finnes.
     private var palett: PalettDokument? { paletter.first { $0.id == dokument.palettID } }
@@ -243,8 +251,12 @@ struct DesignsystemVisning: View {
         .toolbar {
             if !erLagret {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Lagre", action: lagre)
-                        .help("Lagre designsystemet under Designsystemer i Paletter")
+                    if lagrer {
+                        ProgressView()
+                    } else {
+                        Button("Lagre", action: spørOmNavn)
+                            .help("Lagre designsystemet under Designsystemer i Paletter")
+                    }
                 }
             }
             ToolbarItem {
@@ -272,6 +284,13 @@ struct DesignsystemVisning: View {
                 if !navn.isEmpty { kontekst.angresteg("Gi nytt navn") { dokument.navn = navn } }
             }
         }
+        .alert("Lagre designsystemet", isPresented: $velgerNavn) {
+            TextField("Navn", text: $nyttNavn)
+            Button("Avbryt", role: .cancel) {}
+            Button("Lagre") { lagre(som: nyttNavn) }
+        } message: {
+            Text("Gi designsystemet et navn. Du finner det under Designsystemer i Paletter.")
+        }
         .alert("Slette designsystemet?", isPresented: $slettSpørsmål) {
             Button("Avbryt", role: .cancel) {}
             Button("Slett", role: .destructive) {
@@ -287,9 +306,28 @@ struct DesignsystemVisning: View {
 
     private var modus: Designmodus { Designmodus(mørk: mørk, øktKontrast: øktKontrast) }
 
-    private func lagre() {
-        kontekst.angresteg("Lagre designsystem") { kontekst.insert(dokument) }
-        withAnimation { nettoppLagret = true }
+    private func spørOmNavn() {
+        nyttNavn = dokument.navn
+        velgerNavn = true
+    }
+
+    /// Lagrer med valgt navn. Spinneren vises først, så lagringen skjer i neste runde.
+    private func lagre(som navn: String) {
+        let navn = navn.trimmingCharacters(in: .whitespacesAndNewlines)
+        lagrer = true
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(80))
+            kontekst.angresteg("Lagre designsystem") {
+                if !navn.isEmpty { dokument.navn = navn }
+                kontekst.insert(dokument)
+            }
+            try? kontekst.save()
+            withAnimation {
+                lagrer = false
+                erLagret = true
+                nettoppLagret = true
+            }
+        }
     }
 
     /// Forhåndsvisning med «Lagre», eller bekreftelse rett etter lagring.
@@ -301,9 +339,16 @@ struct DesignsystemVisning: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Forhåndsvisning. Se gjennom rollene og komponentene, og lagre for å beholde designsystemet.")
                         .font(.callout)
-                    Button("Lagre designsystemet", systemImage: "checkmark", action: lagre)
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
+                    if lagrer {
+                        HStack(spacing: 8) {
+                            ProgressView().controlSize(.small)
+                            Text("Lagrer …").font(.callout).foregroundStyle(Color.sekundærTekst)
+                        }
+                    } else {
+                        Button("Lagre designsystemet …", systemImage: "checkmark", action: spørOmNavn)
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.small)
+                    }
                 }
                 Spacer(minLength: 0)
             }
@@ -808,7 +853,11 @@ struct DesignsystemEksportArk: View {
         let rot = FileManager.default.temporaryDirectory.appendingPathComponent("Kolorist-designsystem-\(UUID().uuidString)", isDirectory: true)
         let mappe = rot.appendingPathComponent(mappenavn, isDirectory: true)
         do {
-            for (sti, data) in DesignsystemEksport.filer(designsystem, formater: formater, navn: navn) {
+            let versjon = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+            let avsender = DesignsystemEksport.Avsender(app: versjon.isEmpty ? "Kolorist" : "Kolorist \(versjon)",
+                                                         lenke: URL(string: "https://kolorist.no"),
+                                                         utvikler: "Eivind Arnstein Johansen")
+            for (sti, data) in DesignsystemEksport.filer(designsystem, formater: formater, navn: navn, avsender: avsender) {
                 let url = mappe.appendingPathComponent(sti)
                 try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
                 try data.write(to: url, options: .atomic)

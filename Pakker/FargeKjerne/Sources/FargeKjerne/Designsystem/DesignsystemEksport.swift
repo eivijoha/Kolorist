@@ -11,28 +11,67 @@ import Foundation
 /// - CSS: custom properties med `light-dark()` og `color-scheme: light dark`, og økt kontrast under
 ///   `@media (prefers-contrast: more)`.
 public enum DesignsystemEksport {
+    /// Hvem som laget filene, skrevet inn i hver fil (README, CSS, tokens, Figma og asset catalog).
+    public struct Avsender: Sendable, Hashable {
+        /// F.eks. «Kolorist 1.3».
+        public var app: String
+        public var lenke: URL?
+        public var utvikler: String?
+
+        public init(app: String, lenke: URL? = nil, utvikler: String? = nil) {
+            self.app = app
+            self.lenke = lenke
+            self.utvikler = utvikler
+        }
+
+        /// «Kolorist 1.3 (https://kolorist.no) av …» uten Markdown.
+        var tekst: String {
+            var t = app
+            if let lenke { t += " (\(lenke.absoluteString))" }
+            if let utvikler { t += String(localized: " av \(utvikler)", bundle: .module) }
+            return t
+        }
+
+        /// Til `$extensions` i tokenfilene.
+        var utvidelse: [String: Any] {
+            var u: [String: Any] = ["generator": app]
+            if let lenke { u["url"] = lenke.absoluteString }
+            if let utvikler { u["author"] = utvikler }
+            return ["no.engenett.kolorist": u]
+        }
+    }
+
     public enum Format: String, CaseIterable, Sendable, Identifiable {
         case xcode, designTokens, figma, css
         public var id: String { rawValue }
     }
 
     /// Filene for de valgte formatene: relativ sti → innhold. `navn` brukes i filnavn (asset catalog og CSS).
-    public static func filer(_ ds: Designsystem, formater: Set<Format>, navn: String) -> [String: Data] {
+    /// Med minst ett format følger en README.md med (rollene, fargene per modus, kontrasten og bruken).
+    public static func filer(_ ds: Designsystem, formater: Set<Format>, navn: String, dato: Date = .now,
+                             avsender: Avsender = Avsender(app: "Kolorist")) -> [String: Data] {
         var ut: [String: Data] = [:]
         let temaer = Designmodus.allCases.map { ds.tema($0) }
-        if formater.contains(.xcode) { ut.merge(xcode(temaer, navn: navn)) { $1 } }
-        if formater.contains(.designTokens) { ut.merge(designTokens(ds, temaer)) { $1 } }
-        if formater.contains(.figma) { ut.merge(figma(temaer)) { $1 } }
-        if formater.contains(.css) { ut["\(Identifikator.kebab(navn, reserve: "designsystem")).css"] = Data(css(temaer, navn: navn).utf8) }
+        if formater.contains(.xcode) { ut.merge(xcode(temaer, navn: navn, avsender: avsender)) { $1 } }
+        if formater.contains(.designTokens) { ut.merge(designTokens(ds, temaer, avsender: avsender)) { $1 } }
+        if formater.contains(.figma) { ut.merge(figma(temaer, avsender: avsender)) { $1 } }
+        if formater.contains(.css) {
+            ut["\(Identifikator.kebab(navn, reserve: "designsystem")).css"] = Data(css(temaer, navn: navn, avsender: avsender).utf8)
+        }
+        if !formater.isEmpty {
+            ut["README.md"] = Data(readme(ds, temaer, formater: formater, navn: navn, dato: dato, avsender: avsender).utf8)
+        }
         return ut
     }
 
     // MARK: Xcode
 
-    static func xcode(_ temaer: [Designtema], navn: String) -> [String: Data] {
+    static func xcode(_ temaer: [Designtema], navn: String, avsender: Avsender) -> [String: Data] {
         let katalog = "\(navn.isEmpty ? "Designsystem" : navn).xcassets"
         var ut: [String: Data] = [:]
-        ut["\(katalog)/Contents.json"] = json(["info": ["author": "xcode", "version": 1]])
+        // Xcode godtar fritekst i «author».
+        let info: [String: Any] = ["author": avsender.app, "version": 1]
+        ut["\(katalog)/Contents.json"] = json(["info": info])
         guard let lys = temaer.first(where: { $0.modus == .lys }) else { return ut }
         for (i, token) in lys.tokens.enumerated() {
             var farger: [[String: Any]] = []
@@ -46,7 +85,7 @@ public enum DesignsystemEksport {
                 farger.append(variant)
             }
             ut["\(katalog)/\(Identifikator.camel(token.navn, reserve: "farge")).colorset/Contents.json"] =
-                json(["colors": farger, "info": ["author": "xcode", "version": 1]])
+                json(["colors": farger, "info": info])
         }
         return ut
     }
@@ -108,9 +147,9 @@ public enum DesignsystemEksport {
         }
     }
 
-    static func designTokens(_ ds: Designsystem, _ temaer: [Designtema]) -> [String: Data] {
+    static func designTokens(_ ds: Designsystem, _ temaer: [Designtema], avsender: Avsender) -> [String: Data] {
         let (grupper, alias) = primitiver(ds, temaer)
-        var farge: [String: Any] = ["$type": "color"]
+        var farge: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
         for (gruppe, liste) in grupper {
             var g: [String: Any] = [:]
             for (n, f) in liste { g[n] = ["$value": dtcgVerdi(f)] }
@@ -118,7 +157,7 @@ public enum DesignsystemEksport {
         }
         var ut: [String: Data] = ["tokens/primitives.tokens.json": json(["color": farge])]
         for tema in temaer {
-            var semantisk: [String: Any] = ["$type": "color"]
+            var semantisk: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
             for (navn, f) in tema.tokens {
                 semantisk[navn] = ["$value": alias[f.hex()].map { $0 as Any } ?? dtcgVerdi(f)]
             }
@@ -130,6 +169,7 @@ public enum DesignsystemEksport {
         ut["tokens/resolver.json"] = json([
             "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
             "name": ds.navn,
+            "description": avsender.tekst,
             "sets": ["primitives": ["sources": [["$ref": "primitives.tokens.json"]]]],
             "modifiers": ["theme": ["contexts": kontekster, "default": "light"]],
             "resolutionOrder": [["$ref": "#/sets/primitives"], ["$ref": "#/modifiers/theme"]],
@@ -146,10 +186,10 @@ public enum DesignsystemEksport {
 
     // MARK: Figma
 
-    static func figma(_ temaer: [Designtema]) -> [String: Data] {
+    static func figma(_ temaer: [Designtema], avsender: Avsender) -> [String: Data] {
         var ut: [String: Data] = [:]
         for tema in temaer {
-            var g: [String: Any] = ["$type": "color"]
+            var g: [String: Any] = ["$type": "color", "$description": avsender.tekst]
             for (navn, f) in tema.tokens { g[navn] = ["$value": dtcgVerdi(f)] }
             ut["figma/\(tema.modus.tokennavn).tokens.json"] = json(["color": g])
         }
@@ -158,7 +198,7 @@ public enum DesignsystemEksport {
 
     // MARK: CSS
 
-    static func css(_ temaer: [Designtema], navn: String) -> String {
+    static func css(_ temaer: [Designtema], navn: String, avsender: Avsender) -> String {
         func tema(_ m: Designmodus) -> Designtema? { temaer.first { $0.modus == m } }
         guard let lys = tema(.lys), let mørk = tema(.mørk), let lysØK = tema(.lysØktKontrast), let mørkØK = tema(.mørkØktKontrast)
         else { return "" }
@@ -168,8 +208,9 @@ public enum DesignsystemEksport {
             }.joined(separator: "\n")
         }
         return """
-        /* \(navn) – designsystem eksportert fra Kolorist. Lys og mørk modus med light-dark(); økt kontrast med
-           prefers-contrast. Sett color-scheme: light eller dark på et element for å låse modusen der. */
+        /* \(navn) – designsystem fra \(avsender.tekst).
+           Lys og mørk modus med light-dark(); økt kontrast med prefers-contrast. Sett color-scheme: light eller dark på
+           et element for å låse modusen der. */
         :root {
           color-scheme: light dark;
         \(linjer(lys, mørk, innrykk: "  "))

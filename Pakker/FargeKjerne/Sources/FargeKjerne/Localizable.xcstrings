@@ -1,6 +1,26 @@
 {
   "sourceLanguage": "nb",
   "strings": {
+    " av %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " by %@"
+          }
+        }
+      }
+    },
+    "%@ – designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ – design system"
+          }
+        }
+      }
+    },
     "%@%lld %%-poeng": {
       "localizations": {
         "en": {
@@ -57,12 +77,52 @@
         }
       }
     },
+    "Advarsel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warning"
+          }
+        }
+      }
+    },
+    "Advarsler: gul flate med mørk tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warnings: yellow surface with dark text"
+          }
+        }
+      }
+    },
     "Akromatopsi": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Achromatopsia"
+          }
+        }
+      }
+    },
+    "Aksent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accent"
+          }
+        }
+      }
+    },
+    "Alle fargeparene holder kravet i alle moduser og tilstander.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All colour pairs meet the requirement in every mode and state."
           }
         }
       }
@@ -83,6 +143,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analogous with accent"
+          }
+        }
+      }
+    },
+    "Bakgrunn, flater, tekst, kanter og skillelinjer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Background, surfaces, text, borders and separators"
+          }
+        }
+      }
+    },
+    "Bekreftelse, tekst og ikon": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmation, text and icon"
+          }
+        }
+      }
+    },
+    "Bekreftelser": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmations"
           }
         }
       }
@@ -127,6 +217,66 @@
         }
       }
     },
+    "Bruk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usage"
+          }
+        }
+      }
+    },
+    "Bruk `on-accent` for tekst og ikoner på `accent`, og `accent` for tekst på `accent-subtle`. Det er parene som er kontrollert.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use `on-accent` for text and icons on `accent`, and `accent` for text on `accent-subtle`. Those are the pairs that have been checked."
+          }
+        }
+      }
+    },
+    "Bruk disse navnene i koden, ikke grunnfargene: de bytter riktig mellom lys og mørk modus og ved økt kontrast.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use these names in your code, not the base colours: they switch correctly between light and dark mode and with increased contrast."
+          }
+        }
+      }
+    },
+    "Brukes til": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Used for"
+          }
+        }
+      }
+    },
+    "Bryter som er på": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch that is on"
+          }
+        }
+      }
+    },
+    "Brytere som er på": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switches that are on"
+          }
+        }
+      }
+    },
     "CIE LCH (Lab)": {
       "localizations": {
         "en": {
@@ -143,6 +293,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "CSS variables (.css)"
+          }
+        }
+      }
+    },
+    "Deaktivert kontroll": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disabled control"
           }
         }
       }
@@ -167,6 +327,16 @@
         }
       }
     },
+    "Designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design system"
+          }
+        }
+      }
+    },
     "Deuteranomali": {
       "localizations": {
         "en": {
@@ -187,12 +357,42 @@
         }
       }
     },
+    "Disse parene holder ikke kravet (forgrunn / bakgrunn):": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These pairs do not meet the requirement (foreground / background):"
+          }
+        }
+      }
+    },
     "Dobbelt komplementær": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Double complementary"
+          }
+        }
+      }
+    },
+    "Dra `%@` inn i Xcode-prosjektet. Hver farge er et fargesett med fire varianter: lys, mørk og begge med økt kontrast. Systemet velger varianten selv etter utseende og tilgjengelighetsinnstillingen «Øk kontrast».": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag `%@` into your Xcode project. Each colour is a color set with four variants: light, dark and both with increased contrast. The system picks the variant from the appearance and the Increase Contrast accessibility setting."
+          }
+        }
+      }
+    },
+    "Endrer du en farge, sjekk kontrasten på nytt. I Kolorist vises den under Komponenter i designsystemet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you change a colour, check the contrast again. In Kolorist it is shown under Components in the design system."
           }
         }
       }
@@ -213,6 +413,66 @@
           "stringUnit": {
             "state": "translated",
             "value": "The colour library could not be read."
+          }
+        }
+      }
+    },
+    "Fargene er i sRGB, som nettet og Figma bruker, og som WCAG-kontrasten regnes i.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colours are in sRGB, which the web and Figma use and which WCAG contrast is calculated in."
+          }
+        }
+      }
+    },
+    "Fargeparene i vanlige komponenter er kontrollert mot WCAG 2 (AA) i alle moduser og i tilstandene normal, trykket, fokus og deaktivert: tekst minst 4,5:1 (1.4.3), kanter og kontroller minst 3:1 (1.4.11, fra WCAG 2.1). Deaktiverte kontroller er unntatt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colour pairs in common components are checked against WCAG 2 (AA) in every mode and in the normal, pressed, focused and disabled states: text at least 4.5:1 (1.4.3), borders and controls at least 3:1 (1.4.11, from WCAG 2.1). Disabled controls are exempt."
+          }
+        }
+      }
+    },
+    "Farger per modus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colours per mode"
+          }
+        }
+      }
+    },
+    "Feil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
+        }
+      }
+    },
+    "Feilmeldinger og slettehandlinger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error messages and delete actions"
+          }
+        }
+      }
+    },
+    "Feiltekst, ikon og slettehandling": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error text, icon and delete action"
           }
         }
       }
@@ -297,12 +557,52 @@
         }
       }
     },
+    "Flate for advarsel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warning surface"
+          }
+        }
+      }
+    },
+    "Flate for bekreftelse": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmation surface"
+          }
+        }
+      }
+    },
+    "Flate for feilmelding": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error message surface"
+          }
+        }
+      }
+    },
     "Flater, 30 LRV-poeng": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Surfaces, 30 LRV points"
+          }
+        }
+      }
+    },
+    "Fra Xcode 15 lager Xcode `Color(.navn)` og `UIColor(resource:)` for hvert fargesett. Bindestrek i navnene blir camelCase: `on-accent` heter `onAccent`.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From Xcode 15, Xcode generates `Color(.name)` and `UIColor(resource:)` for each color set. Hyphenated names become camelCase: `on-accent` is `onAccent`."
           }
         }
       }
@@ -323,6 +623,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Generic CMYK"
+          }
+        }
+      }
+    },
+    "Gode råd": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tips"
           }
         }
       }
@@ -353,6 +663,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Graphics and UI AA"
+          }
+        }
+      }
+    },
+    "Grunnfarge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base colour"
           }
         }
       }
@@ -437,12 +757,82 @@
         }
       }
     },
+    "Hjelpetekst og sekundær tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Helper and secondary text"
+          }
+        }
+      }
+    },
+    "Hovedknapp når den trykkes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary button when pressed"
+          }
+        }
+      }
+    },
+    "Hovedknapp, lenker, valgt fane og fokusring": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary button, links, selected tab and focus ring"
+          }
+        }
+      }
+    },
+    "Hovedknapp, lenker, valgt fane, fokusring": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary button, links, selected tab, focus ring"
+          }
+        }
+      }
+    },
+    "Hver rolle har en toneskala fra 50 til 950 med samme lyshet (L*) på hvert trinn i alle roller. Trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt, uansett kulør.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each role has a tone scale from 50 to 950 with the same lightness (L*) at each step in every role. Step 400 holds at least 3:1 and step 600 at least 4.5:1 against white, whatever the hue."
+          }
+        }
+      }
+    },
+    "Hver rolle har én grunnfarge. Fargene i hver modus er utledet fra den: grunnfargen brukes uendret der den holder kravene, ellers får den samme kulør med lysheten (CIE L*) som trengs.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each role has one base colour. The colours in each mode are derived from it: the base colour is used unchanged where it meets the requirements; otherwise it keeps its hue at the lightness (CIE L*) needed."
+          }
+        }
+      }
+    },
     "ICC-profil": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "ICC profile"
+          }
+        }
+      }
+    },
+    "Ikke la farge alene bære meningen i varsler: bruk ikon og tekst sammen med `danger`, `success` og `warning`.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don’t let colour alone carry the meaning of alerts: use an icon and text together with `danger`, `success` and `warning`."
           }
         }
       }
@@ -487,6 +877,16 @@
         }
       }
     },
+    "Kant som viser en kontroll (tekstfelt)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Border that shows a control (text field)"
+          }
+        }
+      }
+    },
     "Komplementær": {
       "localizations": {
         "en": {
@@ -503,6 +903,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Conic"
+          }
+        }
+      }
+    },
+    "Kontrast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast"
+          }
+        }
+      }
+    },
+    "Kort, celler, felt og fanelinje": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cards, cells, fields and tab bar"
           }
         }
       }
@@ -567,6 +987,48 @@
         }
       }
     },
+    "Laget med %@ av %@, %@, fra en palett.": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Laget med %1$@ av %2$@, %3$@, fra en palett."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made with %1$@ by %2$@, %3$@, from a palette."
+          }
+        }
+      }
+    },
+    "Laget med %@, %@, fra en palett.": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Laget med %1$@, %2$@, fra en palett."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made with %1$@, %2$@, from a palette."
+          }
+        }
+      }
+    },
+    "Lenk inn `%@` og bruk variablene. Lys og mørk følger nettleserens innstilling via `light-dark()`, og økt kontrast følger `prefers-contrast: more`.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link `%@` and use the variables. Light and dark follow the browser setting through `light-dark()`, and increased contrast follows `prefers-contrast: more`."
+          }
+        }
+      }
+    },
     "Lik": {
       "localizations": {
         "en": {
@@ -607,12 +1069,32 @@
         }
       }
     },
+    "Lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
     "Lys tekst": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Light text"
+          }
+        }
+      }
+    },
+    "Lys, økt kontrast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light, increased contrast"
           }
         }
       }
@@ -717,12 +1199,32 @@
         }
       }
     },
+    "Mørk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark"
+          }
+        }
+      }
+    },
     "Mørk tekst": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Dark text"
+          }
+        }
+      }
+    },
+    "Mørk, økt kontrast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark, increased contrast"
           }
         }
       }
@@ -743,6 +1245,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Natural"
+          }
+        }
+      }
+    },
+    "Nøytral": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neutral"
           }
         }
       }
@@ -837,6 +1349,16 @@
         }
       }
     },
+    "Plassholder i tekstfelt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placeholder in text field"
+          }
+        }
+      }
+    },
     "Protanomali": {
       "localizations": {
         "en": {
@@ -877,6 +1399,26 @@
         }
       }
     },
+    "Rolle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Role"
+          }
+        }
+      }
+    },
+    "Roller": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roles"
+          }
+        }
+      }
+    },
     "Rød": {
       "localizations": {
         "en": {
@@ -913,6 +1455,92 @@
           "stringUnit": {
             "state": "translated",
             "value": "SVG swatches (.svg)"
+          }
+        }
+      }
+    },
+    "Sekundær": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secondary"
+          }
+        }
+      }
+    },
+    "Sekundærknapp og valgt rad": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secondary button and selected row"
+          }
+        }
+      }
+    },
+    "Sett `color-scheme: light` eller `color-scheme: dark` på et element for å låse modusen der.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set `color-scheme: light` or `color-scheme: dark` on an element to lock the mode there."
+          }
+        }
+      }
+    },
+    "Sidebakgrunn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Page background"
+          }
+        }
+      }
+    },
+    "Skalaene ligger i `tokens/primitives.tokens.json`.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The scales are in `tokens/primitives.tokens.json`."
+          }
+        }
+      }
+    },
+    "Skalaer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scales"
+          }
+        }
+      }
+    },
+    "Skillelinjer (dekorativ)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Separators (decorative)"
+          }
+        }
+      }
+    },
+    "Skriftfarger: lys `%@` (tekst i mørk modus) og mørk `%@` (tekst i lys modus).": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Skriftfarger: lys `%1$@` (tekst i mørk modus) og mørk `%2$@` (tekst i lys modus)."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text colours: light `%1$@` (text in dark mode) and dark `%2$@` (text in light mode)."
           }
         }
       }
@@ -977,6 +1605,26 @@
         }
       }
     },
+    "Suksess": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Success"
+          }
+        }
+      }
+    },
+    "Tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text"
+          }
+        }
+      }
+    },
     "Tekst AA": {
       "localizations": {
         "en": {
@@ -993,6 +1641,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text AAA"
+          }
+        }
+      }
+    },
+    "Tekst i deaktivert kontroll": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text in a disabled control"
+          }
+        }
+      }
+    },
+    "Tekst og ikon på advarselsflaten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text and icon on the warning surface"
+          }
+        }
+      }
+    },
+    "Tekst og ikoner på aksent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text and icons on accent"
           }
         }
       }
@@ -1087,6 +1765,36 @@
         }
       }
     },
+    "Verktøy uten støtte for resolver kan lese primitivene og én modusfil om gangen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tools without resolver support can read the primitives and one mode file at a time."
+          }
+        }
+      }
+    },
+    "`separator` er dekorativ. Bruk `border` når kanten er det som viser at noe er en kontroll, for eksempel et tekstfelt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "`separator` is decorative. Use `border` when the edge is what shows that something is a control, such as a text field."
+          }
+        }
+      }
+    },
+    "`tokens/primitives.tokens.json` har skalaene og alle fargene som brukes, gruppert etter rolle og navngitt etter trinn eller L* (`l44`). Hver modus har sin fil (`light`, `dark`, `light-ic`, `dark-ic`) med de semantiske fargene som alias til primitivene, for eksempel `{color.accent.l44}`. `tokens/resolver.json` binder dem sammen etter Resolver-modulen i DTCG 2025.10: velg konteksten `theme` (light, dark, light-ic eller dark-ic) i verktøyet som leser filene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "`tokens/primitives.tokens.json` has the scales and every colour in use, grouped by role and named by step or L* (`l44`). Each mode has its own file (`light`, `dark`, `light-ic`, `dark-ic`) with the semantic colours as aliases to the primitives, for example `{color.accent.l44}`. `tokens/resolver.json` ties them together following the DTCG 2025.10 Resolver Module: choose the `theme` context (light, dark, light-ic or dark-ic) in the tool that reads the files."
+          }
+        }
+      }
+    },
     "beige": {
       "localizations": {
         "en": {
@@ -1137,6 +1845,16 @@
         }
       }
     },
+    "deaktivert": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "disabled"
+          }
+        }
+      }
+    },
     "dempet": {
       "localizations": {
         "en": {
@@ -1163,6 +1881,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "violet"
+          }
+        }
+      }
+    },
+    "fokus": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "focus"
           }
         }
       }
@@ -1243,6 +1971,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "clear"
+          }
+        }
+      }
+    },
+    "krav %@:1, WCAG %@": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "krav %1$@:1, WCAG %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "requirement %1$@:1, WCAG %2$@"
           }
         }
       }
@@ -1337,6 +2081,16 @@
         }
       }
     },
+    "normal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
+          }
+        }
+      }
+    },
     "oransje": {
       "localizations": {
         "en": {
@@ -1407,6 +2161,16 @@
         }
       }
     },
+    "trykket": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pressed"
+          }
+        }
+      }
+    },
     "turkis": {
       "localizations": {
         "en": {
@@ -1433,6 +2197,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "wine red"
+          }
+        }
+      }
+    },
+    "Åpne Variables-panelet og dra alle fire filene i `figma/` inn samtidig. De blir én samling med fire moduser. Filene har fargeverdiene direkte (ikke alias), fordi Figma bare importerer variabler som finnes i alle filene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Variables panel and drag all four files in `figma/` in at once. They become one collection with four modes. The files have the colour values directly (no aliases), because Figma only imports variables that exist in every file."
           }
         }
       }
