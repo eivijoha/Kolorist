@@ -53,6 +53,8 @@ struct FargeRute: View {
             rute
                 .onLongPressGesture(minimumDuration: 0.35) { visValg = true }
                 .sensoryFeedback(.impact(weight: .medium), trigger: visValg) { _, ny in ny }
+                // Lukk boblen når ruten forsvinner, så den ikke blir hengende uten ruten den hørte til.
+                .onDisappear { visValg = false }
                 .popover(isPresented: $visValg, arrowEdge: .bottom) {
                     FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett, åpneIStudio: visFarge ? visIStudio : nil,
                                    kilde: palettFarge?.kilde, ekstra: bobleEkstra?({ visValg = false })) { visValg = false }

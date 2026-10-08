@@ -16,6 +16,9 @@ struct InfoKnapp<Innhold: View>: View {
         // .plain: knapper med andre stiler reagerer ikke i bunnteksten til en seksjon.
         .buttonStyle(.plain)
         .accessibilityLabel(Text(tittel))
+        // Lukk boblen når knappen forsvinner (f.eks. tilbake til alle paletter): ellers kan en tom boble bli liggende
+        // igjen nede til venstre i vinduet på Mac, der den mistet knappen den hørte til.
+        .onDisappear { vis = false }
         .popover(isPresented: $vis) {
             VStack(alignment: .leading, spacing: 10) { innhold }
                 .font(.callout)
