@@ -838,11 +838,17 @@ def funksjoner(lang):
 
 # ---------- Plattformer ----------
 
-# Mac-skjermbilder som mangler for 1.3 (kontrast i kildesiden er fra 1.2).
-MAC_KOMMER = {'kontrast', 'fargefelt', 'designsystem'}
+# Mac-skjermbilder som mangler for 1.3.
+MAC_KOMMER = {'fargefelt'}
+# Mac-skjermbilder tatt for 1.3 (nye, eller erstatter 1.2-bildet i kildesiden).
+MAC_NYE = {'kontrast', 'designsystem', 'flatekontrast'}
 
 
 def macbilde(s, navn):
+    if navn in MAC_NYE:
+        en = '<html lang="en">' in s
+        src = f'../assets/en/mac/skjermbilde-{navn}.png?v=8' if en else f'assets/mac/skjermbilde-{navn}.png?v=8'
+        return f'<img src="{src}" alt="" width="1920" height="1200" loading="lazy">'
     return re.search(r'<img src="[^"]*assets/(?:en/)?mac/skjermbilde-' + navn + r'\.png[^"]*"[^>]*>', s).group(0)
 
 

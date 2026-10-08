@@ -169,6 +169,9 @@ struct DesignsystemRutenett: View {
 struct DesignsystemFane: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var sti: [DesignsystemDokument] = []
+    #if DEBUG
+    @Query(sort: \DesignsystemDokument.opprettet, order: .reverse) private var designsystemer: [DesignsystemDokument]
+    #endif
 
     var body: some View {
         NavigationStack(path: $sti) {
@@ -185,6 +188,12 @@ struct DesignsystemFane: View {
             sti = [d]
             arbeidsbenk.designsystemSomÅpnes = nil
         }
+        #if DEBUG
+        // Skjermbilder: `-visDesignsystem YES` åpner det første designsystemet.
+        .task(id: designsystemer.count) {
+            if UserDefaults.standard.bool(forKey: "visDesignsystem"), sti.isEmpty, let d = designsystemer.first { sti = [d] }
+        }
+        #endif
         .onChange(of: sti) { _, ny in
             // Tilbake fra en forhåndsvisning: den er enten lagret (og står i lista) eller forkastet.
             if ny.isEmpty { arbeidsbenk.designsystemUtkast = nil }

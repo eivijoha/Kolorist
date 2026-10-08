@@ -294,8 +294,8 @@ Siste linje: «Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 farge,palett,designsystem,tokens,pipette,OKLCH,CMYK,Munsell,kontrast,WCAG,APCA,LRV,mørk modus
 ```
 
-**Skjermbilder:** Mac-bildene for 1.3 er ikke tatt ennå (designsystem, kontrast, fargefelt). 1.2-bildene kan
-brukes til de nye er klare.
+**Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/mac-nb/` (2880 × 1800): designsystem, kontrast og flatekontrast. Bruk
+dem sammen med Studio, Harmoni, Overgang, Fargesyn og Lys fra 1.2 (`Dokumentasjon/1.2/Skjermbilder/mac-nb/`).
 
 ---
 
@@ -402,20 +402,24 @@ Contact: eivind.johansen@ntnu.no
 |---|---|---|---|
 | `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 | designsystem, toneskala, kontrast, flatekontrast, fargefelt |
 | `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 | designsystem, kontrast, fargefelt |
-| Mac | – | – | ikke tatt ennå |
+| `mac-nb/`, `mac-en/` | Mac | 2880 × 1800 | designsystem, kontrast, flatekontrast |
 
 Simulatorene «Skjermbilder 6,5» og «Skjermbilder iPad 13», Debug-bygg med `-skjermbilde YES`, klokka satt til 9:41.
 Designsystemet med `-eksempeldesignsystem YES -visDesignsystem YES -startfane paletter` (fra «Jevn fordeling», med info som
 egen rolle). Kontrast med `-startfane vurdering -vurderingDel kontrast -kontrastType wcag`; flatekontrast med
 `-kontrastType lrv -startfarge "#B4674D" -flatekontrastmetode weber`.
 Toneskalaen er tatt fra «Nordisk kyst» (#3E6A80 › Lag toneskala), fargefeltet fra Tekst-menyen i kontrastsjekken.
+Mac: usignert Debug-bygg (utenfor sandkassen, så det ikke deler innstillinger med Xcode-bygget) med de samme argumentene og
+`-ApplePersistenceIgnoreState YES -kunSRGB NO -testmaalinger YES`; vinduet satt til 1440 × 900 pt på den innebygde
+Retina-skjermen og fanget med `screencapture -l <vindu> -o`. Designsystemet med `-startfane designsystemer
+-visDesignsystem YES`. Fargefeltet (menyen) er ikke tatt for Mac.
 
 ### Før du sender inn
 
 - [ ] CloudKit-skjemaet publisert til produksjon: nye felt `tekstfargeData` (PalettDokument) og ny modell
       `DesignsystemDokument`. Uten dette synkroniseres ikke skriftfarger og designsystemer i App Store-bygget.
 - [ ] Ny versjon 1.3 opprettet for iOS og macOS, med tekstene over.
-- [ ] Skjermbilder lastet opp (iPhone og iPad på norsk og engelsk; Mac når de er tatt).
+- [ ] Skjermbilder lastet opp (iPhone, iPad og Mac, norsk og engelsk).
 - [ ] 1.3-nettsiden publisert på kolorist.no før innsending; 1.2 flyttes til `historisk/1.2/`.
 - [ ] Notes for App Review byttet til teksten over.
 - [ ] `CURRENT_PROJECT_VERSION` økt for opplastingen.

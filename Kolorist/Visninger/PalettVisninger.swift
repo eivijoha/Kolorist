@@ -355,7 +355,8 @@ struct PalettListe: View {
             .task { if UserDefaults.standard.bool(forKey: "lagreSomTest") { lagresSom = paletter.first } }
             // Skjermbilder: `-visDesignsystem YES` åpner det første designsystemet.
             .task(id: designsystemer.count) {
-                if UserDefaults.standard.bool(forKey: "visDesignsystem"), sti.isEmpty, let d = designsystemer.first {
+                // I palettspalten (bredt vindu) åpner Designsystemer-fanen det i stedet.
+                if UserDefaults.standard.bool(forKey: "visDesignsystem"), !iKolonne, sti.isEmpty, let d = designsystemer.first {
                     åpneDesignsystem(d)
                 }
             }
