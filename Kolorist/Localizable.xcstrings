@@ -1451,12 +1451,32 @@
         }
       }
     },
+    "Bytt med": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swap with"
+          }
+        }
+      }
+    },
     "Bytt om": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Swap"
+          }
+        }
+      }
+    },
+    "Bytt roller": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swap roles"
           }
         }
       }
@@ -9241,12 +9261,12 @@
         }
       }
     },
-    "Trykk på en farge for å bytte den. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.": {
+    "Trykk på en farge for å velge en annen. Dra en rolle over en annen, eller bruk «Bytt med» i menyen, for å bytte fargene mellom to roller. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tap a colour to change it. Your brand colour is used unchanged in each mode where it meets the requirements; otherwise it keeps its hue at the lightness needed. Light+ and Dark+ are increased contrast."
+            "value": "Tap a colour to choose another. Drag one role onto another, or use Swap with in the menu, to swap the colours of two roles. Your brand colour is used unchanged in each mode where it meets the requirements; otherwise it keeps its hue at the lightness needed. Light+ and Dark+ are increased contrast."
           }
         }
       }

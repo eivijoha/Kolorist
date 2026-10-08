@@ -663,13 +663,19 @@ struct DesignsystemRoller: View {
     @Bindable var dokument: DesignsystemDokument
     let palett: PalettDokument?
     @Environment(\.modelContext) private var kontekst
+    /// Rollen en annen rolle dras over (for å bytte farge), markert med ramme.
+    @State private var slippMål: Designrolle?
+
+    /// En rolle som dras, som tekst med prefiks (så annen tekst som slippes, ikke tolkes som en rolle).
+    private static let draprefiks = "kolorist.designrolle:"
 
     var body: some View {
         let ds = dokument.designsystem
         let temaer = Designmodus.allCases.map { ds.tema($0) }
         VStack(alignment: .leading, spacing: 0) {
             ForEach(Designrolle.allCases) { rolle in
-                rad(tittel: Text(rolle.navn), bruk: Text(rolle.bruk), farge: binding(rolle), ekstra: AnyView(fraPaletten(rolle))) {
+                rad(tittel: Text(rolle.navn), bruk: Text(rolle.bruk), farge: binding(rolle),
+                    ekstra: AnyView(Group { fraPaletten(rolle); byttMeny(rolle) })) {
                     HStack(spacing: 4) {
                         ForEach(temaer, id: \.modus) { t in
                             let f = rolle.farge(i: t)
@@ -685,6 +691,30 @@ struct DesignsystemRoller: View {
                         }
                     }
                 }
+                // Dra en rolle over en annen for å bytte fargene deres.
+                .contentShape(Rectangle())
+                .draggable(Self.draprefiks + rolle.rawValue) {
+                    HStack(spacing: 8) {
+                        RoundedRectangle(cornerRadius: 6, style: .continuous).fill(ds[rolle].swiftUI).frame(width: 28, height: 28)
+                        Text(rolle.navn).font(.subheadline.weight(.semibold))
+                    }
+                    .padding(8)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                }
+                .dropDestination(for: String.self) { tekster, _ in
+                    slippMål = nil
+                    guard let t = tekster.first, t.hasPrefix(Self.draprefiks),
+                          let fra = Designrolle(rawValue: String(t.dropFirst(Self.draprefiks.count))) else { return false }
+                    bytt(fra, rolle)
+                    return true
+                } isTargeted: { over in
+                    if over { slippMål = rolle } else if slippMål == rolle { slippMål = nil }
+                }
+                .overlay {
+                    if slippMål == rolle {
+                        RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.accentColor, lineWidth: 2).padding(2)
+                    }
+                }
                 Divider().padding(.leading, 68)
             }
             rad(tittel: Text("Lys tekst"), bruk: Text("Tekst i mørk modus og på mørke flater"), farge: tekst(lys: true), ekstra: nil) { EmptyView() }
@@ -693,7 +723,7 @@ struct DesignsystemRoller: View {
         }
         .padding(.vertical, 4)
         .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        Text("Trykk på en farge for å bytte den. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.")
+        Text("Trykk på en farge for å velge en annen. Dra en rolle over en annen, eller bruk «Bytt med» i menyen, for å bytte fargene mellom to roller. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.")
             .font(.footnote)
             .foregroundStyle(Color.sekundærTekst)
         if let palett {
@@ -705,6 +735,30 @@ struct DesignsystemRoller: View {
                 }
             }
             .font(.callout)
+        }
+    }
+
+    /// Bytter fargene mellom to roller.
+    private func bytt(_ a: Designrolle, _ b: Designrolle) {
+        guard a != b else { return }
+        kontekst.angresteg("Bytt roller") {
+            var ds = dokument.designsystem
+            let fa = ds[a]
+            ds[a] = ds[b]
+            ds[b] = fa
+            dokument.designsystem = ds
+        }
+    }
+
+    /// «Bytt med» en annen rolle.
+    private func byttMeny(_ rolle: Designrolle) -> some View {
+        let ds = dokument.designsystem
+        return Menu("Bytt med", systemImage: "arrow.left.arrow.right") {
+            ForEach(Designrolle.allCases.filter { $0 != rolle }) { annen in
+                Button { bytt(rolle, annen) } label: {
+                    Text(annen.navn) + Text(verbatim: "  \(ds[annen].hex())")
+                }
+            }
         }
     }
 
