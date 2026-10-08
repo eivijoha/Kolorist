@@ -64,15 +64,22 @@ public extension Palett {
 }
 
 public extension Farge {
-    /// Fargen med gitt kroma og kulør i OKLCH og CIE-lyshet L* = `mål` (0–100). OKLCH-lysheten løses ved binærsøk, så
-    /// lysheten blir eksakt i L* (som WCAG-kontrast bygger på) for alle kulører; kroma senkes ved gamut-kartlegging.
+    /// CIE-lysheten L* (0–100) for luminansen Y (D65, relativ til hvitt) – samme Y som WCAG-kontrast regnes av, så lik L*
+    /// gir lik kontrast. (`cieLab` er D50 og gir litt andre verdier for mettede farger.)
+    var lStjerne: Double {
+        let y = max(luminans, 0)
+        return y > 216.0 / 24389 ? 116 * cbrt(y) - 16 : y * 24389 / 27
+    }
+
+    /// Fargen med gitt kroma og kulør i OKLCH og L* = `mål` (0–100, se `lStjerne`). OKLCH-lysheten løses ved binærsøk, så
+    /// lysheten – og dermed WCAG-kontrasten – blir eksakt for alle kulører; kroma senkes ved gamut-kartlegging.
     static func medLStjerne(_ mål: Double, kroma: Double, kulør: Double, gamut: Gamut = .displayP3) -> Farge {
         let m = min(max(mål, 0), 100)
         func farge(_ l: Double) -> Farge { Farge(okLCH: OKLCH(l: l, c: kroma, h: kulør)).gamutKartlagt(til: gamut) }
         var lav = 0.0, høy = 1.0
         for _ in 0..<40 {
             let midt = (lav + høy) / 2
-            if farge(midt).cieLab.l < m { lav = midt } else { høy = midt }
+            if farge(midt).lStjerne < m { lav = midt } else { høy = midt }
         }
         return farge((lav + høy) / 2)
     }

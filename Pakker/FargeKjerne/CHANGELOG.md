@@ -8,7 +8,13 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
   `PalettFarge.tekstfarge: UUID?` (valgt skriftfarge, `nil` = automatisk). `Skriftfarger.beste(for:blant:)` velger den som
   leses best etter APCA blant dem som når 4,5:1 (WCAG), ellers høyest WCAG-forhold; `Skriftfarger.vurdering`,
   `Skriftfarger.forslag(for:)` (L* 97 og 14 med svakt kulørpreg) og `Palett.skriftfarge(for:)`.
-- `Farge.medLStjerne(_:kroma:kulør:gamut:)`: fargen med gitt OKLCH-kroma og -kulør og eksakt CIE L* (binærsøk i OKLCH L).
+- `Farge.lStjerne`: CIE L* fra luminansen Y (D65), altså samme størrelse som WCAG-kontrasten bygger på. (`cieLab` er D50 og
+  gir litt annen L* for mettede farger.)
+- `Farge.medLStjerne(_:kroma:kulør:gamut:)`: fargen med gitt OKLCH-kroma og -kulør og eksakt L* (`lStjerne`, binærsøk i
+  OKLCH L).
+- **Toneskala forankret i L*:** `Toneskala.kontrastLStjerne` (11 trinn, 50–950: 97, 93, 86, 76, 61, 54, 48, 38, 28, 18, 10),
+  `Toneskala.jevnLStjerne(antall:)` og `toner(for:lStjerne:)`. Like trinn får samme L* for alle kulører, så kontrasten
+  mot hvit og sort blir lik: trinn 400 holder minst 3:1 og 600 minst 4,5:1 mot hvit, også etter avrunding til hex.
 - Eksport med skriftfarger: CSS (`--farge-on`), DTCG (egen gruppe `<palett>-tekst` med `on`-alias), SwiftUI (`fargeOn`),
   Figma- og Tokens Studio-grupper `tekst` og `on`, ASE (egen fargegruppe), GPL. Uten skriftfarger er eksporten som før.
   SwiftUI-eksporten gir nå unike Swift-navn også når fargenavn kolliderer.

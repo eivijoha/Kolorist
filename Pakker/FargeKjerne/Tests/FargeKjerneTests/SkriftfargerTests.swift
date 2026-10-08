@@ -8,7 +8,7 @@ struct SkriftfargerTests {
         for h in stride(from: 0.0, to: 360, by: 30) {
             for mål in [14.0, 48, 61, 97] {
                 let f = Farge.medLStjerne(mål, kroma: 0.1, kulør: h, gamut: .sRGB)
-                #expect(abs(f.cieLab.l - mål) < 0.05, "kulør \(h), L* \(mål): \(f.cieLab.l)")
+                #expect(abs(f.lStjerne - mål) < 0.05, "kulør \(h), L* \(mål): \(f.lStjerne)")
             }
         }
     }
@@ -17,7 +17,7 @@ struct SkriftfargerTests {
         let blå = Farge(hex: "#1F3A8A")!, lyseblå = Farge(hex: "#8FB3C7")!
         let forslag = Skriftfarger.forslag(for: [blå, lyseblå], gamut: .sRGB)
         #expect(forslag.count == 2)
-        #expect(abs(forslag[0].farge.cieLab.l - 97) < 0.1 && abs(forslag[1].farge.cieLab.l - 14) < 0.1)
+        #expect(abs(forslag[0].farge.lStjerne - 97) < 0.1 && abs(forslag[1].farge.lStjerne - 14) < 0.1)
         // Kuløren følger paletten (blå, ~260° i OKLCH).
         #expect(abs(forslag[1].farge.okLCH.h - 260) < 25)
         // Grå palett: nøytrale skriftfarger.
@@ -98,5 +98,23 @@ struct SkriftfargerEksportTests {
         #expect(!css.contains("-on:"))
         let rot = try? JSONSerialization.jsonObject(with: Eksportformat.designTokens.data(for: p)) as? [String: Any]
         #expect(rot?.keys.sorted() == ["kyst"])
+    }
+}
+
+@Suite("Toneskala forankret i L*")
+struct ToneskalaLStjerneTests {
+    @Test func trinnHolderKontrastForAlleKulører() {
+        let hvit = Farge(hex: "#FFFFFF")!
+        for hex in ["#2F7FD8", "#C8553D", "#55911E", "#F9D71C", "#6A3D9A", "#009784"] {
+            let toner = Toneskala(gamut: .sRGB).toner(for: Farge(hex: hex)!, lStjerne: Toneskala.kontrastLStjerne)
+            #expect(toner.count == 11)
+            // 400 (indeks 4): minst 3:1 mot hvit; 600 (indeks 6): minst 4,5:1 mot hvit; 300 under 3:1.
+            #expect(toner[4].wcagKontrast(mot: hvit) >= 3, "\(hex) 400")
+            #expect(toner[6].wcagKontrast(mot: hvit) >= 4.5, "\(hex) 600")
+            #expect(toner[3].wcagKontrast(mot: hvit) < 3, "\(hex) 300")
+            // Også etter avrunding til hex.
+            #expect(Farge(hex: toner[6].hex())!.wcagKontrast(mot: hvit) >= 4.5, "\(hex) 600 hex")
+            for (f, m) in zip(toner, Toneskala.kontrastLStjerne) { #expect(abs(f.lStjerne - m) < 0.1) }
+        }
     }
 }

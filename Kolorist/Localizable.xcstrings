@@ -57,6 +57,22 @@
         }
       }
     },
+    "%@ %@ · Lc %lld": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@ · Lc %3$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@ · Lc %3$lld"
+          }
+        }
+      }
+    },
     "%@ (%lld)": {
       "localizations": {
         "en": {
@@ -3331,6 +3347,16 @@
         }
       }
     },
+    "Hvert trinn har samme lyshet (L*) for alle kulører, så kontrasten blir lik: med 11 trinn holder 400 minst 3:1 mot hvit (kanter og ikoner) og 600 minst 4,5:1 (tekst og knapper).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each step has the same lightness (L*) for every hue, so contrast is consistent: with 11 steps, 400 holds at least 3:1 against white (borders and icons) and 600 at least 4.5:1 (text and buttons)."
+          }
+        }
+      }
+    },
     "Hvilke kulører paletten består av, og om det bare er nøytrale.": {
       "localizations": {
         "en": {
@@ -3817,6 +3843,16 @@
         }
       }
     },
+    "Jevn lyshet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Even lightness"
+          }
+        }
+      }
+    },
     "Juster": {
       "localizations": {
         "en": {
@@ -4075,6 +4111,26 @@
           "stringUnit": {
             "state": "new",
             "value": "Kontrast %1$@, %2$@"
+          }
+        }
+      }
+    },
+    "Kontrast (L*)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast (L*)"
+          }
+        }
+      }
+    },
+    "Kontrast per trinn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast per step"
           }
         }
       }
@@ -5299,6 +5355,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Readability contrast (APCA)"
+          }
+        }
+      }
+    },
+    "Like steg i opplevd lyshet (OKLab). Kontrasten mot hvit og sort varierer litt mellom kulører.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equal steps in perceived lightness (OKLab). Contrast against white and black varies slightly between hues."
           }
         }
       }
@@ -9093,6 +9159,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "WCAG 2.2 contrast between all colour pairs, and how many can be used for text (4.5:1)."
+          }
+        }
+      }
+    },
+    "WCAG-forhold og APCA (Lc) for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WCAG ratio and APCA (Lc) for white and black text on the step. Bold: at least 4.5:1 (all text)."
           }
         }
       }

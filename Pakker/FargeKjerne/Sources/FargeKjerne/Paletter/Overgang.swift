@@ -69,6 +69,30 @@ public struct Toneskala: Sendable {
         }
     }
 
+    /// CIE L* per trinn (50, 100, 200 … 900, 950) for en skala forankret i kontrast: 400 ≈ 3,07:1 mot hvit (kanter og
+    /// ikoner, WCAG 1.4.11) og 600 ≈ 4,82:1 mot hvit (tekst og solid knapp, 1.4.3). WCAG-kontrast bygger på luminans, så
+    /// lik L* gir lik kontrast for alle kulører – det gjør ikke lik OKLCH-lyshet (spredning på 3–6 poeng).
+    public static let kontrastLStjerne: [Double] = [97, 93, 86, 76, 61, 54, 48, 38, 28, 18, 10]
+
+    /// `antall` jevne L*-trinn mellom 97 og 10 (for andre antall enn 11).
+    public static func jevnLStjerne(antall: Int) -> [Double] {
+        guard antall > 1 else { return [97] }
+        return (0..<antall).map { 97 + (10 - 97) * Double($0) / Double(antall - 1) }
+    }
+
+    /// Skala forankret i kontrast: hvert trinn får eksakt CIE L* (`lStjerne`), med grunnfargens kulør og kroma, kroma
+    /// dempet mot ytterpunktene som i `toner(for:)`. OKLCH-lysheten løses per trinn (`Farge.medLStjerne`).
+    public func toner(for grunnfarge: Farge, lStjerne: [Double]) -> [Farge] {
+        let g = grunnfarge.okLCH, gL = grunnfarge.lStjerne
+        return lStjerne.map { m in
+            let avstand = abs(m - gL) / max(gL, 100 - gL, 0.001)
+            let faktor = 1 - kromaDemping * avstand * avstand
+            var f = Farge.medLStjerne(m, kroma: g.c * max(faktor, 0), kulør: g.h, gamut: gamut)
+            f.alfa = grunnfarge.alfa
+            return f
+        }
+    }
+
     /// Lysere og mørkere varianter av en farge i like OKLab-lyshetssteg.
     public static func variasjoner(av farge: Farge, lysere: Int, mørkere: Int, steg: Double = 0.08, gamut: Gamut = .displayP3) -> [Farge] {
         Lyshetstrinn(antallLysere: lysere, antallMørkere: mørkere, lysereSteg: steg, mørkereSteg: steg).toner(for: farge, gamut: gamut)

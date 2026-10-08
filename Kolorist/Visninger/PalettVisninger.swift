@@ -750,6 +750,13 @@ struct PalettDetalj: View {
     @Environment(\.dismiss) private var lukkPalett
     /// I palettkolonnen på Mac: handlingene ligger i en rad under tittelen, ikke i vinduets verktøylinje.
     @Environment(\.iPalettkolonne) private var iKolonne
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var bredde
+    /// På iPhone ligger utskrift i …-menyen, ikke som egen knapp i verktøylinjen.
+    private var utskriftIMeny: Bool { bredde == .compact }
+    #else
+    private let utskriftIMeny = false
+    #endif
     @State private var redigererNavn = false
     @FocusState private var navnIFokus: Bool
 
@@ -936,6 +943,9 @@ struct PalettDetalj: View {
         .toolbar {
             if !iKolonne {
                 ToolbarItemGroup { handlinger }
+                if utskriftIMeny {
+                    ToolbarItem(placement: .secondaryAction) { utskriftsknapp }
+                }
             }
         }
         .sheet(item: $visSkala) { pf in
@@ -995,9 +1005,7 @@ struct PalettDetalj: View {
         }
         .disabled(dokument.farger.isEmpty || kiArbeider)
         .help("Vurder paletten")
-        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(dokument) }
-            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
-            .help("Skriv ut paletten (A4, fargeflater i CIELab)")
+        if !utskriftIMeny { utskriftsknapp }
         Menu("Del", systemImage: "square.and.arrow.up") {
             Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
                 .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
@@ -1012,6 +1020,12 @@ struct PalettDetalj: View {
         .help("Lagre som, del og kopier")
         Button("Slett palett", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
             .help("Slett paletten")
+    }
+
+    private var utskriftsknapp: some View {
+        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(dokument) }
+            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
+            .help("Skriv ut paletten (A4, fargeflater i CIELab)")
     }
 
     private func vurder() async {
@@ -1172,21 +1186,55 @@ struct ToneskalaArk: View {
     @Environment(\.dismiss) private var lukk
     @State private var antall = 11
     @State private var demping = 0.6
+    /// Kontrast (L*): hvert trinn får fast lyshet i luminans, så kontrasten mot hvit og sort er lik for alle kulører.
+    /// Jevn: like steg i OKLab-lyshet (som før 1.3).
+    @AppStorage("toneskala.kontrast") private var kontrast = true
+
+    /// Trinnavn 50, 100 … 900, 950 for 11 trinn; ellers 1, 2, 3 …
+    private func trinnavn(_ i: Int) -> String {
+        antall == 11 ? ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"][i] : "\(i + 1)"
+    }
 
     private var toner: [Farge] {
+        let skala = Toneskala(kromaDemping: demping, gamut: arbeidsbenk.gamut)
+        if kontrast {
+            let lStjerne = antall == 11 ? Toneskala.kontrastLStjerne : Toneskala.jevnLStjerne(antall: antall)
+            return skala.toner(for: grunnfarge.farge, lStjerne: lStjerne).map(arbeidsbenk.begrens)
+        }
         let lysheter = antall == 11 ? Toneskala.standardLysheter : Toneskala.jevn(antall: antall)
         return Toneskala(lysheter: lysheter, kromaDemping: demping, gamut: arbeidsbenk.gamut).toner(for: grunnfarge.farge).map(arbeidsbenk.begrens)
     }
 
     var body: some View {
+        let toner = toner
         NavigationStack {
             Form {
-                Stepper("Trinn: \(antall)", value: $antall, in: 3...21)
-                VStack(alignment: .leading) {
-                    Text("Kromademping mot ytterpunktene")
-                    Slider(value: $demping, in: 0...1)
+                Section {
+                    Picker("Lyshet", selection: $kontrast) {
+                        Text("Kontrast (L*)").tag(true)
+                        Text("Jevn lyshet").tag(false)
+                    }
+                    .pickerStyle(.segmented)
+                    Stepper("Trinn: \(antall)", value: $antall, in: 3...21)
+                    VStack(alignment: .leading) {
+                        Text("Kromademping mot ytterpunktene")
+                        Slider(value: $demping, in: 0...1)
+                    }
+                    PalettStripe(farger: toner).frame(height: 64)
+                } footer: {
+                    Text(kontrast
+                         ? "Hvert trinn har samme lyshet (L*) for alle kulører, så kontrasten blir lik: med 11 trinn holder 400 minst 3:1 mot hvit (kanter og ikoner) og 600 minst 4,5:1 (tekst og knapper)."
+                         : "Like steg i opplevd lyshet (OKLab). Kontrasten mot hvit og sort varierer litt mellom kulører.")
                 }
-                PalettStripe(farger: toner).frame(height: 64)
+                Section {
+                    ForEach(Array(toner.enumerated()), id: \.offset) { i, f in
+                        ToneskalaTrinn(navn: trinnavn(i), farge: f)
+                    }
+                } header: {
+                    Text("Kontrast per trinn")
+                } footer: {
+                    Text("WCAG-forhold og APCA (Lc) for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).")
+                }
             }
             .formStyle(.grouped)
             .navigationTitle("Toneskala")
@@ -1196,13 +1244,45 @@ struct ToneskalaArk: View {
                     Button("Legg til") {
                         let basis = grunnfarge.visningsnavn
                         leggTil(toner.enumerated().map { i, f in
-                            PalettFarge(navn: "\(basis) \(i + 1)", farge: f, opphav: .toneskala)
+                            PalettFarge(navn: "\(basis) \(trinnavn(i))", farge: f, opphav: .toneskala)
                         })
                         lukk()
                     }
                 }
             }
         }
+    }
+}
+
+/// Ett trinn i toneskalaen: fargen med trinnavnet, hex og kontrasten for hvit og sort tekst på trinnet.
+private struct ToneskalaTrinn: View {
+    let navn: String
+    let farge: Farge
+
+    private func kontrast(_ tekst: Farge, _ tittel: String) -> some View {
+        let k = Kontrasttest(forgrunn: tekst, bakgrunn: farge)
+        let lc = farge.apcaKontrast(tekst: tekst)
+        return Text("\(tittel) \(k.formatert) · Lc \(Int(lc.rounded(.towardZero)))")
+            .font(.caption.monospacedDigit())
+            .fontWeight(k.består(.aaTekst) ? .semibold : .regular)
+            .foregroundStyle(k.består(.aaTekst) ? Color.primary : Color.sekundærTekst)
+    }
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Text(navn)
+                .font(.caption.weight(.semibold).monospacedDigit())
+                .foregroundStyle(farge.lesbarTekstfarge.swiftUI)
+                .frame(width: 52, height: 36)
+                .background(farge.swiftUI, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(farge.hex()).font(.callout.monospaced())
+                kontrast(Farge(hex: "#FFFFFF")!, String(localized: "Hvit"))
+                kontrast(Farge(hex: "#000000")!, String(localized: "Sort"))
+            }
+            Spacer(minLength: 0)
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 

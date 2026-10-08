@@ -133,9 +133,10 @@ verktøyene (skalaer, kontrast) ligger der de er.
    «Aa» med kontrastmerke og «Rett opp». Skriftkontrast-visningen får «Skriftfarger mot paletten». Følger med i
    DTCG (`text.light`/`text.dark` + `on`-alias per farge), CSS, SwiftUI, ASE (egen gruppe), PDF og delingslenker.
    `PalettDokument.tekstfargeData` er et nytt felt → CloudKit-skjemaet må publiseres til produksjon.
-2. **Toneskala forankret i CIE L\***: valg «Jevn / Kontrast (L*)» i Overgang › Lysere og mørkere; OKLCH L løses per kulør
-   til trinnets L*-mål (forslag 97/93/86/76/61/54/48/38/28/18/10: 400 ≈ 3:1, 600 ≈ 4,8:1 mot hvit), kontrastmerker
-   (WCAG og Lc begge veier) per trinn i `ToneskalaArk`.
+2. **Toneskala forankret i CIE L\*** (gjort): valget «Kontrast (L*) / Jevn lyshet» ligger i «Lag toneskala»
+   (`ToneskalaArk`, fra fargens meny i paletten), ikke i Overgang › Lysere og mørkere, der trinnene er relative til én
+   grunnfarge. OKLCH L løses per kulør til trinnets L* (`Farge.lStjerne`, D65-luminans; 97/93/86/76/61/54/48/38/28/18/10:
+   400 ≥ 3:1 og 600 ≥ 4,5:1 mot hvit for alle kulører), med WCAG-forhold og Lc mot hvit og sort per trinn.
 3. **«Komponenter» som fjerde visning av en palett** (ved siden av Farger, Lys, Skriftkontrast): roller fordelt
    automatisk og kan byttes; mini-iOS-skjerm (navigasjon, liste/kort, knapper, tekstfelt, bryter, varsel, lenke) i
    Lys/Mørk/Økt kontrast og stil Apple/Web; tilstander normal/trykket/fokus/deaktivert (hover bare med peker);
