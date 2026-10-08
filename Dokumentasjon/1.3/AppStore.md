@@ -230,6 +230,11 @@ colour,color,palette,design system,tokens,OKLCH,CMYK,Munsell,contrast,WCAG,APCA,
 
 ## 3. Mac – norsk (bokmål)
 
+> **Merk (2026-10-08):** iOS og iPadOS er på 1.2, mens Mac fortsatt er på 1.1. Kommer ikke Mac 1.2 ut før 1.3, hopper
+> Mac-brukerne fra 1.1 til 1.3. Da må «Nytt i denne versjonen» for Mac også ta med nyhetene fra 1.2: se i lys og
+> betraktningsforhold, skriftkontrast i paletter, LRV i valgt lys, del som lenke, «Lagre som», filamentfarger, nye
+> harmonier og naturlig lyshetsrekkefølge (`Dokumentasjon/1.2/AppStore.md`, Mac-avsnittet).
+
 **Reklametekst (170)**
 
 ```
