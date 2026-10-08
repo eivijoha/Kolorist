@@ -65,8 +65,8 @@ struct DesignsystemEksportTests {
         #expect(filer["Hav.xcassets/Contents.json"] != nil)
         let sett = filer.keys.filter { $0.hasSuffix(".colorset/Contents.json") }
         #expect(sett.count == ds.tema(.lys).tokens.count)
-        #expect(sett.contains("Hav.xcassets/onAccent.colorset/Contents.json"))
-        let json = try #require(JSONSerialization.jsonObject(with: filer["Hav.xcassets/accent.colorset/Contents.json"]!) as? [String: Any])
+        #expect(sett.contains("Hav.xcassets/textOnAccent.colorset/Contents.json"))
+        let json = try #require(JSONSerialization.jsonObject(with: filer["Hav.xcassets/backgroundAccent.colorset/Contents.json"]!) as? [String: Any])
         let farger = try #require(json["colors"] as? [[String: Any]])
         #expect(farger.count == 4)
         let utseender = farger.compactMap { $0["appearances"] as? [[String: String]] }.flatMap { $0 }
@@ -76,17 +76,23 @@ struct DesignsystemEksportTests {
     @Test func aliasPekerPåPrimitiver() throws {
         let filer = DesignsystemEksport.filer(ds, formater: [.designTokens], navn: "Hav")
         let prim = try #require(JSONSerialization.jsonObject(with: filer["tokens/primitives.tokens.json"]!) as? [String: Any])
-        let farge = try #require(prim["color"] as? [String: Any])
+        let palett = try #require(prim["palette"] as? [String: Any])
         for modus in Designmodus.allCases {
             let fil = try #require(filer["tokens/\(modus.tokennavn).tokens.json"])
-            let sem = try #require((JSONSerialization.jsonObject(with: fil) as? [String: Any])?["semantic"] as? [String: Any])
-            for (navn, token) in sem where !navn.hasPrefix("$") {
-                let verdi = (token as? [String: Any])?["$value"]
-                let alias = try #require(verdi as? String, "\(modus) \(navn) er ikke alias")
-                let sti = alias.dropFirst().dropLast().split(separator: ".").map(String.init)
-                #expect(sti.count == 3 && sti[0] == "color")
-                #expect((farge[sti[1]] as? [String: Any])?[sti[2]] != nil, "\(alias) finnes ikke")
+            let farger = try #require((JSONSerialization.jsonObject(with: fil) as? [String: Any])?["color"] as? [String: Any])
+            var antall = 0
+            for (egenskap, innhold) in farger where !egenskap.hasPrefix("$") {
+                let gruppe = try #require(innhold as? [String: Any])
+                for (navn, token) in gruppe {
+                    let verdi = (token as? [String: Any])?["$value"]
+                    let alias = try #require(verdi as? String, "\(modus) \(egenskap).\(navn) er ikke alias")
+                    let sti = alias.dropFirst().dropLast().split(separator: ".").map(String.init)
+                    #expect(sti.count == 3 && sti[0] == "palette")
+                    #expect((palett[sti[1]] as? [String: Any])?[sti[2]] != nil, "\(alias) finnes ikke")
+                    antall += 1
+                }
             }
+            #expect(antall == ds.tema(modus).tokens.count)
         }
         #expect(filer["tokens/resolver.json"] != nil)
     }
@@ -94,7 +100,8 @@ struct DesignsystemEksportTests {
     @Test func cssMedLightDark() {
         let css = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "Hav")["hav.css"]!, as: UTF8.self)
         #expect(css.contains("color-scheme: light dark;"))
-        #expect(css.contains("--accent: light-dark(#"))
+        #expect(css.contains("--color-background-accent: light-dark(#"))
+        #expect(css.contains("--color-text-secondary: light-dark(#"))
         #expect(css.contains("@media (prefers-contrast: more)"))
     }
 }
@@ -106,7 +113,7 @@ struct DesignsystemReadmeTests {
         let filer = DesignsystemEksport.filer(ds, formater: [.xcode, .css], navn: "Hav")
         let tekst = String(decoding: try #require(filer["README.md"]), as: UTF8.self)
         #expect(tekst.contains("#2F7FD8"))
-        #expect(tekst.contains("`on-accent`"))
+        #expect(tekst.contains("`color.text.on-accent`"))
         #expect(tekst.contains("Hav.xcassets"))
         #expect(tekst.contains("hav.css"))
         #expect(!tekst.contains("figma/"))
@@ -118,12 +125,23 @@ struct DesignsystemReadmeTests {
         // En skriftfarge som ikke holder på aksenten.
         ds.lysTekst = Farge(hex: "#8899AA")!
         let tekst = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "Hav")["README.md"]!, as: UTF8.self)
-        #expect(tekst.contains("`on-accent` / `accent`"))
+        #expect(tekst.contains("`color.text.on-accent` / `color.background.accent`"))
     }
 }
 
 @Suite("Designsystem-avsender")
 struct DesignsystemAvsenderTests {
+    @Test func sammeNavnIAlleFormater() {
+        let t = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)])).tema(.lys).tokens
+        let sekundær = t.first { $0.sti == ["text", "secondary"] }!
+        #expect(sekundær.navn == "color.text.secondary")
+        #expect(sekundær.figmanavn == "color/text/secondary")
+        #expect(sekundær.cssNavn == "--color-text-secondary")
+        #expect(sekundær.xcodeNavn == "textSecondary")
+        #expect(Set(t.map(\.navn)).count == t.count)
+        #expect(Set(t.map(\.xcodeNavn)).count == t.count)
+    }
+
     @Test func avsenderIAlleFiler() throws {
         let ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)]))
         let avsender = DesignsystemEksport.Avsender(app: "Kolorist 1.3", lenke: URL(string: "https://kolorist.no"), utvikler: "Eivind Arnstein Johansen")
@@ -165,20 +183,20 @@ struct DesignsystemP3Tests {
         #expect(!grønn.erInnenfor(.sRGB))
         let ds = Designsystem(navn: "P3", roller: [.aksent: grønn, .sekundær: grønn], lysTekst: Farge(hex: "#FAFAFA")!, mørkTekst: Farge(hex: "#141414")!)
         let css = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "P3")["p3.css"]!, as: UTF8.self)
-        #expect(css.contains("--accent: light-dark(#"))
+        #expect(css.contains("--color-background-accent: light-dark(#"))
         #expect(css.contains("@supports (color: color(display-p3 0 0 0))"))
         #expect(css.contains("@media (color-gamut: p3)"))
-        #expect(css.contains("--accent: light-dark(color(display-p3 "))
+        #expect(css.contains("--color-background-accent: light-dark(color(display-p3 "))
         // Nøytralene er like i begge og står bare i sRGB-delen.
-        #expect(!css.contains("--surface: light-dark(color(display-p3"))
+        #expect(!css.contains("--color-background-surface: light-dark(color(display-p3"))
     }
 
     /// En merkefarge i sRGB står bare i sRGB-delen; statusfargene (standard) og nøytralene står der de skiller seg.
     @Test func merkefargeISRGBUtenP3() {
         let ds = Designsystem(fra: Palett(navn: "Grå", farger: [PalettFarge(farge: Farge(hex: "#336699")!)]))
         let css = String(decoding: DesignsystemEksport.filer(ds, formater: [.css], navn: "Grå")["gra.css"]!, as: UTF8.self)
-        #expect(!css.contains("--accent: light-dark(color(display-p3"))
-        #expect(!css.contains("--text: light-dark(color(display-p3"))
+        #expect(!css.contains("--color-background-accent: light-dark(color(display-p3"))
+        #expect(!css.contains("--color-text-primary: light-dark(color(display-p3"))
     }
 }
 
@@ -193,7 +211,7 @@ struct DesignsystemFigmaTests {
             let data = try #require(filer["figma/\(modus.tokennavn).tokens.json"])
             let rot = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
             let farger = try #require(rot["color"] as? [String: Any])
-            #expect(Set(farger.keys) == ["background", "text", "border", "accent", "control", "disabled", "status"])
+            #expect(Set(farger.keys) == ["background", "text", "border"])
             // Går gjennom gruppene: et token har `$type` og `$value`, en gruppe har bare undergrupper og tokens.
             var navn = Set<String>()
             func gå(_ gruppe: [String: Any], _ sti: String) throws {
@@ -214,9 +232,9 @@ struct DesignsystemFigmaTests {
             try gå(farger, "color/")
             #expect(navn.count == ds.tema(modus).tokens.count)
             #expect(navn.contains("color/text/secondary"))
-            #expect(navn.contains("color/status/danger/bg"))
-            #expect(navn.contains("color/status/warning/label"))
-            #expect(Set(ds.tema(modus).tokens.map { DesignsystemEksport.figmanavn($0.navn) }) == navn)
+            #expect(navn.contains("color/background/danger"))
+            #expect(navn.contains("color/border/focus"))
+            #expect(Set(ds.tema(modus).tokens.map(\.figmanavn)) == navn)
             navnesett.append(navn)
         }
         #expect(Set(navnesett).count == 1)

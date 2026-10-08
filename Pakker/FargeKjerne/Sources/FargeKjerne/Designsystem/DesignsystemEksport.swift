@@ -4,8 +4,12 @@ import Foundation
 ///
 /// - Xcode: en asset catalog med ett fargesett per semantisk token, med variantene lys, mørk og økt kontrast
 ///   (`luminosity: dark`, `contrast: high`; kontrollert med `actool`, som gir UIAppearanceHighContrastAny/Dark).
-/// - Design tokens (DTCG 2025.10): `primitives.tokens.json` med skalaene og fargene som brukes, én fil per modus der de
-///   semantiske tokenene er alias til primitivene, og `resolver.json` (Resolver-modulen 2025.10) som binder dem sammen.
+/// - Design tokens (DTCG 2025.10): `primitives.tokens.json` med skalaene og fargene som brukes (under `palette`), én fil per
+///   modus der de semantiske tokenene (under `color`) er alias til primitivene, og `resolver.json` (Resolver-modulen 2025.10)
+///   som binder dem sammen.
+///
+/// Navnene er de samme i alle formater, med egenskapen først (se `Designtoken`): `color.text.secondary` i tokens,
+/// `color/text/secondary` i Figma, `--color-text-secondary` i CSS og `textSecondary` i Xcode.
 /// - Figma: én fil per modus med verdiene (sRGB og hex), som Figma importerer som én modus per fil. Alias brukes ikke, siden
 ///   Figma bare importerer tokens som finnes i alle filene, og hvert token har sin egen `$type` (Figma arver den ikke).
 /// - CSS: custom properties med `light-dark()` og `color-scheme: light dark`, og økt kontrast under
@@ -85,8 +89,7 @@ public enum DesignsystemEksport {
                 if !utseende.isEmpty { variant["appearances"] = utseende }
                 farger.append(variant)
             }
-            ut["\(katalog)/\(Identifikator.camel(token.navn, reserve: "farge")).colorset/Contents.json"] =
-                json(["colors": farger, "info": info])
+            ut["\(katalog)/\(token.xcodeNavn).colorset/Contents.json"] = json(["colors": farger, "info": info])
         }
         return ut
     }
@@ -100,8 +103,9 @@ public enum DesignsystemEksport {
 
     // MARK: Design tokens (DTCG)
 
-    /// Primitivene: en gruppe per rolle (og «text» for skriftfargene) med skalaen 50–950 og fargene temaene bruker utenfor
-    /// skalaen, navngitt etter L* («l96»). Svarer også med alias-stien for hver farge (etter hex).
+    /// Primitivene under `palette`: en gruppe per rolle (og «text» for skriftfargene) med skalaen 50–950 (lysest først) og
+    /// fargene temaene bruker utenfor skalaen, navngitt etter L* («l96»). Svarer også med alias-stien for hver farge (etter
+    /// hex).
     static func primitiver(_ ds: Designsystem, _ temaer: [Designtema]) -> (grupper: [(String, [(String, Farge)])], alias: [String: String]) {
         var grupper: [(String, [(String, Farge)])] = []
         var alias: [String: String] = [:]
@@ -114,19 +118,18 @@ public enum DesignsystemEksport {
                 var navn = n, i = 2
                 while brukt.contains(navn) { navn = "\(n)-\(i)"; i += 1 }
                 brukt.insert(navn)
-                alias[hex] = "{color.\(gruppe).\(navn)}"
+                alias[hex] = "{palette.\(gruppe).\(navn)}"
                 liste.append((navn, f))
             }
             if !liste.isEmpty { grupper.append((gruppe, liste)) }
         }
         func lNavn(_ f: Farge) -> String { "l\(Int(f.lStjerne.rounded()))" }
         // Skalaene først, så semantiske farger som er lik et trinn, blir alias til trinnet.
-        let roller: [Designrolle] = [.aksent, .sekundær, .nøytral, .feil, .suksess, .advarsel]
         var ekstra: [String: [(String, Farge)]] = [:]
         for tema in temaer {
-            for (navn, farge) in tema.tokens { ekstra[gruppe(for: navn), default: []].append((lNavn(farge), farge)) }
+            for token in tema.tokens { ekstra[token.rolle, default: []].append((lNavn(token.farge), token.farge)) }
         }
-        for rolle in roller {
+        for rolle in Designrolle.allCases {
             let skala = ds.skala(for: rolle)
             legg(rolle.tokennavn, zip(Designsystem.trinnavn, skala).map { ($0, $1) } + (ekstra[rolle.tokennavn] ?? [])
                 .sorted { $0.1.lStjerne > $1.1.lStjerne })
@@ -135,34 +138,22 @@ public enum DesignsystemEksport {
         return (grupper, alias)
     }
 
-    /// Hvilken primitiv gruppe en semantisk token hører til.
-    static func gruppe(for token: String) -> String {
-        switch token {
-        case "text", "on-accent", "warning-text": "text"
-        case "accent", "accent-pressed", "accent-subtle": "accent"
-        case "secondary": "secondary"
-        case let t where t.hasPrefix("danger"): "danger"
-        case let t where t.hasPrefix("success"): "success"
-        case let t where t.hasPrefix("warning"): "warning"
-        default: "neutral"
-        }
-    }
-
     static func designTokens(_ ds: Designsystem, _ temaer: [Designtema], avsender: Avsender) -> [String: Data] {
         let (grupper, alias) = primitiver(ds, temaer)
-        var farge: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
+        var palett: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
         for (gruppe, liste) in grupper {
             var g: [String: Any] = [:]
             for (n, f) in liste { g[n] = ["$type": "color", "$value": dtcgVerdi(f)] }
-            farge[gruppe] = g
+            palett[gruppe] = g
         }
-        var ut: [String: Data] = ["tokens/primitives.tokens.json": json(["color": farge])]
+        var ut: [String: Data] = ["tokens/primitives.tokens.json": json(["palette": palett])]
         for tema in temaer {
-            var semantisk: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
-            for (navn, f) in tema.tokens {
-                semantisk[navn] = ["$type": "color", "$value": alias[f.hex()].map { $0 as Any } ?? dtcgVerdi(f)]
+            var farger: [String: Any] = ["$type": "color", "$description": avsender.tekst, "$extensions": avsender.utvidelse]
+            for token in tema.tokens {
+                let verdi: Any = alias[token.farge.hex()] ?? dtcgVerdi(token.farge)
+                legg(["$type": "color", "$value": verdi], i: token.sti, under: &farger)
             }
-            ut["tokens/\(tema.modus.tokennavn).tokens.json"] = json(["semantic": semantisk])
+            ut["tokens/\(tema.modus.tokennavn).tokens.json"] = json(["color": farger])
         }
         let kontekster = Dictionary(uniqueKeysWithValues: temaer.map {
             ($0.modus.tokennavn, [["$ref": "\($0.modus.tokennavn).tokens.json"]])
@@ -185,62 +176,30 @@ public enum DesignsystemEksport {
                 "alpha": f.alfa, "hex": f.hex()]
     }
 
+    /// Legger et token inn i nøstede grupper etter stien (siste ledd er tokenets navn).
+    private static func legg(_ token: [String: Any], i sti: [String], under gruppe: inout [String: Any]) {
+        guard let første = sti.first else { return }
+        if sti.count == 1 { gruppe[første] = token; return }
+        var under = gruppe[første] as? [String: Any] ?? [:]
+        legg(token, i: Array(sti.dropFirst()), under: &under)
+        gruppe[første] = under
+    }
+
     // MARK: Figma
 
     static func figma(_ temaer: [Designtema], avsender: Avsender) -> [String: Data] {
         var ut: [String: Data] = [:]
         for tema in temaer {
-            // Figma krever `$type` på hvert token (arver ikke fra gruppen) og får ingen andre felt, så importen ikke
-            // hopper over noe. Opphavet står i README.
-            // Som i Apples egne tokens: «color» øverst (plass til andre typer senere), gruppene etter bruk, og korte navn
-            // nederst («color/text/secondary», «color/status/danger/bg»). README viser hvilket CSS-navn hvert svarer til.
+            // Samme navn og grupper som de andre formatene («color/text/secondary»), som i Apples egne tokens med «color»
+            // øverst. Figma krever `$type` på hvert token (arver den ikke fra gruppen) og får ingen andre felt, så importen
+            // ikke hopper over noe; opphavet står i README. Verdiene står direkte (ikke alias), siden Figma bare importerer
+            // variabler som finnes i alle filene.
             var farger: [String: Any] = [:]
-            for (navn, f) in tema.tokens {
-                let sti = figmasti(navn)
-                legg(["$type": "color", "$value": dtcgVerdi(f)], navn: sti.last ?? navn, i: Array(sti.dropLast()), under: &farger)
-            }
+            for token in tema.tokens { legg(["$type": "color", "$value": dtcgVerdi(token.farge)], i: token.sti, under: &farger) }
             ut["figma/\(tema.modus.tokennavn).tokens.json"] = json(["color": farger])
         }
         return ut
     }
-
-    private static func legg(_ token: [String: Any], navn: String, i sti: [String], under gruppe: inout [String: Any]) {
-        guard let første = sti.first else { gruppe[navn] = token; return }
-        var under = gruppe[første] as? [String: Any] ?? [:]
-        legg(token, navn: navn, i: Array(sti.dropFirst()), under: &under)
-        gruppe[første] = under
-    }
-
-    /// Stien til en semantisk farge i Figma (under «color»): gruppe etter bruk og et kort navn til slutt.
-    static func figmasti(_ token: String) -> [String] {
-        switch token {
-        case "bg": ["background", "page"]
-        case "surface": ["background", "surface"]
-        case "text": ["text", "primary"]
-        case "text-secondary": ["text", "secondary"]
-        case "placeholder": ["text", "placeholder"]
-        case "border": ["border", "control"]
-        case "separator": ["border", "separator"]
-        case "accent": ["accent", "default"]
-        case "accent-pressed": ["accent", "pressed"]
-        case "on-accent": ["accent", "label"]
-        case "accent-subtle": ["accent", "subtle"]
-        case "secondary": ["control", "switch-on"]
-        case "disabled-bg": ["disabled", "bg"]
-        case "disabled-text": ["disabled", "label"]
-        default: statussti(token)
-        }
-    }
-
-    /// danger-text → status/danger/label, danger-bg → status/danger/bg (og success, warning).
-    private static func statussti(_ token: String) -> [String] {
-        guard let skille = token.lastIndex(of: "-") else { return [token] }
-        let status = String(token[..<skille]), del = String(token[token.index(after: skille)...])
-        return ["status", status, del == "text" ? "label" : del]
-    }
-
-    /// Hele Figma-navnet, slik Variables-visningen viser det («color/text/secondary»).
-    static func figmanavn(_ token: String) -> String { (["color"] + figmasti(token)).joined(separator: "/") }
 
     // MARK: CSS
 
@@ -254,7 +213,7 @@ public enum DesignsystemEksport {
         else { return "" }
         func linjer(_ a: Designtema, _ b: Designtema, innrykk: String) -> String {
             zip(a.tokens, b.tokens).map { x, y in
-                "\(innrykk)--\(x.navn): light-dark(\(x.farge.hex()), \(y.farge.hex()));"
+                "\(innrykk)\(x.cssNavn): light-dark(\(x.farge.hex()), \(y.farge.hex()));"
             }.joined(separator: "\n")
         }
         var tekst = """
@@ -284,7 +243,7 @@ public enum DesignsystemEksport {
             if !med.isEmpty {
                 func p3Linjer(_ a: Designtema, _ b: Designtema, innrykk: String) -> String {
                     med.map { i in
-                        "\(innrykk)--\(a.tokens[i].navn): light-dark(\(Self.cssP3(a.tokens[i].farge)), \(Self.cssP3(b.tokens[i].farge)));"
+                        "\(innrykk)\(a.tokens[i].cssNavn): light-dark(\(Self.cssP3(a.tokens[i].farge)), \(Self.cssP3(b.tokens[i].farge)));"
                     }.joined(separator: "\n")
                 }
                 tekst += """

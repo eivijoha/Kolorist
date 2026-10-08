@@ -21,9 +21,12 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
   `@media (color-gamut: p3)`. sRGB-verdiene står foran som reserve.
 - Tokenfilene (DTCG og Figma) har `$type` på hvert token, ikke bare på gruppen: Figma arver ikke `$type` og hoppet over
   alle fargene. Figma-filene har ellers bare `$value` (opphavet står i README), og README har trinnene for importen.
-- Figma-filene grupperer fargene etter bruk under `color` med korte navn til slutt, som Apples egne tokens
-  (`color/text/secondary`, `color/accent/label`, `color/status/danger/bg`; `DesignsystemEksport.figmanavn`). README-tabellen
-  har en kolonne med Figma-navnet ved siden av CSS-navnet.
+- **Navngiving og struktur (brytende):** `Designtema.tokens` gir `Designtoken` med en sti etter bruk og egenskapen først
+  (`color.background.accent`, `color.text.on-accent`, `color.border.focus`; 22 tokens), etter Atlassian
+  (Foundation.Property.Modifier), Curtis og DTCG-praksis. Samme navn i alle formater: `navn` (`color.text.secondary`),
+  `figmanavn` (`color/text/secondary`), `cssNavn` (`--color-text-secondary`) og `xcodeNavn` (`textSecondary`). Primitivene
+  ligger under `palette` (alias `{palette.accent.l44}`), de semantiske fargene under `color`, også i Figma-filene. README har
+  en del om navngiving og struktur med kilder, og sier at skalaene går fra 50 (lysest) til 950 (mørkest).
 
 - **Skriftfarger i paletter:** `Palett.tekstfarger` (valgfritt, kodes bare når det finnes; eldre data leses) og
   `PalettFarge.tekstfarge: UUID?` (valgt skriftfarge, `nil` = automatisk). `Skriftfarger.beste(for:blant:)` velger den som

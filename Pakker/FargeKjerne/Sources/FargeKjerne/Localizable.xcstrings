@@ -67,6 +67,56 @@
         }
       }
     },
+    "**Bruk, ikke utseende.** Navnene beskriver hva fargen er til (`color.text.danger`), ikke hvordan den ser ut (`red`). Da holder navnet når fargen endres.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Purpose, not appearance.** The names describe what a colour is for (`color.text.danger`), not how it looks (`red`). That way the name still holds when the colour changes."
+          }
+        }
+      }
+    },
+    "**Egenskapen først.** Navnet bygges som kategori, egenskap, variant og tilstand: `color` · `background` · `accent` · `pressed`. Derfor har aksenten tre navn med samme verdi: flate, tekst og fokusring.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Property first.** A name is built as category, property, variant and state: `color` · `background` · `accent` · `pressed`. That is why the accent has three names with the same value: surface, text and focus ring."
+          }
+        }
+      }
+    },
+    "**Modus utenfor navnet.** Lys, mørk og økt kontrast er egne filer eller varianter, ikke en del av navnet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Mode outside the name.** Light, dark and increased contrast are separate files or variants, not part of the name."
+          }
+        }
+      }
+    },
+    "**Retning på skalaene.** 50 er lysest og 950 mørkest. Retningen er ikke standardisert, så den står her.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Scale direction.** 50 is lightest and 950 darkest. The direction is not standardised, so it is stated here."
+          }
+        }
+      }
+    },
+    "**To lag.** Primitivene (`palette`) er rene verdier uten mening: skalaer og fargene som brukes. De semantiske fargene (`color`) sier hva fargen er til, bytter med modus og peker på primitivene. Komponenter bør bruke de semantiske fargene, ikke primitivene direkte.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Two layers.** The primitives (`palette`) are plain values without meaning: scales and the colours in use. The semantic colours (`color`) say what a colour is for, change with the mode and point to the primitives. Components should use the semantic colours, not the primitives directly."
+          }
+        }
+      }
+    },
     "1. Velg ingenting på lerretet, og klikk «Open variables» i panelet til høyre. Variables-visningen åpnes i et eget vindu.": {
       "localizations": {
         "en": {
@@ -257,12 +307,12 @@
         }
       }
     },
-    "Bruk `on-accent` for tekst og ikoner på `accent`, og `accent` for tekst på `accent-subtle`. Det er parene som er kontrollert.": {
+    "Bruk `color.text.on-accent` for tekst og ikoner på `color.background.accent`, og `color.text.accent` for tekst på `color.background.accent-subtle`. Det er parene som er kontrollert.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use `on-accent` for text and icons on `accent`, and `accent` for text on `accent-subtle`. Those are the pairs that have been checked."
+            "value": "Use `color.text.on-accent` for text and icons on `color.background.accent`, and `color.text.accent` for text on `color.background.accent-subtle`. Those are the pairs that have been checked."
           }
         }
       }
@@ -467,22 +517,22 @@
         }
       }
     },
-    "Fargene ligger under `color`, gruppert etter bruk med korte navn til slutt, som i Apples egne tokens: `color/text/secondary`, `color/status/danger/bg` og så videre. Kolonnen Figma i tabellen over viser hvilket navn hver farge har i CSS og Xcode.": {
+    "Fargene ligger under `color`, i gruppene `background`, `text` og `border`, med samme navn som i de andre filene: `color/text/secondary`, `color/background/danger` og så videre.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The colours sit under `color`, grouped by use with short names at the end, as in Apple’s own tokens: `color/text/secondary`, `color/status/danger/bg` and so on. The Figma column in the table above shows the name each colour has in CSS and Xcode."
+            "value": "The colours sit under `color`, in the groups `background`, `text` and `border`, with the same names as in the other files: `color/text/secondary`, `color/background/danger` and so on."
           }
         }
       }
     },
-    "Fargeparene i vanlige komponenter er kontrollert mot WCAG 2 (AA) i alle moduser og i tilstandene normal, trykket, fokus og deaktivert: tekst minst 4,5:1 (1.4.3), kanter og kontroller minst 3:1 (1.4.11, fra WCAG 2.1). Deaktiverte kontroller er unntatt.": {
+    "Fargeparene i vanlige komponenter er kontrollert mot WCAG 2 (AA) i alle moduser og i tilstandene normal, trykket, fokus og deaktivert: tekst minst 4,5:1 ([1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)), kanter og kontroller minst 3:1 ([1.4.11](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html), fra WCAG 2.1). Deaktiverte kontroller er unntatt.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The colour pairs in common components are checked against WCAG 2 (AA) in every mode and in the normal, pressed, focused and disabled states: text at least 4.5:1 (1.4.3), borders and controls at least 3:1 (1.4.11, from WCAG 2.1). Disabled controls are exempt."
+            "value": "The colour pairs in common components are checked against WCAG 2 (AA) in every mode and in the normal, pressed, focused and disabled states: text at least 4.5:1 ([1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)), borders and controls at least 3:1 ([1.4.11](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html), from WCAG 2.1). Disabled controls are exempt."
           }
         }
       }
@@ -667,12 +717,22 @@
         }
       }
     },
-    "Fra Xcode 15 lager Xcode `Color(.navn)` og `UIColor(resource:)` for hvert fargesett. Bindestrek i navnene blir camelCase: `on-accent` heter `onAccent`.": {
+    "Fokusring": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "From Xcode 15, Xcode generates `Color(.name)` and `UIColor(resource:)` for each color set. Hyphenated names become camelCase: `on-accent` is `onAccent`."
+            "value": "Focus ring"
+          }
+        }
+      }
+    },
+    "Fra Xcode 15 lager Xcode `Color(.navn)` og `UIColor(resource:)` for hvert fargesett. Navnet er stien uten `color`, i camelCase: `color.text.on-accent` heter `textOnAccent`.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From Xcode 15, Xcode generates `Color(.name)` and `UIColor(resource:)` for each color set. The name is the path without `color`, in camelCase: `color.text.on-accent` is `textOnAccent`."
           }
         }
       }
@@ -847,6 +907,16 @@
         }
       }
     },
+    "Hovedknapp og valgt element": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary button and selected item"
+          }
+        }
+      }
+    },
     "Hovedknapp, lenker, valgt fane og fokusring": {
       "localizations": {
         "en": {
@@ -857,22 +927,12 @@
         }
       }
     },
-    "Hovedknapp, lenker, valgt fane, fokusring": {
+    "Hver rolle har en toneskala fra 50 (lysest) til 950 (mørkest) med samme lyshet (L*) på hvert trinn i alle roller. Trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt, uansett kulør.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Primary button, links, selected tab, focus ring"
-          }
-        }
-      }
-    },
-    "Hver rolle har en toneskala fra 50 til 950 med samme lyshet (L*) på hvert trinn i alle roller. Trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt, uansett kulør.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Each role has a tone scale from 50 to 950 with the same lightness (L*) at each step in every role. Step 400 holds at least 3:1 and step 600 at least 4.5:1 against white, whatever the hue."
+            "value": "Each role has a tone scale from 50 (lightest) to 950 (darkest) with the same lightness (L*) at each step in every role. Step 400 holds at least 3:1 and step 600 at least 4.5:1 against white, whatever the hue."
           }
         }
       }
@@ -897,12 +957,12 @@
         }
       }
     },
-    "Ikke la farge alene bære meningen i varsler: bruk ikon og tekst sammen med `danger`, `success` og `warning`.": {
+    "Ikke la farge alene bære meningen i varsler: bruk ikon og tekst sammen med fargene for danger, success og warning.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Don’t let colour alone carry the meaning of alerts: use an icon and text together with `danger`, `success` and `warning`."
+            "value": "Don’t let colour alone carry the meaning of alerts: use an icon and text together with the danger, success and warning colours."
           }
         }
       }
@@ -953,6 +1013,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Border that shows a control (text field)"
+          }
+        }
+      }
+    },
+    "Kilder:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sources:"
           }
         }
       }
@@ -1095,6 +1165,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Link `%@` and use the variables. Light and dark follow the browser setting through `light-dark()`, and increased contrast follows `prefers-contrast: more`."
+          }
+        }
+      }
+    },
+    "Lenker, og tekst på sekundærknapp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Links, and text on the secondary button"
           }
         }
       }
@@ -1315,6 +1395,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Natural"
+          }
+        }
+      }
+    },
+    "Navnene er de samme i alle filene, bare skrevet slik hvert verktøy vil ha dem:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The names are the same in every file, just written the way each tool expects:"
+          }
+        }
+      }
+    },
+    "Navngiving og struktur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naming and structure"
           }
         }
       }
@@ -1579,12 +1679,12 @@
         }
       }
     },
-    "Skalaene ligger i `tokens/primitives.tokens.json`.": {
+    "Skalaene ligger under `palette` i `tokens/primitives.tokens.json`.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The scales are in `tokens/primitives.tokens.json`."
+            "value": "The scales are under `palette` in `tokens/primitives.tokens.json`."
           }
         }
       }
@@ -1745,12 +1845,12 @@
         }
       }
     },
-    "Tekst og ikoner på aksent": {
+    "Tekst og ikoner på aksentflaten": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Text and icons on accent"
+            "value": "Text and icons on the accent surface"
           }
         }
       }
@@ -1855,22 +1955,22 @@
         }
       }
     },
-    "`separator` er dekorativ. Bruk `border` når kanten er det som viser at noe er en kontroll, for eksempel et tekstfelt.": {
+    "`color.border.separator` er dekorativ. Bruk `color.border.control` når kanten er det som viser at noe er en kontroll, for eksempel et tekstfelt.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "`separator` is decorative. Use `border` when the edge is what shows that something is a control, such as a text field."
+            "value": "`color.border.separator` is decorative. Use `color.border.control` when the edge is what shows that something is a control, such as a text field."
           }
         }
       }
     },
-    "`tokens/primitives.tokens.json` har skalaene og alle fargene som brukes, gruppert etter rolle og navngitt etter trinn eller L* (`l44`). Hver modus har sin fil (`light`, `dark`, `light-ic`, `dark-ic`) med de semantiske fargene som alias til primitivene, for eksempel `{color.accent.l44}`. `tokens/resolver.json` binder dem sammen etter Resolver-modulen i DTCG 2025.10: velg konteksten `theme` (light, dark, light-ic eller dark-ic) i verktøyet som leser filene.": {
+    "`tokens/primitives.tokens.json` har skalaene og alle fargene som brukes, under `palette`, gruppert etter rolle og navngitt etter trinn eller L* (`l44`). Hver modus har sin fil (`light`, `dark`, `light-ic`, `dark-ic`) med de semantiske fargene under `color` som alias til primitivene, for eksempel `{palette.accent.l44}`. `tokens/resolver.json` binder dem sammen etter Resolver-modulen i DTCG 2025.10: velg konteksten `theme` (light, dark, light-ic eller dark-ic) i verktøyet som leser filene.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "`tokens/primitives.tokens.json` has the scales and every colour in use, grouped by role and named by step or L* (`l44`). Each mode has its own file (`light`, `dark`, `light-ic`, `dark-ic`) with the semantic colours as aliases to the primitives, for example `{color.accent.l44}`. `tokens/resolver.json` ties them together following the DTCG 2025.10 Resolver Module: choose the `theme` context (light, dark, light-ic or dark-ic) in the tool that reads the files."
+            "value": "`tokens/primitives.tokens.json` has the scales and every colour in use, under `palette`, grouped by role and named by step or L* (`l44`). Each mode has its own file (`light`, `dark`, `light-ic`, `dark-ic`) with the semantic colours under `color` as aliases to the primitives, for example `{palette.accent.l44}`. `tokens/resolver.json` ties them together following the DTCG 2025.10 Resolver Module: choose the `theme` context (light, dark, light-ic or dark-ic) in the tool that reads the files."
           }
         }
       }
@@ -1975,6 +2075,16 @@
         }
       }
     },
+    "grunnverdier, funksjonelle farger og moduser": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "base values, functional colours and modes"
+          }
+        }
+      }
+    },
     "grå": {
       "localizations": {
         "en": {
@@ -2025,6 +2135,16 @@
         }
       }
     },
+    "import av design tokens som variabler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "importing design tokens as variables"
+          }
+        }
+      }
+    },
     "indigo": {
       "localizations": {
         "en": {
@@ -2067,6 +2187,16 @@
           "stringUnit": {
             "state": "new",
             "value": "krav %1$@:1, WCAG %2$@"
+          }
+        }
+      }
+    },
+    "lagene primitiv, semantisk og komponent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the primitive, semantic and component layers"
           }
         }
       }
@@ -2161,12 +2291,42 @@
         }
       }
     },
+    "navn etter mønsteret Foundation.Property.Modifier": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "names following Foundation.Property.Modifier"
+          }
+        }
+      }
+    },
+    "nivåene i et tokennavn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the levels in a token name"
+          }
+        }
+      }
+    },
     "normal": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "normal"
+          }
+        }
+      }
+    },
+    "og": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "and"
           }
         }
       }

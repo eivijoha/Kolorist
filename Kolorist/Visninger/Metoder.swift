@@ -5,7 +5,7 @@ import SwiftUI
 /// hva tallene og fargene bygger på – også hva som er utviklet for appen og hva som er etablert fag.
 enum Metode: String, CaseIterable, Identifiable {
     case oklab, cssColor4, cieLab, ciede2000, wcag, apca, lrv, munsell, machado, icc, renCMYK, harmonier, kunnskapsbase,
-         cam16, kolorimetri, kamerakarakterisering, filamentfarger
+         cam16, kolorimetri, kamerakarakterisering, filamentfarger, designsystem
 
     var id: String { rawValue }
 
@@ -29,6 +29,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .kolorimetri: String(localized: "CIE-kolorimetri")
         case .kamerakarakterisering: String(localized: "Kamerakarakterisering")
         case .filamentfarger: "FilamentColors.xyz"
+        case .designsystem: String(localized: "Designtokens")
         }
     }
 
@@ -51,6 +52,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .kolorimetri: String(localized: "Spektre, lyskilder og fargetemperatur")
         case .kamerakarakterisering: String(localized: "Kamerakarakterisering med referansekort")
         case .filamentfarger: String(localized: "Filamentfarger fra FilamentColors.xyz")
+        case .designsystem: String(localized: "Designsystem og designtokens")
         }
     }
 
@@ -74,6 +76,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .kolorimetri: "CIE 15:2018 Colorimetry; Y. Ohno: «Practical use and calculation of CCT and Duv», LEUKOS 10(1), 2014; S. A. Burns: «Numerical methods for smoothest reflectance reconstruction», Color Research & Application 45(1), 2020"
         case .kamerakarakterisering: "G. D. Finlayson, M. Mackiewicz, A. Hurlbert: «Color correction using root-polynomial regression», IEEE TIP 24(5), 2015; ISO 17321-1"
         case .filamentfarger: String(localized: "FilamentColors.xyz, lisensiert under CC BY 4.0; uttrekk og omregning er laget for Kolorist, som ikke er tilknyttet FilamentColors.xyz")
+        case .designsystem: String(localized: "W3C Design Tokens Community Group: Format Module og Resolver Module 2025.10; Atlassian: Design tokens (Foundation.Property.Modifier); N. Curtis (EightShapes): «Naming Tokens in Design Systems»; B. Frost: lagene primitiv, semantisk og komponent; GitHub Primer: Color; utledningen med L*-områder er utviklet for Kolorist")
         }
     }
 
@@ -111,6 +114,8 @@ enum Metode: String, CaseIterable, Identifiable {
             String(localized: "Med et referansekort i bildet tilpasser Kolorist en tonekurve per kanal fra de grå feltene og deretter en matrise eller et rotpolynom fra kamerafarger til fasiten i dagslys – den modellen som forutsier best. Nøyaktigheten oppgis som snitt og maks ΔE00, kryssvalidert: hvert felt forutsies av en modell tilpasset uten det. En kameraprofil laget én gang gjør at et gråkort holder i nytt lys. Kortet finnes automatisk i bildet (Vision), og lysheten i feltene avgjør hvilken vei det ligger. Referanseverdiene for kortet følger ikke med appen; du importerer dem selv.")
         case .filamentfarger:
             String(localized: "Filamentfargene kommer fra FilamentColors.xyz, som skriver ut prøver av filament fra mange produsenter og måler dem med kolorimeter (CHNSpec DS-220). Verdiene er CIELab under D65 med 10°-observatør, slik det står i kildekoden deres. Kolorist regner Lab om til XYZ med D65-hvitpunktet for 10° og tilpasser til 2° med Bradford; forskjellen mellom observatørene kan ikke regnes om nøyaktig uten spektre, men er liten. Eldre prøver uten måling har en farge fra et fotografi og er merket som anslått. Hver farge lenker til prøven hos FilamentColors.xyz, der du finner bilder og mer om filamentet. Uttrekket følger med appen og oppdateres med nye versjoner; appen henter ingenting fra nettet. Bilder, kjøpslenker og koblinger til andre fargesystemer er ikke tatt med. Farger varierer mellom produksjonspartier og etter overflate, så se på en fysisk prøve før du bestemmer deg.")
+        case .designsystem:
+            String(localized: "Et designsystem utledes fra palettens roller: aksent, sekundær, nøytral og statusfargene. For hver modus (lys og mørk, med og uten økt kontrast) har hver semantisk farge et område i CIE L*, som bestemmer WCAG-kontrasten eksakt for alle kulører. Merkefargen brukes uendret der den ligger i området; ellers flyttes den til nærmeste L* med samme kulør og kroma i OKLCH. Områdene er valgt så tekst holder 4,5:1 (1.4.3) og kanter og kontroller 3:1 (1.4.11) mot flatene de står på. Navngivingen følger praksis i etablerte designsystemer: to lag, der primitivene (palette) er rene verdier og de semantiske fargene (color) sier hva fargen brukes til; egenskapen først (color.background.accent, color.text.on-accent, color.border.focus); og modus utenfor navnet. Navnene er de samme i design tokens, Figma, CSS og Xcode.")
         case .kunnskapsbase:
             String(localized: "Paletter fra verdiord og «Beskriv en farge» bygger på en kunnskapsbase med fargebegreper laget for appen. Språkmodellen på enheten tolker ordene og velger kulørfamilier og uttrykk. Selve paletten komponeres deretter etter faste regler i OKLCH: harmoniprinsipp, lik valør eller lik metning, én aksent, lys eller mørk bakgrunn og tekst med minst 7:1 kontrast. Tekst om fargebetydning er konvensjoner, ikke vitenskapelige fakta.")
         }
@@ -132,6 +137,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .kolorimetri: URL(string: "https://cie.co.at/publications/colorimetry-4th-edition")
         case .kamerakarakterisering: URL(string: "https://doi.org/10.1109/TIP.2015.2405336")
         case .filamentfarger: URL(string: "https://filamentcolors.xyz/about/")
+        case .designsystem: URL(string: "https://www.designtokens.org/TR/2025.10/format/")
         case .renCMYK, .harmonier, .kunnskapsbase: nil
         }
     }

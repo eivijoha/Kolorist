@@ -1814,12 +1814,32 @@
         }
       }
     },
+    "Designsystem og designtokens": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design systems and design tokens"
+          }
+        }
+      }
+    },
     "Designsystemer": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Design systems"
+          }
+        }
+      }
+    },
+    "Designtokens": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design tokens"
           }
         }
       }
@@ -2130,6 +2150,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Single colours"
+          }
+        }
+      }
+    },
+    "Et designsystem utledes fra palettens roller: aksent, sekundær, nøytral og statusfargene. For hver modus (lys og mørk, med og uten økt kontrast) har hver semantisk farge et område i CIE L*, som bestemmer WCAG-kontrasten eksakt for alle kulører. Merkefargen brukes uendret der den ligger i området; ellers flyttes den til nærmeste L* med samme kulør og kroma i OKLCH. Områdene er valgt så tekst holder 4,5:1 (1.4.3) og kanter og kontroller 3:1 (1.4.11) mot flatene de står på. Navngivingen følger praksis i etablerte designsystemer: to lag, der primitivene (palette) er rene verdier og de semantiske fargene (color) sier hva fargen brukes til; egenskapen først (color.background.accent, color.text.on-accent, color.border.focus); og modus utenfor navnet. Navnene er de samme i design tokens, Figma, CSS og Xcode.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A design system is derived from the palette’s roles: accent, secondary, neutral and the status colours. For each mode (light and dark, with and without increased contrast) every semantic colour has a range in CIE L*, which sets the WCAG contrast exactly for every hue. The brand colour is used unchanged where it lies within the range; otherwise it moves to the nearest L* with the same hue and chroma in OKLCH. The ranges are chosen so that text holds 4.5:1 (1.4.3) and borders and controls 3:1 (1.4.11) against the surfaces they sit on. The naming follows practice in established design systems: two layers, where the primitives (palette) are plain values and the semantic colours (color) say what a colour is for; property first (color.background.accent, color.text.on-accent, color.border.focus); and the mode outside the name. The names are the same in design tokens, Figma, CSS and Xcode."
           }
         }
       }
@@ -10109,6 +10139,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The assessment says nothing about taste, mood or whether the colours suit a purpose – only about contrast, legibility and distinguishability."
+          }
+        }
+      }
+    },
+    "W3C Design Tokens Community Group: Format Module og Resolver Module 2025.10; Atlassian: Design tokens (Foundation.Property.Modifier); N. Curtis (EightShapes): «Naming Tokens in Design Systems»; B. Frost: lagene primitiv, semantisk og komponent; GitHub Primer: Color; utledningen med L*-områder er utviklet for Kolorist": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W3C Design Tokens Community Group: Format Module and Resolver Module 2025.10; Atlassian: Design tokens (Foundation.Property.Modifier); N. Curtis (EightShapes): “Naming Tokens in Design Systems”; B. Frost: the primitive, semantic and component layers; GitHub Primer: Color; the derivation with L* ranges was developed for Kolorist"
           }
         }
       }

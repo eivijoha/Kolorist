@@ -284,6 +284,7 @@ struct DesignsystemVisning: View {
                 case .roller: DesignsystemRoller(dokument: dokument, palett: palett)
                 case .skalaer: DesignsystemSkalaer(designsystem: ds)
                 }
+                MetodeHenvisning(.designsystem, .wcag, .oklab)
             }
             .padding(.horizontal)
             .padding(.bottom, 24)

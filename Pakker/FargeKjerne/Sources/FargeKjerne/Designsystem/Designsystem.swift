@@ -211,21 +211,57 @@ public struct Designtema: Hashable, Sendable {
         status[rolle] ?? Statusfarger(tekst: tekst, flate: flate)
     }
 
-    /// Semantiske tokens i fast rekkefølge, med navn som i eksporten.
-    public var tokens: [(navn: String, farge: Farge)] {
-        var t: [(String, Farge)] = [
-            ("bg", bakgrunn), ("surface", flate), ("text", tekst), ("text-secondary", sekundærtekst),
-            ("placeholder", plassholder), ("border", kant), ("separator", skille),
-            ("accent", aksent), ("accent-pressed", aksentTrykket), ("on-accent", påAksent), ("accent-subtle", aksentTonet),
-            ("secondary", sekundær), ("disabled-bg", deaktivertFyll), ("disabled-text", deaktivertTekst),
-        ]
-        for rolle in Designrolle.statusroller {
-            let s = status(rolle)
-            t.append(("\(rolle.tokennavn)-text", s.tekst))
-            t.append(("\(rolle.tokennavn)-bg", s.flate))
+    /// Semantiske tokens i fast rekkefølge. Navnene har egenskapen først (`color.background.accent`,
+    /// `color.text.on-accent`, `color.border.focus`), etter Atlassian, Curtis og DTCG-praksis, og er de samme i alle
+    /// formater. Aksenten står derfor tre steder (flate, tekst og fokusring) med samme verdi.
+    public var tokens: [Designtoken] {
+        let feil = status(.feil), suksess = status(.suksess), advarsel = status(.advarsel)
+        func t(_ egenskap: String, _ variant: String, _ f: Farge, _ rolle: String) -> Designtoken {
+            Designtoken(sti: [egenskap, variant], farge: f, rolle: rolle)
         }
-        return t
+        return [
+            t("background", "page", bakgrunn, "neutral"),
+            t("background", "surface", flate, "neutral"),
+            t("background", "accent", aksent, "accent"),
+            t("background", "accent-pressed", aksentTrykket, "accent"),
+            t("background", "accent-subtle", aksentTonet, "accent"),
+            t("background", "switch-on", sekundær, "secondary"),
+            t("background", "danger", feil.flate, "danger"),
+            t("background", "success", suksess.flate, "success"),
+            t("background", "warning", advarsel.flate, "warning"),
+            t("background", "disabled", deaktivertFyll, "neutral"),
+            t("text", "primary", tekst, "text"),
+            t("text", "secondary", sekundærtekst, "neutral"),
+            t("text", "placeholder", plassholder, "neutral"),
+            t("text", "on-accent", påAksent, "text"),
+            t("text", "accent", aksent, "accent"),
+            t("text", "danger", feil.tekst, "danger"),
+            t("text", "success", suksess.tekst, "success"),
+            t("text", "warning", advarsel.tekst, "text"),
+            t("text", "disabled", deaktivertTekst, "neutral"),
+            t("border", "control", kant, "neutral"),
+            t("border", "separator", skille, "neutral"),
+            t("border", "focus", aksent, "accent"),
+        ]
     }
+}
+
+/// Et semantisk token i designsystemet: en sti etter bruk under «color» og fargen i ett tema.
+public struct Designtoken: Hashable, Sendable {
+    /// Stien under «color», f.eks. `["text", "secondary"]`: egenskap, så variant eller tilstand.
+    public let sti: [String]
+    public let farge: Farge
+    /// Rollen (primitiv gruppe) fargen kommer fra, for alias i design tokens.
+    let rolle: String
+
+    /// DTCG-navnet: `color.text.secondary`.
+    public var navn: String { (["color"] + sti).joined(separator: ".") }
+    /// Navnet i Figmas Variables-visning: `color/text/secondary`.
+    public var figmanavn: String { (["color"] + sti).joined(separator: "/") }
+    /// CSS-variabelen: `--color-text-secondary`.
+    public var cssNavn: String { "--" + (["color"] + sti).joined(separator: "-") }
+    /// Fargesettet i Xcode, uten «color» (det står i `Color(…)`): `textSecondary`.
+    public var xcodeNavn: String { Identifikator.camel(sti.joined(separator: "-"), reserve: "farge") }
 }
 
 /// L*-mål og -områder per modus (se typen `Designsystem`).
