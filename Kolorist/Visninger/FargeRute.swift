@@ -13,6 +13,10 @@ struct FargeRute: View {
     var ekstraMerkeInnrykk: CGFloat = 0
     /// Vis «P3»-merket for farger utenfor sRGB.
     var visMerke = true
+    /// Skriftfargen på fargen (fra paletten, fra 1.3). `nil` = sort eller hvit etter lesbarhet.
+    var tekstfarge: Farge? = nil
+    /// Hvor godt skriftfargen holder (vises som et lite «Aa»-merke når paletten har skriftfarger).
+    var skriftvurdering: Skriftfarger.Vurdering? = nil
     /// Valgfrie handlinger i kontekstmenyen (trykk og hold / høyreklikk).
     var lagre: ((Farge) -> Void)? = nil
     var leggIPalett: ((Farge) -> Void)? = nil
@@ -123,8 +127,24 @@ struct FargeRute: View {
                         }
                         Text(farge.hex()).font(.caption2.monospaced())
                     }
-                    .foregroundStyle(farge.lesbarTekstfarge.swiftUI)
+                    .foregroundStyle((tekstfarge ?? farge.lesbarTekstfarge).swiftUI)
                     .padding(8)
+                }
+            }
+            .overlay(alignment: .topLeading) {
+                if let skriftvurdering, let tekstfarge {
+                    // «Aa» i skriftfargen: hake når den holder for all tekst (4,5:1), ellers kontrastforholdet.
+                    HStack(spacing: 3) {
+                        Text("Aa").font(.caption.weight(.semibold))
+                        if skriftvurdering == .tekst {
+                            Image(systemName: "checkmark").font(.caption2.weight(.bold))
+                        } else {
+                            Text(Kontrasttest(forgrunn: tekstfarge, bakgrunn: farge).formatert)
+                                .font(.caption2.weight(.semibold).monospacedDigit())
+                        }
+                    }
+                    .foregroundStyle(tekstfarge.swiftUI)
+                    .padding(min(hjørne * 0.3 + 4, 6) + ekstraMerkeInnrykk)
                 }
             }
             .overlay(alignment: .topTrailing) {
@@ -145,7 +165,11 @@ struct FargeRute: View {
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(navn.flatMap { $0.isEmpty ? nil : $0 } ?? farge.hex())
-            .accessibilityValue(Fargemodell.okLCH.tekst(for: farge))
+            .accessibilityValue(Fargemodell.okLCH.tekst(for: farge) + (skriftvurdering.map { v in
+                ". " + (v == .tekst ? String(localized: "Skriftfargen holder for all tekst")
+                        : v == .storTekst ? String(localized: "Skriftfargen holder bare for stor tekst")
+                        : String(localized: "Skriftfargen har for lav kontrast"))
+            } ?? ""))
     }
 }
 

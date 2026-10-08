@@ -61,6 +61,8 @@ struct Lagringsinnhold {
     var navn: String
     var farger: [PalettFarge]
     var gradienter: [PalettGradient] = []
+    /// Skriftfargene (fra 1.3), når innholdet er én palett med skriftfarger.
+    var tekstfarger: [PalettFarge] = []
     /// Flere paletter (en palettgruppe): ASE får én fargegruppe per palett og PDF én palett per side. Tom for én palett.
     var deler: [(palett: Palett, gradienter: [PalettGradient])] = []
 
@@ -159,7 +161,7 @@ struct LagreSomArk: View {
     /// Filene i de valgte formatene, i en midlertidig mappe.
     private func lagFiler() -> [URL] {
         let mappe = FileManager.default.temporaryDirectory.appendingPathComponent("Kolorist-lagre-\(UUID().uuidString)", isDirectory: true)
-        let palett = Palett(navn: innhold.navn, farger: innhold.farger)
+        let palett = Palett(navn: innhold.navn, farger: innhold.farger, tekstfarger: innhold.tekstfarger)
         do {
             try FileManager.default.createDirectory(at: mappe, withIntermediateDirectories: true)
             return try Lagringsformat.allCases.filter { valg.formater.contains($0) }.map { f in

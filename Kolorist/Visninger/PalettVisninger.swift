@@ -350,7 +350,7 @@ struct PalettListe: View {
                 LagreSomArk(innhold: .gruppe(navn: g.navn, paletter: ordnet(paletter.filter { $0.gruppeID == g.id })))
             }
             .sheet(item: $lagresSom) { p in
-                LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter))
+                LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter, tekstfarger: p.tekstfarger))
             }
             .fileImporter(isPresented: $importererASE, allowedContentTypes: [UTType(filenameExtension: "ase") ?? .data, .data],
                           allowsMultipleSelection: true) { resultat in
@@ -735,6 +735,8 @@ struct PalettDetalj: View {
     /// Huskes mellom palettene.
     enum Visning: String { case farger, lys, skriftkontrast }
     @AppStorage("palett.visning") private var visning: Visning = .farger
+    /// Skriftkontrast: skriftfargene mot paletten (standard når paletten har skriftfarger) eller alle fargepar.
+    @AppStorage("palett.skriftmatrise") private var skriftmatrise = true
     @AppStorage("seILys.somFoto") private var somFoto = false
     @State private var lysbibliotek = Lysbibliotek.delt
     @State private var visLagreSom = false
@@ -834,18 +836,45 @@ struct PalettDetalj: View {
             if let lys {
                 PalettLysValg(lys: lys).padding([.horizontal, .top])
             }
-            if visning == .skriftkontrast && dokument.farger.count >= 2 {
-                Kontrastmatrise(farger: dokument.farger).padding()
+            if visning == .skriftkontrast && !dokument.farger.isEmpty {
+                // Skriftfarger (valgfritt) står her, der tekstkontrast er tema; uten dem en kort innledning.
+                Group {
+                    if dokument.tekstfarger.isEmpty {
+                        SkriftfargeInnledning(dokument: dokument)
+                    } else {
+                        SkriftfargeRad(dokument: dokument)
+                    }
+                }
+                .padding([.horizontal, .top])
+                if !dokument.tekstfarger.isEmpty {
+                    Picker("Vis", selection: $skriftmatrise) {
+                        Text("Skriftfarger mot paletten").tag(true)
+                        Text("Alle fargepar").tag(false)
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .padding([.horizontal, .top])
+                }
+                if !dokument.tekstfarger.isEmpty && skriftmatrise {
+                    Kontrastmatrise(farger: dokument.farger, tekst: dokument.tekstfarger).padding()
+                } else if dokument.farger.count >= 2 {
+                    Kontrastmatrise(farger: dokument.farger).padding()
+                }
             } else {
+                let palett = dokument.palett
                 LazyVGrid(columns: rutenett, spacing: 10) {
                     ForEach(dokument.farger) { pf in
                         // Fargerutens egen meny (høyreklikk / trykk og hold) har Slett; den overstyrer en ytre meny.
                         let iLyset = lys?.iLyset(pf)
+                        let skrift = palett.skriftfarge(for: pf)
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: iLyset == nil,
+                                  tekstfarge: skrift?.farge,
+                                  skriftvurdering: skrift.map { Skriftfarger.vurdering(tekst: $0.farge, på: pf.farge) },
                                   fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
                                   navngi: { navngisPalettfarge = pf }, palettFarge: pf,
                                   ekstraMeny: AnyView(Group {
                                       Button("Lag toneskala", systemImage: "square.3.layers.3d") { visSkala = pf }
+                                      if !dokument.tekstfarger.isEmpty { SkriftfargeValgMeny(dokument: dokument, farge: pf) }
                                       FlyttMeny(farge: pf, fra: dokument)
                                   }))
                             .aspectRatio(1, contentMode: .fit)
@@ -882,6 +911,10 @@ struct PalettDetalj: View {
             if let lys {
                 PalettLysPar(lys: lys).padding(.horizontal).padding(.bottom)
             }
+            // Skriftfargene, når paletten har dem (ellers vises ingenting her – funksjonen er valgfri).
+            if visning != .skriftkontrast && !dokument.tekstfarger.isEmpty {
+                SkriftfargeRad(dokument: dokument).padding(.horizontal).padding(.bottom)
+            }
             // Gradienter i paletten, under fargene.
             PalettGradientListe(dokument: dokument)
         }
@@ -909,7 +942,7 @@ struct PalettDetalj: View {
             ToneskalaArk(grunnfarge: pf) { nye in dokument.farger += nye }
         }
         .sheet(isPresented: $visLagreSom) {
-            LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter))
+            LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter, tekstfarger: dokument.tekstfarger))
         }
         .sheet(item: $navngisPalettfarge) { pf in
             NavngiArk(farge: pf) { navn in
@@ -947,8 +980,8 @@ struct PalettDetalj: View {
             Label("Skriftkontrast", systemImage: visning == .skriftkontrast ? "a.square.fill" : "a.square")
         }
         .toggleStyle(.button)
-        .disabled(dokument.farger.count < 2)
-        .help(visning == .skriftkontrast ? "Vis fargene" : "Skriftkontrast mellom fargene")
+        .disabled(dokument.farger.isEmpty)
+        .help(visning == .skriftkontrast ? "Vis fargene" : "Skriftkontrast og skriftfarger")
         Toggle(isOn: visningsvalg(.lys)) {
             Label("Se i lys", systemImage: visning == .lys ? "lightbulb.fill" : "lightbulb")
         }

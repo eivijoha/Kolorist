@@ -607,6 +607,16 @@
         }
       }
     },
+    "Lys tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light text"
+          }
+        }
+      }
+    },
     "Lysere": {
       "localizations": {
         "en": {
@@ -703,6 +713,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Munsell’s wheel with ten principal hues in equal perceived steps, widely used in architecture and colour education. Value and chroma are kept; yellow is complementary to purple-blue."
+          }
+        }
+      }
+    },
+    "Mørk tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark text"
           }
         }
       }
@@ -1353,6 +1373,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "red"
+          }
+        }
+      }
+    },
+    "skriftfarger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "text colours"
           }
         }
       }

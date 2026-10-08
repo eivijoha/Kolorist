@@ -30,6 +30,7 @@ final class PalettDokument {
 
     convenience init(_ palett: Palett) {
         self.init(navn: palett.navn, farger: palett.farger)
+        if !palett.tekstfarger.isEmpty { tekstfarger = palett.tekstfarger }
     }
 
     /// Fargene i rekkefølge. Farger som ikke kan leses (fra en nyere versjon), beholdes urørt ved lagring
@@ -43,7 +44,20 @@ final class PalettDokument {
         }
     }
 
-    var palett: Palett { Palett(id: id, navn: navn, farger: farger) }
+    var palett: Palett { Palett(id: id, navn: navn, farger: farger, tekstfarger: tekstfarger) }
+
+    /// Skriftfarger (fra 1.3, valgfritt): eget felt, så eldre versjoner som ikke kjenner det, lar det være i fred.
+    private var tekstfargeData: Data = Data()
+
+    /// Skriftfargene i rekkefølge (tom = ingen definert), lest og skrevet som `farger`.
+    var tekstfarger: [PalettFarge] {
+        get { TolerantListe.les(tekstfargeData) }
+        set {
+            guard let data = TolerantListe.skriv(newValue, beholdUkjenteFra: tekstfargeData) else { return }
+            tekstfargeData = data
+            endret = .now
+        }
+    }
 
     /// Gradienter i paletten (fra 1.1). Eget felt, så eldre versjoner som ikke kjenner det, lar det være i fred.
     private var gradientData: Data = Data()

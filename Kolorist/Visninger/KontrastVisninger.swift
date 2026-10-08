@@ -446,13 +446,18 @@ struct KravRad: View {
 /// palettvisningen (og i et ark fra palettlista).
 struct Kontrastmatrise: View {
     let farger: [PalettFarge]
+    /// Skriftfarger som rader (fra 1.3): hver skriftfarge mot hver farge i paletten. Tom = alle fargepar i paletten.
+    var tekst: [PalettFarge] = []
     @AppStorage("kontrast.krav") private var krav: WCAGKrav = .aaTekst
     @State private var valgt: Kontrasttest?
 
     var body: some View {
-        // Kontrasten er lik begge veier, så hvert fargepar telles én gang.
-        let par = farger.indices.flatMap { i in farger.indices.filter { $0 > i }.map { (i, $0) } }
-        let bestått = par.filter { Kontrasttest(forgrunn: farger[$0.0].farge, bakgrunn: farger[$0.1].farge).består(krav) }.count
+        let rader = tekst.isEmpty ? farger : tekst
+        // Fargepar: kontrasten er lik begge veier, så hvert par telles én gang. Skriftfarger: hver mot hver farge.
+        let tester: [Kontrasttest] = tekst.isEmpty
+            ? farger.indices.flatMap { i in farger.indices.filter { $0 > i }.map { Kontrasttest(forgrunn: farger[i].farge, bakgrunn: farger[$0].farge) } }
+            : tekst.flatMap { t in farger.map { Kontrasttest(forgrunn: t.farge, bakgrunn: $0.farge) } }
+        let bestått = tester.filter { $0.består(krav) }.count
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
                 Image(systemName: "a.square.fill").foregroundStyle(Color.accentColor)
@@ -462,7 +467,7 @@ struct Kontrastmatrise: View {
                 .labelsHidden()
                 .fixedSize()
                 Spacer(minLength: 0)
-                Text("\(bestått) av \(par.count) fargepar består")
+                Text("\(bestått) av \(tester.count) fargepar består")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(Color.sekundærTekst)
             }
@@ -474,7 +479,7 @@ struct Kontrastmatrise: View {
                             FargeRute(farge: bg.farge, visTekst: false, hjørne: 6).frame(width: 56, height: 28)
                         }
                     }
-                    ForEach(farger) { fg in
+                    ForEach(rader) { fg in
                         GridRow {
                             FargeRute(farge: fg.farge, visTekst: false, hjørne: 6).frame(width: 60, height: 52)
                             ForEach(farger) { bg in

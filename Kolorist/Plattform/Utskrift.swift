@@ -38,7 +38,17 @@ enum PalettUtskrift {
             }
             let lab = pf.farge.cieLab
             rader.append(("CIELab (D50)", String(format: "L* %.2f   a* %.2f   b* %.2f", lab.l, lab.a, lab.b)))
+            // Skriftfargen (fra 1.3, når paletten har skriftfarger), med kontrastforholdet.
+            if let skrift = palett.skriftfarge(for: pf) {
+                let k = Kontrasttest(forgrunn: skrift.farge, bakgrunn: pf.farge)
+                rader.append((String(localized: "Skriftfarge"), "\(skrift.visningsnavn) · \(skrift.farge.hex()) · \(k.formatert)"))
+            }
             return PalettPDF.Felt(lab: lab, navn: pf.navn.isEmpty ? nil : pf.navn, rader: rader)
+        } + palett.tekstfarger.map { t -> PalettPDF.Felt in
+            let lab = t.farge.cieLab
+            return PalettPDF.Felt(lab: lab, navn: String(localized: "\(t.visningsnavn) (skriftfarge)"),
+                                  rader: [("Hex (sRGB)", t.farge.hex()),
+                                          ("CIELab (D50)", String(format: "L* %.2f   a* %.2f   b* %.2f", lab.l, lab.a, lab.b))])
         }
 
         let rom = bibliotek.map { String(localized: "Fargebibliotek: \($0.navn)") }

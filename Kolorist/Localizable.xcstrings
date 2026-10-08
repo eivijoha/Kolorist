@@ -11,6 +11,26 @@
         }
       }
     },
+    " (bare stor tekst)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " (large text only)"
+          }
+        }
+      }
+    },
+    " (for lav kontrast)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " (contrast too low)"
+          }
+        }
+      }
+    },
     "%@": {
       "localizations": {
         "en": {
@@ -59,6 +79,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ (beta)"
+          }
+        }
+      }
+    },
+    "%@ (skriftfarge)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (text colour)"
           }
         }
       }
@@ -825,6 +855,16 @@
         }
       }
     },
+    "Alle fargepar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All colour pairs"
+          }
+        }
+      }
+    },
     "Alle fargeparene kan skilles med alle typene fargesynsavvik.": {
       "localizations": {
         "en": {
@@ -941,6 +981,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apple development"
+          }
+        }
+      }
+    },
+    "Automatisk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
           }
         }
       }
@@ -1468,6 +1518,16 @@
         }
       }
     },
+    "Definer skriftfarger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define text colours"
+          }
+        }
+      }
+    },
     "Del": {
       "localizations": {
         "en": {
@@ -1804,6 +1864,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Change gradient"
+          }
+        }
+      }
+    },
+    "Endre skriftfarge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change text colour"
           }
         }
       }
@@ -2443,6 +2513,36 @@
         }
       }
     },
+    "Fjern": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove"
+          }
+        }
+      }
+    },
+    "Fjern skriftfarge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove text colour"
+          }
+        }
+      }
+    },
+    "Fjern skriftfargene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove the text colours"
+          }
+        }
+      }
+    },
     "Flate": {
       "localizations": {
         "en": {
@@ -2589,6 +2689,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suggest palette"
+          }
+        }
+      }
+    },
+    "Foreslå på nytt fra paletten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggest again from the palette"
+          }
+        }
+      }
+    },
+    "Foreslå skriftfarger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggest text colours"
           }
         }
       }
@@ -3197,6 +3317,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The quick buttons change the colours precisely in OKLCH. Free text is interpreted by the language model, which remembers the conversation."
+          }
+        }
+      }
+    },
+    "Hver farge får skriftfargen som leses best og når minst 4,5:1. Velg selv i fargens meny.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each colour gets the text colour that reads best and reaches at least 4.5:1. Choose yourself in the colour’s menu."
           }
         }
       }
@@ -5089,6 +5219,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add to palettes"
+          }
+        }
+      }
+    },
+    "Legg til skriftfarge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add text colour"
           }
         }
       }
@@ -7013,6 +7153,76 @@
         }
       }
     },
+    "Skriftfarge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text colour"
+          }
+        }
+      }
+    },
+    "Skriftfarge %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text colour %lld"
+          }
+        }
+      }
+    },
+    "Skriftfargen har for lav kontrast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The text colour has too little contrast"
+          }
+        }
+      }
+    },
+    "Skriftfargen holder bare for stor tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The text colour works for large text only"
+          }
+        }
+      }
+    },
+    "Skriftfargen holder for all tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The text colour works for all text"
+          }
+        }
+      }
+    },
+    "Skriftfarger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text colours"
+          }
+        }
+      }
+    },
+    "Skriftfarger mot paletten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text colours against the palette"
+          }
+        }
+      }
+    },
     "Skriftkontrast": {
       "localizations": {
         "en": {
@@ -7023,12 +7233,12 @@
         }
       }
     },
-    "Skriftkontrast mellom fargene": {
+    "Skriftkontrast og skriftfarger": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Text contrast between the colours"
+            "value": "Text contrast and text colours"
           }
         }
       }
@@ -8341,6 +8551,16 @@
         }
       }
     },
+    "Valg for skriftfargene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Options for the text colours"
+          }
+        }
+      }
+    },
     "Valør": {
       "localizations": {
         "en": {
@@ -8633,6 +8853,16 @@
           "stringUnit": {
             "state": "new",
             "value": "Versjon %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Vil du bestemme tekstfargene på paletten selv, for eksempel en nær hvit og en nær sort med et preg av palettens farger, kan du definere skriftfarger. Ellers brukes sort eller hvit.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you want to decide the text colours for the palette yourself – for example one near white and one near black with a hint of the palette’s colours – you can define text colours. Otherwise black or white is used."
           }
         }
       }

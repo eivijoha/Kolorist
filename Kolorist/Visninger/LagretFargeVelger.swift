@@ -86,6 +86,8 @@ struct FargeVelgerMeny<Etikett: View>: View {
     var visAktivFarge = true
     /// Hvit og sort som snarveier (for bakgrunner).
     var visHvitOgSort = false
+    /// Ekstra valg nederst (f.eks. «Gi navn» og «Fjern» for en skriftfarge).
+    var ekstra: AnyView? = nil
     @ViewBuilder var etikett: Etikett
     @State private var visLagret = false
     @State private var visUtplukk = false
@@ -104,6 +106,7 @@ struct FargeVelgerMeny<Etikett: View>: View {
                     Button("Sort") { farge = Farge(hex: "#000000")! }
                 }
             }
+            if let ekstra { Section { ekstra } }
             Section {
                 Button("Vis farge", systemImage: "slider.horizontal.3") { Arbeidsbenk.delt.visIStudio(farge) }
                 Button("Kopier \(farge.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(farge) }

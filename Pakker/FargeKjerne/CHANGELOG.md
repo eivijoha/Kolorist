@@ -4,6 +4,15 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Skriftfarger i paletter:** `Palett.tekstfarger` (valgfritt, kodes bare når det finnes; eldre data leses) og
+  `PalettFarge.tekstfarge: UUID?` (valgt skriftfarge, `nil` = automatisk). `Skriftfarger.beste(for:blant:)` velger den som
+  leses best etter APCA blant dem som når 4,5:1 (WCAG), ellers høyest WCAG-forhold; `Skriftfarger.vurdering`,
+  `Skriftfarger.forslag(for:)` (L* 97 og 14 med svakt kulørpreg) og `Palett.skriftfarge(for:)`.
+- `Farge.medLStjerne(_:kroma:kulør:gamut:)`: fargen med gitt OKLCH-kroma og -kulør og eksakt CIE L* (binærsøk i OKLCH L).
+- Eksport med skriftfarger: CSS (`--farge-on`), DTCG (egen gruppe `<palett>-tekst` med `on`-alias), SwiftUI (`fargeOn`),
+  Figma- og Tokens Studio-grupper `tekst` og `on`, ASE (egen fargegruppe), GPL. Uten skriftfarger er eksporten som før.
+  SwiftUI-eksporten gir nå unike Swift-navn også når fargenavn kolliderer.
+
 - `Harmoni.tonebane` (i første gruppe sammen med `.monokrom`) og `Monokromstrek.toner(fraKulør:spenn:antall:gamut:)`:
   toner langs streken i lyshet–metning-planet der kuløren også går `spenn` grader rundt OKLCH-sirkelen fra startkuløren,
   i retningen fortegnet sier og opptil en hel runde (ikke korteste vei). Brytende for uttømmende `switch` på `Harmoni`.

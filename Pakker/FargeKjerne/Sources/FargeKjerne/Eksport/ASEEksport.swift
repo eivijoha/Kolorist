@@ -19,9 +19,18 @@ enum ASEEksport {
     }
 
     private static func gruppeblokker(_ palett: Palett) -> [Data] {
+        var blokker = fargegruppe(palett.navn, palett.farger)
+        // Skriftfargene (fra 1.3) i en egen fargegruppe.
+        if !palett.tekstfarger.isEmpty {
+            blokker += fargegruppe("\(palett.navn) – " + String(localized: "skriftfarger", bundle: .module), palett.tekstfarger)
+        }
+        return blokker
+    }
+
+    private static func fargegruppe(_ navn: String, _ farger: [PalettFarge]) -> [Data] {
         var blokker: [Data] = []
-        blokker.append(blokk(type: 0xC001, innhold: tekst(palett.navn)))  // gruppestart
-        for f in palett.farger {
+        blokker.append(blokk(type: 0xC001, innhold: tekst(navn)))  // gruppestart
+        for f in farger {
             var innhold = tekst(f.visningsnavn)
             if let cmyk = f.lagretCMYK {
                 innhold.append(Data("CMYK".utf8))

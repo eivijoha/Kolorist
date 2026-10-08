@@ -46,19 +46,23 @@ public struct PalettFarge: Hashable, Codable, Sendable, Identifiable {
     /// Hvor fargen kommer fra, når den er en tone i et innebygd bibliotek (f.eks. et filament): produsent, navn og
     /// lenke til kilden.
     public var kilde: Fargekilde?
+    /// Skriftfargen brukeren har valgt for denne fargen (`id` i `Palett.tekstfarger`), eller `nil` for automatisk valg
+    /// (se `Skriftfarger.beste`). Fra 1.3.
+    public var tekstfarge: UUID?
 
     public enum Opphav: String, Codable, Sendable {
         case manuell, kamera, pipette, ki, overgang, toneskala, bilde, bibliotek
     }
 
     public init(id: UUID = UUID(), navn: String = "", farge: Farge, opphav: Opphav = .manuell,
-                representasjon: Fargerepresentasjon? = nil, kilde: Fargekilde? = nil) {
+                representasjon: Fargerepresentasjon? = nil, kilde: Fargekilde? = nil, tekstfarge: UUID? = nil) {
         self.id = id
         self.navn = navn
         self.farge = farge
         self.opphav = opphav
         self.representasjon = representasjon
         self.kilde = kilde
+        self.tekstfarge = tekstfarge
     }
 }
 
@@ -99,9 +103,10 @@ public struct Fargekilde: Hashable, Codable, Sendable {
 /// - Representasjon i Munsell (fra 1.1) lagres i et eget felt som eldre versjoner hopper over.
 /// - Ukjente verdier fra nyere versjoner gir en farge uten opphav/representasjon i stedet for en tom palett.
 /// - Kilden (fra 1.2) er et eget felt som eldre versjoner hopper over.
+/// - Valgt skriftfarge (fra 1.3) er et eget felt som eldre versjoner hopper over.
 extension PalettFarge {
     private enum Nøkler: String, CodingKey {
-        case id, navn, farge, opphav, representasjon, kilde
+        case id, navn, farge, opphav, representasjon, kilde, tekstfarge
         /// Representasjon i en fargemodell som 1.0 ikke kjenner (Munsell).
         case representasjonUtvidet
     }
@@ -118,6 +123,7 @@ extension PalettFarge {
         representasjon = (try? c.decodeIfPresent(Fargerepresentasjon.self, forKey: .representasjonUtvidet))
             ?? (try? c.decodeIfPresent(Fargerepresentasjon.self, forKey: .representasjon))
         kilde = try? c.decodeIfPresent(Fargekilde.self, forKey: .kilde)
+        tekstfarge = try? c.decodeIfPresent(UUID.self, forKey: .tekstfarge)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -134,6 +140,7 @@ extension PalettFarge {
             }
         }
         try c.encodeIfPresent(kilde, forKey: .kilde)
+        try c.encodeIfPresent(tekstfarge, forKey: .tekstfarge)
     }
 }
 
@@ -142,11 +149,33 @@ public struct Palett: Hashable, Codable, Sendable, Identifiable {
     public var id: UUID
     public var navn: String
     public var farger: [PalettFarge]
+    /// Skriftfarger for paletten (fra 1.3, valgfritt): tekst som skal stå på fargene, typisk én nær hvit og én nær sort.
+    /// Tom = ingen definert; da brukes sort eller hvit etter lesbarhet (`Farge.lesbarTekstfarge`).
+    public var tekstfarger: [PalettFarge]
 
-    public init(id: UUID = UUID(), navn: String, farger: [PalettFarge] = []) {
+    public init(id: UUID = UUID(), navn: String, farger: [PalettFarge] = [], tekstfarger: [PalettFarge] = []) {
         self.id = id
         self.navn = navn
         self.farger = farger
+        self.tekstfarger = tekstfarger
+    }
+
+    private enum Nøkler: String, CodingKey { case id, navn, farger, tekstfarger }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: Nøkler.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        navn = try c.decodeIfPresent(String.self, forKey: .navn) ?? ""
+        farger = try c.decodeIfPresent([PalettFarge].self, forKey: .farger) ?? []
+        tekstfarger = (try? c.decodeIfPresent([PalettFarge].self, forKey: .tekstfarger)) ?? []
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: Nøkler.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(navn, forKey: .navn)
+        try c.encode(farger, forKey: .farger)
+        if !tekstfarger.isEmpty { try c.encode(tekstfarger, forKey: .tekstfarger) }
     }
 }
 
