@@ -63,7 +63,7 @@ ALLE FARGEROM
 • Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
 • Angi CMYK eller RGB i profilen de skal brukes i, og få rene CMYK-verdier
-• Skriv hex, CSS-farger, Munsell-notasjon eller beskrivelser som «dyp havblå»
+• Skriv hex, CSS-farger eller Munsell-notasjon
 
 FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 • Importer egne fargekart i ASE, ACO eller ACB med navngitte toner
@@ -90,7 +90,7 @@ PLUKK FARGER
 
 APPLE INTELLIGENCE PÅ ENHETEN
 • Fra verdiord til palett, forankret i en kunnskapsbase med over hundre fargebegreper
-• Beskriv en farge, navngi farger og få vurdering av paletter
+• Navngi farger og få vurdering av paletter
 Alt kjøres på enheten. Uten Apple Intelligence lages paletter direkte fra kunnskapsbasen.
 
 DEL, LAGRE OG EKSPORTER
@@ -170,7 +170,7 @@ EVERY COLOUR SPACE
 • Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile – mapped, never clipped
 • Enter CMYK or RGB in the profile they will be used in, and get clean CMYK values
-• Type hex, CSS colours, Munsell notation or descriptions like “deep ocean blue”
+• Type hex, CSS colours or Munsell notation
 
 COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 • Import your own colour charts in ASE, ACO or ACB with named tones
@@ -197,7 +197,7 @@ PICK COLOURS
 
 APPLE INTELLIGENCE ON DEVICE
 • From value words to a palette, grounded in a knowledge base of more than a hundred colour concepts
-• Describe a colour, name colours and get a critique of your palette
+• Name colours and get a critique of your palette
 Everything runs on device. Without Apple Intelligence, palettes are built straight from the knowledge base.
 
 SHARE, SAVE AND EXPORT

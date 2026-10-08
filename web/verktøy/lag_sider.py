@@ -454,7 +454,6 @@ def design(lang):
         steg = [
             ('Finn fargene', 'Start fra et ord, et bilde eller en farge du allerede har.',
              ['Fra verdiord til palett med Apple Intelligence på enheten, forankret i en kunnskapsbase med over hundre fargebegreper',
-              'Beskriv en farge – «dyp havblå», «støvete rosa» – og se den med en gang',
               'Harmonier på fargesirkler i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N12,
               'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N,
               'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N,
@@ -509,7 +508,6 @@ def design(lang):
     steg = [
         ('Find the colours', 'Start from a word, a photo or a colour you already have.',
          ['From value words to a palette with Apple Intelligence on device, grounded in a knowledge base of more than a hundred colour concepts',
-          'Describe a colour – “deep ocean blue”, “dusty pink” – and see it right away',
           'Harmonies on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N12,
           'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N,
           'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N,
