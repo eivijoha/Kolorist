@@ -149,6 +149,8 @@ struct PalettKolonne: View {
                 .disabled(p.farger.count < 2)
             Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                 .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
+            Button("Lag designsystem", systemImage: "square.stack.3d.up") { arbeidsbenk.åpneDesignsystem(nyttDesignsystem(fra: p)) }
+                .disabled(p.farger.isEmpty)
         }
         .accessibilityElement(children: .contain)
     }

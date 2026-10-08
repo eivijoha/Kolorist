@@ -191,7 +191,22 @@ final class Arbeidsbenk {
             ?? Lyshetstrinn()
     }
 
-    enum Fane: String, Hashable { case studio, paletter, overgang, utplukk, vurdering }
+    enum Fane: String, Hashable { case studio, paletter, overgang, utplukk, vurdering, designsystemer }
+
+    /// Designsystemer har egen fane der palettene ligger i en spalte til høyre (Mac med bredt vindu, 13"-iPad i liggende
+    /// format): der er spalten for smal til designsystemet. Ellers er de en seksjon i Paletter, som åpner i full bredde.
+    var designsystemFane: Bool { palettkolonneMulig }
+    /// Et designsystem som skal åpnes i Designsystemer-fanen (se `åpneDesignsystem`).
+    var designsystemSomÅpnes: DesignsystemDokument?
+    /// Forhåndsvisningen som er åpen i fanen og ikke lagret ennå, så fanen vises også uten lagrede designsystemer.
+    var designsystemUtkast: DesignsystemDokument?
+
+    /// Åpner et designsystem (også en forhåndsvisning) i Designsystemer-fanen.
+    func åpneDesignsystem(_ d: DesignsystemDokument) {
+        if d.modelContext == nil { designsystemUtkast = d }
+        designsystemSomÅpnes = d
+        valgtFane = .designsystemer
+    }
 
     /// Debug: `-startfane overgang` åpner appen på en bestemt fane (brukes til skjermbilder).
     private static var startfane: Fane {
@@ -401,6 +416,13 @@ struct InnholdsVisning: View {
     @Environment(\.undoManager) private var undoManager
     @Environment(\.modelContext) private var kontekst
     @State private var observertAngring: ObjectIdentifier?
+    @Query private var designsystemer: [DesignsystemDokument]
+
+    /// Designsystemer-fanen: der palettene ligger i spalten, og bare når det finnes et designsystem eller en
+    /// forhåndsvisning (funksjonen skal ikke presses på noen).
+    private var visDesignsystemFane: Bool {
+        arbeidsbenk.designsystemFane && (!designsystemer.isEmpty || arbeidsbenk.designsystemUtkast != nil)
+    }
 
     private func kobleAngring() {
         kontekst.undoManager = undoManager
@@ -457,6 +479,11 @@ struct InnholdsVisning: View {
             Tab("Vurdering", systemImage: "checkmark.seal", value: .vurdering) {
                 NavigationStack { VurderingVisning().palettkolonneKnapp() }
             }
+            if visDesignsystemFane {
+                Tab("Designsystemer", systemImage: "square.stack.3d.up", value: .designsystemer) {
+                    DesignsystemFane()
+                }
+            }
         }
         .tabViewStyle(.sidebarAdaptable)
         // Paletter til høyre når vinduet er bredt nok. Mac: hele palettvisningen, fast (ikke i menyen).
@@ -476,6 +503,12 @@ struct InnholdsVisning: View {
         .onChange(of: paletterTilHøyre) { _, til in
             // Paletter-fanen forsvinner fra menyen: gå til Studio i stedet.
             if til, arbeidsbenk.valgtFane == .paletter { arbeidsbenk.valgtFane = .studio }
+        }
+        .onChange(of: visDesignsystemFane) { _, vis in
+            // Fanen forsvinner (smalere vindu, eller siste designsystem slettet): designsystemene er i Paletter.
+            if !vis, arbeidsbenk.valgtFane == .designsystemer {
+                arbeidsbenk.valgtFane = paletterTilHøyre ? .studio : .paletter
+            }
         }
         // ⌘Z: én angrehistorikk for paletter, lagrede farger og aktiv farge.
         .onAppear { kobleAngring() }

@@ -143,7 +143,9 @@ verktøyene (skalaer, kontrast) ligger der de er.
    normal/trykket/fokus/deaktivert; kontrollpunkt per fargepar med WCAG-kriterium (privat sektor i Norge: WCAG 2.0, uten
    1.4.11). Gjenstår: stil Web, hover med peker, ekte Liquid Glass-kontroller.
 4. **Designsystem-dokument** i Paletter (gjort fra palett: «Lag designsystem» i palettens …-meny og i menyen på
-   palettkortet; egen seksjon «Designsystemer» bare når det finnes ett). Faner Komponenter · Roller · Skalaer, eksport i
+   palettkortet). Der palettene ligger i en spalte til høyre (Mac med bredt vindu, 13"-iPad liggende), har designsystemene
+   egen fane «Designsystemer» i hovedmenyen, så de får hele bredden; ellers (iPhone, mindre iPader, smalt Mac-vindu) er de
+   en seksjon i Paletter. Fanen og seksjonen vises bare når det finnes et designsystem (eller en forhåndsvisning er åpen). Faner Komponenter · Roller · Skalaer, eksport i
    verktøylinjen. `DesignsystemDokument` er en ny modell → CloudKit-skjemaet må publiseres. Gjenstår: fra Studio-farge
    eller harmoni. Eksport (gjort): Xcode-fargesett med lys/mørk/økt kontrast (`contrast: high` bekreftet med `actool`),
    DTCG med primitiver, alias og resolver, Figma (én fil per modus), CSS `light-dark()`.

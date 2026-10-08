@@ -109,37 +109,75 @@ extension Komponentpar {
 
 // MARK: - Seksjonen i Paletter
 
-/// Designsystemene i palettoversikten. Vises bare når det finnes minst ett.
+/// Designsystemene i palettoversikten (iPhone, mindre iPader og smale Mac-vinduer). Vises bare når det finnes minst ett.
 struct DesignsystemSeksjon: View {
-    @Query(sort: \DesignsystemDokument.opprettet, order: .reverse) private var designsystemer: [DesignsystemDokument]
-    @Environment(\.modelContext) private var kontekst
+    @Query private var designsystemer: [DesignsystemDokument]
     let åpne: (DesignsystemDokument) -> Void
-    @State private var slettes: DesignsystemDokument?
 
     var body: some View {
         if !designsystemer.isEmpty {
             Listeseksjon("designsystemer", tittel: "Designsystemer") {
                 Text("\(designsystemer.count)").font(.callout).foregroundStyle(Color.sekundærTekst).monospacedDigit()
             } innhold: {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)], alignment: .leading, spacing: 12) {
-                    ForEach(designsystemer) { d in
-                        // Sveip fra høyre for å slette, som palettene.
-                        SveipForÅSlette(slett: { slettes = d }) {
-                            DesignsystemKort(dokument: d)
-                                .onTapGesture { åpne(d) }
-                                .contextMenu {
-                                    Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
-                                }
+                DesignsystemRutenett(åpne: åpne)
+            }
+        }
+    }
+}
+
+/// Kortene for designsystemene: trykk for å åpne, sveip fra høyre eller menyen for å slette.
+struct DesignsystemRutenett: View {
+    @Query(sort: \DesignsystemDokument.opprettet, order: .reverse) private var designsystemer: [DesignsystemDokument]
+    @Environment(\.modelContext) private var kontekst
+    let åpne: (DesignsystemDokument) -> Void
+    @State private var slettes: DesignsystemDokument?
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)], alignment: .leading, spacing: 12) {
+            ForEach(designsystemer) { d in
+                // Sveip fra høyre for å slette, som palettene.
+                SveipForÅSlette(slett: { slettes = d }) {
+                    DesignsystemKort(dokument: d)
+                        .onTapGesture { åpne(d) }
+                        .contextMenu {
+                            Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
                         }
-                    }
                 }
             }
-            .alert("Slette designsystemet «\(slettes?.navn ?? "")»?", isPresented: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } })) {
-                Button("Avbryt", role: .cancel) {}
-                Button("Slett", role: .destructive) {
-                    if let d = slettes { kontekst.angresteg("Slett designsystem") { kontekst.delete(d) } }
-                }
-            } message: { Text("Paletten det ble laget fra, beholdes.") }
+        }
+        .alert("Slette designsystemet «\(slettes?.navn ?? "")»?", isPresented: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } })) {
+            Button("Avbryt", role: .cancel) {}
+            Button("Slett", role: .destructive) {
+                if let d = slettes { kontekst.angresteg("Slett designsystem") { kontekst.delete(d) } }
+            }
+        } message: { Text("Paletten det ble laget fra, beholdes.") }
+    }
+}
+
+/// Designsystemer som egen fane der palettene ligger i en spalte (Mac med bredt vindu, 13"-iPad i liggende format), så
+/// designsystemet får hele bredden. Forhåndsvisninger fra «Lag designsystem» åpnes her.
+struct DesignsystemFane: View {
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @State private var sti: [DesignsystemDokument] = []
+
+    var body: some View {
+        NavigationStack(path: $sti) {
+            ScrollView {
+                DesignsystemRutenett { sti = [$0] }
+                    .padding()
+            }
+            .background(Color(white: 0.5).opacity(0.06))
+            .navigationTitle("Designsystemer")
+            .navigationDestination(for: DesignsystemDokument.self) { DesignsystemVisning(dokument: $0) }
+        }
+        .onChange(of: arbeidsbenk.designsystemSomÅpnes, initial: true) { _, d in
+            guard let d else { return }
+            sti = [d]
+            arbeidsbenk.designsystemSomÅpnes = nil
+        }
+        .onChange(of: sti) { _, ny in
+            // Tilbake fra en forhåndsvisning: den er enten lagret (og står i lista) eller forkastet.
+            if ny.isEmpty { arbeidsbenk.designsystemUtkast = nil }
         }
     }
 }

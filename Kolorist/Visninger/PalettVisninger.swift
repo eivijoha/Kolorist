@@ -164,7 +164,7 @@ struct PalettListe: View {
                             .disabled(p.farger.count < 2)
                         Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                             .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                        Button("Lag designsystem", systemImage: "square.stack.3d.up") { velg(.designsystem(nyttDesignsystem(fra: p))) }
+                        Button("Lag designsystem", systemImage: "square.stack.3d.up") { åpneDesignsystem(nyttDesignsystem(fra: p)) }
                             .disabled(p.farger.isEmpty)
                         Divider()
                         Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
@@ -328,7 +328,10 @@ struct PalettListe: View {
                             })
                         }
                     }
-                    DesignsystemSeksjon { velg(.designsystem($0)) }
+                    // Der designsystemer har egen fane (palettene i spalten), står de ikke her.
+                    if !arbeidsbenk.designsystemFane {
+                        DesignsystemSeksjon { velg(.designsystem($0)) }
+                    }
                     Label(Lagring.synkroniserer ? "Paletter, gradienter og enkeltfarger synkroniseres via iCloud."
                                                 : "Paletter, gradienter og enkeltfarger lagres bare på denne enheten.",
                           systemImage: Lagring.synkroniserer ? "icloud" : "iphone")
@@ -438,7 +441,7 @@ struct PalettListe: View {
                     }
                 }
                 .environment(\.iPalettkolonne, iKolonne)
-                .environment(\.åpneDesignsystem, ÅpneDesignsystem { d in sti.append(.designsystem(d)) })
+                .environment(\.åpneDesignsystem, ÅpneDesignsystem { d in åpneDesignsystem(d, over: true) })
                 // Vinduets egen tilbakepil (fra kolonnens navigasjon) skjules; knappen over brukes i stedet.
                 .navigationBarBackButtonHidden(iKolonne)
                 // I palettkolonnen på Mac vises ingen navigasjonslinje med tilbakeknapp; lag en selv.
@@ -464,6 +467,17 @@ struct PalettListe: View {
 
     private func velg(_ v: Valg) {
         sti = [v]
+    }
+
+    /// I Designsystemer-fanen der den finnes, ellers her i palettlista (over paletten, eller som eneste visning).
+    private func åpneDesignsystem(_ d: DesignsystemDokument, over: Bool = false) {
+        if arbeidsbenk.designsystemFane {
+            arbeidsbenk.åpneDesignsystem(d)
+        } else if over {
+            sti.append(.designsystem(d))
+        } else {
+            velg(.designsystem(d))
+        }
     }
 
     /// Trykk på en fargeprøve: fargen blir aktiv. I palettkolonnen blir du der du er; på egen
