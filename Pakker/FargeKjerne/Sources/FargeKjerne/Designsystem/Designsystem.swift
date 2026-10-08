@@ -95,12 +95,59 @@ public struct Designsystem: Codable, Hashable, Sendable {
     public var lysTekst: Farge
     /// Skriftfarge nær sort (tekst i lys modus og på lyse flater).
     public var mørkTekst: Farge
+    /// Egne roller (valgfritt, høyst `EgenRolle.maksAntall`), f.eks. info eller tilbud, hver med en mal for bruken.
+    public var egneRoller: [EgenRolle]
 
-    public init(navn: String, roller: [Designrolle: Farge], lysTekst: Farge, mørkTekst: Farge) {
+    public init(navn: String, roller: [Designrolle: Farge], lysTekst: Farge, mørkTekst: Farge, egneRoller: [EgenRolle] = []) {
         self.navn = navn
         self.roller = roller
         self.lysTekst = lysTekst
         self.mørkTekst = mørkTekst
+        self.egneRoller = egneRoller
+    }
+
+    private enum Nøkler: String, CodingKey { case navn, roller, lysTekst, mørkTekst, egneRoller }
+
+    // Eldre designsystemer (uten egne roller) leses fortsatt; egne roller skrives bare når de finnes.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: Nøkler.self)
+        navn = try c.decode(String.self, forKey: .navn)
+        roller = try c.decode([Designrolle: Farge].self, forKey: .roller)
+        lysTekst = try c.decode(Farge.self, forKey: .lysTekst)
+        mørkTekst = try c.decode(Farge.self, forKey: .mørkTekst)
+        egneRoller = (try? c.decodeIfPresent([EgenRolle].self, forKey: .egneRoller)) ?? []
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: Nøkler.self)
+        try c.encode(navn, forKey: .navn)
+        try c.encode(roller, forKey: .roller)
+        try c.encode(lysTekst, forKey: .lysTekst)
+        try c.encode(mørkTekst, forKey: .mørkTekst)
+        if !egneRoller.isEmpty { try c.encode(egneRoller, forKey: .egneRoller) }
+    }
+
+    /// Tokennavnene for de egne rollene, i samme rekkefølge: navnet i små bokstaver med bindestrek, uten æ, ø og å, og unikt
+    /// (ikke likt et fast navn eller en annen egen rolle).
+    public var egneTokennavn: [String] {
+        let faste: Set<String> = ["page", "surface", "accent", "accent-pressed", "accent-subtle", "switch-on", "danger",
+                                  "success", "warning", "disabled", "primary", "secondary", "placeholder", "on-accent",
+                                  "control", "separator", "focus"]
+        var brukt = faste
+        return egneRoller.map { r in
+            let grunn = Identifikator.kebab(r.navn, reserve: "rolle")
+            var navn = grunn, i = 2
+            while brukt.contains(navn) || brukt.contains("on-\(navn)") || brukt.contains("\(navn)-pressed") {
+                navn = "\(grunn)-\(i)"; i += 1
+            }
+            brukt.formUnion([navn, "on-\(navn)", "\(navn)-pressed"])
+            return navn
+        }
+    }
+
+    /// Toneskalaen for en egen rolle (se `skala(for:)`).
+    public func skala(for egen: EgenRolle, gamut: Gamut = .sRGB) -> [Farge] {
+        Toneskala(gamut: gamut).toner(for: egen.farge, lStjerne: Toneskala.kontrastLStjerne)
     }
 
     /// Fargen for en rolle (standardfargen når den mangler).
@@ -172,6 +219,70 @@ public struct Designsystem: Codable, Hashable, Sendable {
     public static let trinnavn = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"]
 }
 
+/// Hvordan en egen rolle brukes, og dermed hvilke farger og kontrollpunkter den får.
+public enum Rollemal: String, Codable, CaseIterable, Sendable, Identifiable {
+    /// Som feil og suksess: tekst og ikon på en tonet flate (varsler, merker). Tokens `background.<navn>` og `text.<navn>`.
+    case status
+    /// Som aksenten: fylt flate med tekst på, trykket tilstand og tekst/lenke. Tokens `background.<navn>`,
+    /// `background.<navn>-pressed`, `text.on-<navn>` og `text.<navn>`.
+    case aksent
+    /// Markering uten egen tekst: en svak flate og en tydelig kant/farge (etiketter, kategorier, diagrammer). Tokens
+    /// `background.<navn>` og `border.<navn>`.
+    case markering
+    public var id: String { rawValue }
+}
+
+/// En egen rolle i et designsystem: navn, farge og mal.
+public struct EgenRolle: Codable, Hashable, Sendable, Identifiable {
+    public static let maksAntall = 4
+
+    public var id: UUID
+    /// Navnet slik brukeren skrev det (tokennavnet lages av det, se `Designsystem.egneTokennavn`).
+    public var navn: String
+    public var farge: Farge
+    public var mal: Rollemal
+
+    public init(id: UUID = UUID(), navn: String, farge: Farge, mal: Rollemal) {
+        self.id = id
+        self.navn = navn
+        self.farge = farge
+        self.mal = mal
+    }
+
+    /// Forslaget for info: blå, som status.
+    public static var info: EgenRolle {
+        EgenRolle(navn: "info", farge: Farge(okLCH: OKLCH(l: 0.58, c: 0.14, h: 245)), mal: .status)
+    }
+}
+
+/// Fargene en egen rolle får i ett tema.
+public struct EgenRolleFarger: Hashable, Sendable, Identifiable {
+    public let id: UUID
+    public let navn: String
+    /// Tokennavnet (`info`, `tilbud` …).
+    public let tokennavn: String
+    public let mal: Rollemal
+    /// Status: den tonede flaten. Aksent: den fylte flaten. Markering: den svake flaten.
+    public let flate: Farge
+    /// Status: tekst og ikon på flaten. Aksent: tekst og lenker på sidebakgrunnen. Markering: ingen.
+    public let tekst: Farge?
+    /// Aksent: tekst på den fylte flaten.
+    public let påFlate: Farge?
+    /// Aksent: flaten når den trykkes.
+    public let trykket: Farge?
+    /// Markering: den tydelige fargen (kant, ikon, diagram), minst 3:1 mot flatene.
+    public let kant: Farge?
+
+    /// Fargen som representerer rollen i et tema (til visning).
+    public var hovedfarge: Farge {
+        switch mal {
+        case .status: tekst ?? flate
+        case .aksent: flate
+        case .markering: kant ?? flate
+        }
+    }
+}
+
 // MARK: - Tema per modus
 
 /// En statusfarge (feil, suksess, advarsel) i et varsel: tekst og ikon på en tonet flate.
@@ -206,6 +317,8 @@ public struct Designtema: Hashable, Sendable {
     public var deaktivertFyll: Farge
     public var deaktivertTekst: Farge
     public var status: [Designrolle: Statusfarger]
+    /// Fargene for de egne rollene, i samme rekkefølge som `Designsystem.egneRoller`.
+    public var egne: [EgenRolleFarger] = []
 
     public func status(_ rolle: Designrolle) -> Statusfarger {
         status[rolle] ?? Statusfarger(tekst: tekst, flate: flate)
@@ -242,7 +355,18 @@ public struct Designtema: Hashable, Sendable {
             t("border", "control", kant, "neutral"),
             t("border", "separator", skille, "neutral"),
             t("border", "focus", aksent, "accent"),
-        ]
+        ] + egne.flatMap { e -> [Designtoken] in
+            let n = e.tokennavn
+            switch e.mal {
+            case .status:
+                return [t("background", n, e.flate, n), t("text", n, e.tekst ?? e.flate, n)]
+            case .aksent:
+                return [t("background", n, e.flate, n), t("background", "\(n)-pressed", e.trykket ?? e.flate, n),
+                        t("text", "on-\(n)", e.påFlate ?? tekst, "text"), t("text", n, e.tekst ?? e.flate, n)]
+            case .markering:
+                return [t("background", n, e.flate, n), t("border", n, e.kant ?? e.flate, n)]
+            }
+        }
     }
 }
 
@@ -344,7 +468,28 @@ public extension Designsystem {
             }
         }
 
-        return Designtema(
+        let egne = zip(egneRoller, egneTokennavn).map { rolle, tokennavn -> EgenRolleFarger in
+            let grunn = rolle.farge
+            let c = grunn.okLCH.c
+            switch rolle.mal {
+            case .status:
+                return EgenRolleFarger(id: rolle.id, navn: rolle.navn, tokennavn: tokennavn, mal: .status,
+                                       flate: flytt(grunn, til: n.statusFlate, kroma: min(c * 0.3, 0.045)),
+                                       tekst: iOmråde(grunn, n.statusTekst), påFlate: nil, trykket: nil, kant: nil)
+            case .aksent:
+                let fyll = iOmråde(grunn, n.aksent)
+                return EgenRolleFarger(id: rolle.id, navn: rolle.navn, tokennavn: tokennavn, mal: .aksent,
+                                       flate: fyll, tekst: fyll,
+                                       påFlate: Skriftfarger.beste(for: fyll, blant: skrift)?.farge ?? lys,
+                                       trykket: flytt(fyll, til: fyll.lStjerne + n.trykket), kant: nil)
+            case .markering:
+                return EgenRolleFarger(id: rolle.id, navn: rolle.navn, tokennavn: tokennavn, mal: .markering,
+                                       flate: flytt(grunn, til: n.statusFlate, kroma: min(c * 0.5, 0.08)),
+                                       tekst: nil, påFlate: nil, trykket: nil, kant: iOmråde(grunn, n.sekundær))
+            }
+        }
+
+        var tema = Designtema(
             modus: modus,
             bakgrunn: grå(n.bakgrunn, 0.5),
             flate: grå(n.flate, modus.erMørk ? 0.6 : 0.2),
@@ -362,6 +507,8 @@ public extension Designsystem {
             deaktivertTekst: grå(n.deaktivertTekst, 0.5),
             status: status
         )
+        tema.egne = egne
+        return tema
     }
 }
 
@@ -397,6 +544,8 @@ public enum Komponentkrav: Sendable, Hashable {
 public enum Komponentpar: String, CaseIterable, Sendable, Identifiable {
     case tekst, sekundærtekst, plassholder, lenke, destruktiv, knappetekst, tonetKnapp, feltkant, bryter, fokusring
     case feilvarsel, suksessvarsel, advarselvarsel
+    /// Egne roller: varsel (status), knapp (aksent), etikettens kant og tekst (markering).
+    case egenVarsel, egenKnapp, egenEtikettkant, egenEtikettekst
     public var id: String { rawValue }
 }
 
@@ -406,8 +555,12 @@ public struct Komponentsjekk: Identifiable, Hashable, Sendable {
     public let forgrunn: Farge
     public let bakgrunn: Farge
     public let krav: Komponentkrav
+    /// Navnet på den egne rollen paret hører til (nil for de faste).
+    public var rolle: String? = nil
+    /// Tokennavnet til den egne rollen (nil for de faste).
+    public var rolletoken: String? = nil
 
-    public var id: String { par.rawValue }
+    public var id: String { par.rawValue + (rolle.map { ":" + $0 } ?? "") }
     /// WCAG-kontrastforhold.
     public var forhold: Double { forgrunn.lagtOver(bakgrunn).wcagKontrast(mot: bakgrunn) }
     /// APCA-lesekontrast (Lc).
@@ -453,6 +606,22 @@ public extension Designtema {
         for (par, rolle) in varsler {
             let st = status(rolle)
             s.append(Komponentsjekk(par: par, forgrunn: st.tekst, bakgrunn: st.flate, krav: .tekst))
+        }
+        for e in egne {
+            switch e.mal {
+            case .status:
+                s.append(Komponentsjekk(par: .egenVarsel, forgrunn: e.tekst ?? tekst, bakgrunn: e.flate, krav: .tekst, rolle: e.navn, rolletoken: e.tokennavn))
+            case .aksent:
+                if av {
+                    s.append(Komponentsjekk(par: .egenKnapp, forgrunn: deaktivertTekst, bakgrunn: deaktivertFyll, krav: .unntatt, rolle: e.navn, rolletoken: e.tokennavn))
+                } else {
+                    s.append(Komponentsjekk(par: .egenKnapp, forgrunn: e.påFlate ?? tekst,
+                                            bakgrunn: tilstand == .trykket ? (e.trykket ?? e.flate) : e.flate, krav: .tekst, rolle: e.navn, rolletoken: e.tokennavn))
+                }
+            case .markering:
+                s.append(Komponentsjekk(par: .egenEtikettkant, forgrunn: e.kant ?? e.flate, bakgrunn: flate, krav: .ikkeTekst, rolle: e.navn, rolletoken: e.tokennavn))
+                s.append(Komponentsjekk(par: .egenEtikettekst, forgrunn: tekst, bakgrunn: e.flate, krav: .tekst, rolle: e.navn, rolletoken: e.tokennavn))
+            }
         }
         return s
     }

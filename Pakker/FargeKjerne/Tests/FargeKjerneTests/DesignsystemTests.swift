@@ -240,3 +240,65 @@ struct DesignsystemFigmaTests {
         #expect(Set(navnesett).count == 1)
     }
 }
+
+@Suite("Egne roller i designsystemet")
+struct EgneRollerTests {
+    private func system(_ egne: [EgenRolle]) -> Designsystem {
+        var ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)]))
+        ds.egneRoller = egne
+        return ds
+    }
+
+    @Test func eldreDataUtenEgneRollerLeses() throws {
+        let ds = system([])
+        let data = try JSONEncoder().encode(ds)
+        #expect(!String(decoding: data, as: UTF8.self).contains("egneRoller"))
+        #expect(try JSONDecoder().decode(Designsystem.self, from: data).egneRoller.isEmpty)
+        let med = system([.info])
+        #expect(try JSONDecoder().decode(Designsystem.self, from: JSONEncoder().encode(med)) == med)
+    }
+
+    @Test func tokennavnErUnikeOgGyldige() {
+        let ds = system([EgenRolle(navn: "Tilbud på kjøtt", farge: Farge(hex: "#C04040")!, mal: .status),
+                         EgenRolle(navn: "Accent", farge: Farge(hex: "#40A040")!, mal: .aksent),
+                         EgenRolle(navn: "Kategori", farge: Farge(hex: "#8040C0")!, mal: .markering),
+                         EgenRolle(navn: "kategori", farge: Farge(hex: "#408080")!, mal: .markering)])
+        #expect(ds.egneTokennavn == ["tilbud-pa-kjott", "accent-2", "kategori", "kategori-2"])
+        let navn = ds.tema(.lys).tokens.map(\.navn)
+        #expect(Set(navn).count == navn.count)
+        #expect(navn.contains("color.background.tilbud-pa-kjott"))
+        #expect(navn.contains("color.text.on-accent-2"))
+        #expect(navn.contains("color.background.accent-2-pressed"))
+        #expect(navn.contains("color.border.kategori"))
+    }
+
+    /// Alle maler holder kravene i alle moduser og tilstander, for mange kulører og lysheter.
+    @Test(arguments: [0.0, 60, 120, 180, 240, 300])
+    func egneRollerHolderKravene(kulør: Double) {
+        for l in [0.35, 0.6, 0.85] {
+            let f = Farge(okLCH: OKLCH(l: l, c: 0.15, h: kulør)).gamutKartlagt(til: .sRGB)
+            let ds = system(Rollemal.allCases.map { EgenRolle(navn: $0.rawValue, farge: f, mal: $0) })
+            for modus in Designmodus.allCases {
+                for tilstand in Komponenttilstand.allCases {
+                    for s in ds.tema(modus).sjekker(tilstand) where s.rolle != nil {
+                        #expect(s.består, "\(modus) \(tilstand) \(s.id): \(s.forhold)")
+                    }
+                }
+            }
+        }
+    }
+
+    @Test func eksportOgReadmeTarMedEgneRoller() throws {
+        let ds = system([.info, EgenRolle(navn: "Kategori", farge: Farge(hex: "#8040C0")!, mal: .markering)])
+        let filer = DesignsystemEksport.filer(ds, formater: Set(DesignsystemEksport.Format.allCases), navn: "Hav")
+        let css = String(decoding: filer["hav.css"]!, as: UTF8.self)
+        #expect(css.contains("--color-background-info: light-dark(#"))
+        #expect(css.contains("--color-border-kategori: light-dark(#"))
+        #expect(filer["Hav.xcassets/textInfo.colorset/Contents.json"] != nil)
+        let prim = try #require(JSONSerialization.jsonObject(with: filer["tokens/primitives.tokens.json"]!) as? [String: Any])
+        #expect(((prim["palette"] as? [String: Any])?["info"] as? [String: Any])?["500"] != nil)
+        let readme = String(decoding: filer["README.md"]!, as: UTF8.self)
+        #expect(readme.contains("| info |"))
+        #expect(readme.contains("`color.border.kategori`"))
+    }
+}

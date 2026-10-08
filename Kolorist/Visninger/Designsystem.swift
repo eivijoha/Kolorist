@@ -103,7 +103,17 @@ extension Komponentpar {
         case .feilvarsel: "Feilmelding"
         case .suksessvarsel: "Bekreftelse"
         case .advarselvarsel: "Advarsel"
+        case .egenVarsel: "Varsel"
+        case .egenKnapp: "Tekst på knapp"
+        case .egenEtikettkant: "Kant på etikett"
+        case .egenEtikettekst: "Tekst på etikett"
         }
+    }
+
+    /// Navnet, med rollen for egne roller («Varsel: info»).
+    func navn(rolle: String?) -> Text {
+        guard let rolle else { return Text(navn) }
+        return Text("\(Text(navn)): \(rolle)")
     }
 }
 
@@ -205,8 +215,8 @@ struct DesignsystemKort: View {
                         .background(t.flate.swiftUI, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                         .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Color.primary.opacity(0.1)))
                     }
-                    ForEach(Designrolle.allCases) { r in
-                        RoundedRectangle(cornerRadius: 4, style: .continuous).fill(ds[r].swiftUI).frame(width: 14, height: 30)
+                    ForEach(Designrolle.allCases.map { ds[$0] } + ds.egneRoller.map(\.farge), id: \.self) { f in
+                        RoundedRectangle(cornerRadius: 4, style: .continuous).fill(f.swiftUI).frame(width: 14, height: 30)
                     }
                 }
             }
@@ -484,7 +494,7 @@ private struct Kontrollpunkt: View {
                 .background(sjekk.bakgrunn.swiftUI, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 7, style: .continuous).strokeBorder(Color.primary.opacity(0.12)))
             VStack(alignment: .leading, spacing: 2) {
-                Text(sjekk.par.navn).font(.subheadline)
+                sjekk.par.navn(rolle: sjekk.rolle).font(.subheadline)
                 Group {
                     if let kriterium = sjekk.krav.suksesskriterium, let m = sjekk.krav.minimum {
                         Text("\(kriterium) · minst \(m.formatted(.number.precision(.fractionLength(m == 3 ? 0 : 1)))):1")
@@ -601,6 +611,18 @@ struct KomponentSkjerm: View {
                 varsel(.feil, ikon: "xmark.octagon.fill", tekst: "Navnet mangler")
                 varsel(.suksess, ikon: "checkmark.circle.fill", tekst: "Endringene er lagret")
                 varsel(.advarsel, ikon: "exclamationmark.triangle.fill", tekst: "Lagringsplassen er snart full")
+                ForEach(tema.egne.filter { $0.mal == .status }) { egenVarsel($0) }
+            }
+            let knapper = tema.egne.filter { $0.mal == .aksent }
+            if !knapper.isEmpty {
+                HStack(spacing: 10) { ForEach(knapper) { egenKnapp($0) } }
+            }
+            let etiketter = tema.egne.filter { $0.mal == .markering }
+            if !etiketter.isEmpty {
+                HStack(spacing: 8) {
+                    ForEach(etiketter) { etikett($0) }
+                    Spacer(minLength: 0)
+                }
             }
             fanelinje
         }
@@ -636,6 +658,44 @@ struct KomponentSkjerm: View {
         .background(c(s.flate), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
     }
 
+    /// Varsel for en egen rolle som status.
+    private func egenVarsel(_ e: EgenRolleFarger) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: e.tokennavn == "info" ? "info.circle.fill" : "circle.fill")
+            Text(verbatim: e.navn.prefix(1).uppercased() + e.navn.dropFirst())
+            Spacer(minLength: 0)
+        }
+        .font(.subheadline.weight(.medium))
+        .foregroundStyle(c(e.tekst ?? tema.tekst))
+        .padding(.horizontal, 10)
+        .frame(height: 34)
+        .background(c(e.flate), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+    }
+
+    /// Knapp for en egen rolle som aksent.
+    private func egenKnapp(_ e: EgenRolleFarger) -> some View {
+        Text(verbatim: e.navn.prefix(1).uppercased() + e.navn.dropFirst())
+            .font(.body.weight(.semibold))
+            .foregroundStyle(c(av ? tema.deaktivertTekst : e.påFlate ?? tema.tekst))
+            .frame(maxWidth: .infinity)
+            .frame(height: 44)
+            .background(c(av ? tema.deaktivertFyll : tilstand == .trykket ? e.trykket ?? e.flate : e.flate), in: Capsule())
+    }
+
+    /// Etikett for en egen rolle som markering: svak flate, tydelig kant og prikk, vanlig tekst.
+    private func etikett(_ e: EgenRolleFarger) -> some View {
+        HStack(spacing: 6) {
+            Circle().fill(c(e.kant ?? e.flate)).frame(width: 8, height: 8)
+            Text(verbatim: e.navn)
+        }
+        .font(.footnote.weight(.medium))
+        .foregroundStyle(c(tema.tekst))
+        .padding(.horizontal, 10)
+        .frame(height: 26)
+        .background(c(e.flate), in: Capsule())
+        .overlay(Capsule().strokeBorder(c(e.kant ?? e.flate), lineWidth: 1.5))
+    }
+
     private var fanelinje: some View {
         HStack {
             fane("house.fill", "Hjem", valgt: true)
@@ -665,57 +725,43 @@ struct DesignsystemRoller: View {
     let palett: PalettDokument?
     @Environment(\.modelContext) private var kontekst
     /// Rollen en annen rolle dras over (for å bytte farge), markert med ramme.
-    @State private var slippMål: Designrolle?
+    @State private var slippMål: RolleRef?
+    /// Ny egen rolle (navnet skrives først) og rolle som får nytt navn.
+    @State private var nyRolle = false
+    @State private var omdøpes: UUID?
+    @State private var rollenavn = ""
 
-    /// En rolle som dras, som tekst med prefiks (så annen tekst som slippes, ikke tolkes som en rolle).
-    private static let draprefiks = "kolorist.designrolle:"
+    /// En rolle i lista: en av de faste eller en egen.
+    enum RolleRef: Hashable {
+        case fast(Designrolle)
+        case egen(UUID)
+
+        /// Som tekst når den dras (med prefiks, så annen tekst som slippes, ikke tolkes som en rolle).
+        var dratekst: String {
+            switch self {
+            case .fast(let r): RolleRef.prefiks + "fast:" + r.rawValue
+            case .egen(let id): RolleRef.prefiks + "egen:" + id.uuidString
+            }
+        }
+
+        init?(dratekst t: String) {
+            guard t.hasPrefix(RolleRef.prefiks) else { return nil }
+            let rest = t.dropFirst(RolleRef.prefiks.count)
+            if rest.hasPrefix("fast:"), let r = Designrolle(rawValue: String(rest.dropFirst(5))) { self = .fast(r) }
+            else if rest.hasPrefix("egen:"), let id = UUID(uuidString: String(rest.dropFirst(5))) { self = .egen(id) }
+            else { return nil }
+        }
+
+        static let prefiks = "kolorist.designrolle:"
+    }
 
     var body: some View {
         let ds = dokument.designsystem
         let temaer = Designmodus.allCases.map { ds.tema($0) }
         VStack(alignment: .leading, spacing: 0) {
             ForEach(Designrolle.allCases) { rolle in
-                rad(tittel: Text(rolle.navn), bruk: Text(rolle.bruk), farge: binding(rolle),
-                    ekstra: AnyView(Group { fraPaletten(rolle); byttMeny(rolle) })) {
-                    HStack(spacing: 4) {
-                        ForEach(temaer, id: \.modus) { t in
-                            let f = rolle.farge(i: t)
-                            VStack(spacing: 1) {
-                                RoundedRectangle(cornerRadius: 4, style: .continuous).fill(f.swiftUI)
-                                    .frame(width: 30, height: 16)
-                                    .overlay(RoundedRectangle(cornerRadius: 4, style: .continuous).strokeBorder(Color.primary.opacity(0.12)))
-                                Text(t.modus.kortnavn).font(.caption2).foregroundStyle(Color.sekundærTekst)
-                            }
-                            .accessibilityElement(children: .ignore)
-                            .accessibilityLabel(Text(t.modus.kortnavn))
-                            .accessibilityValue(f.hex())
-                        }
-                    }
-                }
-                // Dra en rolle over en annen for å bytte fargene deres.
-                .contentShape(Rectangle())
-                .draggable(Self.draprefiks + rolle.rawValue) {
-                    HStack(spacing: 8) {
-                        RoundedRectangle(cornerRadius: 6, style: .continuous).fill(ds[rolle].swiftUI).frame(width: 28, height: 28)
-                        Text(rolle.navn).font(.subheadline.weight(.semibold))
-                    }
-                    .padding(8)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                }
-                .dropDestination(for: String.self) { tekster, _ in
-                    slippMål = nil
-                    guard let t = tekster.first, t.hasPrefix(Self.draprefiks),
-                          let fra = Designrolle(rawValue: String(t.dropFirst(Self.draprefiks.count))) else { return false }
-                    bytt(fra, rolle)
-                    return true
-                } isTargeted: { over in
-                    if over { slippMål = rolle } else if slippMål == rolle { slippMål = nil }
-                }
-                .overlay {
-                    if slippMål == rolle {
-                        RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.accentColor, lineWidth: 2).padding(2)
-                    }
-                }
+                rolleRad(.fast(rolle), tittel: Text(rolle.navn), bruk: Text(rolle.bruk), ds: ds,
+                         modusfarger: temaer.map { ($0.modus, rolle.farge(i: $0)) })
                 Divider().padding(.leading, 68)
             }
             rad(tittel: Text("Lys tekst"), bruk: Text("Tekst i mørk modus og på mørke flater"), farge: tekst(lys: true), ekstra: nil) { EmptyView() }
@@ -724,7 +770,58 @@ struct DesignsystemRoller: View {
         }
         .padding(.vertical, 4)
         .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+
+        // Egne roller (valgfritt): vises først når det finnes en.
+        if !ds.egneRoller.isEmpty {
+            Text("Egne roller").font(.headline).padding(.top, 4)
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(ds.egneRoller.enumerated()), id: \.element.id) { i, egen in
+                    rolleRad(.egen(egen.id), tittel: Text(verbatim: egen.navn), bruk: Text(egen.mal.navn), ds: ds,
+                             modusfarger: temaer.map { ($0.modus, $0.egne[i].hovedfarge) })
+                    if i < ds.egneRoller.count - 1 { Divider().padding(.leading, 68) }
+                }
+            }
+            .padding(.vertical, 4)
+            .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
+        Menu {
+            if !ds.egneRoller.contains(where: { $0.navn.lowercased() == "info" }) {
+                Button("Info", systemImage: "info.circle") { leggTil(.info) }
+            }
+            Button("Egen rolle …", systemImage: "plus") {
+                rollenavn = ""
+                nyRolle = true
+            }
+        } label: {
+            Label("Legg til rolle", systemImage: "plus.circle")
+        }
+        .disabled(ds.egneRoller.count >= EgenRolle.maksAntall)
+        .font(.callout)
+        .fixedSize()
+        .alert("Ny rolle", isPresented: $nyRolle) {
+            TextField("Navn", text: $rollenavn)
+            Button("Avbryt", role: .cancel) {}
+            Button("Legg til") {
+                let navn = rollenavn.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !navn.isEmpty else { return }
+                leggTil(EgenRolle(navn: navn, farge: forslagsfarge(), mal: .status))
+            }
+        } message: {
+            Text("Gi rollen et navn, for eksempel «tilbud» eller «kategori». Velg bruk og farge etterpå i menyen på fargen.")
+        }
+        .alert("Gi rollen nytt navn", isPresented: Binding(get: { omdøpes != nil }, set: { if !$0 { omdøpes = nil } })) {
+            TextField("Navn", text: $rollenavn)
+            Button("Avbryt", role: .cancel) {}
+            Button("Lagre") {
+                let navn = rollenavn.trimmingCharacters(in: .whitespacesAndNewlines)
+                if let id = omdøpes, !navn.isEmpty { endreEgen(id, "Gi rollen nytt navn") { $0.navn = navn } }
+            }
+        }
+
         Text("Trykk på en farge for å velge en annen. Dra en rolle over en annen, eller bruk «Bytt med» i menyen, for å bytte fargene mellom to roller. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.")
+            .font(.footnote)
+            .foregroundStyle(Color.sekundærTekst)
+        Text("Egne roller, høyst \(EgenRolle.maksAntall): som status (tekst på en tonet flate), som aksent (knapp) eller som markering (etiketter og diagrammer). De får farger i alle modusene og egne kontrollpunkter under Komponenter.")
             .font(.footnote)
             .foregroundStyle(Color.sekundærTekst)
         if let palett {
@@ -732,6 +829,7 @@ struct DesignsystemRoller: View {
                 kontekst.angresteg("Fordel rollene") {
                     var ny = Designsystem(fra: palett.palett)
                     ny.navn = dokument.navn
+                    ny.egneRoller = dokument.designsystem.egneRoller
                     dokument.designsystem = ny
                 }
             }
@@ -739,36 +837,161 @@ struct DesignsystemRoller: View {
         }
     }
 
+    /// En rolle med farge, navn, bruk og fargen i hver modus; kan dras over en annen rolle for å bytte farge.
+    private func rolleRad(_ ref: RolleRef, tittel: Text, bruk: Text, ds: Designsystem,
+                          modusfarger: [(Designmodus, Farge)]) -> some View {
+        rad(tittel: tittel, bruk: bruk, farge: binding(ref), ekstra: AnyView(Group {
+            fraPaletten(ref)
+            byttMeny(ref, ds: ds)
+            if case .egen(let id) = ref { egenMeny(id, ds: ds) }
+        })) {
+            HStack(spacing: 4) {
+                ForEach(modusfarger, id: \.0) { modus, f in
+                    VStack(spacing: 1) {
+                        RoundedRectangle(cornerRadius: 4, style: .continuous).fill(f.swiftUI)
+                            .frame(width: 30, height: 16)
+                            .overlay(RoundedRectangle(cornerRadius: 4, style: .continuous).strokeBorder(Color.primary.opacity(0.12)))
+                        Text(modus.kortnavn).font(.caption2).foregroundStyle(Color.sekundærTekst)
+                    }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(modus.kortnavn))
+                    .accessibilityValue(f.hex())
+                }
+            }
+        }
+        // Dra en rolle over en annen for å bytte fargene deres.
+        .contentShape(Rectangle())
+        .draggable(ref.dratekst) {
+            HStack(spacing: 8) {
+                RoundedRectangle(cornerRadius: 6, style: .continuous).fill(farge(ref, i: ds).swiftUI).frame(width: 28, height: 28)
+                tittel.font(.subheadline.weight(.semibold))
+            }
+            .padding(8)
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        }
+        .dropDestination(for: String.self) { tekster, _ in
+            slippMål = nil
+            guard let t = tekster.first, let fra = RolleRef(dratekst: t) else { return false }
+            bytt(fra, ref)
+            return true
+        } isTargeted: { over in
+            if over { slippMål = ref } else if slippMål == ref { slippMål = nil }
+        }
+        .overlay {
+            if slippMål == ref {
+                RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.accentColor, lineWidth: 2).padding(2)
+            }
+        }
+    }
+
+    // MARK: Fargen for en rolle
+
+    private func farge(_ ref: RolleRef, i ds: Designsystem) -> Farge {
+        switch ref {
+        case .fast(let r): ds[r]
+        case .egen(let id): ds.egneRoller.first { $0.id == id }?.farge ?? ds[.aksent]
+        }
+    }
+
+    private func sett(_ ref: RolleRef, _ f: Farge, i ds: inout Designsystem) {
+        switch ref {
+        case .fast(let r): ds[r] = f
+        case .egen(let id): if let i = ds.egneRoller.firstIndex(where: { $0.id == id }) { ds.egneRoller[i].farge = f }
+        }
+    }
+
+    private func navn(_ ref: RolleRef, i ds: Designsystem) -> Text {
+        switch ref {
+        case .fast(let r): Text(r.navn)
+        case .egen(let id): Text(verbatim: ds.egneRoller.first { $0.id == id }?.navn ?? "")
+        }
+    }
+
+    private func binding(_ ref: RolleRef) -> Binding<Farge> {
+        Binding(get: { farge(ref, i: dokument.designsystem) }, set: { ny in
+            kontekst.angresteg("Endre rolle") {
+                var ds = dokument.designsystem
+                sett(ref, ny, i: &ds)
+                dokument.designsystem = ds
+            }
+        })
+    }
+
     /// Bytter fargene mellom to roller.
-    private func bytt(_ a: Designrolle, _ b: Designrolle) {
+    private func bytt(_ a: RolleRef, _ b: RolleRef) {
         guard a != b else { return }
         kontekst.angresteg("Bytt roller") {
             var ds = dokument.designsystem
-            let fa = ds[a]
-            ds[a] = ds[b]
-            ds[b] = fa
+            let fa = farge(a, i: ds), fb = farge(b, i: ds)
+            sett(a, fb, i: &ds)
+            sett(b, fa, i: &ds)
             dokument.designsystem = ds
         }
     }
 
-    /// «Bytt med» en annen rolle.
-    private func byttMeny(_ rolle: Designrolle) -> some View {
-        let ds = dokument.designsystem
+    /// «Bytt med» en annen rolle (faste og egne).
+    private func byttMeny(_ ref: RolleRef, ds: Designsystem) -> some View {
+        let alle = Designrolle.allCases.map(RolleRef.fast) + ds.egneRoller.map { RolleRef.egen($0.id) }
         return Menu("Bytt med", systemImage: "arrow.left.arrow.right") {
-            ForEach(Designrolle.allCases.filter { $0 != rolle }) { annen in
+            ForEach(alle.filter { $0 != ref }, id: \.self) { annen in
                 // To tekster i et menyvalg blir tittel og undertittel.
-                Button { bytt(rolle, annen) } label: {
-                    Text(annen.navn)
-                    Text(verbatim: ds[annen].hex())
+                Button { bytt(ref, annen) } label: {
+                    navn(annen, i: ds)
+                    Text(verbatim: farge(annen, i: ds).hex())
                 }
             }
         }
     }
 
-    private func binding(_ rolle: Designrolle) -> Binding<Farge> {
-        Binding(get: { dokument.designsystem[rolle] }, set: { ny in
-            kontekst.angresteg("Endre rolle") { dokument.designsystem[rolle] = ny }
-        })
+    // MARK: Egne roller
+
+    private func leggTil(_ rolle: EgenRolle) {
+        kontekst.angresteg("Legg til rolle") {
+            var ds = dokument.designsystem
+            guard ds.egneRoller.count < EgenRolle.maksAntall else { return }
+            ds.egneRoller.append(rolle)
+            dokument.designsystem = ds
+        }
+    }
+
+    private func endreEgen(_ id: UUID, _ angrenavn: String.LocalizationValue, _ endring: (inout EgenRolle) -> Void) {
+        kontekst.angresteg(angrenavn) {
+            var ds = dokument.designsystem
+            guard let i = ds.egneRoller.firstIndex(where: { $0.id == id }) else { return }
+            endring(&ds.egneRoller[i])
+            dokument.designsystem = ds
+        }
+    }
+
+    /// En farge fra paletten som ingen rolle bruker ennå, ellers en standardfarge.
+    private func forslagsfarge() -> Farge {
+        let ds = dokument.designsystem
+        let brukt = Set(Designrolle.allCases.map { ds[$0].hex() } + ds.egneRoller.map { $0.farge.hex() })
+        return palett?.farger.first { !brukt.contains($0.farge.hex()) && $0.farge.okLCH.c >= 0.04 }?.farge
+            ?? Farge(okLCH: OKLCH(l: 0.6, c: 0.14, h: 300))
+    }
+
+    /// Bruk, nytt navn og fjern for en egen rolle.
+    @ViewBuilder private func egenMeny(_ id: UUID, ds: Designsystem) -> some View {
+        if let egen = ds.egneRoller.first(where: { $0.id == id }) {
+            Picker(selection: Binding(get: { egen.mal }, set: { ny in endreEgen(id, "Endre bruk") { $0.mal = ny } })) {
+                ForEach(Rollemal.allCases) { Text($0.navn).tag($0) }
+            } label: {
+                Label("Bruk", systemImage: "square.on.square")
+            }
+            .pickerStyle(.menu)
+            Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") {
+                rollenavn = egen.navn
+                omdøpes = id
+            }
+            Button("Fjern rollen", systemImage: "trash", role: .destructive) {
+                kontekst.angresteg("Fjern rolle") {
+                    var ds = dokument.designsystem
+                    ds.egneRoller.removeAll { $0.id == id }
+                    dokument.designsystem = ds
+                }
+            }
+        }
     }
 
     private func tekst(lys: Bool) -> Binding<Farge> {
@@ -782,11 +1005,11 @@ struct DesignsystemRoller: View {
     }
 
     /// Palettens farger som valg for rollen.
-    @ViewBuilder private func fraPaletten(_ rolle: Designrolle) -> some View {
+    @ViewBuilder private func fraPaletten(_ ref: RolleRef) -> some View {
         if let palett, !palett.farger.isEmpty {
             Menu("Fra «\(palett.navn)»", systemImage: "swatchpalette") {
                 ForEach(palett.farger) { pf in
-                    Button(pf.visningsnavn) { binding(rolle).wrappedValue = pf.farge }
+                    Button(pf.visningsnavn) { binding(ref).wrappedValue = pf.farge }
                 }
             }
         }
@@ -816,6 +1039,16 @@ struct DesignsystemRoller: View {
     }
 }
 
+extension Rollemal {
+    var navn: LocalizedStringKey {
+        switch self {
+        case .status: "Som status: tekst på en tonet flate"
+        case .aksent: "Som aksent: knapp med tekst på"
+        case .markering: "Markering: etiketter og diagrammer"
+        }
+    }
+}
+
 // MARK: - Skalaer
 
 /// Toneskalaen for hver rolle (50–950, lik L* på hvert trinn).
@@ -825,25 +1058,10 @@ struct DesignsystemSkalaer: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             ForEach(Designrolle.allCases) { rolle in
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(rolle.navn).font(.subheadline.weight(.semibold))
-                    HStack(spacing: 2) {
-                        ForEach(Array(zip(Designsystem.trinnavn, designsystem.skala(for: rolle))), id: \.0) { trinn, f in
-                            VStack(spacing: 2) {
-                                Rectangle().fill(f.swiftUI).frame(height: 36)
-                                Text(trinn).font(.system(size: 9).monospacedDigit()).foregroundStyle(Color.sekundærTekst)
-                            }
-                            .contextMenu {
-                                Button("Vis farge", systemImage: "slider.horizontal.3") { Arbeidsbenk.delt.visIStudio(f) }
-                                Button("Kopier \(f.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(f) }
-                            }
-                            .accessibilityElement(children: .ignore)
-                            .accessibilityLabel(Text(verbatim: trinn))
-                            .accessibilityValue(f.hex())
-                        }
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                }
+                skala(Text(rolle.navn), designsystem.skala(for: rolle))
+            }
+            ForEach(designsystem.egneRoller) { egen in
+                skala(Text(verbatim: egen.navn), designsystem.skala(for: egen))
             }
         }
         .padding(12)
@@ -851,6 +1069,28 @@ struct DesignsystemSkalaer: View {
         Text("Trinnene har samme lyshet (L*) i alle roller, så kontrasten er lik: 400 holder minst 3:1 og 600 minst 4,5:1 mot hvitt. Skalaene følger med i design tokens.")
             .font(.footnote)
             .foregroundStyle(Color.sekundærTekst)
+    }
+
+    private func skala(_ tittel: Text, _ farger: [Farge]) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            tittel.font(.subheadline.weight(.semibold))
+            HStack(spacing: 2) {
+                ForEach(Array(zip(Designsystem.trinnavn, farger)), id: \.0) { trinn, f in
+                    VStack(spacing: 2) {
+                        Rectangle().fill(f.swiftUI).frame(height: 36)
+                        Text(trinn).font(.system(size: 9).monospacedDigit()).foregroundStyle(Color.sekundærTekst)
+                    }
+                    .contextMenu {
+                        Button("Vis farge", systemImage: "slider.horizontal.3") { Arbeidsbenk.delt.visIStudio(f) }
+                        Button("Kopier \(f.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(f) }
+                    }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(verbatim: trinn))
+                    .accessibilityValue(f.hex())
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+        }
     }
 }
 

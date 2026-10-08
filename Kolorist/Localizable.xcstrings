@@ -1954,6 +1954,16 @@
         }
       }
     },
+    "Egen rolle …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom role …"
+          }
+        }
+      }
+    },
     "Eget kort": {
       "localizations": {
         "en": {
@@ -1970,6 +1980,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Custom card …"
+          }
+        }
+      }
+    },
+    "Egne roller": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom roles"
+          }
+        }
+      }
+    },
+    "Egne roller, høyst %lld: som status (tekst på en tonet flate), som aksent (knapp) eller som markering (etiketter og diagrammer). De får farger i alle modusene og egne kontrollpunkter under Komponenter.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom roles, up to %lld: as status (text on a tinted surface), as accent (button) or as marker (labels and charts). They get colours in every mode and their own checks under Components."
           }
         }
       }
@@ -2050,6 +2080,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Endpoints"
+          }
+        }
+      }
+    },
+    "Endre bruk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change use"
           }
         }
       }
@@ -2879,6 +2919,26 @@
         }
       }
     },
+    "Fjern rolle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove role"
+          }
+        }
+      }
+    },
+    "Fjern rollen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove the role"
+          }
+        }
+      }
+    },
     "Fjern skriftfarge": {
       "localizations": {
         "en": {
@@ -3367,6 +3427,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name the palette"
+          }
+        }
+      }
+    },
+    "Gi rollen et navn, for eksempel «tilbud» eller «kategori». Velg bruk og farge etterpå i menyen på fargen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name the role, for example “offer” or “category”. Choose its use and colour afterwards in the menu on the colour."
+          }
+        }
+      }
+    },
+    "Gi rollen nytt navn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename the role"
           }
         }
       }
@@ -4123,6 +4203,16 @@
         }
       }
     },
+    "Info": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Info"
+          }
+        }
+      }
+    },
     "Ingen egne fargerom": {
       "localizations": {
         "en": {
@@ -4389,6 +4479,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Camera characterisation with a reference card"
+          }
+        }
+      }
+    },
+    "Kant på etikett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Label border"
           }
         }
       }
@@ -5899,6 +5999,16 @@
         }
       }
     },
+    "Legg til rolle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add role"
+          }
+        }
+      }
+    },
     "Legg til skriftfarge": {
       "localizations": {
         "en": {
@@ -6283,6 +6393,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Max ΔE00"
+          }
+        }
+      }
+    },
+    "Markering: etiketter og diagrammer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marker: labels and charts"
           }
         }
       }
@@ -6977,6 +7097,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "New Palette Group …"
+          }
+        }
+      }
+    },
+    "Ny rolle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New role"
           }
         }
       }
@@ -8449,6 +8579,16 @@
         }
       }
     },
+    "Som aksent: knapp med tekst på": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As accent: button with text on it"
+          }
+        }
+      }
+    },
     "Som enkeltfarge": {
       "localizations": {
         "en": {
@@ -8585,6 +8725,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "As an editable gradient in sRGB"
+          }
+        }
+      }
+    },
+    "Som status: tekst på en tonet flate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As status: text on a tinted surface"
           }
         }
       }
@@ -8949,6 +9099,16 @@
         }
       }
     },
+    "Tekst på etikett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Label text"
+          }
+        }
+      }
+    },
     "Tekst på flate": {
       "localizations": {
         "en": {
@@ -8965,6 +9125,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text on primary button"
+          }
+        }
+      }
+    },
+    "Tekst på knapp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Button text"
           }
         }
       }
@@ -9643,6 +9813,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warm white LED"
+          }
+        }
+      }
+    },
+    "Varsel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alert"
           }
         }
       }

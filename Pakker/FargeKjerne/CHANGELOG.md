@@ -4,6 +4,12 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Egne roller i designsystemet:** `Designsystem.egneRoller` (`EgenRolle`: navn, farge, `Rollemal` `.status`, `.aksent` eller
+  `.markering`; høyst 4; `EgenRolle.info` som forslag). Eldre designsystemer leses (feltet skrives bare når det finnes).
+  `Designtema.egne` (`EgenRolleFarger`) med farger per mal i alle moduser, tokens (`color.background.<navn>`,
+  `color.text.<navn>`, `color.text.on-<navn>`, `color.background.<navn>-pressed`, `color.border.<navn>`), egne kontrollpunkter
+  (`Komponentpar.egenVarsel`, `.egenKnapp`, `.egenEtikettkant`, `.egenEtikettekst`; `Komponentsjekk.rolle`) og skala under
+  `palette`. Tokennavnene (`egneTokennavn`) er unike og kolliderer ikke med de faste.
 - **Designsystem fra palett** (`Designsystem/`): `Designrolle` (aksent, sekundær, nøytral, feil, suksess, advarsel),
   `Designmodus` (lys, mørk, og begge med økt kontrast), `Komponenttilstand`. `Designsystem(fra:)` fordeler palettens
   farger på rollene (`automatiskeRoller(for:)`) og tar skriftfargene med; `tema(_:)` gir de semantiske fargene i en modus

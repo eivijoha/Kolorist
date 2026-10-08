@@ -477,6 +477,36 @@
         }
       }
     },
+    "Egen rolle, markering: svak flate og tydelig kant (etiketter, diagrammer)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom role, marker: soft surface and clear border (labels, charts)"
+          }
+        }
+      }
+    },
+    "Egen rolle, som aksent: fylt knapp med tekst på, og lenker": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom role, as accent: filled button with text on it, and links"
+          }
+        }
+      }
+    },
+    "Egen rolle, som status: tekst og ikon på en tonet flate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom role, as status: text and icon on a tinted surface"
+          }
+        }
+      }
+    },
     "Endrer du en farge, sjekk kontrasten på nytt. I Kolorist vises den under Komponenter i designsystemet.": {
       "localizations": {
         "en": {
@@ -707,6 +737,16 @@
         }
       }
     },
+    "Flate for «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surface for “%@”"
+          }
+        }
+      }
+    },
     "Flater, 30 LRV-poeng": {
       "localizations": {
         "en": {
@@ -733,6 +773,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "From Xcode 15, Xcode generates `Color(.name)` and `UIColor(resource:)` for each color set. The name is the path without `color`, in camelCase: `color.text.on-accent` is `textOnAccent`."
+          }
+        }
+      }
+    },
+    "Fylt flate for «%@» (knapp)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filled surface for “%@” (button)"
           }
         }
       }
@@ -1795,6 +1845,16 @@
         }
       }
     },
+    "Svak flate for «%@» (etikett)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soft surface for “%@” (label)"
+          }
+        }
+      }
+    },
     "Tekst": {
       "localizations": {
         "en": {
@@ -1835,6 +1895,16 @@
         }
       }
     },
+    "Tekst og ikon for «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text and icon for “%@”"
+          }
+        }
+      }
+    },
     "Tekst og ikon på advarselsflaten": {
       "localizations": {
         "en": {
@@ -1851,6 +1921,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text and icons on the accent surface"
+          }
+        }
+      }
+    },
+    "Tekst og ikoner på «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text and icons on “%@”"
+          }
+        }
+      }
+    },
+    "Tekst og lenker i «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text and links in “%@”"
           }
         }
       }
@@ -1901,6 +1991,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tritanopia"
+          }
+        }
+      }
+    },
+    "Tydelig farge for «%@»: kant, ikon, diagram": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear colour for “%@”: border, icon, chart"
           }
         }
       }
@@ -2437,6 +2537,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "wine red"
+          }
+        }
+      }
+    },
+    "«%@» når den trykkes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” when pressed"
           }
         }
       }

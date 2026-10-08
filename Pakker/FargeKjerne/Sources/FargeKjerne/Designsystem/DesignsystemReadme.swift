@@ -34,6 +34,9 @@ extension DesignsystemEksport {
         for rolle in Designrolle.allCases {
             l.append("| \(rolle.readmeNavn) | `\(ds[rolle].hex())` | \(rolle.readmeBruk) |")
         }
+        for egen in ds.egneRoller {
+            l.append("| \(egen.navn) | `\(egen.farge.hex())` | \(egen.mal.readmeBruk) |")
+        }
         l.append("")
         l.append(String(localized: "Skriftfarger: lys `\(ds.lysTekst.hex())` (tekst i mørk modus) og mørk `\(ds.mørkTekst.hex())` (tekst i lys modus).", bundle: .module))
         l.append("")
@@ -54,7 +57,7 @@ extension DesignsystemEksport {
         if let første = temaer.first {
             for (i, token) in første.tokens.enumerated() {
                 let verdier = temaer.map { "`\($0.tokens[i].farge.hex())`" }.joined(separator: " | ")
-                l.append("| `\(token.navn)` | \(Self.bruk(token.navn)) | \(verdier) |")
+                l.append("| `\(token.navn)` | \(Self.bruk(token.navn, egne: første.egne)) | \(verdier) |")
             }
         }
         l.append("")
@@ -68,7 +71,7 @@ extension DesignsystemEksport {
         for tema in temaer {
             for tilstand in Komponenttilstand.allCases {
                 for s in tema.sjekker(tilstand) where !s.består {
-                    let (fg, bg) = Self.tokenpar(s.par, tilstand)
+                    let (fg, bg) = Self.tokenpar(s.par, tilstand, rolle: s.rolletoken ?? "")
                     let forhold = Kontrasttest(forgrunn: s.forgrunn, bakgrunn: s.bakgrunn).formatert
                     let krav = s.krav.minimum.map { $0.formatted(.number.precision(.fractionLength($0 == 3 ? 0 : 1))) } ?? ""
                     avvik.append("- \(tema.modus.readmeNavn), \(tilstand.readmeNavn): `\(fg)` / `\(bg)` – \(forhold) (\(String(localized: "krav \(krav):1, WCAG \(s.krav.suksesskriterium ?? "")", bundle: .module)))")
@@ -189,8 +192,26 @@ extension DesignsystemEksport {
     }
 
     /// Hva en semantisk token er til.
-    static func bruk(_ token: String) -> String {
+    static func bruk(_ token: String, egne: [EgenRolleFarger] = []) -> String {
         func t(_ s: String.LocalizationValue) -> String { String(localized: s, bundle: .module) }
+        for e in egne {
+            let n = e.tokennavn, navn = e.navn
+            switch token {
+            case "color.background.\(n)":
+                switch e.mal {
+                case .status: return String(localized: "Flate for «\(navn)»", bundle: .module)
+                case .aksent: return String(localized: "Fylt flate for «\(navn)» (knapp)", bundle: .module)
+                case .markering: return String(localized: "Svak flate for «\(navn)» (etikett)", bundle: .module)
+                }
+            case "color.background.\(n)-pressed": return String(localized: "«\(navn)» når den trykkes", bundle: .module)
+            case "color.text.on-\(n)": return String(localized: "Tekst og ikoner på «\(navn)»", bundle: .module)
+            case "color.text.\(n)":
+                return e.mal == .aksent ? String(localized: "Tekst og lenker i «\(navn)»", bundle: .module)
+                                        : String(localized: "Tekst og ikon for «\(navn)»", bundle: .module)
+            case "color.border.\(n)": return String(localized: "Tydelig farge for «\(navn)»: kant, ikon, diagram", bundle: .module)
+            default: continue
+            }
+        }
         switch token {
         case "color.background.page": return t("Sidebakgrunn")
         case "color.background.surface": return t("Kort, celler, felt og fanelinje")
@@ -219,7 +240,7 @@ extension DesignsystemEksport {
     }
 
     /// Tokennavnene for et kontrollert par (forgrunn, bakgrunn) i en tilstand.
-    static func tokenpar(_ par: Komponentpar, _ tilstand: Komponenttilstand) -> (String, String) {
+    static func tokenpar(_ par: Komponentpar, _ tilstand: Komponenttilstand, rolle n: String = "") -> (String, String) {
         let av = tilstand == .deaktivert, trykket = tilstand == .trykket
         func c(_ s: String) -> String { "color." + s }
         switch par {
@@ -240,6 +261,22 @@ extension DesignsystemEksport {
         case .feilvarsel: return (c("text.danger"), c("background.danger"))
         case .suksessvarsel: return (c("text.success"), c("background.success"))
         case .advarselvarsel: return (c("text.warning"), c("background.warning"))
+        case .egenVarsel: return (c("text.\(n)"), c("background.\(n)"))
+        case .egenKnapp:
+            return av ? (c("text.disabled"), c("background.disabled"))
+                      : (c("text.on-\(n)"), c(trykket ? "background.\(n)-pressed" : "background.\(n)"))
+        case .egenEtikettkant: return (c("border.\(n)"), c("background.surface"))
+        case .egenEtikettekst: return (c("text.primary"), c("background.\(n)"))
+        }
+    }
+}
+
+extension Rollemal {
+    var readmeBruk: String {
+        switch self {
+        case .status: String(localized: "Egen rolle, som status: tekst og ikon på en tonet flate", bundle: .module)
+        case .aksent: String(localized: "Egen rolle, som aksent: fylt knapp med tekst på, og lenker", bundle: .module)
+        case .markering: String(localized: "Egen rolle, markering: svak flate og tydelig kant (etiketter, diagrammer)", bundle: .module)
         }
     }
 }

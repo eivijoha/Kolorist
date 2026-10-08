@@ -134,6 +134,10 @@ public enum DesignsystemEksport {
             legg(rolle.tokennavn, zip(Designsystem.trinnavn, skala).map { ($0, $1) } + (ekstra[rolle.tokennavn] ?? [])
                 .sorted { $0.1.lStjerne > $1.1.lStjerne })
         }
+        for (egen, tokennavn) in zip(ds.egneRoller, ds.egneTokennavn) {
+            legg(tokennavn, zip(Designsystem.trinnavn, ds.skala(for: egen)).map { ($0, $1) } + (ekstra[tokennavn] ?? [])
+                .sorted { $0.1.lStjerne > $1.1.lStjerne })
+        }
         legg("text", (ekstra["text"] ?? []).sorted { $0.1.lStjerne > $1.1.lStjerne })
         return (grupper, alias)
     }
