@@ -193,8 +193,6 @@ NYE_BILDER.update({
     ('en', 'toneskala'): ('Tone scale with consistent contrast: eleven steps of a blue-grey colour, with WCAG ratio and APCA against white and black text for each step', 'Tone scale with contrast per step'),
     ('nb', 'fargefelt'): ('Fargemenyen på et fargefelt i kontrastsjekken: lagrede farger eller kjent verdi, plukk med kamera eller fra bilde, lim inn', 'Plukk farge fra et fargefelt'),
     ('en', 'fargefelt'): ('The colour menu on a colour field in the contrast check: saved colours or known value, pick with camera or from image, paste', 'Pick a colour from a colour field'),
-    ('nb', 'presentasjon'): ('Studio i presentasjonsmodus: større tekst og kontroller for prosjektør og skjermdeling', 'Presentasjonsmodus'),
-    ('en', 'presentasjon'): ('Studio in presentation mode: larger text and controls for projectors and screen sharing', 'Presentation mode'),
 })
 # Bilder med annen sti eller størrelse enn iPhone-skjermbildene.
 NYE_STIER = {'del-web-filament': ('ipad/skjermbilde-del-web-filament.png', 1032, 1376)}
@@ -843,7 +841,7 @@ def funksjoner(lang):
 # ---------- Plattformer ----------
 
 # Mac-skjermbilder som mangler for 1.3 (kontrast i kildesiden er fra 1.2).
-MAC_KOMMER = {'kontrast', 'fargefelt', 'presentasjon', 'designsystem'}
+MAC_KOMMER = {'kontrast', 'fargefelt', 'designsystem'}
 
 
 def macbilde(s, navn):
@@ -879,13 +877,12 @@ def plattformer(lang):
         # None: skjermbildene er ikke tatt ennå (plassholder for hver plattform).
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmoni'), ('overgang', 'Overgang'),
                      ('kontrast', 'Kontrast: WCAG, APCA eller LRV'), ('fargefelt', 'Plukk farge fra et fargefelt'),
-                     ('presentasjon', 'Presentasjonsmodus'), ('designsystem', 'Designsystem: komponenter')]
+                     ('designsystem', 'Designsystem: komponenter')]
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
                  ('Designsystem fra en palett, med komponenter og eksport' + N, ja, ja, ja),
                  ('Kontrast (WCAG, APCA og LRV) og fargesyn', ja, ja, ja),
-                 ('Presentasjonsmodus: større tekst og kontroller for prosjektør og skjermdeling' + N, ja, ja, ja),
                  ('Simuler farger og paletter under andre betraktningsforhold', ja, ja, ja),
                  ('Fargeflatene ved siden av verktøyene', nei, 'I liggende format', 'I bredt vindu'),
                  ('Palettene for hånden, med dra og slipp', nei, 'På store iPader', ja),
@@ -919,13 +916,12 @@ def plattformer(lang):
         side_intro = 'The same tools, fitted to the screen.'
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'),
                      ('kontrast', 'Contrast: WCAG, APCA or LRV'), ('fargefelt', 'Pick a colour from a colour field'),
-                     ('presentasjon', 'Presentation mode'), ('designsystem', 'Design system: components')]
+                     ('designsystem', 'Design system: components')]
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
                  ('Design system from a palette, with components and export' + N, ja, ja, ja),
                  ('Contrast (WCAG, APCA and LRV) and colour vision', ja, ja, ja),
-                 ('Presentation mode: larger text and controls for projectors and screen sharing' + N, ja, ja, ja),
                  ('Simulate colours and palettes in other viewing conditions', ja, ja, ja),
                  ('Swatches beside the tools', nei, 'In landscape', 'In a wide window'),
                  ('Palettes at hand, with drag and drop', nei, 'On large iPads', ja),

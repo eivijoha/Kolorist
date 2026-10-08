@@ -49,10 +49,14 @@ let url = try Delingslenke.appLenke(innhold)   // kolorist://l#… – åpner ap
   visning: DeltVisning(bruk: true, presentasjon: true))`. Kontrast → `DeltVisning(fane: "vurdering", vurdering: "kontrast",
   bakgrunn: bakgrunnsfarge, bruk: true)`.
 
-**Presentasjonsmodus** (Vis-menyen, ⌥⌘P, eller lenken): større tekst og kontroller, og større fargeflate i Studio. På
+**Presentasjonsmodus** (fra lenken; fra 2026-10-08 uten eget menyvalg i Kolorist, se merknaden under): større tekst og kontroller, og større fargeflate i Studio. På
 iPhone/iPad med større dynamisk tekst; på Mac med punkttillegg og store kontroller, etter tekstskaleringen i Studieblikk.
 Kjent grense på Mac: menyvelgere og segmenterte velgere skalerer ikke. Videre forbedringer (flere visninger, færre
 forstyrrende elementer) kommer i Kolorist uten at lenkeformatet endres.
+
+**Merknad 2026-10-08:** Presentasjonsmodus er tatt ut av Vis-menyen (og ⌥⌘P) i Kolorist, og omtales ikke på kolorist.no
+eller i App Store. Funksjonen er uendret for Kolorist underviser: `DeltVisning(presentasjon: true)` i lenken slår den på
+som før. Ingen endring i lenkeformatet eller FargeKjerne.
 
 **Ikke med ennå:** App Intents (Snarveier) for det samme – meld i ønskefila om dere trenger det.
 

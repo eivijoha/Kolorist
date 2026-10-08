@@ -45,7 +45,6 @@ Kolorist 1.3 tar paletten helt fram til designsystemet.
 • Palettgrupper: samle paletter i grupper, og skriv ut, lagre og kopier hele grupper. Importer ASE-filer som paletter.
 • Endre rekkefølgen på farger ved å dra dem, og vis en farge fra hvor som helst.
 • Kildefargerom for CMYK og RGB, papirhvitt og valgfritt betraktningsforhold for visningen.
-• Presentasjonsmodus: større tekst og kontroller for prosjektør og skjermdeling.
 ```
 
 **Beskrivelse (4000)**
@@ -119,7 +118,7 @@ farge,palett,designsystem,tokens,OKLCH,CMYK,Munsell,kontrast,WCAG,APCA,LRV,mørk
 ```
 
 **Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/nb/` (iPhone 6,5″) og `ipad-nb/` (iPad 13″). Foreslått rekkefølge for
-iPhone: designsystem, toneskala, kontrast, flatekontrast, fargefelt, presentasjon, og deretter Studio, Harmoni og Lys fra 1.2.
+iPhone: designsystem, toneskala, kontrast, flatekontrast, fargefelt, og deretter Studio, Harmoni og Lys fra 1.2.
 
 ---
 
@@ -153,7 +152,6 @@ Kolorist 1.3 takes your palette all the way to a design system.
 • Palette groups: gather palettes in groups, and print, save and copy whole groups. Import ASE files as palettes.
 • Reorder colours by dragging them, and show a colour from anywhere.
 • Source colour space for CMYK and RGB, paper white and a choice of viewing condition for the display.
-• Presentation mode: larger text and controls for projectors and screen sharing.
 ```
 
 **Description (4000)**
@@ -264,7 +262,7 @@ Siste linje: «Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 farge,palett,designsystem,tokens,pipette,OKLCH,CMYK,Munsell,kontrast,WCAG,APCA,LRV,mørk modus
 ```
 
-**Skjermbilder:** Mac-bildene for 1.3 er ikke tatt ennå (designsystem, kontrast, presentasjonsmodus). 1.2-bildene kan
+**Skjermbilder:** Mac-bildene for 1.3 er ikke tatt ennå (designsystem, kontrast, fargefelt). 1.2-bildene kan
 brukes til de nye er klare.
 
 ---
@@ -322,7 +320,6 @@ NEW IN 1.3 – HOW TO TEST
 • Contrast: Assess › Contrast. Choose WCAG 2.2, APCA or LRV below the colour field; tap Text or Background in the field to pick a colour (also with camera or photo).
 • Harmonies: Studio › Harmony › Monochromatic or Tone path.
 • Palette groups: Palettes › + › New palette group, then drag palettes into it.
-• Presentation mode: larger text and controls – View menu or ⌥⌘P on Mac and iPad.
 
 CAMERA
 Used live, on device only, to pick colours, measure light and show the colour vision filter. Nothing is stored or sent.
@@ -341,14 +338,14 @@ Contact: eivind.johansen@ntnu.no
 
 | Mappe | Plattform | Størrelse | Bilder |
 |---|---|---|---|
-| `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 | designsystem, toneskala, kontrast, flatekontrast, fargefelt, presentasjon |
-| `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 | designsystem, kontrast, fargefelt, presentasjon |
+| `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 | designsystem, toneskala, kontrast, flatekontrast, fargefelt |
+| `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 | designsystem, kontrast, fargefelt |
 | Mac | – | – | ikke tatt ennå |
 
 Simulatorene «Skjermbilder 6,5» og «Skjermbilder iPad 13», Debug-bygg med `-skjermbilde YES`, klokka satt til 9:41.
 Designsystemet med `-eksempeldesignsystem YES -visDesignsystem YES -startfane paletter` (fra «Jevn fordeling», med info som
 egen rolle). Kontrast med `-startfane vurdering -vurderingDel kontrast -kontrastType wcag`; flatekontrast med
-`-kontrastType lrv -startfarge "#B4674D" -flatekontrastmetode weber`; presentasjon med `-startfane studio -presentasjon YES`.
+`-kontrastType lrv -startfarge "#B4674D" -flatekontrastmetode weber`.
 Toneskalaen er tatt fra «Nordisk kyst» (#3E6A80 › Lag toneskala), fargefeltet fra Tekst-menyen i kontrastsjekken.
 
 ### Før du sender inn

@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Presentasjonsmodus: større tekst og kontroller for prosjektør og deling av skjerm. Slås på i Vis-menyen (⌥⌘P) eller fra
-/// en delingslenke.
+/// Presentasjonsmodus: større tekst og kontroller for prosjektør og deling av skjerm. Brukes av Kolorist underviser og har
+/// ikke eget valg i appen: den slås på fra en delingslenke (`DeltVisning.presentasjon`) eller med `-presentasjon YES`.
 ///
 /// Etter lærdommen fra Studieblikk (tekstskalering): macOS har ingen dynamisk tekststørrelse – `dynamicTypeSize` gir samme
 /// punktstørrelse på alle nivåer (målt). På Mac løftes derfor punktstørrelsen med et tillegg: fonten i miljøet ved

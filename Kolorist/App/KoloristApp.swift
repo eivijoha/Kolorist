@@ -625,9 +625,8 @@ struct KoloristKommandoer: Commands {
             Button("Overgang") { arbeidsbenk.valgtFane = .overgang }.keyboardShortcut("3", modifiers: .command)
             Button("Utplukk") { arbeidsbenk.valgtFane = .utplukk }.keyboardShortcut("4", modifiers: .command)
             Button("Vurdering") { arbeidsbenk.valgtFane = .vurdering }.keyboardShortcut("5", modifiers: .command)
-            Divider()
-            Toggle("Presentasjonsmodus", isOn: Binding(get: { arbeidsbenk.presentasjon }, set: { arbeidsbenk.presentasjon = $0 }))
-                .keyboardShortcut("p", modifiers: [.command, .option])
+            // Presentasjonsmodus har ikke eget valg i appen: den slås på fra delingslenker (Kolorist underviser) eller med
+            // startargumentet `-presentasjon YES`.
             Divider()
         }
     }
