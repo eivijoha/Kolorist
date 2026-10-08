@@ -853,11 +853,7 @@ struct PalettDetalj: View {
             .padding(.top, 28)
             .onChange(of: navnIFokus) { _, fokus in if !fokus { redigererNavn = false } }
             if iKolonne {
-                HStack(spacing: 14) { handlinger }
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.borderless)
-                    .menuIndicator(.hidden)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                kolonnehandlinger
                     .padding(.horizontal)
                     .padding(.top, 4)
             }
@@ -1028,22 +1024,75 @@ struct PalettDetalj: View {
         .disabled(dokument.farger.isEmpty || kiArbeider)
         .help("Vurder paletten")
         if !utskriftIMeny { utskriftsknapp }
-        Menu("Del", systemImage: "square.and.arrow.up") {
-            Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
-                .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
-            Divider()
-            let navn = dokument.navn, farger = dokument.farger, gradienter = dokument.gradienter
-            DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
-                .disabled(farger.isEmpty && gradienter.isEmpty)
-            Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
-            Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
-            KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
-        }
-        .help("Lagre som, del og kopier")
-        // I palettkolonnen finnes ingen …-meny i verktøylinjen.
-        if iKolonne { designsystemknapp }
+        Menu("Del", systemImage: "square.and.arrow.up") { delvalg }
+            .help("Lagre som, del og kopier")
         Button("Slett palett", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
             .help("Slett paletten")
+    }
+
+    /// Lagre som, del og kopier.
+    @ViewBuilder private var delvalg: some View {
+        Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
+            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
+        Divider()
+        let navn = dokument.navn, farger = dokument.farger, gradienter = dokument.gradienter
+        DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
+            .disabled(farger.isEmpty && gradienter.isEmpty)
+        Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
+        Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
+        KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
+    }
+
+    /// Hva visningen viser, i én setning under valget (palettkolonnen).
+    private var visningsforklaring: LocalizedStringKey {
+        switch visning {
+        case .farger: "Trykk på en farge for å bruke den. Dra for å endre rekkefølgen, eller dra farger hit fra andre steder."
+        case .skriftkontrast: "Kontrasten mellom tekst og fargene i paletten, med skriftfarger om du vil."
+        case .lys: "Fargene slik de ser ut under andre betraktningsforhold. Velg lyset under."
+        }
+    }
+
+    /// Palettkolonnen på Mac: visningen som valg med tekst, og handlingene med tekst – ikke en rad med ikoner.
+    private var kolonnehandlinger: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Picker("Vis", selection: $visning) {
+                Text("Farger").tag(Visning.farger)
+                Text("Skriftkontrast").tag(Visning.skriftkontrast)
+                Text("Se i lys").tag(Visning.lys)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .disabled(dokument.farger.isEmpty)
+            Text(visningsforklaring)
+                .font(.caption)
+                .foregroundStyle(Color.sekundærTekst)
+                .fixedSize(horizontal: false, vertical: true)
+            HStack(spacing: 12) {
+                Button {
+                    Task { await vurder() }
+                } label: {
+                    if kiArbeider { ProgressView().controlSize(.small) } else { Label("Vurder paletten", systemImage: "text.magnifyingglass") }
+                }
+                .disabled(dokument.farger.isEmpty || kiArbeider)
+                .help("Vurder fargene i paletten: harmoni, kontrast og fargesyn")
+                Spacer(minLength: 0)
+                LimInnFargerKnapp { farger in kontekst.angresteg("Lim inn farger") { dokument.farger += farger } }
+                    .labelStyle(.iconOnly)
+                Menu {
+                    delvalg
+                    Divider()
+                    utskriftsknapp
+                    designsystemknapp
+                    Divider()
+                    Button("Slett palett", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
+                } label: {
+                    Label("Mer", systemImage: "ellipsis.circle")
+                }
+                .fixedSize()
+                .help("Lagre, del, skriv ut, lag designsystem eller slett")
+            }
+            .buttonStyle(.borderless)
+        }
     }
 
     /// Lager et designsystem fra paletten og åpner det (valgfritt; ligger i …-menyen).

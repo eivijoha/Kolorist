@@ -2354,6 +2354,16 @@
         }
       }
     },
+    "Fargene slik de ser ut under andre betraktningsforhold. Velg lyset under.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colours as they look in other viewing conditions. Choose the light below."
+          }
+        }
+      }
+    },
     "Fargepaletter for designere": {
       "localizations": {
         "en": {
@@ -2384,6 +2394,7 @@
         }
       }
     },
+    "Farger": {},
     "Farger (hex)": {
       "localizations": {
         "en": {
@@ -4591,6 +4602,16 @@
         }
       }
     },
+    "Kontrasten mellom tekst og fargene i paletten, med skriftfarger om du vil.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The contrast between text and the colours in the palette, with text colours if you want them."
+          }
+        }
+      }
+    },
     "Kontrastsjekk": {
       "localizations": {
         "en": {
@@ -5605,6 +5626,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save …"
+          }
+        }
+      }
+    },
+    "Lagre, del, skriv ut, lag designsystem eller slett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save, share, print, make a design system or delete"
           }
         }
       }
@@ -9191,6 +9222,16 @@
         }
       }
     },
+    "Trykk på en farge for å bruke den. Dra for å endre rekkefølgen, eller dra farger hit fra andre steder.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a colour to use it. Drag to reorder, or drag colours here from elsewhere."
+          }
+        }
+      }
+    },
     "Trykk på en farge for å bytte den. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.": {
       "localizations": {
         "en": {
@@ -9999,6 +10040,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shows the section"
+          }
+        }
+      }
+    },
+    "Vurder fargene i paletten: harmoni, kontrast og fargesyn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assess the colours in the palette: harmony, contrast and colour vision"
           }
         }
       }
