@@ -15,7 +15,7 @@ struct MottattLenkeArk: View {
         let navn = innhold.navn.flatMap { $0.isEmpty ? nil : $0 }
         switch innhold.slag {
         case .farge: return farger.first.map { $0.navn.isEmpty ? $0.farge.hex() : $0.navn } ?? String(localized: "Farge")
-        case .palett: return navn ?? String(localized: "Palett")
+        case .palett: return navn ?? (innhold.designsystem == nil ? String(localized: "Palett") : String(localized: "Designsystem"))
         case .gradient: return innhold.gradienter.first?.navn ?? String(localized: "Gradient")
         case .harmoni: return navn ?? String(localized: "Harmoni")
         case nil: return String(localized: "Ukjent innhold")
@@ -25,6 +25,7 @@ struct MottattLenkeArk: View {
     private var slagnavn: String {
         switch innhold.slag {
         case .farge: String(localized: "Farge")
+        case .palett where innhold.designsystem != nil: String(localized: "Designsystem")
         case .palett: farger.count == 1 ? String(localized: "Palett · 1 farge") : String(localized: "Palett · \(farger.count) farger")
         case .gradient: String(localized: "Gradient")
         case .harmoni: String(localized: "Harmoni")
@@ -122,7 +123,21 @@ struct MottattLenkeArk: View {
                 }
             }
         case .palett:
-            Button("Legg til i paletter", systemImage: "swatchpalette") {
+            if let dd = innhold.designsystem {
+                // Designsystemet åpnes som forhåndsvisning; det lagres først når brukeren trykker «Lagre».
+                Button("Åpne designsystemet", systemImage: "square.stack.3d.up") {
+                    let ds = dd.designsystem(navn: innhold.navn ?? String(localized: "Delt designsystem"), farger: innhold.farger)
+                    let benk = arbeidsbenk
+                    lukk()
+                    // Etter at arket er lukket: navigasjon mens arket lukkes, blir ikke utført.
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(450))
+                        benk.visDesignsystem(DesignsystemDokument(ds, palettID: nil))
+                    }
+                }
+            }
+            Button(innhold.designsystem == nil ? LocalizedStringKey("Legg til i paletter") : LocalizedStringKey("Legg til fargene som palett"),
+                   systemImage: "swatchpalette") {
                 let p = PalettDokument(navn: innhold.navn ?? String(localized: "Delt palett"), farger: farger)
                 p.gradienter = innhold.gradienter.map {
                     PalettGradient(navn: $0.navn ?? "", oppsett: Lenkedeling.oppsett($0, standardtrinn: arbeidsbenk.lyshetstrinn))

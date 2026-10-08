@@ -302,3 +302,51 @@ struct EgneRollerTests {
         #expect(readme.contains("`color.border.kategori`"))
     }
 }
+
+@Suite("Designsystem i delingslenker")
+struct DesignsystemLenkeTests {
+    private func lenke(_ ds: Designsystem) throws -> URL {
+        let innhold = DeltInnhold(slag: .palett, navn: ds.navn,
+                                  farger: DeltDesignsystem.farger(ds, rollenavn: { $0.rawValue }),
+                                  designsystem: DeltDesignsystem(ds))
+        return try Delingslenke.lenke(innhold)
+    }
+
+    @Test func rundtur() throws {
+        var ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!),
+                                                                PalettFarge(farge: Farge(hex: "#C95530")!)]))
+        ds.egneRoller = [.info, EgenRolle(navn: "Kategori", farge: Farge(hex: "#8040C0")!, mal: .markering)]
+        let url = try lenke(ds)
+        #expect(url.absoluteString.count < 4000)
+        let lest = try Delingslenke.les(url)
+        #expect(lest.slag == .palett)
+        #expect(lest.farger.count == Designrolle.allCases.count + 2)
+        let dd = try #require(lest.designsystem)
+        let igjen = dd.designsystem(navn: lest.navn ?? "", farger: lest.farger)
+        #expect(igjen.egneRoller.map(\.navn) == ["info", "Kategori"])
+        #expect(igjen.egneRoller.map(\.mal) == [.status, .markering])
+        // Samme farger i alle moduser som originalen; avrundingen i lenken kan gi én enhet i en kanal.
+        func kanaler(_ f: Farge) -> [Int] {
+            let h = f.hex().dropFirst()
+            return stride(from: 0, to: 6, by: 2).map { Int(h.dropFirst($0).prefix(2), radix: 16)! }
+        }
+        for modus in Designmodus.allCases {
+            for (a, b) in zip(igjen.tema(modus).tokens, ds.tema(modus).tokens) {
+                #expect(zip(kanaler(a.farge), kanaler(b.farge)).allSatisfy { abs($0 - $1) <= 1 }, "\(modus) \(a.navn)")
+            }
+        }
+        #expect(dd.moduser["dark"]?.count == dd.tokennavn.count)
+        #expect(dd.tokennavn.contains("color.text.on-accent"))
+    }
+
+    @Test func skadetDesignsystemGirPalett() throws {
+        let ds = Designsystem(fra: Palett(navn: "Hav", farger: [PalettFarge(farge: Farge(hex: "#2F7FD8")!)]))
+        var dd = DeltDesignsystem(ds)
+        dd.moduser["light"] = ["zzzzzz"]
+        let innhold = DeltInnhold(slag: .palett, navn: "Hav", farger: DeltDesignsystem.farger(ds, rollenavn: { $0.rawValue }),
+                                  designsystem: dd)
+        let lest = try Delingslenke.les(try Delingslenke.lenke(innhold))
+        #expect(lest.designsystem == nil)
+        #expect(lest.farger.count == Designrolle.allCases.count)
+    }
+}

@@ -26,6 +26,24 @@ nonisolated enum Lenkedeling {
                                          lyshetsrekkefølge: lyshetsrekkefølge, grunnIndeks: grunnIndeks))
     }
 
+    /// Et designsystem: en palett med rollefargene (så eldre versjoner og visningssiden viser fargene) og designsystemet
+    /// med ferdige farger for hver modus.
+    static func designsystem(_ ds: Designsystem) -> DeltInnhold {
+        DeltInnhold(slag: .palett, navn: ds.navn, farger: DeltDesignsystem.farger(ds, rollenavn: rollenavn),
+                    designsystem: DeltDesignsystem(ds))
+    }
+
+    static func rollenavn(_ r: Designrolle) -> String {
+        switch r {
+        case .aksent: String(localized: "Aksent")
+        case .sekundær: String(localized: "Sekundær")
+        case .nøytral: String(localized: "Nøytral")
+        case .feil: String(localized: "Feil")
+        case .suksess: String(localized: "Suksess")
+        case .advarsel: String(localized: "Advarsel")
+        }
+    }
+
     private static func gradient(_ oppsett: Gradientoppsett, navn: String) -> DeltGradient {
         DeltGradient(navn: navn, stopp: [DeltStopp(DeltFarge(oppsett.fra)), DeltStopp(DeltFarge(oppsett.til))],
                      antall: oppsett.antall, trinn: oppsett.trinn)

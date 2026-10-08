@@ -1754,6 +1754,16 @@
         }
       }
     },
+    "Delt designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared design system"
+          }
+        }
+      }
+    },
     "Delt gradient": {
       "localizations": {
         "en": {
@@ -1810,6 +1820,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Design tokens (DTCG) with aliases and resolver"
+          }
+        }
+      }
+    },
+    "Designsystem": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design system"
           }
         }
       }
@@ -5985,6 +6005,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add colour"
+          }
+        }
+      }
+    },
+    "Legg til fargene som palett": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add the colours as a palette"
           }
         }
       }
@@ -10655,6 +10685,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open the Variables view, create a new collection and drag the four files in. Each file becomes a mode. The README has the steps."
+          }
+        }
+      }
+    },
+    "Åpne designsystemet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the design system"
           }
         }
       }

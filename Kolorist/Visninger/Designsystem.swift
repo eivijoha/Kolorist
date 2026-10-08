@@ -150,6 +150,8 @@ struct DesignsystemRutenett: View {
                     DesignsystemKort(dokument: d)
                         .onTapGesture { åpne(d) }
                         .contextMenu {
+                            let ds = d.designsystem
+                            DelSomLenke(navn: d.navn) { Lenkedeling.designsystem(ds) }
                             Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
                         }
                 }
@@ -336,6 +338,10 @@ struct DesignsystemVisning: View {
                     nyttNavn = dokument.navn
                     omdøper = true
                 }
+            }
+            ToolbarItem(placement: .secondaryAction) {
+                let ds = dokument.designsystem
+                DelSomLenke(navn: dokument.navn) { Lenkedeling.designsystem(ds) }
             }
             if erLagret {
                 ToolbarItem(placement: .secondaryAction) {

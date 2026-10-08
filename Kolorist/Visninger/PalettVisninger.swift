@@ -421,6 +421,7 @@ struct PalettListe: View {
             .omdøpPalett($omdøpes)
             .sheet(item: $vurderes) { PalettVurderingArk(palett: $0.palett) }
             .sheet(item: $matrise) { KontrastmatriseArk(palett: $0.palett) }
+            .modifier(ÅpneDesignsystemFraLenke(iKolonne: iKolonne) { velg(.designsystem($0)) })
             // ⌘N (Arkiv › Ny palett).
             .onChange(of: arbeidsbenk.nyPalettForespurt) { _, ny in
                 guard ny else { return }
@@ -1709,6 +1710,24 @@ private struct SlettPalettBekreftelse: ViewModifier {
             #else
             Text("Fargene og gradientene i paletten slettes også. Rist for å angre.")
             #endif
+        }
+    }
+}
+
+/// Et designsystem fra en lenke, åpnet i palettlisten der designsystemene ikke har egen fane. En oppgave, ikke onChange:
+/// listen bygges gjerne på nytt idet fanen byttes, og oppgaven i en liste som forsvinner, avbrytes – så navigasjonen skjer
+/// i den som vises. Forespørselen fjernes først når den er utført.
+private struct ÅpneDesignsystemFraLenke: ViewModifier {
+    let iKolonne: Bool
+    let åpne: (DesignsystemDokument) -> Void
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+
+    func body(content: Content) -> some View {
+        content.task(id: arbeidsbenk.designsystemSomÅpnes?.id) {
+            guard let d = arbeidsbenk.designsystemSomÅpnes, !iKolonne, !arbeidsbenk.designsystemFane else { return }
+            do { try await Task.sleep(for: .milliseconds(300)) } catch { return }
+            åpne(d)
+            arbeidsbenk.designsystemSomÅpnes = nil
         }
     }
 }

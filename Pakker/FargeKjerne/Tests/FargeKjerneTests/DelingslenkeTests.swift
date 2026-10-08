@@ -118,6 +118,14 @@ struct DelingslenkeTests {
         #expect((lest.navn?.count ?? 0) <= Delingslenke.maksNavn)
     }
 
+    @Test func språketFølgerMed() throws {
+        var innhold = Self.eksempler.first { $0.navn == "palett" }!.innhold
+        innhold.språk = "en"
+        #expect(try Delingslenke.les(Delingslenke.lenke(innhold)).språk == "en")
+        innhold.språk = "<script>"
+        #expect(try Delingslenke.les(Delingslenke.lenke(innhold)).språk == nil)
+    }
+
     @Test func lengdenErRimelig() throws {
         let palett = Self.eksempler.first { $0.navn == "palett" }!.innhold
         #expect(try Delingslenke.lenke(palett).absoluteString.count < 1000)
@@ -129,6 +137,9 @@ struct DelingslenkeTests {
         let fil = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("Testlenker.json")
         var nye: [[String: Any]] = []
         for (navn, innhold) in Self.eksempler {
+            // Språket følger maskinen testen kjører på; testlenkene er uten, som eldre lenker.
+            var innhold = innhold
+            innhold.språk = nil
             let lenke = try Delingslenke.lenke(innhold).absoluteString
             let farger = (innhold.farger + innhold.gradienter.flatMap { $0.stopp.map(\.farge) }).map { f -> [String: Any] in
                 let lab = f.farge.cieLab, lch = f.farge.okLCH

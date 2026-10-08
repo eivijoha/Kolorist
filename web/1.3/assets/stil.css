@@ -1462,3 +1462,73 @@ thead th {
   margin: 0;
   color: var(--tekst-dempet);
 }
+
+/* ---------- Delt designsystem (l/) ---------- */
+
+.ds-moduser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.ds-moduser .knapp[aria-pressed="true"] {
+  background: var(--lenke);
+  border-color: var(--lenke);
+  color: #fff;
+}
+
+.ds-oppsett {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  align-items: start;
+}
+
+.ds-skjerm {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-radius: 24px;
+  border: 1px solid var(--kant);
+  font-size: 0.95rem;
+}
+
+.ds-tittel { margin: 0.2rem 0; font-size: 1.4rem; }
+.ds-liste { border-radius: 12px; overflow: hidden; }
+.ds-rad { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; }
+.ds-fyll { flex: 1; }
+.ds-skille { height: 1px; margin-left: 2.9rem; }
+.ds-ikon { display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 7px; font-size: 0.7rem; }
+.ds-bryter { position: relative; width: 2.9rem; height: 1.75rem; border-radius: 999px; }
+.ds-knott { position: absolute; right: 2px; top: 2px; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / 0.25); }
+.ds-hjelp { margin: 0 0.25rem; font-size: 0.82rem; }
+.ds-felt { padding: 0.6rem 0.75rem; border: 1px solid; border-radius: 10px; }
+.ds-knapper { display: flex; gap: 0.6rem; }
+.ds-knapp { flex: 1; text-align: center; padding: 0.65rem; border-radius: 999px; font-weight: 600; }
+.ds-lenker { display: flex; justify-content: space-between; gap: 1rem; padding: 0 0.25rem; font-size: 0.88rem; }
+.ds-lenke { text-decoration: underline; }
+.ds-varsel { display: flex; gap: 0.5rem; align-items: center; padding: 0.5rem 0.7rem; border-radius: 9px; font-weight: 500; font-size: 0.9rem; }
+.ds-tegn { font-weight: 700; width: 1rem; text-align: center; }
+.ds-etiketter { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ds-etikett { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.7rem; border: 1.5px solid; border-radius: 999px; font-size: 0.85rem; font-weight: 500; }
+.ds-prikk { width: 0.5rem; height: 0.5rem; border-radius: 50%; }
+.ds-faner { display: flex; justify-content: space-around; padding: 0.45rem; border: 1px solid; border-radius: 999px; font-size: 0.78rem; font-weight: 500; }
+
+.ds-kontroll h2 { margin-top: 0; }
+.ds-status { font-weight: 600; }
+.ds-status::before { content: "✓ "; color: #2e8b4a; }
+.ds-status.ds-feiler::before { content: "✕ "; color: #c0392b; }
+.ds-par { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
+.ds-par li { display: flex; align-items: center; gap: 0.7rem; }
+.ds-prove { display: inline-grid; place-items: center; width: 2.6rem; height: 2rem; border-radius: 7px; border: 1px solid var(--kant); font-weight: 600; flex: none; }
+.ds-partekst { display: grid; flex: 1; font-size: 0.9rem; }
+.ds-partekst .dempet { font-size: 0.8rem; }
+.ds-ok, .ds-ikke { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ds-ikke { color: #c0392b; }
+
+.ds-tokens { margin-top: 2rem; }
+.ds-tokens table { border-collapse: collapse; font-size: 0.85rem; }
+.ds-tokens th, .ds-tokens td { padding: 0.3rem 0.6rem; text-align: left; border-bottom: 1px solid var(--kant); white-space: nowrap; }
+.ds-tokennavn { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.ds-ruteprove { display: inline-block; width: 1rem; height: 1rem; border-radius: 4px; vertical-align: -0.2rem; margin-right: 0.4rem; border: 1px solid var(--kant); }

@@ -4,6 +4,11 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Designsystem i delingslenker:** `DeltInnhold.designsystem` (`DeltDesignsystem`, nøkkel `ds`): rollen til hver farge,
+  skriftfargene, egne roller og de ferdige fargene i hver modus (tokennavn og hex), så visningssiden kan vise
+  designsystemet uten å regne. Lenken er fortsatt en palett med rollefargene, så eldre versjoner viser fargene; et skadet
+  designsystem droppes. `designsystem(navn:farger:)` regner fargene ut på nytt fra rollene.
+- `DeltInnhold.språk` (nøkkel `sp`): språket appen kjørte på hos avsenderen, så visningssiden viser teksten på samme språk.
 - **Egne roller i designsystemet:** `Designsystem.egneRoller` (`EgenRolle`: navn, farge, `Rollemal` `.status`, `.aksent` eller
   `.markering`; høyst 4; `EgenRolle.info` som forslag). Eldre designsystemer leses (feltet skrives bare når det finnes).
   `Designtema.egne` (`EgenRolleFarger`) med farger per mal i alle moduser, tokens (`color.background.<navn>`,

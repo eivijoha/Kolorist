@@ -143,9 +143,15 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
     public var harmoni: DeltHarmoni?
     /// Hvordan mottakeren skal åpne innholdet (fane, modus, presentasjon …). Valgfri; eldre versjoner ignorerer den.
     public var visning: DeltVisning?
+    /// Et designsystem (fra 1.3). Lenken er da en palett med rollefargene, så eldre versjoner og visningssiden viser den
+    /// som en palett; nyere versjoner leser designsystemet herfra.
+    public var designsystem: DeltDesignsystem?
+    /// Språket Kolorist kjørte på hos avsenderen (`nb`, `en` …), så visningssiden kan vise teksten på samme språk.
+    /// Uten språk (eldre lenker) bruker visningssiden nettleserens språk.
+    public var språk: String?
 
     public init(slag: Slag, navn: String? = nil, farger: [DeltFarge] = [], gradienter: [DeltGradient] = [],
-                harmoni: DeltHarmoni? = nil, visning: DeltVisning? = nil) {
+                harmoni: DeltHarmoni? = nil, visning: DeltVisning? = nil, designsystem: DeltDesignsystem? = nil) {
         self.versjon = Delingslenke.versjon
         self.slag = slag
         self.navn = navn
@@ -153,10 +159,19 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         self.gradienter = gradienter
         self.harmoni = harmoni
         self.visning = visning
+        self.designsystem = designsystem
+        self.språk = Self.appspråk
+    }
+
+    /// Språket appen kjører på (første lokalisering i hovedbunten), som kort kode.
+    static var appspråk: String? {
+        guard let kode = Bundle.main.preferredLocalizations.first?.lowercased() else { return nil }
+        return String(kode.prefix { $0.isLetter }.prefix(3))
     }
 
     enum CodingKeys: String, CodingKey {
         case versjon = "v", slag = "t", navn = "n", farger = "f", gradienter = "g", harmoni = "h", visning = "vs"
+        case designsystem = "ds", språk = "sp"
     }
 
     public init(from decoder: Decoder) throws {
@@ -169,6 +184,9 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         harmoni = try c.decodeIfPresent(DeltHarmoni.self, forKey: .harmoni)
         // En skadet eller ukjent visningstilstand skal ikke hindre at innholdet vises.
         visning = try? c.decodeIfPresent(DeltVisning.self, forKey: .visning)
+        // Et skadet designsystem skal ikke hindre at fargene vises som palett.
+        designsystem = try? c.decodeIfPresent(DeltDesignsystem.self, forKey: .designsystem)
+        språk = try? c.decodeIfPresent(String.self, forKey: .språk)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -180,6 +198,8 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         if !gradienter.isEmpty { try c.encode(gradienter, forKey: .gradienter) }
         try c.encodeIfPresent(harmoni, forKey: .harmoni)
         try c.encodeIfPresent(visning, forKey: .visning)
+        try c.encodeIfPresent(designsystem, forKey: .designsystem)
+        try c.encodeIfPresent(språk, forKey: .språk)
     }
 
     /// Sjekker grensene og rydder tekst, så innholdet trygt kan vises og lagres.
@@ -198,6 +218,9 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         }
         var ny = self
         ny.visning = gyldigVisning
+        // Designsystemet må passe til fargene; ellers vises lenken bare som palett.
+        ny.designsystem = designsystem.flatMap { $0.kontrollert(antallFarger: farger.count) }
+        ny.språk = språk.flatMap { $0.count <= 3 && $0.allSatisfy { $0.isASCII && $0.isLetter } ? $0.lowercased() : nil }
         ny.navn = navn.map(Self.rensket)
         ny.farger = farger.map { var f = $0; f.rens(); return f }
         ny.gradienter = gradienter.map { g in

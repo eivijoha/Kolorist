@@ -208,6 +208,17 @@ final class Arbeidsbenk {
         valgtFane = .designsystemer
     }
 
+    /// Viser et designsystem der designsystemene står: i egen fane når palettene ligger i spalten, ellers i Paletter
+    /// (palettlisten åpner det, se `designsystemSomÅpnes`). Brukes når et designsystem kommer fra en lenke.
+    func visDesignsystem(_ d: DesignsystemDokument) {
+        if designsystemFane {
+            åpneDesignsystem(d)
+        } else {
+            designsystemSomÅpnes = d
+            valgtFane = .paletter
+        }
+    }
+
     /// Debug: `-startfane overgang` åpner appen på en bestemt fane (brukes til skjermbilder).
     private static var startfane: Fane {
         #if DEBUG
