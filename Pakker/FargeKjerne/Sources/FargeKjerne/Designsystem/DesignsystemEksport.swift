@@ -192,11 +192,37 @@ public enum DesignsystemEksport {
         for tema in temaer {
             // Figma krever `$type` på hvert token (arver ikke fra gruppen) og får ingen andre felt, så importen ikke
             // hopper over noe. Opphavet står i README.
-            var g: [String: Any] = [:]
-            for (navn, f) in tema.tokens { g[navn] = ["$type": "color", "$value": dtcgVerdi(f)] }
-            ut["figma/\(tema.modus.tokennavn).tokens.json"] = json(["color": g])
+            // Gruppene blir grupper i Variables-visningen, som i Apples egne tokens: «color» øverst (plass til andre
+            // typer senere), så bruk («color/text/text-secondary», «color/status/danger/danger-bg»). Navnet beholdes, så
+            // det stemmer med CSS-variablene og fargesettene.
+            var farger: [String: Any] = [:]
+            for (navn, f) in tema.tokens {
+                legg(["$type": "color", "$value": dtcgVerdi(f)], navn: navn, i: figmagruppe(navn), under: &farger)
+            }
+            ut["figma/\(tema.modus.tokennavn).tokens.json"] = json(["color": farger])
         }
         return ut
+    }
+
+    private static func legg(_ token: [String: Any], navn: String, i sti: [String], under gruppe: inout [String: Any]) {
+        guard let første = sti.first else { gruppe[navn] = token; return }
+        var under = gruppe[første] as? [String: Any] ?? [:]
+        legg(token, navn: navn, i: Array(sti.dropFirst()), under: &under)
+        gruppe[første] = under
+    }
+
+    /// Gruppene en semantisk farge hører til i Figma, etter bruk.
+    static func figmagruppe(_ token: String) -> [String] {
+        switch token {
+        case "bg", "surface": ["background"]
+        case "text", "text-secondary", "placeholder": ["text"]
+        case "border", "separator": ["border"]
+        case "accent", "accent-pressed", "on-accent", "accent-subtle": ["accent"]
+        case "secondary", "disabled-bg", "disabled-text": ["control"]
+        case let t where t.hasPrefix("danger"): ["status", "danger"]
+        case let t where t.hasPrefix("success"): ["status", "success"]
+        default: ["status", "warning"]
+        }
     }
 
     // MARK: CSS

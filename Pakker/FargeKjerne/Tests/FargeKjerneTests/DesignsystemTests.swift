@@ -192,16 +192,30 @@ struct DesignsystemFigmaTests {
         for modus in Designmodus.allCases {
             let data = try #require(filer["figma/\(modus.tokennavn).tokens.json"])
             let rot = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
-            let gruppe = try #require(rot["color"] as? [String: Any])
-            #expect(!gruppe.keys.contains { $0.hasPrefix("$") })
-            for (_, token) in gruppe {
-                let t = try #require(token as? [String: Any])
-                #expect(t["$type"] as? String == "color")
-                let v = try #require(t["$value"] as? [String: Any])
-                #expect(v["colorSpace"] as? String == "srgb")
-                #expect((v["hex"] as? String)?.count == 7)
+            let farger = try #require(rot["color"] as? [String: Any])
+            #expect(Set(farger.keys) == ["background", "text", "border", "accent", "control", "status"])
+            // Går gjennom gruppene: et token har `$type` og `$value`, en gruppe har bare undergrupper og tokens.
+            var navn = Set<String>()
+            func gå(_ gruppe: [String: Any], _ sti: String) throws {
+                #expect(!gruppe.keys.contains { $0.hasPrefix("$") })
+                for (nøkkel, innhold) in gruppe {
+                    let objekt = try #require(innhold as? [String: Any])
+                    if let type = objekt["$type"] as? String {
+                        #expect(type == "color")
+                        let v = try #require(objekt["$value"] as? [String: Any])
+                        #expect(v["colorSpace"] as? String == "srgb")
+                        #expect((v["hex"] as? String)?.count == 7)
+                        navn.insert(sti + nøkkel)
+                    } else {
+                        try gå(objekt, sti + nøkkel + "/")
+                    }
+                }
             }
-            navnesett.append(Set(gruppe.keys))
+            try gå(farger, "color/")
+            #expect(navn.count == ds.tema(modus).tokens.count)
+            #expect(navn.contains("color/text/text-secondary"))
+            #expect(navn.contains("color/status/danger/danger-bg"))
+            navnesett.append(navn)
         }
         #expect(Set(navnesett).count == 1)
     }

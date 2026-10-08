@@ -467,6 +467,16 @@
         }
       }
     },
+    "Fargene ligger under `color`, i gruppene background, text, border, accent, control og status (med danger, success og warning). Navnene er de samme som i CSS og Xcode: `color/text/text-secondary` i Figma er `--text-secondary` i CSS og `textSecondary` i Xcode.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colours sit under `color`, in the groups background, text, border, accent, control and status (with danger, success and warning). The names are the same as in CSS and Xcode: `color/text/text-secondary` in Figma is `--text-secondary` in CSS and `textSecondary` in Xcode."
+          }
+        }
+      }
+    },
     "Fargeparene i vanlige komponenter er kontrollert mot WCAG 2 (AA) i alle moduser og i tilstandene normal, trykket, fokus og deaktivert: tekst minst 4,5:1 (1.4.3), kanter og kontroller minst 3:1 (1.4.11, fra WCAG 2.1). Deaktiverte kontroller er unntatt.": {
       "localizations": {
         "en": {

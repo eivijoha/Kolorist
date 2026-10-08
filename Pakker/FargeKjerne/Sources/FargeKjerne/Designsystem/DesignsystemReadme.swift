@@ -120,6 +120,8 @@ extension DesignsystemEksport {
             l.append(t("2. Lag en ny samling i den visningen."))
             l.append(t("3. Dra alle fire filene i `figma/` inn i visningen samtidig. Hver fil blir en modus: light, dark, light-ic og dark-ic."))
             l.append("")
+            l.append(t("Fargene ligger under `color`, i gruppene background, text, border, accent, control og status (med danger, success og warning). Navnene er de samme som i CSS og Xcode: `color/text/text-secondary` i Figma er `--text-secondary` i CSS og `textSecondary` i Xcode."))
+            l.append("")
             l.append(t("Fire moduser krever et betalt Figma-abonnement eller Education. Med gratisabonnementet kan en samling bare ha én modus: importer da `light.tokens.json` alene. Vil du oppdatere en samling som finnes, høyreklikker du en modus og velger «Import mode»."))
             l.append("")
             l.append(t("Filene har fargeverdiene direkte (ikke alias), fordi Figma bare importerer variabler som finnes i alle filene."))
