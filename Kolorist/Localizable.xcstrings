@@ -2394,7 +2394,16 @@
         }
       }
     },
-    "Farger": {},
+    "Farger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colours"
+          }
+        }
+      }
+    },
     "Farger (hex)": {
       "localizations": {
         "en": {
