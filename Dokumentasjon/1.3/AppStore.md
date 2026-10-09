@@ -124,7 +124,8 @@ Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet e
 farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,Munsell
 ```
 
-**Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/nb/` (iPhone 6,5″) og `ipad-nb/` (iPad 13″) – alle tatt med 1.3.
+**Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/iphone63-nb/` (iPhone 6,1″/6,3″, 1206 × 2622 – formatet App Store
+Connect nå ber om, nummerert i opplastingsrekkefølge) og `ipad-nb/` (iPad 13″). `nb/` (6,5″, 1284 × 2778) er reserve.
 Foreslått rekkefølge (høyst ti): designsystem, toneskala, kontrast, flatekontrast, studio, harmoni, lys, fargesyn,
 overgang, fargefelt.
 
@@ -235,7 +236,7 @@ Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported 
 color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,Munsell
 ```
 
-**Screenshots:** `Dokumentasjon/1.3/Skjermbilder/en/` (iPhone 6.5″) and `ipad-en/` (iPad 13″), all taken with 1.3, in the
+**Screenshots:** `Dokumentasjon/1.3/Skjermbilder/iphone63-en/` (iPhone 6.1″/6.3″, 1206 × 2622) and `ipad-en/` (iPad 13″), all taken with 1.3, in the
 same order as the Norwegian ones.
 
 ---
@@ -574,6 +575,7 @@ Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu
 
 | Mappe | Plattform | Størrelse | Bilder |
 |---|---|---|---|
+| `iphone63-nb/`, `iphone63-en/` | iPhone 6,1″/6,3″ | 1206 × 2622 | 1–9: designsystem, toneskala, kontrast, flatekontrast, studio, harmoni, lys, fargesyn, overgang (simulator «Skjermbilder 6,3», iPhone 17 Pro, iOS 26.5) |
 | `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 | studio, harmoni, toneskala, overgang, fargesyn, lys, kontrast, flatekontrast, designsystem, fargefelt |
 | `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 | de samme |
 | `mac-nb/`, `mac-en/` | Mac | 2880 × 1800 | de samme uten fargefelt |
