@@ -436,7 +436,7 @@ Mac: usignert Debug-bygg med de samme argumentene og `-ApplePersistenceIgnoreSta
 
 ### Før du sender inn
 
-- [ ] CloudKit-skjemaet publisert til produksjon (CloudKit Console › iCloud.no.engenett.Kolorist › Deploy Schema
+- [x] CloudKit-skjemaet publisert til produksjon 2026-10-09 (CloudKit Console › iCloud.no.engenett.Kolorist › Deploy Schema
       Changes). Nytt i 1.3: feltene `CD_gruppeID`, `CD_sortering` og `CD_tekstfargeData` i `CD_PalettDokument`, og
       posttypene `CD_PalettGruppe` og `CD_DesignsystemDokument`. Utviklingsskjemaet ble gjort komplett 2026-10-09 med
       Debug-argumentet `-initialiserCloudKitSkjema YES` (Mac). Uten dette synkroniseres ikke palettgrupper,
