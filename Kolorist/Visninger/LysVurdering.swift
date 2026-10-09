@@ -44,8 +44,8 @@ struct LysVurdering: View {
         let skift = miljø.fargeskift(farge)
         return Section {
             HStack(spacing: 8) {
-                // Egen nøkkel: kort etikett på engelsk («Condition»), så den ikke kolliderer med valget.
-                Text(String(localized: "lys.etikett.betraktningsforhold", defaultValue: "Betraktningsforhold"))
+                // Egen nøkkel: kort etikett («Forhold», «Condition»), så den ikke kolliderer med valget.
+                Text(String(localized: "lys.etikett.betraktningsforhold", defaultValue: "Forhold"))
                     .foregroundStyle(Color.sekundærTekst).lineLimit(1).fixedSize()
                 Spacer(minLength: 0)
                 Menu {
