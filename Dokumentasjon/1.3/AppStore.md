@@ -436,8 +436,11 @@ Mac: usignert Debug-bygg med de samme argumentene og `-ApplePersistenceIgnoreSta
 
 ### Før du sender inn
 
-- [ ] CloudKit-skjemaet publisert til produksjon: nye felt `tekstfargeData` (PalettDokument) og ny modell
-      `DesignsystemDokument`. Uten dette synkroniseres ikke skriftfarger og designsystemer i App Store-bygget.
+- [ ] CloudKit-skjemaet publisert til produksjon (CloudKit Console › iCloud.no.engenett.Kolorist › Deploy Schema
+      Changes). Nytt i 1.3: feltene `CD_gruppeID`, `CD_sortering` og `CD_tekstfargeData` i `CD_PalettDokument`, og
+      posttypene `CD_PalettGruppe` og `CD_DesignsystemDokument`. Utviklingsskjemaet ble gjort komplett 2026-10-09 med
+      Debug-argumentet `-initialiserCloudKitSkjema YES` (Mac). Uten dette synkroniseres ikke palettgrupper,
+      rekkefølge, skriftfarger og designsystemer i App Store-bygget.
 - [ ] Ny versjon 1.3 opprettet for iOS og macOS, med tekstene over.
 - [ ] Skjermbilder lastet opp (iPhone, iPad og Mac, norsk og engelsk).
 - [ ] 1.3-nettsiden publisert på kolorist.no før innsending; 1.2 flyttes til `historisk/1.2/`.

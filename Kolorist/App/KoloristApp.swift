@@ -10,6 +10,9 @@ struct KoloristApp: App {
     @State private var profiler = ProfilBibliotek.delt
 
     init() {
+        #if DEBUG
+        Lagring.initialiserCloudKitSkjemaOmØnsket()
+        #endif
         KoloristSnarveier.updateAppShortcutParameters()
     }
 

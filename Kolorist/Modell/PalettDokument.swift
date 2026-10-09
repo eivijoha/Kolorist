@@ -237,3 +237,40 @@ enum Lagring {
         #endif
     }
 }
+
+#if DEBUG
+import CoreData
+
+extension Lagring {
+    /// Debug: `-initialiserCloudKitSkjema YES` lager alle posttyper og felt i CloudKits utviklingsmiljø (med midlertidige
+    /// poster som slettes igjen), så skjemaet er komplett før det publiseres til produksjon i CloudKit Console. Kjøres før
+    /// SwiftData åpner lageret, mot et eget midlertidig lager.
+    static func initialiserCloudKitSkjemaOmØnsket() {
+        guard UserDefaults.standard.bool(forKey: "initialiserCloudKitSkjema") else { return }
+        guard let modell = NSManagedObjectModel.makeManagedObjectModel(for: [PalettDokument.self, LagretFarge.self,
+                                                                             LagretGradient.self, PalettGruppe.self,
+                                                                             DesignsystemDokument.self]) else {
+            print("CloudKit-skjema: fant ikke modellen")
+            return
+        }
+        let url = URL.temporaryDirectory.appending(path: "Kolorist-skjema-\(UUID().uuidString).store")
+        let beskrivelse = NSPersistentStoreDescription(url: url)
+        beskrivelse.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerID)
+        beskrivelse.shouldAddStoreAsynchronously = false
+        let beholder = NSPersistentCloudKitContainer(name: "Kolorist", managedObjectModel: modell)
+        beholder.persistentStoreDescriptions = [beskrivelse]
+        beholder.loadPersistentStores { _, feil in
+            if let feil { print("CloudKit-skjema: kunne ikke åpne lageret: \(feil)") }
+        }
+        do {
+            try beholder.initializeCloudKitSchema()
+            print("CloudKit-skjema: initialisert i utviklingsmiljøet")
+        } catch {
+            print("CloudKit-skjema: feil: \(error)")
+        }
+        for lager in beholder.persistentStoreCoordinator.persistentStores {
+            try? beholder.persistentStoreCoordinator.remove(lager)
+        }
+    }
+}
+#endif
