@@ -163,8 +163,8 @@ NYE_BILDER = {
     ('en', 'monokrom'): ('Monochromatic harmony: six tones of orange along a line from rich orange to a dark, saturated tone, in the lightness and saturation field', 'Monochromatic'),
     ('nb', 'harmoni-aksent'): ('Harmoni: analog med komplementær aksent og naturlig lyshetsrekkefølge, vist på fargesirkelen', 'Analog med aksent'),
     ('en', 'harmoni-aksent'): ('Harmony: analogous with a complementary accent and natural lightness order, shown on the colour wheel', 'Analogous with accent'),
-    ('nb', 'munsell'): ('Studio med en teglrød farge i Munsell-notasjon, 10R 5/8 – kulør, valør og kroma', 'Munsell'),
-    ('en', 'munsell'): ('Studio with a brick-red colour in Munsell notation, 10R 5/8 – hue, value and chroma', 'Munsell'),
+    ('nb', 'munsell'): ('Studio med en teglrød farge i Munsell-notasjon, 10R 5,1/7,3 – kulør, valør og kroma', 'Munsell'),
+    ('en', 'munsell'): ('Studio with a brick-red colour in Munsell notation, 10R 5.1/7.3 – hue, value and chroma', 'Munsell'),
     ('nb', 'arkitektur-lys'): ('Lys under Vurdering: en teglrød farge på skjermen og i stua om kvelden, og under flere betraktningsforhold med fargeskiftet for hvert', 'Fargen under ulike betraktningsforhold'),
     ('en', 'arkitektur-lys'): ('Light under Assess: a brick-red colour on screen and in the living room in the evening, and in more viewing conditions with the colour shift for each', 'The colour in viewing conditions'),
     ('nb', 'palett-lys'): ('En palett i lys: fargen på skjermen øverst og i stua om kvelden nederst i hver rute, med fargeskiftet', 'Paletten i lys'),
@@ -173,8 +173,8 @@ NYE_BILDER = {
     ('en', 'skriftkontrast'): ('Text contrast in a palette: each colour as text on the others, with WCAG contrast and how many colour pairs pass', 'Text contrast'),
 }
 NYE_BILDER.update({
-    ('nb', 'filament'): ('Studio med «Filament: alle typer»: fargen og nærmeste filament, Atomic Filament Too Good to be Blue (PLA)', 'Nærmeste filament'),
-    ('en', 'filament'): ('Studio with “Filament: all types”: the colour and the nearest filament, Atomic Filament Too Good to be Blue (PLA)', 'Nearest filament'),
+    ('nb', 'filament'): ('Studio med «Filament: alle typer»: fargen og nærmeste filament, Amolen Silk Sapphire Blue (PLA)', 'Nærmeste filament'),
+    ('en', 'filament'): ('Studio with “Filament: all types”: the colour and the nearest filament, Amolen Silk Sapphire Blue (PLA)', 'Nearest filament'),
     ('nb', 'del-app'): ('En delt palett åpnet i Kolorist: forhåndsvisning med farger og gradient, og «Legg til i paletter»', 'Mottatt i appen'),
     ('en', 'del-app'): ('A shared palette opened in Kolorist: preview with colours and gradient, and “Add to palettes”', 'Received in the app'),
     ('nb', 'del-web'): ('En delt palett i nettleseren på kolorist.no: fargene med hex, OKLCH, CIELab og Munsell', 'I nettleseren'),

@@ -54,7 +54,21 @@
       }
     },
     "Kolorist-palett" : {
-
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolorist palette"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolorist-palett"
+          }
+        }
+      }
     },
     "Kolorist-palettfarge" : {
       "extractionState" : "manual",
