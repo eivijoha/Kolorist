@@ -18,7 +18,9 @@ struct FargeValgRad: View {
     var body: some View {
         HStack(spacing: 12) {
             Button { visVelger = true } label: {
-                FargeRute(farge: farge, visTekst: false, hjørne: 8).frame(width: 52, height: 36)
+                // Høyreklikk / trykk og hold: fargens meny, også med «Endre i Studio …».
+                FargeRute(farge: farge, visTekst: false, hjørne: 8, endre: { farge = $0 }, endreTittel: tittel)
+                    .frame(width: 52, height: 36)
                     // Tynn kant, så hvitt/svært lyse farger synes mot lys bakgrunn (og mørke mot mørk).
                     .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(.secondary.opacity(0.4), lineWidth: 1))
             }

@@ -29,6 +29,8 @@ struct FargeRute: View {
     var navngi: (() -> Void)? = nil
     /// «Endre i Studio …»: fargen endres i et Studio-ark og gis tilbake hit (f.eks. en farge i en palett).
     var endre: ((Farge) -> Void)? = nil
+    /// Tittelen på Studio-arket (standard fargens navn eller hex).
+    var endreTittel: String? = nil
     /// Når satt, dras fargen med navn (mellom paletter); ellers som ren farge.
     var palettFarge: PalettFarge? = nil
     /// Ekstra menypunkter (f.eks. «Flytt til …»).
@@ -114,7 +116,8 @@ struct FargeRute: View {
                 let pf = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
                 LagreSomArk(innhold: Lagringsinnhold(navn: pf.navn.isEmpty ? farge.hex() : pf.navn, farger: [pf]))
             }
-            .endreIStudio(tittel: navn.flatMap { $0.isEmpty ? nil : $0 } ?? farge.hex(), vises: $endrerIStudio, farge: farge) { endre?($0) }
+            .endreIStudio(tittel: endreTittel ?? navn.flatMap { $0.isEmpty ? nil : $0 } ?? farge.hex(), vises: $endrerIStudio,
+                          farge: farge) { endre?($0) }
     }
 
     private var form: UnevenRoundedRectangle {
