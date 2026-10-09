@@ -27,6 +27,8 @@ struct FargeRute: View {
     var visFarge = true
     var fjern: (() -> Void)? = nil
     var navngi: (() -> Void)? = nil
+    /// «Endre i Studio …»: fargen endres i et Studio-ark og gis tilbake hit (f.eks. en farge i en palett).
+    var endre: ((Farge) -> Void)? = nil
     /// Når satt, dras fargen med navn (mellom paletter); ellers som ren farge.
     var palettFarge: PalettFarge? = nil
     /// Ekstra menypunkter (f.eks. «Flytt til …»).
@@ -40,6 +42,7 @@ struct FargeRute: View {
     var bobleEkstra: ((@escaping () -> Void) -> AnyView)? = nil
     @State private var visValg = false
     @State private var visLagreSom = false
+    @State private var endrerIStudio = false
 
     var body: some View {
         #if os(macOS)
@@ -84,6 +87,9 @@ struct FargeRute: View {
                 if visFarge {
                     Button("Vis farge", systemImage: "slider.horizontal.3") { visIStudio(farge) }
                 }
+                if endre != nil {
+                    Button("Endre i Studio …", systemImage: "slider.horizontal.3") { endrerIStudio = true }
+                }
                 if let navngi {
                     Button("Gi navn …", systemImage: "character.cursor.ibeam", action: navngi)
                 }
@@ -108,6 +114,7 @@ struct FargeRute: View {
                 let pf = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
                 LagreSomArk(innhold: Lagringsinnhold(navn: pf.navn.isEmpty ? farge.hex() : pf.navn, farger: [pf]))
             }
+            .endreIStudio(tittel: navn.flatMap { $0.isEmpty ? nil : $0 } ?? farge.hex(), vises: $endrerIStudio, farge: farge) { endre?($0) }
     }
 
     private var form: UnevenRoundedRectangle {

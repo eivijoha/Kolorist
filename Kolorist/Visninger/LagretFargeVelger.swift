@@ -12,6 +12,7 @@ struct FargeValgRad: View {
     var verditekst: (Farge) -> String = { $0.hex() }
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var visVelger = false
+    @State private var endrerIStudio = false
     @State private var målrettet = false
 
     var body: some View {
@@ -36,6 +37,7 @@ struct FargeValgRad: View {
                 .controlSize(.small)
                 .lineLimit(1)
             Menu("Mer", systemImage: "ellipsis.circle") {
+                Button("Endre i Studio …", systemImage: "slider.horizontal.3") { endrerIStudio = true }
                 FargehentingValg(farge: $farge)
             }
             .labelStyle(.iconOnly)
@@ -55,6 +57,7 @@ struct FargeValgRad: View {
         .sheet(isPresented: $visVelger) {
             LagretFargeArk(tittel: tittel) { farge = $0 }
         }
+        .endreIStudio(tittel: tittel, vises: $endrerIStudio, farge: farge) { farge = $0 }
     }
 }
 
@@ -92,7 +95,6 @@ struct FargeVelgerMeny<Etikett: View>: View {
     @State private var visLagret = false
     @State private var visUtplukk = false
     @State private var endrerIStudio = false
-    @State private var studiotilstand: EndreIStudioArk.Tilstand?
     @State private var målrettet = false
 
     var body: some View {
@@ -110,10 +112,7 @@ struct FargeVelgerMeny<Etikett: View>: View {
             }
             if let ekstra { Section { ekstra } }
             Section {
-                Button("Endre i Studio …", systemImage: "slider.horizontal.3") {
-                    studiotilstand = EndreIStudioArk.start(med: farge)
-                    endrerIStudio = true
-                }
+                Button("Endre i Studio …", systemImage: "slider.horizontal.3") { endrerIStudio = true }
                 Button("Kopier \(farge.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(farge) }
             }
         } label: {
@@ -136,17 +135,7 @@ struct FargeVelgerMeny<Etikett: View>: View {
         } isTargeted: { målrettet = $0 }
         .sheet(isPresented: $visLagret) { LagretFargeArk(tittel: tittel) { farge = $0 } }
         .sheet(isPresented: $visUtplukk) { FargeutplukkArk(tittel: tittel) { farge = $0 } }
-        .sheet(isPresented: $endrerIStudio, onDismiss: {
-            if let studiotilstand { EndreIStudioArk.slutt(studiotilstand) }
-            studiotilstand = nil
-        }) {
-            // Studios farge settes tilbake først, så den nye fargen: feltet kan være selve den aktive fargen (Kontrast).
-            EndreIStudioArk(tittel: tittel) { ny in
-                if let studiotilstand { EndreIStudioArk.slutt(studiotilstand) }
-                studiotilstand = nil
-                farge = ny
-            }
-        }
+        .endreIStudio(tittel: tittel, vises: $endrerIStudio, farge: farge) { farge = $0 }
     }
 }
 
@@ -196,6 +185,41 @@ struct EndreIStudioArk: View {
         #if os(macOS)
         .frame(minWidth: 760, minHeight: 640)
         #endif
+    }
+}
+
+/// «Endre i Studio …»: når `vises` blir sann, blir fargen Studios aktive farge og `EndreIStudioArk` vises. «Bruk» gir den
+/// endrede fargen til `bruk`; Studios egen farge settes tilbake først (feltet kan være selve den aktive fargen, som i
+/// Kontrast), og ellers når arket lukkes.
+private struct EndreIStudio: ViewModifier {
+    let tittel: String
+    @Binding var vises: Bool
+    let farge: Farge
+    let bruk: (Farge) -> Void
+    @State private var tilstand: EndreIStudioArk.Tilstand?
+
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: vises) { _, ny in
+                if ny, tilstand == nil { tilstand = EndreIStudioArk.start(med: farge) }
+            }
+            .sheet(isPresented: $vises, onDismiss: tilbake) {
+                EndreIStudioArk(tittel: tittel) { ny in
+                    tilbake()
+                    bruk(ny)
+                }
+            }
+    }
+
+    private func tilbake() {
+        if let tilstand { EndreIStudioArk.slutt(tilstand) }
+        tilstand = nil
+    }
+}
+
+extension View {
+    func endreIStudio(tittel: String, vises: Binding<Bool>, farge: Farge, bruk: @escaping (Farge) -> Void) -> some View {
+        modifier(EndreIStudio(tittel: tittel, vises: vises, farge: farge, bruk: bruk))
     }
 }
 

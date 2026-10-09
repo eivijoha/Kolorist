@@ -612,6 +612,7 @@ struct EnkeltfargerRad: View {
                     ForEach(farger.prefix(60)) { pf in
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
                                   fjern: { slettEnkeltfarge(pf.id, i: kontekst) },
+                                  endre: { ny in endreEnkeltfarge(pf.id, til: ny, i: kontekst) },
                                   palettFarge: pf, ekstraMeny: AnyView(FlyttMeny(farge: pf, fra: nil)))
                             .frame(width: 44, height: 44)
                             .onTapGesture { velg(pf.farge) }
@@ -650,7 +651,9 @@ struct EnkeltfargerVisning: View {
                     FargeRute(farge: pf.farge, navn: pf.navn,
                               leggIPalett: { _ in leggIPalett = [pf] },
                               fjern: { kontekst.angresteg("Slett farge") { kontekst.delete(lagret) } },
-                              navngi: { navngis = lagret }, palettFarge: pf)
+                              navngi: { navngis = lagret },
+                              endre: { ny in kontekst.angresteg("Endre farge") { lagret.palettFarge = pf.endret(til: ny) } },
+                              palettFarge: pf)
                         .aspectRatio(1, contentMode: .fit)
                         .onTapGesture {
                             arbeidsbenk.aktivFarge = pf.farge
@@ -726,7 +729,8 @@ struct PalettRad: View {
                 HStack(spacing: 8) {
                     ForEach(dokument.farger) { pf in
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
-                                  fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } }, palettFarge: pf,
+                                  fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
+                                  endre: { ny in dokument.endreFarge(pf.id, til: ny, i: kontekst) }, palettFarge: pf,
                                   ekstraMeny: AnyView(FlyttMeny(farge: pf, fra: dokument)))
                             .frame(width: 44, height: 44)
                             .onTapGesture { velg(pf.farge) }
@@ -904,7 +908,8 @@ struct PalettDetalj: View {
                                   tekstfarge: skrift?.farge,
                                   skriftvurdering: skrift.map { Skriftfarger.vurdering(tekst: $0.farge, på: pf.farge) },
                                   fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
-                                  navngi: { navngisPalettfarge = pf }, palettFarge: pf,
+                                  navngi: { navngisPalettfarge = pf },
+                                  endre: { ny in dokument.endreFarge(pf.id, til: ny, i: kontekst) }, palettFarge: pf,
                                   ekstraMeny: AnyView(Group {
                                       Button("Lag toneskala", systemImage: "square.3.layers.3d") { visSkala = pf }
                                       if !dokument.tekstfarger.isEmpty { SkriftfargeValgMeny(dokument: dokument, farge: pf) }
@@ -1702,6 +1707,37 @@ extension EnvironmentValues {
 }
 
 /// Sletter en enkeltfarge (lagret uten palett) ut fra id-en.
+/// En enkeltfarge får ny farge («Endre i Studio …»), med angresteg.
+func endreEnkeltfarge(_ id: UUID, til ny: Farge, i kontekst: ModelContext) {
+    kontekst.angresteg("Endre farge") {
+        for lagret in (try? kontekst.fetch(FetchDescriptor<LagretFarge>())) ?? [] where lagret.id == id {
+            lagret.palettFarge = lagret.palettFarge.endret(til: ny)
+        }
+    }
+}
+
+extension PalettDokument {
+    /// En farge i paletten får ny farge («Endre i Studio …»), med angresteg. Navn og plass beholdes.
+    @MainActor func endreFarge(_ id: UUID, til ny: Farge, i kontekst: ModelContext) {
+        kontekst.angresteg("Endre farge") {
+            farger = farger.map { $0.id == id ? $0.endret(til: ny) : $0 }
+        }
+    }
+}
+
+extension PalettFarge {
+    /// Samme farge (id, navn, opphav og skriftfarge) med ny verdi. Verdiene i fargerommet den ble laget i, og kilden
+    /// (f.eks. en filamentprøve), gjelder ikke lenger.
+    func endret(til ny: Farge) -> PalettFarge {
+        guard ny != farge else { return self }
+        var p = self
+        p.farge = ny
+        p.representasjon = nil
+        p.kilde = nil
+        return p
+    }
+}
+
 func slettEnkeltfarge(_ id: UUID, i kontekst: ModelContext) {
     for lagret in (try? kontekst.fetch(FetchDescriptor<LagretFarge>())) ?? [] where lagret.id == id {
         kontekst.delete(lagret)
