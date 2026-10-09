@@ -10,6 +10,10 @@ Tekstene står per plattform og språk, i den rekkefølgen de legges inn i App S
 
 App-informasjon, URL-er, personvernetiketten og eksportregler er uendret fra 1.2 (`Dokumentasjon/1.2/AppStore.md`).
 
+Nøkkelord: fargefunksjoner designere og arkitekter søker etter. Ord som står i navnet eller undertittelen
+(«Kolorist», «Fargepaletter for designere», «Colour palettes for designers»), indekseres allerede og gjentas ikke;
+ordene kombineres med dem («color» + «picker», «farge» + «palett»). Samme sett for iOS og Mac.
+
 Skrivemåte: tekstene beskriver hva man oppnår, ikke hvor menyene er; ubestemt flertall («farger», «paletter»); annen
 programvare og rettighetsbelagte fargesystemer nevnes ikke ved navn. Standarder (WCAG, APCA, LRV, TEK17) kan nevnes.
 
@@ -117,7 +121,7 @@ Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet e
 **Nøkkelord (100)**
 
 ```
-farge,palett,designsystem,tokens,OKLCH,CMYK,Munsell,kontrast,WCAG,APCA,LRV,mørk modus,filament
+farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,Munsell
 ```
 
 **Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/nb/` (iPhone 6,5″) og `ipad-nb/` (iPad 13″) – alle tatt med 1.3.
@@ -228,7 +232,7 @@ Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported 
 **Keywords (100)**
 
 ```
-colour,color,palette,design system,tokens,OKLCH,CMYK,Munsell,contrast,WCAG,APCA,LRV,dark mode
+color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,Munsell
 ```
 
 **Screenshots:** `Dokumentasjon/1.3/Skjermbilder/en/` (iPhone 6.5″) and `ipad-en/` (iPad 13″), all taken with 1.3, in the
@@ -361,7 +365,7 @@ Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 **Nøkkelord (100)**
 
 ```
-farge,palett,designsystem,tokens,pipette,OKLCH,CMYK,Munsell,kontrast,WCAG,APCA,LRV,mørk modus
+farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,Munsell
 ```
 
 **Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/mac-nb/` (2880 × 1800) – alle tatt med 1.3. Foreslått rekkefølge:
@@ -492,7 +496,7 @@ Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
 **Keywords (100)**
 
 ```
-colour,color,palette,design system,tokens,eyedropper,OKLCH,CMYK,Munsell,contrast,WCAG,APCA,LRV
+color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,Munsell
 ```
 
 ---
