@@ -68,16 +68,9 @@ struct SammenligningVisning: View {
                     felt("B", String(localized: "Farge B"), farge: $b)
                 }
             }
-            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: bred ? 0 : 20, style: .continuous))
+            .clipShape(Kortform.fargepanel(bred: bred))
             .frame(height: bred ? nil : (presentasjon ? 330 : 250))
             .frame(maxHeight: bred ? .infinity : nil)
-            HStack {
-                Button("Bytt A og B", systemImage: "arrow.left.arrow.right") { swap(&a, &b) }
-                    .help("Bytt A og B")
-                Spacer()
-            }
-            .padding(.horizontal, 16)
-            .frame(minHeight: 48)
         }
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
@@ -139,32 +132,52 @@ struct SammenligningVisning: View {
     }
 
     private var detaljer: some View {
-        Form { detaljseksjon }.formStyle(.grouped).frame(minHeight: 420).scrollDisabled(true)
+        Form { detaljseksjon }.formStyle(.grouped).frame(minHeight: 480).scrollDisabled(true)
+    }
+
+    /// Verdiene i detaljlista: navn, verdi og antall desimaler.
+    private var verdier: [(navn: String, verdi: Double, desimaler: Int)] {
+        let la = a.cieLab, lb = b.cieLab, ca = a.cieLCH, cb = b.cieLCH
+        return [
+            (String(localized: "ΔE00 (CIEDE2000)"), a.deltaE2000(til: b), 2),
+            (String(localized: "ΔE76 (CIELab)"), Fargeavstand.deltaE76(la, lb), 2),
+            (String(localized: "ΔE OK (OKLab)"), a.avstandOK(til: b), 4),
+            (String(localized: "ΔL* (lyshet)"), lb.l - la.l, 2),
+            (String(localized: "ΔC* (kroma)"), cb.c - ca.c, 2),
+            (String(localized: "Δh (kulør, grader)"), kulørforskjell(ca.h, cb.h), 1),
+        ]
+    }
+
+    private func tall(_ verdi: Double, _ desimaler: Int) -> String {
+        verdi.formatted(.number.precision(.fractionLength(desimaler)))
+    }
+
+    /// Alle verdiene som tabell (tabulatorer mellom kolonnene), så de limes inn som celler i regneark og tabeller.
+    private var tabell: String {
+        ([[String(localized: "Farge A"), a.hex()], [String(localized: "Farge B"), b.hex()]]
+            + verdier.map { [$0.navn, tall($0.verdi, $0.desimaler)] })
+            .map { $0.joined(separator: "\t") }.joined(separator: "\n")
     }
 
     @ViewBuilder private var detaljseksjon: some View {
-        let de00 = a.deltaE2000(til: b)
         Section {
-            let la = a.cieLab, lb = b.cieLab, ca = a.cieLCH, cb = b.cieLCH
-            rad("ΔE00 (CIEDE2000)", de00, 2)
-            rad("ΔE76 (CIELab)", Fargeavstand.deltaE76(la, lb), 2)
-            rad("ΔE OK (OKLab)", a.avstandOK(til: b), 4)
-            rad("ΔL* (lyshet)", lb.l - la.l, 2)
-            rad("ΔC* (kroma)", cb.c - ca.c, 2)
-            rad("Δh (kulør, grader)", kulørforskjell(ca.h, cb.h), 1)
+            ForEach(verdier, id: \.navn) { d in
+                LabeledContent(d.navn) {
+                    Text(tall(d.verdi, d.desimaler)).monospacedDigit()
+                }
+                .contextMenu {
+                    Button("Kopier verdi", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(tall(d.verdi, d.desimaler)) }
+                    Button("Kopier alle som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(tabell) }
+                }
+            }
+            Button("Kopier alle som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(tabell) }
         } header: {
             Text("Detaljer")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse.")
+                Text("Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse. Trykk og hold (høyreklikk på Mac) på en verdi for å kopiere den.")
                 MetodeHenvisning(.ciede2000, .cieLab)
             }
-        }
-    }
-
-    private func rad(_ navn: LocalizedStringKey, _ verdi: Double, _ desimaler: Int) -> some View {
-        LabeledContent(navn) {
-            Text(verdi, format: .number.precision(.fractionLength(desimaler))).monospacedDigit()
         }
     }
 

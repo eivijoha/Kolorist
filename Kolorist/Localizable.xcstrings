@@ -1201,12 +1201,12 @@
         }
       }
     },
-    "Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse.": {
+    "Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse. Trykk og hold (høyreklikk på Mac) på en verdi for å kopiere den.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculated in CIELab D50. Interpretation: below 1 is not noticeable, 1–2 noticeable on close comparison, 2–3.5 noticeable, above 5 counts as different colours. Camera measurements are affected by lighting and white balance."
+            "value": "Calculated in CIELab D50. Interpretation: below 1 is not noticeable, 1–2 noticeable on close comparison, 2–3.5 noticeable, above 5 counts as different colours. Camera measurements are affected by lighting and white balance. Touch and hold (right-click on the Mac) a value to copy it."
           }
         }
       }
@@ -1437,16 +1437,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Based on: %@"
-          }
-        }
-      }
-    },
-    "Bytt A og B": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Swap A and B"
           }
         }
       }
@@ -4921,6 +4911,16 @@
         }
       }
     },
+    "Kopier alle som tabell": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy all as a table"
+          }
+        }
+      }
+    },
     "Kopier bare moderne verdi": {
       "localizations": {
         "en": {
@@ -5017,6 +5017,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copy tones to"
+          }
+        }
+      }
+    },
+    "Kopier verdi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy value"
           }
         }
       }
@@ -7493,6 +7503,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Palette · 1 colour"
+          }
+        }
+      }
+    },
+    "Palett: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palette: %@"
           }
         }
       }
@@ -10634,18 +10654,17 @@
       }
     },
     "lys.etikett.betraktningsforhold": {
-      "extractionState": "extracted_with_value",
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Forhold"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Condition"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forhold"
           }
         }
       }

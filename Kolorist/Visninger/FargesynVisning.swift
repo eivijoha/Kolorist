@@ -110,12 +110,25 @@ struct FargesynVurdering: View {
                 }
                 // Som valget av betraktningsforhold i Lys: etikett til venstre, valget til høyre.
                 HStack(spacing: 8) {
-                    Text("Palett").foregroundStyle(Color.sekundærTekst).lineLimit(1)
+                    Text("Palett").foregroundStyle(Color.sekundærTekst).lineLimit(1).fixedSize()
                     Spacer(minLength: 0)
-                    Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
-                        ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
+                    // Meny i stedet for Picker: navnet holdes på én linje og kortes ned om det er langt.
+                    Menu {
+                        Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
+                            ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
+                        }
+                        .pickerStyle(.inline)
+                        .labelsHidden()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Text(valgt.navn.isEmpty ? String(localized: "Uten navn") : valgt.navn).lineLimit(1).truncationMode(.tail)
+                            Image(systemName: "chevron.up.chevron.down").font(.caption.weight(.semibold))
+                        }
+                        .foregroundStyle(Color.accentColor)
+                        .contentShape(Rectangle())
                     }
-                    .labelsHidden()
+                    .menuIndicator(.hidden)
+                    .accessibilityLabel("Palett: \(valgt.navn)")
                 }
             }
             // Toppen får høyden den trenger; fargefeltet tar resten.
