@@ -6,6 +6,10 @@ import SwiftUI
 
 /// Studio: rediger aktiv farge i valgfri fargemodell, se alle representasjoner.
 struct FargeEditor: View {
+    /// Bare Farge-modus, uten modusvelger (Studio i et ark for å endre en farge, se `EndreIStudioArk`).
+    var bareFarge = false
+    /// Tittelen i arket (standard «Studio»).
+    var tittel: String? = nil
     @Environment(\.presentasjonsmodus) private var presentasjon
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var hexTekst = ""
@@ -17,7 +21,8 @@ struct FargeEditor: View {
     @State private var harmonifarger: [Farge] = []
     @State private var harmoniGrunn: Int?
     @Environment(\.modelContext) private var kontekst
-    @AppStorage("studioModus") private var modus: Modus = .farge
+    @AppStorage("studioModus") private var lagretModus: Modus = .farge
+    private var modus: Modus { bareFarge ? .farge : lagretModus }
     @AppStorage("visOgsåProfil") private var visOgsåID = ICCProfil.sRGB.id
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     @AppStorage("renCMYK") private var renCMYK = false
@@ -33,7 +38,7 @@ struct FargeEditor: View {
 
     private var modusvelger: some View {
         // Tekst, ikke symboler: i verktøylinjen viser en segmentkontroll ellers bare symbolene.
-        Picker("Modus", selection: $modus) {
+        Picker("Modus", selection: $lagretModus) {
             ForEach(Modus.allCases) { Text($0.navn).tag($0) }
         }
         .pickerStyle(.segmented)
@@ -222,7 +227,7 @@ struct FargeEditor: View {
         fargepanel(farge, bred: bred)
             .frame(width: bred ? geo.size.width / 2 : nil)
         Form {
-            if !velgerIVerktøylinje {
+            if !velgerIVerktøylinje && !bareFarge {
                 // iPhone: tittellinjen er skjult, så velgeren står sentrert og fritt øverst i skjemaet.
                 Section {
                     modusvelger
@@ -257,7 +262,7 @@ struct FargeEditor: View {
         }
         .background(Color.skjemabakgrunn)
         }
-        .navigationTitle("Studio")
+        .navigationTitle(tittel ?? String(localized: "Studio"))
         // Ny gjengivelseshensikt: behold verdiene i kildefargerommet og regn fargen om, så f.eks. CMYK 0/0/0/0 blir
         // papirhvitt med absolutt kolorimetrisk (og hvitt igjen med relativ).
         .onChange(of: hensikt) { gammel, ny in
@@ -270,7 +275,7 @@ struct FargeEditor: View {
         }
         // iPad og Mac: Farge | Harmoni midt i verktøylinjen, som velgerne i Utplukk og Vurdering.
         .toolbar {
-            if velgerIVerktøylinje {
+            if velgerIVerktøylinje && !bareFarge {
                 ToolbarItem(placement: .principal) { modusvelger }
             }
         }
@@ -278,7 +283,7 @@ struct FargeEditor: View {
         // Liten tittel: fargepanelet står fast øverst og trenger plassen.
         .navigationBarTitleDisplayMode(.inline)
         // iPhone: ingen tittellinje – fanen sier allerede «Studio», og fargeflaten får plassen.
-        .toolbar(UIDevice.current.userInterfaceIdiom == .phone ? .hidden : .automatic, for: .navigationBar)
+        .toolbar(UIDevice.current.userInterfaceIdiom == .phone && !bareFarge ? .hidden : .automatic, for: .navigationBar)
         #endif
         // Arket presenteres herfra, ikke fra menyen: iOS viser ikke ark fra et menyvalg som er i ferd med å lukkes.
         .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }

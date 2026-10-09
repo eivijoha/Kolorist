@@ -91,6 +91,8 @@ struct FargeVelgerMeny<Etikett: View>: View {
     @ViewBuilder var etikett: Etikett
     @State private var visLagret = false
     @State private var visUtplukk = false
+    @State private var endrerIStudio = false
+    @State private var studiotilstand: EndreIStudioArk.Tilstand?
     @State private var målrettet = false
 
     var body: some View {
@@ -108,7 +110,10 @@ struct FargeVelgerMeny<Etikett: View>: View {
             }
             if let ekstra { Section { ekstra } }
             Section {
-                Button("Vis farge", systemImage: "slider.horizontal.3") { Arbeidsbenk.delt.visIStudio(farge) }
+                Button("Endre i Studio …", systemImage: "slider.horizontal.3") {
+                    studiotilstand = EndreIStudioArk.start(med: farge)
+                    endrerIStudio = true
+                }
                 Button("Kopier \(farge.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(farge) }
             }
         } label: {
@@ -131,6 +136,66 @@ struct FargeVelgerMeny<Etikett: View>: View {
         } isTargeted: { målrettet = $0 }
         .sheet(isPresented: $visLagret) { LagretFargeArk(tittel: tittel) { farge = $0 } }
         .sheet(isPresented: $visUtplukk) { FargeutplukkArk(tittel: tittel) { farge = $0 } }
+        .sheet(isPresented: $endrerIStudio, onDismiss: {
+            if let studiotilstand { EndreIStudioArk.slutt(studiotilstand) }
+            studiotilstand = nil
+        }) {
+            // Studios farge settes tilbake først, så den nye fargen: feltet kan være selve den aktive fargen (Kontrast).
+            EndreIStudioArk(tittel: tittel) { ny in
+                if let studiotilstand { EndreIStudioArk.slutt(studiotilstand) }
+                studiotilstand = nil
+                farge = ny
+            }
+        }
+    }
+}
+
+/// Studio i et ark for å endre fargen i et fargefelt: «Bruk» gir fargen tilbake til feltet. Studios egen aktive farge
+/// settes tilbake når arket lukkes (`slutt`), så arbeidet der ikke går tapt.
+struct EndreIStudioArk: View {
+    let tittel: String
+    /// Kalles med den endrede fargen når brukeren velger «Bruk».
+    var bruk: (Farge) -> Void
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.dismiss) private var lukk
+
+    /// Studios aktive farge før arket, som settes tilbake etterpå.
+    struct Tilstand {
+        let farge: Farge
+        let verdier: Arbeidsbenk.Profilverdier?
+    }
+
+    /// Gjør fargen i feltet til Studios aktive farge (før arket vises) og svarer med det som skal settes tilbake.
+    static func start(med farge: Farge) -> Tilstand {
+        let a = Arbeidsbenk.delt
+        let t = Tilstand(farge: a.aktivFarge, verdier: a.profilverdier)
+        a.profilverdier = nil
+        a.aktivFarge = farge
+        return t
+    }
+
+    static func slutt(_ t: Tilstand) {
+        Arbeidsbenk.delt.aktivFarge = t.farge
+        Arbeidsbenk.delt.profilverdier = t.verdier
+    }
+
+    var body: some View {
+        NavigationStack {
+            FargeEditor(bareFarge: true, tittel: tittel)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) { Button("Avbryt") { lukk() } }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Bruk") {
+                            let ny = arbeidsbenk.aktivFarge
+                            lukk()
+                            bruk(ny)
+                        }
+                    }
+                }
+        }
+        #if os(macOS)
+        .frame(minWidth: 760, minHeight: 640)
+        #endif
     }
 }
 

@@ -2174,6 +2174,16 @@
         }
       }
     },
+    "Endre i Studio …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit in Studio …"
+          }
+        }
+      }
+    },
     "Endre lysere og mørkere": {
       "localizations": {
         "en": {
