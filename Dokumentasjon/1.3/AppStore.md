@@ -443,6 +443,6 @@ Mac: usignert Debug-bygg med de samme argumentene og `-ApplePersistenceIgnoreSta
       rekkefølge, skriftfarger og designsystemer i App Store-bygget.
 - [ ] Ny versjon 1.3 opprettet for iOS og macOS, med tekstene over.
 - [ ] Skjermbilder lastet opp (iPhone, iPad og Mac, norsk og engelsk).
-- [ ] 1.3-nettsiden publisert på kolorist.no før innsending; 1.2 flyttes til `historisk/1.2/`.
+- [x] 1.3-nettsiden publisert på kolorist.no 2026-10-09; 1.2 ligger i `historisk/1.2/`.
 - [ ] Notes for App Review byttet til teksten over.
 - [ ] `CURRENT_PROJECT_VERSION` økt for opplastingen.
