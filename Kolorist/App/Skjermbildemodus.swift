@@ -29,6 +29,25 @@ enum Skjermbildemodus {
             kontekst.insert(DesignsystemDokument(ds, palettID: palett.id))
             try? kontekst.save()
         }
+        #if os(macOS)
+        // `-skjermbildevindu YES`: vinduet 1440 × 900 pt midt på den innebygde Retina-skjermen (uten å styre det utenfra).
+        if UserDefaults.standard.bool(forKey: "skjermbildevindu") {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(1))
+                let innebygd = NSScreen.screens.first { skjerm in
+                    (skjerm.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)
+                        .map { CGDisplayIsBuiltin($0.uint32Value) != 0 } ?? false
+                } ?? NSScreen.main
+                guard let vindu = NSApp.windows.first(where: { $0.isVisible && $0.canBecomeMain }), let flate = innebygd?.visibleFrame
+                else { return }
+                let størrelse = CGSize(width: 1440, height: 900)
+                vindu.setFrame(CGRect(x: flate.midX - størrelse.width / 2, y: flate.midY - størrelse.height / 2,
+                                      width: størrelse.width, height: størrelse.height), display: true)
+                NSApp.activate()
+                vindu.makeKeyAndOrderFront(nil)
+            }
+        }
+        #endif
         // `-testmaalinger YES`: noen plukkede farger, som om de kom fra kamera og bilder.
         if UserDefaults.standard.bool(forKey: "testmaalinger") {
             for hex in ["#C4553B", "#E8B04A", "#3F7D5A", "#2E5E8C", "#D9CBB4"] { Arbeidsbenk.delt.registrerMåling(Farge(hex: hex)!) }

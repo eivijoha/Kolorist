@@ -189,8 +189,8 @@ NYE_BILDER.update({
     ('en', 'flatekontrast'): ('Contrast between surfaces: a brick-red and a white surface side by side, LRV 20 and 100, luminance contrast 0.80 by Weber, and the requirements', 'Contrast between surfaces (LRV)'),
     ('nb', 'designsystem'): ('Designsystem fra en palett: knapper, felt, bryter, varsler og fanelinje i lys modus, og «Alle fargepar holder kravet»', 'Designsystem: komponenter'),
     ('en', 'designsystem'): ('Design system from a palette: buttons, fields, switch, alerts and tab bar in light mode, and “All colour pairs meet the requirement”', 'Design system: components'),
-    ('nb', 'toneskala'): ('Toneskala med lik kontrast: elleve trinn av en blågrå farge, med WCAG-forhold og APCA mot hvit og sort tekst for hvert trinn', 'Toneskala med kontrast per trinn'),
-    ('en', 'toneskala'): ('Tone scale with consistent contrast: eleven steps of a blue-grey colour, with WCAG ratio and APCA against white and black text for each step', 'Tone scale with contrast per step'),
+    ('nb', 'toneskala'): ('Toneskala i Studio: elleve trinn fra lyst til mørkt av en blå farge, med kontrasten mot hvit og sort tekst for hvert trinn', 'Toneskala med kontrast per trinn'),
+    ('en', 'toneskala'): ('Tone scale in Studio: eleven steps from light to dark of a blue colour, with the contrast against white and black text for each step', 'Tone scale with contrast per step'),
     ('nb', 'fargefelt'): ('Fargemenyen på et fargefelt i kontrastsjekken: lagrede farger eller kjent verdi, plukk med kamera eller fra bilde, lim inn', 'Plukk farge fra et fargefelt'),
     ('en', 'fargefelt'): ('The colour menu on a colour field in the contrast check: saved colours or known value, pick with camera or from image, paste', 'Pick a colour from a colour field'),
 })

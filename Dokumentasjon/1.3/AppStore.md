@@ -35,11 +35,13 @@ Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mø
 Kolorist 1.3 tar paletten helt fram til designsystemet.
 
 • Designsystem fra en palett: roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast. Se dem på knapper, felt, brytere og varsler, med kontrasten for hvert fargepar og kravet i WCAG. Legg til egne roller, for eksempel info.
-• Eksporter designsystemet som fargesett for apputvikling, design tokens med alias og én fil per modus, og CSS med lys og mørk modus og Display P3 – med en README som forklarer systemet.
-• Toneskalaer med lik kontrast for alle kulører: trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt.
+• Eksporter designsystemet som fargesett for apputvikling, design tokens med alias og én fil per modus, og CSS med lys og mørk modus og Display P3 – med en README som forklarer systemet. Eller del det som lenke: mottakere ser komponentene og fargene i nettleseren.
+• Toneskala i Studio, ved siden av Farge og Harmoni: trinn 50–950 med lik kontrast for alle kulører – trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt.
 • Skriftfarger i paletten om du vil: én nær hvit og én nær sort, med palettens kulørpreg.
 • Ny kontrastsjekk: velg WCAG 2.2, APCA eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
 • Kontrast mellom flater med valgfri metode: LRV-forskjell, Weber (TEK17, NS 11001) eller Michelson.
+• Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh – kopier én verdi eller alle som tabell.
+• Kopier farger som RGB-verdier til CAD, BIM og video, og som lineære verdier til 3D-programmer.
 • Plukk farge med kamera eller fra bilde rett fra fargefeltene.
 • Nye harmonier: monokromatisk og tonebane, der kuløren går i bue gjennom lyshet og metning – og Goethes fargesirkel.
 • Palettgrupper: samle paletter i grupper, og skriv ut, lagre og kopier hele grupper. Importer ASE-filer som paletter.
@@ -56,8 +58,8 @@ FRA PALETT TIL DESIGNSYSTEM
 • Roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast – merkefargen beholdes der den holder kravene
 • Se fargene på knapper, felt, brytere, varsler og faner, med kontrasten for hvert fargepar og kravet i WCAG
 • Egne roller, for eksempel info, kategorier eller tilbud
-• Toneskalaer med lik kontrast for alle kulører
-• Eksporter som fargesett for apputvikling, design tokens og CSS med lys og mørk modus
+• Toneskalaer med lik kontrast for alle kulører, rett i Studio
+• Eksporter som fargesett for apputvikling, design tokens og CSS med lys og mørk modus – eller del designsystemet som lenke
 
 ALLE FARGEROM
 • Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
@@ -79,6 +81,7 @@ KONTRAST OG FARGESYN
 • Skriftkontrast og skriftfarger for hele paletter
 • Kontrast mellom flater for bygg og interiør: LRV-forskjell, Weber eller Michelson – også i valgt lys
 • Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
+• Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh
 
 LYS OG FARGEMÅLING
 • Se farger og hele paletter under egne og standardiserte betraktningsforhold
@@ -96,7 +99,7 @@ Alt kjøres på enheten. Uten Apple Intelligence lages paletter direkte fra kunn
 DEL, LAGRE OG EKSPORTER
 • Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser dem i nettleseren
 • Lagre som ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex og PDF
-• Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer
+• Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer – eller som RGB-verdier til CAD, BIM og video og lineære verdier til 3D-programmer
 • Skriv ut paletter og palettgrupper på A4 i CIELab
 
 PALETTER OG ICLOUD
@@ -117,8 +120,9 @@ Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet e
 farge,palett,designsystem,tokens,OKLCH,CMYK,Munsell,kontrast,WCAG,APCA,LRV,mørk modus,filament
 ```
 
-**Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/nb/` (iPhone 6,5″) og `ipad-nb/` (iPad 13″). Foreslått rekkefølge for
-iPhone: designsystem, toneskala, kontrast, flatekontrast, fargefelt, og deretter Studio, Harmoni og Lys fra 1.2.
+**Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/nb/` (iPhone 6,5″) og `ipad-nb/` (iPad 13″) – alle tatt med 1.3.
+Foreslått rekkefølge (høyst ti): designsystem, toneskala, kontrast, flatekontrast, studio, harmoni, lys, fargesyn,
+overgang, fargefelt.
 
 ---
 
@@ -142,11 +146,13 @@ From palette to design system: tone scales with consistent contrast, colours for
 Kolorist 1.3 takes your palette all the way to a design system.
 
 • Design system from a palette: roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast. See them on buttons, fields, switches and alerts, with the contrast for each colour pair and the WCAG requirement. Add your own roles, such as info.
-• Export the design system as colour sets for app development, design tokens with aliases and one file per mode, and CSS with light and dark mode and Display P3 – with a README that explains the system.
-• Tone scales with the same contrast for every hue: step 400 holds at least 3:1 and step 600 at least 4.5:1 against white.
+• Export the design system as colour sets for app development, design tokens with aliases and one file per mode, and CSS with light and dark mode and Display P3 – with a README that explains the system. Or share it as a link: recipients see the components and colours in their browser.
+• Tone scale in Studio, next to Colour and Harmony: steps 50–950 with the same contrast for every hue – step 400 holds at least 3:1 and step 600 at least 4.5:1 against white.
 • Text colours in the palette if you want them: one near white and one near black, tinted with the palette’s hue.
 • New contrast check: choose WCAG 2.2, APCA or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
 • Contrast between surfaces with a choice of method: LRV difference, Weber or Michelson.
+• The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh – copy one value or all of them as a table.
+• Copy colours as RGB values for CAD, BIM and video, and as linear values for 3D apps.
 • Pick a colour with the camera or from a photo right from the colour fields.
 • New harmonies: monochromatic and tone path, where the hue arcs through lightness and saturation – and Goethe’s colour wheel.
 • Palette groups: gather palettes in groups, and print, save and copy whole groups. Import ASE files as palettes.
@@ -163,8 +169,8 @@ FROM PALETTE TO DESIGN SYSTEM
 • Roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast – your brand colour is kept wherever it meets the requirements
 • See the colours on buttons, fields, switches, alerts and tabs, with the contrast for each colour pair and the WCAG requirement
 • Your own roles, such as info, categories or offers
-• Tone scales with the same contrast for every hue
-• Export as colour sets for app development, design tokens and CSS with light and dark mode
+• Tone scales with the same contrast for every hue, right in Studio
+• Export as colour sets for app development, design tokens and CSS with light and dark mode – or share the design system as a link
 
 EVERY COLOUR SPACE
 • Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
@@ -186,6 +192,7 @@ CONTRAST AND COLOUR VISION
 • Text contrast and text colours for whole palettes
 • Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson – in the chosen light too
 • See palettes with protan, deutan and tritan deficiencies and achromatopsia – and which colours become hard to tell apart
+• The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh
 
 LIGHT AND COLOUR MEASUREMENT
 • See colours and whole palettes in your own and standard viewing conditions
@@ -203,7 +210,7 @@ Everything runs on device. Without Apple Intelligence, palettes are built straig
 SHARE, SAVE AND EXPORT
 • Share colours, palettes, gradients and harmonies as links – recipients without the app see them in their browser
 • Save as ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex and PDF
-• Copy colours and gradients straight into design, layout and presentation apps
+• Copy colours and gradients straight into design, layout and presentation apps – or as RGB values for CAD, BIM and video and linear values for 3D apps
 • Print palettes and palette groups on A4 in CIELab
 
 PALETTES AND ICLOUD
@@ -224,7 +231,8 @@ Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported 
 colour,color,palette,design system,tokens,OKLCH,CMYK,Munsell,contrast,WCAG,APCA,LRV,dark mode
 ```
 
-**Screenshots:** `Dokumentasjon/1.3/Skjermbilder/en/` (iPhone 6.5″) and `ipad-en/` (iPad 13″).
+**Screenshots:** `Dokumentasjon/1.3/Skjermbilder/en/` (iPhone 6.5″) and `ipad-en/` (iPad 13″), all taken with 1.3, in the
+same order as the Norwegian ones.
 
 ---
 
@@ -246,12 +254,14 @@ Kolorist 1.3 for Mac tar paletten helt fram til designsystemet – og tar lyset 
 FRA PALETT TIL DESIGNSYSTEM
 • Designsystem fra en palett: roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast. Se dem på knapper, felt, brytere og varsler, med kontrasten for hvert fargepar og kravet i WCAG. Legg til egne roller, for eksempel info.
 • Eksporter designsystemet som fargesett for apputvikling, design tokens med alias og én fil per modus, og CSS med lys og mørk modus og Display P3 – med en README som forklarer systemet.
-• Toneskalaer med lik kontrast for alle kulører, og skriftfarger i paletten om du vil.
+• Toneskala i Studio med lik kontrast for alle kulører, og skriftfarger i paletten om du vil.
+• Del designsystemet som lenke: mottakere ser komponentene og fargene i nettleseren.
 
 KONTRAST
 • Ny kontrastsjekk: velg WCAG 2.2, APCA eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
 • Skriftkontrast rett i palettene: hver farge som tekst på de andre.
 • Kontrast mellom flater med valgfri metode: LRV-forskjell, Weber (TEK17, NS 11001) eller Michelson – også i valgt lys.
+• Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh – kopier én verdi eller alle som tabell.
 
 LYS
 • Se farger og hele paletter slik de oppleves under andre betraktningsforhold – egne eller standardiserte for grafisk vurdering, arbeidsplasser, skoler og museer.
@@ -267,10 +277,11 @@ PALETTER, DELING OG EKSPORT
 • Palettgrupper: samle paletter i grupper, og skriv ut, lagre og kopier hele grupper. Importer ASE-filer som paletter.
 • Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren.
 • Lagre som: velg formater etter hvor filene skal brukes, og lagre dem i en mappe eller del dem.
-• Kopier gradienter som redigerbare gradienter til design-, layout- og presentasjonsprogrammer.
+• Kopier gradienter som redigerbare gradienter til design-, layout- og presentasjonsprogrammer, og farger som RGB-verdier til CAD, BIM og video og lineære verdier til 3D-programmer.
 • Endre rekkefølgen på farger ved å dra dem, og plukk farge rett fra fargefeltene.
 
 PÅ MACEN
+• Kopier paletter rett inn i fargevelgeren på Macen, som fargeliste i alle programmer.
 • Designsystemer får egen plass i sidepanelet når vinduet er bredt.
 • Palettene i spalten til høyre har tydeligere valg, med tekst på visningene.
 • Skjermpipette også med ⌘I, og hurtigtaster: ⌘N ny palett, ⇧⌘S lagre som, ⌘1–5 for fanene.
@@ -282,6 +293,7 @@ PÅ MACEN
 PLUKK OG DRA
 • Skjermpipette som plukker farger fra hvor som helst på skjermen
 • Dra fargeprøver inn i andre programmer og fargebrønner – og dra farger inn fra dem
+• Legg paletter i fargevelgeren på Macen, som fargeliste i alle programmer
 • Kamera, også iPhone som kamera, og bilder
 ```
 
@@ -294,8 +306,8 @@ Siste linje: «Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 farge,palett,designsystem,tokens,pipette,OKLCH,CMYK,Munsell,kontrast,WCAG,APCA,LRV,mørk modus
 ```
 
-**Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/mac-nb/` (2880 × 1800): designsystem, kontrast og flatekontrast. Bruk
-dem sammen med Studio, Harmoni, Overgang, Fargesyn og Lys fra 1.2 (`Dokumentasjon/1.2/Skjermbilder/mac-nb/`).
+**Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/mac-nb/` (2880 × 1800) – alle tatt med 1.3. Foreslått rekkefølge:
+designsystem, toneskala, kontrast, flatekontrast, studio, harmoni, lys, fargesyn, overgang. Engelsk i `mac-en/`.
 
 ---
 
@@ -315,12 +327,14 @@ Kolorist 1.3 for Mac takes your palette all the way to a design system – and b
 FROM PALETTE TO DESIGN SYSTEM
 • Design system from a palette: roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast. See them on buttons, fields, switches and alerts, with the contrast for each colour pair and the WCAG requirement. Add your own roles, such as info.
 • Export the design system as colour sets for app development, design tokens with aliases and one file per mode, and CSS with light and dark mode and Display P3 – with a README that explains the system.
-• Tone scales with the same contrast for every hue, and text colours in the palette if you want them.
+• Tone scale in Studio with the same contrast for every hue, and text colours in the palette if you want them.
+• Share the design system as a link: recipients see the components and colours in their browser.
 
 CONTRAST
 • New contrast check: choose WCAG 2.2, APCA or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
 • Text contrast right in your palettes: each colour as text on the others.
 • Contrast between surfaces with a choice of method: LRV difference, Weber or Michelson – in the chosen light too.
+• The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh – copy one value or all of them as a table.
 
 LIGHT
 • See colours and whole palettes as they appear in other viewing conditions – your own or standard ones for graphic arts, workplaces, schools and museums.
@@ -336,10 +350,11 @@ PALETTES, SHARING AND EXPORT
 • Palette groups: gather palettes in groups, and print, save and copy whole groups. Import ASE files as palettes.
 • Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser.
 • Save as: choose formats by where the files will be used, and save them to a folder or share them.
-• Copy gradients as editable gradients to design, layout and presentation apps.
+• Copy gradients as editable gradients to design, layout and presentation apps, and colours as RGB values for CAD, BIM and video and linear values for 3D apps.
 • Reorder colours by dragging them, and pick a colour right from the colour fields.
 
 ON THE MAC
+• Copy palettes straight into the Mac colour picker, as a colour list in every app.
 • Design systems get their own place in the sidebar when the window is wide.
 • Palettes in the right-hand column have clearer controls, with labelled views.
 • Screen eyedropper with ⌘I too, and keyboard shortcuts: ⌘N new palette, ⇧⌘S Save as, ⌘1–5 for the tabs.
@@ -351,6 +366,7 @@ ON THE MAC
 PICK AND DRAG
 • Screen eyedropper that picks colours from anywhere on screen
 • Drag swatches into other apps and colour wells, and back
+• Add palettes to the Mac colour picker, as a colour list in every app
 • Camera, including iPhone as a camera, and photos
 ```
 
@@ -377,9 +393,12 @@ No account, no server of our own, no analytics, ads or in-app purchases. Data sy
 
 NEW IN 1.3 – HOW TO TEST
 • Design system: open a palette › ⋯ › Make design system. A preview opens with Components, Roles and Scales; Save keeps it. Export (share button) writes colour sets, design tokens, CSS and a README to a folder.
-• Tone scale: touch and hold a colour in a palette › Create tone scale. "Contrast (L*)" gives the same contrast for every hue.
+• Tone scale: Studio › Tone scale (also from a colour in a palette › Create tone scale). "Contrast (L*)" gives the same contrast for every hue.
+• Copy to: touch and hold (right-click on Mac) a colour › Copy to. New targets: RGB 0–255, RGB 0–1, linear values for 3D apps, and on Mac the system colour picker (writes a colour list to ~/Library/Colors).
+• Share a design system: open it › ⋯ › Share as link; the link opens a preview in the browser or in the app.
 • Text colours: open a palette › A (text contrast) › Define text colours.
 • Contrast: Assess › Contrast. Choose WCAG 2.2, APCA or LRV below the colour field; tap Text or Background in the field to pick a colour (also with camera or photo).
+• ΔE: Assess › ΔE. Touch and hold a value to copy it, or use Copy all as a table.
 • Harmonies: Studio › Harmony › Monochromatic or Tone path.
 • Palette groups: Palettes › + › New palette group, then drag palettes into it.
 
@@ -400,19 +419,20 @@ Contact: eivind.johansen@ntnu.no
 
 | Mappe | Plattform | Størrelse | Bilder |
 |---|---|---|---|
-| `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 | designsystem, toneskala, kontrast, flatekontrast, fargefelt |
-| `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 | designsystem, kontrast, fargefelt |
-| `mac-nb/`, `mac-en/` | Mac | 2880 × 1800 | designsystem, kontrast, flatekontrast |
+| `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 | studio, harmoni, toneskala, overgang, fargesyn, lys, kontrast, flatekontrast, designsystem, fargefelt |
+| `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 | de samme |
+| `mac-nb/`, `mac-en/` | Mac | 2880 × 1800 | de samme uten fargefelt |
 
-Simulatorene «Skjermbilder 6,5» og «Skjermbilder iPad 13», Debug-bygg med `-skjermbilde YES`, klokka satt til 9:41.
-Designsystemet med `-eksempeldesignsystem YES -visDesignsystem YES -startfane paletter` (fra «Jevn fordeling», med info som
-egen rolle). Kontrast med `-startfane vurdering -vurderingDel kontrast -kontrastType wcag`; flatekontrast med
-`-kontrastType lrv -startfarge "#B4674D" -flatekontrastmetode weber`.
-Toneskalaen er tatt fra «Nordisk kyst» (#3E6A80 › Lag toneskala), fargefeltet fra Tekst-menyen i kontrastsjekken.
-Mac: usignert Debug-bygg (utenfor sandkassen, så det ikke deler innstillinger med Xcode-bygget) med de samme argumentene og
-`-ApplePersistenceIgnoreState YES -kunSRGB NO -testmaalinger YES`; vinduet satt til 1440 × 900 pt på den innebygde
-Retina-skjermen og fanget med `screencapture -l <vindu> -o`. Designsystemet med `-startfane designsystemer
--visDesignsystem YES`. Fargefeltet (menyen) er ikke tatt for Mac.
+Tatt 2026-10-09 i simulatorene «Skjermbilder 6,5» og «Skjermbilder iPad 13», Debug-bygg med `-skjermbilde YES`, klokka
+satt til 9:41. Felles: `-visOgsåProfil kCGColorSpaceGenericCMYK -harmoni jevn -harmoniAntall 5`. Studio med
+`-startfane studio -studioModus farge|harmoni|toneskala`; Overgang med `-overgangFra "#1B3A6B" -overgangTil "#F2B84B"
+-overgangAntall 7`; Fargesyn med `-startfane vurdering -vurderingDel fargesyn`; Lys med `-vurderingDel lys -lys.valgtMiljø
+6C1E0000-0000-4000-8000-000000002700 -seILys.somFoto NO`; Kontrast med `-vurderingDel kontrast -kontrastType wcag`;
+flatekontrast med `-kontrastType lrv -startfarge "#B4674D" -flatekontrastmetode weber`; designsystemet med
+`-eksempeldesignsystem YES -visDesignsystem YES -startfane paletter` (Mac: `-startfane designsystemer`). Fargefeltet er
+menyen på Tekst i kontrastsjekken.
+Mac: usignert Debug-bygg med de samme argumentene og `-ApplePersistenceIgnoreState YES -kunSRGB NO -testmaalinger YES
+-skjermbildevindu YES` (vinduet 1440 × 900 pt midt på den innebygde Retina-skjermen), fanget med `screencapture -l <vindu> -o`.
 
 ### Før du sender inn
 
