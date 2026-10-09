@@ -463,7 +463,7 @@ struct DesignsystemVisning: View {
         }
         .padding(.vertical, 4)
         .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        Text("Kravene er fra WCAG 2 (AA). 1.4.3 gjelder tekst og finnes i WCAG 2.0 og nyere. 1.4.11 gjelder kanter og kontroller og kom i WCAG 2.1. Offentlig sektor i Norge skal følge WCAG 2.1. For private virksomheter er kravet WCAG 2.0, uten 1.4.11. Deaktiverte kontroller er unntatt.")
+        KortForklaring("Kravene er fra WCAG 2 (AA). Deaktiverte kontroller er unntatt.") { Text("Kravene er fra WCAG 2 (AA). 1.4.3 gjelder tekst og finnes i WCAG 2.0 og nyere. 1.4.11 gjelder kanter og kontroller og kom i WCAG 2.1. Offentlig sektor i Norge skal følge WCAG 2.1. For private virksomheter er kravet WCAG 2.0, uten 1.4.11. Deaktiverte kontroller er unntatt.") }
             .font(.footnote)
             .foregroundStyle(Color.sekundærTekst)
     }
@@ -833,10 +833,10 @@ struct DesignsystemRoller: View {
             }
         }
 
-        Text("Trykk på en farge for å velge en annen. Dra en rolle over en annen, eller bruk «Bytt med» i menyen, for å bytte fargene mellom to roller. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.")
+        KortForklaring("Trykk på en farge for å bytte den. Dra en rolle over en annen for å bytte fargene.") { Text("Trykk på en farge for å velge en annen. Dra en rolle over en annen, eller bruk «Bytt med» i menyen, for å bytte fargene mellom to roller. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.") }
             .font(.footnote)
             .foregroundStyle(Color.sekundærTekst)
-        Text("Egne roller, høyst \(EgenRolle.maksAntall): som status (tekst på en tonet flate), som aksent (knapp) eller som markering (etiketter og diagrammer). De får farger i alle modusene og egne kontrollpunkter under Komponenter.")
+        KortForklaring("Egne roller får farger i alle moduser og egne kontrollpunkter.") { Text("Egne roller, høyst \(EgenRolle.maksAntall): som status (tekst på en tonet flate), som aksent (knapp) eller som markering (etiketter og diagrammer). De får farger i alle modusene og egne kontrollpunkter under Komponenter.") }
             .font(.footnote)
             .foregroundStyle(Color.sekundærTekst)
         if let palett {
@@ -1081,7 +1081,7 @@ struct DesignsystemSkalaer: View {
         }
         .padding(12)
         .background(.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        Text("Trinnene har samme lyshet (L*) i alle roller, så kontrasten er lik: 400 holder minst 3:1 og 600 minst 4,5:1 mot hvitt. Skalaene følger med i design tokens.")
+        KortForklaring("Samme lyshet (L*) i alle roller, så kontrasten er lik.") { Text("Trinnene har samme lyshet (L*) i alle roller, så kontrasten er lik: 400 holder minst 3:1 og 600 minst 4,5:1 mot hvitt. Skalaene følger med i design tokens.") }
             .font(.footnote)
             .foregroundStyle(Color.sekundærTekst)
     }
@@ -1166,7 +1166,7 @@ struct DesignsystemEksportArk: View {
                         }
                     }
                 } footer: {
-                    Text("Filene legges i mappa «\(mappenavn)», med en README som forklarer systemet og bruken. Fargene er i sRGB, som alle skjermer og Figma forstår. CSS-fila har i tillegg Display P3 der fargene går utenfor sRGB.")
+                    KortForklaring("Filene legges i mappa «\(mappenavn)», med en README.") { Text("Filene legges i mappa «\(mappenavn)», med en README som forklarer systemet og bruken. Fargene er i sRGB, som alle skjermer og Figma forstår. CSS-fila har i tillegg Display P3 der fargene går utenfor sRGB.") }
                 }
             }
             .formStyle(.grouped)

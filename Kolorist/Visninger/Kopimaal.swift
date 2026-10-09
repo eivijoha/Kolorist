@@ -66,7 +66,7 @@ struct KopimålArk: View {
                         rekkefølge = ider.joined(separator: ",")
                     }
                 } footer: {
-                    Text("Målene som er slått på, vises i «Kopier til» for farger, paletter og gradienter, i denne rekkefølgen. Dra for å endre rekkefølgen.")
+                    KortForklaring("Slå mål av og på, og dra for å endre rekkefølgen.") { Text("Målene som er slått på, vises i «Kopier til» for farger, paletter og gradienter, i denne rekkefølgen. Dra for å endre rekkefølgen.") }
                 }
                 Section {
                     Button("Tilbakestill", systemImage: "arrow.uturn.backward") {

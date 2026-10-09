@@ -47,7 +47,7 @@ struct KontrastSeksjon: View {
             Text("Tekst og grafikk (WCAG 2.2)")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. Regelverket for universell utforming viser til WCAG 2.")
+                KortForklaring("Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten.") { Text("Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. Regelverket for universell utforming viser til WCAG 2.") }
                 MetodeHenvisning(.wcag, .oklab)
             }
         }
@@ -121,7 +121,7 @@ struct APCASeksjon: View {
             Text("Lesekontrast (APCA)")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("APCA er forslaget til lesekontrast i WCAG 3 og følger opplevd lesbarhet bedre enn WCAG 2, særlig for lys tekst på mørk bakgrunn. Lc er positiv for mørk tekst på lys bakgrunn og negativ for lys tekst på mørk. Nivåene er veiledende og gjelder tekst i vanlig vekt; tynnere og mindre tekst trenger mer. «Rett opp» endrer bare lysheten. Regelverket viser fortsatt til WCAG 2.")
+                KortForklaring("Lesekontrast etter APCA, forslaget til WCAG 3.") { Text("APCA er forslaget til lesekontrast i WCAG 3 og følger opplevd lesbarhet bedre enn WCAG 2, særlig for lys tekst på mørk bakgrunn. Lc er positiv for mørk tekst på lys bakgrunn og negativ for lys tekst på mørk. Nivåene er veiledende og gjelder tekst i vanlig vekt; tynnere og mindre tekst trenger mer. «Rett opp» endrer bare lysheten. Regelverket viser fortsatt til WCAG 2.") }
                 MetodeHenvisning(.apca, .oklab)
             }
         }
@@ -141,7 +141,7 @@ struct KontrastVisMedSeksjon: View {
             }
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Velg fargene rett i flaten øverst: trykk på teksten eller fargeknappene for lagrede farger, kjent verdi, kamera eller bilde. «Vis med» simulerer et fargesynsavvik i flaten; kravene gjelder alltid de faktiske fargene.")
+                KortForklaring("Trykk på teksten eller fargene i flaten for å velge farger.") { Text("Velg fargene rett i flaten øverst: trykk på teksten eller fargeknappene for lagrede farger, kjent verdi, kamera eller bilde. «Vis med» simulerer et fargesynsavvik i flaten; kravene gjelder alltid de faktiske fargene.") }
                 MetodeHenvisning(.machado)
             }
         }
@@ -320,34 +320,35 @@ struct Kontrastflate: View {
     }
 
     private func fargeknapper(_ f: Farge, _ b: Farge, merket: Bool) -> some View {
-        HStack(spacing: 8) {
-            fargeknapp(forgrunnTittel, merke: merket ? String(localized: "Tekst") : nil,
-                       farge: $forgrunn, vist: f, visAktivFarge: false)
+        // Rett på bakgrunnen i lesbar farge, som fargeverdiene i LRV, ΔE og Lys (ingen pilleboks).
+        let lesbar = b.lesbarTekstfarge.swiftUI
+        // Bakgrunnen til venstre og teksten til høyre.
+        return HStack(spacing: 16) {
             fargeknapp(bakgrunnTittel, merke: merket ? String(localized: "Bakgrunn") : nil,
-                       farge: $bakgrunn, vist: b, visHvitOgSort: true)
+                       farge: $bakgrunn, vist: b, lesbar: lesbar, visHvitOgSort: true)
             Spacer(minLength: 0)
+            fargeknapp(forgrunnTittel, merke: merket ? String(localized: "Tekst") : nil,
+                       farge: $forgrunn, vist: f, lesbar: lesbar, visAktivFarge: false)
         }
     }
 
     /// Fargeknapp nederst i flaten: fargeprøve og hex; åpner valgene for fargen, og tar imot fargen man slipper på den.
-    private func fargeknapp(_ tittel: String, merke: String?, farge: Binding<Farge>, vist: Farge, visAktivFarge: Bool = true,
-                            visHvitOgSort: Bool = false) -> some View {
+    private func fargeknapp(_ tittel: String, merke: String?, farge: Binding<Farge>, vist: Farge, lesbar: Color,
+                            visAktivFarge: Bool = true, visHvitOgSort: Bool = false) -> some View {
         FargeVelgerMeny(tittel: tittel, farge: farge, visAktivFarge: visAktivFarge, visHvitOgSort: visHvitOgSort) {
             HStack(spacing: 6) {
                 if let merke { Text(merke).koloristFont(.caption, weight: .semibold).lineLimit(1) }
                 RoundedRectangle(cornerRadius: 4, style: .continuous)
                     .fill(vist.swiftUI)
-                    .overlay(RoundedRectangle(cornerRadius: 4, style: .continuous).strokeBorder(.secondary.opacity(0.5), lineWidth: 1))
-                    .frame(width: 18, height: 18)
+                    .overlay(RoundedRectangle(cornerRadius: 4, style: .continuous).strokeBorder(lesbar.opacity(0.6), lineWidth: 1))
+                    .frame(width: 16, height: 16)
                 Text(farge.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
-                Image(systemName: "chevron.up.chevron.down").font(.caption2).foregroundStyle(Color.sekundærTekst)
+                Image(systemName: "chevron.up.chevron.down").font(.caption2)
             }
-            // Fast kortbakgrunn og vanlig tekstfarge, så knappen er lesbar på alle bakgrunner.
-            .foregroundStyle(Color.primary)
-            .padding(.horizontal, 8)
+            .foregroundStyle(lesbar)
+            .opacity(0.9)
             .padding(.vertical, 5)
-            .background(Color.kortbakgrunn, in: Capsule())
-            .contentShape(Capsule())
+            .contentShape(Rectangle())
         }
     }
 
@@ -625,8 +626,10 @@ struct FlatekontrastSeksjon: View {
             Text("Flater (LRV)")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart.")
-                Text(metode.forklaring)
+                KortForklaring("LRV er andelen lys flaten reflekterer, som på malingskart.") {
+                    Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart.")
+                    Text(metode.forklaring)
+                }
                 if arbeidsbenk.erUkalibrert(flate) || arbeidsbenk.erUkalibrert(bakgrunn) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Label("LRV merket ≈ er kun veiledende.", systemImage: "exclamationmark.triangle")
@@ -634,7 +637,7 @@ struct FlatekontrastSeksjon: View {
                     }
                 }
                 if lysmiljø != nil {
-                    Text("Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer under valgte betraktningsforhold – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.")
+                    KortForklaring("Kravene gjelder LRV i dagslys. «I lyset» viser flatene under valgte betraktningsforhold.") { Text("Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer under valgte betraktningsforhold – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.") }
                 }
                 MetodeHenvisning(.lrv, .oklab)
             }

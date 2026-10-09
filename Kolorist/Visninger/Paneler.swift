@@ -113,7 +113,7 @@ struct TilpasningArk: View {
                     } header: {
                         Text("Verdier som vises")
                     } footer: {
-                        Text("Dra for å endre rekkefølgen under «Verdier». Du kan også skjule en verdi ved å sveipe fra høyre på den. Oppsettet synkroniseres via iCloud.")
+                        KortForklaring("Dra for å endre rekkefølgen, og sveip fra høyre for å skjule.") { Text("Dra for å endre rekkefølgen under «Verdier». Du kan også skjule en verdi ved å sveipe fra høyre på den. Oppsettet synkroniseres via iCloud.") }
                     }
                 }
 

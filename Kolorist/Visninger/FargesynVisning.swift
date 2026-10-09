@@ -65,7 +65,7 @@ struct FargesynVurdering: View {
                         } header: {
                             Text("Slik ser paletten ut").foregroundStyle(Color.sekundærTekst)
                         } footer: {
-                            Text("Typene står etter hvor vanlige de er. Tallene gjelder personer av nordeuropeisk opprinnelse og omfatter både delvis og fullstendig avvik; delvis avvik er langt vanligst. Kilde: J. Birch, JOSA A 29(3), 2012.")
+                            KortForklaring("Typene står etter hvor vanlige de er.") { Text("Typene står etter hvor vanlige de er. Tallene gjelder personer av nordeuropeisk opprinnelse og omfatter både delvis og fullstendig avvik; delvis avvik er langt vanligst. Kilde: J. Birch, JOSA A 29(3), 2012.") }
                                 .foregroundStyle(Color.sekundærTekst)
                         }
 
@@ -249,7 +249,7 @@ struct FargesynVurdering: View {
             Text("Vanskelige fargepar").foregroundStyle(Color.sekundærTekst)
         } footer: { Group {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Par som er tydelig ulike med normalt syn (ΔE00 ≥ 10), men kommer under 10 med avviket. Under 5 er de nesten like. Skill dem med lyshet, ikke bare kulør, eller bruk mønster, ikon eller tekst i tillegg.")
+                KortForklaring("Par som skilles godt med normalt syn, men nesten ikke med avviket.") { Text("Par som er tydelig ulike med normalt syn (ΔE00 ≥ 10), men kommer under 10 med avviket. Under 5 er de nesten like. Skill dem med lyshet, ikke bare kulør, eller bruk mønster, ikon eller tekst i tillegg.") }
                 MetodeHenvisning(.machado, .ciede2000, .cssColor4)
             }
         }.foregroundStyle(Color.sekundærTekst) }

@@ -356,14 +356,14 @@ struct KortkalibreringArk: View {
                 Section {
                     Toggle("Lagre som kameraprofil", isOn: $lagreSomProfil)
                 } footer: {
-                    Text("Med en kameraprofil holder det med et gråkort neste gang, også i et annet lys: Kolorist kjenner da kameraets farger, og gråkortet gir lysets farge og styrke.")
+                    KortForklaring("Med en kameraprofil holder det med et gråkort neste gang.") { Text("Med en kameraprofil holder det med et gråkort neste gang, også i et annet lys: Kolorist kjenner da kameraets farger, og gråkortet gir lysets farge og styrke.") }
                 }
             }
             Section {
                 Button("Plasser hjørnene på nytt", systemImage: "arrow.uturn.backward") { resultat = nil }
             } footer: {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Tallene er kryssvalidert: hvert felt er forutsagt av en modell tilpasset uten det. Under 3 er godt for et telefonkamera. Kompensasjonen gjelder dette lyset og dette kameraet.")
+                    KortForklaring("Under 3 er godt for et telefonkamera.") { Text("Tallene er kryssvalidert: hvert felt er forutsagt av en modell tilpasset uten det. Under 3 er godt for et telefonkamera. Kompensasjonen gjelder dette lyset og dette kameraet.") }
                     MetodeHenvisning(.kamerakarakterisering, .kolorimetri, .ciede2000)
                 }
             }
@@ -498,7 +498,7 @@ struct ReferansekortDetalj: View {
                 Section {
                     Group {
                         #if os(macOS)
-                        Text("Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lyset med Kolorist på iPhone og lagre det som betraktningsforhold, så kommer det hit via iCloud.")
+                        KortForklaring("Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera.") { Text("Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera (Continuity). Lyset kan ikke måles fra Macen; mål lyset med Kolorist på iPhone og lagre det som betraktningsforhold, så kommer det hit via iCloud.") }
                         #else
                         Text("Bruk kortet under Utplukk › Lys › Med referansekort: hold kortet i samme lys som fargene, og plasser hjørnene i bildet.")
                         #endif

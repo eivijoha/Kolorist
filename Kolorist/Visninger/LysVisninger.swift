@@ -285,7 +285,7 @@ struct LysmiljøRedigering: View {
                                in: 1800...10000, step: 100)
                     }
                 } footer: {
-                    Text("Under 4000 K regnes lyset som glødelys (sortlegeme), over som dagslys. Lysrør og LED har ujevne spektre som kan endre enkelte farger mer enn fargetemperaturen tilsier.")
+                    KortForklaring("Under 4000 K regnes lyset som glødelys, over som dagslys.") { Text("Under 4000 K regnes lyset som glødelys (sortlegeme), over som dagslys. Lysrør og LED har ujevne spektre som kan endre enkelte farger mer enn fargetemperaturen tilsier.") }
                 }
                 Section {
                     LabeledContent("Belysningsstyrke") { Text("\(miljø.lux.formatted(.number.precision(.significantDigits(2)))) lx").monospacedDigit() }

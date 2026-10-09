@@ -50,3 +50,26 @@ extension View {
             .padding(.horizontal, -(side - 24) / 2)
     }
 }
+
+/// Kort forklaring i grensesnittet (høyst to linjer), med den lengre forklaringen bak ⓘ.
+struct KortForklaring<Mer: View>: View {
+    let tekst: Text
+    @ViewBuilder var mer: Mer
+
+    init(_ tekst: LocalizedStringKey, @ViewBuilder mer: () -> Mer) {
+        self.tekst = Text(tekst)
+        self.mer = mer()
+    }
+
+    init(verbatim tekst: String, @ViewBuilder mer: () -> Mer) {
+        self.tekst = Text(verbatim: tekst)
+        self.mer = mer()
+    }
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            tekst
+            InfoKnapp { mer }
+        }
+    }
+}

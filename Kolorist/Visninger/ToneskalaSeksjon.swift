@@ -42,9 +42,11 @@ struct ToneskalaSeksjon: View {
         } header: {
             Text("Toneskala")
         } footer: {
-            Text(kontrast
-                 ? "Faste trinn fra lyst til mørkt for designsystemer. Hvert trinn har samme lyshet (L*) for alle kulører, så kontrasten blir lik: med 11 trinn holder 400 minst 3:1 mot hvit (kanter og ikoner) og 600 minst 4,5:1 (tekst og knapper). «Lysere og mørkere toner» under Farge gir i stedet trinn rundt fargen selv."
-                 : "Like steg i opplevd lyshet (OKLab). Kontrasten mot hvit og sort varierer litt mellom kulører.")
+            KortForklaring(kontrast ? "Samme lyshet (L*) for alle kulører, så kontrasten blir lik." : "Like steg i opplevd lyshet (OKLab).") {
+                Text(kontrast
+                     ? "Faste trinn fra lyst til mørkt for designsystemer. Hvert trinn har samme lyshet (L*) for alle kulører, så kontrasten blir lik: med 11 trinn holder 400 minst 3:1 mot hvit (kanter og ikoner) og 600 minst 4,5:1 (tekst og knapper). «Lysere og mørkere toner» under Farge gir i stedet trinn rundt fargen selv."
+                     : "Like steg i opplevd lyshet (OKLab). Kontrasten mot hvit og sort varierer litt mellom kulører.")
+            }
         }
         Section {
             ForEach(Array(toner.enumerated()), id: \.offset) { i, f in

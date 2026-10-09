@@ -121,7 +121,7 @@ struct OvergangVisning: View {
             Stepper("Toner: \(antall)", value: $antall, in: 2...24)
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold (høyreklikk på Mac) for å lagre, kopiere eller dele den.")
+                KortForklaring("Trykk på en tone for å gjøre den aktiv, eller hold for flere valg.") { Text("Tonene vises i feltene øverst. Trykk på en tone for å gjøre den aktiv, eller trykk og hold (høyreklikk på Mac) for å lagre, kopiere eller dele den.") }
                 MetodeHenvisning(.oklab)
             }
         }
@@ -382,7 +382,7 @@ struct CSSGradientSeksjon: View {
             .buttonStyle(.borderless)
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Moderne nettlesere bruker OKLab og viser nøyaktig samme overgang som her. Eldre nettlesere får tette sRGB-stopp som etterligner den.")
+                KortForklaring("Nettlesere viser samme overgang i OKLab, eller en etterligning i sRGB.") { Text("Moderne nettlesere bruker OKLab og viser nøyaktig samme overgang som her. Eldre nettlesere får tette sRGB-stopp som etterligner den.") }
                 MetodeHenvisning(.cssColor4, .oklab)
             }
         }

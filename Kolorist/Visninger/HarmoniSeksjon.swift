@@ -486,14 +486,16 @@ struct HarmoniSeksjon: View {
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
                 if harmoni == .monokrom {
-                    Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.")
+                    KortForklaring("Én kulør i flere toner. Dra endepunktene i flaten for å forme streken.") { Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.") }
                 } else if harmoni == .tonebane {
-                    Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren midt på banen.")
+                    KortForklaring("Toner langs en bane gjennom lyshet, metning og kulør. Dra endepunktene i flaten og rundt ringen.") { Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren midt på banen.") }
                 } else {
-                Text(sirkel.forklaring + " " + (brukerMunsell
-                    ? String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.")
-                    : String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien."))
-                    + lyshetsforklaring)
+                KortForklaring("Dra i sirkelen for å endre kulør, eller trykk i midten for å starte fra en lagret farge.") {
+                    Text(sirkel.forklaring + " " + (brukerMunsell
+                        ? String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.")
+                        : String(localized: "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien."))
+                        + lyshetsforklaring)
+                }
                 }
                 MetodeHenvisning(.harmonier, .oklab, .cieLab)
             }

@@ -129,7 +129,7 @@ struct LagreSomArk: View {
                 }
                 Section {
                 } footer: {
-                    Text("Filene får navnet «\(filnavn)». «Lagre» lar deg velge eller opprette en mappe – også i OneDrive, Jottacloud og andre tjenester. «Del» sender filene med e-post, Teams, AirDrop og andre apper.")
+                    KortForklaring("Filene får navnet «\(filnavn)».") { Text("Filene får navnet «\(filnavn)». «Lagre» lar deg velge eller opprette en mappe – også i OneDrive, Jottacloud og andre tjenester. «Del» sender filene med e-post, Teams, AirDrop og andre apper.") }
                 }
             }
             .formStyle(.grouped)

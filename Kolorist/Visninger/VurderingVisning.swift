@@ -178,10 +178,12 @@ struct PalettVurderingInnhold: View {
             Text("Grunnlag for vurderingen")
         }.foregroundStyle(Color.sekundærTekst) } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text(vurdering.kilde == .appleIntelligence
-                     ? "Tallene regnes ut nøyaktig i appen. Apple Intelligence på enheten skriver vurderingen ut fra dem, og regner ikke selv."
-                     : "Tallene regnes ut nøyaktig i appen, og vurderingen lages etter faste regler: lyshetsspenn minst 0,50, minst ett fargepar på 4,5:1, og ingen fargepar som forveksles ved rød-grønt fargesynsavvik.")
-                Text("Vurderingen sier ikke noe om smak, stemning eller om fargene passer til et formål – bare om kontrast, lesbarhet og skillbarhet.")
+                KortForklaring("Vurderingen gjelder kontrast, lesbarhet og skillbarhet – ikke smak.") {
+                    Text(vurdering.kilde == .appleIntelligence
+                         ? "Tallene regnes ut nøyaktig i appen. Apple Intelligence på enheten skriver vurderingen ut fra dem, og regner ikke selv."
+                         : "Tallene regnes ut nøyaktig i appen, og vurderingen lages etter faste regler: lyshetsspenn minst 0,50, minst ett fargepar på 4,5:1, og ingen fargepar som forveksles ved rød-grønt fargesynsavvik.")
+                    Text("Vurderingen sier ikke noe om smak, stemning eller om fargene passer til et formål – bare om kontrast, lesbarhet og skillbarhet.")
+                }
                 MetodeHenvisning(.wcag, .oklab, .machado, .ciede2000)
             }
             .foregroundStyle(Color.sekundærTekst)

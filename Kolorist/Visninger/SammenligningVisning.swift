@@ -175,7 +175,9 @@ struct SammenligningVisning: View {
             Text("Detaljer")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse. Trykk og hold (høyreklikk på Mac) på en verdi for å kopiere den.")
+                KortForklaring("Under 1 er ikke merkbart, over 5 regnes som ulike farger.") {
+                    Text("Beregnet i CIELab D50. Tolkning: under 1 er ikke merkbart, 1–2 merkbart ved nøye sammenligning, 2–3,5 merkbart, over 5 regnes som ulike farger. Kameramålinger påvirkes av lys og hvitbalanse. Trykk og hold (høyreklikk på Mac) på en verdi for å kopiere den.")
+                }
                 MetodeHenvisning(.ciede2000, .cieLab)
             }
         }

@@ -70,7 +70,7 @@ struct ProfilkonverteringVisning: View {
                 Text("Alle gjengivelseshensikter")
             }.foregroundStyle(Color.sekundærTekst) } footer: {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("ΔE00 måler avviket fra kildefargen. Hensiktene skiller seg bare når profilene har egne tabeller for dem, typisk CMYK-profiler fra trykkerier; rene matriseprofiler som sRGB og Display P3 gir samme svar for alle.")
+                    KortForklaring("ΔE00 måler avviket fra kildefargen.") { Text("ΔE00 måler avviket fra kildefargen. Hensiktene skiller seg bare når profilene har egne tabeller for dem, typisk CMYK-profiler fra trykkerier; rene matriseprofiler som sRGB og Display P3 gir samme svar for alle.") }
                     MetodeHenvisning(.icc, .ciede2000)
                 }
             }

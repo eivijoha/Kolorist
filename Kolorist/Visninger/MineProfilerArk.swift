@@ -95,7 +95,7 @@ struct MineProfilerArk: View {
                         Text("Du kan også dra filer hit.")
                         #endif
                         Text("ICC-profiler: .icc og .icm – for eksempel trykkprofilen fra trykkeriet (FOGRA, GRACoL) eller en skjermprofil.")
-                        Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne. Når du deler farger som lenke, deles fargeverdiene, men ikke tonenavnene fra bibliotekene du har importert.")
+                        KortForklaring("Fargebiblioteker: .ase, .aco og .acb – fargekart med navngitte toner.") { Text("Fargebiblioteker: .ase (Adobe Swatch Exchange), .aco (Photoshop-fargeprøver) og .acb (Adobe Color Book) – fargekart med navngitte toner. Kolorist leverer ingen fargekart fra fargesystemer; du importerer dine egne. Når du deler farger som lenke, deles fargeverdiene, men ikke tonenavnene fra bibliotekene du har importert.") }
                         Text(bibliotek.brukerICloud
                              ? "Filene ligger i iCloud Drive › Kolorist › Profiler og synkroniseres mellom enhetene dine."
                              : "Filene lagres på denne enheten (iCloud Drive er ikke tilgjengelig).")
@@ -113,10 +113,10 @@ struct MineProfilerArk: View {
                     }
                     Button("Importer referanseverdier …", systemImage: "square.grid.3x2") { importererKort = true; importerer = true }
                     #if os(macOS)
-                    Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk – på iPhone og iPad, og på Mac med iPhone som kamera (Continuity) – og synkroniseres mellom enhetene. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.")
+                    KortForklaring("Referansekort gir nøyaktig lyskompensasjon i Utplukk.") { Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk – på iPhone og iPad, og på Mac med iPhone som kamera (Continuity) – og synkroniseres mellom enhetene. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.") }
                         .forklaring()
                     #else
-                    Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk og et anslag av lyset. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.")
+                    KortForklaring("Referansekort gir nøyaktig lyskompensasjon i Utplukk.") { Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk og et anslag av lyset. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.") }
                         .forklaring()
                     #endif
                 } header: {

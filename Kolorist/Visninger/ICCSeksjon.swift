@@ -75,7 +75,7 @@ struct ICCSeksjon: View {
             }
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("ICC-fargestyring regner med D50 som referanse for betraktningsforholdene, og det er standard her. Med andre betraktningsforhold vises fargen til høyre i fargefeltet slik den oppleves der; verdiene er de samme.")
+                KortForklaring("D50 er referansen i ICC-fargestyring og standard her.") { Text("ICC-fargestyring regner med D50 som referanse for betraktningsforholdene, og det er standard her. Med andre betraktningsforhold vises fargen til høyre i fargefeltet slik den oppleves der; verdiene er de samme.") }
                 MetodeHenvisning(.icc, .renCMYK, .ciede2000)
                 Text(bibliotek.brukerICloud
                      ? "Importerte ICC-profiler og fargebiblioteker ligger i iCloud Drive › Kolorist › Profiler og synkroniseres mellom enhetene. Du kan også legge filer der fra Filer eller Finder."

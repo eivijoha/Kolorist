@@ -122,7 +122,7 @@ struct SkriftfargeInnledning: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Vil du bestemme tekstfargene på paletten selv, for eksempel en nær hvit og en nær sort med et preg av palettens farger, kan du definere skriftfarger. Ellers brukes sort eller hvit.")
+            KortForklaring("Velg egne skriftfarger, eller la hver farge få sort eller hvit tekst.") { Text("Vil du bestemme tekstfargene på paletten selv, for eksempel en nær hvit og en nær sort med et preg av palettens farger, kan du definere skriftfarger. Ellers brukes sort eller hvit.") }
                 .font(.footnote)
                 .foregroundStyle(Color.sekundærTekst)
             Button("Definer skriftfarger", systemImage: "textformat") {

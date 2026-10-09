@@ -179,7 +179,7 @@ struct PalettLysPar: View {
                     }
                     .accessibilityElement(children: .combine)
                 }
-                Text("Fargepar som skilles godt på skjermen (ΔE00 minst 6), men nesten ikke i lyset (under 3) – typisk i svakt lys, der fargene blir mindre fargerike.")
+                KortForklaring("Fargepar som skilles godt på skjermen, men nesten ikke i lyset.") { Text("Fargepar som skilles godt på skjermen (ΔE00 minst 6), men nesten ikke i lyset (under 3) – typisk i svakt lys, der fargene blir mindre fargerike.") }
                     .font(.footnote)
                     .foregroundStyle(Color.sekundærTekst)
             }
@@ -232,7 +232,7 @@ struct LysVurderingSeksjon: View {
             Text("Lys")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Hvordan fargene holder seg i ulike lys: fargeskift over 3 ΔE00, og fargepar som skilles godt på skjermen men nesten ikke i lyset. Egne betraktningsforhold tas med.")
+                KortForklaring("Fargeskift over 3 ΔE00, og fargepar som blir vanskelige å skille i lyset.") { Text("Hvordan fargene holder seg i ulike lys: fargeskift over 3 ΔE00, og fargepar som skilles godt på skjermen men nesten ikke i lyset. Egne betraktningsforhold tas med.") }
                 MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
             }
         }

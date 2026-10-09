@@ -132,7 +132,7 @@ struct VerdiordVisning: View {
                      ? "Verdiordene er tolket med Apple Intelligence på enheten."
                      : "Verdiordene er tolket med den innebygde kunnskapsbasen (uten Apple Intelligence).")
                 if forslag.oppskrift != nil {
-                    Text("Paletten er komponert etter harmoniprinsippet, med lik valør eller lik metning i hovedfargene. Teksten har minst 7:1 kontrast mot bakgrunnen, og hovedfargene minst 3:1 der kuløren tillater det. Tallet ved hver farge er kontrasten mot bakgrunnen.")
+                    KortForklaring("Komponert etter harmoniprinsippet, med lesbar kontrast.") { Text("Paletten er komponert etter harmoniprinsippet, med lik valør eller lik metning i hovedfargene. Teksten har minst 7:1 kontrast mot bakgrunnen, og hovedfargene minst 3:1 der kuløren tillater det. Tallet ved hver farge er kontrasten mot bakgrunnen.") }
                 }
                 MetodeHenvisning(.kunnskapsbase, .harmonier, .oklab, .wcag)
             }

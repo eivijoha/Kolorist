@@ -1306,9 +1306,11 @@ struct ToneskalaArk: View {
                     }
                     PalettStripe(farger: toner).frame(height: 64)
                 } footer: {
-                    Text(kontrast
-                         ? "Hvert trinn har samme lyshet (L*) for alle kulører, så kontrasten blir lik: med 11 trinn holder 400 minst 3:1 mot hvit (kanter og ikoner) og 600 minst 4,5:1 (tekst og knapper)."
-                         : "Like steg i opplevd lyshet (OKLab). Kontrasten mot hvit og sort varierer litt mellom kulører.")
+                    KortForklaring(kontrast ? "Samme lyshet (L*) for alle kulører, så kontrasten blir lik." : "Like steg i opplevd lyshet (OKLab).") {
+                        Text(kontrast
+                             ? "Hvert trinn har samme lyshet (L*) for alle kulører, så kontrasten blir lik: med 11 trinn holder 400 minst 3:1 mot hvit (kanter og ikoner) og 600 minst 4,5:1 (tekst og knapper)."
+                             : "Like steg i opplevd lyshet (OKLab). Kontrasten mot hvit og sort varierer litt mellom kulører.")
+                    }
                 }
                 Section {
                     ForEach(Array(toner.enumerated()), id: \.offset) { i, f in

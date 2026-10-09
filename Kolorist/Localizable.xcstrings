@@ -1341,6 +1341,16 @@
         }
       }
     },
+    "Bruk kortet under Utplukk › Lys › Med referansekort, med iPhone som kamera.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use the card under Pick › Light › With reference card, with iPhone as the camera."
+          }
+        }
+      }
+    },
     "Bruk kortet under Utplukk › Lys › Med referansekort: hold kortet i samme lys som fargene, og plasser hjørnene i bildet.": {
       "localizations": {
         "en": {
@@ -1610,6 +1620,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "D50 (ICC reference)"
+          }
+        }
+      }
+    },
+    "D50 er referansen i ICC-fargestyring og standard her.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D50 is the reference in ICC colour management and the default here."
           }
         }
       }
@@ -1894,6 +1914,16 @@
         }
       }
     },
+    "Dra for å endre rekkefølgen, og sveip fra høyre for å skjule.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to reorder, and swipe from the right to hide."
+          }
+        }
+      }
+    },
     "Dra for å endre rekkefølgen. Slå av for å legge panelet sammen – det kan også gjøres med pilen i overskriften.": {
       "localizations": {
         "en": {
@@ -1930,6 +1960,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Drag in the wheel to change the base colour’s hue, or tap the center to start from a saved colour. Saturation and lightness apply to the whole harmony."
+          }
+        }
+      }
+    },
+    "Dra i sirkelen for å endre kulør, eller trykk i midten for å starte fra en lagret farge.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag on the wheel to change the hue, or tap the centre to start from a saved colour."
           }
         }
       }
@@ -2000,6 +2040,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Custom roles"
+          }
+        }
+      }
+    },
+    "Egne roller får farger i alle moduser og egne kontrollpunkter.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your own roles get colours in every mode and their own checks."
           }
         }
       }
@@ -2344,6 +2394,16 @@
         }
       }
     },
+    "Fargebiblioteker: .ase, .aco og .acb – fargekart med navngitte toner.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour libraries: .ase, .aco and .acb – colour charts with named tones."
+          }
+        }
+      }
+    },
     "Fargegjengivelse (anslått)": {
       "localizations": {
         "en": {
@@ -2400,6 +2460,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The colour is tested as text and graphics against the background. “Fix” changes only the lightness, keeping hue and chroma. Accessibility regulations refer to WCAG 2."
+          }
+        }
+      }
+    },
+    "Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colour is tested as text and graphics against the background. “Fix” only changes the lightness."
           }
         }
       }
@@ -2490,6 +2560,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour pairs that are easy to tell apart on screen (ΔE00 at least 6) but hardly in the light (below 3) – typically in dim light, where colours become less colourful."
+          }
+        }
+      }
+    },
+    "Fargepar som skilles godt på skjermen, men nesten ikke i lyset.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour pairs that are easy to tell apart on screen, but hardly in the light."
           }
         }
       }
@@ -2600,6 +2680,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "A colour shift (ΔE00) above 3 is clearly noticeable."
+          }
+        }
+      }
+    },
+    "Fargeskift over 3 ΔE00, og fargepar som blir vanskelige å skille i lyset.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour shifts above 3 ΔE00, and colour pairs that become hard to tell apart in the light."
           }
         }
       }
@@ -2889,6 +2979,16 @@
         }
       }
     },
+    "Filene får navnet «%@».": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files are named “%@”."
+          }
+        }
+      }
+    },
     "Filene får navnet «%@». «Lagre» lar deg velge eller opprette en mappe – også i OneDrive, Jottacloud og andre tjenester. «Del» sender filene med e-post, Teams, AirDrop og andre apper.": {
       "localizations": {
         "en": {
@@ -2915,6 +3015,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The files go in the folder “%@”, with a README that explains the system and how to use it. The colours are in sRGB, which every screen and Figma understand. The CSS file also has Display P3 where the colours go beyond sRGB."
+          }
+        }
+      }
+    },
+    "Filene legges i mappa «%@», med en README.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files go in the folder “%@”, with a README."
           }
         }
       }
@@ -4699,6 +4809,16 @@
         }
       }
     },
+    "Komponert etter harmoniprinsippet, med lesbar kontrast.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composed by the harmony principle, with legible contrast."
+          }
+        }
+      }
+    },
     "Konto": {
       "localizations": {
         "en": {
@@ -5101,12 +5221,32 @@
         }
       }
     },
+    "Kravene er fra WCAG 2 (AA). Deaktiverte kontroller er unntatt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The requirements are from WCAG 2 (AA). Disabled controls are exempt."
+          }
+        }
+      }
+    },
     "Kravene gjelder LRV (dagslys). Verdiene «i lyset» viser hvor mye lys flatene reflekterer under valgte betraktningsforhold – med lysrør og LED kan kontrasten bli en annen. Spektrene er anslått fra fargene.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The requirements apply to LRV (daylight). The values “in the light” show how much light the surfaces reflect in the chosen viewing condition – with fluorescent and LED light the contrast can differ. The spectra are estimated from the colours."
+          }
+        }
+      }
+    },
+    "Kravene gjelder LRV i dagslys. «I lyset» viser flatene under valgte betraktningsforhold.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The requirements apply to LRV in daylight. “In the light” shows the surfaces under the chosen viewing conditions."
           }
         }
       }
@@ -5303,6 +5443,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "LRV is the CIE luminance Y in per cent – the share of visible light a surface reflects, as paint manufacturers state it. Kolorist computes it for the colour as shown in sRGB. Contrast between surfaces is calculated with the chosen method, each with its own requirements: difference in LRV points (BS 8300: at least 30, or 20 for large surfaces and above 200 lux); Weber luminance contrast, |Yo − Yb| / Yb with the background as reference, as used by the Norwegian building regulations TEK17 and NS 11001 (0.4 for orientation and wayfinding, 0.8 for stair nosings, handrails and hazard fields); and Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), per ISO 21542 (30 % for large surfaces, 60 % for hazards and text, with values from the Canadian draft CAN-ASC-2.4). The figures cannot be compared across methods. LRV from the camera or an image without a grey card or reference card is only indicative. “Fix” changes only the lightness in OKLCH."
+          }
+        }
+      }
+    },
+    "LRV er andelen lys flaten reflekterer, som på malingskart.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LRV is the share of light a surface reflects, as on paint charts."
           }
         }
       }
@@ -6179,6 +6329,26 @@
         }
       }
     },
+    "Lesekontrast etter APCA, forslaget til WCAG 3.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading contrast by APCA, the proposal for WCAG 3."
+          }
+        }
+      }
+    },
+    "Like steg i opplevd lyshet (OKLab).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equal steps in perceived lightness (OKLab)."
+          }
+        }
+      }
+    },
     "Like steg i opplevd lyshet (OKLab). Kontrasten mot hvit og sort varierer litt mellom kulører.": {
       "localizations": {
         "en": {
@@ -6513,6 +6683,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "With a camera profile, a grey card is enough next time, even in different light: Kolorist then knows the camera’s colours, and the grey card gives the colour and strength of the light."
+          }
+        }
+      }
+    },
+    "Med en kameraprofil holder det med et gråkort neste gang.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With a camera profile, a grey card is enough next time."
           }
         }
       }
@@ -7067,6 +7247,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Web and design tokens"
+          }
+        }
+      }
+    },
+    "Nettlesere viser samme overgang i OKLab, eller en etterligning i sRGB.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Browsers show the same gradient in OKLab, or an imitation in sRGB."
           }
         }
       }
@@ -7633,6 +7823,16 @@
         }
       }
     },
+    "Par som skilles godt med normalt syn, men nesten ikke med avviket.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairs that are easy to tell apart with normal vision, but hardly with the deficiency."
+          }
+        }
+      }
+    },
     "Perseptuell": {
       "localizations": {
         "en": {
@@ -7833,6 +8033,16 @@
         }
       }
     },
+    "Referansekort gir nøyaktig lyskompensasjon i Utplukk.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reference cards give accurate light compensation in Pick."
+          }
+        }
+      }
+    },
     "Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk og et anslag av lyset. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.": {
       "localizations": {
         "en": {
@@ -7969,6 +8179,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cohesion"
+          }
+        }
+      }
+    },
+    "Samme lyshet (L*) for alle kulører, så kontrasten blir lik.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The same lightness (L*) for every hue, so the contrast is the same."
+          }
+        }
+      }
+    },
+    "Samme lyshet (L*) i alle roller, så kontrasten er lik.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The same lightness (L*) in every role, so the contrast is the same."
           }
         }
       }
@@ -8655,6 +8885,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Turn off"
+          }
+        }
+      }
+    },
+    "Slå mål av og på, og dra for å endre rekkefølgen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn targets on and off, and drag to reorder."
           }
         }
       }
@@ -9499,6 +9739,16 @@
         }
       }
     },
+    "Toner langs en bane gjennom lyshet, metning og kulør. Dra endepunktene i flaten og rundt ringen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tones along a path through lightness, saturation and hue. Drag the end points in the field and around the ring."
+          }
+        }
+      }
+    },
     "Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren midt på banen.": {
       "localizations": {
         "en": {
@@ -9601,6 +9851,16 @@
         }
       }
     },
+    "Trykk på en farge for å bytte den. Dra en rolle over en annen for å bytte fargene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a colour to change it. Drag one role onto another to swap their colours."
+          }
+        }
+      }
+    },
     "Trykk på en farge for å velge en annen. Dra en rolle over en annen, eller bruk «Bytt med» i menyen, for å bytte fargene mellom to roller. Merkefargen brukes uendret i hver modus der den holder kravene; ellers får den samme kulør med lysheten som trengs. Lys+ og Mørk+ er økt kontrast.": {
       "localizations": {
         "en": {
@@ -9617,6 +9877,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tap a tile for the contrast against all the requirements and a suggested colour that passes."
+          }
+        }
+      }
+    },
+    "Trykk på en tone for å gjøre den aktiv, eller hold for flere valg.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a tone to make it active, or hold for more options."
           }
         }
       }
@@ -9641,6 +9911,16 @@
         }
       }
     },
+    "Trykk på teksten eller fargene i flaten for å velge farger.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the text or the colours in the field to choose colours."
+          }
+        }
+      }
+    },
     "Trykket": {
       "localizations": {
         "en": {
@@ -9657,6 +9937,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Type"
+          }
+        }
+      }
+    },
+    "Typene står etter hvor vanlige de er.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The types are listed by how common they are."
           }
         }
       }
@@ -9721,12 +10011,42 @@
         }
       }
     },
+    "Under 1 er ikke merkbart, over 5 regnes som ulike farger.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below 1 is not noticeable; above 5 counts as different colours."
+          }
+        }
+      }
+    },
+    "Under 3 er godt for et telefonkamera.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below 3 is good for a phone camera."
+          }
+        }
+      }
+    },
     "Under 4000 K regnes lyset som glødelys (sortlegeme), over som dagslys. Lysrør og LED har ujevne spektre som kan endre enkelte farger mer enn fargetemperaturen tilsier.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Below 4000 K the light is treated as incandescent (blackbody), above as daylight. Fluorescent and LED lights have uneven spectra that can change some colours more than the colour temperature suggests."
+          }
+        }
+      }
+    },
+    "Under 4000 K regnes lyset som glødelys, over som dagslys.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below 4000 K the light counts as incandescent, above as daylight."
           }
         }
       }
@@ -10023,6 +10343,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose the viewing condition the colour is shown in"
+          }
+        }
+      }
+    },
+    "Velg egne skriftfarger, eller la hver farge få sort eller hvit tekst.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your own text colours, or let each colour get black or white text."
           }
         }
       }
@@ -10463,6 +10793,16 @@
         }
       }
     },
+    "Vurderingen gjelder kontrast, lesbarhet og skillbarhet – ikke smak.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The assessment covers contrast, legibility and distinguishability – not taste."
+          }
+        }
+      }
+    },
     "Vurderingen sier ikke noe om smak, stemning eller om fargene passer til et formål – bare om kontrast, lesbarhet og skillbarhet.": {
       "localizations": {
         "en": {
@@ -10875,6 +11215,16 @@
         }
       }
     },
+    "Én kulør i flere toner. Dra endepunktene i flaten for å forme streken.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One hue in several tones. Drag the end points in the field to shape the line."
+          }
+        }
+      }
+    },
     "Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.": {
       "localizations": {
         "en": {
@@ -10993,6 +11343,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "ΔE00 (CIEDE2000)"
+          }
+        }
+      }
+    },
+    "ΔE00 måler avviket fra kildefargen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ΔE00 measures the deviation from the source colour."
           }
         }
       }
