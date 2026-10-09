@@ -40,14 +40,14 @@ struct KopimålArk: View {
     @Environment(\.dismiss) private var lukk
 
     private var mål: [Kopimål] {
-        Kopiinnstillinger.ordnet(Kopimål.allCases.map(\.rawValue), rekkefølge: rekkefølge).compactMap(Kopimål.init(rawValue:))
+        Kopiinnstillinger.ordnet(Kopimål.tilgjengelige.map(\.rawValue), rekkefølge: rekkefølge).compactMap(Kopimål.init(rawValue:))
     }
 
     private func synlig(_ m: Kopimål) -> Binding<Bool> {
         Binding(get: { !skjult.split(separator: ",").contains(Substring(m.rawValue)) }, set: { vis in
             var sett = Set(skjult.split(separator: ",").map(String.init))
             if vis { sett.remove(m.rawValue) } else { sett.insert(m.rawValue) }
-            skjult = Kopimål.allCases.map(\.rawValue).filter(sett.contains).joined(separator: ",")
+            skjult = Kopimål.tilgjengelige.map(\.rawValue).filter(sett.contains).joined(separator: ",")
         })
     }
 

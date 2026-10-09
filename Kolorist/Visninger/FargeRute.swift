@@ -263,7 +263,7 @@ struct FargeValgBoble: View {
                 }
                 // «Kopier til …»: formatet målprogrammet tar imot (også via universell utklippstavle).
                 Menu {
-                    ForEach(Kopiinnstillinger.synlige(Kopimål.allCases.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
+                    ForEach(Kopiinnstillinger.synlige(Kopimål.tilgjengelige.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
                         .compactMap(Kopimål.init(rawValue:))) { mål in
                         Button {
                             Utklippstavle.kopier([PalettFarge(farge: farge)], navn: "", til: mål)

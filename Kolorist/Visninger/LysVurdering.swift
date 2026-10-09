@@ -37,60 +37,51 @@ struct LysVurdering: View {
         #endif
     }
 
-    /// Stort felt øverst, som i Forskjell: fargen på skjermen (trykk for å endre) og i det primære lysmiljøet (trykk for
-    /// å velge lysmiljø), med lyset, kvaliteten og fargeskiftet under.
+    /// Kortet øverst, som Kontrast og Fargesyn: valget av betraktningsforhold på egen linje, så fargen på skjermen (trykk
+    /// for å endre) og i det valgte betraktningsforholdet i et stort felt, med lyset, kvaliteten og fargeskiftet under.
     private func toppfelt(_ farge: Farge, _ miljø: Lysmiljø, _ aktiv: Binding<Farge>) -> some View {
         let iLyset = somFoto ? miljø.somFoto(farge) : miljø.sett(farge)
         let skift = miljø.fargeskift(farge)
         return Section {
+            HStack(spacing: 8) {
+                Text("Betraktningsforhold").foregroundStyle(Color.sekundærTekst).lineLimit(1).layoutPriority(-1)
+                Spacer(minLength: 0)
+                Menu {
+                LysmiljøMenyvalg(valgt: Binding(get: { miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
+            } label: {
+                HStack(spacing: 6) {
+                    Text(miljø.navn).lineLimit(1).truncationMode(.tail)
+                    Image(systemName: "chevron.up.chevron.down").font(.caption.weight(.semibold))
+                }
+                .foregroundStyle(Color.accentColor)
+                .contentShape(Rectangle())
+                }
+                .menuIndicator(.hidden)
+                .accessibilityLabel("Betraktningsforhold: \(miljø.navn)")
+                .accessibilityHint("Velg betraktningsforholdet fargen vises under")
+            }
+            .listRowSeparator(.hidden)
             HStack(spacing: 0) {
                 // Fargen som eget lag bak menyen, så flatene møtes i en rett kant (menyen avrunder på iOS 26).
                 ZStack {
                     aktiv.wrappedValue.swiftUI
                     FargeVelgerMeny(tittel: String(localized: "Farge"), farge: aktiv) {
-                        Color.clear
-                            .overlay(alignment: .bottomLeading) {
-                                HStack(spacing: 6) {
-                                    Text(aktiv.wrappedValue.hex()).font(.caption.monospaced())
-                                    Image(systemName: "chevron.up.chevron.down").font(.caption2.weight(.semibold))
-                                }
-                                .font(.caption.weight(.medium))
-                                .foregroundStyle(.primary)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 6)
-                                .background(.regularMaterial, in: Capsule())
-                                .padding(10)
+                        flatetekst(String(localized: "På skjermen"), farge: aktiv.wrappedValue) {
+                            HStack(spacing: 4) {
+                                Text(aktiv.wrappedValue.hex()).koloristFont(.caption, design: .monospaced)
+                                Image(systemName: "chevron.up.chevron.down").font(.caption2)
                             }
-                            .contentShape(Rectangle())
+                            .opacity(0.85)
+                        }
                     }
                 }
-                Menu {
-                    LysmiljøMenyvalg(valgt: Binding(get: { miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
-                } label: {
-                    iLyset.swiftUI
-                        .overlay(alignment: .bottomTrailing) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "lightbulb.fill")
-                                Text(miljø.navn).lineLimit(1)
-                                Image(systemName: "chevron.up.chevron.down").font(.caption2.weight(.semibold))
-                            }
-                            .font(.caption.weight(.medium))
-                            .foregroundStyle(.primary)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(.regularMaterial, in: Capsule())
-                            .padding(10)
-                        }
-                        .contentShape(Rectangle())
+                flatetekst(String(localized: "Under betraktningsforholdet"), farge: iLyset) {
+                    Text(iLyset.hex()).koloristFont(.caption, design: .monospaced).opacity(0.85)
                 }
-                .buttonStyle(Flatetrykk())
-                .menuIndicator(.hidden)
-                .accessibilityLabel("Betraktningsforhold: \(miljø.navn)")
-                .accessibilityHint("Velg betraktningsforholdet fargen vises under")
+                .background(iLyset.swiftUI)
+                .accessibilityElement(children: .combine)
             }
             .frame(height: 140)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(.secondary.opacity(0.3), lineWidth: 1))
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
             HStack(spacing: 6) {
@@ -110,6 +101,19 @@ struct LysVurdering: View {
             .pickerStyle(.segmented)
             .labelsHidden()
         }
+    }
+
+    /// Tekst rett på en flate i lesbar farge, som i Kontrast: tittel øverst og verdien nederst.
+    private func flatetekst<Bunn: View>(_ tittel: String, farge: Farge, @ViewBuilder bunn: () -> Bunn) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(2).minimumScaleFactor(0.8)
+            Spacer(minLength: 4)
+            bunn()
+        }
+        .foregroundStyle(farge.lesbarTekstfarge.swiftUI)
+        .padding(12)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .contentShape(Rectangle())
     }
 
     private func fargeseksjon(_ farge: Farge, _ miljøer: [Lysmiljø], _ aktiv: Binding<Farge>) -> some View {

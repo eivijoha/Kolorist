@@ -7,7 +7,16 @@ import AppKit
 
 /// Formatene i «Lagre som», gruppert etter hvor filene skal brukes.
 enum Lagringsformat: String, CaseIterable, Identifiable {
-    case ase, aco, indesign, figmaVariabler, tokensStudio, css, designTokens, swiftUI, gpl, svg, hexListe, pdf
+    case ase, aco, indesign, figmaVariabler, tokensStudio, css, designTokens, swiftUI, clr, gpl, svg, hexListe, pdf
+
+    /// Formatene som finnes på denne plattformen (fargelista for macOS bare på Mac).
+    static var tilgjengelige: [Lagringsformat] {
+        #if os(macOS)
+        allCases
+        #else
+        allCases.filter { $0 != .clr }
+        #endif
+    }
 
     var id: String { rawValue }
     var eksportformat: Eksportformat? { Eksportformat(rawValue: rawValue) }
@@ -15,6 +24,7 @@ enum Lagringsformat: String, CaseIterable, Identifiable {
         switch self {
         case .indesign: String(localized: "InDesign-utklipp med gradienter (.idms)")
         case .pdf: String(localized: "PDF med fargeflater (A4)")
+        case .clr: String(localized: "Fargeliste for macOS (.clr)")
         default: eksportformat?.navn ?? rawValue
         }
     }
@@ -22,6 +32,7 @@ enum Lagringsformat: String, CaseIterable, Identifiable {
         switch self {
         case .indesign: "idms"
         case .pdf: "pdf"
+        case .clr: "clr"
         default: eksportformat?.filendelse ?? rawValue
         }
     }
@@ -48,7 +59,7 @@ enum Lagringsformat: String, CaseIterable, Identifiable {
         case .ase, .aco, .indesign: .adobe
         case .figmaVariabler, .tokensStudio: .figma
         case .css, .designTokens: .nett
-        case .swiftUI: .apple
+        case .swiftUI, .clr: .apple
         case .gpl: .åpne
         case .svg, .hexListe: .andre
         case .pdf: .utskrift
@@ -109,7 +120,7 @@ struct LagreSomArk: View {
             Form {
                 ForEach(Lagringsformat.Gruppe.allCases) { gruppe in
                     Section(gruppe.tittel) {
-                        ForEach(Lagringsformat.allCases.filter { $0.gruppe == gruppe }) { f in
+                        ForEach(Lagringsformat.tilgjengelige.filter { $0.gruppe == gruppe }) { f in
                             Toggle(isOn: Binding(get: { valg.formater.contains(f) }, set: { valg.sett(f, $0) })) {
                                 Text(f.navn)
                             }
@@ -164,8 +175,14 @@ struct LagreSomArk: View {
         let palett = Palett(navn: innhold.navn, farger: innhold.farger, tekstfarger: innhold.tekstfarger)
         do {
             try FileManager.default.createDirectory(at: mappe, withIntermediateDirectories: true)
-            return try Lagringsformat.allCases.filter { valg.formater.contains($0) }.map { f in
+            return try Lagringsformat.tilgjengelige.filter { valg.formater.contains($0) }.map { f in
                 let url = mappe.appendingPathComponent("\(filnavn).\(f.filendelse)")
+                #if os(macOS)
+                if f == .clr {
+                    try Fargeliste.liste(innhold.farger, navn: filnavn).write(to: url)
+                    return url
+                }
+                #endif
                 let data: Data
                 switch f {
                 case .pdf:

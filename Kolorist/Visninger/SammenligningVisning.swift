@@ -175,13 +175,6 @@ struct SammenligningVisning: View {
     }
 }
 
-/// Lett dimming mens flaten trykkes, så den kjennes som en knapp.
-struct Flatetrykk: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label.opacity(configuration.isPressed ? 0.75 : 1)
-    }
-}
-
 /// Viser ΔE2000 mellom de to siste fangede fargene; trykk åpner full sammenligning.
 struct DeltaEMerke: View {
     let fanget: [Farge]

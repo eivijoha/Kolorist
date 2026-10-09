@@ -2,6 +2,7 @@ import CoreGraphics
 import ImageIO
 import FargeKjerne
 import SwiftUI
+import UniformTypeIdentifiers
 
 #if canImport(UIKit)
 import UIKit
@@ -20,11 +21,25 @@ import AppKit
 /// - Pages, Keynote, Numbers: figurer med fargefyll i Apples felles utklippsformat (`IWorkUtklipp`), uten tekst.
 /// - Word, Excel, PowerPoint: figurer med fargefyll i Offices utklippsformat (`OfficeUtklipp`), uten tekst.
 /// - CSS og SwiftUI: kode.
+/// - Blender: lineære verdier som `[r, g, b, a]`, formatet Blender selv kopierer et fargefelt som (⌘C/⌘V over feltet).
+/// - RGB 0–255 og 0–1: verdilister i sRGB, til programmer med egne felt for hver kanal (CAD, BIM, video, spillmotorer).
+/// - Macens fargevelger (bare Mac): fargeliste (.clr) i Bibliotek/Colors, så fargene finnes i fargevelgeren i alle
+///   programmer som bruker den.
 /// De andre målene får i tillegg tekst (hex), så innliming i et tekstfelt også gir mening.
 enum Kopimål: String, CaseIterable, Identifiable {
-    case figma, illustrator, indesign, photoshop, sketchAffinity, iWork, office, css, swiftUI
+    case figma, illustrator, indesign, photoshop, sketchAffinity, iWork, office, css, swiftUI, blender, rgb255, rgb01,
+         fargevelger
 
     var id: String { rawValue }
+
+    /// Målene som finnes på denne plattformen (fargevelgeren bare på Mac).
+    static var tilgjengelige: [Kopimål] {
+        #if os(macOS)
+        allCases
+        #else
+        allCases.filter { $0 != .fargevelger }
+        #endif
+    }
 
     var navn: String {
         switch self {
@@ -37,6 +52,10 @@ enum Kopimål: String, CaseIterable, Identifiable {
         case .office: "Word / Excel / PowerPoint"
         case .css: "CSS"
         case .swiftUI: "SwiftUI"
+        case .blender: "Blender"
+        case .rgb255: String(localized: "RGB 0–255")
+        case .rgb01: String(localized: "RGB 0–1")
+        case .fargevelger: String(localized: "Macens fargevelger")
         }
     }
 
@@ -48,6 +67,10 @@ enum Kopimål: String, CaseIterable, Identifiable {
         case .iWork, .office: String(localized: "Som figurer med fargefyll")
         case .css: String(localized: "Som variabler")
         case .swiftUI: String(localized: "Som Color-konstanter")
+        case .blender: String(localized: "Som lineære verdier til fargefelt")
+        case .rgb255: String(localized: "Som verdier, f.eks. til CAD og BIM")
+        case .rgb01: String(localized: "Som desimaler, f.eks. til video og spillmotorer")
+        case .fargevelger: String(localized: "Som fargeliste i alle programmer")
         }
     }
 
@@ -59,6 +82,9 @@ enum Kopimål: String, CaseIterable, Identifiable {
         case .iWork: "doc.on.doc"
         case .office: "rectangle.on.rectangle"
         case .css, .swiftUI: "chevron.left.forwardslash.chevron.right"
+        case .blender: "cube"
+        case .rgb255, .rgb01: "number"
+        case .fargevelger: "paintpalette"
         }
     }
 }
@@ -83,7 +109,7 @@ struct KopierTilMeny: View {
 
     /// Målene som er slått på, i valgt rekkefølge (se `KopimålArk`), og til slutt «Tilpass listen …».
     @ViewBuilder private var valg: some View {
-        ForEach(Kopiinnstillinger.synlige(Kopimål.allCases.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
+        ForEach(Kopiinnstillinger.synlige(Kopimål.tilgjengelige.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
             .compactMap(Kopimål.init(rawValue:))) { mål in
             Button {
                 Utklippstavle.kopier(farger, navn: navn, til: mål)
@@ -98,6 +124,12 @@ struct KopierTilMeny: View {
 extension Utklippstavle {
     static func kopier(_ farger: [PalettFarge], navn: String, til mål: Kopimål) {
         guard !farger.isEmpty else { return }
+        #if os(macOS)
+        if mål == .fargevelger {
+            Fargeliste.leggTil(farger, navn: navn)
+            return
+        }
+        #endif
         let palett = Palett(navn: navn.isEmpty ? String(localized: "Kolorist") : navn, farger: farger)
         let hex = farger.map { $0.farge.hex(medAlfa: $0.farge.alfa < 1) }.joined(separator: "\n")
         var typer: [(String, Data)] = []
@@ -139,6 +171,15 @@ extension Utklippstavle {
             tekst = String(decoding: Eksportformat.css.data(for: palett), as: UTF8.self)
         case .swiftUI:
             tekst = String(decoding: Eksportformat.swiftUI.data(for: palett), as: UTF8.self)
+        case .blender:
+            tekst = farger.map { Verdiliste.blender($0.farge) }.joined(separator: "\n")
+        case .rgb255:
+            tekst = farger.map { Verdiliste.rgb255($0.farge) }.joined(separator: "\n")
+        case .rgb01:
+            tekst = farger.map { Verdiliste.rgb01($0.farge) }.joined(separator: "\n")
+        case .fargevelger:
+            // Håndtert over (Mac); finnes ikke i menyene ellers.
+            tekst = hex
         }
         #if canImport(UIKit)
         var element: [String: Any] = [:]
@@ -154,6 +195,90 @@ extension Utklippstavle {
         merkEgen()
     }
 }
+
+/// Fargeverdier som tekst, én farge per linje. Farger utenfor sRGB gamut-kartlegges først; alfa tas med bare når
+/// fargen ikke er dekkende (Blender har alltid fire verdier). Alltid punktum som desimaltegn.
+enum Verdiliste {
+    /// `[r, g, b, a]` i lineær sRGB med seks desimaler, som Blender kopierer fargefelt (scene linear, Rec. 709-primærer).
+    static func blender(_ farge: Farge) -> String {
+        let f = farge.gamutKartlagt(til: .sRGB)
+        return "[" + [f.r, f.g, f.b, f.alfa].map { tall($0.klampet01, desimaler: 6) }.joined(separator: ", ") + "]"
+    }
+
+    /// `47, 127, 216` – gammakodet sRGB i heltall.
+    static func rgb255(_ farge: Farge) -> String {
+        let s = farge.gamutKartlagt(til: .sRGB).sRGB
+        var verdier = [s.r, s.g, s.b].map { String(Int(($0.klampet01 * 255).rounded())) }
+        if farge.alfa < 1 { verdier.append(tall(farge.alfa, desimaler: 2)) }
+        return verdier.joined(separator: ", ")
+    }
+
+    /// `0.1843, 0.4980, 0.8471` – gammakodet sRGB i desimaler.
+    static func rgb01(_ farge: Farge) -> String {
+        let s = farge.gamutKartlagt(til: .sRGB).sRGB
+        var verdier = [s.r, s.g, s.b].map { tall($0.klampet01, desimaler: 4) }
+        if farge.alfa < 1 { verdier.append(tall(farge.alfa, desimaler: 4)) }
+        return verdier.joined(separator: ", ")
+    }
+
+    private static func tall(_ v: Double, desimaler: Int) -> String {
+        String(format: "%.\(desimaler)f", locale: Locale(identifier: "en_US_POSIX"), v)
+    }
+}
+
+private extension Double {
+    var klampet01: Double { Swift.min(Swift.max(self, 0), 1) }
+}
+
+#if os(macOS)
+/// Macens fargevelger: fargene som en fargeliste (.clr) i Bibliotek/Colors i hjemmemappa, som fargevelgeren i alle
+/// programmer leser. En liste med samme navn byttes ut. Går det ikke å skrive dit, får brukeren velge plassering.
+enum Fargeliste {
+    static func leggTil(_ farger: [PalettFarge], navn: String) {
+        let listenavn = LagreSomArk.rentFilnavn(navn.isEmpty ? String(localized: "Kolorist") : navn)
+        let liste = liste(farger, navn: listenavn)
+        let mappe = URL(fileURLWithPath: hjemmemappe).appendingPathComponent("Library/Colors", isDirectory: true)
+        let fil = mappe.appendingPathComponent("\(listenavn).clr")
+        do {
+            try FileManager.default.createDirectory(at: mappe, withIntermediateDirectories: true)
+            try liste.write(to: fil)
+        } catch {
+            // Sandkassen kan stenge mappa: la brukeren lagre fila selv (fargevelgeren åpner den med «Åpne …»).
+            let panel = NSSavePanel()
+            panel.directoryURL = mappe
+            panel.nameFieldStringValue = fil.lastPathComponent
+            panel.allowedContentTypes = [.init(filenameExtension: "clr") ?? .data]
+            panel.message = String(localized: "Lagre fargelista i Bibliotek/Colors, så finnes den i fargevelgeren i alle programmer.")
+            guard panel.runModal() == .OK, let url = panel.url, (try? liste.write(to: url)) != nil else { return }
+        }
+        // Vis lista i fargevelgeren som bekreftelse.
+        let panel = NSColorPanel.shared
+        panel.attachColorList(liste)
+        panel.mode = .colorList
+        panel.orderFront(nil)
+    }
+
+    /// Fargelista: én farge per navn (fargens navn, ellers hex; like navn får nummer).
+    static func liste(_ farger: [PalettFarge], navn: String) -> NSColorList {
+        let liste = NSColorList(name: navn)
+        var brukt: [String: Int] = [:]
+        for pf in farger {
+            let grunn = pf.navn.isEmpty ? pf.farge.hex() : pf.navn
+            let antall = brukt[grunn, default: 0] + 1
+            brukt[grunn] = antall
+            let nøkkel = antall == 1 ? grunn : "\(grunn) (\(antall))"
+            liste.setColor(NSColor(cgColor: Fargeprøvepdf.cgFarge(pf)) ?? .black, forKey: nøkkel)
+        }
+        return liste
+    }
+
+    /// Den ekte hjemmemappa (ikke sandkassens container).
+    private static var hjemmemappe: String {
+        if let pw = getpwuid(getuid()), let dir = pw.pointee.pw_dir { return String(cString: dir) }
+        return NSHomeDirectory()
+    }
+}
+#endif
 
 /// Fargeprøver som PDF (vektor): én flate per farge, i fargens eget fargerom. Farger lagret i en
 /// ICC-profil (f.eks. CMYK) tegnes med de lagrede verdiene i den profilen; ellers sRGB, eller

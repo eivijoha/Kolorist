@@ -2374,6 +2374,16 @@
         }
       }
     },
+    "Fargeliste for macOS (.clr)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS colour list (.clr)"
+          }
+        }
+      }
+    },
     "Fargemodell": {
       "localizations": {
         "en": {
@@ -5597,6 +5607,16 @@
         }
       }
     },
+    "Lagre fargelista i Bibliotek/Colors, så finnes den i fargevelgeren i alle programmer.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the colour list in Library/Colors to find it in the colour picker in every app."
+          }
+        }
+      }
+    },
     "Lagre farger som palett …": {
       "localizations": {
         "en": {
@@ -6423,6 +6443,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fluorescent and LED light have uneven spectra. The colour’s spectrum is estimated, so a real surface may change differently in such light (metamerism)."
+          }
+        }
+      }
+    },
+    "Macens fargevelger": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac colour picker"
           }
         }
       }
@@ -7723,6 +7753,16 @@
         }
       }
     },
+    "På skjermen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On screen"
+          }
+        }
+      }
+    },
     "På, %lld prosent": {
       "localizations": {
         "en": {
@@ -7739,6 +7779,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "RGB"
+          }
+        }
+      }
+    },
+    "RGB 0–1": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RGB 0–1"
+          }
+        }
+      }
+    },
+    "RGB 0–255": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RGB 0–255"
           }
         }
       }
@@ -8629,6 +8689,16 @@
         }
       }
     },
+    "Som desimaler, f.eks. til video og spillmotorer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As decimals, e.g. for video and game engines"
+          }
+        }
+      }
+    },
     "Som enkeltfarge": {
       "localizations": {
         "en": {
@@ -8645,6 +8715,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "As a photo"
+          }
+        }
+      }
+    },
+    "Som fargeliste i alle programmer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As a colour list in every app"
           }
         }
       }
@@ -8749,6 +8829,16 @@
         }
       }
     },
+    "Som lineære verdier til fargefelt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As linear values for colour fields"
+          }
+        }
+      }
+    },
     "Som redigerbar gradient (PDF) i sRGB": {
       "localizations": {
         "en": {
@@ -8795,6 +8885,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "As vector shapes (PDF), with colour space and ICC"
+          }
+        }
+      }
+    },
+    "Som verdier, f.eks. til CAD og BIM": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As values, e.g. for CAD and BIM"
           }
         }
       }
@@ -9471,16 +9571,6 @@
         }
       }
     },
-    "Trykk for å velge en annen farge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap to choose another colour"
-          }
-        }
-      }
-    },
     "Trykk og hold på bildet for å sammenligne med normalt syn.": {
       "localizations": {
         "en": {
@@ -9627,6 +9717,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Below 4000 K the light is treated as incandescent (blackbody), above as daylight. Fluorescent and LED lights have uneven spectra that can change some colours more than the colour temperature suggests."
+          }
+        }
+      }
+    },
+    "Under betraktningsforholdet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under the viewing conditions"
           }
         }
       }
@@ -9943,16 +10043,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose colour – %@"
-          }
-        }
-      }
-    },
-    "Velg farge …": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose colour …"
           }
         }
       }
@@ -10903,16 +10993,16 @@
     },
     "ΔL* %@ · ΔC* %@ · Δh %@°": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "ΔL* %1$@ · ΔC* %2$@ · Δh %3$@°"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "ΔL* %@ · ΔC* %@ · Δh %@°"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "ΔL* %1$@ · ΔC* %2$@ · Δh %3$@°"
           }
         }
       }

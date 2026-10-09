@@ -95,27 +95,28 @@ struct FargesynVurdering: View {
         let vist = farger.map { $0.farge.simulert(vis, grad: grad) }
         let antall = analyse.first { $0.0 == vis }?.1.count ?? 0
         return VStack(spacing: 0) {
-            // Bare tittelen med antall vanskelige par (detaljene står lenger ned), og palettvalget nederst til høyre,
-            // rett over paletten det styrer (nærhet).
-            HStack(alignment: .bottom, spacing: 8) {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(alignment: .center, spacing: 8) {
-                        Image(systemName: antall == 0 ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .foregroundStyle(antall == 0 ? Color.suksess : Color.feil)
-                            .koloristFont(.title)
-                        Text(antall == 0 ? String(localized: "Ingen vanskelige par")
-                                         : (antall == 1 ? String(localized: "1 vanskelig par") : String(localized: "\(antall) vanskelige par")))
-                            .koloristFont(.title2, weight: .bold)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
+            // Bare tittelen med antall vanskelige par (detaljene står lenger ned) øverst, og palettvalget på egen linje
+            // under, til høyre rett over paletten det styrer (nærhet). Hver får hele bredden, så de ikke kolliderer.
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .center, spacing: 8) {
+                    Image(systemName: antall == 0 ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .foregroundStyle(antall == 0 ? Color.suksess : Color.feil)
+                        .koloristFont(.title)
+                    Text(antall == 0 ? String(localized: "Ingen vanskelige par")
+                                     : (antall == 1 ? String(localized: "1 vanskelig par") : String(localized: "\(antall) vanskelige par")))
+                        .koloristFont(.title2, weight: .bold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
+                // Som valget av betraktningsforhold i Lys: etikett til venstre, valget til høyre.
+                HStack(spacing: 8) {
+                    Text("Palett").foregroundStyle(Color.sekundærTekst).lineLimit(1)
+                    Spacer(minLength: 0)
+                    Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
+                        ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
                     }
+                    .labelsHidden()
                 }
-                Spacer(minLength: 0)
-                Picker("Palett", selection: Binding(get: { valgt.id.uuidString }, set: { valgtIDTekst = $0 })) {
-                    ForEach(paletter) { Text($0.navn.isEmpty ? String(localized: "Uten navn") : $0.navn).tag($0.id.uuidString) }
-                }
-                .labelsHidden()
-                .fixedSize()
             }
             // Toppen får høyden den trenger; fargefeltet tar resten.
             .fixedSize(horizontal: false, vertical: true)
