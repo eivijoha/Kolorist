@@ -571,6 +571,14 @@ Takk for at du tester Kolorist 1.3! Prøv gjerne dette:
 Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu.no.
 ```
 
+### Header og søkeresultat (iOS 27 / iPadOS 27)
+
+`Dokumentasjon/1.3/Skjermbilder/`: `header-nb.png` / `header-en.png` (produktsidens header, 21:9, 3840 × 1646) og
+`sokeresultat-nb.png` / `sokeresultat-en.png` (søkeresultat, 3:2, 3840 × 2560). Begge viser palett → validering →
+designsystem med tittelen «Fra palett gjennom validering til designsystem» / «From palette through validation to design
+system» (SF Display, halvfet). Lages på nytt med `lag_header.py` og `lag_sokeresultat.py` fra skjermbildene i simulatoren
+«Skjermbilder 6,3» (Harmoni, Kontrast med #1E5AA8 på hvitt, og designsystemet i lys og mørk modus).
+
 ### Skjermbilder – slik er de tatt
 
 | Mappe | Plattform | Størrelse | Bilder |
