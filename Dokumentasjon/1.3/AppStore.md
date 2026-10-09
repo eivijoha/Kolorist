@@ -42,7 +42,7 @@ Kolorist 1.3 tar paletten helt fram til designsystemet.
 • Kontrast mellom flater med valgfri metode: LRV-forskjell, Weber (TEK17, NS 11001) eller Michelson.
 • Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh – kopier én verdi eller alle som tabell.
 • Kopier farger som RGB-verdier til CAD, BIM og video, og som lineære verdier til 3D-programmer.
-• Plukk farge med kamera eller fra bilde rett fra fargefeltene.
+• Plukk farge med kamera eller fra bilde rett fra fargefeltene – eller endre fargen i Studio og ta den med tilbake.
 • Nye harmonier: monokromatisk og tonebane, der kuløren går i bue gjennom lyshet og metning – og Goethes fargesirkel.
 • Palettgrupper: samle paletter i grupper, og skriv ut, lagre og kopier hele grupper. Importer ASE-filer som paletter.
 • Endre rekkefølgen på farger ved å dra dem, og vis en farge fra hvor som helst.
@@ -153,7 +153,7 @@ Kolorist 1.3 takes your palette all the way to a design system.
 • Contrast between surfaces with a choice of method: LRV difference, Weber or Michelson.
 • The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh – copy one value or all of them as a table.
 • Copy colours as RGB values for CAD, BIM and video, and as linear values for 3D apps.
-• Pick a colour with the camera or from a photo right from the colour fields.
+• Pick a colour with the camera or from a photo right from the colour fields – or edit it in Studio and bring it back.
 • New harmonies: monochromatic and tone path, where the hue arcs through lightness and saturation – and Goethe’s colour wheel.
 • Palette groups: gather palettes in groups, and print, save and copy whole groups. Import ASE files as palettes.
 • Reorder colours by dragging them, and show a colour from anywhere.
@@ -265,12 +265,14 @@ KONTRAST
 
 LYS
 • Se farger og hele paletter slik de oppleves under andre betraktningsforhold – egne eller standardiserte for grafisk vurdering, arbeidsplasser, skoler og museer.
+• Paletter i lys: hver farge på skjermen og i lyset side om side, og hvilke fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED.
 • Betraktningsforhold du har målt med iPhone og iPad, følger med til Macen via iCloud.
 • Med iPhone som kamera kan farger kompenseres for lyset med gråkort eller referansekort (beta).
 
 FARGER OG HARMONIER
 • Nye harmonier: monokromatisk, tonebane, triade, kvadrat og analog med komplementær aksent – på fargesirkler med Goethe og Munsell, og med naturlig lyshetsrekkefølge.
 • Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament.
+• Munsell i trinnene fra Munsell-boka.
 • Kildefargerom for CMYK og RGB, papirhvitt og valgfritt betraktningsforhold for visningen.
 
 PALETTER, DELING OG EKSPORT
@@ -278,12 +280,13 @@ PALETTER, DELING OG EKSPORT
 • Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren.
 • Lagre som: velg formater etter hvor filene skal brukes, og lagre dem i en mappe eller del dem.
 • Kopier gradienter som redigerbare gradienter til design-, layout- og presentasjonsprogrammer, og farger som RGB-verdier til CAD, BIM og video og lineære verdier til 3D-programmer.
-• Endre rekkefølgen på farger ved å dra dem, og plukk farge rett fra fargefeltene.
+• Kopierte gradienter har færre stopp, så de er enkle å redigere videre.
+• Endre rekkefølgen på farger ved å dra dem, legg til farger rett i lista, og plukk farge rett fra fargefeltene – eller endre den i Studio og ta den med tilbake.
 
 PÅ MACEN
 • Kopier paletter rett inn i fargevelgeren på Macen, som fargeliste i alle programmer.
 • Designsystemer får egen plass i sidepanelet når vinduet er bredt.
-• Palettene i spalten til høyre har tydeligere valg, med tekst på visningene.
+• Palettene i spalten til høyre har tydeligere valg, med tekst på visningene, og seksjoner du ikke bruker, kan legges sammen.
 • Skjermpipette også med ⌘I, og hurtigtaster: ⌘N ny palett, ⇧⌘S lagre som, ⌘1–5 for fanene.
 ```
 
@@ -338,12 +341,14 @@ CONTRAST
 
 LIGHT
 • See colours and whole palettes as they appear in other viewing conditions – your own or standard ones for graphic arts, workplaces, schools and museums.
+• Palettes in light: each colour on screen and in the light side by side, and which colour pairs become hard to tell apart in dim light or under fluorescent and LED lighting.
 • Viewing conditions you measured with iPhone and iPad follow you to the Mac through iCloud.
 • With iPhone as the camera, colours can be compensated for the light with a grey card or reference card (beta).
 
 COLOURS AND HARMONIES
 • New harmonies: monochromatic, tone path, triad, square and analogous with a complementary accent – on colour wheels including Goethe and Munsell, with natural lightness order.
 • Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament.
+• Munsell in the steps of the Munsell book.
 • Source colour space for CMYK and RGB, paper white and a choice of viewing condition for the display.
 
 PALETTES, SHARING AND EXPORT
@@ -351,12 +356,13 @@ PALETTES, SHARING AND EXPORT
 • Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser.
 • Save as: choose formats by where the files will be used, and save them to a folder or share them.
 • Copy gradients as editable gradients to design, layout and presentation apps, and colours as RGB values for CAD, BIM and video and linear values for 3D apps.
-• Reorder colours by dragging them, and pick a colour right from the colour fields.
+• Copied gradients have fewer stops, so they are easy to edit further.
+• Reorder colours by dragging them, add colours right in the list, and pick a colour right from the colour fields – or edit it in Studio and bring it back.
 
 ON THE MAC
 • Copy palettes straight into the Mac colour picker, as a colour list in every app.
 • Design systems get their own place in the sidebar when the window is wide.
-• Palettes in the right-hand column have clearer controls, with labelled views.
+• Palettes in the right-hand column have clearer controls, with labelled views, and sections you don’t use can be collapsed.
 • Screen eyedropper with ⌘I too, and keyboard shortcuts: ⌘N new palette, ⇧⌘S Save as, ⌘1–5 for the tabs.
 ```
 
