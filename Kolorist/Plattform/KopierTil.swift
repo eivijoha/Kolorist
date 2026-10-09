@@ -234,6 +234,9 @@ private extension Double {
 /// Macens fargevelger: fargene som en fargeliste (.clr) i Bibliotek/Colors i hjemmemappa, som fargevelgeren i alle
 /// programmer leser. En liste med samme navn byttes ut. Går det ikke å skrive dit, får brukeren velge plassering.
 enum Fargeliste {
+    /// Listene som er lagt ved fargevelgeren i denne økten, etter navn.
+    private static var vedlagt: [String: NSColorList] = [:]
+
     static func leggTil(_ farger: [PalettFarge], navn: String) {
         let listenavn = LagreSomArk.rentFilnavn(navn.isEmpty ? String(localized: "Kolorist") : navn)
         let liste = liste(farger, navn: listenavn)
@@ -251,8 +254,10 @@ enum Fargeliste {
             panel.message = String(localized: "Lagre fargelista i Bibliotek/Colors, så finnes den i fargevelgeren i alle programmer.")
             guard panel.runModal() == .OK, let url = panel.url, (try? liste.write(to: url)) != nil else { return }
         }
-        // Vis lista i fargevelgeren som bekreftelse.
+        // Vis lista i fargevelgeren som bekreftelse (en tidligere utgave med samme navn tas ut først).
         let panel = NSColorPanel.shared
+        if let forrige = vedlagt[listenavn] { panel.detachColorList(forrige) }
+        vedlagt[listenavn] = liste
         panel.attachColorList(liste)
         panel.mode = .colorList
         panel.orderFront(nil)

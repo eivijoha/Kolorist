@@ -4,6 +4,8 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- `Komponentsjekk.id` bruker tokennavnet til den egne rollen (unikt) i stedet for navnet, så to egne roller med samme navn
+  gir ulike id-er. Xcode-eksporten lager navnet på asset-katalogen uten tegn som skiller stier (`/`, `:` …).
 - **Designsystem i delingslenker:** `DeltInnhold.designsystem` (`DeltDesignsystem`, nøkkel `ds`): rollen til hver farge,
   skriftfargene, egne roller og de ferdige fargene i hver modus (tokennavn og hex), så visningssiden kan vise
   designsystemet uten å regne. Lenken er fortsatt en palett med rollefargene, så eldre versjoner viser fargene; et skadet

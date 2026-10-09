@@ -72,7 +72,10 @@ public enum DesignsystemEksport {
     // MARK: Xcode
 
     static func xcode(_ temaer: [Designtema], navn: String, avsender: Avsender) -> [String: Data] {
-        let katalog = "\(navn.isEmpty ? "Designsystem" : navn).xcassets"
+        // Navnet som ett mappenavn: uten skilletegn for stier og uten punktum først og sist (ikke «..»).
+        let rent = navn.components(separatedBy: CharacterSet(charactersIn: "/\\:?%*|\"<>")).joined(separator: "-")
+            .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: ".")))
+        let katalog = "\(rent.isEmpty ? "Designsystem" : rent).xcassets"
         var ut: [String: Data] = [:]
         // Xcode godtar fritekst i «author».
         let info: [String: Any] = ["author": avsender.app, "version": 1]

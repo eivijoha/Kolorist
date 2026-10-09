@@ -5527,16 +5527,6 @@
         }
       }
     },
-    "Lagre designsystem": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save design system"
-          }
-        }
-      }
-    },
     "Lagre designsystemet": {
       "localizations": {
         "en": {
@@ -10639,6 +10629,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "light text on dark background"
+          }
+        }
+      }
+    },
+    "lys.etikett.betraktningsforhold": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Betraktningsforhold"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condition"
           }
         }
       }

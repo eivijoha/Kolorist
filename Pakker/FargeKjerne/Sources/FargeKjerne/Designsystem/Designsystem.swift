@@ -560,7 +560,8 @@ public struct Komponentsjekk: Identifiable, Hashable, Sendable {
     /// Tokennavnet til den egne rollen (nil for de faste).
     public var rolletoken: String? = nil
 
-    public var id: String { par.rawValue + (rolle.map { ":" + $0 } ?? "") }
+    /// Unik også når to egne roller har samme navn (tokennavnet er unikt).
+    public var id: String { par.rawValue + (rolletoken.map { ":" + $0 } ?? "") }
     /// WCAG-kontrastforhold.
     public var forhold: Double { forgrunn.lagtOver(bakgrunn).wcagKontrast(mot: bakgrunn) }
     /// APCA-lesekontrast (Lc).

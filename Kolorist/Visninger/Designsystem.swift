@@ -226,7 +226,8 @@ struct DesignsystemKort: View {
                         .background(t.flate.swiftUI, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                         .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Color.primary.opacity(0.1)))
                     }
-                    ForEach(Designrolle.allCases.map { ds[$0] } + ds.egneRoller.map(\.farge), id: \.self) { f in
+                    // Plassen som id: flere roller kan ha samme farge (sekundær er aksenten når paletten har én kulør).
+                    ForEach(Array((Designrolle.allCases.map { ds[$0] } + ds.egneRoller.map(\.farge)).enumerated()), id: \.offset) { _, f in
                         RoundedRectangle(cornerRadius: 4, style: .continuous).fill(f.swiftUI).frame(width: 14, height: 30)
                     }
                 }
@@ -391,10 +392,9 @@ struct DesignsystemVisning: View {
         lagrer = true
         Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(80))
-            kontekst.angresteg("Lagre designsystem") {
-                if !navn.isEmpty { dokument.navn = navn }
-                kontekst.insert(dokument)
-            }
+            // Ikke et angresteg: visningen ville stått som lagret etter angring. «Slett designsystem» fjerner det igjen.
+            if !navn.isEmpty { dokument.navn = navn }
+            kontekst.insert(dokument)
             try? kontekst.save()
             withAnimation {
                 lagrer = false

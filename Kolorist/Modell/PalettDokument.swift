@@ -114,6 +114,7 @@ final class DesignsystemDokument {
         }
         set {
             data = (try? JSONEncoder().encode(newValue)) ?? data
+            navn = newValue.navn
             endret = .now
         }
     }
