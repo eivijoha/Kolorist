@@ -44,7 +44,26 @@ struct LysVurdering: View {
         let skift = miljø.fargeskift(farge)
         return Section {
             HStack(spacing: 0) {
-                FargeflateVelger(tittel: String(localized: "Farge"), farge: aktiv, kant: .leading)
+                // Fargen som eget lag bak menyen, så flatene møtes i en rett kant (menyen avrunder på iOS 26).
+                ZStack {
+                    aktiv.wrappedValue.swiftUI
+                    FargeVelgerMeny(tittel: String(localized: "Farge"), farge: aktiv) {
+                        Color.clear
+                            .overlay(alignment: .bottomLeading) {
+                                HStack(spacing: 6) {
+                                    Text(aktiv.wrappedValue.hex()).font(.caption.monospaced())
+                                    Image(systemName: "chevron.up.chevron.down").font(.caption2.weight(.semibold))
+                                }
+                                .font(.caption.weight(.medium))
+                                .foregroundStyle(.primary)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(.regularMaterial, in: Capsule())
+                                .padding(10)
+                            }
+                            .contentShape(Rectangle())
+                    }
+                }
                 Menu {
                     LysmiljøMenyvalg(valgt: Binding(get: { miljø.id }, set: { bibliotek.valgtLysmiljø = $0 }))
                 } label: {

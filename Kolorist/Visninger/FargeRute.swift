@@ -285,7 +285,9 @@ struct FargeValgBoble: View {
                     ekstra
                 }
             }
-            .buttonStyle(.borderless)
+            // .plain, ikke .borderless: .borderless toner hele etiketten (også teksten) i aksentfarge.
+            .buttonStyle(.plain)
+            .menuStyle(.button)
             .labelStyle(JustertEtikett())
         }
         .padding(16)
@@ -302,6 +304,7 @@ private struct JustertEtikett: LabelStyle {
             configuration.icon.frame(width: 24).foregroundStyle(.tint)
             configuration.title.foregroundStyle(.primary)
         }
-        .frame(minHeight: 36)
+        .frame(maxWidth: .infinity, minHeight: 36, alignment: .leading)
+        .contentShape(Rectangle())
     }
 }
