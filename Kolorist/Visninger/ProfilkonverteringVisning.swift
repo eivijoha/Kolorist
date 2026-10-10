@@ -9,7 +9,11 @@ struct ProfilkonverteringVisning: View {
     @AppStorage("konverterFra") private var fraID = ICCProfil.sRGB.id
     @AppStorage("konverterTil") private var tilID = ICCProfil.genericCMYK.id
     @AppStorage("konverterHensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
+    /// Studios kildefargerom for CMYK og RGB (samme lagring som i FargeEditor).
+    @AppStorage("kildeprofil.cmyk") private var kildeCMYK = ICCProfil.genericCMYK.id
+    @AppStorage("kildeprofil.rgb") private var kildeRGB = ICCProfil.sRGB.id
     @State private var verdier: [Double] = []
+    @Environment(\.dismiss) private var lukk
 
     private var fra: ICCProfil { bibliotek.profil(id: fraID) ?? .sRGB }
     private var til: ICCProfil { bibliotek.profil(id: tilID) ?? .genericCMYK }
@@ -55,8 +59,7 @@ struct ProfilkonverteringVisning: View {
                     }
                     if let målfarge {
                         Button("Bruk som aktiv farge", systemImage: "slider.horizontal.3") {
-                            arbeidsbenk.aktivFarge = målfarge
-                            arbeidsbenk.valgtFane = .studio
+                            bruk(resultat, farge: målfarge)
                         }
                     }
                 }
@@ -78,6 +81,29 @@ struct ProfilkonverteringVisning: View {
         .formStyle(.grouped)
         .navigationTitle("Konverter mellom profiler")
         .onChange(of: fraID) { verdier = [] }
+    }
+
+    /// Gjør resultatet til aktiv farge i målprofilens fargemodell og fargerom, med nøyaktig de konverterte verdiene
+    /// (ikke en ny rundtur gjennom profilen, som kan gi andre, likeverdige verdier – f.eks. annen sortgenerering).
+    private func bruk(_ resultat: [Double], farge: Farge) {
+        switch til.modell {
+        case .cmyk:
+            kildeCMYK = til.id
+            arbeidsbenk.modell = .cmyk
+        case .rgb:
+            kildeRGB = til.id
+            arbeidsbenk.modell = .rgb
+        case .lab:
+            arbeidsbenk.modell = .cieLab
+        default:
+            break
+        }
+        // Verdiene settes før fargen, så en begrensning til målprofilen ikke regner fargen om.
+        arbeidsbenk.profilverdier = .init(profilID: til.id, verdier: resultat, farge: farge)
+        arbeidsbenk.aktivFarge = farge
+        arbeidsbenk.valgtFane = .studio
+        // Tilbake til Studio, der fargen nå vises i målprofilens verdier.
+        lukk()
     }
 
     private func profilvelger(_ tittel: LocalizedStringKey, valgt: Binding<String>) -> some View {

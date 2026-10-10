@@ -16,6 +16,7 @@ struct ICCSeksjon: View {
     /// Visningslyset for «Vis som» (tom = D50, ICC-standarden).
     @AppStorage("visningslys") private var visningslysID = ""
     @State private var lysbibliotek = Lysbibliotek.delt
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
 
     private var profil: ICCProfil { bibliotek.profil(id: profilID) ?? .sRGB }
 
@@ -40,7 +41,8 @@ struct ICCSeksjon: View {
                 .fixedSize()
             }
 
-            if let verdier = farge.komponenter(i: profil, hensikt: hensikt) {
+            // Verdiene som er angitt eller konvertert direkte i profilen, ellers regnet fra fargen.
+            if let verdier = arbeidsbenk.profilverdier(for: profil) ?? farge.komponenter(i: profil, hensikt: hensikt) {
                 LabeledContent(profil.komponentnavn.joined(separator: " ")) {
                     Text(formatert(verdier))
                         .font(.callout.monospaced())
