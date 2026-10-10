@@ -6471,12 +6471,12 @@
         }
       }
     },
-    "Lyskilder beskrives med spektre fra CIE (dagslysserien, standardlys A, lysrør og LED-typer) eller som sortlegemer. Korrelert fargetemperatur og avstand fra Plancks kurve (Duv) regnes etter Ohno. Farger uten målt spekter får det glatteste spekteret som gir fargen i dagslys (Burns). Fargegjengivelse anslås fra referansekortets spektre, sammenlignet med et referanselys med samme fargetemperatur; tallet er skalert så det ligger nær Ra, men er ikke en offisiell fargegjengivelsesindeks. Standard betraktningsforhold følger belysningsstyrken i ISO 3664, NS-EN 12464-1 og CIE 157.": {
+    "Lyskilder beskrives med spektre fra CIE (dagslysserien, standardlys A, lysrør og LED-typer) eller som sortlegemer. Korrelert fargetemperatur og avstand fra Plancks kurve (Duv) regnes etter Ohno. Farger uten målt spekter får det glatteste spekteret som gir fargen i dagslys, etter metoden til S. A. Burns (2020), implementert for Kolorist. Fargegjengivelse anslås fra referansekortets spektre, sammenlignet med et referanselys med samme fargetemperatur; tallet er skalert så det ligger nær Ra, men er ikke en offisiell fargegjengivelsesindeks. Standard betraktningsforhold følger belysningsstyrken i ISO 3664, NS-EN 12464-1 og CIE 157.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Light sources are described by CIE spectra (the daylight series, illuminant A, fluorescent and LED types) or as blackbodies. Correlated colour temperature and distance from the Planckian locus (Duv) are calculated after Ohno. Colours without a measured spectrum get the smoothest spectrum that gives the colour in daylight (Burns). Colour rendering is estimated from the reference card’s spectra, compared with a reference light of the same colour temperature; the figure is scaled to lie close to Ra, but is not an official colour rendering index. Standard viewing conditions follow the illuminance in ISO 3664, EN 12464-1 and CIE 157."
+            "value": "Light sources are described by CIE spectra (the daylight series, illuminant A, fluorescent and LED types) or as blackbodies. Correlated colour temperature and distance from the Planckian locus (Duv) are calculated after Ohno. Colours without a measured spectrum get the smoothest spectrum that gives the colour in daylight using the method of S. A. Burns (2020), implemented for Kolorist. Colour rendering is estimated from the reference card’s spectra, compared with a reference light of the same colour temperature; the figure is scaled to lie close to Ra, but is not an official colour rendering index. Standard viewing conditions follow the illuminance in ISO 3664, EN 12464-1 and CIE 157."
           }
         }
       }
