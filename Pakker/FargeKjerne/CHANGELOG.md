@@ -2,7 +2,7 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
-## Ikke publisert
+## 0.4.0 – 2026-10-10
 
 - **Munsell er fjernet (brytende endring).** Munsell er et registrert varemerke (X-Rite), og renotasjonsdataene i
   `Munsell.json` var RITs `all.dat`, der omtrent halvparten er ekstrapolerte verdier med uklart opphav. Fjernet: typen
