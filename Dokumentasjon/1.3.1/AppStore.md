@@ -16,9 +16,8 @@ Bakgrunn (bare internt): APCA (Myndex) er lisensbelagt – lisensen gjelder bare
 et registrert varemerke (X-Rite), og de ekstrapolerte renotasjonsdataene har uklart opphav. Se
 `Dokumentasjon/APCA-gjeninnforing.md` og `Dokumentasjon/Munsell-gjeninnforing.md`.
 
-**«Nytt i denne versjonen» for iOS har to varianter.** Bruk A hvis 1.3 trekkes fra gjennomgang og aldri kommer ut på iOS
-(brukerne går da fra 1.2 til 1.3.1). Bruk B hvis 1.3 allerede er ute på iOS. Mac 1.3 er ute, så Mac bruker den korte
-teksten.
+**Versjonsløp:** iOS og iPadOS går rett fra 1.2 til 1.3.1 (1.3 ble trukket fra gjennomgang), så iOS-tekstene tar med
+alle nyhetene fra 1.3. Mac går fra 1.3 til 1.3.1 og har den korte teksten.
 
 ---
 
@@ -36,7 +35,7 @@ Fargepaletter for designere
 Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus og kontroll etter WCAG og LRV – rett inn i verktøyene du bruker.
 ```
 
-**Nytt i denne versjonen (4000) – A: fra 1.2 (1.3 trukket)**
+**Nytt i denne versjonen (4000)** – fra 1.2, så nyhetene fra 1.3 er med
 
 ```
 Kolorist 1.3.1 tar paletten helt fram til designsystemet.
@@ -57,13 +56,6 @@ Kolorist 1.3.1 tar paletten helt fram til designsystemet.
 • Spisset utvalg av modeller: fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
 ```
 
-**Nytt i denne versjonen (4000) – B: fra 1.3**
-
-```
-• Spisset utvalg av modeller: kontrastsjekken bygger på WCAG 2.2 og LRV, standardene regelverket for universell utforming viser til, og fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
-• Tekst på fargeflater velges som sort eller hvit etter WCAG-kontrast.
-• Mindre rettelser.
-```
 
 **Beskrivelse (4000)**
 
@@ -152,7 +144,7 @@ Colour palettes for designers
 From palette to design system: tone scales with consistent contrast, colours for light and dark mode, and checks by WCAG and LRV – straight into your tools.
 ```
 
-**What’s New in This Version (4000) – A: from 1.2 (1.3 withdrawn)**
+**What’s New in This Version (4000)** – from 1.2, so the 1.3 news is included
 
 ```
 Kolorist 1.3.1 takes your palette all the way to a design system.
@@ -173,13 +165,6 @@ Kolorist 1.3.1 takes your palette all the way to a design system.
 • A more focused set of models: the colour model and colour wheel with hue, value and chroma have been removed.
 ```
 
-**What’s New in This Version (4000) – B: from 1.3**
-
-```
-• A more focused set of models: the contrast check is based on WCAG 2.2 and LRV, the standards accessibility regulations refer to, and the colour model and colour wheel with hue, value and chroma have been removed.
-• Text on colour fields is chosen as black or white by WCAG contrast.
-• Minor fixes.
-```
 
 **Description (4000)**
 
@@ -262,7 +247,7 @@ color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,ha
 Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus, kontroll etter WCAG og LRV – plukk fra hele skjermen og dra fargene videre.
 ```
 
-**Nytt i denne versjonen (4000)**
+**Nytt i denne versjonen (4000)** – fra 1.3
 
 ```
 • Spisset utvalg av modeller: kontrastsjekken bygger på WCAG 2.2 og LRV, standardene regelverket for universell utforming viser til, og fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
@@ -354,7 +339,7 @@ farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,desi
 From palette to design system: tone scales with consistent contrast, light and dark mode, checks by WCAG and LRV – pick from anywhere on screen and drag colours on.
 ```
 
-**What’s New (4000)**
+**What’s New (4000)** – from 1.3
 
 ```
 • A more focused set of models: the contrast check is based on WCAG 2.2 and LRV, the standards accessibility regulations refer to, and the colour model and colour wheel with hue, value and chroma have been removed.
@@ -446,12 +431,14 @@ color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,ha
 Thank you for reviewing Kolorist 1.3.1, a colour palette tool for designers and architects on iPhone, iPad and Mac (one universal purchase).
 
 ABOUT 1.3.1
-1.3.1 refines the set of models included in the app. The contrast check now uses WCAG 2.2 and LRV only, and one colour model (hue, value and chroma) has been removed together with its colour wheel. No new permissions or data collection compared with 1.3.
+On iPhone and iPad, 1.3.1 is the first release after 1.2 and includes everything under HOW TO TEST. On Mac it follows 1.3.
+
+1.3.1 also refines the set of models included in the app: the contrast check uses WCAG 2.2 and LRV only, and one colour model (hue, value and chroma) has been removed together with its colour wheel. No new permissions or data collection.
 
 NO ACCOUNT NEEDED
 No account, no server of our own, no analytics, ads or in-app purchases. Data syncs through the user's private iCloud when signed in; otherwise everything stays on device.
 
-FROM 1.3 – HOW TO TEST
+NEW SINCE 1.2 – HOW TO TEST
 • Design system: open a palette › ⋯ › Make design system. A preview opens with Components, Roles and Scales; Save keeps it. Export (share button) writes colour sets, design tokens, CSS and a README to a folder.
 • Tone scale: Studio › Tone scale (also from a colour in a palette › Create tone scale). "Contrast (L*)" gives the same contrast for every hue.
 • Copy to: touch and hold (right-click on Mac) a colour › Copy to. New targets: RGB 0–255, RGB 0–1, linear values for 3D apps, and on Mac the system colour picker (writes a colour list to ~/Library/Colors).
@@ -476,6 +463,26 @@ Contact: eivind.johansen@ntnu.no
 ```
 
 ### TestFlight – What to Test (4000)
+
+iPhone og iPad (fra 1.2):
+
+```
+Takk for at du tester Kolorist 1.3.1! Versjonen kommer rett etter 1.2, så mye er nytt. Prøv gjerne dette:
+
+• Designsystem: åpne en palett › ⋯ › Lag designsystem. Se på komponentene i lys og mørk modus, bytt farger mellom rollene, lagre og eksporter. Del det gjerne som lenke.
+• Kontrast: Vurdering › Kontrast med WCAG 2.2 eller LRV. Trykk på fargene i flaten for å velge, og prøv «Endre i Studio …».
+• Toneskala: Studio › Toneskala.
+• Nye harmonier: monokromatisk og tonebane.
+• Palettgrupper: lag en gruppe og dra paletter inn i den.
+• Kopier til: trykk og hold på en farge › Kopier til.
+• ΔE: kopier verdiene, én eller alle som tabell.
+• Fargemodeller: paletter og lenker som brukte modellen med kulør, valør og kroma, skal åpnes som vanlige farger.
+• Synk: sjekk at paletter, grupper og designsystemer kommer over til dine andre enheter.
+
+Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu.no.
+```
+
+Mac (fra 1.3):
 
 ```
 Takk for at du tester Kolorist 1.3.1! Versjonen spisser utvalget av modeller:
@@ -508,8 +515,7 @@ for 6,3″) – metodelinja nevnte Munsell. Slik bildene er tatt: se `Dokumentas
 ### Før du sender inn
 
 - [ ] Xcode på grenen `versjon-1.3.1`; `MARKETING_VERSION` 1.3.1, `CURRENT_PROJECT_VERSION` 13 (14 hvis 13 alt er lastet opp).
-- [ ] iOS: 1.3 ligger til gjennomgang – trekk den («Remove from Review») og send 1.3.1 i stedet (tekst A), eller send
-      1.3.1 rett etter at 1.3 er godkjent (tekst B).
+- [ ] iOS: 1.3 er trukket fra gjennomgang; 1.3.1 sendes i stedet, med iOS-tekstene over (fra 1.2).
 - [ ] Ny versjon 1.3.1 for iOS og macOS, med tekstene over.
 - [ ] Reklametekst, beskrivelse og nøkkelord byttet (Munsell er byttet med harmoni/palette i nøkkelordene).
 - [ ] Studio-bildet byttet i alle settene (iPhone, iPad og Mac; norsk og engelsk).

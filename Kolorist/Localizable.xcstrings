@@ -4683,6 +4683,16 @@
         }
       }
     },
+    "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Herings motfargesirkel eller Goethes sirkel fra Farbenlehre (1810). RYB-, Hering- og Goethe-sirklene er stykkevis lineære avbildninger laget for appen. Monokromatisk harmoni holder kuløren fast og fordeler tonene jevnt langs en strek i lyshet (OKLCH) og metning, regnet som andel av høyeste kroma innenfor gamut ved hver lyshet. Tonebane gjør det samme, men gir hvert endepunkt sin kulør og fordeler også kuløren jevnt, i bue rundt OKLCH-sirkelen i retningen og så langt brukeren velger, opptil en hel runde – i motsetning til overganger, som går i rett linje i OKLab og kan passere grått mellom motfarger. Prinsippet er kjent fra sekvensielle paletter i HCL (Zeileis mfl.) og cubehelix (Green); flaten og de to kulørhåndtakene er laget for Kolorist. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distribution are calculated as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Hering’s opponent-colour wheel or Goethe’s wheel from his Theory of Colours (1810). The RYB, Hering and Goethe wheels are piecewise linear mappings made for the app. The monochromatic harmony keeps the hue fixed and spreads the tones evenly along a line in lightness (OKLCH) and saturation, taken as a share of the highest chroma within the gamut at each lightness. The tone path does the same, but gives each end point its own hue and spreads the hue evenly too, in an arc around the OKLCH wheel in the direction and as far as the user chooses, up to a full turn – unlike gradients, which run in a straight line in OKLab and can pass through grey between opposite colours. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift. The principle is known from sequential palettes in HCL (Zeileis et al.) and cubehelix (Green); the field and the two hue handles were made for Kolorist."
+          }
+        }
+      }
+    },
     "Komponenter": {
       "localizations": {
         "en": {
