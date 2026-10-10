@@ -4,15 +4,17 @@ Innholdet hentes fra de opprinnelige forsidene (webkilde/), så funksjonslistene
 
     python3 web/verktøy/lag_sider.py
 
-Skriver sidene i web/<VERSJON> (nå 1.3; 1.2-sidene i web/1.2 er ferdige og bygges ikke på nytt). Tekst endres i
+Skriver sidene i web/<VERSJON> (nå 1.4; sidene i web/1.2 og web/1.3 er ferdige og bygges ikke på nytt). Tekst endres i
 webkilde/ eller her, ikke i de ferdige sidene (de skrives over). Det som er nytt i versjonen, merkes med N; det som
 var nytt i forrige versjon, står med N12 (tomt), så merket kan flyttes tilbake om det trengs."""
 import pathlib
 import re
 
-VERSJON = '1.3'
+VERSJON = '1.4'
 # Merke for det som var nytt i 1.2 – ikke lenger nytt.
 N12 = ''
+# Det som var nytt i 1.3 (merket fjernet i 1.4, som N12 i 1.3).
+N13 = ''
 
 S = str(pathlib.Path(__file__).resolve().parent)
 W = str(pathlib.Path(__file__).resolve().parent.parent / VERSJON)
@@ -260,7 +262,7 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG, APCA eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
+        nyhet = f'<p class="nyhet">{N13}<a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG, APCA eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.'),
@@ -289,7 +291,7 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="design.html">From palette to design system, a contrast check by WCAG, APCA or LRV, and colours and gradients you copy straight into your design apps</a></p>'
+        nyhet = f'<p class="nyhet">{N13}<a href="design.html">From palette to design system, a contrast check by WCAG, APCA or LRV, and colours and gradients you copy straight into your design apps</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, Munsell and every colour space and ICC profile.'),
@@ -455,51 +457,51 @@ def design(lang):
             ('Finn fargene', 'Start fra et ord, et bilde eller en farge du allerede har.',
              ['Fra verdiord til palett med Apple Intelligence på enheten, forankret i en kunnskapsbase med over hundre fargebegreper',
               'Harmonier på fargesirkler i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N12,
-              'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N,
-              'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N,
-              'Tonebaner: toner langs en bane gjennom lyshet, metning og kulør – kuløren går i bue mellom to endepunkter' + N,
+              'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N13,
+              'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N13,
+              'Tonebaner: toner langs en bane gjennom lyshet, metning og kulør – kuløren går i bue mellom to endepunkter' + N13,
               'Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning' + N12,
-              'Plukk farger med kameraet eller fra bilder rett fra fargefeltene – og fra hele skjermen på Mac' + N], 'monokrom', None),
+              'Plukk farger med kameraet eller fra bilder rett fra fargefeltene – og fra hele skjermen på Mac' + N13], 'monokrom', None),
             ('Bygg fargesystemet', 'Toner og overganger i like perseptuelle steg, så trinnene oppleves jevne.',
-             ['Toneskalaer fra 50 til 950 med lik kontrast for alle kulører, rett i Studio: trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt' + N,
-              'Fra palett til designsystem: roller for aksent, nøytral og status i lys og mørk modus, med og uten økt kontrast. Merkefargen beholdes der den holder kravene, og du kan legge til egne roller som info eller tilbud' + N,
-              'Skriftfarger i paletten om du vil: én nær hvit og én nær sort, med palettens kulørpreg' + N,
+             ['Toneskalaer fra 50 til 950 med lik kontrast for alle kulører, rett i Studio: trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt' + N13,
+              'Fra palett til designsystem: roller for aksent, nøytral og status i lys og mørk modus, med og uten økt kontrast. Merkefargen beholdes der den holder kravene, og du kan legge til egne roller som info eller tilbud' + N13,
+              'Skriftfarger i paletten om du vil: én nær hvit og én nær sort, med palettens kulørpreg' + N13,
               'Lysere og mørkere toner i like eller avtagende steg, med verdier i valgt fargemodell' + N12,
               'Overganger i OKLab, med lysere og mørkere rader',
               'Dra på lyshetsstigen for å gjøre hele rekken lysere eller mørkere' + N12,
               'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'toneskala', None),
             ('Kontroller', 'Kontroller kontrast og lesbarhet, også med fargesynsavvik.',
              ['WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk',
-              'Kontrastsjekk etter WCAG 2.2, APCA eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N,
+              'Kontrastsjekk etter WCAG 2.2, APCA eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N13,
               '«Rett opp» endrer lysheten til fargen består',
               'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
-              'Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG' + N,
-              'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N,
-              'Lesekontrast etter APCA (Lc), med hva kontrasten holder til: brødtekst, overskrifter eller grafikk' + N,
+              'Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG' + N13,
+              'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N13,
+              'Lesekontrast etter APCA (Lc), med hva kontrasten holder til: brødtekst, overskrifter eller grafikk' + N13,
               'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'designsystem', None),
             ('Skjerm, trykk og 3D-print', 'Display P3 side om side med trykkprofiler, egne ICC-profiler og fargekart – og filamentfarger for 3D-print.',
              ['Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil',
               'Varsel når fargen er utenfor fargeområdet – og begrens farger til en profil om du vil',
               'Rene CMYK-verdier: grått innslag flyttes til sort, med færrest mulig trykkfarger',
-              'Kildefargerom for CMYK og RGB: angi verdiene i profilen de skal brukes i' + N,
-              'CMYK i prosent; RGB som 0–255 i sRGB (de samme tallene som i hex) og 0–1 i andre fargerom' + N,
-              'Betraktningsforhold for visningen: D50 (ICC-referanse), D65 eller andre – og papirhvitt med absolutt kolorimetrisk gjengivelse' + N,
+              'Kildefargerom for CMYK og RGB: angi verdiene i profilen de skal brukes i' + N13,
+              'CMYK i prosent; RGB som 0–255 i sRGB (de samme tallene som i hex) og 0–1 i andre fargerom' + N13,
+              'Betraktningsforhold for visningen: D50 (ICC-referanse), D65 eller andre – og papirhvitt med absolutt kolorimetrisk gjengivelse' + N13,
               'Fargekart med navngitte toner: arbeid innenfor dem, med tonenavn vist',
               'Vurder trykk og bilder under standardlys for grafisk vurdering (ISO 3664)' + N12,
               'Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt med kolorimeter – finn nærmeste filament, med lenke til prøven (<a href="filament.html">les mer</a>)' + N12],
              'studio', ('lys.html', 'Les om lys og fargemåling')),
             ('Levér', 'Eksporter og kopier farger til andre programmer, i formatet de ble laget i.',
              ['Eksport til ASE, ACO, design tokens (DTCG-JSON), CSS, SwiftUI, GPL, SVG-fargeprøver og hex-lister',
-              'Designsystemet som fargesett for apputvikling (lys, mørk og økt kontrast), design tokens med alias og én fil per modus, og CSS med light-dark()' + N,
+              'Designsystemet som fargesett for apputvikling (lys, mørk og økt kontrast), design tokens med alias og én fil per modus, og CSS med light-dark()' + N13,
               'Farger eksporteres i formatet de er laget i – for eksempel CMYK som CMYK',
-              'Kopier farger og gradienter rett inn i design-, layout-, kontor- og presentasjonsprogrammer – som figurer og redigerbare gradienter, ikke bilder' + N,
-              'Kopier også RGB-verdier, lineære verdier til 3D-programmer og – på Mac – fargelister rett inn i fargevelgeren i alle programmer' + N,
-              'Velg selv hvilke programmer «Kopier til» viser, og i hvilken rekkefølge' + N,
+              'Kopier farger og gradienter rett inn i design-, layout-, kontor- og presentasjonsprogrammer – som figurer og redigerbare gradienter, ikke bilder' + N13,
+              'Kopier også RGB-verdier, lineære verdier til 3D-programmer og – på Mac – fargelister rett inn i fargevelgeren i alle programmer' + N13,
+              'Velg selv hvilke programmer «Kopier til» viser, og i hvilken rekkefølge' + N13,
               'Dra fargeprøver rett inn i andre programmer på Mac – og farger inn i Kolorist',
-              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
+              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N13,
               'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i en skytjeneste – eller del filene direkte' + N12,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
-              'Del designsystemer som lenke: komponentene i alle moduser og alle tokens, i nettleseren eller i Kolorist' + N,
+              'Del designsystemer som lenke: komponentene i alle moduser og alle tokens, i nettleseren eller i Kolorist' + N13,
               'Siri og Snarveier: lag paletter og overganger, konverter farger og sjekk kontrast'], 'palettgrupper', None),
         ]
         return fagside('nb', 'design.html', 'Kolorist for design – paletter, toner, kontroll og eksport',
@@ -511,51 +513,51 @@ def design(lang):
         ('Find the colours', 'Start from a word, a photo or a colour you already have.',
          ['From value words to a palette with Apple Intelligence on device, grounded in a knowledge base of more than a hundred colour concepts',
           'Harmonies on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N12,
-          'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N,
-          'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N,
-          'Tone paths: tones along a path through lightness, saturation and hue – the hue arcs between two end points' + N,
+          'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N13,
+          'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N13,
+          'Tone paths: tones along a path through lightness, saturation and hue – the hue arcs between two end points' + N13,
           'Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension' + N12,
-          'Pick colours with the camera or from photos right from the colour fields – and from anywhere on screen on the Mac' + N], 'monokrom', None),
+          'Pick colours with the camera or from photos right from the colour fields – and from anywhere on screen on the Mac' + N13], 'monokrom', None),
         ('Build the colour system', 'Tones and gradients in perceptually equal steps, so the steps look even.',
-         ['Tone scales from 50 to 950 with the same contrast for every hue, right in Studio: step 400 holds at least 3:1 and step 600 at least 4.5:1 against white' + N,
-          'From palette to design system: roles for accent, neutral and status in light and dark mode, with and without increased contrast. Your brand colour is kept wherever it meets the requirements, and you can add your own roles, such as info or offers' + N,
-          'Text colours in the palette if you want them: one near white and one near black, tinted with the palette’s hue' + N,
+         ['Tone scales from 50 to 950 with the same contrast for every hue, right in Studio: step 400 holds at least 3:1 and step 600 at least 4.5:1 against white' + N13,
+          'From palette to design system: roles for accent, neutral and status in light and dark mode, with and without increased contrast. Your brand colour is kept wherever it meets the requirements, and you can add your own roles, such as info or offers' + N13,
+          'Text colours in the palette if you want them: one near white and one near black, tinted with the palette’s hue' + N13,
           'Lighter and darker tones in equal or easing steps, with values in the chosen colour model' + N12,
           'Gradients in OKLab, with lighter and darker rows',
           'Drag on the lightness ladder to make the whole row lighter or darker' + N12,
           'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'toneskala', None),
         ('Check', 'Check contrast and legibility, including with colour vision deficiencies.',
          ['WCAG 2.2 contrast: AA and AAA, large text and graphics',
-          'Contrast check by WCAG 2.2, APCA or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N,
+          'Contrast check by WCAG 2.2, APCA or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N13,
           'Auto-fix changes the lightness until the colour passes',
           'Text contrast for whole palettes, right in the palette view' + N12,
-          'Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement' + N,
-          'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N,
-          'Reading contrast by APCA (Lc), with what the contrast is good for: body text, headlines or graphics' + N,
+          'Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement' + N13,
+          'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N13,
+          'Reading contrast by APCA (Lc), with what the contrast is good for: body text, headlines or graphics' + N13,
           'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'designsystem', None),
         ('Screen, print and 3D printing', 'Display P3 side by side with print profiles, your own ICC profiles and colour libraries – and filament colours for 3D printing.',
          ['Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile',
           'A warning when the colour is out of gamut – and limit colours to a profile if you like',
           'Clean CMYK values: grey components move to black, with as few inks as possible',
-          'Source colour space for CMYK and RGB: enter the values in the profile they will be used in' + N,
-          'CMYK in percent, and RGB as 0–255 in sRGB – the same numbers as in hex – and 0–1 in other colour spaces' + N,
-          'Viewing light: D50 (ICC standard), D65 or a viewing condition – and paper white with absolute colorimetric' + N,
+          'Source colour space for CMYK and RGB: enter the values in the profile they will be used in' + N13,
+          'CMYK in percent, and RGB as 0–255 in sRGB – the same numbers as in hex – and 0–1 in other colour spaces' + N13,
+          'Viewing light: D50 (ICC standard), D65 or a viewing condition – and paper white with absolute colorimetric' + N13,
           'Colour libraries with named tones: work within them, with tone names shown',
           'Judge print and images under standard viewing conditions for graphic arts (ISO 3664)' + N12,
           'Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most measured with a colorimeter – find the nearest filament, with a link to the sample (<a href="filament.html">read more</a>)' + N12],
          'studio', ('light.html', 'Read about light and colour measurement')),
         ('Deliver', 'Export and copy colours to other apps, in the format they were made in.',
          ['Export to ASE, ACO, design tokens (DTCG JSON), CSS, SwiftUI, GPL, SVG swatches and hex lists',
-          'The design system as colour sets for app development (light, dark and increased contrast), design tokens with aliases and one file per mode, and CSS with light-dark()' + N,
+          'The design system as colour sets for app development (light, dark and increased contrast), design tokens with aliases and one file per mode, and CSS with light-dark()' + N13,
           'Colours are exported in the format they were made in – CMYK as CMYK, for example',
-          'Copy colours and gradients straight into design, layout, office and presentation apps – as shapes and editable gradients, not images' + N,
-          'Copy RGB values too, linear values for 3D apps and – on the Mac – colour lists straight into the colour picker in every app' + N,
-          'Choose which apps “Copy to” shows, and in what order' + N,
+          'Copy colours and gradients straight into design, layout, office and presentation apps – as shapes and editable gradients, not images' + N13,
+          'Copy RGB values too, linear values for 3D apps and – on the Mac – colour lists straight into the colour picker in every app' + N13,
+          'Choose which apps “Copy to” shows, and in what order' + N13,
           'Drag swatches straight into other apps on the Mac – and colours into Kolorist',
-          'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N,
+          'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N13,
           'Save as: palettes and colours in several formats at once – in a folder you choose, including a cloud service – or share the files directly' + N12,
           'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
-          'Share design systems as a link: the components in every mode and every token, in the browser or in Kolorist' + N,
+          'Share design systems as a link: the components in every mode and every token, in the browser or in Kolorist' + N13,
           'Siri and Shortcuts: make palettes and gradients, convert colours and check contrast'], 'palettgrupper', None),
     ]
     return fagside('en', 'design.html', 'Kolorist for design – palettes, tones, checks and export',
@@ -587,9 +589,9 @@ def arkitektur(lang):
               'Farger som skifter karakter, og fargepar som blir vanskelige å skille i svakt lys eller under lysrør og LED' + N12],
              'arkitektur-lys', ('lys.html', 'Les om lys og fargemåling')),
             ('Universell utforming', 'Kontrast mellom flater – dører, vegger, gulv og skilt – ikke bare tekst.',
-             ['To flater side om side med lysrefleksjonsverdi (LRV) og kontrasten mellom dem' + N,
-              'Velg beregningsmetode: LRV-forskjell (BS 8300), Weber (TEK17, NS 11001) eller Michelson (ISO 21542) – hver med sine krav' + N,
-              'Plukk begge flatene med kameraet – uten gråkort eller referansekort merkes LRV som veiledende' + N,
+             ['To flater side om side med lysrefleksjonsverdi (LRV) og kontrasten mellom dem' + N13,
+              'Velg beregningsmetode: LRV-forskjell (BS 8300), Weber (TEK17, NS 11001) eller Michelson (ISO 21542) – hver med sine krav' + N13,
+              'Plukk begge flatene med kameraet – uten gråkort eller referansekort merkes LRV som veiledende' + N13,
               'LRV og luminanskontrast i valgt lys – også lysrør og LED' + N12,
               'WCAG-kontrast for skilt og tekst',
               'Farger og paletter slik de oppleves med fargesynsavvik – og et kamera med fargesynsfilter for omgivelsene'],
@@ -598,9 +600,9 @@ def arkitektur(lang):
              ['Mål fargetemperatur, belysningsstyrke (lux) og anslått fargegjengivelse med iPhone eller iPad' + N12,
               'Sammenlign med anbefalte nivåer, for eksempel 500 lx på en arbeidsplass',
               'Lagre målt lys som betraktningsforhold, og se andre farger under det' + N12,
-              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N,
+              'Skriv ut paletter som A4-PDF med fargeflater i CIELab, navn og verdier – også harmonier, overganger og palettgrupper' + N13,
               'Lagre som: paletter og farger i flere formater samtidig – i en mappe du velger, også i en skytjeneste – eller del filene direkte' + N12,
-              'Kopier farger som RGB-verdier til CAD- og BIM-programmer, og på Mac rett inn i fargevelgeren i alle programmer' + N,
+              'Kopier farger som RGB-verdier til CAD- og BIM-programmer, og på Mac rett inn i fargevelgeren i alle programmer' + N13,
               'Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser fargene i nettleseren' + N12,
               'Paletter og betraktningsforhold synkroniseres til iPad og Mac via iCloud'], None, None),
         ]
@@ -628,9 +630,9 @@ def arkitektur(lang):
           'Colours that change character, and colour pairs that become hard to tell apart in dim light or under fluorescent and LED lighting' + N12],
          'arkitektur-lys', ('light.html', 'Read about light and colour measurement')),
         ('Universal design', 'Contrast between surfaces – doors, walls, floors and signs – not just text.',
-         ['Two surfaces side by side with light reflectance value (LRV) and the contrast between them' + N,
-          'Choose the method: LRV difference (BS 8300), Weber (Norwegian TEK17, NS 11001) or Michelson (ISO 21542) – each with its own requirements' + N,
-          'Pick both surfaces with the camera – without a grey card or reference card the LRV is marked as indicative' + N,
+         ['Two surfaces side by side with light reflectance value (LRV) and the contrast between them' + N13,
+          'Choose the method: LRV difference (BS 8300), Weber (Norwegian TEK17, NS 11001) or Michelson (ISO 21542) – each with its own requirements' + N13,
+          'Pick both surfaces with the camera – without a grey card or reference card the LRV is marked as indicative' + N13,
           'LRV and luminance contrast in the chosen light – including fluorescent and LED' + N12,
           'WCAG contrast for signs and text',
           'Colours and palettes as they appear with colour vision deficiencies – and a camera with a colour vision filter for your surroundings'],
@@ -639,9 +641,9 @@ def arkitektur(lang):
          ['Measure colour temperature, illuminance (lux) and estimated colour rendering with iPhone or iPad' + N12,
           'Compare with recommended levels, such as 500 lx at a workplace',
           'Save measured light as a viewing condition, and see other colours under it' + N12,
-          'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N,
+          'Print palettes as an A4 PDF with swatches in CIELab, names and values – harmonies, gradients and palette groups too' + N13,
           'Save as: palettes and colours in several formats at once – in a folder you choose, including a cloud service – or share the files directly' + N12,
-          'Copy colours as RGB values for CAD and BIM apps, and on the Mac straight into the colour picker in every app' + N,
+          'Copy colours as RGB values for CAD and BIM apps, and on the Mac straight into the colour picker in every app' + N13,
           'Share colours, palettes, gradients and harmonies as a link – recipients without the app see the colours in their browser' + N12,
           'Palettes and viewing conditions sync to iPad and Mac through iCloud'], None, None),
     ]
@@ -895,7 +897,7 @@ def plattformer(lang):
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
-                 ('Designsystem fra en palett, med komponenter og eksport' + N, ja, ja, ja),
+                 ('Designsystem fra en palett, med komponenter og eksport' + N13, ja, ja, ja),
                  ('Kontrast (WCAG, APCA og LRV) og fargesyn', ja, ja, ja),
                  ('Simuler farger og paletter under andre betraktningsforhold', ja, ja, ja),
                  ('Fargeflatene ved siden av verktøyene', nei, 'I liggende format', 'I bredt vindu'),
@@ -934,7 +936,7 @@ def plattformer(lang):
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
-                 ('Design system from a palette, with components and export' + N, ja, ja, ja),
+                 ('Design system from a palette, with components and export' + N13, ja, ja, ja),
                  ('Contrast (WCAG, APCA and LRV) and colour vision', ja, ja, ja),
                  ('Simulate colours and palettes in other viewing conditions', ja, ja, ja),
                  ('Swatches beside the tools', nei, 'In landscape', 'In a wide window'),

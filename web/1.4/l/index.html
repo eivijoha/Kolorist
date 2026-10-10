@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Innholdet ligger etter # i adressen og sendes aldri til nettstedet. Siden lagrer og sender ingenting. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <meta name="apple-itunes-app" content="app-id=6818636272">
+  <title>Delt fra Kolorist</title>
+  <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="stil.css?v=5">
+  <script src="vis.js?v=6" defer></script>
+</head>
+<body>
+  <a class="hopp" href="#hovedinnhold" data-t="hopp">Hopp til hovedinnhold</a>
+  <div class="regnbuestripe" aria-hidden="true"></div>
+
+  <header class="topp">
+    <div class="topp-innhold">
+      <a class="merkenavn" href="../index.html" data-href-en="../en/index.html">
+        <img src="../assets/ikon.svg" alt="" width="32" height="32">
+        Kolorist
+      </a>
+    </div>
+  </header>
+
+  <main id="hovedinnhold" class="innhold" tabindex="-1">
+    <header class="sidetopp">
+      <p class="overtittel" id="slag"></p>
+      <h1 id="tittel" data-t="laster">Åpner …</h1>
+      <div class="handlinger" id="topphandling" hidden>
+        <a class="knapp" id="aapneTopp" href="#">Åpne fargene i Kolorist-appen</a>
+      </div>
+    </header>
+
+    <div id="innhold"></div>
+
+    <section class="seksjon" id="handlinger" hidden>
+      <div class="boks videre-boks">
+        <h2 data-t="haAppen">Har du Kolorist?</h2>
+        <p data-t="haAppenTekst">Åpne lenken i appen for å lagre, endre og bygge videre.</p>
+        <div class="handlinger">
+          <a class="knapp" id="aapne" href="#">Åpne fargene i Kolorist-appen</a>
+          <a class="knapp knapp-sekundaer" href="https://apps.apple.com/app/kolorist-fargepaletter/id6818636272" data-t="lastNed">Last ned for iPhone, iPad og Mac</a>
+        </div>
+      </div>
+    </section>
+
+    <noscript><p class="boks">Siden trenger JavaScript for å vise fargene. / This page needs JavaScript to show the colours.</p></noscript>
+  </main>
+
+  <footer class="bunn">
+    <div class="bunn-innhold">
+      <p data-t="personvern">Fargene ligger i selve lenken. Kolorist.no får ikke vite hva som deles.</p>
+    </div>
+  </footer>
+</body>
+</html>
