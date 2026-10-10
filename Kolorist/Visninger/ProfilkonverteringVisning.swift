@@ -112,6 +112,16 @@ struct ProfilkonverteringVisning: View {
             if !bibliotek.importerte.isEmpty {
                 Seksjon("Importerte") { ForEach(bibliotek.importerte) { Text($0.navn).tag($0.id) } }
             }
+            #if os(macOS)
+            // Profilene installert på Macen, én seksjon per mappe (Systemet, Maskinen, Displays …).
+            let installerte = bibliotek.installerte.filter { p in !bibliotek.importerte.contains { $0.id == p.id } }
+            let grupper = Dictionary(grouping: installerte) { bibliotek.installertGruppe[$0.id] ?? String(localized: "Andre") }
+            ForEach(grupper.keys.sorted { $0.localizedStandardCompare($1) == .orderedAscending }, id: \.self) { gruppe in
+                Section(String(localized: "Installert: \(gruppe)")) {
+                    ForEach(grupper[gruppe] ?? []) { Text(bibliotek.visningsnavn($0)).tag($0.id) }
+                }
+            }
+            #endif
         }
     }
 

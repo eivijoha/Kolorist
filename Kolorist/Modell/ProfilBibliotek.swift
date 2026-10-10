@@ -50,9 +50,17 @@ final class ProfilBibliotek {
         Task { await kobleTilICloud() }
         #if os(macOS)
         Task {
-            let funnet = await Task.detached(priority: .utility) { InstallerteProfiler.finn() }.value
+            // Profilene som kan brukes som fargerom (RGB, CMYK, grå), uten duplikater av standardrommene.
+            let funnet = await Task.detached(priority: .utility) { () -> [(profil: ICCProfil, gruppe: String, navn: String)] in
+                let innebygdeNavn = Set(ICCProfil.innebygde.map(\.navn))
+                var sett = Set<String>()
+                return InstallerteProfiler.finn().filter(\.kanBrukesSomFargerom).compactMap { i in
+                    guard let p = i.profil(), !innebygdeNavn.contains(p.navn), sett.insert(p.id).inserted else { return nil }
+                    return (p, i.gruppe, i.visningsnavn)
+                }
+            }.value
             installertGruppe = Dictionary(funnet.map { ($0.profil.id, $0.gruppe) }, uniquingKeysWith: { a, _ in a })
-            installertNavn = Dictionary(funnet.map { ($0.profil.id, $0.visningsnavn) }, uniquingKeysWith: { a, _ in a })
+            installertNavn = Dictionary(funnet.map { ($0.profil.id, $0.navn) }, uniquingKeysWith: { a, _ in a })
             installerte = funnet.map(\.profil)
         }
         #endif

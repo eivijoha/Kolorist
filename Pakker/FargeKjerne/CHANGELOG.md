@@ -4,6 +4,12 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Installerte ICC-profiler (macOS):** `InstallerteProfiler.finn(klasser:datarom:)` lister profilene i
+  `/System/Library/ColorSync/Profiles`, `/Library/ColorSync/Profiles` og `~/Library/ColorSync/Profiles` (med undermapper,
+  og det ColorSync ellers kjenner). `InstallertProfil` har `url`, `navn` (beskrivelsen i profilen), `visningsnavn`
+  (entydig), `klasse` (skjerm, inndata, utdata, fargerom, lenke, abstrakt, navngitt), `datarom` (RGB, CMYK, grå, Lab, XYZ),
+  `plassering` (system, maskin, bruker, annen), `gruppe` (undermappe), `kanBrukesSomFargerom`, og `profil()` som åpner den
+  som `ICCProfil`. Leser bare hodet og beskrivelsen. Virker i sandkassen uten egne rettigheter. Finnes ikke på iOS.
 - `Komponentsjekk.id` bruker tokennavnet til den egne rollen (unikt) i stedet for navnet, så to egne roller med samme navn
   gir ulike id-er. Xcode-eksporten lager navnet på asset-katalogen uten tegn som skiller stier (`/`, `:` …).
 - **Designsystem i delingslenker:** `DeltInnhold.designsystem` (`DeltDesignsystem`, nøkkel `ds`): rollen til hver farge,
