@@ -1130,7 +1130,7 @@ def filamentside(lang):
         ('Share with a link', 'Share a palette of filament colours as a link. Recipients without the app see the colours in their browser, with a way on to each sample.',
          ['With Kolorist the link opens in the app, and you decide what to save',
           'Without the app – on PCs too – the colours are shown at kolorist.no, with manufacturer, material and a link to the source',
-          'The source and licence are stated on the page'], 'del-web-filament', (FIL, 'See the example “Nordisk kyst in PLA”')),
+          'The source and licence are stated on the page'], 'del-web-filament', (FIL, 'See the example “Nordic coast in PLA”')),
         ('Open about the data', 'Where the colours come from, and what Kolorist does with them.',
          [f'Source: {kilde}, licensed under {lisens} – Kolorist has selected information and converted the colours',
           'Measured as CIELab under D65 with the 10° observer, and converted to Kolorist’s colour space with Bradford adaptation',
@@ -1146,9 +1146,39 @@ def filamentside(lang):
 
 # ---------- Skriv ----------
 
+# Navn i eksempellenkene (skrevet på norsk) på engelsk, for de engelske sidene.
+LENKENAVN_EN = {
+    'Nordisk kyst': 'Nordic coast', 'Dyp fjord': 'Deep fjord', 'Kystblå': 'Coastal blue', 'Disig himmel': 'Hazy sky',
+    'Sand': 'Sand', 'Naust': 'Boathouse', 'Skumring': 'Dusk', 'Generisk CMYK': 'Generic CMYK',
+    'Nordisk kyst i PLA': 'Nordic coast in PLA',
+}
+
+
+def lenke_på(url, lang):
+    """Delingslenken på sidens språk: navnene oversatt (engelsk) og `sp`, så visningssiden bruker samme språk."""
+    import base64, json, zlib
+    hode, frag = url.split('#z', 1)
+    b = frag.replace('-', '+').replace('_', '/') + '=' * (-len(frag) % 4)
+    innhold = json.loads(zlib.decompress(base64.b64decode(b), -15))
+    if lang == 'en':
+        def oversett(o):
+            if isinstance(o, dict):
+                return {k: (LENKENAVN_EN.get(v, v) if k in ('n', 'rn') and isinstance(v, str) else oversett(v)) for k, v in o.items()}
+            if isinstance(o, list):
+                return [oversett(x) for x in o]
+            return o
+        innhold = oversett(innhold)
+    innhold['sp'] = lang
+    pakker = zlib.compressobj(9, zlib.DEFLATED, -15)
+    rå = pakker.compress(json.dumps(innhold, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()) + pakker.flush()
+    return hode + '#z' + base64.b64encode(rå).decode().replace('+', '-').replace('/', '_').rstrip('=')
+
+
 def skriv(sti, tekst):
     # Nye skjermbilder: ny versjon i adressen, så nettleser og Varnish henter dem på nytt.
     tekst = re.sub(r'\.png\?v=\d+', '.png?v=8', tekst)
+    lang = 'en' if sti.startswith('en/') else 'nb'
+    tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)
 
 
