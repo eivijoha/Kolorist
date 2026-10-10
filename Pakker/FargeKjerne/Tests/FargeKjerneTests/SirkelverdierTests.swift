@@ -2,19 +2,10 @@ import FargeKjerne
 import Foundation
 import Testing
 
-@Suite("Munsell-trinn og sirkelverdier")
+@Suite("Sirkelverdier")
 struct SirkelverdierTests {
-    @Test func munsellTrinn() {
-        #expect(Munsell.avrundetValør(4.4) == 4)
-        #expect(Munsell.avrundetValør(10.7) == 10)
-        #expect(Munsell.avrundetKroma(13.1) == 14)
-        #expect(Munsell.avrundetKroma(0.9) == 0)
-        #expect(Munsell(kulør: 5, valør: Munsell.avrundetValør(4.2), kroma: Munsell.avrundetKroma(13.4)).notasjon == "5R 4/14")
-    }
-
     @Test func verditekstPerSirkel() {
         let f = Farge(hex: "#2F7FD8")!
-        #expect(Fargesirkel.munsell.verditekst(for: f) == f.munsell.notasjon)
         #expect(Fargesirkel.okLCH.verditekst(for: f).hasPrefix("OKLCH 59% 0.156 254°"))
         #expect(Fargesirkel.hsl.verditekst(for: f).hasPrefix("HSL 212°"))
         #expect(Fargesirkel.ryb.verditekst(for: f).hasPrefix("RYB "))
@@ -26,7 +17,6 @@ struct SirkelverdierTests {
         #expect(Fargemodell.okLCH.kortTekst(for: f) == "OKLCH 59% 0.156 254°")
         #expect(Fargemodell.rgb.kortTekst(for: f) == "#2F7FD8")
         #expect(Fargemodell.cmyk.kortTekst(for: f).hasPrefix("CMYK ") && Fargemodell.cmyk.kortTekst(for: f).hasSuffix("%"))
-        #expect(Fargemodell.munsell.kortTekst(for: f) == f.munsell.notasjon)
         #expect(Fargesirkel.okLCH.verditekst(for: f) == Fargemodell.okLCH.kortTekst(for: f))
     }
 

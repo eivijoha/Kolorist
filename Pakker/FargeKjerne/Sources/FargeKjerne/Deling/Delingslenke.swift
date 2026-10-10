@@ -238,8 +238,8 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
     }
 }
 
-/// En farge i en lenke: OKLab (kanonisk, og direkte brukbar som `oklab()` i CSS), med navn, fargemodellen den ble
-/// laget i, og Munsell-notasjonen ferdig utregnet for visningssiden.
+/// En farge i en lenke: OKLab (kanonisk, og direkte brukbar som `oklab()` i CSS), med navn og fargemodellen den ble
+/// laget i. Feltet `mu` fra lenker laget før 1.3.1 hoppes over.
 public struct DeltFarge: Codable, Equatable, Sendable {
     /// OKLab: L, a, b.
     public var okLab: [Double]
@@ -247,20 +247,18 @@ public struct DeltFarge: Codable, Equatable, Sendable {
     public var navn: String?
     /// Rommet fargen ble laget i: `modell:<Fargemodell>` eller `icc:<profil-id>`.
     public var rom: String?
-    /// Visningsnavnet til rommet («Munsell», «Generisk CMYK»).
+    /// Visningsnavnet til rommet («OKLCH», «Generisk CMYK»).
     public var romnavn: String?
     public var verdier: [Double]?
     /// Verdiene slik de ble vist («78 / 41 / 0 / 15 %»).
     public var tekst: String?
-    /// Munsell-notasjonen, for visningssiden (som ikke regner Munsell selv).
-    public var munsell: String?
     /// sRGB-hex uten «#», gamut-kartlagt som i appen (CSS Color 4), så visningssiden viser samme verdi.
     public var hex: String?
     /// Kilden, for farger fra et innebygd bibliotek (f.eks. filament): produsent, navn, materiale og lenke.
     public var kilde: DeltKilde?
 
     enum CodingKeys: String, CodingKey {
-        case okLab = "k", alfa = "a", navn = "n", rom = "r", romnavn = "rn", verdier = "rv", tekst = "rt", munsell = "mu", hex = "x"
+        case okLab = "k", alfa = "a", navn = "n", rom = "r", romnavn = "rn", verdier = "rv", tekst = "rt", hex = "x"
         case kilde = "q"
     }
 
@@ -277,7 +275,6 @@ public struct DeltFarge: Codable, Equatable, Sendable {
             verdier = r.verdier.map { Self.avrundet($0, 4) }
             tekst = r.tekst
         }
-        munsell = farge.munsell.notasjon
         hex = String(farge.hex().dropFirst())
     }
 
@@ -322,7 +319,6 @@ public struct DeltFarge: Codable, Equatable, Sendable {
         navn = navn.map(DeltInnhold.rensket)
         romnavn = romnavn.map(DeltInnhold.rensket)
         tekst = tekst.map(DeltInnhold.rensket)
-        munsell = munsell.map(DeltInnhold.rensket)
         hex = hex.flatMap { $0.count == 6 && $0.allSatisfy(\.isHexDigit) ? $0 : nil }
         kilde?.rens()
         rom = rom.map(DeltInnhold.rensket)
@@ -454,7 +450,7 @@ public struct DeltVisning: Codable, Equatable, Sendable {
     public var fane: String?
     /// Modus i Studio: `farge` eller `harmoni`.
     public var studiomodus: String?
-    /// Fargemodellen i Studio (`Fargemodell.rawValue`, f.eks. `okLCH`, `cieLab`, `rgb`, `cmyk`, `munsell`).
+    /// Fargemodellen i Studio (`Fargemodell.rawValue`, f.eks. `okLCH`, `cieLab`, `rgb`, `cmyk`).
     public var fargemodell: String?
     /// Delen av Vurdering: `kontrast`, `sammenlign`, `fargesyn` eller `lys`.
     public var vurdering: String?

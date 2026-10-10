@@ -91,10 +91,10 @@
   };
   SIRKLER = en ? {
     okLCH: "OKLCH (perceptual)", cieLCH: "CIE LCH (Lab)", hsl: "HSL (RGB screen)", ryb: "RYB (artist's wheel)",
-    munsell: "Munsell", hering: "Hering (opponent colours)",
+    hering: "Hering (opponent colours)",
   } : {
     okLCH: "OKLCH (perseptuell)", cieLCH: "CIE LCH (Lab)", hsl: "HSL (RGB-skjerm)", ryb: "RYB (kunstnersirkel)",
-    munsell: "Munsell", hering: "Hering (motfarger)",
+    hering: "Hering (motfarger)",
   };
   }
   settSpråk(!erNorsk(navigator.language || "nb"));
@@ -260,11 +260,11 @@
     const rad = (navn, verdi) => { verdier.append(lag("dt", null, navn), lag("dd", null, verdi)); };
     const [L, C, H] = okLCH(f.k);
     const lab = cieLab(f.k);
-    if (f.rt && f.rn) rad(tekst(f.rn), tekst(f.rt));
+    // Fargemodeller som er tatt ut av appen (lenker fra før 1.3.1), vises ikke.
+    if (f.rt && f.rn && f.r !== "modell:munsell") rad(tekst(f.rn), tekst(f.rt));
     if (hex(f)) rad("Hex (sRGB)", hex(f));
     rad("OKLCH", `${tall(L * 100, 0)}% ${tall(C, 3)} ${tall(H, 0)}°`);
     rad("CIELab (D50)", `${tall(lab[0], 1)} ${tall(lab[1], 1)} ${tall(lab[2], 1)}`);
-    if (f.mu && f.rn !== "Munsell") rad("Munsell", tekst(f.mu));
     const q = f.q && typeof f.q === "object" ? f.q : null;
     if (q) {
       if (q.p) rad(T.produsent, tekst(q.p));

@@ -66,10 +66,10 @@ FRA PALETT TIL DESIGNSYSTEM
 • Eksporter som fargesett for apputvikling, design tokens og CSS med lys og mørk modus – eller del designsystemet som lenke
 
 ALLE FARGEROM
-• Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
 • Angi CMYK eller RGB i profilen de skal brukes i, og få rene CMYK-verdier
-• Skriv hex, CSS-farger eller Munsell-notasjon
+• Skriv hex eller CSS-farger
 
 FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 • Importer egne fargekart i ASE, ACO eller ACB med navngitte toner
@@ -78,7 +78,7 @@ FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 
 OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader og CSS-gradienter
-• Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL eller RYB
+• Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Hering, Goethe, HSL eller RYB
 
 KONTRAST OG FARGESYN
 • Kontrastsjekk etter WCAG 2.2 eller LRV, med «Rett opp» som justerer fargen til den består
@@ -110,7 +110,7 @@ PALETTER OG ICLOUD
 Samle farger og gradienter i paletter og palettgrupper, og synkroniser via din egen, private iCloud.
 
 ÅPENT OM METODENE
-Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC og designtokens – med kilde og forklaring.
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC og designtokens – med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -121,7 +121,7 @@ Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet e
 **Nøkkelord (100)**
 
 ```
-farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,Munsell
+farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,harmoni
 ```
 
 **Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/iphone63-nb/` (iPhone 6,1″/6,3″, 1206 × 2622 – formatet App Store
@@ -178,10 +178,10 @@ FROM PALETTE TO DESIGN SYSTEM
 • Export as colour sets for app development, design tokens and CSS with light and dark mode – or share the design system as a link
 
 EVERY COLOUR SPACE
-• Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile – mapped, never clipped
 • Enter CMYK or RGB in the profile they will be used in, and get clean CMYK values
-• Type hex, CSS colours or Munsell notation
+• Type hex or CSS colours
 
 COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 • Import your own colour charts in ASE, ACO or ACB with named tones
@@ -190,7 +190,7 @@ COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 
 GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
-• Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL or RYB colour wheels
+• Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Hering, Goethe, HSL or RYB colour wheels
 
 CONTRAST AND COLOUR VISION
 • Contrast check by WCAG 2.2 or LRV, with auto-fix that adjusts the colour until it passes
@@ -222,7 +222,7 @@ PALETTES AND ICLOUD
 Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
 
 OPEN ABOUT METHODS
-The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC and design tokens – with source and explanation.
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC and design tokens – with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -233,7 +233,7 @@ Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported 
 **Keywords (100)**
 
 ```
-color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,Munsell
+color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,palette
 ```
 
 **Screenshots:** `Dokumentasjon/1.3/Skjermbilder/iphone63-en/` (iPhone 6.1″/6.3″, 1206 × 2622) and `ipad-en/` (iPad 13″), all taken with 1.3, in the
@@ -275,9 +275,8 @@ LYS
 • Med iPhone som kamera kan farger kompenseres for lyset med gråkort eller referansekort (beta).
 
 FARGER OG HARMONIER
-• Nye harmonier: monokromatisk, tonebane, triade, kvadrat og analog med komplementær aksent – på fargesirkler med Goethe og Munsell, og med naturlig lyshetsrekkefølge.
+• Nye harmonier: monokromatisk, tonebane, triade, kvadrat og analog med komplementær aksent – på fargesirkler med Goethe, og med naturlig lyshetsrekkefølge.
 • Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament.
-• Munsell i trinnene fra Munsell-boka.
 • Kildefargerom for CMYK og RGB, papirhvitt og valgfritt betraktningsforhold for visningen.
 
 PALETTER, DELING OG EKSPORT
@@ -308,10 +307,10 @@ FRA PALETT TIL DESIGNSYSTEM
 • Eksporter som fargesett for apputvikling, design tokens og CSS med lys og mørk modus – eller del designsystemet som lenke
 
 ALLE FARGEROM
-• Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
 • Angi CMYK eller RGB i profilen de skal brukes i, og få rene CMYK-verdier
-• Skriv hex, CSS-farger eller Munsell-notasjon
+• Skriv hex eller CSS-farger
 
 FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 • Importer egne fargekart i ASE, ACO eller ACB med navngitte toner
@@ -320,7 +319,7 @@ FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 
 OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader og CSS-gradienter
-• Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL eller RYB
+• Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Hering, Goethe, HSL eller RYB
 
 KONTRAST OG FARGESYN
 • Kontrastsjekk etter WCAG 2.2 eller LRV, med «Rett opp» som justerer fargen til den består
@@ -355,7 +354,7 @@ PALETTER OG ICLOUD
 Samle farger og gradienter i paletter og palettgrupper, og synkroniser via din egen, private iCloud.
 
 ÅPENT OM METODENE
-Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC og designtokens – med kilde og forklaring.
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC og designtokens – med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -366,7 +365,7 @@ Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 **Nøkkelord (100)**
 
 ```
-farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,Munsell
+farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,harmoni
 ```
 
 **Skjermbilder:** `Dokumentasjon/1.3/Skjermbilder/mac-nb/` (2880 × 1800) – alle tatt med 1.3. Foreslått rekkefølge:
@@ -406,9 +405,8 @@ LIGHT
 • With iPhone as the camera, colours can be compensated for the light with a grey card or reference card (beta).
 
 COLOURS AND HARMONIES
-• New harmonies: monochromatic, tone path, triad, square and analogous with a complementary accent – on colour wheels including Goethe and Munsell, with natural lightness order.
+• New harmonies: monochromatic, tone path, triad, square and analogous with a complementary accent – on colour wheels including Goethe, with natural lightness order.
 • Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament.
-• Munsell in the steps of the Munsell book.
 • Source colour space for CMYK and RGB, paper white and a choice of viewing condition for the display.
 
 PALETTES, SHARING AND EXPORT
@@ -439,10 +437,10 @@ FROM PALETTE TO DESIGN SYSTEM
 • Export as colour sets for app development, design tokens and CSS with light and dark mode – or share the design system as a link
 
 EVERY COLOUR SPACE
-• Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile – mapped, never clipped
 • Enter CMYK or RGB in the profile they will be used in, and get clean CMYK values
-• Type hex, CSS colours or Munsell notation
+• Type hex or CSS colours
 
 COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 • Import your own colour charts in ASE, ACO or ACB with named tones
@@ -451,7 +449,7 @@ COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 
 GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
-• Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL or RYB colour wheels
+• Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Hering, Goethe, HSL or RYB colour wheels
 
 CONTRAST AND COLOUR VISION
 • Contrast check by WCAG 2.2 or LRV, with auto-fix that adjusts the colour until it passes
@@ -486,7 +484,7 @@ PALETTES AND ICLOUD
 Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
 
 OPEN ABOUT METHODS
-The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC and design tokens – with source and explanation.
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC and design tokens – with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -497,7 +495,7 @@ Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
 **Keywords (100)**
 
 ```
-color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,Munsell
+color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,palette
 ```
 
 ---

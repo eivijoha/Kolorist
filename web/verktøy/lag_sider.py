@@ -163,8 +163,8 @@ NYE_BILDER = {
     ('en', 'monokrom'): ('Monochromatic harmony: six tones of orange along a line from rich orange to a dark, saturated tone, in the lightness and saturation field', 'Monochromatic'),
     ('nb', 'harmoni-aksent'): ('Harmoni: analog med komplementær aksent og naturlig lyshetsrekkefølge, vist på fargesirkelen', 'Analog med aksent'),
     ('en', 'harmoni-aksent'): ('Harmony: analogous with a complementary accent and natural lightness order, shown on the colour wheel', 'Analogous with accent'),
-    ('nb', 'munsell'): ('Studio med en teglrød farge i Munsell-notasjon, 10R 5,1/7,3 – kulør, valør og kroma', 'Munsell'),
-    ('en', 'munsell'): ('Studio with a brick-red colour in Munsell notation, 10R 5.1/7.3 – hue, value and chroma', 'Munsell'),
+    ('nb', 'spesifiser'): ('Studio med en teglrød farge i CIELab, lab(52.2 29.8 28.7), og samme farge i Generisk CMYK', 'CIELab og CMYK'),
+    ('en', 'spesifiser'): ('Studio with a brick-red colour in CIELab, lab(52.2 29.8 28.7), and the same colour in Generic CMYK', 'CIELab and CMYK'),
     ('nb', 'arkitektur-lys'): ('Lys under Vurdering: en teglrød farge på skjermen og i stua om kvelden, og under flere betraktningsforhold med fargeskiftet for hvert', 'Fargen under ulike betraktningsforhold'),
     ('en', 'arkitektur-lys'): ('Light under Assess: a brick-red colour on screen and in the living room in the evening, and in more viewing conditions with the colour shift for each', 'The colour in viewing conditions'),
     ('nb', 'palett-lys'): ('En palett i lys: fargen på skjermen øverst og i stua om kvelden nederst i hver rute, med fargeskiftet', 'Paletten i lys'),
@@ -177,8 +177,8 @@ NYE_BILDER.update({
     ('en', 'filament'): ('Studio with “Filament: all types”: the colour and the nearest filament, Amolen Silk Sapphire Blue (PLA)', 'Nearest filament'),
     ('nb', 'del-app'): ('En delt palett åpnet i Kolorist: forhåndsvisning med farger og gradient, og «Legg til i paletter»', 'Mottatt i appen'),
     ('en', 'del-app'): ('A shared palette opened in Kolorist: preview with colours and gradient, and “Add to palettes”', 'Received in the app'),
-    ('nb', 'del-web'): ('En delt palett i nettleseren på kolorist.no: fargene med hex, OKLCH, CIELab og Munsell', 'I nettleseren'),
-    ('en', 'del-web'): ('A shared palette in the browser at kolorist.no: the colours with hex, OKLCH, CIELab and Munsell', 'In the browser'),
+    ('nb', 'del-web'): ('En delt palett i nettleseren på kolorist.no: fargene med hex, OKLCH og CIELab', 'I nettleseren'),
+    ('en', 'del-web'): ('A shared palette in the browser at kolorist.no: the colours with hex, OKLCH and CIELab', 'In the browser'),
     ('nb', 'del-web-filament'): ('En delt filamentpalett i nettleseren på iPad, med lenke til hver prøve hos FilamentColors.xyz', 'Filament i nettleseren'),
     ('en', 'del-web-filament'): ('A shared filament palette in the browser on iPad, with a link to each sample at FilamentColors.xyz', 'Filament in the browser'),
 })
@@ -263,7 +263,7 @@ def startside(lang):
         nyhet = f'<p class="nyhet">{N} <a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
         tekster = dict(
             kort='Kort fortalt',
-            poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.'),
+            poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, CIELab og alle fargerom og ICC-profiler.'),
                    ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG og LRV, og farger slik de ser ut med fargesynsavvik.'),
                    ('Farger i ulikt lys', 'Simuler farger under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
                    ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
@@ -279,7 +279,7 @@ def startside(lang):
                       ('design.html#lever', 'Få fargene ut', 'I designprogrammer, trykk og kode – eller del dem som lenke.')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter for skjerm og trykk – rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
-                   ('arkitektur.html', 'Arkitektur', 'Hent farger fra rommet, angi dem i Munsell, se dem under andre betraktningsforhold og kontroller kontrasten mellom flater.', 'Kolorist for arkitektur og interiør', 'arkitektur-lys')],
+                   ('arkitektur.html', 'Arkitektur', 'Hent farger fra rommet, angi dem i CIELab, se dem under andre betraktningsforhold og kontroller kontrasten mellom flater.', 'Kolorist for arkitektur og interiør', 'arkitektur-lys')],
             skjermbilder='Skjermbilder', rull='Skjermbilder – rull sidelengs',
             alle='Se alle funksjoner', alle_href='funksjoner.html',
             tillit='<strong>Alt skjer på enheten.</strong> Ingen konto, ingen bruksanalyse og ingen sporing. Palettene synkroniseres via din egen iCloud, og hver del av appen viser metodene den bygger på.',
@@ -292,7 +292,7 @@ def startside(lang):
         nyhet = f'<p class="nyhet">{N} <a href="design.html">From palette to design system, a contrast check by WCAG or LRV, and colours and gradients you copy straight into your design apps</a></p>'
         tekster = dict(
             kort='In short',
-            poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, Munsell and every colour space and ICC profile.'),
+            poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, CIELab and every colour space and ICC profile.'),
                    ('Contrast and colour vision', 'Contrast for text and surfaces by WCAG and LRV, and colours as they appear with colour vision deficiencies.'),
                    ('Colours in different light', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
                    ('One app – one or more devices', 'The same app on iPhone, iPad and Mac. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
@@ -308,7 +308,7 @@ def startside(lang):
                       ('design.html#deliver', 'Get your colours out', 'Into design apps, print and code – or share them as a link.')],
             fagfelt='Two fields',
             dører=[('design.html', 'Design', 'Palettes, tone scales and gradients for screen and print – straight into your design tools.', 'Kolorist for design', 'harmoni'),
-                   ('architecture.html', 'Architecture', 'Take colours from the room, specify them in Munsell, see them in other viewing conditions and check the contrast between surfaces.', 'Kolorist for architecture and interiors', 'arkitektur-lys')],
+                   ('architecture.html', 'Architecture', 'Take colours from the room, specify them in CIELab, see them in other viewing conditions and check the contrast between surfaces.', 'Kolorist for architecture and interiors', 'arkitektur-lys')],
             skjermbilder='Screenshots', rull='Screenshots – scroll sideways',
             alle='See all features', alle_href='features.html',
             tillit='<strong>Everything happens on device.</strong> No account, no analytics and no tracking. Palettes sync through your own iCloud, and every part of the app shows the methods it is based on.',
@@ -454,7 +454,7 @@ def design(lang):
         steg = [
             ('Finn fargene', 'Start fra et ord, et bilde eller en farge du allerede har.',
              ['Fra verdiord til palett med Apple Intelligence på enheten, forankret i en kunnskapsbase med over hundre fargebegreper',
-              'Harmonier på fargesirkler i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N12,
+              'Harmonier på fargesirkler i OKLCH, CIE LCH, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N12,
               'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N,
               'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N,
               'Tonebaner: toner langs en bane gjennom lyshet, metning og kulør – kuløren går i bue mellom to endepunkter' + N,
@@ -508,7 +508,7 @@ def design(lang):
     steg = [
         ('Find the colours', 'Start from a word, a photo or a colour you already have.',
          ['From value words to a palette with Apple Intelligence on device, grounded in a knowledge base of more than a hundred colour concepts',
-          'Harmonies on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N12,
+          'Harmonies on an OKLCH, CIE LCH, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N12,
           'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N,
           'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N,
           'Tone paths: tones along a path through lightness, saturation and hue – the hue arcs between two end points' + N,
@@ -570,11 +570,10 @@ def arkitektur(lang):
               'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)' + N12,
               'Mål lyset der du står og lagre det som betraktningsforhold' + N12,
               'Dominerende farger i bilder'], None, None),
-            ('Spesifiser', 'Angi farger med Munsell-notasjon, CIELab og fargekart.',
-             ['Munsell i trinnene fra Munsell-boka – kulør 2,5, valør 1 og kroma 2 – med Munsell-notasjon' + N12,
-              'Harmonier på Munsells fargesirkel, med ekte Munsell-farger',
-              'Fargekart med navngitte toner: importer dine egne (ASE, ACO, ACB) og finn nærmeste tone',
-              'CIELab (D50) og fargeforskjell med ΔE2000'], 'munsell', None),
+            ('Spesifiser', 'Angi farger med CIELab, CMYK og fargekart.',
+             ['CIELab (D50) og fargeforskjell med ΔE2000',
+              'Samme farge i CMYK eller et annet fargerom side om side, med ICC-profil',
+              'Fargekart med navngitte toner: importer dine egne (ASE, ACO, ACB) og finn nærmeste tone'], 'spesifiser', None),
             ('Se fargene i lyset', 'Simuler farger og hele paletter under betraktningsforholdene der de skal brukes.',
              ['Betraktningsforhold for stua om kvelden, kontoret og butikken – eller lyset du har målt på stedet' + N12,
               'Standard betraktningsforhold for arbeidsplasser og skoler (NS-EN 12464-1) og museer (CIE 157)' + N12,
@@ -601,7 +600,7 @@ def arkitektur(lang):
               'Paletter og betraktningsforhold synkroniseres til iPad og Mac via iCloud'], None, None),
         ]
         return fagside('nb', 'arkitektur.html', 'Kolorist for arkitektur og interiørarkitektur',
-                       'Fargeverktøy for arkitektur og interiørarkitektur: plukk farger fra rom og materialer, spesifiser i Munsell, se farger i lyset der de skal brukes, og kontroller kontrasten mellom flater (LRV) for universell utforming.',
+                       'Fargeverktøy for arkitektur og interiørarkitektur: plukk farger fra rom og materialer, spesifiser i CIELab, se farger i lyset der de skal brukes, og kontroller kontrasten mellom flater (LRV) for universell utforming.',
                        'Kolorist for', 'Arkitektur og interiørarkitektur',
                        'Farger for rom og bygg: hent dem fra materialer og omgivelser, spesifiser dem presist, se dem i lyset der de skal brukes, og kontroller kontrasten for universell utforming.',
                        steg, ('Les videre', [('lys.html', 'Lys og fargemåling'), ('funksjoner.html', 'Alle funksjoner'), ('design.html', 'Kolorist for design')]))
@@ -611,11 +610,10 @@ def arkitektur(lang):
           'Compensate picked colours for the light with a grey card or reference card – in photos too (beta)' + N12,
           'Measure the light where you are and save it as a viewing condition' + N12,
           'Dominant colours in photos'], None, None),
-        ('Specify', 'Specify colours with Munsell notation, CIELab and colour libraries.',
-         ['Munsell in the steps of the Munsell book – hue 2.5, value 1 and chroma 2 – with Munsell notation' + N12,
-          'Harmonies on the Munsell colour wheel, with real Munsell colours',
-          'Colour libraries with named tones: import your own (ASE, ACO, ACB) and find the nearest tone',
-          'CIELab (D50) and colour difference with ΔE2000'], 'munsell', None),
+        ('Specify', 'Specify colours with CIELab, CMYK and colour libraries.',
+         ['CIELab (D50) and colour difference with ΔE2000',
+          'The same colour in CMYK or another colour space side by side, with an ICC profile',
+          'Colour libraries with named tones: import your own (ASE, ACO, ACB) and find the nearest tone'], 'spesifiser', None),
         ('See the colours in the light', 'Simulate colours and whole palettes in the viewing conditions where they will be used.',
          ['Viewing conditions for the living room in the evening, the office and the shop – or the light you measured on site' + N12,
           'Standard viewing conditions for workplaces and schools (EN 12464-1) and museums (CIE 157)' + N12,
@@ -642,7 +640,7 @@ def arkitektur(lang):
           'Palettes and viewing conditions sync to iPad and Mac through iCloud'], None, None),
     ]
     return fagside('en', 'architecture.html', 'Kolorist for architecture and interior architecture',
-                   'A colour tool for architecture and interior architecture: pick colours from rooms and materials, specify them in Munsell, see colours in the light where they will be used, and check LRV and contrast for universal design.',
+                   'A colour tool for architecture and interior architecture: pick colours from rooms and materials, specify them in CIELab, see colours in the light where they will be used, and check LRV and contrast for universal design.',
                    'Kolorist for', 'Architecture and interior architecture',
                    'Colours for rooms and buildings: take them from materials and surroundings, specify them precisely, see them in the light where they will be used, and check the contrast for universal design.',
                    steg, ('Read on', [('light.html', 'Light and colour measurement'), ('features.html', 'All features'), ('design.html', 'Kolorist for design')]))
@@ -758,7 +756,7 @@ def funksjoner(lang):
                                 '<li>For paletter og enkeltfarger</li>'])),
               ('Delingslenker', ul([f'<li>Del enkeltfarger, paletter, gradienter og harmonier som lenke {N12}</li>',
                                     '<li>Med Kolorist åpnes lenken i appen, og du velger selv om noe skal lagres</li>',
-                                    '<li>Uten appen – også på PC – vises fargene i nettleseren, med hex, OKLCH, CIELab og Munsell</li>',
+                                    '<li>Uten appen – også på PC – vises fargene i nettleseren, med hex, OKLCH og CIELab</li>',
                                     '<li>Fargene ligger i selve lenken; ingenting lagres eller sendes via nettstedet</li>',
                                     '<li>Tonenavn fra fargekart du har importert, tas ikke med – bare fargeverdiene deles</li>',
                                     '<li><a href="https://kolorist.no/l#znZJLTsMwEIavYlliFxw_M-PuaEpZVLAoK4S6CCWUkL6UtIiq6nE4CRdjnAfKmo09Htuf5v9nzvyNj57PvKRVCmMSqaJrKaQ2XWCVShYR3xz5iCs5ZlqY2AjLI76lzOS0Z28fu-qVzl_hxdTc2Am_RD3RKatNAzI-cS0Rve6JINyYWUJaAR1ydqoPL-uf745opsktugERLEjf1uhtGxh0dlgjEE71FRZ1sWLvxWaTrzskTscmhQESPSgVEUhqMGHXCL4HauGeGAqM1Z_qx2zbC75NJmmKQ8FeIxJDaZANEw2agdw5c7GSwneoh-xYHyiuKC6Wy1GZ3qW79a563GfL_C7f5lWxTO-fZuFJeN-m6pL1yUOjmcUMkBbUtOircPFJ5SgZAUaoo2B4KDdF5wz1h46rpu8ZH0EnqjxuqmK7or91c0WD8a-5GM5B8GXAAaCeBVPAtbvXSg2NnjMQOsY_zlR7cpg4i1ByYxgNW9Bfnhrfgvx9ts4P4UCS1eUX">Åpne en delt eksempelpalett</a> – og se <a href="plattformer.html#del">hvordan deling fungerer</a></li>'])),
@@ -795,7 +793,7 @@ def funksjoner(lang):
                               '<li>For palettes and single colours</li>'])),
               ('Share links', ul([f'<li>Share single colours, palettes, gradients and harmonies as a link {N12}</li>',
                                   '<li>With Kolorist the link opens in the app, and you decide whether to save anything</li>',
-                                  '<li>Without the app – on PCs too – the colours are shown in the browser, with hex, OKLCH, CIELab and Munsell</li>',
+                                  '<li>Without the app – on PCs too – the colours are shown in the browser, with hex, OKLCH and CIELab</li>',
                                   '<li>The colours are in the link itself; nothing is stored or sent through the website</li>',
                                   '<li>Tone names from colour charts you have imported are left out – only the colour values are shared</li>',
                                   '<li><a href="https://kolorist.no/l#znZJLTsMwEIavYlliFxw_M-PuaEpZVLAoK4S6CCWUkL6UtIiq6nE4CRdjnAfKmo09Htuf5v9nzvyNj57PvKRVCmMSqaJrKaQ2XWCVShYR3xz5iCs5ZlqY2AjLI76lzOS0Z28fu-qVzl_hxdTc2Am_RD3RKatNAzI-cS0Rve6JINyYWUJaAR1ydqoPL-uf745opsktugERLEjf1uhtGxh0dlgjEE71FRZ1sWLvxWaTrzskTscmhQESPSgVEUhqMGHXCL4HauGeGAqM1Z_qx2zbC75NJmmKQ8FeIxJDaZANEw2agdw5c7GSwneoh-xYHyiuKC6Wy1GZ3qW79a563GfL_C7f5lWxTO-fZuFJeN-m6pL1yUOjmcUMkBbUtOircPFJ5SgZAUaoo2B4KDdF5wz1h46rpu8ZH0EnqjxuqmK7or91c0WD8a-5GM5B8GXAAaCeBVPAtbvXSg2NnjMQOsY_zlR7cpg4i1ByYxgNW9Bfnhrfgvx9ts4P4UCS1eUX">Open a shared example palette</a> – and see <a href="platforms.html#del">how sharing works</a></li>'])),
@@ -990,7 +988,7 @@ def plattformer(lang):
     if nb:
         del_tittel, del_ingress = 'Del med andre – også uten appen', 'Farger, paletter, gradienter og harmonier kan deles som lenke. Fargene ligger i selve lenken – kolorist.no lagrer og ser ingenting.'
         del_punkter = ['Med Kolorist åpnes lenken i appen på iPhone, iPad og Mac, med forhåndsvisning – ingenting lagres før du velger det',
-                       'Uten appen – også på PC – vises fargene i nettleseren, med hex, OKLCH, CIELab og Munsell, klare til å kopieres',
+                       'Uten appen – også på PC – vises fargene i nettleseren, med hex, OKLCH og CIELab, klare til å kopieres',
                        'Filamentfarger lenker videre til prøven hos kilden',
                        'Tonenavn fra fargekart du har importert, tas ikke med – bare fargeverdiene deles',
                        'Lagre som: filer i formatene du velger, i en mappe du velger – eller del dem direkte']
@@ -998,7 +996,7 @@ def plattformer(lang):
     else:
         del_tittel, del_ingress = 'Share with others – even without the app', 'Colours, palettes, gradients and harmonies can be shared as a link. The colours are in the link itself – kolorist.no stores and sees nothing.'
         del_punkter = ['With Kolorist the link opens in the app on iPhone, iPad and Mac, with a preview – nothing is saved until you choose',
-                       'Without the app – on PCs too – the colours are shown in the browser, with hex, OKLCH, CIELab and Munsell, ready to copy',
+                       'Without the app – on PCs too – the colours are shown in the browser, with hex, OKLCH and CIELab, ready to copy',
                        'Filament colours link on to the sample at the source',
                        'Tone names from colour charts you have imported are left out – only the colour values are shared',
                        'Save as: files in the formats you choose, in a folder you choose – or share them directly']
@@ -1172,7 +1170,7 @@ def lenke_på(url, lang):
 
 def skriv(sti, tekst):
     # Nye skjermbilder: ny versjon i adressen, så nettleser og Varnish henter dem på nytt.
-    tekst = re.sub(r'\.png\?v=\d+', '.png?v=9', tekst)
+    tekst = re.sub(r'\.png\?v=\d+', '.png?v=10', tekst)
     lang = 'en' if sti.startswith('en/') else 'nb'
     tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)

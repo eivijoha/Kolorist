@@ -1898,16 +1898,6 @@
         }
       }
     },
-    "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Kroma og valør gjelder hele harmonien.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drag in the wheel to change the base colour’s hue, or tap the centre to start from a saved colour. Chroma and value apply to the whole harmony."
-          }
-        }
-      }
-    },
     "Dra i sirkelen for å endre grunnfargens kulør, eller trykk i midten for å starte fra en lagret farge. Metning og lyshet gjelder hele harmonien.": {
       "localizations": {
         "en": {
@@ -4011,16 +4001,6 @@
         }
       }
     },
-    "Hvor lyse fargene i harmonien er i forhold til hverandre (valør).": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "How light the colours in the harmony are relative to each other (Munsell value)."
-          }
-        }
-      }
-    },
     "Hvor lyse fargene i harmonien er i forhold til hverandre.": {
       "localizations": {
         "en": {
@@ -4703,16 +4683,6 @@
         }
       }
     },
-    "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell, Herings motfargesirkel eller Goethes sirkel fra Farbenlehre (1810). Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB-, Hering- og Goethe-sirklene er stykkevis lineære avbildninger laget for appen. Monokromatisk harmoni holder kuløren fast og fordeler tonene jevnt langs en strek i lyshet (OKLCH) og metning, regnet som andel av høyeste kroma innenfor gamut ved hver lyshet. Tonebane gjør det samme, men gir hvert endepunkt sin kulør og fordeler også kuløren jevnt, i bue rundt OKLCH-sirkelen i retningen og så langt brukeren velger, opptil en hel runde – i motsetning til overganger, som går i rett linje i OKLab og kan passere grått mellom motfarger. Prinsippet er kjent fra sekvensielle paletter i HCL (Zeileis mfl.) og cubehelix (Green); flaten og de to kulørhåndtakene er laget for Kolorist. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distribution are calculated as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Munsell, Hering’s opponent-colour wheel or Goethe’s wheel from his Theory of Colours (1810). With Munsell, real Munsell colours in the book’s steps are used (hue 2.5, value 1, chroma 2). The RYB, Hering and Goethe wheels are piecewise linear mappings made for the app. The monochromatic harmony keeps the hue fixed and spreads the tones evenly along a line in lightness (OKLCH) and saturation, taken as a share of the highest chroma within the gamut at each lightness. The tone path does the same, but gives each end point its own hue and spreads the hue evenly too, in an arc around the OKLCH wheel in the direction and as far as the user chooses, up to a full turn – unlike gradients, which run in a straight line in OKLab and can pass through grey between opposite colours. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift. The principle is known from sequential palettes in HCL (Zeileis et al.) and cubehelix (Green); the field and the two hue handles were made for Kolorist."
-          }
-        }
-      }
-    },
     "Komponenter": {
       "localizations": {
         "en": {
@@ -5165,16 +5135,6 @@
         }
       }
     },
-    "Kroma": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chroma"
-          }
-        }
-      }
-    },
     "Kromademping mot ytterpunktene": {
       "localizations": {
         "en": {
@@ -5211,16 +5171,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hue, start"
-          }
-        }
-      }
-    },
-    "Kulør, valør og kroma etter Munsell. Omregningen bruker renotasjonsdataene fra 1943 (CIE xyY under lyskilde C, offentlige data) med interpolasjon i kroma, kulør og valør, Bradford-tilpasning til D65, og ASTM D1535 for sammenhengen mellom valør og luminans. Notasjonen er en tilnærming; fysiske Munsell-prøver kan avvike.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hue, value and chroma after Munsell. The conversion uses the 1943 renotation data (CIE xyY under illuminant C, public data) with interpolation in chroma, hue and value, Bradford adaptation to D65, and ASTM D1535 for the relation between value and luminance. The notation is an approximation; physical Munsell chips may differ."
           }
         }
       }
@@ -6853,26 +6803,6 @@
         }
       }
     },
-    "Munsell": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Munsell"
-          }
-        }
-      }
-    },
-    "Munsell-systemet": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Munsell system"
-          }
-        }
-      }
-    },
     "Museum, lysfølsomme gjenstander (CIE 157)": {
       "localizations": {
         "en": {
@@ -7401,16 +7331,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "About lightness order"
-          }
-        }
-      }
-    },
-    "Om valørrekkefølge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "About value order"
           }
         }
       }
@@ -10107,26 +10027,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Options for the text colours"
-          }
-        }
-      }
-    },
-    "Valør": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Value"
-          }
-        }
-      }
-    },
-    "Valørrekkefølge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Value order"
           }
         }
       }
