@@ -262,7 +262,11 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
+<<<<<<< HEAD
         nyhet = f'<p class="nyhet">{N13}<a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
+=======
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
+>>>>>>> versjon-1.3.1
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.'),
@@ -291,7 +295,11 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
+<<<<<<< HEAD
         nyhet = f'<p class="nyhet">{N13}<a href="design.html">From palette to design system, a contrast check by WCAG or LRV, and colours and gradients you copy straight into your design apps</a></p>'
+=======
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">From palette to design system, a contrast check by WCAG or LRV, and colours and gradients you copy straight into your design apps</a></p>'
+>>>>>>> versjon-1.3.1
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, Munsell and every colour space and ICC profile.'),
@@ -472,10 +480,17 @@ def design(lang):
               'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'toneskala', None),
             ('Kontroller', 'Kontroller kontrast og lesbarhet, også med fargesynsavvik.',
              ['WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk',
+<<<<<<< HEAD
               'Kontrastsjekk etter WCAG 2.2 eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N13,
               '«Rett opp» endrer lysheten til fargen består',
               'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
               'Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG' + N13,
+=======
+              'Kontrastsjekk etter WCAG 2.2 eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N,
+              '«Rett opp» endrer lysheten til fargen består',
+              'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
+              'Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG' + N,
+>>>>>>> versjon-1.3.1
               'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'designsystem', None),
             ('Skjerm, trykk og 3D-print', 'Display P3 side om side med trykkprofiler, egne ICC-profiler og fargekart – og filamentfarger for 3D-print.',
              ['Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil',
@@ -526,10 +541,17 @@ def design(lang):
           'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'toneskala', None),
         ('Check', 'Check contrast and legibility, including with colour vision deficiencies.',
          ['WCAG 2.2 contrast: AA and AAA, large text and graphics',
+<<<<<<< HEAD
           'Contrast check by WCAG 2.2 or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N13,
           'Auto-fix changes the lightness until the colour passes',
           'Text contrast for whole palettes, right in the palette view' + N12,
           'Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement' + N13,
+=======
+          'Contrast check by WCAG 2.2 or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N,
+          'Auto-fix changes the lightness until the colour passes',
+          'Text contrast for whole palettes, right in the palette view' + N12,
+          'Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement' + N,
+>>>>>>> versjon-1.3.1
           'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'designsystem', None),
         ('Screen, print and 3D printing', 'Display P3 side by side with print profiles, your own ICC profiles and colour libraries – and filament colours for 3D printing.',
          ['Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile',
@@ -893,7 +915,11 @@ def plattformer(lang):
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
+<<<<<<< HEAD
                  ('Designsystem fra en palett, med komponenter og eksport' + N13, ja, ja, ja),
+=======
+                 ('Designsystem fra en palett, med komponenter og eksport' + N, ja, ja, ja),
+>>>>>>> versjon-1.3.1
                  ('Kontrast (WCAG og LRV) og fargesyn', ja, ja, ja),
                  ('Simuler farger og paletter under andre betraktningsforhold', ja, ja, ja),
                  ('Fargeflatene ved siden av verktøyene', nei, 'I liggende format', 'I bredt vindu'),
@@ -932,7 +958,11 @@ def plattformer(lang):
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
+<<<<<<< HEAD
                  ('Design system from a palette, with components and export' + N13, ja, ja, ja),
+=======
+                 ('Design system from a palette, with components and export' + N, ja, ja, ja),
+>>>>>>> versjon-1.3.1
                  ('Contrast (WCAG and LRV) and colour vision', ja, ja, ja),
                  ('Simulate colours and palettes in other viewing conditions', ja, ja, ja),
                  ('Swatches beside the tools', nei, 'In landscape', 'In a wide window'),

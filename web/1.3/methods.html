@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Metoder og kilder – Kolorist</title>
-  <meta name="description" content="Metodene og kildene Kolorist bygger på: OKLab, CSS Color 4, CIELab, CIEDE2000, WCAG 2.2, simulering av fargesynsavvik, APCA, LRV, ICC og det som er utviklet for appen.">
+  <meta name="description" content="Metodene og kildene Kolorist bygger på: OKLab, CSS Color 4, CIELab, CIEDE2000, WCAG 2.2, simulering av fargesynsavvik, LRV, ICC og det som er utviklet for appen.">
   <meta name="color-scheme" content="light dark">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="assets/ikon.svg" type="image/svg+xml">
@@ -64,12 +64,6 @@
     <p>W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt.</p>
     <p class="dempet">Kilde: <a href="https://www.w3.org/TR/WCAG22/">W3C: Web Content Accessibility Guidelines 2.2, suksesskriteriene 1.4.3, 1.4.6 og 1.4.11</a></p>
 
-    <h2 id="apca">Lesekontrast etter APCA</h2>
-    <p>APCA (Accessible Perceptual Contrast Algorithm) er utviklet som grunnlag for kontrast i WCAG 3, som fortsatt er et utkast. Den gir lesekontrast som Lc fra omtrent −108 til 106 – positiv for mørk tekst på lys bakgrunn, negativ for lys tekst på mørk – og tar hensyn til at øyet opplever lyse og mørke farger ulikt. Den følger opplevd lesbarhet bedre enn WCAG 2, særlig for mørke og mettede farger.</p>
-    <p>Hvor mye som trengs, avhenger av skriftstørrelse og vekt: Lc 90 er foretrukket og 75 minimum for brødtekst, 60 for større tekst, 45 for store eller fete overskrifter, 30 for ikke-viktig tekst og 15 for ikoner og grafikk. Velg APCA i kontrastsjekken for å se Lc og hva kontrasten holder til. Om teksten på appens egne fargeflater skal være sort eller hvit, avgjøres også med APCA, som gir hvit tekst på flere mellomtoner.</p>
-    <p>Regelverket for universell utforming viser fortsatt til WCAG 2. Bruk APCA som et supplement til WCAG 2.2, som er kravet i regelverket.</p>
-    <p class="dempet">Kilde: <a href="https://github.com/Myndex/apca-w3">Myndex: APCA (Accessible Perceptual Contrast Algorithm) 0.0.98G-4g</a></p>
-    
     <h2 id="fargesyn">Simulering av fargesynsavvik</h2>
     <p>Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i fargesynsvurderingen, i fargeflaten i kontrastsjekken og i kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.</p>
     <p class="dempet">Kilde: <a href="https://doi.org/10.1109/TVCG.2009.113">G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009</a></p>

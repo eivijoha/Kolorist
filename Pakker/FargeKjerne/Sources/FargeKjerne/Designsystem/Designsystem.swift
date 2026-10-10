@@ -564,8 +564,6 @@ public struct Komponentsjekk: Identifiable, Hashable, Sendable {
     public var id: String { par.rawValue + (rolletoken.map { ":" + $0 } ?? "") }
     /// WCAG-kontrastforhold.
     public var forhold: Double { forgrunn.lagtOver(bakgrunn).wcagKontrast(mot: bakgrunn) }
-    /// APCA-lesekontrast (Lc).
-    public var lc: Double { bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn)) }
     /// Holder kravet (unntatte par holder alltid). Forholdet avrundes ikke opp.
     public var består: Bool { krav.minimum.map { forhold >= $0 } ?? true }
 }

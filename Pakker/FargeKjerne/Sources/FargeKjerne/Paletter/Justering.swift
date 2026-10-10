@@ -77,32 +77,3 @@ public extension Farge {
         return mørkere ? Farge(lineærR: 0, g: 0, b: 0) : Farge(lineærR: 1, g: 1, b: 1)
     }
 }
-
-public extension Farge {
-    /// Justerer lysheten (OKLCH) til APCA-lesekontrasten (|Lc|) for fargen som tekst på `bakgrunn` når minst `mål`,
-    /// i den retningen som krever minst endring. Kulør og kroma bevares så langt gamut tillater. Når målet ikke kan nås
-    /// (f.eks. Lc 90 på en mellomtone), blir svaret sort eller hvitt, det som gir mest kontrast.
-    func medAPCA(mot bakgrunn: Farge, minst mål: Double) -> Farge {
-        func lc(_ f: Farge) -> Double { abs(bakgrunn.apcaKontrast(tekst: f.lagtOver(bakgrunn))) }
-        if lc(self) >= mål { return self }
-        let lch = okLCH
-        var beste: Farge?
-        var minsteAvstand = Double.infinity
-        for retning in [1.0, -1.0] {
-            var l = lch.l
-            for _ in 0..<200 {
-                l += retning * 0.005
-                guard (0...1).contains(l) else { break }
-                let kandidat = Farge(okLCH: OKLCH(l: l, c: lch.c, h: lch.h), alfa: alfa).gamutKartlagt(til: .displayP3)
-                if lc(kandidat) >= mål {
-                    let avstand = abs(l - lch.l)
-                    if avstand < minsteAvstand { minsteAvstand = avstand; beste = kandidat }
-                    break
-                }
-            }
-        }
-        if let beste { return beste }
-        let hvit = Farge(lineærR: 1, g: 1, b: 1), sort = Farge(lineærR: 0, g: 0, b: 0)
-        return lc(sort) >= lc(hvit) ? sort : hvit
-    }
-}

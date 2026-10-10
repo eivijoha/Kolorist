@@ -69,7 +69,6 @@ struct TestvektorerTests {
             return [
                 "tekst": tekst, "bakgrunn": bakgrunn,
                 "wcagKontrast": tall(t.wcagKontrast(mot: b)),
-                "apcaLc": tall(b.apcaKontrast(tekst: t)),
                 "deltaE2000": tall(Fargeavstand.deltaE2000(t.cieLab, b.cieLab)),
                 "deltaE76": tall(Fargeavstand.deltaE76(t.cieLab, b.cieLab)),
                 "deltaEOK": tall(t.avstandOK(til: b)),
@@ -93,7 +92,6 @@ struct TestvektorerTests {
                 "hex": "sRGB etter gamut-kartlegging",
                 "lrv": "lysrefleksjonsverdi i prosent: Y × 100 av sRGB-klippet farge",
                 "wcagKontrast": "WCAG 2.x, (L1 + 0,05) / (L2 + 0,05) på sRGB-klippet luminans",
-                "apcaLc": "APCA 0.0.98G-4g, tekst oppå bakgrunn; positiv for mørk tekst på lys bakgrunn",
                 "deltaE2000/deltaE76": "på CIELab D50",
                 "deltaEOK": "euklidsk avstand i OKLab (ikke ×100)",
                 "lrvForskjell": "|LRV tekst − LRV bakgrunn| i poeng (BS 8300)",
@@ -128,7 +126,7 @@ struct TestvektorerTests {
         let lagredePar = try #require(lagret["par"] as? [[String: Any]])
         let nyePar = try #require(nye["par"] as? [[String: Any]])
         for (a, b) in zip(lagredePar, nyePar) {
-            for nøkkel in ["wcagKontrast", "apcaLc", "deltaE2000", "deltaE76", "deltaEOK", "lrvForskjell", "weberFlatePaaBakgrunn", "michelson"] {
+            for nøkkel in ["wcagKontrast", "deltaE2000", "deltaE76", "deltaEOK", "lrvForskjell", "weberFlatePaaBakgrunn", "michelson"] {
                 let x = try #require(a[nøkkel] as? Double), y = try #require(b[nøkkel] as? Double)
                 #expect(abs(x - y) < 1e-9, "\(a["tekst"] ?? "") på \(a["bakgrunn"] ?? "") \(nøkkel)")
             }

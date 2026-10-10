@@ -6,7 +6,7 @@ implementasjoner (f.eks. TypeScript på web) kan testes mot samme regning. Farge
 - **`farger`** – hver oppføring har inndata (`inn`: sRGB-hex, OKLCH – også utenfor gamut – eller Display P3) og
   resultatene: lineær sRGB, sRGB, XYZ (D65), OKLab, OKLCH, CIELab og CIELCH (D50), Display P3, HSL, HSB, om fargen er
   innenfor sRGB/Display P3, gamut-kartlagt sRGB og Display P3 (CSS Color 4), hex og LRV.
-- **`par`** – tekst og bakgrunn: WCAG 2-kontrast, APCA (Lc), ΔE2000, ΔE76 og ΔE i OKLab, og hvilken tekstfarge (sort
+- **`par`** – tekst og bakgrunn: WCAG 2-kontrast, ΔE2000, ΔE76 og ΔE i OKLab, og hvilken tekstfarge (sort
   eller hvit) som leses best på bakgrunnen.
 - **`konvensjoner`** – skalaer, hvitpunkter og definisjoner for hvert felt.
 

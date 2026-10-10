@@ -2,22 +2,20 @@ import FargeKjerne
 import FargeMaaling
 import SwiftUI
 
-/// Hvilken kontrastsjekk som vises i Vurdering › Kontrast: tekst og grafikk etter WCAG 2.2, lesekontrast etter APCA
-/// (WCAG 3-utkastet), eller flater etter lysrefleksjonsverdi (LRV).
+/// Hvilken kontrastsjekk som vises i Vurdering › Kontrast: tekst og grafikk etter WCAG 2.2, eller flater etter
+/// lysrefleksjonsverdi (LRV).
 enum Kontrasttype: String, CaseIterable, Identifiable {
-    case wcag, apca, lrv
+    case wcag, lrv
     var id: String { rawValue }
     var navn: String {
         switch self {
         case .wcag: "WCAG 2.2"
-        case .apca: "APCA"
         case .lrv: "LRV"
         }
     }
     var hjelp: String {
         switch self {
         case .wcag: String(localized: "Tekst og grafikk etter WCAG 2.2 (kontrastforhold)")
-        case .apca: String(localized: "Opplevd lesekontrast etter APCA (WCAG 3-utkast)")
         case .lrv: String(localized: "Flater for bygg og universell utforming (LRV og luminanskontrast)")
         }
     }
@@ -54,80 +52,6 @@ struct KontrastSeksjon: View {
     }
 }
 
-/// APCAs veiledende nivåer for lesekontrast (|Lc|), for tekst i vanlig vekt.
-enum APCANivå: Double, CaseIterable, Identifiable {
-    case lc90 = 90, lc75 = 75, lc60 = 60, lc45 = 45, lc30 = 30, lc15 = 15
-    var id: Double { rawValue }
-
-    var bruk: String {
-        switch self {
-        case .lc90: String(localized: "Godt nok for all tekst, også brødtekst")
-        case .lc75: String(localized: "Brødtekst (minimum)")
-        case .lc60: String(localized: "Større tekst, ikke brødtekst")
-        case .lc45: String(localized: "Store eller fete overskrifter")
-        case .lc30: String(localized: "Ikke-viktig tekst, som plassholdere")
-        case .lc15: String(localized: "Ikoner og grafikk, ikke tekst")
-        }
-    }
-
-    /// Det høyeste nivået Lc når, eller nil når den er for lav til tekst og grafikk.
-    static func nådd(_ lc: Double) -> APCANivå? { allCases.first { abs(lc) >= $0.rawValue } }
-
-    static func bruk(_ lc: Double) -> String { nådd(lc)?.bruk ?? String(localized: "For lav til tekst og grafikk") }
-
-    static func retning(_ lc: Double) -> String {
-        lc >= 0 ? String(localized: "mørk tekst på lys bakgrunn") : String(localized: "lys tekst på mørk bakgrunn")
-    }
-
-    /// «Lc 75» – kuttet mot null, så tallet aldri viser et nivå som ikke er nådd (som WCAG-forholdet).
-    static func formatert(_ lc: Double) -> String {
-        "Lc " + lc.rounded(.towardZero).formatted(.number.precision(.fractionLength(0)))
-    }
-}
-
-/// Lesekontrast etter APCA: nivåene fargen når som tekst på bakgrunnen, med «Rett opp».
-struct APCASeksjon: View {
-    @Binding var forgrunn: Farge
-    @AppStorage("kontrastBakgrunn") private var bakgrunnHex = "#FFFFFF"
-
-    private var bakgrunn: Farge { Kontrastbakgrunn.farge(bakgrunnHex) }
-
-    var body: some View {
-        let lc = bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn))
-        Section {
-            ForEach(APCANivå.allCases) { nivå in
-                let bestått = abs(lc) >= nivå.rawValue
-                HStack {
-                    Image(systemName: bestått ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundStyle(bestått ? Color.suksess : Color.feil)
-                        .accessibilityHidden(true)
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(nivå.bruk)
-                        Text("minst Lc \(Int(nivå.rawValue))")
-                            .font(.caption)
-                            .foregroundStyle(Color.sekundærTekst)
-                    }
-                    Spacer()
-                    if !bestått {
-                        Button("Rett opp") { forgrunn = forgrunn.medAPCA(mot: bakgrunn, minst: nivå.rawValue) }
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                    }
-                }
-                .accessibilityElement(children: .combine)
-                .accessibilityValue(bestått ? "Bestått" : "Ikke bestått")
-            }
-        } header: {
-            Text("Lesekontrast (APCA)")
-        } footer: {
-            VStack(alignment: .leading, spacing: 6) {
-                KortForklaring("Lesekontrast etter APCA, forslaget til WCAG 3.") { Text("APCA er forslaget til lesekontrast i WCAG 3 og følger opplevd lesbarhet bedre enn WCAG 2, særlig for lys tekst på mørk bakgrunn. Lc er positiv for mørk tekst på lys bakgrunn og negativ for lys tekst på mørk. Nivåene er veiledende og gjelder tekst i vanlig vekt; tynnere og mindre tekst trenger mer. «Rett opp» endrer bare lysheten. Regelverket viser fortsatt til WCAG 2.") }
-                MetodeHenvisning(.apca, .oklab)
-            }
-        }
-    }
-}
-
 /// «Vis med»: simuler et fargesynsavvik i flaten øverst i kontrastsjekken.
 struct KontrastVisMedSeksjon: View {
     /// «normalt» = ingen simulering.
@@ -148,7 +72,7 @@ struct KontrastVisMedSeksjon: View {
     }
 }
 
-/// Den store flaten øverst i kontrastsjekken: bakgrunnen med fargen som tekst og grafikk (WCAG, APCA) eller som
+/// Den store flaten øverst i kontrastsjekken: bakgrunnen med fargen som tekst og grafikk (WCAG) eller som
 /// to likeverdige flater side om side (LRV), og nøkkeltallet for valgt sjekk. Fargene velges rett i flaten: trykk på prøven
 /// eller fargeknappene (tekst) eller på en av flatene (LRV). Tallene står i en lesbar farge, prøvene i fargen som testes.
 struct Kontrastflate: View {
@@ -182,12 +106,6 @@ struct Kontrastflate: View {
                 String(localized: "\($0.suksesskriterium) · minst \($0.minimum, format: .number.precision(.fractionLength(1))):1")
             }
             return (test.formatert, ok, navn, detalj)
-        case .apca:
-            let lc = bakgrunn.apcaKontrast(tekst: forgrunn.lagtOver(bakgrunn))
-            let (ok, navn, detalj) = utdrag(APCANivå.allCases, { abs(lc) >= $0.rawValue }, navn: \.bruk) {
-                String(localized: "minst Lc \(Int($0.rawValue))")
-            }
-            return (APCANivå.formatert(lc), ok, navn, detalj + " · " + APCANivå.retning(lc))
         case .lrv:
             let k = Flatekontrast(forgrunn, bakgrunn)
             // Plukket uten referanse: kontrasten er et anslag (≈).

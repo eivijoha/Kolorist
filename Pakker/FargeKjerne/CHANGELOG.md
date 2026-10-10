@@ -4,6 +4,11 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **APCA er fjernet (brytende endring).** APCA er lisensbelagt (Myndex; bare nettinnhold under W3C-avtalen, kommersiell
+  bruk krever egen avtale), og FargeKjerne skal ikke inneholde lisensbelagte modeller. Fjernet: `Farge.apcaKontrast(tekst:)`,
+  `Farge.medAPCA(mot:minst:)` og `Komponentsjekk.lc`. `Farge.lesbarTekstfarge` velger nå sort eller hvit etter høyest
+  WCAG 2-kontrast (som før 1.3), og `Skriftfarger.beste(for:blant:)` velger skriftfargen med høyest WCAG-kontrast.
+  `Testvektorer/Fargeregning.json` har ikke lenger `apcaLc`.
 - **Installerte ICC-profiler (macOS):** `InstallerteProfiler.finn(klasser:datarom:)` lister profilene i
   `/System/Library/ColorSync/Profiles`, `/Library/ColorSync/Profiles` og `~/Library/ColorSync/Profiles` (med undermapper,
   og det ColorSync ellers kjenner). `InstallertProfil` har `url`, `navn` (beskrivelsen i profilen), `visningsnavn`
