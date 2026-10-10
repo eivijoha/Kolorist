@@ -56,8 +56,8 @@ struct ToneskalaSeksjon: View {
             Text("Kontrast per trinn")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
-                Text("WCAG-forhold og APCA (Lc) for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).")
-                MetodeHenvisning(.wcag, .apca, .oklab)
+                Text("WCAG-forhold for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).")
+                MetodeHenvisning(.wcag, .oklab)
             }
         }
     }

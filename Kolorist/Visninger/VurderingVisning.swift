@@ -83,7 +83,7 @@ extension VurderingVisning {
 }
 
 /// Kontrast for aktiv farge mot en valgt bakgrunn: en stor flate øverst med nøkkeltallet for valgt sjekk (WCAG 2.2,
-/// APCA eller LRV) og fargevalgene i flaten, og kravene rett under. Bred visning: flaten til venstre, som i Studio.
+/// eller LRV) og fargevalgene i flaten, og kravene rett under. Bred visning: flaten til venstre, som i Studio.
 private struct KontrastVurdering: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.presentasjonsmodus) private var presentasjon
@@ -106,7 +106,6 @@ private struct KontrastVurdering: View {
                     // Vurderingen rett under flaten og typevalget (fargene velges i flaten).
                     switch type {
                     case .wcag: KontrastSeksjon(forgrunn: $arbeidsbenk.aktivFarge)
-                    case .apca: APCASeksjon(forgrunn: $arbeidsbenk.aktivFarge)
                     case .lrv: FlatekontrastSeksjon(flate: $arbeidsbenk.aktivFarge, bakgrunn: bakgrunn)
                     }
                     KontrastVisMedSeksjon()

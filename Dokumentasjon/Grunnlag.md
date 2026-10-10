@@ -119,7 +119,7 @@ Gjenstår i disse sporene: Adobe Color-tema direkte (krever Adobe-konto/API), Fi
 - Hvitbalanse-lås og referansekort for kamera
 
 **Fase 2 – designerflyt**
-- Kontrastmatrise (WCAG 2 + APCA) og fargeblindhetssimulering
+- Kontrastmatrise (WCAG 2) og fargeblindhetssimulering
 - Flere eksportformater: Procreate `.swatches`, Apple `.clr` (Mac), Figma-variabler, Tailwind, Android XML
 - iCloud-synk (CloudKit) og deling av paletter
 - Widget og Kontrollsenter-kontroll (siste palett, rask pipette/kamera)
@@ -129,7 +129,7 @@ Gjenstår i disse sporene: Adobe Color-tema direkte (krever Adobe-konto/API), Fi
 verktøyene (skalaer, kontrast) ligger der de er.
 1. **Skriftfarger i paletten:** et eget lag ved siden av fargene (`Palett.tekstfarger`, høyst fire; standard «Lys tekst»
    nær hvit og «Mørk tekst» nær sort, «Foreslå fra paletten» med svakt kulørpreg, L* ≈ 97/14). Hver palettfarge får
-   skriftfarge automatisk (APCA velger, WCAG 4,5:1 som gulv) eller overstyrt (`PalettFarge.tekstfarge: UUID?`), vist som
+   skriftfarge automatisk (høyest WCAG-kontrast) eller overstyrt (`PalettFarge.tekstfarge: UUID?`), vist som
    «Aa» med kontrastmerke og «Rett opp». Skriftkontrast-visningen får «Skriftfarger mot paletten». Følger med i
    DTCG (`text.light`/`text.dark` + `on`-alias per farge), CSS, SwiftUI, ASE (egen gruppe), PDF og delingslenker.
    `PalettDokument.tekstfargeData` er et nytt felt → CloudKit-skjemaet må publiseres til produksjon.
@@ -170,3 +170,9 @@ verktøyene (skalaer, kontrast) ligger der de er.
 - Interaktive snippets i Snarveier (vis paletten direkte i Siri-svaret)
 - KI: forklar/kritiser palett, foreslå navn, generer varianter («varmere», «mer eksklusiv»)
 - Spotlight-indeksering ved hver lagring (i dag bare ved intents)
+
+## Beslutning 2026-10-10: ingen lisensbelagte modeller
+
+APCA (Myndex) er tatt ut av Kolorist i 1.3.1 og av FargeKjerne: lisensen gjelder bare nettinnhold under W3C-avtalen,
+kommersiell bruk krever egen avtale, og koden kan revideres av Myndex. Kolorist skal bare bygge på åpne standarder og
+metoder (WCAG 2, CIE, ICC, LRV-standardene m.m.) og egne metoder. Tekst på fargeflater velges etter WCAG 2-kontrast.

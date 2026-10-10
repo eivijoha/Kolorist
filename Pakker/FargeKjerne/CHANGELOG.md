@@ -4,6 +4,11 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **APCA er fjernet (brytende endring).** APCA er lisensbelagt (Myndex; bare nettinnhold under W3C-avtalen, kommersiell
+  bruk krever egen avtale), og FargeKjerne skal ikke inneholde lisensbelagte modeller. Fjernet: `Farge.apcaKontrast(tekst:)`,
+  `Farge.medAPCA(mot:minst:)` og `Komponentsjekk.lc`. `Farge.lesbarTekstfarge` velger nå sort eller hvit etter høyest
+  WCAG 2-kontrast (som før 1.3), og `Skriftfarger.beste(for:blant:)` velger skriftfargen med høyest WCAG-kontrast.
+  `Testvektorer/Fargeregning.json` har ikke lenger `apcaLc`.
 - `Komponentsjekk.id` bruker tokennavnet til den egne rollen (unikt) i stedet for navnet, så to egne roller med samme navn
   gir ulike id-er. Xcode-eksporten lager navnet på asset-katalogen uten tegn som skiller stier (`/`, `:` …).
 - **Designsystem i delingslenker:** `DeltInnhold.designsystem` (`DeltDesignsystem`, nøkkel `ds`): rollen til hver farge,

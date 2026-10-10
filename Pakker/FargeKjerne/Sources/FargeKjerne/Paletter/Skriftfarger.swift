@@ -3,9 +3,8 @@ import Foundation
 /// Skriftfarger i en palett (fra 1.3): fargene tekst skal ha på palettens farger – typisk én nær hvit for mørke farger og
 /// én nær sort for lyse. Valgfritt; uten skriftfarger brukes sort eller hvit (`Farge.lesbarTekstfarge`).
 ///
-/// Valget for hver palettfarge er automatisk med mindre brukeren har valgt selv: blant skriftfargene som når 4,5:1 etter
-/// WCAG 2 (kravet i regelverket for vanlig tekst) velges den som leses best etter APCA; når ingen når 4,5:1, den med høyest
-/// WCAG-forhold.
+/// Valget for hver palettfarge er automatisk med mindre brukeren har valgt selv: den skriftfargen som gir høyest
+/// kontrastforhold etter WCAG 2 (4,5:1 er kravet i regelverket for vanlig tekst).
 public enum Skriftfarger {
     /// Høyst så mange skriftfarger per palett.
     public static let maksAntall = 4
@@ -28,8 +27,6 @@ public enum Skriftfarger {
     /// Den beste skriftfargen for en bakgrunn blant `kandidater` (se typen), eller `nil` uten kandidater.
     public static func beste(for bakgrunn: Farge, blant kandidater: [PalettFarge]) -> PalettFarge? {
         func wcag(_ k: PalettFarge) -> Double { k.farge.lagtOver(bakgrunn).wcagKontrast(mot: bakgrunn) }
-        func lc(_ k: PalettFarge) -> Double { abs(bakgrunn.apcaKontrast(tekst: k.farge.lagtOver(bakgrunn))) }
-        if let best = kandidater.filter({ wcag($0) >= 4.5 }).max(by: { lc($0) < lc($1) }) { return best }
         return kandidater.max(by: { wcag($0) < wcag($1) })
     }
 

@@ -82,30 +82,13 @@ struct FargeromTests {
         #expect(Farge(hex: "#FFFF00")!.lesbarTekstfarge == sort)
     }
 
-    /// Referanseverdier fra APCA 0.0.98G-4g (apcacontrast.com).
-    @Test func apca() {
+    /// Tekst på fargeflater: sort eller hvit etter høyest WCAG 2-kontrast (skillet ligger ved grått rundt #767676).
+    @Test func lesbarTekstfarge() {
         let hvit = Farge(hex: "#FFFFFF")!, sort = Farge(hex: "#000000")!
-        #expect(nær(hvit.apcaKontrast(tekst: sort), 106.04, 0.05))
-        #expect(nær(sort.apcaKontrast(tekst: hvit), -107.88, 0.05))
-        #expect(nær(hvit.apcaKontrast(tekst: Farge(hex: "#888888")!), 63.06, 0.05))
-        // Mellomtoner får hvit tekst (WCAG 2 ville valgt sort for #777777 og #8A8A8A); lyse toner sort.
-        #expect(Farge(hex: "#777777")!.lesbarTekstfarge == hvit)
-        #expect(Farge(hex: "#8A8A8A")!.lesbarTekstfarge == hvit)
-        #expect(Farge(hex: "#AAAAAA")!.lesbarTekstfarge == sort)
-    }
-
-    /// «Rett opp» for APCA: når målet med minst mulig endring i lyshet, og lar farger som holder, være.
-    @Test func apcaRettOpp() {
-        let hvit = Farge(hex: "#FFFFFF")!, blå = Farge(hex: "#537BB0")!
-        #expect(blå.medAPCA(mot: hvit, minst: 30) == blå)
-        let rettet = blå.medAPCA(mot: hvit, minst: 75)
-        #expect(abs(hvit.apcaKontrast(tekst: rettet)) >= 75)
-        #expect(abs(hvit.apcaKontrast(tekst: rettet)) < 78)
-        #expect(abs(rettet.okLCH.h - blå.okLCH.h) < 2)
-        // Lc 90 kan ikke nås på en mellomtone: svaret blir sort eller hvitt, det som gir mest kontrast.
-        let grå = Farge(hex: "#808080")!
-        let umulig = Farge(hex: "#707070")!.medAPCA(mot: grå, minst: 90)
-        #expect(umulig == Farge(lineærR: 0, g: 0, b: 0) || umulig == Farge(lineærR: 1, g: 1, b: 1))
+        #expect(Farge(hex: "#707070")!.lesbarTekstfarge == hvit)
+        #expect(Farge(hex: "#808080")!.lesbarTekstfarge == sort)
+        #expect(Farge(hex: "#1F3A4D")!.lesbarTekstfarge == hvit)
+        #expect(Farge(hex: "#FFFF00")!.lesbarTekstfarge == sort)
     }
 }
 

@@ -531,7 +531,6 @@ private struct Kontrollpunkt: View {
                     Text(Kontrasttest(forgrunn: sjekk.forgrunn, bakgrunn: sjekk.bakgrunn).formatert)
                         .font(.subheadline.monospacedDigit().weight(.semibold))
                 }
-                Text(APCANivå.formatert(sjekk.lc)).font(.caption.monospacedDigit()).foregroundStyle(Color.sekundærTekst)
             }
         }
         .padding(.horizontal, 12)

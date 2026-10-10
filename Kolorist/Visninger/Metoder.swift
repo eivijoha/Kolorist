@@ -4,7 +4,7 @@ import SwiftUI
 /// Vises per seksjon («Metode: …») og samlet under «Metoder og kilder», så brukeren alltid kan se
 /// hva tallene og fargene bygger på – også hva som er utviklet for appen og hva som er etablert fag.
 enum Metode: String, CaseIterable, Identifiable {
-    case oklab, cssColor4, cieLab, ciede2000, wcag, apca, lrv, munsell, machado, icc, renCMYK, harmonier, kunnskapsbase,
+    case oklab, cssColor4, cieLab, ciede2000, wcag, lrv, munsell, machado, icc, renCMYK, harmonier, kunnskapsbase,
          cam16, kolorimetri, kamerakarakterisering, filamentfarger, designsystem
 
     var id: String { rawValue }
@@ -17,7 +17,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .cieLab: "CIELab D50"
         case .ciede2000: "CIEDE2000"
         case .wcag: "WCAG 2.2"
-        case .apca: "APCA"
         case .lrv: "LRV"
         case .munsell: "Munsell"
         case .machado: String(localized: "Machado mfl. 2009")
@@ -40,7 +39,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .cieLab: String(localized: "CIELab, CIE LCH og Bradford-tilpasning")
         case .ciede2000: String(localized: "CIEDE2000 (ΔE00)")
         case .wcag: String(localized: "WCAG 2.2 kontrast")
-        case .apca: String(localized: "APCA – opplevd lesekontrast (WCAG 3-utkast)")
         case .lrv: String(localized: "Lysrefleksjonsverdi og luminanskontrast")
         case .munsell: String(localized: "Munsell-systemet")
         case .machado: String(localized: "Simulering av fargesynsavvik")
@@ -64,7 +62,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .cieLab: "CIE 15:2018 Colorimetry; K. M. Lam (1985), Bradford-transformasjonen"
         case .ciede2000: "G. Sharma, W. Wu, E. N. Dalal: Color Research & Application 30(1), 2005; CIE 142-2001"
         case .wcag: "W3C: Web Content Accessibility Guidelines 2.2, suksesskriterium 1.4.3, 1.4.6 og 1.4.11"
-        case .apca: "Andrew Somers (Myndex Research): Accessible Perceptual Contrast Algorithm, versjon 0.0.98G-4g; W3C: WCAG 3.0 Working Draft"
         case .lrv: String(localized: "CIE 15 (luminansfaktor Y); BS 8300-2:2018; TEK17 med veiledning, NS 11001-1:2018 og Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (utkast 2026)")
         case .munsell: "Newhall, Nickerson & Judd: «Final Report of the O.S.A. Subcommittee on the Spacing of the Munsell Colors», JOSA 33(7), 1943; ASTM D1535"
         case .machado: "G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009"
@@ -92,8 +89,6 @@ enum Metode: String, CaseIterable, Identifiable {
             String(localized: "CIEs formel for opplevd fargeforskjell. Brukes ved sammenligning av farger, gamutavvik og i analysen av farger som blir vanskelige å skille med fargesynsavvik. Implementasjonen er kontrollert mot testdataene i Sharma mfl.")
         case .wcag:
             String(localized: "W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt.")
-        case .apca:
-            String(localized: "En kontrastmodell utviklet som grunnlag for WCAG 3, som fortsatt er et utkast. Den gir lesekontrast som Lc fra omtrent −108 til 106: positiv for mørk tekst på lys bakgrunn, negativ for lys tekst på mørk. Den tar hensyn til at øyet opplever lyse og mørke farger ulikt, og følger opplevd lesbarhet bedre enn WCAG 2 – særlig for mørke og mettede farger. Hvor mye som trengs, avhenger av skriftstørrelse og vekt: Lc 90 er foretrukket og 75 minimum for brødtekst, 60 for større tekst, 45 for store overskrifter, 30 for ikke-viktig tekst og 15 for ikoner og grafikk. Kolorist viser Lc i kontrastsjekken og velger sort eller hvit tekst på fargefelt etter APCA. Regelverket for universell utforming viser fortsatt til WCAG 2, så bruk APCA som et supplement.")
         case .lrv:
             String(localized: "LRV er CIE-luminansen Y i prosent – andelen synlig lys en flate reflekterer, slik malingsprodusentene oppgir den. Kolorist regner den for fargen slik den vises i sRGB. Kontrasten mellom flater regnes etter valgt metode, hver med sine egne krav: forskjell i LRV-poeng (BS 8300: minst 30, eller 20 for store flater og over 200 lux); luminanskontrast etter Weber, |Yo − Yb| / Yb med bakgrunnen som referanse, slik TEK17 og NS 11001 bruker den (0,4 for orientering og veifinning, 0,8 for trappeneser, håndløper og farefelt); og Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), etter ISO 21542 (30 % for store flater, 60 % for fare og tekst, med verdier fra det kanadiske utkastet CAN-ASC-2.4). Tallene kan ikke sammenlignes på tvers av metodene. LRV fra kamera eller bilde uten gråkort eller referansekort er bare veiledende. «Rett opp» endrer bare lysheten i OKLCH.")
         case .munsell:
@@ -128,7 +123,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .cieLab: URL(string: "https://cie.co.at/publications/colorimetry-4th-edition")
         case .ciede2000: URL(string: "https://doi.org/10.1002/col.20070")
         case .wcag: URL(string: "https://www.w3.org/TR/WCAG22/")
-        case .apca: URL(string: "https://github.com/Myndex/apca-w3")
         case .lrv: URL(string: "https://www.standard.no/no/Nettbutikk/produktkatalogen/Produktpresentasjon/?ProductID=1000883")
         case .munsell: URL(string: "https://doi.org/10.1364/JOSA.33.000385")
         case .machado: URL(string: "https://doi.org/10.1109/TVCG.2009.113")

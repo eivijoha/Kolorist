@@ -15,7 +15,7 @@ Nøkkelord: fargefunksjoner designere og arkitekter søker etter. Ord som står 
 ordene kombineres med dem («color» + «picker», «farge» + «palett»). Samme sett for iOS og Mac.
 
 Skrivemåte: tekstene beskriver hva man oppnår, ikke hvor menyene er; ubestemt flertall («farger», «paletter»); annen
-programvare og rettighetsbelagte fargesystemer nevnes ikke ved navn. Standarder (WCAG, APCA, LRV, TEK17) kan nevnes.
+programvare og rettighetsbelagte fargesystemer nevnes ikke ved navn. Standarder (WCAG, LRV, TEK17) kan nevnes. APCA er lisensbelagt og nevnes ikke (tatt ut av appen i 1.3.1).
 
 ---
 
@@ -30,7 +30,7 @@ Fargepaletter for designere
 **Reklametekst (170)**
 
 ```
-Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus og kontroll etter WCAG, APCA og LRV – rett inn i verktøyene du bruker.
+Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus og kontroll etter WCAG og LRV – rett inn i verktøyene du bruker.
 ```
 
 **Nytt i denne versjonen (4000)**
@@ -42,7 +42,7 @@ Kolorist 1.3 tar paletten helt fram til designsystemet.
 • Eksporter designsystemet som fargesett for apputvikling, design tokens med alias og én fil per modus, og CSS med lys og mørk modus og Display P3 – med en README som forklarer systemet. Eller del det som lenke: mottakere ser komponentene og fargene i nettleseren.
 • Toneskala i Studio, ved siden av Farge og Harmoni: trinn 50–950 med lik kontrast for alle kulører – trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt.
 • Skriftfarger i paletten om du vil: én nær hvit og én nær sort, med palettens kulørpreg.
-• Ny kontrastsjekk: velg WCAG 2.2, APCA eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
+• Ny kontrastsjekk: velg WCAG 2.2 eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
 • Kontrast mellom flater med valgfri metode: LRV-forskjell, Weber (TEK17, NS 11001) eller Michelson.
 • Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh – kopier én verdi eller alle som tabell.
 • Kopier farger som RGB-verdier til CAD, BIM og video, og som lineære verdier til 3D-programmer.
@@ -81,7 +81,7 @@ OVERGANGER, TONER OG HARMONIER
 • Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL eller RYB
 
 KONTRAST OG FARGESYN
-• Kontrastsjekk etter WCAG 2.2, APCA eller LRV, med «Rett opp» som justerer fargen til den består
+• Kontrastsjekk etter WCAG 2.2 eller LRV, med «Rett opp» som justerer fargen til den består
 • Skriftkontrast og skriftfarger for hele paletter
 • Kontrast mellom flater for bygg og interiør: LRV-forskjell, Weber eller Michelson – også i valgt lys
 • Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
@@ -110,7 +110,7 @@ PALETTER OG ICLOUD
 Samle farger og gradienter i paletter og palettgrupper, og synkroniser via din egen, private iCloud.
 
 ÅPENT OM METODENE
-Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV, Munsell, ICC og designtokens – med kilde og forklaring.
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC og designtokens – med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -142,7 +142,7 @@ Colour palettes for designers
 **Promotional text (170)**
 
 ```
-From palette to design system: tone scales with consistent contrast, colours for light and dark mode, and checks by WCAG, APCA and LRV – straight into your tools.
+From palette to design system: tone scales with consistent contrast, colours for light and dark mode, and checks by WCAG and LRV – straight into your tools.
 ```
 
 **What’s New in This Version (4000)**
@@ -154,7 +154,7 @@ Kolorist 1.3 takes your palette all the way to a design system.
 • Export the design system as colour sets for app development, design tokens with aliases and one file per mode, and CSS with light and dark mode and Display P3 – with a README that explains the system. Or share it as a link: recipients see the components and colours in their browser.
 • Tone scale in Studio, next to Colour and Harmony: steps 50–950 with the same contrast for every hue – step 400 holds at least 3:1 and step 600 at least 4.5:1 against white.
 • Text colours in the palette if you want them: one near white and one near black, tinted with the palette’s hue.
-• New contrast check: choose WCAG 2.2, APCA or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
+• New contrast check: choose WCAG 2.2 or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
 • Contrast between surfaces with a choice of method: LRV difference, Weber or Michelson.
 • The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh – copy one value or all of them as a table.
 • Copy colours as RGB values for CAD, BIM and video, and as linear values for 3D apps.
@@ -193,7 +193,7 @@ GRADIENTS, TONES AND HARMONIES
 • Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL or RYB colour wheels
 
 CONTRAST AND COLOUR VISION
-• Contrast check by WCAG 2.2, APCA or LRV, with auto-fix that adjusts the colour until it passes
+• Contrast check by WCAG 2.2 or LRV, with auto-fix that adjusts the colour until it passes
 • Text contrast and text colours for whole palettes
 • Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson – in the chosen light too
 • See palettes with protan, deutan and tritan deficiencies and achromatopsia – and which colours become hard to tell apart
@@ -222,7 +222,7 @@ PALETTES AND ICLOUD
 Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
 
 OPEN ABOUT METHODS
-The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV, Munsell, ICC and design tokens – with source and explanation.
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC and design tokens – with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -248,7 +248,7 @@ same order as the Norwegian ones.
 **Reklametekst (170)**
 
 ```
-Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus, kontroll etter WCAG, APCA og LRV – plukk fra hele skjermen og dra fargene videre.
+Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus, kontroll etter WCAG og LRV – plukk fra hele skjermen og dra fargene videre.
 ```
 
 **Nytt i denne versjonen (4000)** – Mac hopper fra 1.1, så nyhetene fra 1.2 er med
@@ -263,7 +263,7 @@ FRA PALETT TIL DESIGNSYSTEM
 • Del designsystemet som lenke: mottakere ser komponentene og fargene i nettleseren.
 
 KONTRAST
-• Ny kontrastsjekk: velg WCAG 2.2, APCA eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
+• Ny kontrastsjekk: velg WCAG 2.2 eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
 • Skriftkontrast rett i palettene: hver farge som tekst på de andre.
 • Kontrast mellom flater med valgfri metode: LRV-forskjell, Weber (TEK17, NS 11001) eller Michelson – også i valgt lys.
 • Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh – kopier én verdi eller alle som tabell.
@@ -323,7 +323,7 @@ OVERGANGER, TONER OG HARMONIER
 • Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL eller RYB
 
 KONTRAST OG FARGESYN
-• Kontrastsjekk etter WCAG 2.2, APCA eller LRV, med «Rett opp» som justerer fargen til den består
+• Kontrastsjekk etter WCAG 2.2 eller LRV, med «Rett opp» som justerer fargen til den består
 • Skriftkontrast og skriftfarger for hele paletter
 • Kontrast mellom flater for bygg og interiør: LRV-forskjell, Weber eller Michelson – også i valgt lys
 • Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
@@ -355,7 +355,7 @@ PALETTER OG ICLOUD
 Samle farger og gradienter i paletter og palettgrupper, og synkroniser via din egen, private iCloud.
 
 ÅPENT OM METODENE
-Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV, Munsell, ICC og designtokens – med kilde og forklaring.
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC og designtokens – med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -379,7 +379,7 @@ designsystem, toneskala, kontrast, flatekontrast, studio, harmoni, lys, fargesyn
 **Promotional text (170)**
 
 ```
-From palette to design system: tone scales with consistent contrast, light and dark mode, checks by WCAG, APCA and LRV – pick from anywhere on screen and drag colours on.
+From palette to design system: tone scales with consistent contrast, light and dark mode, checks by WCAG and LRV – pick from anywhere on screen and drag colours on.
 ```
 
 **What’s New (4000)** – the Mac skips 1.2, so the 1.2 news is included
@@ -394,7 +394,7 @@ FROM PALETTE TO DESIGN SYSTEM
 • Share the design system as a link: recipients see the components and colours in their browser.
 
 CONTRAST
-• New contrast check: choose WCAG 2.2, APCA or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
+• New contrast check: choose WCAG 2.2 or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
 • Text contrast right in your palettes: each colour as text on the others.
 • Contrast between surfaces with a choice of method: LRV difference, Weber or Michelson – in the chosen light too.
 • The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh – copy one value or all of them as a table.
@@ -454,7 +454,7 @@ GRADIENTS, TONES AND HARMONIES
 • Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Munsell, Hering, Goethe, HSL or RYB colour wheels
 
 CONTRAST AND COLOUR VISION
-• Contrast check by WCAG 2.2, APCA or LRV, with auto-fix that adjusts the colour until it passes
+• Contrast check by WCAG 2.2 or LRV, with auto-fix that adjusts the colour until it passes
 • Text contrast and text colours for whole palettes
 • Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson – in the chosen light too
 • See palettes with protan, deutan and tritan deficiencies and achromatopsia – and which colours become hard to tell apart
@@ -486,7 +486,7 @@ PALETTES AND ICLOUD
 Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
 
 OPEN ABOUT METHODS
-The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV, Munsell, ICC and design tokens – with source and explanation.
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell, ICC and design tokens – with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -518,7 +518,7 @@ NEW IN 1.3 – HOW TO TEST
 • Copy to: touch and hold (right-click on Mac) a colour › Copy to. New targets: RGB 0–255, RGB 0–1, linear values for 3D apps, and on Mac the system colour picker (writes a colour list to ~/Library/Colors).
 • Share a design system: open it › ⋯ › Share as link; the link opens a preview in the browser or in the app.
 • Text colours: open a palette › A (text contrast) › Define text colours.
-• Contrast: Assess › Contrast. Choose WCAG 2.2, APCA or LRV below the colour field; tap Text or Background in the field to pick a colour (also with camera or photo).
+• Contrast: Assess › Contrast. Choose WCAG 2.2 or LRV below the colour field; tap Text or Background in the field to pick a colour (also with camera or photo).
 • ΔE: Assess › ΔE. Touch and hold a value to copy it, or use Copy all as a table.
 • Harmonies: Studio › Harmony › Monochromatic or Tone path.
 • Palette groups: Palettes › + › New palette group, then drag palettes into it.
@@ -544,7 +544,7 @@ Mac (fra 1.1 til 1.3):
 Takk for at du tester Kolorist 1.3 for Mac! Versjonen hopper over 1.2, så mye er nytt. Prøv gjerne dette:
 
 • Designsystem: åpne en palett › ⋯ › Lag designsystem. Se på komponentene i lys og mørk modus, bytt farger mellom rollene, lagre og eksporter. Del det gjerne som lenke.
-• Kontrast: Vurdering › Kontrast med WCAG, APCA eller LRV. Velg farger rett i flaten, og prøv «Endre i Studio …» i menyen på fargene.
+• Kontrast: Vurdering › Kontrast med WCAG eller LRV. Velg farger rett i flaten, og prøv «Endre i Studio …» i menyen på fargene.
 • Lys: se farger og paletter under ulike betraktningsforhold (Vurdering › Lys og palettvisningen «Se i lys»).
 • Toneskala i Studio, nye harmonier (monokromatisk og tonebane) og filamentfarger.
 • Palettgrupper: lag en gruppe og dra paletter inn i den.
@@ -560,7 +560,7 @@ iPhone og iPad (fra 1.2 til 1.3):
 Takk for at du tester Kolorist 1.3! Prøv gjerne dette:
 
 • Designsystem: åpne en palett › ⋯ › Lag designsystem. Se på komponentene i lys og mørk modus, bytt farger mellom rollene, lagre og eksporter. Del det gjerne som lenke.
-• Kontrast: Vurdering › Kontrast med WCAG, APCA eller LRV. Trykk på fargene i flaten for å velge, og prøv «Endre i Studio …».
+• Kontrast: Vurdering › Kontrast med WCAG eller LRV. Trykk på fargene i flaten for å velge, og prøv «Endre i Studio …».
 • Toneskala: Studio › Toneskala.
 • Nye harmonier: monokromatisk og tonebane.
 • Palettgrupper: lag en gruppe og dra paletter inn i den.
