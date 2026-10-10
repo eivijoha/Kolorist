@@ -24,3 +24,16 @@ forespørsel, bruk av navnet bare for korrekt og oppdatert implementering, logo 
 - Skriftlig, signert kommersiell avtale med Myndex som dekker app (ikke bare nettinnhold), iOS og macOS.
 - Implementeringen må følge gjeldende APCA-versjon og konstanter (sjekk apca-w3 for endringer siden 0.0.98G-4g,
   bl.a. klemming ved ±Lc 10 i 0.1.9), og avtalen avgjør om navnet «APCA» kan brukes i appen og på nettsiden.
+
+## Intern bruk og avtale (2026-10-10)
+
+Lisensen gjelder også intern bruk: å velge tekstfarge med APCA i appens eget grensesnitt er ikke nettinnhold, og
+kommersiell bruk krever skriftlig avtale uansett om navnet vises. Eivind tar kontakt med Myndex om en avtale. Den bør dekke:
+
+- Native apper (iOS, iPadOS, macOS) distribuert gjennom App Store, både som synlig kontrastsjekk og intern bruk
+  (tekstfarge, skriftfarger, designsystem).
+- FargeKjerne som pakke, også brukt av Kolorist underviser og Kolorist student (web).
+- Patentlisens for metoden, ikke bare opphavsrett til koden.
+- Bruk av navnet «APCA» i appen, på nettsiden og i App Store-tekstene, og eventuelt logoen.
+- Versjonskrav (hvilken algoritmeversjon og konstanter, og plikten til å holde den oppdatert), revisjonsretten, vederlag,
+  varighet og oppsigelse.
