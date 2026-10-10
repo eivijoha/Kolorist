@@ -18,6 +18,56 @@ For å unngå at to tråder skriver i samme fil:
    merknad under ønsket.
 5. Prioritet avklares alltid med Eivind før et ønske bygges i Kolorist. 1.2 er i review; nytt arbeid går mot 1.3.
 
+## FargeKjerne 0.4.0 (2026-10-10) – lisensopprydding, brytende endringer
+
+Kolorist skal ikke inneholde lisensbelagte modeller eller data (ut over CC BY og CC BY-SA), og bruker ikke andres
+varemerker som navn på funksjoner. Det gir to brytende endringer i FargeKjerne fra **0.4.0** (merket i
+`eivijoha/FargeKjerne`). Bytt avhengigheten fra 0.3.0 når dere er klare; se `CHANGELOG.md` i pakken.
+
+### Ønske 6: APCA — **besvart** (tatt ut)
+
+- Lisensen (Myndex, `apca-w3`) gjelder bare nettinnhold under W3C-avtalen; bruk i en app krever egen skriftlig avtale,
+  med revisjonsrett og vilkår for navnet. **APCA kan ikke brukes i Kolorist underviser** uten en slik avtale.
+- Fjernet: `Farge.apcaKontrast(tekst:)`, `apcaLuminans`, `Farge.medAPCA(mot:minst:)` og `Komponentsjekk.lc`.
+  `Farge.lesbarTekstfarge` og `Skriftfarger.beste(for:blant:)` velger nå etter høyest WCAG 2-kontrast.
+- `Testvektorer/Fargeregning.json` har ikke lenger `apcaLc`. Kolorist student bør ta ut APCA-sjekken mot fila.
+- I Kolorist 1.3.1 har kontrastsjekken WCAG 2.2 og LRV. `kontrastType = apca` i `UserDefaults` gir WCAG.
+- Om WCAG 3: dere har rett i at APCA ikke er vedtatt. Når APCA ikke lenger er med, faller kommentaren bort. Forelesning 5
+  kan omtale APCA som en kandidat som ble tatt ut av WCAG 3-utkastene i 2023, uten å bruke algoritmen.
+
+### Munsell — **tatt ut** (nytt, påvirker Kolorist underviser)
+
+- Munsell® er et registrert varemerke (X-Rite), og `Munsell.json` var RITs `all.dat`. Omtrent halvparten av verdiene der
+  er ekstrapolert, med uklart opphav og uten lisens.
+- Fjernet: typen `Munsell`, `Farge.munsell`, `Farge(munsell:)`, `Farge.innenforMunsell`, `Fargemodell.munsell`,
+  `Fargesirkel.munsell` med `trinn` og `avrundet(_:)`, notasjonen i `Fargetolk`, `DeltFarge.munsell` (`mu`) og ressursen.
+- **Lenker:** `DeltVisning(fargemodell: "munsell")` ignoreres, så Studio beholder modellen som er valgt. En
+  harmonilenke med sirkelen `munsell` viser fargene, men med sirkelen brukeren har valgt. Farger lagret med Munsell åpnes
+  uten representasjon. Ta `munsell` ut av lenkene dere lager. Fargemodellene er nå `okLCH`, `okLab`, `cieLCH`, `cieLab`,
+  `hsb`, `hsl`, `rgb`, `displayP3`, `cmyk`.
+- **Forelesningene:** læringsmodulen (forelesning 4 og 8) har Munsell-treet, Munsells sirkel og Munsell som
+  fargemodell. Historien (A. H. Munsell, valør og kroma) kan fortsatt fortelles; det er bruken av navnet som funksjon og de
+  ekstrapolerte dataene som er problemet. Skal dere vise et kulør–valør–kroma-rom, bør det bygge på de målte dataene i
+  Newhall, Nickerson & Judd (1943) og Judd & Wyszecki (1956), ha et nøytralt navn og et varemerkeforbehold. Se
+  `Dokumentasjon/Munsell-gjeninnforing.md` for vilkårene. Det er Eivinds avgjørelse om forelesningene skal endres.
+
+### CIE-data (CC BY-SA 4.0)
+
+- Spektrene i `FargeMaaling/CIEData.json` (observatør, dagslysserien, FL og LED) er © CIE under CC BY-SA 4.0. Viser
+  Kolorist underviser eller Kolorist student kurver eller tall fra dem, må CIE krediteres med lisensen. Deles dataene
+  videre, må det skje under samme lisens. Uttrekket ligger på https://kolorist.no/data/cie/. Se
+  `DATALISENSER.md` i pakken.
+
+### Ønske 5: systemets ICC-profiler — **levert** i 0.4.0
+
+- `InstallerteProfiler.finn(klasser:datarom:)` (macOS) lister profilene i `/System/Library/ColorSync/Profiles`,
+  `/Library/ColorSync/Profiles` og `~/Library/ColorSync/Profiles` (med undermapper), og det ColorSync ellers kjenner.
+  For eksempel gir `finn(klasser: [.utdata], datarom: [.cmyk])` CMYK-trykkprofilene til hensiktene.
+- `InstallertProfil`: `navn`, `visningsnavn` (entydig), `klasse`, `datarom`, `plassering`, `gruppe` (undermappe),
+  `kanBrukesSomFargerom` og `profil()`, som åpner den som `ICCProfil`.
+- **Sandkasse:** lesing av mappene er tillatt i app-sandkassen uten egne rettigheter (sjekket mot systemets
+  sandkasseprofil). På iOS og iPadOS finnes ikke API-et; behold filvalget der.
+
 ## Levert
 
 ### 1. «Åpne i Kolorist» med visningstilstand og presentasjonsmodus — **levert (grunnlaget)** 2026-10-05, FargeKjerne `0.2.0` (Kolorist-commit `d51a846`)
@@ -37,7 +87,7 @@ let url = try Delingslenke.appLenke(innhold)   // kolorist://l#… – åpner ap
 |---|---|---|
 | `fane` | `studio`, `paletter`, `overgang`, `utplukk`, `vurdering` | Fanen som vises |
 | `studiomodus` | `farge`, `harmoni` | Modus i Studio |
-| `fargemodell` | `okLCH`, `okLab`, `cieLCH`, `cieLab`, `munsell`, `hsb`, `hsl`, `rgb`, `cmyk` | Fargemodellen i Studio |
+| `fargemodell` | `okLCH`, `okLab`, `cieLCH`, `cieLab`, `hsb`, `hsl`, `rgb`, `cmyk` (`munsell` er tatt ut i 0.4.0) | Fargemodellen i Studio |
 | `vurdering` | `kontrast`, `sammenlign`, `fargesyn`, `lys` | Delen av Vurdering |
 | `bakgrunn` | en farge | Bakgrunnen i kontrastsjekken (forgrunnen er aktiv farge) |
 | `bruk` | `true` | Innholdet tas i bruk direkte: farge → aktiv farge, harmoni → Studio › Harmoni med samme oppsett, gradient → Overgang. **Paletter vises alltid i ark** (lagres bare når brukeren velger det). Uten `bruk`: arket som før, og visningstilstanden settes i tillegg. |
@@ -85,7 +135,7 @@ som før. Ingen endring i lenkeformatet eller FargeKjerne.
 - Fil: `Pakker/FargeKjerne/Testvektorer/Fargeregning.json`, forklart i `Pakker/FargeKjerne/Testvektorer/README.md`.
 - 34 farger (sRGB-hex, OKLCH – også utenfor gamut – og Display P3) med lineær sRGB, sRGB, XYZ D65, OKLab, OKLCH, CIELab
   og CIELCH D50, Display P3, HSL, HSB, innenfor sRGB/P3, gamut-kartlagt sRGB og P3 (CSS Color 4), hex og LRV.
-- 12 par med WCAG 2-kontrast, APCA (Lc), ΔE2000, ΔE76, ΔE i OKLab og lesbar tekstfarge (sort/hvit).
+- 12 par med WCAG 2-kontrast, APCA (Lc; tatt ut i 0.4.0), ΔE2000, ΔE76, ΔE i OKLab og lesbar tekstfarge (sort/hvit).
 - `konvensjoner` i fila beskriver skalaer og hvitpunkter. Tallene er avrundet til 12 desimaler; bruk 1e-9 som toleranse.
 - Fila lages og kontrolleres av `TestvektorerTests` i FargeKjerne, så den følger regningen. Endres den, varsles det her.
 - **Kvitter** med status **ferdig** på ønske 3 i ønskefila når web-koden er testet mot den.
