@@ -58,10 +58,26 @@ Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mø
 From palette to design system: tone scales with consistent contrast, light and dark mode, checks by WCAG and LRV – pick from anywhere on screen and drag colours on.
 ```
 
+## Skjermbilder
+
+Hele settet for 1.3.1 ligger i `Dokumentasjon/1.3.1/Skjermbilder/`, uten APCA og Munsell (kontrollert med
+tekstgjenkjenning 2026-10-10):
+
+| Mappe | Enhet | Størrelse |
+|---|---|---|
+| `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 |
+| `iphone63-nb/`, `iphone63-en/` | iPhone 6,3″ | 1206 × 2622 |
+| `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 |
+| `mac-nb/`, `mac-en/` | Mac | 2880 × 1800 |
+| `header-*.png`, `sokeresultat-*.png` | Header og søkeresultat | |
+
+Endret siden 1.3: Studio-bildet i alle settene (`studio.png`, `5-studio.png` for 6,3″) – metodelinja nevnte Munsell.
+
 ## Før du sender inn
 
 - [ ] `MARKETING_VERSION` 1.3.1, `CURRENT_PROJECT_VERSION` 13 (satt i prosjektet).
 - [ ] Ny versjon 1.3.1 for iOS og macOS, med «Nytt i denne versjonen» over.
+- [ ] Studio-bildet byttet i alle settene (iPhone 6,5″ og 6,3″, iPad, Mac; norsk og engelsk).
 - [ ] Reklametekst, beskrivelse, nøkkelord og Notes for App Review byttet til tekstene uten APCA og Munsell
       (`Dokumentasjon/1.3/AppStore.md`; nøkkelordet Munsell er byttet med harmoni/palette).
 - [ ] iOS: 1.3 ligger til gjennomgang – trekk den («Remove from Review») og send inn 1.3.1 i stedet, eller send 1.3.1
