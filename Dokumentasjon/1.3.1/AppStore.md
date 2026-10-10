@@ -1,29 +1,43 @@
 # App Store Connect – Kolorist 1.3.1
 
-Retteversjon for iOS, iPadOS og macOS (2026-10-10): **APCA er tatt ut av appen.** APCA (Myndex) er lisensbelagt – lisensen
-gjelder bare nettinnhold under W3C-avtalen, og kommersiell bruk krever egen avtale – og Kolorist skal ikke ha
-lisensbelagte modeller.
+Retteversjon for iOS, iPadOS og macOS (2026-10-10): **APCA og Munsell er tatt ut av appen.** APCA (Myndex) er
+lisensbelagt – lisensen gjelder bare nettinnhold under W3C-avtalen, og kommersiell bruk krever egen avtale. Munsell er et
+registrert varemerke (X-Rite), og de ekstrapolerte renotasjonsdataene har uklart opphav. Kolorist skal ikke ha
+lisensbelagte modeller eller data, eller bruke andres varemerker som navn på funksjoner.
 
 - Kontrastsjekken har WCAG 2.2 og LRV (valget APCA, Lc og «Rett opp» etter APCA er fjernet).
 - Tekst på fargeflater er sort eller hvit etter høyest kontrastforhold etter WCAG 2 (som før 1.3).
 - Skriftfarger i paletter og designsystemet velges etter høyest WCAG-kontrast; Lc vises ikke lenger.
-- Metoder og kilder, nettsiden (alle versjoner) og App Store-tekstene nevner ikke APCA.
+- Fargemodellen og fargesirkelen med kulør, valør og kroma (Munsell) er fjernet, og feltet for fargeverdi leser ikke
+  lenger notasjonen («5R 4/14»). Lagrede farger og delingslenker med modellen åpnes som vanlige farger.
+- Metoder og kilder, nettsiden (alle versjoner) og App Store-tekstene nevner verken APCA eller Munsell.
 
-Resten av tekstene er som i `Dokumentasjon/1.3/AppStore.md` (rettet uten APCA). **Oppdater i App Store Connect** for
-både iOS og macOS: reklameteksten, beskrivelsen og Notes for App Review – alle nevnte APCA.
+Resten av tekstene er som i `Dokumentasjon/1.3/AppStore.md` (rettet uten APCA og Munsell). **Oppdater i App Store
+Connect** for både iOS og macOS: reklameteksten, beskrivelsen, nøkkelordene og Notes for App Review – de nevnte APCA eller
+Munsell.
 
 ## Nytt i denne versjonen (iOS og macOS)
 
 ```
 • Kontrastsjekken bygger nå på WCAG 2.2 og LRV, standardene regelverket for universell utforming viser til.
 • Tekst på fargeflater velges som sort eller hvit etter WCAG-kontrast.
+• Fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
 • Mindre rettelser.
 ```
 
 ```
 • The contrast check is now based on WCAG 2.2 and LRV, the standards accessibility regulations refer to.
 • Text on colour fields is chosen as black or white by WCAG contrast.
+• The colour model and colour wheel with hue, value and chroma have been removed.
 • Minor fixes.
+```
+
+## Notes for App Review (iOS og macOS)
+
+Kort og saklig – hva som er endret, uten begrunnelse:
+
+```
+1.3.1 is a maintenance update. The contrast check now uses WCAG 2.2 and LRV only, and one colour model (hue, value and chroma) has been removed together with its colour wheel. No new features, permissions or data collection.
 ```
 
 ## Reklametekst (170) – oppdatert, uten APCA
@@ -50,8 +64,10 @@ From palette to design system: tone scales with consistent contrast, light and d
 
 - [ ] `MARKETING_VERSION` 1.3.1, `CURRENT_PROJECT_VERSION` 13 (satt i prosjektet).
 - [ ] Ny versjon 1.3.1 for iOS og macOS, med «Nytt i denne versjonen» over.
-- [ ] Reklametekst, beskrivelse og Notes for App Review byttet til tekstene uten APCA (`Dokumentasjon/1.3/AppStore.md`).
+- [ ] Reklametekst, beskrivelse, nøkkelord og Notes for App Review byttet til tekstene uten APCA og Munsell
+      (`Dokumentasjon/1.3/AppStore.md`; nøkkelordet Munsell er byttet med harmoni/palette).
 - [ ] iOS: 1.3 ligger til gjennomgang – trekk den («Remove from Review») og send inn 1.3.1 i stedet, eller send 1.3.1
       rett etter at 1.3 er godkjent.
 - [x] Nettsiden uten APCA (rota, /neste/ og historisk/), lastet opp 2026-10-10.
+- [ ] Nettsiden uten Munsell (rota, /neste/ og historisk/).
 - [x] CloudKit-skjemaet er uendret siden 1.3.

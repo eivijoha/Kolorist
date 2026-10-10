@@ -154,9 +154,6 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
     case hsl
     /// RYB – kunstnersirkelen (Itten): rød ↔ grønn, gul ↔ fiolett, blå ↔ oransje.
     case ryb
-    /// Munsell: ti hovedkulører (R, YR, Y, GY, G, BG, B, PB, P, RP) i like store opplevde steg, fra
-    /// renotasjonsdataene. Komplementærparene følger Munsell (5R ↔ 5BG, 5Y ↔ 5PB), ikke Lab-vinkelen.
-    case munsell
     /// Herings motfargesirkel: de fire elementærfargene gul, rød, blå og grønn i hver sin kvart (0°, 90°,
     /// 180°, 270°), så gul ↔ blå og rød ↔ grønn er motfarger. Kulørene mellom dem interpoleres i OKLCH.
     case hering
@@ -172,7 +169,6 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .cieLCH: String(localized: "CIE LCH (Lab)", bundle: .module)
         case .hsl: String(localized: "HSL (RGB-skjerm)", bundle: .module)
         case .ryb: String(localized: "RYB (kunstnersirkel)", bundle: .module)
-        case .munsell: "Munsell"
         case .hering: String(localized: "Hering (motfarger)", bundle: .module)
         case .goethe: String(localized: "Goethe (Farbenlehre)", bundle: .module)
         }
@@ -186,26 +182,14 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .ryb: String(localized: "Kunstnersirkelen med rød, gul og blå som primærfarger. Blå er komplementær til oransje.", bundle: .module)
         case .hering: String(localized: "Herings motfargesirkel med de fire elementærfargene gul, rød, blå og grønn i hver sin kvart. Gul er komplementær til blå og rød til grønn. Lyshet og metning holdes fast.", bundle: .module)
         case .goethe: String(localized: "Goethes sirkel fra Farbenlehre (1810) med seks farger: purpur, oransje, gul, grønn, blå og fiolett. Gul er komplementær til fiolett, blå til oransje og purpur til grønn. Lyshet og metning holdes fast.", bundle: .module)
-        case .munsell: String(localized: "Munsells sirkel med ti hovedkulører i like store opplevde steg, mye brukt i arkitektur og fargelære. Valør og kroma holdes fast; gul er komplementær til purpurblå.", bundle: .module)
         }
     }
 
-    /// Faste kulørsteg i grader, eller `nil` for en sammenhengende sirkel. Munsell brukes i steg på 2,5
-    /// (40 kulører rundt, 9°), som i Munsells fargekart – da får fargene gyldige notasjoner som 7.5PB.
-    public var trinn: Double? { self == .munsell ? 9 : nil }
-
-    /// Vinkelen rundet til nærmeste trinn (uendret for sammenhengende sirkler).
-    public func avrundet(_ vinkel: Double) -> Double {
-        guard let trinn else { return vinkel }
-        return Harmoni.normaliser((vinkel / trinn).rounded() * trinn)
-    }
-
-    /// Fargens plass i denne sirkelen som kort tekst, for fargefeltene i en harmoni: «5R 4/14» (Munsell),
-    /// «OKLCH 59% 0.156 254°», «LCH 55 48 254°», «HSL 254° 60% 52%», «RYB 210°» eller «70% gul, 30% rød» (Hering).
+    /// Fargens plass i denne sirkelen som kort tekst, for fargefeltene i en harmoni: «OKLCH 59% 0.156 254°»,
+    /// «LCH 55 48 254°», «HSL 254° 60% 52%», «RYB 210°» eller «70% gul, 30% rød» (Hering).
     /// Prosent skrives inntil tallet, som i fargefeltene ellers.
     public func verditekst(for farge: Farge) -> String {
         switch self {
-        case .munsell: return Fargemodell.munsell.kortTekst(for: farge)
         case .okLCH: return Fargemodell.okLCH.kortTekst(for: farge)
         case .cieLCH: return Fargemodell.cieLCH.kortTekst(for: farge)
         case .hsl: return Fargemodell.hsl.kortTekst(for: farge)
@@ -222,7 +206,6 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .cieLCH: farge.cieLCH.h
         case .hsl: farge.hsl.h
         case .ryb: RYB.fraRGBKulør(farge.hsl.h)
-        case .munsell: farge.munsell.kulør * 3.6
         case .hering: Hering.vinkel(forOKLCHKulør: farge.okLCH.h)
         case .goethe: Goethe.vinkel(forOKLCHKulør: farge.okLCH.h)
         }
@@ -256,11 +239,6 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
             var lch = grunn.okLCH
             lch.h = Goethe.okLCHKulør(forVinkel: v)
             return Farge(okLCH: lch, alfa: grunn.alfa).gamutKartlagt(til: gamut)
-        case .munsell:
-            var m = grunn.munsell
-            m.kulør = avrundet(v) / 3.6
-            // Valør og kroma beholdes; kroma senkes bare der kuløren ikke når så høyt i renotasjonsdataene.
-            return Farge.innenforMunsell(m, alfa: grunn.alfa, gamut: gamut) ?? grunn
         }
     }
 
@@ -281,11 +259,6 @@ public enum Fargesirkel: String, CaseIterable, Codable, Sendable, Identifiable {
         case .goethe:
             let g = grunn.okLCH
             return Farge(okLCH: OKLCH(l: g.l, c: max(g.c, 0.08), h: Goethe.okLCHKulør(forVinkel: vinkel))).gamutKartlagt(til: .displayP3)
-        case .munsell:
-            // Ekte Munsell-farger med grunnfargens valør og kroma (kroma senket der kuløren ikke når så høyt).
-            var m = grunn.munsell
-            m.kulør = avrundet(vinkel) / 3.6
-            return Farge.innenforMunsell(m, gamut: .displayP3) ?? grunn
         }
     }
 }

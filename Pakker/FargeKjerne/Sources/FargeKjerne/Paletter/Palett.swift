@@ -100,14 +100,15 @@ public struct Fargekilde: Hashable, Codable, Sendable {
 /// Lagringsformatet holdes lesbart for eldre versjoner av appen, som kan synkronisere de samme palettene
 /// via iCloud. Kan ikke 1.0 lese én farge, blir hele paletten tom der – og lagres den derfra, er fargene borte.
 /// - Opphav `bibliotek` (fra 1.1) lagres som `manuell`; opphavet er bare til informasjon.
-/// - Representasjon i Munsell (fra 1.1) lagres i et eget felt som eldre versjoner hopper over.
+/// - Representasjon i en fargemodell 1.0 ikke kjenner, lagres i et eget felt som eldre versjoner hopper over (1.1–1.3
+///   brukte det for en modell som er tatt ut; slike farger leses uten representasjon).
 /// - Ukjente verdier fra nyere versjoner gir en farge uten opphav/representasjon i stedet for en tom palett.
 /// - Kilden (fra 1.2) er et eget felt som eldre versjoner hopper over.
 /// - Valgt skriftfarge (fra 1.3) er et eget felt som eldre versjoner hopper over.
 extension PalettFarge {
     private enum Nøkler: String, CodingKey {
         case id, navn, farge, opphav, representasjon, kilde, tekstfarge
-        /// Representasjon i en fargemodell som 1.0 ikke kjenner (Munsell).
+        /// Representasjon i en fargemodell som 1.0 ikke kjenner.
         case representasjonUtvidet
     }
 

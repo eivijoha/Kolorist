@@ -240,7 +240,7 @@ final class Arbeidsbenk {
         #endif
     }
 
-    /// Debug: `-startmodell munsell` åpner Studio i en bestemt fargemodell (brukes til skjermbilder).
+    /// Debug: `-startmodell cmyk` åpner Studio i en bestemt fargemodell (brukes til skjermbilder).
     private static var startmodell: Fargemodell {
         #if DEBUG
         UserDefaults.standard.string(forKey: "startmodell").flatMap(Fargemodell.init(rawValue:)) ?? .okLCH

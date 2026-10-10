@@ -350,7 +350,7 @@ extension FargeEditor {
                     Text("\(arbeidsbenk.modell.navn)-verdiene angis i \(p.navn) og vises slik de gjengis i dette fargerommet.")
                         .foregroundStyle(Color.sekundærTekst)
                 }
-                MetodeHenvisning(.cssColor4, .oklab, .cieLab, .munsell, .lrv, .icc)
+                MetodeHenvisning(.cssColor4, .oklab, .cieLab, .lrv, .icc)
             }
         }
     }
@@ -421,23 +421,13 @@ struct KomponentGlidere: View {
     private var erSRGB: Bool { profil == nil || profil?.id == ICCProfil.sRGB.id }
 
     /// Verdien slik den vises ved glideren: CMYK, metning og lysstyrke i prosent, RGB 0–255 i sRGB og 0–1 ellers.
-    /// Munsell-kulør vises som notasjon («5.5PB»), ikke som tall 0–100.
     private func verditekst(_ v: Double, _ k: Fargemodell.Komponent) -> String {
-        if profil == nil, modell == .munsell, k.erKulør { return Munsell(kulør: v, valør: 5, kroma: 2).kulørnavn }
-        return k.tekst(v, sRGB: erSRGB)
+        k.tekst(v, sRGB: erSRGB)
     }
 
-    /// Gliderne går i trinnene som vises: hele prosent for CMYK, heltall 0–255 for sRGB. Munsell i trinn som i
-    /// Munsell-boka: kulør 2,5 (2.5R, 5R, 7.5R, 10R …), valør 1 og kroma 2.
+    /// Gliderne går i trinnene som vises: hele prosent for CMYK, heltall 0–255 for sRGB.
     private func trinnvis(_ v: Double, komponent i: Int) -> Double {
-        guard profil == nil, modell == .munsell else {
-            return modell.komponenter.indices.contains(i) ? modell.komponenter[i].avrundet(v, sRGB: erSRGB) : v
-        }
-        switch i {
-        case 0: return Munsell.avrundetKulør(v)
-        case 1: return Munsell.avrundetValør(v)
-        default: return Munsell.avrundetKroma(v)
-        }
+        modell.komponenter.indices.contains(i) ? modell.komponenter[i].avrundet(v, sRGB: erSRGB) : v
     }
 
     /// Fargene langs sporet for komponent `i`: de andre komponentene holdes fast, så sporet viser
@@ -482,9 +472,7 @@ struct KomponentGlidere: View {
                     }
                 ), område: k.område, spor: spor(for: i, område: k.område), gjeldende: farge.swiftUI,
                    tittel: Text(k.navn),
-                   verdiTekst: verditekst(gjeldende[i], k),
-                   stegForTilgjengelighet: profil == nil && modell == .munsell
-                       ? [Munsell.kulørsteg, Munsell.valørsteg, Munsell.kromasteg][min(i, 2)] : nil)
+                   verdiTekst: verditekst(gjeldende[i], k))
                 Text(verditekst(gjeldende[i], k))
                     .koloristFont(.callout)
                     .monospacedDigit()

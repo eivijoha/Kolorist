@@ -18,27 +18,27 @@ struct LagringsformatTests {
         var representasjon: Representasjon?
     }
 
-    @Test func munsellOgBibliotekKanLesesAv10() throws {
+    @Test func bibliotekKanLesesAv10() throws {
         let farge = Farge(hex: "#2F7FD8")!
         let farger = [
             PalettFarge(navn: "Fra bibliotek", farge: farge, opphav: .bibliotek),
-            PalettFarge(farge: farge, representasjon: Fargerepresentasjon(modell: .munsell, farge: farge)),
             PalettFarge(farge: farge, representasjon: Fargerepresentasjon(modell: .cmyk, farge: farge)),
         ]
         let data = try JSONEncoder().encode(farger)
         let gamle = try JSONDecoder().decode([PalettFarge10].self, from: data)
-        #expect(gamle.count == 3)
+        #expect(gamle.count == 2)
         #expect(gamle[0].opphav == .manuell && gamle[0].navn == "Fra bibliotek")
-        #expect(gamle[1].representasjon == nil)
-        if case .modell(.cmyk)? = gamle[2].representasjon?.rom {} else { Issue.record("CMYK-representasjonen gikk tapt") }
+        if case .modell(.cmyk)? = gamle[1].representasjon?.rom {} else { Issue.record("CMYK-representasjonen gikk tapt") }
     }
 
-    @Test func munsellBeholdesI11() throws {
+    /// Farger lagret i 1.1–1.3 med en modell som er tatt ut (i feltet `representasjonUtvidet`), leses uten representasjon.
+    @Test func uttattModellGirFargeUtenRepresentasjon() throws {
         let farge = Farge(hex: "#2F7FD8")!
-        let pf = PalettFarge(farge: farge, representasjon: Fargerepresentasjon(modell: .munsell, farge: farge))
-        let tilbake = try JSONDecoder().decode(PalettFarge.self, from: JSONEncoder().encode(pf))
-        #expect(tilbake.representasjon == pf.representasjon)
-        #expect(tilbake.id == pf.id && tilbake.farge == pf.farge)
+        var json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(PalettFarge(farge: farge))) as! [String: Any]
+        json["representasjonUtvidet"] = ["rom": ["modell": ["_0": "munsell"]], "verdier": [72.5, 5, 10], "tekst": "7.5PB 5/10"]
+        let lest = try JSONDecoder().decode(PalettFarge.self, from: JSONSerialization.data(withJSONObject: json))
+        #expect(lest.representasjon == nil)
+        #expect(lest.farge == farge)
     }
 
     @Test func ukjenteVerdierTømmerIkkePaletten() throws {

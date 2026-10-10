@@ -8,7 +8,7 @@ struct DelingslenkeTests {
     static var eksempler: [(navn: String, innhold: DeltInnhold)] {
         let tegl = Farge(hex: "#B66248")!
         let farge = DeltInnhold(slag: .farge, farger: [
-            DeltFarge(tegl, navn: "Tegl", representasjon: Fargerepresentasjon(rom: .modell(.munsell), verdier: [10, 5, 8], tekst: "10R 5/8")),
+            DeltFarge(tegl, navn: "Tegl", representasjon: Fargerepresentasjon(modell: .cieLab, farge: tegl)),
         ])
         let kyst = ["#1F3A4D", "#3F6E85", "#8FB3C7", "#E6DCC8", "#C8553D"]
         var kystfarger = zip(kyst, ["Dyp fjord", "Kystblå", "Disig himmel", "Sand", "Naust"]).map {
@@ -70,7 +70,14 @@ struct DelingslenkeTests {
         #expect(naust.representasjon(harProfil: { _ in false }) == nil)
         #expect(naust.representasjon(harProfil: { $0 == "kCGColorSpaceGenericCMYK" })?.tekst == "10 / 78 / 82 / 2%")
         let tegl = Self.eksempler[0].innhold.farger[0]
-        #expect(tegl.representasjon(harProfil: { _ in false })?.rom == .modell(.munsell))
+        #expect(tegl.representasjon(harProfil: { _ in false })?.rom == .modell(.cieLab))
+    }
+
+    /// Lenker laget før 1.3.1 kan ha en fargemodell som er tatt ut (og feltet `mu`): fargen leses, uten representasjon.
+    @Test func uttattModellILenkeGirFargeUtenRepresentasjon() throws {
+        let lest = try Delingslenke.les(URL(string: "https://kolorist.no/l#zq1ZKU7KKrlbKBpIGeqYWFkYmOgZ6BpYGlhYg2tzA0ixWRym3VMlKydAgSMFU30JJRykPyAtJTc8BMouAzNz8lNScHKvc0rxiIA0SBCnwRXBLUHQXlQHtMjTQMdWxABpdAZRzMjMzMrFQqgVyQUrTEovSU4EKgeoMawE")!)
+        #expect(lest.farger[0].farge.hex() == "#B66248")
+        #expect(lest.farger[0].representasjon(harProfil: { _ in true }) == nil)
     }
 
     @Test func koloristSkjemaOgWwwGodtas() throws {

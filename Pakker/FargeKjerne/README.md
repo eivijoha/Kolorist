@@ -9,7 +9,7 @@ Fargevitenskapen i [Kolorist](https://kolorist.no): Swift-pakken appen er bygd p
 
 | Produkt | Innhold |
 |---|---|
-| `FargeKjerne` | `Farge` (kanonisk lineær utvidet sRGB), fargerom (sRGB, Display P3, OKLab/OKLCH, CIELab/LCH D50, HSL/HSB, CMYK, Munsell), gamut-kartlegging etter CSS Color 4, overganger i OKLab, harmonier, kontrast (WCAG 2, APCA), LRV, fargesyn, ICC via CoreGraphics, delingslenker, eksport og import (ASE, CSS, DTCG, GPL, SwiftUI m.fl.) |
+| `FargeKjerne` | `Farge` (kanonisk lineær utvidet sRGB), fargerom (sRGB, Display P3, OKLab/OKLCH, CIELab/LCH D50, HSL/HSB, CMYK), gamut-kartlegging etter CSS Color 4, overganger i OKLab, harmonier, kontrast (WCAG 2), LRV, fargesyn, ICC via CoreGraphics, delingslenker, eksport og import (ASE, CSS, DTCG, GPL, SwiftUI m.fl.) |
 | `FargeMaaling` | Spektre, kolorimetri (CIE 1931 2°), fargetemperatur, CAM16, betraktningsforhold, lyskompensasjon og referansekort |
 | `FargeKI` | Verdiord → palett og beskrivelse → farge (Foundation Models på enheten, med leksikon som reserve) |
 
@@ -51,7 +51,6 @@ Filnavn i pakken er uten æ, ø og å (SwiftPM klarer ikke å lese dem fra git).
 ## Data og kreditering
 
 - **CIE-data** (`FargeMaaling/CIEData.json`): CIE 15:2018 – 1931 2°-observatøren, dagslysserien og standardlyskilder.
-- **Munsell** (`FargeKjerne/Munsell.json`): renotasjonsdataene (Newhall, Nickerson & Judd 1943).
 - **Filamentfarger** (`FargeKjerne/Filamentfarger.json`): fra [FilamentColors.xyz](https://filamentcolors.xyz/), lisensiert
   under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Krediteringen skal følge med der fargene vises.
 - **Fargesemantikk** (`FargeKI/Fargesemantikk.json`): Kolorists egen kunnskapsbase.

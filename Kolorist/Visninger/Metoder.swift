@@ -4,7 +4,7 @@ import SwiftUI
 /// Vises per seksjon («Metode: …») og samlet under «Metoder og kilder», så brukeren alltid kan se
 /// hva tallene og fargene bygger på – også hva som er utviklet for appen og hva som er etablert fag.
 enum Metode: String, CaseIterable, Identifiable {
-    case oklab, cssColor4, cieLab, ciede2000, wcag, lrv, munsell, machado, icc, renCMYK, harmonier, kunnskapsbase,
+    case oklab, cssColor4, cieLab, ciede2000, wcag, lrv, machado, icc, renCMYK, harmonier, kunnskapsbase,
          cam16, kolorimetri, kamerakarakterisering, filamentfarger, designsystem
 
     var id: String { rawValue }
@@ -18,7 +18,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .ciede2000: "CIEDE2000"
         case .wcag: "WCAG 2.2"
         case .lrv: "LRV"
-        case .munsell: "Munsell"
         case .machado: String(localized: "Machado mfl. 2009")
         case .icc: "ICC/ColorSync"
         case .renCMYK: String(localized: "UCR/GCR")
@@ -40,7 +39,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .ciede2000: String(localized: "CIEDE2000 (ΔE00)")
         case .wcag: String(localized: "WCAG 2.2 kontrast")
         case .lrv: String(localized: "Lysrefleksjonsverdi og luminanskontrast")
-        case .munsell: String(localized: "Munsell-systemet")
         case .machado: String(localized: "Simulering av fargesynsavvik")
         case .icc: String(localized: "ICC-profiler og fargestyring")
         case .renCMYK: String(localized: "Rene CMYK-verdier (UCR/GCR)")
@@ -63,7 +61,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .ciede2000: "G. Sharma, W. Wu, E. N. Dalal: Color Research & Application 30(1), 2005; CIE 142-2001"
         case .wcag: "W3C: Web Content Accessibility Guidelines 2.2, suksesskriterium 1.4.3, 1.4.6 og 1.4.11"
         case .lrv: String(localized: "CIE 15 (luminansfaktor Y); BS 8300-2:2018; TEK17 med veiledning, NS 11001-1:2018 og Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (utkast 2026)")
-        case .munsell: "Newhall, Nickerson & Judd: «Final Report of the O.S.A. Subcommittee on the Spacing of the Munsell Colors», JOSA 33(7), 1943; ASTM D1535"
         case .machado: "G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009"
         case .icc: "International Color Consortium (ICC.1); Apple ColorSync via Core Graphics"
         case .renCMYK: String(localized: "Etablert trykkteknikk; søket er utviklet for Kolorist")
@@ -92,8 +89,6 @@ enum Metode: String, CaseIterable, Identifiable {
             String(localized: "W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt.")
         case .lrv:
             String(localized: "LRV er CIE-luminansen Y i prosent – andelen synlig lys en flate reflekterer, slik malingsprodusentene oppgir den. Kolorist regner den for fargen slik den vises i sRGB. Kontrasten mellom flater regnes etter valgt metode, hver med sine egne krav: forskjell i LRV-poeng (BS 8300: minst 30, eller 20 for store flater og over 200 lux); luminanskontrast etter Weber, |Yo − Yb| / Yb med bakgrunnen som referanse, slik TEK17 og NS 11001 bruker den (0,4 for orientering og veifinning, 0,8 for trappeneser, håndløper og farefelt); og Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), etter ISO 21542 (30 % for store flater, 60 % for fare og tekst, med verdier fra det kanadiske utkastet CAN-ASC-2.4). Tallene kan ikke sammenlignes på tvers av metodene. LRV fra kamera eller bilde uten gråkort eller referansekort er bare veiledende. «Rett opp» endrer bare lysheten i OKLCH.")
-        case .munsell:
-            String(localized: "Kulør, valør og kroma etter Munsell. Omregningen bruker renotasjonsdataene fra 1943 (CIE xyY under lyskilde C, offentlige data) med interpolasjon i kroma, kulør og valør, Bradford-tilpasning til D65, og ASTM D1535 for sammenhengen mellom valør og luminans. Notasjonen er en tilnærming; fysiske Munsell-prøver kan avvike.")
         case .machado:
             String(localized: "Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i fargesynsvurderingen, i fargeflaten i kontrastsjekken og i kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.")
         case .icc:
@@ -101,7 +96,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .renCMYK:
             String(localized: "Felles grått innslag i C, M og Y flyttes til sort, og Kolorist søker etter separasjonen med færrest trykkfarger som holder seg innenfor 1 ΔE00 av profilens egen separasjon.")
         case .harmonier:
-            String(localized: "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell, Herings motfargesirkel eller Goethes sirkel fra Farbenlehre (1810). Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB-, Hering- og Goethe-sirklene er stykkevis lineære avbildninger laget for appen. Monokromatisk harmoni holder kuløren fast og fordeler tonene jevnt langs en strek i lyshet (OKLCH) og metning, regnet som andel av høyeste kroma innenfor gamut ved hver lyshet. Tonebane gjør det samme, men gir hvert endepunkt sin kulør og fordeler også kuløren jevnt, i bue rundt OKLCH-sirkelen i retningen og så langt brukeren velger, opptil en hel runde – i motsetning til overganger, som går i rett linje i OKLab og kan passere grått mellom motfarger. Prinsippet er kjent fra sekvensielle paletter i HCL (Zeileis mfl.) og cubehelix (Green); flaten og de to kulørhåndtakene er laget for Kolorist. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.")
+            String(localized: "Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Herings motfargesirkel eller Goethes sirkel fra Farbenlehre (1810). RYB-, Hering- og Goethe-sirklene er stykkevis lineære avbildninger laget for appen. Monokromatisk harmoni holder kuløren fast og fordeler tonene jevnt langs en strek i lyshet (OKLCH) og metning, regnet som andel av høyeste kroma innenfor gamut ved hver lyshet. Tonebane gjør det samme, men gir hvert endepunkt sin kulør og fordeler også kuløren jevnt, i bue rundt OKLCH-sirkelen i retningen og så langt brukeren velger, opptil en hel runde – i motsetning til overganger, som går i rett linje i OKLab og kan passere grått mellom motfarger. Prinsippet er kjent fra sekvensielle paletter i HCL (Zeileis mfl.) og cubehelix (Green); flaten og de to kulørhåndtakene er laget for Kolorist. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.")
         case .cam16:
             String(localized: "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge, og der fargene blir mindre fargesterke i svakt lys. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).")
         case .kolorimetri:
@@ -125,7 +120,6 @@ enum Metode: String, CaseIterable, Identifiable {
         case .ciede2000: URL(string: "https://doi.org/10.1002/col.20070")
         case .wcag: URL(string: "https://www.w3.org/TR/WCAG22/")
         case .lrv: URL(string: "https://www.standard.no/no/Nettbutikk/produktkatalogen/Produktpresentasjon/?ProductID=1000883")
-        case .munsell: URL(string: "https://doi.org/10.1364/JOSA.33.000385")
         case .machado: URL(string: "https://doi.org/10.1109/TVCG.2009.113")
         case .icc: URL(string: "https://www.color.org/specification/ICC.1-2022-05.pdf")
         case .cam16: URL(string: "https://doi.org/10.1002/col.22131")
