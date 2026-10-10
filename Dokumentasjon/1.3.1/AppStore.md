@@ -19,25 +19,23 @@ Munsell.
 ## Nytt i denne versjonen (iOS og macOS)
 
 ```
-• Kontrastsjekken bygger nå på WCAG 2.2 og LRV, standardene regelverket for universell utforming viser til.
+• Spisset utvalg av modeller: kontrastsjekken bygger på WCAG 2.2 og LRV, standardene regelverket for universell utforming viser til, og fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
 • Tekst på fargeflater velges som sort eller hvit etter WCAG-kontrast.
-• Fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
 • Mindre rettelser.
 ```
 
 ```
-• The contrast check is now based on WCAG 2.2 and LRV, the standards accessibility regulations refer to.
+• A more focused set of models: the contrast check is based on WCAG 2.2 and LRV, the standards accessibility regulations refer to, and the colour model and colour wheel with hue, value and chroma have been removed.
 • Text on colour fields is chosen as black or white by WCAG contrast.
-• The colour model and colour wheel with hue, value and chroma have been removed.
 • Minor fixes.
 ```
 
 ## Notes for App Review (iOS og macOS)
 
-Kort og saklig – hva som er endret, uten begrunnelse:
+Kort og saklig – hva som er endret, rammet inn som et spisset utvalg av modeller:
 
 ```
-1.3.1 is a maintenance update. The contrast check now uses WCAG 2.2 and LRV only, and one colour model (hue, value and chroma) has been removed together with its colour wheel. No new features, permissions or data collection.
+1.3.1 refines the set of models included in the app. The contrast check now uses WCAG 2.2 and LRV only, and one colour model (hue, value and chroma) has been removed together with its colour wheel. No new features, permissions or data collection.
 ```
 
 ## Reklametekst (170) – oppdatert, uten APCA
