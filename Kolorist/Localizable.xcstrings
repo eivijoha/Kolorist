@@ -10787,6 +10787,16 @@
         }
       }
     },
+    "data: © CIE, CC BY-SA 4.0, uttrekk på kolorist.no/data/cie/": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "data: © CIE, CC BY-SA 4.0, extract at kolorist.no/data/cie/"
+          }
+        }
+      }
+    },
     "gråkort": {
       "localizations": {
         "en": {

@@ -4,6 +4,8 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Datalisenser:** `DATALISENSER.md` lister dataene i pakken og lisensene deres. CIE-dataene i `CIEData.json` er
+  © CIE under CC BY-SA 4.0; uttrekket er publisert på https://kolorist.no/data/cie/ under samme lisens.
 - **APCA er fjernet (brytende endring).** APCA er lisensbelagt (Myndex; bare nettinnhold under W3C-avtalen, kommersiell
   bruk krever egen avtale), og FargeKjerne skal ikke inneholde lisensbelagte modeller. Fjernet: `Farge.apcaKontrast(tekst:)`,
   `Farge.medAPCA(mot:minst:)` og `Komponentsjekk.lc`. `Farge.lesbarTekstfarge` velger nå sort eller hvit etter høyest
