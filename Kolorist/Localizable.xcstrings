@@ -10597,12 +10597,12 @@
         }
       }
     },
-    "W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt.": {
+    "W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt. Tekst på fargeflater er hvit når hvit gir minst 2,7:1, ellers sort. Da får mettede mellomtoner hvit tekst, slik øyet foretrekker, i stedet for å bytte til sort allerede ved middels grått. Der kravet gjelder, som knappetekst i designsystemet, er 4,5:1 gulvet.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The W3C requirements for contrast between text/graphics and background, computed from relative luminance. “Fix” changes only lightness (OKLCH) until the requirement is met."
+            "value": "The W3C requirements for contrast between text/graphics and background, computed from relative luminance. “Fix” changes only lightness (OKLCH) until the requirement is met. Text on colour fields is white when white gives at least 2.7:1, otherwise black. Saturated mid-tones then get white text, as the eye prefers, instead of switching to black already at middle grey. Where the requirement applies, such as button text in the design system, 4.5:1 is the floor."
           }
         }
       }

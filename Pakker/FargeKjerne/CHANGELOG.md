@@ -2,6 +2,14 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
+## Ikke publisert
+
+- **Tekstfarge på fargeflater (endret oppførsel):** `Farge.lesbarTekstfarge` velger hvit når hvit gir minst 2,7:1 etter
+  WCAG 2 (`Farge.lysTekstgrense`), ellers sort. Skiftet flyttes fra L* ≈ 50 til L* ≈ 65, så mettede mellomtoner får hvit
+  tekst. Ny `lesbarTekstfarge(krav:)` med WCAG 2 som gulv. `Skriftfarger.beste(for:blant:krav:)` følger samme regel (den
+  lyse skriftfargen når den når grensen); designsystemet bruker `krav: 4.5` for knappetekst. `lesbarTekstfargePåBakgrunn`
+  i testvektorene er oppdatert (fire par).
+
 ## 0.4.0 – 2026-10-10
 
 - **Munsell er fjernet (brytende endring).** Munsell er et registrert varemerke (X-Rite), og renotasjonsdataene i

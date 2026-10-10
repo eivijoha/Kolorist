@@ -5,6 +5,20 @@ personvern er som i 1.3 (`Dokumentasjon/1.3/AppStore.md`).
 
 ## Nytt i denne versjonen – utkast
 
+Nyheter:
+
+- **Tekst på fargeflater (WCAG+, internt navn):** hvit tekst når hvit gir minst 2,7:1 etter WCAG 2, ellers sort. Mettede
+  mellomtoner får hvit tekst slik øyet foretrekker; knappetekst i designsystemet holder fortsatt 4,5:1. Navnet «WCAG+»
+  brukes ikke i appen eller tekstene.
+
+```
+• Tekst på fargeflater følger øyet: mettede mellomtoner får hvit tekst, og knappetekst i designsystemet holder fortsatt kravet i WCAG.
+```
+
+```
+• Text on colour fields follows the eye: saturated mid-tones get white text, and button text in the design system still meets the WCAG requirement.
+```
+
 Feilrettinger (nevnes i «Nytt i denne versjonen», ikke som nyhet på nettsiden):
 
 - **Konvertering mellom profiler:** «Bruk som aktiv farge» setter fargen i målprofilens fargemodell og fargerom (for

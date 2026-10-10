@@ -3,8 +3,9 @@ import Foundation
 /// Skriftfarger i en palett (fra 1.3): fargene tekst skal ha på palettens farger – typisk én nær hvit for mørke farger og
 /// én nær sort for lyse. Valgfritt; uten skriftfarger brukes sort eller hvit (`Farge.lesbarTekstfarge`).
 ///
-/// Valget for hver palettfarge er automatisk med mindre brukeren har valgt selv: den skriftfargen som gir høyest
-/// kontrastforhold etter WCAG 2 (4,5:1 er kravet i regelverket for vanlig tekst).
+/// Valget for hver palettfarge er automatisk med mindre brukeren har valgt selv: den lyse skriftfargen når den gir minst
+/// 2,7:1 etter WCAG 2 (`Farge.lysTekstgrense`), ellers den som gir høyest kontrastforhold (4,5:1 er kravet i regelverket
+/// for vanlig tekst).
 public enum Skriftfarger {
     /// Høyst så mange skriftfarger per palett.
     public static let maksAntall = 4
@@ -24,10 +25,10 @@ public enum Skriftfarger {
         return k >= 4.5 ? .tekst : k >= 3 ? .storTekst : .feiler
     }
 
-    /// Den beste skriftfargen for en bakgrunn blant `kandidater` (se typen), eller `nil` uten kandidater.
-    public static func beste(for bakgrunn: Farge, blant kandidater: [PalettFarge]) -> PalettFarge? {
-        func wcag(_ k: PalettFarge) -> Double { k.farge.lagtOver(bakgrunn).wcagKontrast(mot: bakgrunn) }
-        return kandidater.max(by: { wcag($0) < wcag($1) })
+    /// Den beste skriftfargen for en bakgrunn blant `kandidater` (se typen), eller `nil` uten kandidater. Med `krav`
+    /// (f.eks. 4,5) er WCAG 2 gulvet: holder ikke den foretrukne kravet, velges en som gjør det.
+    public static func beste(for bakgrunn: Farge, blant kandidater: [PalettFarge], krav: Double? = nil) -> PalettFarge? {
+        Farge.foretrukketTekst(blant: kandidater, på: bakgrunn, farge: \.farge, krav: krav)
     }
 
     /// To forslag til skriftfarger, med et svakt preg av palettens kulør: «Lys tekst» (CIE L* 97) og «Mørk tekst» (L* 14).

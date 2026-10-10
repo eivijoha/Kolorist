@@ -81,13 +81,25 @@ struct FargeromTests {
         #expect(Farge(hex: "#FFFF00")!.lesbarTekstfarge == sort)
     }
 
-    /// Tekst på fargeflater: sort eller hvit etter høyest WCAG 2-kontrast (skillet ligger ved grått rundt #767676).
+    /// Tekst på fargeflater: hvit når hvit gir minst 2,7:1 etter WCAG 2, ellers sort – skiftet ligger ved L* ≈ 65, ikke ved
+    /// L* ≈ 50 der forholdet til hvit og sort er likt (grått rundt #767676).
     @Test func lesbarTekstfarge() {
         let hvit = Farge(hex: "#FFFFFF")!, sort = Farge(hex: "#000000")!
-        #expect(Farge(hex: "#707070")!.lesbarTekstfarge == hvit)
-        #expect(Farge(hex: "#808080")!.lesbarTekstfarge == sort)
+        #expect(Farge(hex: "#808080")!.lesbarTekstfarge == hvit)      // 3,95:1 med hvit, 5,32:1 med sort
+        #expect(Farge(hex: "#1E88E5")!.lesbarTekstfarge == hvit)      // mettet blå: 3,68:1
+        #expect(Farge(hex: "#43A047")!.lesbarTekstfarge == hvit)
         #expect(Farge(hex: "#1F3A4D")!.lesbarTekstfarge == hvit)
+        #expect(Farge(hex: "#A0A0A0")!.lesbarTekstfarge == sort)      // L* 66: hvit gir under 2,7:1
         #expect(Farge(hex: "#FFFF00")!.lesbarTekstfarge == sort)
+        #expect(Farge(hex: "#FFD700")!.lesbarTekstfarge == sort)
+    }
+
+    /// Med krav er WCAG 2 gulvet: hvit på mettet blå holder ikke 4,5:1, så da blir teksten sort.
+    @Test func lesbarTekstfargeMedKrav() {
+        let hvit = Farge(hex: "#FFFFFF")!, sort = Farge(hex: "#000000")!
+        #expect(Farge(hex: "#1E88E5")!.lesbarTekstfarge(krav: 3) == hvit)
+        #expect(Farge(hex: "#1E88E5")!.lesbarTekstfarge(krav: 4.5) == sort)
+        #expect(Farge(hex: "#1F3A4D")!.lesbarTekstfarge(krav: 4.5) == hvit)
     }
 }
 

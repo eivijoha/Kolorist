@@ -453,7 +453,7 @@ public extension Designsystem {
         let aksent = iOmråde(self[.aksent], n.aksent)
         let a = aksent.okLCH
         let skrift = [PalettFarge(farge: lys), PalettFarge(farge: mørk)]
-        let påAksent = Skriftfarger.beste(for: aksent, blant: skrift)?.farge ?? lys
+        let påAksent = Skriftfarger.beste(for: aksent, blant: skrift, krav: 4.5)?.farge ?? lys
 
         var status: [Designrolle: Statusfarger] = [:]
         for rolle in Designrolle.statusroller {
@@ -480,7 +480,7 @@ public extension Designsystem {
                 let fyll = iOmråde(grunn, n.aksent)
                 return EgenRolleFarger(id: rolle.id, navn: rolle.navn, tokennavn: tokennavn, mal: .aksent,
                                        flate: fyll, tekst: fyll,
-                                       påFlate: Skriftfarger.beste(for: fyll, blant: skrift)?.farge ?? lys,
+                                       påFlate: Skriftfarger.beste(for: fyll, blant: skrift, krav: 4.5)?.farge ?? lys,
                                        trykket: flytt(fyll, til: fyll.lStjerne + n.trykket), kant: nil)
             case .markering:
                 return EgenRolleFarger(id: rolle.id, navn: rolle.navn, tokennavn: tokennavn, mal: .markering,
