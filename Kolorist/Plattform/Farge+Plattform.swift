@@ -133,9 +133,28 @@ func dragLeverandør(farge: Farge, palettFarge: PalettFarge?) -> NSItemProvider 
 #endif
 
 /// En palett som dras til en palettgruppe: bare id-en, så den ikke kan forveksles med farger eller tekst.
+/// En palett som dras: id-en (innad i appen, til en annen plass eller en palettgruppe), og for andre apper delingslenken
+/// (`public.url`) og hex-verdiene, én per linje (`public.utf8-plain-text`). Bare id-en kodes.
 nonisolated struct PalettReferanse: Codable, Transferable {
     let id: UUID
-    static var transferRepresentation: some TransferRepresentation { CodableRepresentation(contentType: .koloristPalett) }
+    var lenke: URL?
+    var hex = ""
+
+    private enum CodingKeys: String, CodingKey { case id }
+
+    @MainActor init(_ p: PalettDokument) {
+        id = p.id
+        lenke = try? Delingslenke.lenke(Lenkedeling.palett(navn: p.navn, farger: p.farger, gradienter: p.gradienter))
+        hex = p.farger.map { $0.farge.hex() }.joined(separator: "\n")
+    }
+
+    static var transferRepresentation: some TransferRepresentation {
+        CodableRepresentation(contentType: .koloristPalett)
+        ProxyRepresentation(exporting: { (r: PalettReferanse) in r.lenke ?? URL(string: "https://kolorist.no/l")! })
+            .exportingCondition { $0.lenke != nil }
+        ProxyRepresentation(exporting: \.hex)
+            .exportingCondition { !$0.hex.isEmpty }
+    }
 }
 
 nonisolated extension UTType {

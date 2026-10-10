@@ -153,7 +153,7 @@ struct PalettListe: View {
                         slipp(referanser, på: p)
                     }
                     // Dra paletten til en annen plass, en palettgruppe eller «Uten gruppe».
-                    .draggable(PalettReferanse(id: p.id)) {
+                    .draggable(PalettReferanse(p)) {
                         Label(p.navn.isEmpty ? String(localized: "Uten navn") : p.navn, systemImage: "swatchpalette")
                             .padding(10)
                             .background(.regularMaterial, in: Capsule())
