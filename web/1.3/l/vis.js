@@ -249,6 +249,8 @@
     } catch { /* utklippstavlen er ikke tilgjengelig */ }
   }
 
+  const MODELLER = new Set(["okLCH", "okLab", "cieLCH", "cieLab", "hsb", "hsl", "rgb", "displayP3", "cmyk"]);
+
   function fargekort(f) {
     const kort = lag("li", "delt-farge");
     const prøve = lag("div", "delt-prove");
@@ -260,8 +262,9 @@
     const rad = (navn, verdi) => { verdier.append(lag("dt", null, navn), lag("dd", null, verdi)); };
     const [L, C, H] = okLCH(f.k);
     const lab = cieLab(f.k);
-    // Fargemodeller som er tatt ut av appen (lenker fra før 1.3.1), vises ikke.
-    if (f.rt && f.rn && f.r !== "modell:munsell") rad(tekst(f.rn), tekst(f.rt));
+    // Bare fargemodeller appen har i dag (eldre lenker kan ha modeller som er tatt ut) og ICC-profiler.
+    const modell = typeof f.r === "string" && f.r.startsWith("modell:") ? f.r.slice(7) : null;
+    if (f.rt && f.rn && (modell === null || MODELLER.has(modell))) rad(tekst(f.rn), tekst(f.rt));
     if (hex(f)) rad("Hex (sRGB)", hex(f));
     rad("OKLCH", `${tall(L * 100, 0)}% ${tall(C, 3)} ${tall(H, 0)}°`);
     rad("CIELab (D50)", `${tall(lab[0], 1)} ${tall(lab[1], 1)} ${tall(lab[2], 1)}`);
