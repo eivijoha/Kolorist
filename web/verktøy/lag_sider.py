@@ -183,8 +183,8 @@ NYE_BILDER.update({
     ('en', 'del-web-filament'): ('A shared filament palette in the browser on iPad, with a link to each sample at FilamentColors.xyz', 'Filament in the browser'),
 })
 NYE_BILDER.update({
-    ('nb', 'kontrast'): ('Kontrastsjekk etter WCAG 2.2: blå tekst på hvitt, 4,07:1 med kryss for Tekst AA, tekst og bakgrunn valgt rett i fargeflaten', 'Kontrast: WCAG, APCA eller LRV'),
-    ('en', 'kontrast'): ('Contrast check by WCAG 2.2: blue text on white, 4.07:1 with a cross for Text AA, text and background chosen right in the colour field', 'Contrast: WCAG, APCA or LRV'),
+    ('nb', 'kontrast'): ('Kontrastsjekk etter WCAG 2.2: blå tekst på hvitt, 4,07:1 med kryss for Tekst AA, tekst og bakgrunn valgt rett i fargeflaten', 'Kontrast: WCAG eller LRV'),
+    ('en', 'kontrast'): ('Contrast check by WCAG 2.2: blue text on white, 4.07:1 with a cross for Text AA, text and background chosen right in the colour field', 'Contrast: WCAG or LRV'),
     ('nb', 'flatekontrast'): ('Kontrast mellom flater: en teglrød flate og en hvit flate side om side, LRV 20 og 100, luminanskontrast 0,80 etter Weber, og kravene fra TEK17 og NS 11001', 'Kontrast mellom flater (LRV)'),
     ('en', 'flatekontrast'): ('Contrast between surfaces: a brick-red and a white surface side by side, LRV 20 and 100, luminance contrast 0.80 by Weber, and the requirements', 'Contrast between surfaces (LRV)'),
     ('nb', 'designsystem'): ('Designsystem fra en palett: knapper, felt, bryter, varsler og fanelinje i lys modus, og «Alle fargepar holder kravet»', 'Designsystem: komponenter'),
@@ -260,18 +260,18 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG, APCA eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, Munsell og alle fargerom og ICC-profiler.'),
-                   ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG, APCA og LRV, og farger slik de ser ut med fargesynsavvik.'),
+                   ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG og LRV, og farger slik de ser ut med fargesynsavvik.'),
                    ('Farger i ulikt lys', 'Simuler farger under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
                    ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
             oppgaver_tittel='Dette kan du gjøre',
             oppgaver=[('design.html#finn-fargene', 'Lag en palett', 'Fra et ord, et bilde eller en farge du allerede har.'),
                       ('design.html#bygg-fargesystemet', 'Bygg toneskalaer med lik kontrast', 'Trinnene holder de samme kontrastkravene for alle kulører.'),
                       ('design.html#bygg-fargesystemet', 'Gjør paletten om til et designsystem', 'Med farger for lys og mørk modus, og filer til apputvikling, designverktøy og nettet.'),
-                      ('design.html#kontroller', 'Sjekk kontrasten på tekst og knapper', 'Etter WCAG, APCA eller LRV – og rett opp farger som ikke holder kravet.'),
+                      ('design.html#kontroller', 'Sjekk kontrasten på tekst og knapper', 'Etter WCAG eller LRV – og rett opp farger som ikke holder kravet.'),
                       ('funksjoner.html#kontrast', 'Se fargene med fargesynsavvik', 'Og finn fargepar som blir vanskelige å skille.'),
                       ('arkitektur.html', 'Velg farger til vegger, gulv og dører', 'Med nok kontrast mellom flatene for universell utforming.'),
                       ('lys.html', 'Se fargene i lyset der de skal brukes', 'Og kompenser farger du plukker for lyset de ble fotografert i.'),
@@ -289,18 +289,18 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N} <a href="design.html">From palette to design system, a contrast check by WCAG, APCA or LRV, and colours and gradients you copy straight into your design apps</a></p>'
+        nyhet = f'<p class="nyhet">{N} <a href="design.html">From palette to design system, a contrast check by WCAG or LRV, and colours and gradients you copy straight into your design apps</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, Munsell and every colour space and ICC profile.'),
-                   ('Contrast and colour vision', 'Contrast for text and surfaces by WCAG, APCA and LRV, and colours as they appear with colour vision deficiencies.'),
+                   ('Contrast and colour vision', 'Contrast for text and surfaces by WCAG and LRV, and colours as they appear with colour vision deficiencies.'),
                    ('Colours in different light', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
                    ('One app – one or more devices', 'The same app on iPhone, iPad and Mac. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
             oppgaver_tittel='What you can do',
             oppgaver=[('design.html#find-the-colours', 'Make a palette', 'From a word, a photo or a colour you already have.'),
                       ('design.html#build-the-colour-system', 'Build tone scales with consistent contrast', 'The steps meet the same contrast requirements for every hue.'),
                       ('design.html#build-the-colour-system', 'Turn a palette into a design system', 'With colours for light and dark mode, and files for app development, design tools and the web.'),
-                      ('design.html#check', 'Check the contrast of text and buttons', 'By WCAG, APCA or LRV – and fix colours that fall short.'),
+                      ('design.html#check', 'Check the contrast of text and buttons', 'By WCAG or LRV – and fix colours that fall short.'),
                       ('features.html#contrast', 'See colours with colour vision deficiencies', 'And find colour pairs that become hard to tell apart.'),
                       ('architecture.html', 'Choose colours for walls, floors and doors', 'With enough contrast between surfaces for universal design.'),
                       ('light.html', 'See colours in the light where they will be used', 'And compensate colours you pick for the light they were photographed in.'),
@@ -341,7 +341,7 @@ def startside(lang):
           </div>
           {img}
         </article>''')
-    # Plassholder: kontrastsjekken har fått ny utforming i 1.3 (stor flate, valg av WCAG, APCA eller LRV).
+    # Plassholder: kontrastsjekken har fått ny utforming i 1.3 (stor flate, valg av WCAG eller LRV).
     bilder = skjermbilder(s, ['studio', 'designsystem', 'kontrast'], ' tre').format(tekster['rull'])
     innhold = f'''{helt}
 
@@ -470,12 +470,10 @@ def design(lang):
               'CSS-gradienter i oklab med sRGB-reserve – lineær, radiell eller konisk'], 'toneskala', None),
             ('Kontroller', 'Kontroller kontrast og lesbarhet, også med fargesynsavvik.',
              ['WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk',
-              'Kontrastsjekk etter WCAG 2.2, APCA eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N,
+              'Kontrastsjekk etter WCAG 2.2 eller LRV: øverst står tallet og det strengeste kravet fargen ikke klarer (for WCAG: AA-kravene), og tekst og bakgrunn velger du rett i fargeflaten' + N,
               '«Rett opp» endrer lysheten til fargen består',
               'Skriftkontrast for hele paletter, rett i palettvisningen' + N12,
               'Komponenter i designsystemet: knapper, felt, brytere, varsler og faner i normal, trykket, fokusert og deaktivert tilstand, med kontrasten for hvert fargepar og kravet i WCAG' + N,
-              'Tekst på fargeflater i sort eller hvit etter opplevd lesbarhet (APCA), også på mellomtoner' + N,
-              'Lesekontrast etter APCA (Lc), med hva kontrasten holder til: brødtekst, overskrifter eller grafikk' + N,
               'Paletter slik de oppleves med fargesynsavvik – og hvilke farger som blir vanskelige å skille'], 'designsystem', None),
             ('Skjerm, trykk og 3D-print', 'Display P3 side om side med trykkprofiler, egne ICC-profiler og fargekart – og filamentfarger for 3D-print.',
              ['Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil',
@@ -526,12 +524,10 @@ def design(lang):
           'CSS gradients in oklab with an sRGB fallback – linear, radial or conic'], 'toneskala', None),
         ('Check', 'Check contrast and legibility, including with colour vision deficiencies.',
          ['WCAG 2.2 contrast: AA and AAA, large text and graphics',
-          'Contrast check by WCAG 2.2, APCA or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N,
+          'Contrast check by WCAG 2.2 or LRV: the figure and the strictest requirement the colour does not meet are shown at the top (for WCAG: the AA requirements), and you pick text and background right in the colour field' + N,
           'Auto-fix changes the lightness until the colour passes',
           'Text contrast for whole palettes, right in the palette view' + N12,
           'Components in the design system: buttons, fields, switches, alerts and tabs in normal, pressed, focused and disabled states, with the contrast for each colour pair and the WCAG requirement' + N,
-          'Text on colour fields in black or white by perceived legibility (APCA), mid-tones included' + N,
-          'Reading contrast by APCA (Lc), with what the contrast is good for: body text, headlines or graphics' + N,
           'Palettes as they appear with colour vision deficiencies – and which colours become hard to tell apart'], 'designsystem', None),
         ('Screen, print and 3D printing', 'Display P3 side by side with print profiles, your own ICC profiles and colour libraries – and filament colours for 3D printing.',
          ['Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile',
@@ -695,12 +691,12 @@ def lysside(lang):
 
 # ---------- Alle funksjoner ----------
 
-# Tilgjengelighet-kortet: 0 WCAG, 1 APCA på fargeflater, 2 APCA-lesekontrast, 3 valg av kontrastsjekk, 4 Rett opp,
-# 5 skriftkontrast i paletter, 6 vurderinger viser grunnlaget, 7 LRV og metoder, 8 LRV i lys, 9 veiledende LRV fra kamera,
-# 10 paletter i ulike lys, 11 ΔE2000, 12 fargesyn, 13 utbredelse, 14 kamera.
-TILG_TEKST = (0, 1, 2, 3, 4, 5, 6, 11)
-TILG_FLATER = (7, 8, 9, 10)
-TILG_FARGESYN = (12, 13, 14)
+# Tilgjengelighet-kortet: 0 WCAG, 1 valg av kontrastsjekk, 2 Rett opp, 3 skriftkontrast i paletter, 4 vurderinger viser
+# grunnlaget, 5 LRV og metoder, 6 LRV i lys, 7 veiledende LRV fra kamera, 8 paletter i ulike lys, 9 ΔE2000, 10 fargesyn,
+# 11 utbredelse, 12 kamera. (De to APCA-punktene er tatt ut 2026-10-10.)
+TILG_TEKST = (0, 1, 2, 3, 4, 9)
+TILG_FLATER = (5, 6, 7, 8)
+TILG_FARGESYN = (10, 11, 12)
 
 
 def funksjoner(lang):
@@ -711,7 +707,7 @@ def funksjoner(lang):
     nb = lang == 'nb'
     tilg = lier(k['Tilgjengelighet' if nb else 'Accessibility'])
     # Punktene i Tilgjengelighet-kortet på forsiden, fordelt på gruppene. Settes et punkt inn i kortet, må tallene følge med.
-    assert len(tilg) == 15, f'Tilgjengelighet-kortet har {len(tilg)} punkter – oppdater TILG_* i funksjoner()'
+    assert len(tilg) == 13, f'Tilgjengelighet-kortet har {len(tilg)} punkter – oppdater TILG_* i funksjoner()'
     lysliste = (['Se farger og hele paletter under egne og standardiserte betraktningsforhold – paletter rett i palettvisningen',
                  'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)',
                  'Mål lyset med kameraet og lagre det som betraktningsforhold – lysstyrken anslås, eller måles med et kort',
@@ -751,7 +747,7 @@ def funksjoner(lang):
             ('hent', 'Hent farger', 'Hent farger', None,
              [('Plukk farger', plukk), ('Apple Intelligence på enheten', k['Apple Intelligence på enheten'])]),
             ('kontrast', 'Kontrast og fargesyn', 'Kontrast og fargesyn', None,
-             [('Tekst og grafikk (WCAG 2.2 og APCA)', ul([tilg[i] for i in TILG_TEKST])),
+             [('Tekst og grafikk (WCAG 2.2)', ul([tilg[i] for i in TILG_TEKST])),
               ('Flater og bygg (LRV)', ul([tilg[i] for i in TILG_FLATER])),
               ('Fargesyn', ul([tilg[i] for i in TILG_FARGESYN]))]),
             ('lys', 'Lys og fargemåling', 'Lys', lysdel, []),
@@ -788,7 +784,7 @@ def funksjoner(lang):
             ('getting-colours', 'Getting colours', 'Getting colours', None,
              [('Pick colours', plukk), ('Apple Intelligence on device', k['Apple Intelligence on device'])]),
             ('contrast', 'Contrast and colour vision', 'Contrast and colour vision', None,
-             [('Text and graphics (WCAG 2.2 and APCA)', ul([tilg[i] for i in TILG_TEKST])),
+             [('Text and graphics (WCAG 2.2)', ul([tilg[i] for i in TILG_TEKST])),
               ('Surfaces and buildings (LRV)', ul([tilg[i] for i in TILG_FLATER])),
               ('Colour vision', ul([tilg[i] for i in TILG_FARGESYN]))]),
             ('light', 'Light and colour measurement', 'Light', lysdel, []),
@@ -890,13 +886,13 @@ def plattformer(lang):
         side_intro = 'Samme verktøy, tilpasset skjermen.'
         # None: skjermbildene er ikke tatt ennå (plassholder for hver plattform).
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmoni'), ('overgang', 'Overgang'),
-                     ('kontrast', 'Kontrast: WCAG, APCA eller LRV'), ('fargefelt', 'Plukk farge fra et fargefelt'),
+                     ('kontrast', 'Kontrast: WCAG eller LRV'), ('fargefelt', 'Plukk farge fra et fargefelt'),
                      ('designsystem', 'Designsystem: komponenter')]
         tabell_tittel = 'Hva finnes hvor'
         tabell_tekst = 'Funksjon'
         rader = [('Farger, toner, harmonier, overganger og paletter', ja, ja, ja),
                  ('Designsystem fra en palett, med komponenter og eksport' + N, ja, ja, ja),
-                 ('Kontrast (WCAG, APCA og LRV) og fargesyn', ja, ja, ja),
+                 ('Kontrast (WCAG og LRV) og fargesyn', ja, ja, ja),
                  ('Simuler farger og paletter under andre betraktningsforhold', ja, ja, ja),
                  ('Fargeflatene ved siden av verktøyene', nei, 'I liggende format', 'I bredt vindu'),
                  ('Palettene for hånden, med dra og slipp', nei, 'På store iPader', ja),
@@ -929,13 +925,13 @@ def plattformer(lang):
         side_tittel = 'Side by side'
         side_intro = 'The same tools, fitted to the screen.'
         visninger = [('studio', 'Studio'), ('harmoni', 'Harmony'), ('overgang', 'Gradient'),
-                     ('kontrast', 'Contrast: WCAG, APCA or LRV'), ('fargefelt', 'Pick a colour from a colour field'),
+                     ('kontrast', 'Contrast: WCAG or LRV'), ('fargefelt', 'Pick a colour from a colour field'),
                      ('designsystem', 'Design system: components')]
         tabell_tittel = 'What is where'
         tabell_tekst = 'Feature'
         rader = [('Colours, tones, harmonies, gradients and palettes', ja, ja, ja),
                  ('Design system from a palette, with components and export' + N, ja, ja, ja),
-                 ('Contrast (WCAG, APCA and LRV) and colour vision', ja, ja, ja),
+                 ('Contrast (WCAG and LRV) and colour vision', ja, ja, ja),
                  ('Simulate colours and palettes in other viewing conditions', ja, ja, ja),
                  ('Swatches beside the tools', nei, 'In landscape', 'In a wide window'),
                  ('Palettes at hand, with drag and drop', nei, 'On large iPads', ja),
