@@ -1535,6 +1535,16 @@ struct Utviklerlinje: View {
             ? URL(string: "https://kolorist.no/en/")! : URL(string: "https://kolorist.no/")!
     }
 
+    /// Siden for å skrive en omtale i App Store (på Mac rett i Mac App Store). Lenken i stedet for `requestReview`:
+    /// systemet viser stjernevinduet høyst tre ganger i året, så en knapp som ber om det, kan gjøre ingenting.
+    static var omtale: URL {
+        #if os(macOS)
+        URL(string: "macappstore://apps.apple.com/app/id6818636272?action=write-review")!
+        #else
+        URL(string: "https://apps.apple.com/app/id6818636272?action=write-review")!
+        #endif
+    }
+
     private var bygg: String {
         (Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String) ?? ""
     }
@@ -1589,6 +1599,15 @@ struct Utviklerlinje: View {
             // Nettsiden på appens språk.
             Link(destination: Self.nettside) {
                 rad(Label("kolorist.no", systemImage: "safari"), tegn: "arrow.up.right")
+            }
+            .buttonStyle(.plain)
+            Divider()
+            Text("Hjelper Kolorist deg på en god måte? Gi gjerne en omtale i App Store.")
+                .font(.footnote)
+                .foregroundStyle(Color.sekundærTekst)
+                .padding(.top, 10)
+            Link(destination: Self.omtale) {
+                rad(Label("Skriv en omtale", systemImage: "star"), tegn: "arrow.up.right")
             }
             .buttonStyle(.plain)
         }

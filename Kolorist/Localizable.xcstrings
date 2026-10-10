@@ -3751,6 +3751,16 @@
         }
       }
     },
+    "Hjelper Kolorist deg på en god måte? Gi gjerne en omtale i App Store.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Is Kolorist working well for you? Feel free to leave a review on the App Store."
+          }
+        }
+      }
+    },
     "HSB": {
       "localizations": {
         "en": {
@@ -8379,6 +8389,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text contrast and text colours"
+          }
+        }
+      }
+    },
+    "Skriv en omtale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write a review"
           }
         }
       }
