@@ -1,22 +1,63 @@
 # App Store Connect – Kolorist 1.3.1
 
-Retteversjon for iOS, iPadOS og macOS (2026-10-10): **APCA og Munsell er tatt ut av appen.** APCA (Myndex) er
-lisensbelagt – lisensen gjelder bare nettinnhold under W3C-avtalen, og kommersiell bruk krever egen avtale. Munsell er et
-registrert varemerke (X-Rite), og de ekstrapolerte renotasjonsdataene har uklart opphav. Kolorist skal ikke ha
-lisensbelagte modeller eller data, eller bruke andres varemerker som navn på funksjoner.
+Fullstendige tekster for 1.3.1, per plattform og språk, i den rekkefølgen de legges inn i App Store Connect. Alle tekstene
+er uten APCA og Munsell. App-informasjon, URL-er, personvernetiketten og eksportregler er uendret.
 
-- Kontrastsjekken har WCAG 2.2 og LRV (valget APCA, Lc og «Rett opp» etter APCA er fjernet).
-- Tekst på fargeflater er sort eller hvit etter høyest kontrastforhold etter WCAG 2 (som før 1.3).
-- Skriftfarger i paletter og designsystemet velges etter høyest WCAG-kontrast; Lc vises ikke lenger.
-- Fargemodellen og fargesirkelen med kulør, valør og kroma (Munsell) er fjernet, og feltet for fargeverdi leser ikke
-  lenger notasjonen («5R 4/14»). Lagrede farger og delingslenker med modellen åpnes som vanlige farger.
-- Metoder og kilder, nettsiden (alle versjoner) og App Store-tekstene nevner verken APCA eller Munsell.
+1. [iPhone og iPad – norsk](#1-iphone-og-ipad--norsk-bokmål)
+2. [iPhone og iPad – engelsk](#2-iphone-og-ipad--engelsk)
+3. [Mac – norsk](#3-mac--norsk-bokmål)
+4. [Mac – engelsk](#4-mac--engelsk)
+5. [Felles](#5-felles): App Review, TestFlight, skjermbilder og sjekkliste
 
-Resten av tekstene er som i `Dokumentasjon/1.3/AppStore.md` (rettet uten APCA og Munsell). **Oppdater i App Store
-Connect** for både iOS og macOS: reklameteksten, beskrivelsen, nøkkelordene og Notes for App Review – de nevnte APCA eller
-Munsell.
+**Perspektiv:** 1.3.1 spisser utvalget av modeller. Kontrastsjekken bygger på WCAG 2.2 og LRV, og fargemodellen og
+fargesirkelen med kulør, valør og kroma er tatt ut. Tekstene beskriver hva som er endret, uten begrunnelse.
 
-## Nytt i denne versjonen (iOS og macOS)
+Bakgrunn (bare internt): APCA (Myndex) er lisensbelagt – lisensen gjelder bare nettinnhold under W3C-avtalen. Munsell er
+et registrert varemerke (X-Rite), og de ekstrapolerte renotasjonsdataene har uklart opphav. Se
+`Dokumentasjon/APCA-gjeninnforing.md` og `Dokumentasjon/Munsell-gjeninnforing.md`.
+
+**«Nytt i denne versjonen» for iOS har to varianter.** Bruk A hvis 1.3 trekkes fra gjennomgang og aldri kommer ut på iOS
+(brukerne går da fra 1.2 til 1.3.1). Bruk B hvis 1.3 allerede er ute på iOS. Mac 1.3 er ute, så Mac bruker den korte
+teksten.
+
+---
+
+## 1. iPhone og iPad – norsk (bokmål)
+
+**Undertittel (30)** – uendret
+
+```
+Fargepaletter for designere
+```
+
+**Reklametekst (170)**
+
+```
+Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus og kontroll etter WCAG og LRV – rett inn i verktøyene du bruker.
+```
+
+**Nytt i denne versjonen (4000) – A: fra 1.2 (1.3 trukket)**
+
+```
+Kolorist 1.3.1 tar paletten helt fram til designsystemet.
+
+• Designsystem fra en palett: roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast. Se dem på knapper, felt, brytere og varsler, med kontrasten for hvert fargepar og kravet i WCAG. Legg til egne roller, for eksempel info.
+• Eksporter designsystemet som fargesett for apputvikling, design tokens med alias og én fil per modus, og CSS med lys og mørk modus og Display P3 – med en README som forklarer systemet. Eller del det som lenke: mottakere ser komponentene og fargene i nettleseren.
+• Toneskala i Studio, ved siden av Farge og Harmoni: trinn 50–950 med lik kontrast for alle kulører – trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt.
+• Skriftfarger i paletten om du vil: én nær hvit og én nær sort, med palettens kulørpreg.
+• Ny kontrastsjekk: velg WCAG 2.2 eller LRV. Øverst står tallet og det strengeste kravet fargen ikke klarer.
+• Kontrast mellom flater med valgfri metode: LRV-forskjell, Weber (TEK17, NS 11001) eller Michelson.
+• Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh – kopier én verdi eller alle som tabell.
+• Kopier farger som RGB-verdier til CAD, BIM og video, og som lineære verdier til 3D-programmer.
+• Plukk farge med kamera eller fra bilde rett fra fargefeltene – eller endre fargen i Studio og ta den med tilbake.
+• Nye harmonier: monokromatisk og tonebane, der kuløren går i bue gjennom lyshet og metning – og Goethes fargesirkel.
+• Palettgrupper: samle paletter i grupper, og skriv ut, lagre og kopier hele grupper. Importer ASE-filer som paletter.
+• Endre rekkefølgen på farger ved å dra dem, og vis en farge fra hvor som helst.
+• Kildefargerom for CMYK og RGB, papirhvitt og valgfritt betraktningsforhold for visningen.
+• Spisset utvalg av modeller: fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
+```
+
+**Nytt i denne versjonen (4000) – B: fra 1.3**
 
 ```
 • Spisset utvalg av modeller: kontrastsjekken bygger på WCAG 2.2 og LRV, standardene regelverket for universell utforming viser til, og fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
@@ -24,64 +65,454 @@ Munsell.
 • Mindre rettelser.
 ```
 
+**Beskrivelse (4000)**
+
+```
+Kolorist er et fargeverktøy for designere og arkitekter på iPhone, iPad og Mac. Bygg paletter på tvers av fargerom, gjør dem om til designsystemer, kontroller kontrast og fargesyn, se fargene i lyset der de skal brukes – og få dem inn i verktøyene du allerede bruker.
+
+FRA PALETT TIL DESIGNSYSTEM
+• Roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast – merkefargen beholdes der den holder kravene
+• Se fargene på knapper, felt, brytere, varsler og faner, med kontrasten for hvert fargepar og kravet i WCAG
+• Egne roller, for eksempel info, kategorier eller tilbud
+• Toneskalaer med lik kontrast for alle kulører, rett i Studio
+• Eksporter som fargesett for apputvikling, design tokens og CSS med lys og mørk modus – eller del designsystemet som lenke
+
+ALLE FARGEROM
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
+• Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
+• Angi CMYK eller RGB i profilen de skal brukes i, og få rene CMYK-verdier
+• Skriv hex eller CSS-farger
+
+FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
+• Importer egne fargekart i ASE, ACO eller ACB med navngitte toner
+• Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament
+• Egne ICC-profiler, synkronisert via iCloud Drive
+
+OVERGANGER, TONER OG HARMONIER
+• Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader og CSS-gradienter
+• Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Hering, Goethe, HSL eller RYB
+
+KONTRAST OG FARGESYN
+• Kontrastsjekk etter WCAG 2.2 eller LRV, med «Rett opp» som justerer fargen til den består
+• Skriftkontrast og skriftfarger for hele paletter
+• Kontrast mellom flater for bygg og interiør: LRV-forskjell, Weber eller Michelson – også i valgt lys
+• Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
+• Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh
+
+LYS OG FARGEMÅLING
+• Se farger og hele paletter under egne og standardiserte betraktningsforhold
+• Mål lyset med kameraet, og kompenser farger du plukker med gråkort eller referansekort (beta)
+
+PLUKK FARGER
+• Kamera og bilder, rett fra fargefeltene der du trenger fargen
+• Farger du plukker, tas vare på til du lagrer dem
+
+APPLE INTELLIGENCE PÅ ENHETEN
+• Fra verdiord til palett, forankret i en kunnskapsbase med over hundre fargebegreper
+• Navngi farger og få vurdering av paletter
+Alt kjøres på enheten. Uten Apple Intelligence lages paletter direkte fra kunnskapsbasen.
+
+DEL, LAGRE OG EKSPORTER
+• Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser dem i nettleseren
+• Lagre som ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex og PDF
+• Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer – eller som RGB-verdier til CAD, BIM og video og lineære verdier til 3D-programmer
+• Skriv ut paletter og palettgrupper på A4 i CIELab
+
+PALETTER OG ICLOUD
+Samle farger og gradienter i paletter og palettgrupper, og synkroniser via din egen, private iCloud.
+
+ÅPENT OM METODENE
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC og designtokens – med kilde og forklaring.
+
+PERSONVERN
+Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
+
+Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet enhet.
+```
+
+**Nøkkelord (100)**
+
+```
+farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,harmoni
+```
+
+---
+
+## 2. iPhone og iPad – engelsk
+
+**Subtitle (30)** – unchanged
+
+```
+Colour palettes for designers
+```
+
+**Promotional text (170)**
+
+```
+From palette to design system: tone scales with consistent contrast, colours for light and dark mode, and checks by WCAG and LRV – straight into your tools.
+```
+
+**What’s New in This Version (4000) – A: from 1.2 (1.3 withdrawn)**
+
+```
+Kolorist 1.3.1 takes your palette all the way to a design system.
+
+• Design system from a palette: roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast. See them on buttons, fields, switches and alerts, with the contrast for each colour pair and the WCAG requirement. Add your own roles, such as info.
+• Export the design system as colour sets for app development, design tokens with aliases and one file per mode, and CSS with light and dark mode and Display P3 – with a README that explains the system. Or share it as a link: recipients see the components and colours in their browser.
+• Tone scale in Studio, next to Colour and Harmony: steps 50–950 with the same contrast for every hue – step 400 holds at least 3:1 and step 600 at least 4.5:1 against white.
+• Text colours in the palette if you want them: one near white and one near black, tinted with the palette’s hue.
+• New contrast check: choose WCAG 2.2 or LRV. The figure and the strictest requirement the colour does not meet are shown at the top.
+• Contrast between surfaces with a choice of method: LRV difference, Weber or Michelson.
+• The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh – copy one value or all of them as a table.
+• Copy colours as RGB values for CAD, BIM and video, and as linear values for 3D apps.
+• Pick a colour with the camera or from a photo right from the colour fields – or edit it in Studio and bring it back.
+• New harmonies: monochromatic and tone path, where the hue arcs through lightness and saturation – and Goethe’s colour wheel.
+• Palette groups: gather palettes in groups, and print, save and copy whole groups. Import ASE files as palettes.
+• Reorder colours by dragging them, and show a colour from anywhere.
+• Source colour space for CMYK and RGB, paper white and a choice of viewing condition for the display.
+• A more focused set of models: the colour model and colour wheel with hue, value and chroma have been removed.
+```
+
+**What’s New in This Version (4000) – B: from 1.3**
+
 ```
 • A more focused set of models: the contrast check is based on WCAG 2.2 and LRV, the standards accessibility regulations refer to, and the colour model and colour wheel with hue, value and chroma have been removed.
 • Text on colour fields is chosen as black or white by WCAG contrast.
 • Minor fixes.
 ```
 
-## Notes for App Review (iOS og macOS)
-
-Kort og saklig – hva som er endret, rammet inn som et spisset utvalg av modeller:
+**Description (4000)**
 
 ```
-1.3.1 refines the set of models included in the app. The contrast check now uses WCAG 2.2 and LRV only, and one colour model (hue, value and chroma) has been removed together with its colour wheel. No new features, permissions or data collection.
+Kolorist is a colour tool for designers and architects on iPhone, iPad and Mac. Build palettes across colour spaces, turn them into design systems, check contrast and colour vision, see colours in the light where they will be used – and get them into the tools you already use.
+
+FROM PALETTE TO DESIGN SYSTEM
+• Roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast – your brand colour is kept wherever it meets the requirements
+• See the colours on buttons, fields, switches, alerts and tabs, with the contrast for each colour pair and the WCAG requirement
+• Your own roles, such as info, categories or offers
+• Tone scales with the same contrast for every hue, right in Studio
+• Export as colour sets for app development, design tokens and CSS with light and dark mode – or share the design system as a link
+
+EVERY COLOUR SPACE
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
+• Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile – mapped, never clipped
+• Enter CMYK or RGB in the profile they will be used in, and get clean CMYK values
+• Type hex or CSS colours
+
+COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
+• Import your own colour charts in ASE, ACO or ACB with named tones
+• Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament
+• Your own ICC profiles, synced through iCloud Drive
+
+GRADIENTS, TONES AND HARMONIES
+• Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
+• Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Hering, Goethe, HSL or RYB colour wheels
+
+CONTRAST AND COLOUR VISION
+• Contrast check by WCAG 2.2 or LRV, with auto-fix that adjusts the colour until it passes
+• Text contrast and text colours for whole palettes
+• Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson – in the chosen light too
+• See palettes with protan, deutan and tritan deficiencies and achromatopsia – and which colours become hard to tell apart
+• The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh
+
+LIGHT AND COLOUR MEASUREMENT
+• See colours and whole palettes in your own and standard viewing conditions
+• Measure the light with the camera, and compensate the colours you pick with a grey card or reference card (beta)
+
+PICK COLOURS
+• Camera and photos, right from the colour fields where you need the colour
+• Colours you pick are kept until you save them
+
+APPLE INTELLIGENCE ON DEVICE
+• From value words to a palette, grounded in a knowledge base of more than a hundred colour concepts
+• Name colours and get a critique of your palette
+Everything runs on device. Without Apple Intelligence, palettes are built straight from the knowledge base.
+
+SHARE, SAVE AND EXPORT
+• Share colours, palettes, gradients and harmonies as links – recipients without the app see them in their browser
+• Save as ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex and PDF
+• Copy colours and gradients straight into design, layout and presentation apps – or as RGB values for CAD, BIM and video and linear values for 3D apps
+• Print palettes and palette groups on A4 in CIELab
+
+PALETTES AND ICLOUD
+Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
+
+OPEN ABOUT METHODS
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC and design tokens – with source and explanation.
+
+PRIVACY
+No account, no analytics, no ads and no tracking. The developer collects no data.
+
+Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported device.
 ```
 
-## Reklametekst (170) – oppdatert, uten APCA
+**Keywords (100)**
 
 ```
-Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus og kontroll etter WCAG og LRV – rett inn i verktøyene du bruker.
+color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,palette
 ```
 
-```
-From palette to design system: tone scales with consistent contrast, colours for light and dark mode, and checks by WCAG and LRV – straight into your tools.
-```
+---
 
-Mac (norsk/engelsk):
+## 3. Mac – norsk (bokmål)
+
+**Reklametekst (170)**
 
 ```
 Fra palett til designsystem: toneskalaer med lik kontrast, farger for lys og mørk modus, kontroll etter WCAG og LRV – plukk fra hele skjermen og dra fargene videre.
 ```
 
+**Nytt i denne versjonen (4000)**
+
+```
+• Spisset utvalg av modeller: kontrastsjekken bygger på WCAG 2.2 og LRV, standardene regelverket for universell utforming viser til, og fargemodellen og fargesirkelen med kulør, valør og kroma er tatt ut.
+• Tekst på fargeflater velges som sort eller hvit etter WCAG-kontrast.
+• Mindre rettelser.
+```
+
+**Beskrivelse (4000)**
+
+```
+Kolorist er et fargeverktøy for designere og arkitekter på Mac – og på iPhone og iPad med samme kjøp. Bygg paletter på tvers av fargerom, gjør dem om til designsystemer, kontroller kontrast og fargesyn, se fargene i lyset der de skal brukes – og få dem inn i verktøyene du allerede bruker.
+
+FRA PALETT TIL DESIGNSYSTEM
+• Roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast – merkefargen beholdes der den holder kravene
+• Se fargene på knapper, felt, brytere, varsler og faner, med kontrasten for hvert fargepar og kravet i WCAG
+• Egne roller, for eksempel info, kategorier eller tilbud
+• Toneskalaer med lik kontrast for alle kulører, rett i Studio
+• Eksporter som fargesett for apputvikling, design tokens og CSS med lys og mørk modus – eller del designsystemet som lenke
+
+ALLE FARGEROM
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
+• Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
+• Angi CMYK eller RGB i profilen de skal brukes i, og få rene CMYK-verdier
+• Skriv hex eller CSS-farger
+
+FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
+• Importer egne fargekart i ASE, ACO eller ACB med navngitte toner
+• Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament
+• Egne ICC-profiler, synkronisert via iCloud Drive
+
+OVERGANGER, TONER OG HARMONIER
+• Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader og CSS-gradienter
+• Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Hering, Goethe, HSL eller RYB
+
+KONTRAST OG FARGESYN
+• Kontrastsjekk etter WCAG 2.2 eller LRV, med «Rett opp» som justerer fargen til den består
+• Skriftkontrast og skriftfarger for hele paletter
+• Kontrast mellom flater for bygg og interiør: LRV-forskjell, Weber eller Michelson – også i valgt lys
+• Se paletter med protan-, deutan- og tritanavvik og akromatopsi – og hvilke farger som blir vanskelige å skille
+• Forskjellen mellom to farger med ΔE2000, ΔL*, ΔC* og Δh
+
+LYS OG FARGEMÅLING
+• Se farger og hele paletter under egne og standardiserte betraktningsforhold
+• Mål lyset med iPhone eller iPad – betraktningsforholdene følger med til Macen via iCloud
+• Kompenser farger for lyset med gråkort eller referansekort, med iPhone som kamera (beta)
+
+PLUKK OG DRA
+• Skjermpipette som plukker farger fra hvor som helst på skjermen
+• Dra fargeprøver inn i andre programmer og fargebrønner – og dra farger inn fra dem
+• Legg paletter i fargevelgeren på Macen, som fargeliste i alle programmer
+• Kamera, også iPhone som kamera, og bilder
+
+APPLE INTELLIGENCE PÅ ENHETEN
+• Fra verdiord til palett, forankret i en kunnskapsbase med over hundre fargebegreper
+• Navngi farger og få vurdering av paletter
+Alt kjøres på enheten. Uten Apple Intelligence lages paletter direkte fra kunnskapsbasen.
+
+DEL, LAGRE OG EKSPORTER
+• Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser dem i nettleseren
+• Lagre som ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex, PDF og fargeliste for macOS
+• Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer – eller som RGB-verdier til CAD, BIM og video og lineære verdier til 3D-programmer
+• Skriv ut paletter og palettgrupper på A4 i CIELab
+
+PALETTER OG ICLOUD
+Samle farger og gradienter i paletter og palettgrupper, og synkroniser via din egen, private iCloud.
+
+ÅPENT OM METODENE
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC og designtokens – med kilde og forklaring.
+
+PERSONVERN
+Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
+
+Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
+```
+
+**Nøkkelord (100)**
+
+```
+farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,harmoni
+```
+
+---
+
+## 4. Mac – engelsk
+
+**Promotional text (170)**
+
 ```
 From palette to design system: tone scales with consistent contrast, light and dark mode, checks by WCAG and LRV – pick from anywhere on screen and drag colours on.
 ```
 
-## Skjermbilder
+**What’s New (4000)**
+
+```
+• A more focused set of models: the contrast check is based on WCAG 2.2 and LRV, the standards accessibility regulations refer to, and the colour model and colour wheel with hue, value and chroma have been removed.
+• Text on colour fields is chosen as black or white by WCAG contrast.
+• Minor fixes.
+```
+
+**Description (4000)**
+
+```
+Kolorist is a colour tool for designers and architects on Mac – and on iPhone and iPad with the same purchase. Build palettes across colour spaces, turn them into design systems, check contrast and colour vision, see colours in the light where they will be used – and get them into the tools you already use.
+
+FROM PALETTE TO DESIGN SYSTEM
+• Roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast – your brand colour is kept wherever it meets the requirements
+• See the colours on buttons, fields, switches, alerts and tabs, with the contrast for each colour pair and the WCAG requirement
+• Your own roles, such as info, categories or offers
+• Tone scales with the same contrast for every hue, right in Studio
+• Export as colour sets for app development, design tokens and CSS with light and dark mode – or share the design system as a link
+
+EVERY COLOUR SPACE
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
+• Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile – mapped, never clipped
+• Enter CMYK or RGB in the profile they will be used in, and get clean CMYK values
+• Type hex or CSS colours
+
+COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
+• Import your own colour charts in ASE, ACO or ACB with named tones
+• Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament
+• Your own ICC profiles, synced through iCloud Drive
+
+GRADIENTS, TONES AND HARMONIES
+• Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
+• Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Hering, Goethe, HSL or RYB colour wheels
+
+CONTRAST AND COLOUR VISION
+• Contrast check by WCAG 2.2 or LRV, with auto-fix that adjusts the colour until it passes
+• Text contrast and text colours for whole palettes
+• Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson – in the chosen light too
+• See palettes with protan, deutan and tritan deficiencies and achromatopsia – and which colours become hard to tell apart
+• The difference between two colours with ΔE2000, ΔL*, ΔC* and Δh
+
+LIGHT AND COLOUR MEASUREMENT
+• See colours and whole palettes in your own and standard viewing conditions
+• Measure the light with iPhone or iPad – it syncs to the Mac through iCloud
+• Compensate colours for the light with a grey card or reference card, with iPhone as the camera (beta)
+
+PICK AND DRAG
+• Screen eyedropper that picks colours from anywhere on screen
+• Drag swatches into other apps and colour wells, and back
+• Add palettes to the Mac colour picker, as a colour list in every app
+• Camera, including iPhone as a camera, and photos
+
+APPLE INTELLIGENCE ON DEVICE
+• From value words to a palette, grounded in a knowledge base of more than a hundred colour concepts
+• Name colours and get a critique of your palette
+Everything runs on device. Without Apple Intelligence, palettes are built straight from the knowledge base.
+
+SHARE, SAVE AND EXPORT
+• Share colours, palettes, gradients and harmonies as links – recipients without the app see them in their browser
+• Save as ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex, PDF and a macOS colour list
+• Copy colours and gradients straight into design, layout and presentation apps – or as RGB values for CAD, BIM and video and linear values for 3D apps
+• Print palettes and palette groups on A4 in CIELab
+
+PALETTES AND ICLOUD
+Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
+
+OPEN ABOUT METHODS
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, ICC and design tokens – with source and explanation.
+
+PRIVACY
+No account, no analytics, no ads and no tracking. The developer collects no data.
+
+Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
+```
+
+**Keywords (100)**
+
+```
+color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,palette
+```
+
+---
+
+## 5. Felles
+
+### App Review – Notes (4000), iOS og macOS
+
+```
+Thank you for reviewing Kolorist 1.3.1, a colour palette tool for designers and architects on iPhone, iPad and Mac (one universal purchase).
+
+ABOUT 1.3.1
+1.3.1 refines the set of models included in the app. The contrast check now uses WCAG 2.2 and LRV only, and one colour model (hue, value and chroma) has been removed together with its colour wheel. No new permissions or data collection compared with 1.3.
+
+NO ACCOUNT NEEDED
+No account, no server of our own, no analytics, ads or in-app purchases. Data syncs through the user's private iCloud when signed in; otherwise everything stays on device.
+
+FROM 1.3 – HOW TO TEST
+• Design system: open a palette › ⋯ › Make design system. A preview opens with Components, Roles and Scales; Save keeps it. Export (share button) writes colour sets, design tokens, CSS and a README to a folder.
+• Tone scale: Studio › Tone scale (also from a colour in a palette › Create tone scale). "Contrast (L*)" gives the same contrast for every hue.
+• Copy to: touch and hold (right-click on Mac) a colour › Copy to. New targets: RGB 0–255, RGB 0–1, linear values for 3D apps, and on Mac the system colour picker (writes a colour list to ~/Library/Colors).
+• Share a design system: open it › ⋯ › Share as link; the link opens a preview in the browser or in the app.
+• Text colours: open a palette › A (text contrast) › Define text colours.
+• Contrast: Assess › Contrast. Choose WCAG 2.2 or LRV below the colour field; tap Text or Background in the field to pick a colour (also with camera or photo).
+• ΔE: Assess › ΔE. Touch and hold a value to copy it, or use Copy all as a table.
+• Harmonies: Studio › Harmony › Monochromatic or Tone path.
+• Palette groups: Palettes › + › New palette group, then drag palettes into it.
+
+CAMERA
+Used live, on device only, to pick colours, measure light and show the colour vision filter. Nothing is stored or sent.
+
+APPLE INTELLIGENCE
+On-device Foundation Models with a built-in knowledge base as fallback. No text leaves the device.
+
+BUNDLED DATA
+Filament colours from FilamentColors.xyz under CC BY 4.0, credited in the app and at kolorist.no.
+
+Methods and sources: in the app (Palettes › Methods and sources) and at https://kolorist.no/en/methods.html
+Contact: eivind.johansen@ntnu.no
+```
+
+### TestFlight – What to Test (4000)
+
+```
+Takk for at du tester Kolorist 1.3.1! Versjonen spisser utvalget av modeller:
+
+• Kontrast: Vurdering › Kontrast har WCAG 2.2 og LRV. Sjekk at «Rett opp» og fargevalget i flaten virker.
+• Tekst på fargeflater: sjekk at sort eller hvit tekst er lesbar på paletter, toneskala og designsystem.
+• Fargemodeller: Studio har OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK. Paletter og lenker som brukte modellen med kulør, valør og kroma, skal åpnes som vanlige farger.
+• Synk: sjekk at paletter, grupper og designsystemer kommer over til dine andre enheter.
+
+Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu.no.
+```
+
+### Skjermbilder
 
 Hele settet for 1.3.1 ligger i `Dokumentasjon/1.3.1/Skjermbilder/`, uten APCA og Munsell (kontrollert med
 tekstgjenkjenning 2026-10-10):
 
 | Mappe | Enhet | Størrelse |
 |---|---|---|
-| `nb/`, `en/` | iPhone 6,5″ | 1284 × 2778 |
-| `iphone63-nb/`, `iphone63-en/` | iPhone 6,3″ | 1206 × 2622 |
+| `iphone63-nb/`, `iphone63-en/` | iPhone 6,1″/6,3″ (formatet App Store Connect ber om) | 1206 × 2622 |
+| `nb/`, `en/` | iPhone 6,5″ (reserve) | 1284 × 2778 |
 | `ipad-nb/`, `ipad-en/` | iPad 13″ | 2064 × 2752 |
 | `mac-nb/`, `mac-en/` | Mac | 2880 × 1800 |
-| `header-*.png`, `sokeresultat-*.png` | Header og søkeresultat | |
+| `header-*.png`, `sokeresultat-*.png` | Header (3840 × 1646) og søkeresultat (3840 × 2560) | |
 
-Endret siden 1.3: Studio-bildet i alle settene (`studio.png`, `5-studio.png` for 6,3″) – metodelinja nevnte Munsell.
+Foreslått rekkefølge (høyst ti): designsystem, toneskala, kontrast, flatekontrast, studio, harmoni, lys, fargesyn,
+overgang, fargefelt (Mac uten fargefelt). Endret siden 1.3: Studio-bildet i alle settene (`studio.png`, `5-studio.png`
+for 6,3″) – metodelinja nevnte Munsell. Slik bildene er tatt: se `Dokumentasjon/1.3/AppStore.md`.
 
-## Før du sender inn
+### Før du sender inn
 
-- [ ] `MARKETING_VERSION` 1.3.1, `CURRENT_PROJECT_VERSION` 13 (satt i prosjektet).
-- [ ] Ny versjon 1.3.1 for iOS og macOS, med «Nytt i denne versjonen» over.
-- [ ] Studio-bildet byttet i alle settene (iPhone 6,5″ og 6,3″, iPad, Mac; norsk og engelsk).
-- [ ] Reklametekst, beskrivelse, nøkkelord og Notes for App Review byttet til tekstene uten APCA og Munsell
-      (`Dokumentasjon/1.3/AppStore.md`; nøkkelordet Munsell er byttet med harmoni/palette).
-- [ ] iOS: 1.3 ligger til gjennomgang – trekk den («Remove from Review») og send inn 1.3.1 i stedet, eller send 1.3.1
-      rett etter at 1.3 er godkjent.
-- [x] Nettsiden uten APCA (rota, /neste/ og historisk/), lastet opp 2026-10-10.
-- [ ] Nettsiden uten Munsell (rota, /neste/ og historisk/).
+- [ ] Xcode på grenen `versjon-1.3.1`; `MARKETING_VERSION` 1.3.1, `CURRENT_PROJECT_VERSION` 13 (14 hvis 13 alt er lastet opp).
+- [ ] iOS: 1.3 ligger til gjennomgang – trekk den («Remove from Review») og send 1.3.1 i stedet (tekst A), eller send
+      1.3.1 rett etter at 1.3 er godkjent (tekst B).
+- [ ] Ny versjon 1.3.1 for iOS og macOS, med tekstene over.
+- [ ] Reklametekst, beskrivelse og nøkkelord byttet (Munsell er byttet med harmoni/palette i nøkkelordene).
+- [ ] Studio-bildet byttet i alle settene (iPhone, iPad og Mac; norsk og engelsk).
+- [ ] Notes for App Review byttet til teksten over.
+- [x] Nettsiden uten APCA og Munsell (rota, /neste/ og historisk/), lastet opp 2026-10-10.
 - [x] CloudKit-skjemaet er uendret siden 1.3.
