@@ -1172,7 +1172,7 @@ def lenke_på(url, lang):
 
 def skriv(sti, tekst):
     # Nye skjermbilder: ny versjon i adressen, så nettleser og Varnish henter dem på nytt.
-    tekst = re.sub(r'\.png\?v=\d+', '.png?v=8', tekst)
+    tekst = re.sub(r'\.png\?v=\d+', '.png?v=9', tekst)
     lang = 'en' if sti.startswith('en/') else 'nb'
     tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)
