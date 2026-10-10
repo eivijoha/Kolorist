@@ -18,6 +18,18 @@ For å unngå at to tråder skriver i samme fil:
    merknad under ønsket.
 5. Prioritet avklares alltid med Eivind før et ønske bygges i Kolorist. 1.2 er i review; nytt arbeid går mot 1.3.
 
+## Ønske 7: dra en hel palett ut av Kolorist — **levert** 2026-10-10 (Kolorist 1.4, commit `6973768` på `versjon-1.4`)
+
+En palett som dras fra palettlisten, gir nå i denne rekkefølgen:
+
+1. `no.engenett.kolorist.palett` – `PalettReferanse` med bare id-en, som før (slipp i palettgrupper virker uendret).
+2. `public.url` – delingslenken `https://kolorist.no/l#z…`, den samme som «Del som lenke» (navn, farger og gradienter).
+3. `public.utf8-plain-text` – hex-verdiene, én per linje (som `PalettEntity` for Snarveier).
+
+En tom palett gir bare id-en. Kontrollert ved å eksportere representasjonene og lese lenken tilbake med
+`Delingslenke.les` (navn og farger kom tilbake). Ikke prøvd med ekte dra og slipp mellom appene ennå – det trengs et
+bygg av Kolorist 1.4 på samme maskin. Ingen API-endring i FargeKjerne.
+
 ## FargeKjerne 0.4.0 (2026-10-10) – lisensopprydding, brytende endringer
 
 Kolorist skal ikke inneholde lisensbelagte modeller eller data (ut over CC BY og CC BY-SA), og bruker ikke andres
