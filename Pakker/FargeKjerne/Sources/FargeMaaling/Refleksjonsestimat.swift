@@ -5,6 +5,9 @@ import Foundation
 /// lyskilder med ujevnt spekter (lysrør, LED). Metoden er Burns' minste kvadrerte stigning (LLSS, 2015):
 /// det glatteste spekteret som gir nøyaktig fargen under D65.
 ///
+/// Skrevet for Kolorist fra metoden i S. A. Burns, «Numerical methods for smoothest reflectance reconstruction», Color
+/// Research & Application 45(1), 2020 – ikke fra Burns' egen kode (som er CC BY-SA). Metoden krever bare kildehenvisning.
+///
 /// Spekteret er et anslag – to farger som er like på skjermen, kan ha ulike spektre i virkeligheten (metameri).
 public enum Refleksjonsestimat {
     /// 81×3: refleksjon = B · XYZ(D65, Y = 1).
