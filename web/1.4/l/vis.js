@@ -48,6 +48,7 @@
     token: "Token", minst: "at least", kopierTokens: "Copy as CSS",
     dsTekst: "Open the link in Kolorist to save the design system and export it to app development, design tools and the web.",
     aapneDs: "Open the design system in the Kolorist app",
+    rapport: "Colour report", kopierTabell: "Copy as table", skrivUt: "Print",
   } : {
     hopp: "Hopp til hovedinnhold", laster: "Åpner …", haAppen: "Har du Kolorist?",
     haAppenTekst: "Åpne lenken i appen for å lagre, endre og bygge videre.",
@@ -79,6 +80,7 @@
     token: "Token", minst: "minst", kopierTokens: "Kopier som CSS",
     dsTekst: "Åpne lenken i Kolorist for å lagre designsystemet og eksportere det til apputvikling, designverktøy og nettet.",
     aapneDs: "Åpne designsystemet i Kolorist-appen",
+    rapport: "Fargerapport", kopierTabell: "Kopier som tabell", skrivUt: "Skriv ut",
   };
   HARMONIER = en ? {
     komplementær: "Complementary", splittKomplementær: "Split complementary", analog: "Analogous",
@@ -158,7 +160,20 @@
     }
     if (!["farge", "palett", "gradient", "harmoni"].includes(d.t)) throw new Error("slag");
     return { versjon: d.v, slag: d.t, navn: tekst(d.n), farger, gradienter, harmoni: d.h && typeof d.h === "object" ? d.h : null,
-             designsystem: lesDesignsystem(d.ds, farger.length), språk: typeof d.sp === "string" && /^[a-z]{1,3}$/.test(d.sp) ? d.sp : null };
+             designsystem: lesDesignsystem(d.ds, farger.length), rapport: lesRapport(d.rp, farger.length), språk: typeof d.sp === "string" && /^[a-z]{1,3}$/.test(d.sp) ? d.sp : null };
+  }
+
+  // Fargerapport (fra 1.4): tekstene er ferdig formatert hos avsenderen; en skadet rapport droppes, fargene vises likevel.
+  function lesRapport(rp, antallFarger) {
+    if (!rp || typeof rp !== "object" || typeof rp.s !== "string" || typeof rp.t !== "string") return null;
+    const tabell = Array.isArray(rp.r) ? rp.r : [];
+    if (tabell.length > 160 || !tabell.every((rad) => Array.isArray(rad) && rad.length <= 10 && rad.every((c) => typeof c === "string"))) return null;
+    const par = Array.isArray(rp.p) ? rp.p : [];
+    const plass = (i) => Number.isInteger(i) && i >= 0 && i < antallFarger;
+    if (par.length > 160 || !par.every((p) => p && plass(p.a) && plass(p.b))) return null;
+    return { slag: tekst(rp.s), tittel: tekst(rp.t), undertittel: tekst(rp.u), overskrift: rp.o === true,
+             tabell: tabell.map((rad) => rad.map(tekst)),
+             par: par.map((p) => ({ a: p.a, b: p.b, sa: erHex(p.sa) ? `#${p.sa}` : null, sb: erHex(p.sb) ? `#${p.sb}` : null, tekst: tekst(p.t) })) };
   }
 
   const MODUSER = ["light", "dark", "light-ic", "dark-ic"];
@@ -357,7 +372,11 @@
       return;
     }
 
-    if (d.farger.length > 1) {
+    if (d.rapport) {
+      slag.textContent = `${T.rapport} · ${T.delt}`;
+      visRapport(d);
+    }
+    if (d.farger.length > 1 && !d.rapport) {
       // Hele paletten under ett, før kortene med verdier.
       const stripe = lag("div", "delt-oversikt");
       stripe.setAttribute("aria-hidden", "true");
@@ -415,6 +434,66 @@
     }
     document.getElementById("topphandling").hidden = false;
     document.getElementById("handlinger").hidden = false;
+  }
+
+  // ---------- Fargerapport ----------
+
+  function prøve(venstre, høyre) {
+    const p = lag("div", "rapport-prove");
+    p.setAttribute("aria-hidden", "true");
+    for (const farge of [venstre, høyre]) { const s = lag("span"); s.style.background = farge; p.append(s); }
+    return p;
+  }
+
+  function visRapport(d) {
+    const r = d.rapport;
+    const innhold = document.getElementById("innhold");
+    const seksjon = lag("section", "delt-rapport");
+    seksjon.append(lag("h2", null, r.tittel));
+    if (r.undertittel) seksjon.append(lag("p", "dempet", r.undertittel));
+    if (r.par.length) {
+      const liste = lag("ul", "rapport-par");
+      for (const p of r.par) {
+        const a = d.farger[p.a], b = d.farger[p.b];
+        const li = lag("li");
+        const pa = prøve(hex(a) || "#808080", hex(b) || "#808080");
+        pa.children[0].style.background = css(a);
+        pa.children[1].style.background = css(b);
+        li.append(pa);
+        if (p.sa && p.sb) li.append(prøve(p.sa, p.sb));
+        li.append(lag("strong", null, `${tekst(a.n) || hex(a)} / ${tekst(b.n) || hex(b)}`));
+        if (p.tekst) li.append(lag("span", "dempet", p.tekst));
+        liste.append(li);
+      }
+      seksjon.append(liste);
+    }
+    if (r.tabell.length) {
+      const ramme = lag("div", "rapport-tabell-ramme");
+      const tabell = lag("table", "rapport-tabell");
+      const rader = r.overskrift ? r.tabell.slice(1) : r.tabell;
+      if (r.overskrift) {
+        const thead = lag("thead"), tr = lag("tr");
+        r.tabell[0].forEach((c) => { const th = lag("th", null, c); th.scope = "col"; tr.append(th); });
+        thead.append(tr);
+        tabell.append(thead);
+      }
+      const tbody = lag("tbody");
+      for (const rad of rader) {
+        const tr = lag("tr");
+        rad.forEach((c, i) => tr.append(lag(!r.overskrift && i === 0 ? "th" : "td", null, c)));
+        tbody.append(tr);
+      }
+      tabell.append(tbody);
+      ramme.append(tabell);
+      seksjon.append(ramme);
+    }
+    const knapper = knapperad([[T.kopierTabell, r.tabell.map((rad) => rad.join("\t")).join("\n")]]);
+    const utskrift = lag("button", "knapp knapp-sekundaer", T.skrivUt);
+    utskrift.type = "button";
+    utskrift.addEventListener("click", () => window.print());
+    knapper.append(utskrift);
+    seksjon.append(knapper);
+    innhold.append(seksjon);
   }
 
   // ---------- Designsystem ----------

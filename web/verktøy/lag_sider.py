@@ -693,10 +693,12 @@ def lysside(lang):
 
 # Tilgjengelighet-kortet: 0 WCAG, 1 valg av kontrastsjekk, 2 Rett opp, 3 skriftkontrast i paletter, 4 vurderinger viser
 # grunnlaget, 5 LRV og metoder, 6 LRV i lys, 7 veiledende LRV fra kamera, 8 paletter i ulike lys, 9 ΔE2000, 10 fargesyn,
-# 11 utbredelse, 12 kamera. (De to APCA-punktene er tatt ut 2026-10-10.)
-TILG_TEKST = (0, 1, 2, 3, 4, 9)
+# 11 utbredelse, 12 kamera, 13 tekst på fargeflater (1.4), 14 fargerapporter (1.4). (De to APCA-punktene er tatt ut
+# 2026-10-10.)
+TILG_TEKST = (0, 1, 2, 3, 13, 4, 9)
 TILG_FLATER = (5, 6, 7, 8)
 TILG_FARGESYN = (10, 11, 12)
+TILG_RAPPORTER = (14,)
 
 
 def funksjoner(lang):
@@ -707,7 +709,7 @@ def funksjoner(lang):
     nb = lang == 'nb'
     tilg = lier(k['Tilgjengelighet' if nb else 'Accessibility'])
     # Punktene i Tilgjengelighet-kortet på forsiden, fordelt på gruppene. Settes et punkt inn i kortet, må tallene følge med.
-    assert len(tilg) == 13, f'Tilgjengelighet-kortet har {len(tilg)} punkter – oppdater TILG_* i funksjoner()'
+    assert len(tilg) == 15, f'Tilgjengelighet-kortet har {len(tilg)} punkter – oppdater TILG_* i funksjoner()'
     lysliste = (['Se farger og hele paletter under egne og standardiserte betraktningsforhold – paletter rett i palettvisningen',
                  'Kompenser plukkede farger for lyset med gråkort eller referansekort – også i bilder (beta)',
                  'Mål lyset med kameraet og lagre det som betraktningsforhold – lysstyrken anslås, eller måles med et kort',
@@ -749,7 +751,8 @@ def funksjoner(lang):
             ('kontrast', 'Kontrast og fargesyn', 'Kontrast og fargesyn', None,
              [('Tekst og grafikk (WCAG 2.2)', ul([tilg[i] for i in TILG_TEKST])),
               ('Flater og bygg (LRV)', ul([tilg[i] for i in TILG_FLATER])),
-              ('Fargesyn', ul([tilg[i] for i in TILG_FARGESYN]))]),
+              ('Fargesyn', ul([tilg[i] for i in TILG_FARGESYN])),
+              ('Fargerapporter', ul([tilg[i] for i in TILG_RAPPORTER]))]),
             ('lys', 'Lys og fargemåling', 'Lys', lysdel, []),
             ('levere', 'Paletter, eksport og deling', 'Paletter og eksport', None,
              [('Paletter og iCloud', k['Paletter og iCloud']), ('Eksport', k['Eksport']),
@@ -786,7 +789,8 @@ def funksjoner(lang):
             ('contrast', 'Contrast and colour vision', 'Contrast and colour vision', None,
              [('Text and graphics (WCAG 2.2)', ul([tilg[i] for i in TILG_TEKST])),
               ('Surfaces and buildings (LRV)', ul([tilg[i] for i in TILG_FLATER])),
-              ('Colour vision', ul([tilg[i] for i in TILG_FARGESYN]))]),
+              ('Colour vision', ul([tilg[i] for i in TILG_FARGESYN])),
+              ('Colour reports', ul([tilg[i] for i in TILG_RAPPORTER]))]),
             ('light', 'Light and colour measurement', 'Light', lysdel, []),
             ('deliver', 'Palettes, export and sharing', 'Palettes and export', None,
              [('Palettes and iCloud', k['Palettes and iCloud']), ('Export', k['Export']),
