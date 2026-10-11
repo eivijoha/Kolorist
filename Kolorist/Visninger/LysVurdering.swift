@@ -130,6 +130,7 @@ struct LysVurdering: View {
                 }
                 .padding(.vertical, 4)
             }
+            RapportValg(rapport: lysrapport(farge, [bibliotek.gjeldendeLysmiljø] + miljøer))
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
@@ -139,6 +140,26 @@ struct LysVurdering: View {
                 MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
             }
         }
+    }
+
+    /// Fargen under betraktningsforholdene som rapport: fargen på skjermen og i hvert lys, med lyset og fargeskiftet.
+    private func lysrapport(_ farge: Farge, _ miljøer: [Lysmiljø]) -> Fargerapport {
+        var farger = [PalettFarge(navn: String(localized: "På skjermen"), farge: farge)]
+        var par: [DeltRapportpar] = []
+        var rader = [[String(localized: "Betraktningsforhold"), String(localized: "Lys"), String(localized: "Hex i lyset"),
+                      String(localized: "Fargeskift (ΔE00)")]]
+        for m in miljøer {
+            let sett = somFoto ? m.somFoto(farge) : m.sett(farge)
+            let skift = m.fargeskift(farge).formatted(.number.precision(.fractionLength(1)))
+            farger.append(PalettFarge(navn: m.navn, farge: sett))
+            par.append(DeltRapportpar(a: 0, b: farger.count - 1, tekst: "\(Lysbeskrivelse.tekst(m)) · ΔE00 \(skift)",
+                                      merke: m.fargeskift(farge) >= 3 ? String(localized: "Skifter tydelig") : nil))
+            rader.append([m.navn, Lysbeskrivelse.tekst(m), sett.hex(), skift])
+        }
+        return Fargerapport(navn: "", farger: farger,
+                            rapport: DeltRapport(slag: "lys", tittel: String(localized: "Fargen i lys"),
+                                                 undertittel: somFoto ? String(localized: "Som et foto") : String(localized: "Slik øyet ser det"),
+                                                 par: par, tabell: rader, overskrift: true))
     }
 
     /// Én prøve: fargen i lyset, navnet på lyset, lyset (K og lx) og fargeskiftet.

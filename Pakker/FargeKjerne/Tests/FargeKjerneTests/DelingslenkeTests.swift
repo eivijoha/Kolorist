@@ -41,7 +41,8 @@ struct DelingslenkeTests {
         let blå = Farge(hex: "#00509E")!, lilla = Farge(hex: "#482776")!
         let rapport = DeltInnhold(slag: .palett, navn: "Kyst", farger: [DeltFarge(blå, navn: "NTNU-blå"), DeltFarge(lilla)], rapport:
             DeltRapport(slag: "fargesyn", tittel: "Vanskelige fargepar", undertittel: "Deuteranopi",
-                        par: [DeltRapportpar(a: 0, b: 1, simulert: (blå.simulert(.deutan), lilla.simulert(.deutan)), tekst: "ΔE00 22,4 → 7,1")],
+                        par: [DeltRapportpar(a: 0, b: 1, simulert: (blå.simulert(.deutan), lilla.simulert(.deutan)),
+                                               etikett: "Deuteranopi", tekst: "ΔE00 22,4 → 7,1", merke: "Vanskelige å skille", alvorlig: false)],
                         tabell: [["Farge A", "Hex A", "Farge B", "Hex B", "ΔE00"], ["NTNU-blå", "#00509E", "#482776", "#482776", "7,1"]],
                         overskrift: true))
         return [("farge", farge), ("palett", palett), ("gradient", gradient), ("harmoni", harmoni), ("bred", bred), ("rapport", rapport)]
@@ -70,6 +71,21 @@ struct DelingslenkeTests {
         #expect(r.slag == "fargesyn" && r.overskrift && r.tabell.count == 2)
         #expect(r.par.first?.simulertA?.count == 6)
         #expect(r.tabulatortekst.hasPrefix("Farge A\tHex A"))
+    }
+
+    @Test func skriftkontrastSomMatrise() throws {
+        let farger = ["#1F3A4D", "#E6DCC8", "#C8553D"].map { DeltFarge(Farge(hex: $0)!) }
+        let godkjent = [[true, true, false], [true, true, false], [false, false, true]]
+        let innhold = DeltInnhold(slag: .palett, farger: farger, rapport:
+            DeltRapport(slag: "skriftkontrast", tittel: "Skriftkontrast", tabell: [["", "A", "B", "C"]], overskrift: true,
+                        matrise: ([0, 1, 2], [0, 1, 2], godkjent)))
+        let r = try #require(Delingslenke.les(Delingslenke.lenke(innhold)).rapport)
+        #expect(r.godkjent == godkjent && r.matriseKolonner == [0, 1, 2])
+        // Feil form på godkjenningene: matrisen droppes, tabellen beholdes.
+        var feil = innhold
+        feil.rapport?.godkjent = [[true]]
+        let r2 = try #require(Delingslenke.les(Delingslenke.lenke(feil)).rapport)
+        #expect(r2.matriseRader == nil && r2.tabell.count == 1)
     }
 
     /// En rapport med par som peker utenfor fargene droppes, men fargene vises fortsatt som palett.

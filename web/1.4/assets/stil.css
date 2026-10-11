@@ -1539,25 +1539,62 @@ thead th {
   margin: 0.5rem 0 2rem;
 }
 
-.rapport-par {
+.rapport-kort {
   display: grid;
-  gap: 1rem 1.25rem;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
   list-style: none;
   padding: 0;
-  margin: 1rem 0;
+  margin: 1rem 0 1.5rem;
 }
 
-.rapport-par li {
+.rapport-par {
   display: grid;
-  gap: 0.3rem;
+  gap: 0.4rem;
   align-content: start;
+  background: var(--flate);
+  border: 1px solid var(--kant);
+  border-radius: var(--radius);
+  padding: 0.9rem;
 }
 
-.rapport-prove {
+.rapport-par.alvorlig {
+  border-color: #d64545;
+  box-shadow: inset 0 0 0 1px #d64545;
+}
+
+.rapport-topp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+  margin-bottom: 0.2rem;
+}
+
+.rapport-merke {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--advarsel-bg);
+  color: #7a5a00;
+}
+
+.rapport-merke.feil {
+  background: #fde4e4;
+  color: #a12b2b;
+}
+
+.rapport-etikett {
+  font-size: 0.8rem;
+  color: var(--tekst-dempet);
+  margin-top: 0.2rem;
+}
+
+.rapport-flater {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  height: 2rem;
   border-radius: var(--radius-liten);
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
@@ -1565,9 +1602,51 @@ thead th {
   print-color-adjust: exact;
 }
 
+.rapport-flate {
+  display: grid;
+  align-content: end;
+  gap: 0.1rem;
+  min-height: 4.5rem;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.rapport-navn {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.rapport-hex {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  opacity: 0.85;
+}
+
+.rapport-tekstprove {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-liten);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+  font-size: 0.8rem;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.rapport-tekstprove-stor {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.rapport-tall {
+  margin: 0.3rem 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
 .rapport-tabell-ramme {
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 0.5rem 0 1rem;
 }
 
 .rapport-tabell {
@@ -1588,10 +1667,19 @@ thead th {
   border-bottom-width: 2px;
 }
 
+@media (prefers-color-scheme: dark) {
+  .rapport-merke { background: #4a3b10; color: #f5d77a; }
+  .rapport-merke.feil { background: #4d1f1f; color: #f3a6a6; }
+}
+
 @media print {
   #topphandling,
   #handlinger,
   .delt-knapper {
     display: none;
+  }
+
+  .rapport-par {
+    break-inside: avoid;
   }
 }

@@ -324,7 +324,9 @@ struct FargesynVurdering: View {
         let par = alle.map { f in
             DeltRapportpar(a: f.i, b: f.j,
                            simulert: (farger[f.i].farge.simulert(f.type, grad: grad), farger[f.j].farge.simulert(f.type, grad: grad)),
-                           tekst: "\(avviksnavn(f.type, medGrad: true)) · ΔE00 \(desimal(f.normalt)) → \(desimal(f.simulert))")
+                           etikett: avviksnavn(f.type, medGrad: true),
+                           tekst: "ΔE00 \(desimal(f.normalt)) → \(desimal(f.simulert))",
+                           merke: vurdering(f), alvorlig: f.alvorlig)
         }
         return Fargerapport(navn: navn, farger: farger,
                             rapport: DeltRapport(slag: "fargesyn", tittel: String(localized: "Vanskelige fargepar"),

@@ -40,7 +40,9 @@ struct KontrastSeksjon: View {
         Section {
             ForEach(WCAGKrav.strengestFørst) { krav in
                 KravRad(krav: krav, test: test) { forgrunn = test.rettet(for: krav) }
+                    .contextMenu { RapportValg(rapport: rapport(test)) }
             }
+            RapportValg(rapport: rapport(test))
         } header: {
             Text("Tekst og grafikk (WCAG 2.2)")
         } footer: {
@@ -49,6 +51,28 @@ struct KontrastSeksjon: View {
                 MetodeHenvisning(.wcag, .oklab)
             }
         }
+    }
+}
+
+extension KontrastSeksjon {
+    /// Kontrastsjekken som rapport: tekst og bakgrunn, forholdet og hvert WCAG-krav.
+    fileprivate func rapport(_ test: Kontrasttest) -> Fargerapport {
+        let ikke = WCAGKrav.strengestFørst.filter { !test.består($0) }
+        let rader = [[String(localized: "Tekst"), forgrunn.hex()], [String(localized: "Bakgrunn"), bakgrunn.hex()],
+                     [String(localized: "Kontrastforhold"), test.formatert]]
+            + WCAGKrav.strengestFørst.map { krav in
+                [krav.navn,
+                 String(localized: "\(krav.suksesskriterium) · minst \(krav.minimum.formatted(.number.precision(.fractionLength(1)))):1"),
+                 test.består(krav) ? String(localized: "Bestått") : String(localized: "Ikke bestått")]
+            }
+        let par = DeltRapportpar(a: 0, b: 1, tekst: test.formatert,
+                                 merke: ikke.isEmpty ? String(localized: "Holder alle kravene")
+                                     : String(localized: "Holder ikke: \(ikke.map(\.navn).joined(separator: ", "))"),
+                                 alvorlig: ikke.contains(.aaTekst))
+        return Fargerapport(navn: "", farger: [PalettFarge(navn: String(localized: "Tekst"), farge: forgrunn),
+                                               PalettFarge(navn: String(localized: "Bakgrunn"), farge: bakgrunn)],
+                            rapport: DeltRapport(slag: "wcag", tittel: String(localized: "Kontrast (WCAG 2.2)"),
+                                                 par: [par], tabell: rader))
     }
 }
 
@@ -389,6 +413,14 @@ struct Kontrastmatrise: View {
                 Text("\(bestått) av \(tester.count) fargepar består")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(Color.sekundærTekst)
+                Menu {
+                    RapportValg(rapport: rapport(rader: rader, oppsummering: "\(bestått)/\(tester.count)"))
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .menuIndicator(.hidden)
+                .fixedSize()
+                .accessibilityLabel("Del rapporten")
             }
             ScrollView(.horizontal, showsIndicators: false) {
                 Grid(horizontalSpacing: 4, verticalSpacing: 4) {
@@ -459,6 +491,28 @@ struct Kontrastmatrise: View {
 }
 
 /// Skriftkontrasten for en palett i et ark (fra menyen i palettlista).
+extension Kontrastmatrise {
+    /// Matrisen som rapport: hver tekstfarge på hver bakgrunn med forholdet, og om cellen holder valgt krav.
+    fileprivate func rapport(rader: [PalettFarge], oppsummering: String) -> Fargerapport {
+        let alle = farger + (tekst.isEmpty ? [] : tekst)
+        let kolonner = Array(farger.indices)
+        let radplasser = tekst.isEmpty ? kolonner : Array(farger.count..<alle.count)
+        var tabell = [[String(localized: "Tekst ↓ / bakgrunn →")] + farger.map(\.etikett)]
+        var godkjent: [[Bool]] = []
+        for fg in rader {
+            let tester = farger.map { bg in fg.id == bg.id ? nil : Kontrasttest(forgrunn: fg.farge, bakgrunn: bg.farge) }
+            tabell.append([fg.etikett] + tester.map { $0?.formatert ?? "—" })
+            godkjent.append(tester.map { $0?.består(krav) ?? true })
+        }
+        let minimum = krav.minimum.formatted(.number.precision(.fractionLength(1)))
+        return Fargerapport(navn: "", farger: alle,
+                            rapport: DeltRapport(slag: "skriftkontrast", tittel: String(localized: "Skriftkontrast"),
+                                                 undertittel: String(localized: "\(krav.navn) · minst \(minimum):1 · \(oppsummering) fargepar består"),
+                                                 tabell: tabell, overskrift: true,
+                                                 matrise: (radplasser, kolonner, godkjent)))
+    }
+}
+
 struct KontrastmatriseArk: View {
     let palett: Palett
     @Environment(\.dismiss) private var lukk
@@ -587,7 +641,11 @@ struct FlatekontrastSeksjon: View {
             rader.append([krav.navn, "\(krav.kilde) · \(krav.kravtekst)",
                           k.består(krav) ? String(localized: "Bestått") : String(localized: "Ikke bestått")])
         }
-        let par = DeltRapportpar(a: 0, b: 1, tekst: "\(metode.kortnavn) \(metode.formatert(k.verdi(metode)))")
+        let ikke = metode.krav.filter { !k.består($0) }
+        let par = DeltRapportpar(a: 0, b: 1, tekst: "\(metode.kortnavn) \(metode.formatert(k.verdi(metode)))",
+                                 merke: ikke.isEmpty ? String(localized: "Holder alle kravene")
+                                     : String(localized: "Holder ikke: \(ikke.map(\.navn).joined(separator: ", "))"),
+                                 alvorlig: !ikke.isEmpty)
         return Fargerapport(navn: "", farger: [PalettFarge(navn: String(localized: "Flate"), farge: flate),
                                                PalettFarge(navn: String(localized: "Tilstøtende flate"), farge: bakgrunn)],
                             rapport: DeltRapport(slag: "flater", tittel: String(localized: "Kontrast mellom flater"),

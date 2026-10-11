@@ -6,7 +6,9 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 - **Fargerapporter i delingslenker:** `DeltInnhold.rapport` (`DeltRapport`, nøkkel `rp`): slag (`fargesyn`, `flater`,
   `deltaE`), tittel, undertittel, fargepar (`DeltRapportpar`: plassene i `farger`, fargene med avvik som hex, kort tekst)
-  og en ferdig formatert tabell (`tabulatortekst` gir den med tabulatorer). Lenken er en palett med fargene i
+  og en ferdig formatert tabell (`tabulatortekst` gir den med tabulatorer). Parene kan ha etikett for raden med
+  avviket, vurdering (`merke`) og `alvorlig`; skriftkontrast sendes som matrise (`matriseRader`, `matriseKolonner`,
+  `godkjent`). Lenken er en palett med fargene i
   rapporten, så eldre versjoner viser fargene; en skadet rapport droppes. `Testlenker.json` har fått eksempelet `rapport`.
 - **Tekstfarge på fargeflater (endret oppførsel):** `Farge.lesbarTekstfarge` velger hvit når hvit gir minst 2,7:1 etter
   WCAG 2 (`Farge.lysTekstgrense`), ellers sort. Skiftet flyttes fra L* ≈ 50 til L* ≈ 65, så mettede mellomtoner får hvit

@@ -29,8 +29,14 @@ nonisolated struct Fargerapport: Sendable {
                            tekst: [farger[p.a].visningsnavn, farger[p.b].visningsnavn].joined(separator: " / ")
                                + (p.tekst.map { "\n" + $0 } ?? ""))
         }
+        var matrise: RapportPDF.Matrise?
+        if let rader = rapport.matriseRader, let kolonner = rapport.matriseKolonner, let godkjent = rapport.godkjent {
+            matrise = RapportPDF.Matrise(rader: rader.map { (farger[$0].farge.cieLab, farger[$0].visningsnavn) },
+                                         kolonner: kolonner.map { (farger[$0].farge.cieLab, farger[$0].visningsnavn) },
+                                         celler: rapport.tabell.dropFirst().map { Array($0.dropFirst()) }, godkjent: godkjent)
+        }
         return RapportPDF.lag(tittel: tittel, undertittel: undertittel, par: par, tabell: rapport.tabell,
-                              overskrift: rapport.overskrift) { side, av in String(localized: "Side \(side) av \(av)") }
+                              overskrift: rapport.overskrift, matrise: matrise) { side, av in String(localized: "Side \(side) av \(av)") }
     }
 }
 
@@ -56,6 +62,14 @@ nonisolated enum RapportPDF {
         var tekst: String
     }
 
+    /// Skriftkontrast: hver tekstfarge (rad) på hver bakgrunn (kolonne), med forholdet og om cellen holder kravet.
+    struct Matrise: Sendable {
+        var rader: [(lab: CIELab, navn: String)]
+        var kolonner: [(lab: CIELab, navn: String)]
+        var celler: [[String]]
+        var godkjent: [[Bool]]
+    }
+
     private static let side = PalettPDF.side
     private static let marg = PalettPDF.marg
     private static let parPerRad = 3
@@ -63,7 +77,7 @@ nonisolated enum RapportPDF {
     private static let celleluft: CGFloat = 4
 
     static func lag(tittel: String, undertittel: String, par: [Par], tabell: [[String]], overskrift: Bool,
-                    sidetekst: (Int, Int) -> String) -> Data {
+                    matrise: Matrise? = nil, sidetekst: (Int, Int) -> String) -> Data {
         // To gjennomganger: først for å telle sidene (til «Side n av m»), så den som blir PDF-en.
         func tegnet(totalt: Int) -> (data: Data, sider: Int) {
             let data = NSMutableData()
@@ -71,7 +85,8 @@ nonisolated enum RapportPDF {
             var boks = side
             let info: [CFString: Any] = [kCGPDFContextTitle: tittel, kCGPDFContextCreator: "Kolorist"]
             guard let ctx = CGContext(consumer: mottaker, mediaBox: &boks, info as CFDictionary) else { return (Data(), 0) }
-            let sider = tegn(i: ctx, tittel: tittel, undertittel: undertittel, par: par, tabell: tabell, overskrift: overskrift) {
+            let sider = tegn(i: ctx, tittel: tittel, undertittel: undertittel, par: par, tabell: tabell, overskrift: overskrift,
+                             matrise: matrise) {
                 sidetekst($0, totalt)
             }
             ctx.closePDF()
@@ -81,7 +96,7 @@ nonisolated enum RapportPDF {
     }
 
     private static func tegn(i ctx: CGContext, tittel: String, undertittel: String, par: [Par], tabell: [[String]],
-                             overskrift: Bool, sidetall: (Int) -> String) -> Int {
+                             overskrift: Bool, matrise: Matrise?, sidetall: (Int) -> String) -> Int {
         let lab = CGColorSpace(labWhitePoint: [0.9642, 1.0, 0.8249], blackPoint: [0, 0, 0], range: [-128, 127, -128, 127])
         let fullBredde = side.width - 2 * marg
         let bunn = side.height - marg - 14
@@ -139,6 +154,66 @@ nonisolated enum RapportPDF {
                 PalettPDF.tegn(tekst(p.tekst), i: ctx, x: x, topp: y + prøvehøyde * (medSimulert ? 2 : 1) + 2 + 6, bredde: parbredde)
             }
             y += høyde + 16
+        }
+
+        if let m = matrise {
+            tegnMatrise(m)
+            avsluttSide()
+            return sidenr
+        }
+
+        /// Matrisen: kolonnenes bakgrunner øverst, tekstfargene til venstre, og i hver celle «Aa» og forholdet i
+        /// tekstfargen på bakgrunnen, med en grønn eller rød prikk for kravet.
+        func tegnMatrise(_ m: Matrise) {
+            let radkolonne: CGFloat = 78
+            let cellebredde = min(58, (fullBredde - radkolonne) / CGFloat(max(m.kolonner.count, 1)))
+            let cellehøyde: CGFloat = 38
+            let navnefont = PalettPDF.font(6.5)
+            func labfarge(_ l: CIELab) -> CGColor? {
+                lab.flatMap { CGColor(colorSpace: $0, components: [CGFloat(l.l), CGFloat(l.a), CGFloat(l.b), 1]) }
+            }
+            func overskrift() {
+                for (k, kol) in m.kolonner.enumerated() {
+                    let x = marg + radkolonne + CGFloat(k) * cellebredde
+                    fyll(kol.lab, CGRect(x: x + 1, y: side.height - y - 12, width: cellebredde - 2, height: 12))
+                    PalettPDF.tegn(kol.navn, font: navnefont, farge: 0.3, i: ctx, x: x + 1, topp: y + 14, bredde: cellebredde - 2)
+                }
+                y += 34
+            }
+            overskrift()
+            for (r, rad) in m.rader.enumerated() {
+                if y + cellehøyde > bunn { nySide(); overskrift() }
+                fyll(rad.lab, CGRect(x: marg, y: side.height - y - cellehøyde + 1, width: 10, height: cellehøyde - 2))
+                PalettPDF.tegn(rad.navn, font: navnefont, farge: 0.2, i: ctx, x: marg + 14, topp: y + 4, bredde: radkolonne - 18)
+                for (k, kol) in m.kolonner.enumerated() {
+                    let x = marg + radkolonne + CGFloat(k) * cellebredde
+                    let celle = CGRect(x: x + 1, y: side.height - y - cellehøyde + 1, width: cellebredde - 2, height: cellehøyde - 2)
+                    let tekst = r < m.celler.count && k + 0 < m.celler[r].count ? m.celler[r][k] : ""
+                    if tekst == "—" {
+                        ctx.setFillColor(gray: 0.94, alpha: 1)
+                        ctx.fill(celle)
+                        PalettPDF.tegn("—", font: PalettPDF.font(8), farge: 0.5, i: ctx, x: x + 6, topp: y + 12, bredde: cellebredde - 8)
+                        continue
+                    }
+                    fyll(kol.lab, celle)
+                    if let tf = labfarge(rad.lab) {
+                        let a: [NSAttributedString.Key: Any] = [NSAttributedString.Key(kCTFontAttributeName as String): PalettPDF.font(11, fet: true),
+                                                                NSAttributedString.Key(kCTForegroundColorAttributeName as String): tf]
+                        let b: [NSAttributedString.Key: Any] = [NSAttributedString.Key(kCTFontAttributeName as String): PalettPDF.font(6.5),
+                                                                NSAttributedString.Key(kCTForegroundColorAttributeName as String): tf]
+                        let t = NSMutableAttributedString(string: "Aa\n", attributes: a)
+                        t.append(NSAttributedString(string: tekst, attributes: b))
+                        PalettPDF.tegn(t, i: ctx, x: x + 5, topp: y + 5, bredde: cellebredde - 8)
+                    }
+                    let ok = r < m.godkjent.count && k < m.godkjent[r].count ? m.godkjent[r][k] : false
+                    ctx.setFillColor(red: ok ? 0.2 : 0.8, green: ok ? 0.6 : 0.2, blue: ok ? 0.3 : 0.2, alpha: 1)
+                    ctx.fillEllipse(in: CGRect(x: celle.maxX - 8, y: celle.maxY - 8, width: 5, height: 5))
+                    ctx.setStrokeColor(gray: 1, alpha: 0.9)
+                    ctx.setLineWidth(0.6)
+                    ctx.strokeEllipse(in: CGRect(x: celle.maxX - 8, y: celle.maxY - 8, width: 5, height: 5))
+                }
+                y += cellehøyde
+            }
         }
 
         // Tabellen: kolonnebredder etter innholdet, tekst brytes i cellene.

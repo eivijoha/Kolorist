@@ -228,6 +228,7 @@ struct LysVurderingSeksjon: View {
                         .foregroundStyle(skift.isEmpty && par.isEmpty ? Color.suksess : Color.advarsel)
                 }
             }
+            RapportValg(rapport: rapport(ff))
         } header: {
             Text("Lys")
         } footer: {
@@ -236,6 +237,39 @@ struct LysVurderingSeksjon: View {
                 MetodeHenvisning(.cam16, .kolorimetri, .ciede2000)
             }
         }
+    }
+}
+
+extension LysVurderingSeksjon {
+    /// Paletten i lys som rapport: fargepar som blir vanskelige å skille (med fargene slik de ses i lyset) og farger som
+    /// skifter tydelig, for hvert betraktningsforhold.
+    fileprivate func rapport(_ ff: [Farge]) -> Fargerapport {
+        func d(_ x: Double) -> String { x.formatted(.number.precision(.fractionLength(1))) }
+        var par: [DeltRapportpar] = []
+        var rader = [[String(localized: "Betraktningsforhold"), String(localized: "Farge"), String(localized: "Hex"),
+                      String(localized: "Vurdering"), "ΔE00"]]
+        for m in miljøer {
+            let analyse = m.palett(ff)
+            for p in analyse.sammenfallendePar {
+                par.append(DeltRapportpar(a: p.a, b: p.b, simulert: (analyse.sett[p.a], analyse.sett[p.b]), etikett: m.navn,
+                                          tekst: "ΔE00 \(d(p.påSkjerm)) → \(d(p.iLyset))",
+                                          merke: String(localized: "Vanskelige å skille"), alvorlig: p.iLyset < 3))
+                rader.append([m.navn, "\(farger[p.a].etikett) / \(farger[p.b].etikett)",
+                              "\(farger[p.a].farge.hex()) / \(farger[p.b].farge.hex())", String(localized: "Vanskelige å skille"),
+                              "\(d(p.påSkjerm)) → \(d(p.iLyset))"])
+            }
+            for i in analyse.fargeskift.indices where analyse.fargeskift[i] >= 3 {
+                rader.append([m.navn, farger[i].etikett, farger[i].farge.hex(), String(localized: "Skifter tydelig"),
+                              d(analyse.fargeskift[i])])
+            }
+            if analyse.sammenfallendePar.isEmpty && !analyse.fargeskift.contains(where: { $0 >= 3 }) {
+                rader.append([m.navn, "", "", String(localized: "Fargene holder seg."), ""])
+            }
+        }
+        return Fargerapport(navn: "", farger: farger,
+                            rapport: DeltRapport(slag: "lyspalett", tittel: String(localized: "Paletten i lys"),
+                                                 undertittel: String(localized: "Fargeskift over 3 ΔE00, og fargepar som blir vanskelige å skille i lyset."),
+                                                 par: par, tabell: rader, overskrift: true))
     }
 }
 

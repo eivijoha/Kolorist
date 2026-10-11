@@ -48,7 +48,7 @@
     token: "Token", minst: "at least", kopierTokens: "Copy as CSS",
     dsTekst: "Open the link in Kolorist to save the design system and export it to app development, design tools and the web.",
     aapneDs: "Open the design system in the Kolorist app",
-    rapport: "Colour report", kopierTabell: "Copy as table", skrivUt: "Print",
+    rapport: "Colour report", kopierTabell: "Copy as table", skrivUt: "Print", normaltSyn: "Normal vision", detaljer: "Details", lesbar: "Readable text",
   } : {
     hopp: "Hopp til hovedinnhold", laster: "Åpner …", haAppen: "Har du Kolorist?",
     haAppenTekst: "Åpne lenken i appen for å lagre, endre og bygge videre.",
@@ -80,7 +80,7 @@
     token: "Token", minst: "minst", kopierTokens: "Kopier som CSS",
     dsTekst: "Åpne lenken i Kolorist for å lagre designsystemet og eksportere det til apputvikling, designverktøy og nettet.",
     aapneDs: "Åpne designsystemet i Kolorist-appen",
-    rapport: "Fargerapport", kopierTabell: "Kopier som tabell", skrivUt: "Skriv ut",
+    rapport: "Fargerapport", kopierTabell: "Kopier som tabell", skrivUt: "Skriv ut", normaltSyn: "Normalt syn", detaljer: "Detaljer", lesbar: "Lesbar tekst",
   };
   HARMONIER = en ? {
     komplementær: "Complementary", splittKomplementær: "Split complementary", analog: "Analogous",
@@ -173,7 +173,8 @@
     if (par.length > 160 || !par.every((p) => p && plass(p.a) && plass(p.b))) return null;
     return { slag: tekst(rp.s), tittel: tekst(rp.t), undertittel: tekst(rp.u), overskrift: rp.o === true,
              tabell: tabell.map((rad) => rad.map(tekst)),
-             par: par.map((p) => ({ a: p.a, b: p.b, sa: erHex(p.sa) ? `#${p.sa}` : null, sb: erHex(p.sb) ? `#${p.sb}` : null, tekst: tekst(p.t) })) };
+             par: par.map((p) => ({ a: p.a, b: p.b, sa: erHex(p.sa) ? `#${p.sa}` : null, sb: erHex(p.sb) ? `#${p.sb}` : null,
+                                    etikett: tekst(p.e), tekst: tekst(p.t), merke: tekst(p.m), alvorlig: p.al === true })) };
   }
 
   const MODUSER = ["light", "dark", "light-ic", "dark-ic"];
@@ -438,11 +439,22 @@
 
   // ---------- Fargerapport ----------
 
-  function prøve(venstre, høyre) {
-    const p = lag("div", "rapport-prove");
-    p.setAttribute("aria-hidden", "true");
-    for (const farge of [venstre, høyre]) { const s = lag("span"); s.style.background = farge; p.append(s); }
-    return p;
+  // Tekst på en flate: hvit når hvit gir minst 2,7:1, som i appen.
+  const tekstPå = (h) => forhold(h, "#FFFFFF") >= 2.7 ? "#FFFFFF" : "#000000";
+
+  // To flater side om side med navn og hex på flaten.
+  function flatepar(venstre, høyre, navn) {
+    const rad = lag("div", "rapport-flater");
+    [venstre, høyre].forEach((farge, i) => {
+      const f = lag("div", "rapport-flate");
+      f.style.background = farge.hex;
+      if (farge.css) f.style.background = farge.css;
+      f.style.color = tekstPå(farge.hex);
+      if (navn[i]) f.append(lag("span", "rapport-navn", navn[i]));
+      f.append(lag("span", "rapport-hex", farge.hex));
+      rad.append(f);
+    });
+    return rad;
   }
 
   function visRapport(d) {
@@ -452,22 +464,40 @@
     seksjon.append(lag("h2", null, r.tittel));
     if (r.undertittel) seksjon.append(lag("p", "dempet", r.undertittel));
     if (r.par.length) {
-      const liste = lag("ul", "rapport-par");
+      const liste = lag("ul", "rapport-kort");
       for (const p of r.par) {
         const a = d.farger[p.a], b = d.farger[p.b];
-        const li = lag("li");
-        const pa = prøve(hex(a) || "#808080", hex(b) || "#808080");
-        pa.children[0].style.background = css(a);
-        pa.children[1].style.background = css(b);
-        li.append(pa);
-        if (p.sa && p.sb) li.append(prøve(p.sa, p.sb));
-        li.append(lag("strong", null, `${tekst(a.n) || hex(a)} / ${tekst(b.n) || hex(b)}`));
-        if (p.tekst) li.append(lag("span", "dempet", p.tekst));
-        liste.append(li);
+        const navn = [tekst(a.n) || hex(a), tekst(b.n) || hex(b)];
+        const kort = lag("li", p.alvorlig ? "rapport-par alvorlig" : "rapport-par");
+        const topp = lag("div", "rapport-topp");
+        topp.append(lag("strong", null, `${navn[0]} / ${navn[1]}`));
+        if (p.merke) topp.append(lag("span", p.alvorlig ? "rapport-merke feil" : "rapport-merke", p.merke));
+        kort.append(topp);
+        const medAvvik = p.sa && p.sb;
+        if (medAvvik) kort.append(lag("span", "rapport-etikett", T.normaltSyn));
+        if (r.slag === "wcag") {
+          // Kontrastsjekken: teksten på bakgrunnen, slik den skal leses.
+          const prøve = lag("div", "rapport-tekstprove");
+          prøve.style.background = hex(b) || "#FFFFFF";
+          prøve.style.background = css(b);
+          prøve.style.color = hex(a) || "#000000";
+          prøve.style.color = css(a);
+          prøve.append(lag("span", "rapport-tekstprove-stor", T.lesbar), lag("span", null, `${hex(a)} / ${hex(b)}`));
+          kort.append(prøve);
+        } else {
+          kort.append(flatepar({ hex: hex(a) || "#808080", css: css(a) }, { hex: hex(b) || "#808080", css: css(b) }, navn));
+        }
+        if (medAvvik) {
+          kort.append(lag("span", "rapport-etikett", p.etikett || ""));
+          kort.append(flatepar({ hex: p.sa }, { hex: p.sb }, navn));
+        }
+        if (p.tekst) kort.append(lag("p", "rapport-tall", p.tekst));
+        liste.append(kort);
       }
       seksjon.append(liste);
     }
     if (r.tabell.length) {
+      seksjon.append(lag("h3", null, T.detaljer));
       const ramme = lag("div", "rapport-tabell-ramme");
       const tabell = lag("table", "rapport-tabell");
       const rader = r.overskrift ? r.tabell.slice(1) : r.tabell;

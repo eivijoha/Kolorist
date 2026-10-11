@@ -287,6 +287,16 @@
         }
       }
     },
+    "%@ · minst %@:1 · %@ fargepar består": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · at least %2$@:1 · %3$@ colour pairs pass"
+          }
+        }
+      }
+    },
     "%@ · rene farger": {
       "localizations": {
         "en": {
@@ -1688,6 +1698,16 @@
         }
       }
     },
+    "Del rapporten": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share report"
+          }
+        }
+      }
+    },
     "Del rapporten som lenke": {
       "localizations": {
         "en": {
@@ -2418,6 +2438,16 @@
         }
       }
     },
+    "Fargen i lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The colour in light"
+          }
+        }
+      }
+    },
     "Fargen testes som tekst og grafikk mot bakgrunnen. «Rett opp» endrer bare lysheten, og beholder kulør og metning. Regelverket for universell utforming viser til WCAG 2.": {
       "localizations": {
         "en": {
@@ -2644,6 +2674,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour wheels and harmonies"
+          }
+        }
+      }
+    },
+    "Fargeskift (ΔE00)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour shift (ΔE00)"
           }
         }
       }
@@ -3851,6 +3891,9 @@
         }
       }
     },
+    "Hex": {
+      "shouldTranslate": false
+    },
     "Hex A": {
       "localizations": {
         "en": {
@@ -3877,6 +3920,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hex or CSS colour, e.g. #767676"
+          }
+        }
+      }
+    },
+    "Hex i lyset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hex in the light"
           }
         }
       }
@@ -3957,6 +4010,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Corner %lld"
+          }
+        }
+      }
+    },
+    "Holder alle kravene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meets all requirements"
+          }
+        }
+      }
+    },
+    "Holder ikke: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Does not meet: %@"
           }
         }
       }
@@ -4839,6 +4912,16 @@
         }
       }
     },
+    "Kontrast (WCAG 2.2)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast (WCAG 2.2)"
+          }
+        }
+      }
+    },
     "Kontrast mellom flater": {
       "localizations": {
         "en": {
@@ -4881,6 +4964,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The contrast between text and the colours in the palette, with text colours if you want them."
+          }
+        }
+      }
+    },
+    "Kontrastforhold": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast ratio"
           }
         }
       }
@@ -7647,6 +7740,16 @@
         }
       }
     },
+    "Paletten i lys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The palette in light"
+          }
+        }
+      }
+    },
     "Paletten trenger minst to farger.": {
       "localizations": {
         "en": {
@@ -8289,6 +8392,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scales and colours as primitives, one file per mode with aliases, and resolver.json."
+          }
+        }
+      }
+    },
+    "Skifter tydelig": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shifts clearly"
           }
         }
       }
