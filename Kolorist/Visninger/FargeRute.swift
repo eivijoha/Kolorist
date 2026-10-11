@@ -298,7 +298,7 @@ struct FargeValgBoble: View {
             // .plain, ikke .borderless: .borderless toner hele etiketten (også teksten) i aksentfarge.
             .buttonStyle(.plain)
             .menuStyle(.button)
-            .labelStyle(JustertEtikett())
+            .labelStyle(Handlingsetikett())
         }
         .padding(16)
         // Boblen skal få hele høyden innholdet trenger (ellers klippes de nederste valgene).
@@ -307,12 +307,14 @@ struct FargeValgBoble: View {
 }
 
 /// Etikett med fast ikonbredde, så teksten i en knappeliste står på linje.
-private struct JustertEtikett: LabelStyle {
+/// Handlinger i bobler og halvhøye ark (glassbakgrunn): ikonet i aksentfarge, teksten i vanlig tekstfarge – blå tekst
+/// leses dårlig på glass.
+struct Handlingsetikett: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack(spacing: 10) {
-            // Ikonet i aksentfarge, teksten i vanlig tekstfarge (blå tekst leses dårlig på glassbakgrunn).
             configuration.icon.frame(width: 24).foregroundStyle(.tint)
-            configuration.title.foregroundStyle(.primary)
+            // Color.primary, ikke .primary: i knapper i et skjema er .primary knappens aksentfarge.
+            configuration.title.foregroundStyle(Color.primary)
         }
         .frame(maxWidth: .infinity, minHeight: 36, alignment: .leading)
         .contentShape(Rectangle())

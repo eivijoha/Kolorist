@@ -1258,6 +1258,8 @@ struct VelgPalettArk: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Avbryt") { lukk() } } }
+            // Halvhøyt ark på glass: handlingene med tekst i vanlig tekstfarge og ikonet i aksentfarge.
+            .labelStyle(Handlingsetikett())
             .onAppear {
                 nyttNavn = foreslåttNavn
                 if paletter.isEmpty || nyPalett { navnIFokus = true }
@@ -1473,6 +1475,7 @@ struct NavngiArk: View {
                 ToolbarItem(placement: .cancellationAction) { Button(avbryt) { lukk() } }
                 ToolbarItem(placement: .confirmationAction) { Button("Lagre", action: lagreOgLukk) }
             }
+            .labelStyle(Handlingsetikett())
             .onAppear {
                 navn = farge.navn
                 fokus = true
