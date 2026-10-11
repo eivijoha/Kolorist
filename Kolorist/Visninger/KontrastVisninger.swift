@@ -503,7 +503,7 @@ struct FlatekontrastSeksjon: View {
                 verdi(metode.kortnavn, metode.formatert(k.verdi(metode)))
             }
             .padding(.vertical, 4)
-            .contextMenu { kopiervalg(k) }
+            .contextMenu { RapportValg(rapport: rapport(k)) }
             Picker("Metode", selection: $metode) {
                 ForEach(Flatekontrastmetode.allCases) { Text($0.valgnavn).tag($0) }
             }
@@ -540,9 +540,9 @@ struct FlatekontrastSeksjon: View {
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityValue(bestått ? "Bestått" : "Ikke bestått")
-                .contextMenu { kopiervalg(k) }
+                .contextMenu { RapportValg(rapport: rapport(k)) }
             }
-            Button("Kopier som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(rapport(k)) }
+            RapportValg(rapport: rapport(k))
         } header: {
             Text("Flater (LRV)")
         } footer: {
@@ -566,13 +566,9 @@ struct FlatekontrastSeksjon: View {
         }
     }
 
-    @ViewBuilder private func kopiervalg(_ k: Flatekontrast) -> some View {
-        Button("Kopier som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(rapport(k)) }
-    }
-
     /// Vurderingen som tabell (tabulatorer mellom kolonnene): flatene med hex og LRV, metode og verdi, lyset, og hvert
     /// krav med kilde og om det holder.
-    private func rapport(_ k: Flatekontrast) -> String {
+    private func rapport(_ k: Flatekontrast) -> Fargerapport {
         func lrv(_ f: Farge) -> String {
             (arbeidsbenk.erUkalibrert(f) ? "≈ " : "") + f.lrv.formatted(.number.precision(.fractionLength(0)))
         }
@@ -591,7 +587,12 @@ struct FlatekontrastSeksjon: View {
             rader.append([krav.navn, "\(krav.kilde) · \(krav.kravtekst)",
                           k.består(krav) ? String(localized: "Bestått") : String(localized: "Ikke bestått")])
         }
-        return rader.map { $0.joined(separator: "\t") }.joined(separator: "\n")
+        let par = DeltRapportpar(a: 0, b: 1, tekst: "\(metode.kortnavn) \(metode.formatert(k.verdi(metode)))")
+        return Fargerapport(navn: "", farger: [PalettFarge(navn: String(localized: "Flate"), farge: flate),
+                                               PalettFarge(navn: String(localized: "Tilstøtende flate"), farge: bakgrunn)],
+                            rapport: DeltRapport(slag: "flater", tittel: String(localized: "Kontrast mellom flater"),
+                                                 undertittel: lysmiljø?.navn ?? String(localized: "Dagslys (LRV)"),
+                                                 par: [par], tabell: rader))
     }
 
     private func verdi(_ tittel: String, _ tekst: String) -> some View {

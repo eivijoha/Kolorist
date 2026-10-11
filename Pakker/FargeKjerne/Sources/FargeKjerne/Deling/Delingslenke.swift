@@ -146,12 +146,15 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
     /// Et designsystem (fra 1.3). Lenken er da en palett med rollefargene, så eldre versjoner og visningssiden viser den
     /// som en palett; nyere versjoner leser designsystemet herfra.
     public var designsystem: DeltDesignsystem?
+    /// En fargerapport (fra 1.4). Lenken er da en palett med fargene i rapporten (se `DeltRapport`).
+    public var rapport: DeltRapport?
     /// Språket Kolorist kjørte på hos avsenderen (`nb`, `en` …), så visningssiden kan vise teksten på samme språk.
     /// Uten språk (eldre lenker) bruker visningssiden nettleserens språk.
     public var språk: String?
 
     public init(slag: Slag, navn: String? = nil, farger: [DeltFarge] = [], gradienter: [DeltGradient] = [],
-                harmoni: DeltHarmoni? = nil, visning: DeltVisning? = nil, designsystem: DeltDesignsystem? = nil) {
+                harmoni: DeltHarmoni? = nil, visning: DeltVisning? = nil, designsystem: DeltDesignsystem? = nil,
+                rapport: DeltRapport? = nil) {
         self.versjon = Delingslenke.versjon
         self.slag = slag
         self.navn = navn
@@ -160,6 +163,7 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         self.harmoni = harmoni
         self.visning = visning
         self.designsystem = designsystem
+        self.rapport = rapport
         self.språk = Self.appspråk
     }
 
@@ -171,7 +175,7 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
 
     enum CodingKeys: String, CodingKey {
         case versjon = "v", slag = "t", navn = "n", farger = "f", gradienter = "g", harmoni = "h", visning = "vs"
-        case designsystem = "ds", språk = "sp"
+        case designsystem = "ds", rapport = "rp", språk = "sp"
     }
 
     public init(from decoder: Decoder) throws {
@@ -186,6 +190,8 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         visning = try? c.decodeIfPresent(DeltVisning.self, forKey: .visning)
         // Et skadet designsystem skal ikke hindre at fargene vises som palett.
         designsystem = try? c.decodeIfPresent(DeltDesignsystem.self, forKey: .designsystem)
+        // En skadet rapport skal heller ikke hindre at fargene vises.
+        rapport = try? c.decodeIfPresent(DeltRapport.self, forKey: .rapport)
         språk = try? c.decodeIfPresent(String.self, forKey: .språk)
     }
 
@@ -199,6 +205,7 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         try c.encodeIfPresent(harmoni, forKey: .harmoni)
         try c.encodeIfPresent(visning, forKey: .visning)
         try c.encodeIfPresent(designsystem, forKey: .designsystem)
+        try c.encodeIfPresent(rapport, forKey: .rapport)
         try c.encodeIfPresent(språk, forKey: .språk)
     }
 
@@ -220,6 +227,7 @@ public struct DeltInnhold: Codable, Equatable, Sendable {
         ny.visning = gyldigVisning
         // Designsystemet må passe til fargene; ellers vises lenken bare som palett.
         ny.designsystem = designsystem.flatMap { $0.kontrollert(antallFarger: farger.count) }
+        ny.rapport = rapport.flatMap { $0.kontrollert(antallFarger: farger.count) }
         ny.språk = språk.flatMap { $0.count <= 3 && $0.allSatisfy { $0.isASCII && $0.isLetter } ? $0.lowercased() : nil }
         ny.navn = navn.map(Self.rensket)
         ny.farger = farger.map { var f = $0; f.rens(); return f }

@@ -69,7 +69,7 @@ struct FargesynVurdering: View {
                                 .foregroundStyle(Color.sekundærTekst)
                         }
 
-                        forvekslingsseksjon(farger, alle: analyse.flatMap(\.1))
+                        forvekslingsseksjon(farger, alle: analyse.flatMap(\.1), navn: valgt.navn)
                     }
                     .formStyle(.grouped)
                     #if os(iOS)
@@ -233,7 +233,7 @@ struct FargesynVurdering: View {
     }
 
     @ViewBuilder
-    private func forvekslingsseksjon(_ farger: [PalettFarge], alle: [Forveksling]) -> some View {
+    private func forvekslingsseksjon(_ farger: [PalettFarge], alle: [Forveksling], navn: String) -> some View {
         Section {
             if farger.count < 2 {
                 Text("Paletten trenger minst to farger.").foregroundStyle(Color.sekundærTekst)
@@ -241,20 +241,18 @@ struct FargesynVurdering: View {
                 Label("Alle fargeparene kan skilles med alle typene fargesynsavvik.", systemImage: "checkmark.circle.fill")
                     .foregroundStyle(Color.suksess)
             } else {
+                let rapport = rapport(alle, farger: farger, navn: navn)
                 ForEach(Array(alle.enumerated()), id: \.offset) { _, f in
                     parRad(f, farger: farger)
                         .contextMenu {
                             Button("Kopier fargeparet", systemImage: "doc.on.doc") {
                                 Utklippstavle.kopierTekst(parrapport(f, farger: farger))
                             }
-                            Button("Kopier alle som tabell", systemImage: "tablecells") {
-                                Utklippstavle.kopierTekst(partabell(alle, farger: farger))
-                            }
+                            Divider()
+                            RapportValg(rapport: rapport)
                         }
                 }
-                Button("Kopier alle som tabell", systemImage: "tablecells") {
-                    Utklippstavle.kopierTekst(partabell(alle, farger: farger))
-                }
+                RapportValg(rapport: rapport)
             }
         } header: {
             Text("Vanskelige fargepar").foregroundStyle(Color.sekundærTekst)
@@ -321,8 +319,21 @@ struct FargesynVurdering: View {
         ].map { $0.joined(separator: "\t") }.joined(separator: "\n")
     }
 
-    /// Alle vanskelige par som tabell med overskriftsrad (tabulatorer mellom kolonnene).
-    private func partabell(_ alle: [Forveksling], farger: [PalettFarge]) -> String {
+    /// Alle vanskelige par som rapport: parene med fargene slik avviket ser dem, og tabellen.
+    private func rapport(_ alle: [Forveksling], farger: [PalettFarge], navn: String) -> Fargerapport {
+        let par = alle.map { f in
+            DeltRapportpar(a: f.i, b: f.j,
+                           simulert: (farger[f.i].farge.simulert(f.type, grad: grad), farger[f.j].farge.simulert(f.type, grad: grad)),
+                           tekst: "\(avviksnavn(f.type, medGrad: true)) · ΔE00 \(desimal(f.normalt)) → \(desimal(f.simulert))")
+        }
+        return Fargerapport(navn: navn, farger: farger,
+                            rapport: DeltRapport(slag: "fargesyn", tittel: String(localized: "Vanskelige fargepar"),
+                                                 undertittel: String(localized: "Par som skilles godt med normalt syn, men nesten ikke med avviket."),
+                                                 par: par, tabell: partabell(alle, farger: farger), overskrift: true))
+    }
+
+    /// Alle vanskelige par som tabell med overskriftsrad.
+    private func partabell(_ alle: [Forveksling], farger: [PalettFarge]) -> [[String]] {
         let overskrift = [String(localized: "Farge A"), String(localized: "Hex A"), String(localized: "Farge B"),
                           String(localized: "Hex B"), String(localized: "Fargesynsavvik"),
                           String(localized: "ΔE00 med normalt syn"), String(localized: "ΔE00 med avviket"),
@@ -332,7 +343,7 @@ struct FargesynVurdering: View {
             return [a.visningsnavn, a.farge.hex(), b.visningsnavn, b.farge.hex(), avviksnavn(f.type, medGrad: true),
                     desimal(f.normalt), desimal(f.simulert), vurdering(f)]
         }
-        return ([overskrift] + rader).map { $0.joined(separator: "\t") }.joined(separator: "\n")
+        return [overskrift] + rader
     }
 }
 

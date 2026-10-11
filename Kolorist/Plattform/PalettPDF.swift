@@ -29,7 +29,7 @@ nonisolated enum PalettPDF {
 
     /// A4 i punkter (210 × 297 mm).
     static let side = CGRect(x: 0, y: 0, width: 595.28, height: 841.89)
-    private static let marg: CGFloat = 42
+    static let marg: CGFloat = 42
     private static let kolonner = 3
     private static let mellomrom: CGFloat = 14
     /// Luft mellom radene (under teksten til én rad og over flatene i neste).
@@ -162,12 +162,12 @@ nonisolated enum PalettPDF {
 
     // MARK: - Tekst
 
-    private static func font(_ størrelse: CGFloat, fet: Bool = false) -> CTFont {
+    static func font(_ størrelse: CGFloat, fet: Bool = false) -> CTFont {
         CTFontCreateUIFontForLanguage(fet ? .emphasizedSystem : .system, størrelse, nil)
             ?? CTFontCreateWithName("Helvetica" as CFString, størrelse, nil)
     }
 
-    private static func attributter(_ font: CTFont, grå: CGFloat) -> [NSAttributedString.Key: Any] {
+    static func attributter(_ font: CTFont, grå: CGFloat) -> [NSAttributedString.Key: Any] {
         [NSAttributedString.Key(kCTFontAttributeName as String): font,
          NSAttributedString.Key(kCTForegroundColorAttributeName as String): CGColor(gray: grå, alpha: 1)]
     }
@@ -185,14 +185,14 @@ nonisolated enum PalettPDF {
         return t
     }
 
-    private static func høyde(av tekst: NSAttributedString, bredde: CGFloat) -> CGFloat {
+    static func høyde(av tekst: NSAttributedString, bredde: CGFloat) -> CGFloat {
         let ramme = CTFramesetterCreateWithAttributedString(tekst)
         let størrelse = CTFramesetterSuggestFrameSizeWithConstraints(ramme, CFRange(location: 0, length: tekst.length), nil,
                                                                     CGSize(width: bredde, height: .greatestFiniteMagnitude), nil)
         return ceil(størrelse.height)
     }
 
-    private static func tegn(_ streng: String, font: CTFont, farge: CGFloat, i ctx: CGContext,
+    static func tegn(_ streng: String, font: CTFont, farge: CGFloat, i ctx: CGContext,
                              x: CGFloat, topp: CGFloat, bredde: CGFloat, høyrestilt: Bool = false) {
         let tekst = NSAttributedString(string: streng, attributes: attributter(font, grå: farge))
         guard høyrestilt else { return tegn(tekst, i: ctx, x: x, topp: topp, bredde: bredde) }
@@ -208,7 +208,7 @@ nonisolated enum PalettPDF {
     }
 
     /// Tegner teksten med øverste kant ved `topp` (målt ovenfra), brutt innenfor `bredde`.
-    private static func tegn(_ tekst: NSAttributedString, i ctx: CGContext, x: CGFloat, topp: CGFloat, bredde: CGFloat) {
+    static func tegn(_ tekst: NSAttributedString, i ctx: CGContext, x: CGFloat, topp: CGFloat, bredde: CGFloat) {
         let h = høyde(av: tekst, bredde: bredde) + 2
         let ramme = CTFramesetterCreateWithAttributedString(tekst)
         let sti = CGPath(rect: CGRect(x: x, y: side.height - topp - h, width: bredde, height: h), transform: nil)

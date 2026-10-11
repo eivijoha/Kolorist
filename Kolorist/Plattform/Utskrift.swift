@@ -114,6 +114,9 @@ enum PalettUtskrift {
         skrivUt(data: pdf(for: palett, gradienter: gradienter), jobb: palett.navn.isEmpty ? String(localized: "Palett") : palett.navn)
     }
 
+    /// En ferdig A4-PDF (f.eks. en fargerapport) i systemets utskriftsdialog.
+    static func skrivUt(pdf: Data, jobb: String) { skrivUt(data: pdf, jobb: jobb) }
+
     private static func skrivUt(data: Data, jobb: String) {
         #if canImport(UIKit)
         let info = UIPrintInfo(dictionary: nil)

@@ -1688,6 +1688,16 @@
         }
       }
     },
+    "Del rapporten som lenke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share report as link"
+          }
+        }
+      }
+    },
     "Del settet som lenke": {
       "localizations": {
         "en": {
@@ -2348,6 +2358,16 @@
         }
       }
     },
+    "Fargeforskjell (ΔE)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour difference (ΔE)"
+          }
+        }
+      }
+    },
     "Fargegjengivelse (anslått)": {
       "localizations": {
         "en": {
@@ -2554,6 +2574,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colours outside sRGB, which only display correctly on P3 screens."
+          }
+        }
+      }
+    },
+    "Fargerapport": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour report"
           }
         }
       }
@@ -4809,6 +4839,16 @@
         }
       }
     },
+    "Kontrast mellom flater": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast between surfaces"
+          }
+        }
+      }
+    },
     "Kontrast per trinn": {
       "localizations": {
         "en": {
@@ -4961,16 +5001,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copy all as hex"
-          }
-        }
-      }
-    },
-    "Kopier alle som tabell": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copy all as a table"
           }
         }
       }
@@ -8479,6 +8509,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Print the palette (A4, swatches in CIELab)"
+          }
+        }
+      }
+    },
+    "Skriv ut rapporten …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Print report …"
           }
         }
       }

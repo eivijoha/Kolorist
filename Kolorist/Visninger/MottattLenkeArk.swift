@@ -26,6 +26,7 @@ struct MottattLenkeArk: View {
         switch innhold.slag {
         case .farge: String(localized: "Farge")
         case .palett where innhold.designsystem != nil: String(localized: "Designsystem")
+        case .palett where innhold.rapport != nil: String(localized: "Fargerapport")
         case .palett: farger.count == 1 ? String(localized: "Palett · 1 farge") : String(localized: "Palett · \(farger.count) farger")
         case .gradient: String(localized: "Gradient")
         case .harmoni: String(localized: "Harmoni")
@@ -94,6 +95,8 @@ struct MottattLenkeArk: View {
                     }
                 }
 
+                if let rapport = innhold.rapport { rapportseksjon(rapport) }
+
                 Section { handlinger }
             }
             .formStyle(.grouped)
@@ -106,6 +109,30 @@ struct MottattLenkeArk: View {
         #if os(macOS)
         .frame(minWidth: 440, minHeight: 420)
         #endif
+    }
+
+    /// Rapporten fra lenken: tabellen slik avsenderen så den, og valg for å kopiere og skrive den ut.
+    private func rapportseksjon(_ rapport: DeltRapport) -> some View {
+        Section {
+            if let u = rapport.undertittel { Text(u).font(.footnote).foregroundStyle(Color.sekundærTekst) }
+            ScrollView(.horizontal) {
+                Grid(alignment: .leading, horizontalSpacing: 14, verticalSpacing: 6) {
+                    ForEach(Array(rapport.tabell.enumerated()), id: \.offset) { r, rad in
+                        GridRow {
+                            ForEach(Array(rad.enumerated()), id: \.offset) { _, celle in
+                                Text(celle)
+                                    .font(.caption.weight(rapport.overskrift && r == 0 ? .semibold : .regular).monospacedDigit())
+                                    .fixedSize()
+                            }
+                        }
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+            RapportValg(rapport: Fargerapport(navn: "", farger: farger, rapport: rapport))
+        } header: {
+            Text(rapport.tittel)
+        }
     }
 
     @ViewBuilder private var handlinger: some View {

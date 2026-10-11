@@ -37,7 +37,14 @@ struct DelingslenkeTests {
         let bred = DeltInnhold(slag: .farge, farger: [
             DeltFarge(Farge(okLCH: OKLCH(l: 0.75, c: 0.25, h: 145), alfa: 0.5), navn: "Klar grønn"),
         ])
-        return [("farge", farge), ("palett", palett), ("gradient", gradient), ("harmoni", harmoni), ("bred", bred)]
+        // Fargerapport: vanskelige fargepar med deuteranopi, med simulerte farger og tabell.
+        let blå = Farge(hex: "#00509E")!, lilla = Farge(hex: "#482776")!
+        let rapport = DeltInnhold(slag: .palett, navn: "Kyst", farger: [DeltFarge(blå, navn: "NTNU-blå"), DeltFarge(lilla)], rapport:
+            DeltRapport(slag: "fargesyn", tittel: "Vanskelige fargepar", undertittel: "Deuteranopi",
+                        par: [DeltRapportpar(a: 0, b: 1, simulert: (blå.simulert(.deutan), lilla.simulert(.deutan)), tekst: "ΔE00 22,4 → 7,1")],
+                        tabell: [["Farge A", "Hex A", "Farge B", "Hex B", "ΔE00"], ["NTNU-blå", "#00509E", "#482776", "#482776", "7,1"]],
+                        overskrift: true))
+        return [("farge", farge), ("palett", palett), ("gradient", gradient), ("harmoni", harmoni), ("bred", bred), ("rapport", rapport)]
     }
 
     @Test func rundturForAlleSlag() throws {
@@ -54,6 +61,25 @@ struct DelingslenkeTests {
         let lest = try Delingslenke.les(Delingslenke.lenke(DeltInnhold(slag: .farge, farger: [DeltFarge(f)])))
         #expect(lest.farger[0].farge.avstandOK(til: f) < 0.0001)
         #expect(lest.farger[0].farge.hex() == "#B66248")
+    }
+
+    @Test func rapportKommerTilbake() throws {
+        let innhold = Self.eksempler.first { $0.navn == "rapport" }!.innhold
+        let lest = try Delingslenke.les(Delingslenke.lenke(innhold))
+        let r = try #require(lest.rapport)
+        #expect(r.slag == "fargesyn" && r.overskrift && r.tabell.count == 2)
+        #expect(r.par.first?.simulertA?.count == 6)
+        #expect(r.tabulatortekst.hasPrefix("Farge A\tHex A"))
+    }
+
+    /// En rapport med par som peker utenfor fargene droppes, men fargene vises fortsatt som palett.
+    @Test func ugyldigRapportDroppes() throws {
+        let f = Farge(hex: "#2F7FD8")!
+        let innhold = DeltInnhold(slag: .palett, farger: [DeltFarge(f)],
+                                  rapport: DeltRapport(slag: "flater", tittel: "Flater", par: [DeltRapportpar(a: 0, b: 3)], tabell: [["x"]]))
+        let lest = try Delingslenke.les(Delingslenke.lenke(innhold))
+        #expect(lest.rapport == nil)
+        #expect(lest.farger.count == 1)
     }
 
     @Test func gradientMedFlereStopp() throws {

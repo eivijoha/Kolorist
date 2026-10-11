@@ -152,11 +152,15 @@ struct SammenligningVisning: View {
         verdi.formatted(.number.precision(.fractionLength(desimaler)))
     }
 
-    /// Alle verdiene som tabell (tabulatorer mellom kolonnene), så de limes inn som celler i regneark og tabeller.
-    private var tabell: String {
-        ([[String(localized: "Farge A"), a.hex()], [String(localized: "Farge B"), b.hex()]]
-            + verdier.map { [$0.navn, tall($0.verdi, $0.desimaler)] })
-            .map { $0.joined(separator: "\t") }.joined(separator: "\n")
+    /// Alle verdiene som rapport: tabellen kopieres med tabulatorer mellom kolonnene, så den limes inn som celler i
+    /// regneark og tabeller, og kan deles som lenke og skrives ut.
+    private var rapport: Fargerapport {
+        let tabell = [[String(localized: "Farge A"), a.hex()], [String(localized: "Farge B"), b.hex()]]
+            + verdier.map { [$0.navn, tall($0.verdi, $0.desimaler)] }
+        return Fargerapport(navn: "", farger: [PalettFarge(farge: a), PalettFarge(farge: b)],
+                            rapport: DeltRapport(slag: "deltaE", tittel: String(localized: "Fargeforskjell (ΔE)"),
+                                                 par: [DeltRapportpar(a: 0, b: 1, tekst: "ΔE00 \(tall(a.deltaE2000(til: b), 2))")],
+                                                 tabell: tabell))
     }
 
     @ViewBuilder private var detaljseksjon: some View {
@@ -167,10 +171,11 @@ struct SammenligningVisning: View {
                 }
                 .contextMenu {
                     Button("Kopier verdi", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(tall(d.verdi, d.desimaler)) }
-                    Button("Kopier alle som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(tabell) }
+                    Divider()
+                    RapportValg(rapport: rapport)
                 }
             }
-            Button("Kopier alle som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(tabell) }
+            RapportValg(rapport: rapport)
         } header: {
             Text("Detaljer")
         } footer: {
