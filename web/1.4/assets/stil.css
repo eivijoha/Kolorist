@@ -1639,6 +1639,70 @@ thead th {
   line-height: 1.2;
 }
 
+.rapport-matrise {
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-size: 0.75rem;
+}
+
+.rapport-matrise th {
+  font-weight: 500;
+  text-align: left;
+  vertical-align: bottom;
+  color: var(--tekst-dempet);
+}
+
+.rapport-kolonneprove,
+.rapport-radprove {
+  display: block;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.rapport-kolonneprove { height: 0.9rem; width: 4rem; margin-bottom: 0.2rem; }
+.rapport-radprove { height: 0.9rem; width: 0.9rem; display: inline-block; vertical-align: middle; margin-right: 0.4rem; }
+.rapport-kolonnenavn { display: block; max-width: 4rem; overflow-wrap: anywhere; }
+
+.rapport-celle {
+  position: relative;
+  width: 4rem;
+  height: 3rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 6px;
+  vertical-align: top;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.rapport-celle.tom {
+  background: var(--flate-2);
+  color: var(--tekst-dempet);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rapport-aa { display: block; font-size: 1rem; font-weight: 700; line-height: 1.1; }
+.rapport-forhold { display: block; font-variant-numeric: tabular-nums; }
+
+.rapport-prikk {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  line-height: 1rem;
+  text-align: center;
+  color: #fff;
+}
+
+.rapport-prikk.ok { background: #2f8a4a; }
+.rapport-prikk.feil { background: #c0392b; }
+
 .rapport-tall {
   margin: 0.3rem 0 0;
   font-variant-numeric: tabular-nums;
@@ -1682,4 +1746,24 @@ thead th {
   .rapport-par {
     break-inside: avoid;
   }
+}
+
+/* Plassholdere for skjermbilder som kommer (1.4). */
+.plassholdere {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
+  margin: 1.25rem 0;
+}
+
+.bilde-plassholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1284 / 2778;
+  max-height: 26rem;
+  border: 2px dashed var(--kant);
+  border-radius: var(--radius);
+  background: var(--flate-2);
+  color: var(--tekst-dempet);
+  font-size: 0.9rem;
 }

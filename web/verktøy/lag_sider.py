@@ -104,7 +104,7 @@ def side(lang, fil, tittel, beskrivelse, innhold, karusell=False):
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="{p}assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="{p}assets/stil.css?v=7">
+  <link rel="stylesheet" href="{p}assets/stil.css?v=8">
   <link rel="canonical" href="{egen}">
   <link rel="alternate" hreflang="nb" href="{nburl}">
   <link rel="alternate" hreflang="en" href="{enurl}">
@@ -701,6 +701,13 @@ TILG_FARGESYN = (10, 11, 12)
 TILG_RAPPORTER = (14,)
 
 
+def plassholdere(bilder):
+    """Plassholdere for skjermbilder som kommer (1.4): samme rute som et skjermbilde, med teksten under."""
+    figurer = ''.join(f'<figure class="skjermbilde plassholder"><div class="bilde-plassholder" role="img" aria-label="{a}">{t}</div>'
+                      f'<figcaption>{a}</figcaption></figure>' for a, t in bilder)
+    return f'<div class="plassholdere">{figurer}</div>'
+
+
 def funksjoner(lang):
     s = kilde[lang]
     k = kort(s)
@@ -753,6 +760,7 @@ def funksjoner(lang):
               ('Flater og bygg (LRV)', ul([tilg[i] for i in TILG_FLATER])),
               ('Fargesyn', ul([tilg[i] for i in TILG_FARGESYN])),
               ('Fargerapporter', ul([tilg[i] for i in TILG_RAPPORTER]))]),
+            ('rapporter', 'Fargerapporter', 'Rapporter', '<p class="lesetekst">Kopier vurderingen som tabell, del den som lenke eller skriv den ut som A4-PDF – for kontrast (WCAG 2.2), skriftkontrast, kontrast mellom flater (LRV), vanskelige fargepar med fargesynsavvik, farger i lys og fargeforskjell (ΔE). Mottakere uten appen ser rapporten i nettleseren, med fargeparene og tallene.</p>\n' + plassholdere([('Vanskelige fargepar i appen', 'Skjermbilde kommer'), ('Rapporten i nettleseren', 'Skjermbilde kommer'), ('Rapporten som PDF', 'Skjermbilde kommer')]) + '\n<p><a href="https://kolorist.no/l#zXVBBTsMwEPxKtFzdynHcuPGNQhESUk_AJcrBkRwUxaSRnaBWUa48APGFvqR3HsFL2DhBKlzsnd2d2dntoQCZ9lDhS5c8EitOFnRJI8F9EEZrLjICNUjYPe6eFrk5n4DAATGlK5psYSC_9CimTBBkxyz25DAKWTY18zUTIoZh1no4uhZlbAOyhz3I1naaQOO9KJCUgDIgC2UcpnOQIQGNtFvdtdqqet-UyH7FzLOqXaVN-aKD8ylwVWmMxpJT3iDfJDcjyj2KEsERtQi-PreUBowRHny_fwSChN6aRQMp3CmLctfYeq8P_p8ymzkz_l4AMpL-OcvVfBOM5oUvo3FKhlMcGihGRXesZz8Xa_hKoyxWun8rD1Nzo4xux_O94WGGHw">Åpne en delt eksempelrapport</a></p>', []),
             ('lys', 'Lys og fargemåling', 'Lys', lysdel, []),
             ('levere', 'Paletter, eksport og deling', 'Paletter og eksport', None,
              [('Paletter og iCloud', k['Paletter og iCloud']), ('Eksport', k['Eksport']),
@@ -791,6 +799,7 @@ def funksjoner(lang):
               ('Surfaces and buildings (LRV)', ul([tilg[i] for i in TILG_FLATER])),
               ('Colour vision', ul([tilg[i] for i in TILG_FARGESYN])),
               ('Colour reports', ul([tilg[i] for i in TILG_RAPPORTER]))]),
+            ('reports', 'Colour reports', 'Reports', '<p class="lesetekst">Copy the assessment as a table, share it as a link or print it as an A4 PDF – for contrast (WCAG 2.2), text contrast, contrast between surfaces (LRV), colour pairs that are hard to tell apart with colour vision deficiencies, colours in light and colour difference (ΔE). Recipients without the app see the report in their browser, with the colour pairs and the figures.</p>\n' + plassholdere([('Hard-to-tell-apart colour pairs in the app', 'Screenshot coming'), ('The report in the browser', 'Screenshot coming'), ('The report as a PDF', 'Screenshot coming')]) + '\n<p><a href="https://kolorist.no/l#zXVBBTsMwEPxKtFzdynHcuPGNQhESUk_AJcrBkRwUxaSRnaBWUa48APGFvqR3HsFL2DhBKlzsnd2d2dntoQCZ9lDhS5c8EitOFnRJI8F9EEZrLjICNUjYPe6eFrk5n4DAATGlK5psYSC_9CimTBBkxyz25DAKWTY18zUTIoZh1no4uhZlbAOyhz3I1naaQOO9KJCUgDIgC2UcpnOQIQGNtFvdtdqqet-UyH7FzLOqXaVN-aKD8ylwVWmMxpJT3iDfJDcjyj2KEsERtQi-PreUBowRHny_fwSChN6aRQMp3CmLctfYeq8P_p8ymzkz_l4AMpL-OcvVfBOM5oUvo3FKhlMcGihGRXesZz8Xa_hKoyxWun8rD1Nzo4xux_O94WGGHw">Open a shared example report</a></p>', []),
             ('light', 'Light and colour measurement', 'Light', lysdel, []),
             ('deliver', 'Palettes, export and sharing', 'Palettes and export', None,
              [('Palettes and iCloud', k['Palettes and iCloud']), ('Export', k['Export']),
@@ -1204,7 +1213,7 @@ for lang, mappe in (('nb', ''), ('en', 'en/')):
         h = open(sti).read()
         h = re.sub(r'<nav class="hovednav".*?</nav>', hovednav(lang, fil), h, count=1, flags=re.S)
         h = re.sub(r'<nav aria-label="(Bunnmeny|Footer menu)">.*?</nav>', bunnnav(lang, fil), h, count=1, flags=re.S)
-        h = re.sub(r'stil\.css\?v=\d+', 'stil.css?v=7', h)
+        h = re.sub(r'stil\.css\?v=\d+', 'stil.css?v=8', h)
         h = h.replace('index.html#lys', 'lys.html' if lang == 'nb' else 'light.html')
         open(sti, 'w').write(h)
 

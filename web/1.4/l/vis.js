@@ -171,7 +171,14 @@
     const par = Array.isArray(rp.p) ? rp.p : [];
     const plass = (i) => Number.isInteger(i) && i >= 0 && i < antallFarger;
     if (par.length > 160 || !par.every((p) => p && plass(p.a) && plass(p.b))) return null;
-    return { slag: tekst(rp.s), tittel: tekst(rp.t), undertittel: tekst(rp.u), overskrift: rp.o === true,
+    // Skriftkontrast som matrise: rader og kolonner peker på fargene, og hver celle har en godkjenning.
+    let matrise = null;
+    if (Array.isArray(rp.mr) && Array.isArray(rp.mk) && Array.isArray(rp.g) && rp.mr.length <= 24 && rp.mk.length <= 24
+        && rp.mr.every(plass) && rp.mk.every(plass) && rp.g.length === rp.mr.length
+        && rp.g.every((rad) => Array.isArray(rad) && rad.length === rp.mk.length && rad.every((x) => typeof x === "boolean"))) {
+      matrise = { rader: rp.mr, kolonner: rp.mk, godkjent: rp.g };
+    }
+    return { slag: tekst(rp.s), tittel: tekst(rp.t), undertittel: tekst(rp.u), overskrift: rp.o === true, matrise,
              tabell: tabell.map((rad) => rad.map(tekst)),
              par: par.map((p) => ({ a: p.a, b: p.b, sa: erHex(p.sa) ? `#${p.sa}` : null, sb: erHex(p.sb) ? `#${p.sb}` : null,
                                     etikett: tekst(p.e), tekst: tekst(p.t), merke: tekst(p.m), alvorlig: p.al === true })) };
@@ -457,6 +464,60 @@
     return rad;
   }
 
+  // Skriftkontrast: hver tekstfarge (rad) på hver bakgrunn (kolonne), med «Aa», forholdet og om kravet holder.
+  function matrisevisning(d, r) {
+    const m = r.matrise;
+    const navn = (f) => tekst(f.n) || hex(f);
+    const ramme = lag("div", "rapport-tabell-ramme");
+    const tabell = lag("table", "rapport-matrise");
+    const thead = lag("thead"), topp = lag("tr");
+    topp.append(lag("th", "rapport-hjorne", r.tabell[0]?.[0] || ""));
+    for (const k of m.kolonner) {
+      const th = lag("th");
+      th.scope = "col";
+      const prøve = lag("span", "rapport-kolonneprove");
+      prøve.style.background = hex(d.farger[k]) || "#808080";
+      prøve.style.background = css(d.farger[k]);
+      th.append(prøve, lag("span", "rapport-kolonnenavn", navn(d.farger[k])));
+      topp.append(th);
+    }
+    thead.append(topp);
+    tabell.append(thead);
+    const tbody = lag("tbody");
+    m.rader.forEach((ri, r2) => {
+      const tr = lag("tr");
+      const th = lag("th");
+      th.scope = "row";
+      const prøve = lag("span", "rapport-radprove");
+      prøve.style.background = hex(d.farger[ri]) || "#808080";
+      prøve.style.background = css(d.farger[ri]);
+      th.append(prøve, lag("span", null, navn(d.farger[ri])));
+      tr.append(th);
+      m.kolonner.forEach((ki, k) => {
+        const verdi = r.tabell[r2 + 1]?.[k + 1] || "";
+        const td = lag("td", "rapport-celle");
+        if (verdi === "—") {
+          td.classList.add("tom");
+          td.textContent = "—";
+        } else {
+          td.style.background = hex(d.farger[ki]) || "#808080";
+          td.style.background = css(d.farger[ki]);
+          td.style.color = hex(d.farger[ri]) || "#000000";
+          td.style.color = css(d.farger[ri]);
+          const ok = m.godkjent[r2][k];
+          td.append(lag("span", "rapport-aa", "Aa"), lag("span", "rapport-forhold", verdi),
+                    lag("span", ok ? "rapport-prikk ok" : "rapport-prikk feil", ok ? "✓" : "✗"));
+          td.title = `${navn(d.farger[ri])} / ${navn(d.farger[ki])}: ${verdi}`;
+        }
+        tr.append(td);
+      });
+      tbody.append(tr);
+    });
+    tabell.append(tbody);
+    ramme.append(tabell);
+    return ramme;
+  }
+
   function visRapport(d) {
     const r = d.rapport;
     const innhold = document.getElementById("innhold");
@@ -496,7 +557,9 @@
       }
       seksjon.append(liste);
     }
-    if (r.tabell.length) {
+    if (r.matrise) {
+      seksjon.append(matrisevisning(d, r));
+    } else if (r.tabell.length) {
       seksjon.append(lag("h3", null, T.detaljer));
       const ramme = lag("div", "rapport-tabell-ramme");
       const tabell = lag("table", "rapport-tabell");
