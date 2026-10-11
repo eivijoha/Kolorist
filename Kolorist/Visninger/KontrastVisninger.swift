@@ -503,6 +503,7 @@ struct FlatekontrastSeksjon: View {
                 verdi(metode.kortnavn, metode.formatert(k.verdi(metode)))
             }
             .padding(.vertical, 4)
+            .contextMenu { kopiervalg(k) }
             Picker("Metode", selection: $metode) {
                 ForEach(Flatekontrastmetode.allCases) { Text($0.valgnavn).tag($0) }
             }
@@ -539,7 +540,9 @@ struct FlatekontrastSeksjon: View {
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityValue(bestått ? "Bestått" : "Ikke bestått")
+                .contextMenu { kopiervalg(k) }
             }
+            Button("Kopier som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(rapport(k)) }
         } header: {
             Text("Flater (LRV)")
         } footer: {
@@ -547,6 +550,7 @@ struct FlatekontrastSeksjon: View {
                 KortForklaring("LRV er andelen lys flaten reflekterer, som på malingskart.") {
                     Text("For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart.")
                     Text(metode.forklaring)
+                    Text("Trykk og hold (høyreklikk på Mac) på verdiene eller kravene for å kopiere vurderingen som tabell.")
                 }
                 if arbeidsbenk.erUkalibrert(flate) || arbeidsbenk.erUkalibrert(bakgrunn) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
@@ -560,6 +564,34 @@ struct FlatekontrastSeksjon: View {
                 MetodeHenvisning(.lrv, .oklab)
             }
         }
+    }
+
+    @ViewBuilder private func kopiervalg(_ k: Flatekontrast) -> some View {
+        Button("Kopier som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(rapport(k)) }
+    }
+
+    /// Vurderingen som tabell (tabulatorer mellom kolonnene): flatene med hex og LRV, metode og verdi, lyset, og hvert
+    /// krav med kilde og om det holder.
+    private func rapport(_ k: Flatekontrast) -> String {
+        func lrv(_ f: Farge) -> String {
+            (arbeidsbenk.erUkalibrert(f) ? "≈ " : "") + f.lrv.formatted(.number.precision(.fractionLength(0)))
+        }
+        var rader: [[String]] = [
+            [String(localized: "Flate"), flate.hex(), "LRV " + lrv(flate)],
+            [String(localized: "Tilstøtende flate"), bakgrunn.hex(), "LRV " + lrv(bakgrunn)],
+            [String(localized: "Metode"), metode.valgnavn, metode.formatert(k.verdi(metode))],
+        ]
+        if let miljø = lysmiljø {
+            let yf = miljø.xyzUnderLyset(flate).y * 100, yb = miljø.xyzUnderLyset(bakgrunn).y * 100
+            rader.append([String(localized: "Lys"), miljø.navn, metode.formatert(metode.verdi(flate: yf, bakgrunn: yb))])
+        } else {
+            rader.append([String(localized: "Lys"), String(localized: "Dagslys (LRV)")])
+        }
+        for krav in metode.krav.reversed() {
+            rader.append([krav.navn, "\(krav.kilde) · \(krav.kravtekst)",
+                          k.består(krav) ? String(localized: "Bestått") : String(localized: "Ikke bestått")])
+        }
+        return rader.map { $0.joined(separator: "\t") }.joined(separator: "\n")
     }
 
     private func verdi(_ tittel: String, _ tekst: String) -> some View {

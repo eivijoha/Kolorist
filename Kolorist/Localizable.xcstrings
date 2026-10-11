@@ -3751,16 +3751,6 @@
         }
       }
     },
-    "Hjelper Kolorist deg på en god måte? Gi gjerne en omtale i App Store.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Is Kolorist working well for you? Feel free to leave a review on the App Store."
-          }
-        }
-      }
-    },
     "HSB": {
       "localizations": {
         "en": {
@@ -3831,6 +3821,26 @@
         }
       }
     },
+    "Hex A": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hex A"
+          }
+        }
+      }
+    },
+    "Hex B": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hex B"
+          }
+        }
+      }
+    },
     "Hex eller CSS-farge, f.eks. #767676": {
       "localizations": {
         "en": {
@@ -3877,6 +3887,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hex, e.g. #F2B84B"
+          }
+        }
+      }
+    },
+    "Hjelper Kolorist deg på en god måte? Gi gjerne en omtale i App Store.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Is Kolorist working well for you? Feel free to leave a review on the App Store."
           }
         }
       }
@@ -4427,6 +4447,16 @@
         }
       }
     },
+    "Installert: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installed: %@"
+          }
+        }
+      }
+    },
     "Institutt for design, NTNU": {
       "localizations": {
         "en": {
@@ -4965,6 +4995,16 @@
         }
       }
     },
+    "Kopier fargeparet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy colour pair"
+          }
+        }
+      }
+    },
     "Kopier gradient til": {
       "localizations": {
         "en": {
@@ -5021,6 +5061,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copy as"
+          }
+        }
+      }
+    },
+    "Kopier som tabell": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy as table"
           }
         }
       }
@@ -7637,12 +7687,12 @@
         }
       }
     },
-    "Par som er tydelig ulike med normalt syn (ΔE00 ≥ 10), men kommer under 10 med avviket. Under 5 er de nesten like. Skill dem med lyshet, ikke bare kulør, eller bruk mønster, ikon eller tekst i tillegg.": {
+    "Par som er tydelig ulike med normalt syn (ΔE00 ≥ 10), men kommer under 10 med avviket. Under 5 er de nesten like. Skill dem med lyshet, ikke bare kulør, eller bruk mønster, ikon eller tekst i tillegg. Trykk og hold (høyreklikk på Mac) på et par for å kopiere det, eller alle parene som tabell.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pairs that are clearly different with normal vision (ΔE00 ≥ 10) but fall below 10 with the deficiency. Below 5 they are almost identical. Separate them by lightness, not just hue, or add a pattern, icon or text."
+            "value": "Pairs that are clearly different with normal vision (ΔE00 ≥ 10) but fall below 10 with the deficiency. Below 5 they are almost identical. Separate them by lightness, not just hue, or add a pattern, icon or text. Touch and hold (right-click on Mac) a pair to copy it, or all pairs as a table."
           }
         }
       }
@@ -9645,6 +9695,16 @@
         }
       }
     },
+    "Trykk og hold (høyreklikk på Mac) på verdiene eller kravene for å kopiere vurderingen som tabell.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold (right-click on Mac) the values or requirements to copy the assessment as a table."
+          }
+        }
+      }
+    },
     "Trykk og hold på bildet for å sammenligne med normalt syn.": {
       "localizations": {
         "en": {
@@ -10067,6 +10127,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hard-to-tell colour pairs"
+          }
+        }
+      }
+    },
+    "Vanskelige å skille": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard to tell apart"
           }
         }
       }
@@ -10813,6 +10883,16 @@
         }
       }
     },
+    "og %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "and %@"
+          }
+        }
+      }
+    },
     "referansekort": {
       "localizations": {
         "en": {
@@ -11117,6 +11197,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "ΔE00 (CIEDE2000)"
+          }
+        }
+      }
+    },
+    "ΔE00 med avviket": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ΔE00 with the deficiency"
+          }
+        }
+      }
+    },
+    "ΔE00 med normalt syn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ΔE00 with normal vision"
           }
         }
       }

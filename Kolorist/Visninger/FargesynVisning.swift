@@ -243,13 +243,24 @@ struct FargesynVurdering: View {
             } else {
                 ForEach(Array(alle.enumerated()), id: \.offset) { _, f in
                     parRad(f, farger: farger)
+                        .contextMenu {
+                            Button("Kopier fargeparet", systemImage: "doc.on.doc") {
+                                Utklippstavle.kopierTekst(parrapport(f, farger: farger))
+                            }
+                            Button("Kopier alle som tabell", systemImage: "tablecells") {
+                                Utklippstavle.kopierTekst(partabell(alle, farger: farger))
+                            }
+                        }
+                }
+                Button("Kopier alle som tabell", systemImage: "tablecells") {
+                    Utklippstavle.kopierTekst(partabell(alle, farger: farger))
                 }
             }
         } header: {
             Text("Vanskelige fargepar").foregroundStyle(Color.sekundærTekst)
         } footer: { Group {
             VStack(alignment: .leading, spacing: 6) {
-                KortForklaring("Par som skilles godt med normalt syn, men nesten ikke med avviket.") { Text("Par som er tydelig ulike med normalt syn (ΔE00 ≥ 10), men kommer under 10 med avviket. Under 5 er de nesten like. Skill dem med lyshet, ikke bare kulør, eller bruk mønster, ikon eller tekst i tillegg.") }
+                KortForklaring("Par som skilles godt med normalt syn, men nesten ikke med avviket.") { Text("Par som er tydelig ulike med normalt syn (ΔE00 ≥ 10), men kommer under 10 med avviket. Under 5 er de nesten like. Skill dem med lyshet, ikke bare kulør, eller bruk mønster, ikon eller tekst i tillegg. Trykk og hold (høyreklikk på Mac) på et par for å kopiere det, eller alle parene som tabell.") }
                 MetodeHenvisning(.machado, .ciede2000, .cssColor4)
             }
         }.foregroundStyle(Color.sekundærTekst) }
@@ -267,8 +278,10 @@ struct FargesynVurdering: View {
                     .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(a.visningsnavn) og \(b.visningsnavn)").font(.subheadline).lineLimit(1)
-                Text(grad >= 1 ? f.type.navn : f.type.delvisNavn).font(.caption).foregroundStyle(Color.sekundærTekst)
+                // Ett navn per linje: lange navn (f.eks. RGB-verdier fra et fargekart) kuttes ellers midt i paret.
+                Text(a.visningsnavn).font(.subheadline).lineLimit(2)
+                Text("og \(b.visningsnavn)").font(.subheadline).lineLimit(2)
+                Text(avviksnavn(f.type)).font(.caption).foregroundStyle(Color.sekundærTekst)
                 Text("ΔE00 \(f.normalt, format: .number.precision(.fractionLength(1))) → \(f.simulert, format: .number.precision(.fractionLength(1)))")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(f.alvorlig ? Color.feil : Color.advarsel)
@@ -279,6 +292,47 @@ struct FargesynVurdering: View {
             }
         }
         .accessibilityElement(children: .combine)
+    }
+
+    // MARK: - Rapport
+
+    /// Avviket slik det vises, med grad ved delvis avvik («Deuteranomali 60 %»).
+    private func avviksnavn(_ type: Fargesynstype, medGrad: Bool = false) -> String {
+        guard grad < 1 else { return type.navn }
+        return medGrad ? "\(type.delvisNavn) \(grad.formatted(.percent.precision(.fractionLength(0))))" : type.delvisNavn
+    }
+
+    private func vurdering(_ f: Forveksling) -> String {
+        f.alvorlig ? String(localized: "Nesten like") : String(localized: "Vanskelige å skille")
+    }
+
+    private func desimal(_ v: Double) -> String { v.formatted(.number.precision(.fractionLength(1))) }
+
+    /// Ett fargepar som rapport (tabulator mellom navn og verdi), så den kan limes inn som tekst eller i et regneark.
+    private func parrapport(_ f: Forveksling, farger: [PalettFarge]) -> String {
+        let a = farger[f.i], b = farger[f.j]
+        return [
+            [String(localized: "Farge A"), a.visningsnavn, a.farge.hex()],
+            [String(localized: "Farge B"), b.visningsnavn, b.farge.hex()],
+            [String(localized: "Fargesynsavvik"), avviksnavn(f.type, medGrad: true)],
+            [String(localized: "ΔE00 med normalt syn"), desimal(f.normalt)],
+            [String(localized: "ΔE00 med avviket"), desimal(f.simulert)],
+            [String(localized: "Vurdering"), vurdering(f)],
+        ].map { $0.joined(separator: "\t") }.joined(separator: "\n")
+    }
+
+    /// Alle vanskelige par som tabell med overskriftsrad (tabulatorer mellom kolonnene).
+    private func partabell(_ alle: [Forveksling], farger: [PalettFarge]) -> String {
+        let overskrift = [String(localized: "Farge A"), String(localized: "Hex A"), String(localized: "Farge B"),
+                          String(localized: "Hex B"), String(localized: "Fargesynsavvik"),
+                          String(localized: "ΔE00 med normalt syn"), String(localized: "ΔE00 med avviket"),
+                          String(localized: "Vurdering")]
+        let rader = alle.map { f -> [String] in
+            let a = farger[f.i], b = farger[f.j]
+            return [a.visningsnavn, a.farge.hex(), b.visningsnavn, b.farge.hex(), avviksnavn(f.type, medGrad: true),
+                    desimal(f.normalt), desimal(f.simulert), vurdering(f)]
+        }
+        return ([overskrift] + rader).map { $0.joined(separator: "\t") }.joined(separator: "\n")
     }
 }
 
