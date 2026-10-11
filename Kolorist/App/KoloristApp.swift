@@ -16,6 +16,10 @@ struct KoloristApp: App {
         KoloristSnarveier.updateAppShortcutParameters()
     }
 
+    #if os(macOS)
+    @AppStorage("utseende") private var utseende = Utseende.system.rawValue
+    #endif
+
     var body: some Scene {
         WindowGroup {
             InnholdsVisning()
@@ -25,6 +29,8 @@ struct KoloristApp: App {
                 #if os(macOS)
                 // Minste vindu: sidepanel og én kolonne omtrent som på iPhone. Mindre enn dette presses innholdet sammen.
                 .frame(minWidth: 640, minHeight: 600)
+                // Vis › Utseende: lys, mørk eller som systemet, for hele appen.
+                .onChange(of: utseende, initial: true) { Utseende.bruk(utseende) }
                 #endif
                 #if DEBUG
                 .focusEffectDisabled(Skjermbildemodus.på)
@@ -39,6 +45,7 @@ struct KoloristApp: App {
         .commands { UtskriftKommando() }
         .commands { KoloristKommandoer(arbeidsbenk: arbeidsbenk) }
         #if os(macOS)
+        .commands { UtseendeOgSpråkKommandoer() }
         .commands {
             CommandGroup(after: .pasteboard) {
                 Button("Kopier aktiv farge som hex") { Utklippstavle.kopier(arbeidsbenk.aktivFarge) }

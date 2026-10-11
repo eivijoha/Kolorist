@@ -2088,6 +2088,16 @@
         }
       }
     },
+    "Ellers brukes språket neste gang Kolorist starter.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otherwise the language is used the next time Kolorist starts."
+          }
+        }
+      }
+    },
     "En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge, og der fargene blir mindre fargesterke i svakt lys. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).": {
       "localizations": {
         "en": {
@@ -8300,6 +8310,16 @@
         }
       }
     },
+    "Senere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
+        }
+      }
+    },
     "Side %lld av %lld": {
       "localizations": {
         "en": {
@@ -9156,6 +9176,16 @@
         }
       }
     },
+    "Som systemet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System"
+          }
+        }
+      }
+    },
     "Som variabler": {
       "localizations": {
         "en": {
@@ -9236,6 +9266,16 @@
         }
       }
     },
+    "Språk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      }
+    },
     "Standard": {
       "localizations": {
         "en": {
@@ -9272,6 +9312,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start"
+          }
+        }
+      }
+    },
+    "Start Kolorist på nytt for å bytte språk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart Kolorist to change the language"
+          }
+        }
+      }
+    },
+    "Start på nytt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart"
           }
         }
       }
@@ -10200,6 +10260,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pick"
+          }
+        }
+      }
+    },
+    "Utseende": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
           }
         }
       }
