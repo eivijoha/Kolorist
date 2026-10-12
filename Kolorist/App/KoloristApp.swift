@@ -4,7 +4,6 @@ import FargeKjerne
 import SwiftData
 import SwiftUI
 
-@main
 struct KoloristApp: App {
     @State private var arbeidsbenk = Arbeidsbenk.delt
     @State private var profiler = ProfilBibliotek.delt

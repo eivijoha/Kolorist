@@ -41,10 +41,13 @@ enum Appspråk: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Valget som er lagret for appen (`AppleLanguages` i appens egne innstillinger, ikke systemets).
+    /// Valget som er lagret for appen (`AppleLanguages` i appens egne innstillinger, ikke systemets). Et språk Kolorist
+    /// satte selv ved oppstart (`Språkvalg`: norsk for norsk, svensk og dansk, ellers engelsk) regnes som «Som systemet».
     static var gjeldende: Appspråk {
-        let domene = UserDefaults.standard.persistentDomain(forName: Bundle.main.bundleIdentifier ?? "") ?? [:]
-        guard let første = (domene["AppleLanguages"] as? [String])?.first else { return .system }
+        let innstillinger = UserDefaults.standard
+        let domene = innstillinger.persistentDomain(forName: Bundle.main.bundleIdentifier ?? "") ?? [:]
+        guard let første = (domene["AppleLanguages"] as? [String])?.first,
+              første != innstillinger.string(forKey: "språk.automatisk") else { return .system }
         if første.hasPrefix("en") { return .en }
         if første.hasPrefix("nb") || første.hasPrefix("no") { return .nb }
         return .system
@@ -52,6 +55,8 @@ enum Appspråk: String, CaseIterable, Identifiable {
 
     func velg() {
         guard self != Appspråk.gjeldende else { return }
+        // «Som systemet»: Kolorist velger igjen ved neste oppstart (`Språkvalg`). Et eget valg merkes ikke som automatisk.
+        UserDefaults.standard.removeObject(forKey: "språk.automatisk")
         if self == .system {
             UserDefaults.standard.removeObject(forKey: "AppleLanguages")
         } else {
