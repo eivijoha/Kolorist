@@ -1,25 +1,38 @@
 import Foundation
 import SwiftUI
 
-/// Appens språk, valgt ved oppstart før noe annet lastes: norsk på enheter som er satt opp på norsk, svensk eller dansk,
-/// ellers engelsk. Uten dette faller iOS og macOS tilbake til utviklingsspråket (norsk) når enhetens språk verken er
-/// norsk eller engelsk, for eksempel tysk eller fransk. Har brukeren selv valgt språk for Kolorist (Innstillinger ›
-/// Kolorist › Språk), respekteres det.
+/// Appens språk, valgt ved hver oppstart før noe annet lastes: norsk på enheter som er satt opp på norsk, svensk eller
+/// dansk, ellers engelsk. Uten dette faller iOS og macOS tilbake til utviklingsspråket (norsk) når enhetens språk verken
+/// er norsk eller engelsk, for eksempel tysk eller fransk.
+///
+/// Valget lagres ikke: det settes i argumentdomenet for denne kjøringen (som `-AppleLanguages` ved oppstart), så det
+/// alltid følger enhetens språk. Et språk brukeren har valgt for Kolorist selv – i Innstillinger › Kolorist › Språk,
+/// Systeminnstillinger › Språk og region › Programmer, eller Vis › Språk på Mac – ligger i appens egne innstillinger
+/// og går foran.
 nonisolated enum Språkvalg {
     private static let språknøkkel = "AppleLanguages"
-    /// Språket Kolorist selv satte sist, så et valg brukeren har gjort i Innstillinger kan skilles fra det.
-    private static let automatisk = "språk.automatisk"
+    /// Fra testbygg av 1.3.2 som lagret språket; ryddes bort.
+    private static let gammelMerke = "språk.automatisk"
 
     static func bruk() {
         let innstillinger = UserDefaults.standard
-        let eget = innstillinger.persistentDomain(forName: Bundle.main.bundleIdentifier ?? "")?[språknøkkel] as? [String]
-        if let eget, eget.first != innstillinger.string(forKey: automatisk) { return }
-        // Fjern Kolorists eget valg først, så enhetens språkliste (det globale domenet) leses – også når den er endret.
-        if eget != nil { innstillinger.removeObject(forKey: språknøkkel) }
+        let id = Bundle.main.bundleIdentifier ?? ""
+        var eget = innstillinger.persistentDomain(forName: id)?[språknøkkel] as? [String]
+        if let gammelt = innstillinger.string(forKey: gammelMerke) {
+            if eget?.first == gammelt {
+                innstillinger.removeObject(forKey: språknøkkel)
+                eget = nil
+            }
+            innstillinger.removeObject(forKey: gammelMerke)
+        }
+        // Brukerens eget valg for Kolorist går foran.
+        guard eget == nil else { return }
+        var argumenter = innstillinger.volatileDomain(forName: UserDefaults.argumentDomain)
+        // Språk gitt ved oppstart (Xcode, skjermbilder) går også foran.
+        guard argumenter[språknøkkel] == nil else { return }
         let enheten = innstillinger.stringArray(forKey: språknøkkel) ?? Locale.preferredLanguages
-        let ønsket = språk(for: enheten.first ?? "en")
-        innstillinger.set([ønsket], forKey: språknøkkel)
-        innstillinger.set(ønsket, forKey: automatisk)
+        argumenter[språknøkkel] = [språk(for: enheten.first ?? "en")]
+        innstillinger.setVolatileDomain(argumenter, forName: UserDefaults.argumentDomain)
     }
 
     /// Norsk (bokmål) for norsk, nynorsk, svensk og dansk; engelsk for alle andre språk.
