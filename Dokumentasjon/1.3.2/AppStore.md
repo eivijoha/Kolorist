@@ -6,8 +6,9 @@ ett sted. App-informasjon, URL-er, personvernetiketten og eksportregler er uendr
 
 **Rettelsen:** Kolorist ble vist på norsk på enheter som verken er satt opp på norsk eller engelsk, fordi iOS og macOS
 faller tilbake til utviklingsspråket (norsk). Nå velger Kolorist språket ved oppstart: norsk på enheter som er satt opp på
-norsk, svensk eller dansk, ellers engelsk. Et språk brukeren har valgt for Kolorist i Innstillinger, respekteres
-(`Kolorist/App/Sprakvalg.swift`).
+norsk, svensk eller dansk, ellers engelsk. Valget lagres ikke (det settes for hver kjøring), så det følger alltid
+enhetens språk. Et språk brukeren har valgt for Kolorist selv går foran: Innstillinger › Kolorist › Språk (iPhone/iPad) og
+Systeminnstillinger › Generelt › Språk og region › Programmer (Mac). Se `Kolorist/App/Sprakvalg.swift`.
 
 ---
 
