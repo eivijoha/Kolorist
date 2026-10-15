@@ -41,6 +41,10 @@ The complete implementation is in one folder in the app, `Kolorist/APCA/`:
 | `APCA.swift` | The algorithm: constants, screen luminance (`y`), Lc (`lc`), and the reference values from apca-w3 |
 | `APCA+Kolorist.swift` | How Kolorist uses APCA: Lc for colours, «Fix» (lightness to a target Lc), guidance levels, and the connection that chooses text colours on colour fields |
 
+Identifiers and user-facing strings in the code are in Norwegian, the app's source language. The files have a short
+glossary and English translations of the strings in comments; the app shows the strings in English on English-language
+devices.
+
 APCA is not part of FargeKjerne, Kolorist's colour package, which is shared with other apps. The package only has a
 neutral hook (`Tekstvalg`) that the app connects APCA to at launch.
 

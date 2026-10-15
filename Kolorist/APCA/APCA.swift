@@ -10,8 +10,8 @@
 // values from apca-w3 that are checked in every debug build (`APCA.kontroller()`), and APCA+Kolorist.swift is how
 // Kolorist uses it. The two files can be shared as they are for review.
 //
-// Norsk: APCA brukes med tillatelse fra rettighetshaver (Andrew Somers / Myndex Research). Implementasjonen følger
-// gjeldende tilgjengelige versjon av APCA og oppdateres jevnlig når en ny versjon publiseres.
+// Identifiers are in Norwegian, the app's source language: tekst = text, bakgrunn = background, versjon = version,
+// referanser = reference values, kontroller = verify.
 
 import Foundation
 

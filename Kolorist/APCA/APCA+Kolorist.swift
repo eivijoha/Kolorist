@@ -1,7 +1,13 @@
 // How Kolorist uses APCA (see APCA.swift for the algorithm, the licence note and the update policy).
 //
-// - Vurdering › Kontrast: Lc for the colour as text on the background, with APCA's guidance levels (`APCANivå`) and
-//   «Rett opp», which changes only the lightness (OKLCH) until a level is reached (`Farge.medAPCA`).
+// Identifiers and user-facing strings are in Norwegian, the app's source language; the English translations are in the
+// app's string catalog and are given in comments here. Glossary: Farge = colour, tekst = text, bakgrunn = background,
+// mål = target, minst = at least, nivå = level, bruk = use, retning = polarity, formatert = formatted,
+// kobleInn = connect, lesbarhet = readability, Tekstvalg = text colour choice, Komponentsjekk = design-system check.
+//
+// - Assess › Contrast (Vurdering › Kontrast): Lc for the colour as text on the background, with APCA's guidance levels
+//   (`APCANivå`) and «Fix» (Rett opp), which changes only the lightness (OKLCH) until a level is reached
+//   (`Farge.medAPCA`).
 // - Text and icons on colour fields (e.g. the [+] button): black or white, whichever has the higher |Lc|
 //   (`APCA.kobleInn()` connects APCA to `Farge.lesbarTekstfarge` and `Skriftfarger.beste` in FargeKjerne). Where a
 //   requirement applies (button text in the design system), WCAG 2 remains the floor.
@@ -71,18 +77,19 @@ enum APCANivå: Double, CaseIterable, Identifiable {
 
     var bruk: String {
         switch self {
-        case .lc90: String(localized: "Godt nok for all tekst, også brødtekst")
-        case .lc75: String(localized: "Brødtekst (minimum)")
-        case .lc60: String(localized: "Større tekst, ikke brødtekst")
-        case .lc45: String(localized: "Store eller fete overskrifter")
-        case .lc30: String(localized: "Ikke-viktig tekst, som plassholdere")
-        case .lc15: String(localized: "Ikoner og grafikk, ikke tekst")
+        case .lc90: String(localized: "Godt nok for all tekst, også brødtekst")   // Good enough for all text, including body text
+        case .lc75: String(localized: "Brødtekst (minimum)")                       // Body text (minimum)
+        case .lc60: String(localized: "Større tekst, ikke brødtekst")              // Larger text, not body text
+        case .lc45: String(localized: "Store eller fete overskrifter")             // Large or bold headings
+        case .lc30: String(localized: "Ikke-viktig tekst, som plassholdere")       // Non-essential text, such as placeholders
+        case .lc15: String(localized: "Ikoner og grafikk, ikke tekst")             // Icons and graphics, not text
         }
     }
 
     /// The highest level Lc reaches, or nil when it is too low for text and graphics.
     static func nådd(_ lc: Double) -> APCANivå? { allCases.first { abs(lc) >= $0.rawValue } }
 
+    /// «dark text on a light background» or «light text on a dark background».
     static func retning(_ lc: Double) -> String {
         lc >= 0 ? String(localized: "mørk tekst på lys bakgrunn") : String(localized: "lys tekst på mørk bakgrunn")
     }
