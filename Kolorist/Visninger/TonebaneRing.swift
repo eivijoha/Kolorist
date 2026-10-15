@@ -18,6 +18,11 @@ struct TonebaneRing<Midt: View>: View {
     let kulør: (Double) -> Double
     var tekst: (Double) -> String = { "\(Int($0.rounded()))°" }
     var stegForTilgjengelighet: Double = 5
+    /// Håndtaket som redigeres eller sist ble redigert (`true` = slutt), markert med en ekstra ring – kvadratet i midten
+    /// vises i den kuløren.
+    var merketSlutt: Bool? = nil
+    /// Kalles når et håndtak begynner å dras (`true` = slutt).
+    var redigerer: (Bool) -> Void = { _ in }
     /// Ny start og nytt spenn.
     var endre: (Double, Double) -> Void
     @ViewBuilder var midt: Midt
@@ -104,19 +109,29 @@ struct TonebaneRing<Midt: View>: View {
                 midt
                     .frame(width: indre * 1.41 + 24, height: indre * 1.41 + 24)
                     .position(senter)
-                håndtak(kulør: start, tittel: Text("Kulør, start"), senter: senter, radius: ringR) { endre(Self.normaliser(start + $0), spenn - $0) }
-                håndtak(kulør: slutt, tittel: Text("Kulør, slutt"), senter: senter, radius: ringR) { endre(start, min(max(spenn + $0, -360), 360)) }
+                håndtak(kulør: start, tittel: Text("Kulør, start"), senter: senter, radius: ringR, merket: merketSlutt == false) {
+                    endre(Self.normaliser(start + $0), spenn - $0)
+                }
+                håndtak(kulør: slutt, tittel: Text("Kulør, slutt"), senter: senter, radius: ringR, merket: merketSlutt == true) {
+                    endre(start, min(max(spenn + $0, -360), 360))
+                }
             }
         }
     }
 
-    private func håndtak(kulør h: Double, tittel: Text, senter: CGPoint, radius: CGFloat, juster: @escaping (Double) -> Void) -> some View {
+    private func håndtak(kulør h: Double, tittel: Text, senter: CGPoint, radius: CGFloat, merket: Bool,
+                         juster: @escaping (Double) -> Void) -> some View {
         Circle()
             .fill(farge(h))
             .overlay(Circle().strokeBorder(.white, lineWidth: 3))
             .overlay(Circle().strokeBorder(Color.black.opacity(0.25), lineWidth: 0.5))
             .shadow(color: .black.opacity(0.25), radius: 2, y: 1)
             .frame(width: tommel, height: tommel)
+            .background {
+                if merket {
+                    Circle().strokeBorder(Color.primary.opacity(0.7), lineWidth: 2).frame(width: tommel + 10, height: tommel + 10)
+                }
+            }
             .position(punkt(vinkel(h), radius: radius, senter: senter))
             .allowsHitTesting(false)
             .accessibilityElement()
@@ -133,6 +148,7 @@ struct TonebaneRing<Midt: View>: View {
             let ds = abs(Self.steg(vinkel(start), v)), de = abs(Self.steg(vinkel(slutt), v))
             drar = de <= ds ? .slutt : .start
             sisteKulør = drar == .slutt ? slutt : start
+            redigerer(drar == .slutt)
         }
         guard let forrige = sisteKulør else { return }
         let d = Self.steg(forrige, h)

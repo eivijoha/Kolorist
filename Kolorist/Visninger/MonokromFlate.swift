@@ -14,6 +14,12 @@ struct LyshetMetningFlate: View {
     var velg: (Farge) -> Void = { _ in }
     /// «↑ Lyshet» og «Metning →» ved kantene (ikke inni kulørringen for tonebane, der kvadratet heller får plassen).
     var visAkser = true
+    /// Grunnfargen som stiplet ring (monokrom). Ikke for tonebane, der kvadratet viser kuløren i ett av endepunktene.
+    var visGrunnfarge = true
+    /// Endepunktet som redigeres eller sist ble redigert (`true` = `b`), markert med en ekstra ring (tonebane).
+    var merketSlutt: Bool? = nil
+    /// Kalles når et endepunkt begynner å dras (`true` = `b`).
+    var redigerer: (Bool) -> Void = { _ in }
 
     /// Endepunktet som dras (a eller b), valgt ved starten av bevegelsen.
     @State private var drar: WritableKeyPath<Monokromstrek, Monokromstrek.Punkt>?
@@ -62,12 +68,20 @@ struct LyshetMetningFlate: View {
                     let rute = CGRect(x: p.x - d / 2, y: p.y - d / 2, width: d, height: d)
                     ctx.fill(Path(ellipseIn: rute), with: .color(tone.swiftUI))
                     ctx.stroke(Path(ellipseIn: rute), with: .color(tone.lesbarTekstfarge.swiftUI), lineWidth: endepunkt ? 3 : 2)
+                    // Endepunktet kvadratets farger hører til: en ekstra ring utenfor.
+                    if let merketSlutt, endepunkt, (i == toner.count - 1) == merketSlutt {
+                        let ytre = rute.insetBy(dx: -5, dy: -5)
+                        ctx.stroke(Path(ellipseIn: ytre), with: .color(.white.opacity(0.9)), lineWidth: 3)
+                        ctx.stroke(Path(ellipseIn: ytre), with: .color(.black.opacity(0.55)), lineWidth: 1)
+                    }
                 }
 
                 // Grunnfargen som en liten ring.
-                let g = punkt(.fra(lyshet: grunnfarge.okLCH.l, kroma: grunnfarge.okLCH.c, kulør: kulør, gamut: gamut), i: r)
-                ctx.stroke(Path(ellipseIn: CGRect(x: g.x - 6, y: g.y - 6, width: 12, height: 12)),
-                           with: .color(grunnfarge.lesbarTekstfarge.swiftUI), style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
+                if visGrunnfarge {
+                    let g = punkt(.fra(lyshet: grunnfarge.okLCH.l, kroma: grunnfarge.okLCH.c, kulør: kulør, gamut: gamut), i: r)
+                    ctx.stroke(Path(ellipseIn: CGRect(x: g.x - 6, y: g.y - 6, width: 12, height: 12)),
+                               with: .color(grunnfarge.lesbarTekstfarge.swiftUI), style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
+                }
             }
             .contentShape(Rectangle())
             .gesture(
@@ -78,7 +92,10 @@ struct LyshetMetningFlate: View {
                             // Bare nær et endepunkt; et trykk andre steder (f.eks. på en tone) flytter ingenting.
                             let da = hypot(v.startLocation.x - pa.x, v.startLocation.y - pa.y)
                             let db = hypot(v.startLocation.x - pb.x, v.startLocation.y - pb.y)
-                            if min(da, db) < 32 { drar = da <= db ? \.a : \.b }
+                            if min(da, db) < 32 {
+                                drar = da <= db ? \.a : \.b
+                                redigerer(da > db)
+                            }
                         }
                         guard let drar else { return }
                         let l = Double((r.maxY - v.location.y) / r.height)

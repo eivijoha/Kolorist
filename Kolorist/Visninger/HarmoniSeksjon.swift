@@ -281,8 +281,12 @@ struct HarmoniSeksjon: View {
         }
     }
 
-    /// Kuløren midt på tonebanen, som flaten vises i.
-    private var midtkulør: Double { TonebaneRing<EmptyView>.normaliser(startKulør + tonebaneSpenn / 2) }
+    /// Endepunktet i tonebanen som redigeres eller sist ble redigert (`true` = slutt): flaten vises i kuløren der, så
+    /// fargene i kvadratet svarer til punktet man drar.
+    @State private var tonebaneSlutt = true
+    private var flatekulør: Double {
+        tonebaneSlutt ? TonebaneRing<EmptyView>.normaliser(startKulør + tonebaneSpenn) : startKulør
+    }
 
 
     /// Kulørglider(e) (i valgt fargesirkel) og lyshet–metning-flaten med streken. Tonebane har en kulør per endepunkt.
@@ -298,13 +302,16 @@ struct HarmoniSeksjon: View {
                          kulør: { sirkel.farge(ref, vinkel: $0, gamut: gamut).okLCH.h },
                          tekst: tekst,
                          stegForTilgjengelighet: 5,
+                         merketSlutt: tonebaneSlutt,
+                         redigerer: { tonebaneSlutt = $0 },
                          endre: { nyStart, nyttSpenn in
                              tonebaneStart = nyStart
                              tonebaneSpenn = nyttSpenn
                              settSluttkulør(TonebaneRing<EmptyView>.normaliser(nyStart + nyttSpenn))
                          }) {
-                LyshetMetningFlate(kulør: midtkulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra,
-                                   visAkser: false)
+                LyshetMetningFlate(kulør: flatekulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra,
+                                   visAkser: false, visGrunnfarge: false, merketSlutt: tonebaneSlutt,
+                                   redigerer: { tonebaneSlutt = $0 })
             }
             .frame(width: sirkelhøyde + 100, height: sirkelhøyde + 100)
             .frame(maxWidth: .infinity)
@@ -425,7 +432,7 @@ struct HarmoniSeksjon: View {
                 if harmoni == .monokrom {
                     KortForklaring("Én kulør i flere toner. Dra endepunktene i flaten for å forme streken.") { Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.") }
                 } else if harmoni == .tonebane {
-                    KortForklaring("Toner langs en bane gjennom lyshet, metning og kulør. Dra endepunktene i flaten og rundt ringen.") { Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren midt på banen.") }
+                    KortForklaring("Toner langs en bane gjennom lyshet, metning og kulør. Dra endepunktene i flaten og rundt ringen.") { Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren i endepunktet du drar eller sist dro, markert med en ring.") }
                 } else {
                 KortForklaring("Dra i sirkelen for å endre kulør, eller trykk i midten for å starte fra en lagret farge.") {
                     Text(sirkel.forklaring + " "
