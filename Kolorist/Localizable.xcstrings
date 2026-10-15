@@ -605,6 +605,22 @@
         }
       }
     },
+    "%lld av fargene ligger utenfor %@. Pilene viser hvor de havner.": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av fargene ligger utenfor %2$@. Pilene viser hvor de havner."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of the colours are outside %2$@. The arrows show where they end up."
+          }
+        }
+      }
+    },
     "%lld fargepar blir vanskelige å skille: %@": {
       "localizations": {
         "en": {
@@ -4053,6 +4069,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Whole Set"
+          }
+        }
+      }
+    },
+    "Heltrukket: OKLab, som Kolorist bruker. Stiplet: rett gjennom sRGB, som vanlige overganger.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solid: OKLab, as Kolorist uses. Dashed: straight through sRGB, like ordinary gradients."
           }
         }
       }
@@ -7700,6 +7726,22 @@
         }
       }
     },
+    "Nærmeste tone: %@ (ΔE00 %@).": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nærmeste tone: %1$@ (ΔE00 %2$@)."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nearest tone: %1$@ (ΔE00 %2$@)."
+          }
+        }
+      }
+    },
     "Nøyaktighet": {
       "localizations": {
         "en": {
@@ -7766,6 +7808,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "OKLab, %lld tones"
+          }
+        }
+      }
+    },
+    "OKLab: L opp, a og b ut – overganger er rette linjer her. Dra for å dreie, knip for å zoome.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OKLab: L up, a and b outwards – gradients are straight lines here. Drag to rotate, pinch to zoom."
           }
         }
       }

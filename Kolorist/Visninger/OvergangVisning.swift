@@ -29,6 +29,8 @@ struct OvergangVisning: View {
     @State private var gradientLagret = false
     /// Én farge fra overgangen som skal legges i en palett (trykk og hold).
     @State private var leggIPalett: [PalettFarge]?
+    /// Overgangen i 3D: OKLab-veien mot veien gjennom sRGB.
+    @State private var vis3D: Fargerom3DKilde?
     @Environment(\.modelContext) private var kontekst
     @Environment(ProfilBibliotek.self) private var bibliotek
     /// Samme «Vis som»-rom og hensikt som Studio, så feltene øverst viser verdiene der.
@@ -58,7 +60,8 @@ struct OvergangVisning: View {
                          // Tonene i trinn og selve gradienten, så mottakeren ser begge.
                          lenke: { Lenkedeling.palett(navn: navn, farger: farger, gradienter: [PalettGradient(navn: navn, oppsett: oppsett)]) },
                          tekstfarge: (toner.last ?? slutt).lesbarTekstfarge.swiftUI,
-                         gradienter: [PalettGradient(navn: navn, oppsett: oppsett)])
+                         gradienter: [PalettGradient(navn: navn, oppsett: oppsett)],
+                         vis3D: { vis3D = .overgang(navn: navn, fra: start, til: slutt, antall: antall) })
     }
 
     private func lagreGradient() {
@@ -273,6 +276,7 @@ struct OvergangVisning: View {
         } message: {
             Text("Gradienten lagres under «Gradienter» i Paletter og kan åpnes igjen her.")
         }
+        .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0, gamut: arbeidsbenk.gamut) }
         .sheet(isPresented: Binding(get: { leggIPalett != nil }, set: { if !$0 { leggIPalett = nil } })) {
             VelgPalettArk(farger: leggIPalett ?? [])
         }

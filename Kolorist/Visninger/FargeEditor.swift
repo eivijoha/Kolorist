@@ -20,6 +20,8 @@ struct FargeEditor: View {
     /// Harmoniens farger (Harmoni-modus), vist i fargeflaten øverst, og grunnfargens plass blant dem.
     @State private var harmonifarger: [Farge] = []
     @State private var harmoniGrunn: Int?
+    /// Fargen (eller harmonien) i 3D.
+    @State private var vis3D: Fargerom3DKilde?
     @Environment(\.modelContext) private var kontekst
     @AppStorage("studioModus") private var lagretModus: Modus = .farge
     private var modus: Modus { bareFarge ? .farge : lagretModus }
@@ -144,7 +146,8 @@ struct FargeEditor: View {
                                       lenketittel: "Del harmonien som lenke",
                                       lenke: { Lenkedeling.harmoni(h, sirkel: s, grunn: grunn, farger: farger, antall: a, vinkel: v,
                                                                    lyshetsrekkefølge: o, grunnIndeks: i) },
-                                      tekstfarge: (farger.last ?? farge).lesbarTekstfarge.swiftUI)
+                                      tekstfarge: (farger.last ?? farge).lesbarTekstfarge.swiftUI,
+                                      vis3D: { vis3D = .farger(navn: h.navn, farger: farger) })
                         }
                 } else {
                     // Samme rom som «Vis som»: én flate med verdiene. Ellers verdiene i kildefargerommet til venstre.
@@ -156,7 +159,12 @@ struct FargeEditor: View {
                                renCMYK: renCMYK,
                                stablet: bred,
                                lagre: { lagreEnkeltfarger([$0], i: kontekst) },
-                               leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
+                               leggIPalett: { lagreNavn = ""; lagreFarger = [$0] },
+                               vis3D: {
+                                   // Med et fargebibliotek: alle tonene, med fargen og nærmeste tone markert.
+                                   vis3D = visOgsåBibliotek.map { .bibliotek($0, markert: farge) }
+                                       ?? .farger(navn: farge.hex(), farger: [farge])
+                               })
                 }
             }
                 // Smal visning: fast høyde øverst (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
@@ -287,6 +295,7 @@ struct FargeEditor: View {
         #endif
         // Arket presenteres herfra, ikke fra menyen: iOS viser ikke ark fra et menyvalg som er i ferd med å lukkes.
         .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }
+        .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0, gamut: arbeidsbenk.gamut, startprofil: visOgsåProfil) }
         .sheet(isPresented: Binding(get: { lagreFarger != nil }, set: { if !$0 { lagreFarger = nil } })) {
             VelgPalettArk(farger: lagreFarger ?? [], foreslåttNavn: lagreNavn)
         }
@@ -856,6 +865,8 @@ struct Fargeflate: View {
     /// Lagre en halvdel som enkeltfarge, eller åpne «Legg i palett» for den.
     var lagre: (PalettFarge) -> Void = { _ in }
     var leggIPalett: (PalettFarge) -> Void = { _ in }
+    /// «Vis i 3D …» i menyen på flaten.
+    var vis3D: (() -> Void)? = nil
 
     /// Rene CMYK-verdier for gjeldende farge og profil. Søket er for tungt til å kjøre ved hver
     /// tegning (glidere), så det gjøres i bakgrunnen etter en kort pause og vises når det er klart.
@@ -953,7 +964,8 @@ struct Fargeflate: View {
         // Fargerutens egen meny overstyrer en ytre meny, så alle valgene sendes inn i den.
         return FargeRute(farge: f, visTekst: false, hjørne: 0, visMerke: false,
                          lagre: { _ in lagre(pf) }, leggIPalett: { _ in leggIPalett(pf) }, visFarge: false, palettFarge: pf,
-                         kopierVerdier: tekst)
+                         kopierVerdier: tekst,
+                         ekstraMeny: vis3D.map { vis in AnyView(Button("Vis i 3D …", systemImage: "rotate.3d", action: vis)) })
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(2).minimumScaleFactor(0.85)

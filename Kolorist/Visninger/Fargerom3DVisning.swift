@@ -2,35 +2,63 @@ import FargeKjerne
 import QuickLook
 import SwiftUI
 
-/// Det 3D-visningen viser: farger (en harmoni eller palett, eventuelt med banen for en tonebane) eller fargerommet til
-/// en ICC-profil.
+/// Det 3D-visningen viser.
 enum Fargerom3DKilde: Identifiable {
+    /// Farger (en harmoni eller palett), eventuelt med banen for en tonebane.
     case farger(navn: String, farger: [Farge], bane: [Farge]? = nil)
+    /// En overgang: OKLab-veien (som Kolorist bruker) og den vanlige veien gjennom sRGB.
+    case overgang(navn: String, fra: Farge, til: Farge, antall: Int)
+    /// Tonene i et fargebibliotek som punktsky, eventuelt med en farge og nærmeste tone markert.
+    case bibliotek(Fargebibliotek, markert: Farge? = nil)
+    /// Fargerommet til en ICC-profil.
     case profil(ICCProfil)
 
     var id: String {
         switch self {
         case .farger(let navn, let farger, _): "farger:\(navn):\(farger.map { $0.hex() }.joined())"
+        case .overgang(let navn, let fra, let til, let antall): "overgang:\(navn):\(fra.hex())\(til.hex())\(antall)"
+        case .bibliotek(let b, let m): "bibliotek:\(b.id):\(m?.hex() ?? "")"
         case .profil(let p): "profil:\(p.id)"
         }
     }
 
     var navn: String {
         switch self {
-        case .farger(let navn, _, _): navn
+        case .farger(let navn, _, _), .overgang(let navn, _, _, _): navn
+        case .bibliotek(let b, _): b.navn
         case .profil: String(localized: "Fargerom i 3D")
+        }
+    }
+
+    /// Rommet visningen starter i.
+    var foretrukketRom: Fargerom3DRom? {
+        switch self {
+        case .farger: nil
+        case .overgang: .okLab
+        case .bibliotek, .profil: .cieLab
         }
     }
 }
 
 /// Rommet farger vises i.
 enum Fargerom3DRom: String, CaseIterable, Identifiable {
-    case fargekule, cieLab
+    case fargekule, okLab, cieLab
     var id: String { rawValue }
     var navn: LocalizedStringKey {
         switch self {
         case .fargekule: "Fargekule"
+        case .okLab: "OKLab"
         case .cieLab: "CIELab"
+        }
+    }
+    /// Rom med kube og akser (a, b ut, L opp).
+    nonisolated var erLab: Bool { self != .fargekule }
+
+    nonisolated func posisjon(_ f: Farge, gamut: Gamut) -> SIMD3<Double> {
+        switch self {
+        case .fargekule: Fargerom3D.kuleposisjon(f, gamut: gamut)
+        case .okLab: Fargerom3D.oklabposisjon(f)
+        case .cieLab: Fargerom3D.labposisjon(f)
         }
     }
 }
@@ -46,6 +74,7 @@ struct Fargerom3DTegning: Sendable {
         var p: SIMD3<Double>
         var farge: Color
         var størrelse: CGFloat
+        var kant = true
     }
     struct Strek: Sendable {
         var a: SIMD3<Double>, b: SIMD3<Double>
@@ -56,14 +85,20 @@ struct Fargerom3DTegning: Sendable {
     var trekanter: [Trekant] = []
     var punkter: [Punkt] = []
     var streker: [Strek] = []
-    var lab = false
+    var rom: Fargerom3DRom = .fargekule
+    /// Kort tekst om det som er tegnet (f.eks. hvor mange farger som ligger utenfor profilen).
+    var merknad: String?
     /// Det samme som USDZ-scene.
     var scene = Fargerom3D.Scene()
 
-    /// Bygger innholdet (tungt for ICC-profiler: kjøres i bakgrunnen).
+    /// Bygger innholdet (tungt for ICC-profiler og biblioteker: kjøres i bakgrunnen).
     nonisolated static func lag(_ kilde: Fargerom3DKilde, rom: Fargerom3DRom, profil: ICCProfil, sammenlign: ICCProfil?,
                                 gamut: Gamut) -> Fargerom3DTegning {
         var t = Fargerom3DTegning()
+        let rom: Fargerom3DRom = if case .profil = kilde { rom == .fargekule ? .cieLab : rom } else { rom }
+        t.rom = rom
+        let posisjon: (Farge) -> SIMD3<Double> = { rom.posisjon($0, gamut: gamut) }
+
         func flate(_ f: Fargerom3D.Flate, opasitet: Double) {
             let farger = f.farger.map(\.swiftUI)
             for tr in f.trekanter {
@@ -72,56 +107,125 @@ struct Fargerom3DTegning: Sendable {
             }
             t.scene.flater.append((f, opasitet))
         }
+        func skall(_ p: ICCProfil, opasitet: Double, oppløsning: Int) {
+            guard let sider = Fargerom3D.gamutskall(p, oppløsning: oppløsning) else { return }
+            for s in sider { flate(rom == .cieLab ? s : s.omplassert(posisjon), opasitet: opasitet) }
+        }
         func linje(_ punkter: [SIMD3<Double>], farger: [Color], bredde: CGFloat, stiplet: Bool = false) {
             for i in 1..<punkter.count {
                 t.streker.append(.init(a: punkter[i - 1], b: punkter[i], farge: farger[min(i, farger.count - 1)], bredde: bredde, stiplet: stiplet))
             }
         }
+        func punkt(_ f: Farge, størrelse: CGFloat = 14, radius: Double = 0.06, kant: Bool = true) {
+            let p = posisjon(f)
+            t.punkter.append(.init(p: p, farge: f.swiftUI, størrelse: størrelse, kant: kant))
+            t.scene.punkter.append((p, f, radius))
+        }
+        /// Fargen slik profilen kan gjengi den: gamut-kartlagt i OKLCH for sRGB og Display P3, ellers gjennom profilen
+        /// og tilbake (som ved utskrift).
+        func kartlagt(_ f: Farge) -> Farge {
+            if profil.id == ICCProfil.sRGB.id { return f.gamutKartlagt(til: .sRGB) }
+            if profil.id == ICCProfil.displayP3.id { return f.gamutKartlagt(til: .displayP3) }
+            guard let k = f.komponenter(i: profil), let tilbake = Farge(komponenter: k, i: profil) else { return f }
+            return tilbake
+        }
+        /// Piler fra farger utenfor profilen til der de havner.
+        func kartlegging(_ farger: [Farge]) {
+            guard rom.erLab else { return }
+            var utenfor = 0
+            for f in farger {
+                let m = kartlagt(f)
+                let a = f.okLab, b = m.okLab
+                guard hypot(hypot(a.l - b.l, a.a - b.a), a.b - b.b) > 0.01 else { continue }
+                utenfor += 1
+                let (p, q) = (posisjon(f), posisjon(m))
+                t.streker.append(.init(a: p, b: q, farge: .red.opacity(0.85), bredde: 2))
+                t.punkter.append(.init(p: q, farge: m.swiftUI, størrelse: 9))
+                t.scene.streker.append(([p, q], Farge(lineærR: 0.8, g: 0.05, b: 0.05), 0.008))
+                t.scene.punkter.append((q, m, 0.035))
+            }
+            if utenfor > 0 {
+                t.merknad = String(localized: "\(utenfor) av fargene ligger utenfor \(profil.navn). Pilene viser hvor de havner.")
+            }
+        }
 
         switch kilde {
         case .farger(_, let farger, let bane):
-            let posisjon: (Farge) -> SIMD3<Double> = rom == .fargekule
-                ? { Fargerom3D.kuleposisjon($0, gamut: gamut) } : { Fargerom3D.labposisjon($0) }
             if rom == .fargekule {
                 flate(Fargerom3D.kuleflate(gamut: gamut, kolonner: 49, rader: 25), opasitet: 0.22)
-                // Den grå aksen, fra sort til hvit.
-                let akse = (0...10).map { SIMD3<Double>(0, Double($0) / 5 - 1, 0) }
-                linje(akse, farger: (0...10).map { Color(white: Double($0) / 10) }, bredde: 3)
                 let ekvator = (0...72).map { Fargerom3D.kuleposisjon(lyshet: 0.5, metning: 1, kulør: Double($0) * 5) }
                 linje(ekvator, farger: [.primary.opacity(0.35)], bredde: 0.75, stiplet: true)
             } else {
-                t.lab = true
-                if let skall = Fargerom3D.gamutskall(profil, oppløsning: 12) {
-                    for s in skall { flate(s, opasitet: 0.2) }
-                }
+                skall(profil, opasitet: 0.2, oppløsning: 12)
             }
             if let bane, bane.count > 1 {
                 let punkter = bane.map(posisjon)
                 linje(punkter, farger: [.primary.opacity(0.8)], bredde: 2.5)
                 t.scene.streker.append((punkter, Farge(lineærR: 0.2, g: 0.2, b: 0.2), 0.012))
             }
-            for f in farger {
-                let p = posisjon(f)
-                t.punkter.append(.init(p: p, farge: f.swiftUI, størrelse: 14))
-                t.scene.punkter.append((p, f, 0.06))
+            for f in farger { punkt(f) }
+            kartlegging(farger)
+
+        case .overgang(_, let fra, let til, let antall):
+            if rom == .fargekule {
+                flate(Fargerom3D.kuleflate(gamut: gamut, kolonner: 49, rader: 25), opasitet: 0.18)
+            } else {
+                skall(profil, opasitet: 0.14, oppløsning: 12)
             }
+            // OKLab-veien (Kolorist) og veien gjennom sRGB (vanlige CSS-overganger og de fleste designprogrammer).
+            let ok = Overgang.toner(fra: fra, til: til, antall: 48)
+            let (a, b) = (fra.gamutKartlagt(til: .sRGB).sRGB, til.gamutKartlagt(til: .sRGB).sRGB)
+            let srgb = (0..<48).map { i -> Farge in
+                let t = Double(i) / 47
+                return Farge(sRGB: SRGB(r: a.r + (b.r - a.r) * t, g: a.g + (b.g - a.g) * t, b: a.b + (b.b - a.b) * t))
+            }
+            let okPunkter = ok.map(posisjon), srgbPunkter = srgb.map(posisjon)
+            linje(srgbPunkter, farger: [.orange], bredde: 2.5, stiplet: true)
+            linje(okPunkter, farger: [.primary.opacity(0.85)], bredde: 2.5)
+            t.scene.streker.append((srgbPunkter, Farge(lineærR: 0.9, g: 0.4, b: 0.05), 0.01))
+            t.scene.streker.append((okPunkter, Farge(lineærR: 0.15, g: 0.15, b: 0.15), 0.012))
+            let toner = Overgang.toner(fra: fra, til: til, antall: max(antall, 2))
+            for f in toner { punkt(f, størrelse: 12, radius: 0.05) }
+            for i in 1..<max(antall, 2) - 1 {
+                let t = Double(i) / Double(max(antall, 2) - 1)
+                let f = Farge(sRGB: SRGB(r: a.r + (b.r - a.r) * t, g: a.g + (b.g - a.g) * t, b: a.b + (b.b - a.b) * t))
+                punkt(f, størrelse: 8, radius: 0.03)
+            }
+            t.merknad = String(localized: "Heltrukket: OKLab, som Kolorist bruker. Stiplet: rett gjennom sRGB, som vanlige overganger.")
+
+        case .bibliotek(let bibliotek, let markert):
+            if rom == .fargekule {
+                flate(Fargerom3D.kuleflate(gamut: gamut, kolonner: 49, rader: 25), opasitet: 0.12)
+            } else {
+                skall(profil, opasitet: 0.12, oppløsning: 12)
+            }
+            let små: CGFloat = bibliotek.farger.count > 400 ? 5 : 8
+            for pf in bibliotek.farger { punkt(pf.farge, størrelse: små, radius: 0.018, kant: false) }
+            if let markert {
+                punkt(markert, størrelse: 16, radius: 0.06)
+                if let n = bibliotek.nærmeste(til: markert) {
+                    punkt(n.tone.farge, størrelse: 12, radius: 0.045)
+                    let (p, q) = (posisjon(markert), posisjon(n.tone.farge))
+                    t.streker.append(.init(a: p, b: q, farge: .primary, bredde: 2))
+                    t.scene.streker.append(([p, q], Farge(lineærR: 0.1, g: 0.1, b: 0.1), 0.008))
+                    t.merknad = String(localized: "Nærmeste tone: \(n.tone.visningsnavn) (ΔE00 \(String(format: "%.1f", n.avstand))).")
+                }
+            }
+
         case .profil:
-            t.lab = true
-            if let skall = Fargerom3D.gamutskall(profil, oppløsning: 16) {
-                for s in skall { flate(s, opasitet: 1) }
-            }
-            if let sammenlign, let skall = Fargerom3D.gamutskall(sammenlign, oppløsning: 12) {
-                for s in skall { flate(s, opasitet: 0.22) }
-            }
+            skall(profil, opasitet: 1, oppløsning: 16)
+            if let sammenlign { skall(sammenlign, opasitet: 0.22, oppløsning: 12) }
         }
-        if t.lab {
-            // Kuben (±128 a* og b*, L* 0–100) og aksene.
+
+        // Den grå aksen, fra sort til hvit.
+        let akse = (0...10).map { SIMD3<Double>(0, Double($0) / 5 - 1, 0) }
+        linje(akse, farger: (0...10).map { Color(white: Double($0) / 10) }, bredde: 3)
+        if rom.erLab {
+            // Kuben og a/b-aksene ved bunnen.
             let h: [SIMD3<Double>] = [[-1, -1, -1], [1, -1, -1], [1, -1, 1], [-1, -1, 1], [-1, 1, -1], [1, 1, -1], [1, 1, 1], [-1, 1, 1]]
             for (a, b) in [(0, 1), (1, 2), (2, 3), (3, 0), (4, 5), (5, 6), (6, 7), (7, 4), (0, 4), (1, 5), (2, 6), (3, 7)] {
                 t.streker.append(.init(a: h[a], b: h[b], farge: .primary.opacity(0.15), bredde: 1))
             }
-            let akse = (0...10).map { SIMD3<Double>(0, Double($0) / 5 - 1, 0) }
-            linje(akse, farger: (0...10).map { Color(white: Double($0) / 10) }, bredde: 3)
             t.streker.append(.init(a: [-1, -1, 0], b: [1, -1, 0], farge: .primary.opacity(0.35), bredde: 1.5))
             t.streker.append(.init(a: [0, -1, -1], b: [0, -1, 1], farge: .primary.opacity(0.35), bredde: 1.5))
         }
@@ -149,14 +253,24 @@ struct Fargerom3DVisning: View {
 
     private enum Element {
         case trekant(Path, Color, Double)
-        case punkt(CGPoint, Color, CGFloat)
+        case punkt(CGPoint, Color, CGFloat, Bool)
         case strek(CGPoint, CGPoint, Color, CGFloat, Bool)
+    }
+
+    private var aksetekster: [(String, SIMD3<Double>)] {
+        switch tegning.rom {
+        case .fargekule: []
+        case .okLab: [("L 1", [0, 1.12, 0]), ("L 0", [0, -1.14, 0]), ("+a", [1.18, -1, 0]), ("−a", [-1.18, -1, 0]),
+                      ("+b", [0, -1, -1.18]), ("−b", [0, -1, 1.18])]
+        case .cieLab: [("L* 100", [0, 1.12, 0]), ("L* 0", [0, -1.14, 0]), ("+a*", [1.18, -1, 0]), ("−a*", [-1.18, -1, 0]),
+                       ("+b*", [0, -1, -1.18]), ("−b*", [0, -1, 1.18])]
+        }
     }
 
     var body: some View {
         Canvas { ctx, størrelse in
             let senter = CGPoint(x: størrelse.width / 2, y: størrelse.height / 2)
-            let skala = min(størrelse.width, størrelse.height) * (tegning.lab ? 0.3 : 0.42) * zoom
+            let skala = min(størrelse.width, størrelse.height) * (tegning.rom.erLab ? 0.3 : 0.42) * zoom
             var elementer: [(dybde: Double, element: Element)] = []
             elementer.reserveCapacity(tegning.trekanter.count + tegning.punkter.count + tegning.streker.count)
             for t in tegning.trekanter {
@@ -174,7 +288,7 @@ struct Fargerom3DVisning: View {
             }
             for p in tegning.punkter {
                 let (q, z) = projiser(p.p, senter: senter, skala: skala)
-                elementer.append((z + 0.002, .punkt(q, p.farge, p.størrelse)))
+                elementer.append((z + 0.002, .punkt(q, p.farge, p.størrelse, p.kant)))
             }
             elementer.sort { $0.dybde < $1.dybde }
             for (_, e) in elementer {
@@ -189,22 +303,19 @@ struct Fargerom3DVisning: View {
                 case .strek(let a, let b, let farge, let bredde, let stiplet):
                     var sti = Path()
                     sti.move(to: a); sti.addLine(to: b)
-                    ctx.stroke(sti, with: .color(farge), style: StrokeStyle(lineWidth: bredde, lineCap: .round, dash: stiplet ? [2, 3] : []))
-                case .punkt(let p, let farge, let d):
+                    ctx.stroke(sti, with: .color(farge), style: StrokeStyle(lineWidth: bredde, lineCap: .round, dash: stiplet ? [4, 4] : []))
+                case .punkt(let p, let farge, let d, let kant):
                     let sirkel = Path(ellipseIn: CGRect(x: p.x - d / 2, y: p.y - d / 2, width: d, height: d))
                     ctx.fill(sirkel, with: .color(farge))
-                    ctx.stroke(sirkel, with: .color(.white), lineWidth: 2)
-                    ctx.stroke(sirkel.strokedPath(StrokeStyle(lineWidth: 2)), with: .color(.black.opacity(0.3)), lineWidth: 0.5)
+                    if kant {
+                        ctx.stroke(sirkel, with: .color(.white), lineWidth: 2)
+                        ctx.stroke(sirkel.strokedPath(StrokeStyle(lineWidth: 2)), with: .color(.black.opacity(0.3)), lineWidth: 0.5)
+                    }
                 }
             }
-            if tegning.lab {
-                let merker: [(String, SIMD3<Double>)] = [("L* 100", [0, 1.12, 0]), ("L* 0", [0, -1.14, 0]),
-                                                         ("+a*", [1.18, -1, 0]), ("−a*", [-1.18, -1, 0]),
-                                                         ("+b*", [0, -1, -1.18]), ("−b*", [0, -1, 1.18])]
-                for (tekst, p) in merker {
-                    ctx.draw(Text(verbatim: tekst).font(.caption2.weight(.semibold)).foregroundStyle(Color.sekundærTekst),
-                             at: projiser(p, senter: senter, skala: skala).0)
-                }
+            for (tekst, p) in aksetekster {
+                ctx.draw(Text(verbatim: tekst).font(.caption2.weight(.semibold)).foregroundStyle(Color.sekundærTekst),
+                         at: projiser(p, senter: senter, skala: skala).0)
             }
         }
         .contentShape(Rectangle())
@@ -234,40 +345,40 @@ struct Fargerom3DVisning: View {
     }
 }
 
-/// Ark med 3D-visningen: valg av rom (for farger) og profil, deling som 3D-modell (USDZ) og Hurtigvisning (AR på
-/// iPhone og iPad).
+/// Ark med 3D-visningen: valg av rom og profil, deling som 3D-modell (USDZ) og Hurtigvisning (AR på iPhone og iPad).
 struct Fargerom3DArk: View {
     let kilde: Fargerom3DKilde
     var gamut: Gamut = .displayP3
+    /// Profilen visningen starter med (f.eks. den som er valgt under «Vis som» i Studio).
+    var startprofil: ICCProfil? = nil
     @Environment(\.dismiss) private var lukk
-    @AppStorage("fargerom3D.rom") private var rom: Fargerom3DRom = .fargekule
+    @AppStorage("fargerom3D.rom") private var lagretRom: Fargerom3DRom = .fargekule
     @AppStorage("fargerom3D.profil") private var profilID = ICCProfil.sRGB.id
     @AppStorage("fargerom3D.sammenlign") private var sammenlignID = ""
+    @State private var rom: Fargerom3DRom = .fargekule
     @State private var tegning: Fargerom3DTegning?
     @State private var dreining = 0.0
     @State private var fil: URL?
     @State private var forhåndsvisning: URL?
 
     private var erProfil: Bool { if case .profil = kilde { true } else { false } }
-    private var visesILab: Bool { erProfil || rom == .cieLab }
     private var profiler: [ICCProfil] { ProfilBibliotek.delt.alle.filter { $0.modell == .rgb || $0.modell == .cmyk } }
     private var profil: ICCProfil { ProfilBibliotek.delt.profil(id: profilID) ?? .sRGB }
     private var sammenlign: ICCProfil? { sammenlignID.isEmpty ? nil : ProfilBibliotek.delt.profil(id: sammenlignID) }
     private var nøkkel: String { "\(kilde.id)|\(rom.rawValue)|\(profil.id)|\(sammenlignID)" }
+    private var romvalg: [Fargerom3DRom] { erProfil ? [.okLab, .cieLab] : Fargerom3DRom.allCases }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 12) {
-                if !erProfil {
-                    Picker("Rom", selection: $rom) {
-                        ForEach(Fargerom3DRom.allCases) { Text($0.navn).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
+                Picker("Rom", selection: $rom) {
+                    ForEach(romvalg) { Text($0.navn).tag($0) }
                 }
-                if visesILab {
-                    // Fargerommet (som skall – i heldekkende farger for en profil, som glass rundt fargene ellers),
-                    // og for en profil et annet rom til sammenligning (som glass).
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                if rom.erLab {
+                    // Fargerommet (heldekkende for en profil, som glass rundt fargene ellers) og for en profil et annet
+                    // rom til sammenligning (som glass).
                     profilvelger("Fargerom", valgt: $profilID, ingen: false)
                     if erProfil { profilvelger("Sammenlign med", valgt: $sammenlignID, ingen: true) }
                 }
@@ -279,12 +390,15 @@ struct Fargerom3DArk: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                Text(visesILab
-                     ? "CIELab (D50): L* opp, a* og b* ut. Dra for å dreie, knip for å zoome."
-                     : "Kuløren rundt den grå aksen, lysheten opp og metningen ut mot overflaten. Dra for å dreie.")
-                    .font(.footnote)
-                    .foregroundStyle(Color.sekundærTekst)
-                    .multilineTextAlignment(.center)
+                VStack(spacing: 4) {
+                    if let merknad = tegning?.merknad {
+                        Text(merknad).font(.footnote)
+                    }
+                    Text(forklaring)
+                        .font(.footnote)
+                        .foregroundStyle(Color.sekundærTekst)
+                }
+                .multilineTextAlignment(.center)
             }
             .padding()
             .navigationTitle(kilde.navn)
@@ -309,12 +423,24 @@ struct Fargerom3DArk: View {
                 }
             }
             .quickLookPreview($forhåndsvisning)
-            .onAppear { if case .profil(let p) = kilde { profilID = p.id } }
+            .onAppear {
+                if case .profil(let p) = kilde { profilID = p.id } else if let startprofil { profilID = startprofil.id }
+                rom = kilde.foretrukketRom ?? lagretRom
+            }
+            .onChange(of: rom) { _, ny in if kilde.foretrukketRom == nil { lagretRom = ny } }
             .task(id: nøkkel) { await bygg() }
         }
         #if os(macOS)
         .frame(minWidth: 520, minHeight: 600)
         #endif
+    }
+
+    private var forklaring: LocalizedStringKey {
+        switch rom {
+        case .fargekule: "Kuløren rundt den grå aksen, lysheten opp og metningen ut mot overflaten. Dra for å dreie."
+        case .okLab: "OKLab: L opp, a og b ut – overganger er rette linjer her. Dra for å dreie, knip for å zoome."
+        case .cieLab: "CIELab (D50): L* opp, a* og b* ut. Dra for å dreie, knip for å zoome."
+        }
     }
 
     private func profilvelger(_ tittel: LocalizedStringKey, valgt: Binding<String>, ingen: Bool) -> some View {
@@ -328,14 +454,26 @@ struct Fargerom3DArk: View {
     private func bygg() async {
         let navn = erProfil ? ProfilBibliotek.delt.visningsnavn(profil) : kilde.navn
         let (k, r, p, s, g) = (kilde, rom, profil, sammenlign, gamut)
-        if case .farger(_, let farger, _) = kilde, dreining == 0 {
-            // Snu kula så snittkuløren vender mot betrakteren.
+        if dreining == 0, case .overgang(_, let fra, let til, _) = kilde {
+            // Overgangen på tvers av synsretningen, så forskjellen mellom de to veiene ses fra siden.
+            let d = Fargerom3D.oklabposisjon(til) - Fargerom3D.oklabposisjon(fra)
+            dreining = atan2(d.z, d.x) + (abs(d.x) + abs(d.z) < 0.01 ? 0.6 : 0)
+        }
+        if dreining == 0 {
+            // Snu kula så snittkuløren av fargene vender mot betrakteren.
+            let farger: [Farge] = switch kilde {
+            case .farger(_, let f, _): f
+            case .overgang(_, let fra, let til, _): [fra, til]
+            case .bibliotek(_, let m): m.map { [$0] } ?? []
+            case .profil: []
+            }
             let lch = farger.map(\.okLCH).filter { $0.c > 0.02 }
-            let (sx, sy) = lch.reduce((0.0, 0.0)) { ($0.0 + cos($1.h * .pi / 180), $0.1 + sin($1.h * .pi / 180)) }
-            let h = lch.isEmpty ? 0 : atan2(sy, sx)
-            dreining = -.pi / 2 - h
-        } else if dreining == 0 {
-            dreining = 215 * .pi / 180
+            if lch.isEmpty {
+                dreining = 215 * .pi / 180
+            } else {
+                let (sx, sy) = lch.reduce((0.0, 0.0)) { ($0.0 + cos($1.h * .pi / 180), $0.1 + sin($1.h * .pi / 180)) }
+                dreining = -.pi / 2 - atan2(sy, sx)
+            }
         }
         let ny = await Task.detached(priority: .userInitiated) {
             Fargerom3DTegning.lag(k, rom: r, profil: p, sammenlign: s, gamut: g)

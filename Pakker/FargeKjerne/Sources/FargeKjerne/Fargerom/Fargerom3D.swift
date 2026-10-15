@@ -8,6 +8,7 @@ import simd
 /// - **Fargekule (OKLCH):** lysheten langs den grå aksen (sort nederst, hvit øverst), kuløren rundt aksen og metningen ut
 ///   mot overflaten, som andel av høyeste kroma innenfor gamut ved fargens lyshet og kulør (overflaten = så mettet som
 ///   fargen kan bli). Farger utenfor gamut ligger utenfor kula.
+/// - **OKLab:** L opp (0…1), a og b ut (±0,32) – rommet overgangene regnes i, der en overgang er en rett linje.
 /// - **CIELab (D50, som ICC):** L* opp, a* og b* ut, ±128 – fargerom (gamutskall) fra ICC-profiler i sin virkelige form.
 ///
 /// Kuløren går fra +a* mot +b* i begge rom (x = a*, z = −b*), så de kan sammenlignes.
@@ -30,6 +31,11 @@ public enum Fargerom3D {
         }
 
         public func indeks(_ kolonne: Int, _ rad: Int) -> Int { rad * kolonner + kolonne }
+
+        /// Samme flate med punktene regnet om (f.eks. fra CIELab til OKLab) ut fra fargene.
+        public func omplassert(_ posisjon: (Farge) -> SIMD3<Double>) -> Flate {
+            Flate(kolonner: kolonner, rader: rader, punkter: farger.map(posisjon), farger: farger, lukket: lukket)
+        }
 
         /// Trekantene i rutenettet (indekser i `punkter`).
         public var trekanter: [SIMD3<Int32>] {
@@ -78,6 +84,14 @@ public enum Fargerom3D {
             }
         }
         return Flate(kolonner: kolonner, rader: rader, punkter: punkter, farger: farger, lukket: true)
+    }
+
+    // MARK: - OKLab
+
+    /// Fargens plass i OKLab: x = a/0,32, y = 2L − 1, z = −b/0,32.
+    public static func oklabposisjon(_ farge: Farge) -> SIMD3<Double> {
+        let lab = farge.okLab
+        return .init(lab.a / 0.32, 2 * lab.l - 1, -lab.b / 0.32)
     }
 
     // MARK: - CIELab
@@ -171,9 +185,28 @@ public enum Fargerom3D {
             for (nr, s) in streker.enumerated() {
                 mesher.append(.rør(navn: "Strek\(nr)", langs: s.punkter.map(p), radius: Float(s.radius) * skala, farge: rgb(s.farge)))
             }
-            for (nr, punkt) in punkter.enumerated() {
-                mesher.append(.kule(navn: "Farge\(nr)", sentrum: p(punkt.posisjon), radius: Float(punkt.radius) * skala,
-                                    farge: rgb(punkt.farge)))
+            // Alle punktene i én flate, med fargene i et teksturatlas (én piksel per punkt): få materialer også for
+            // tusenvis av farger (f.eks. et fargebibliotek).
+            if !punkter.isEmpty {
+                let side = Int(Double(punkter.count).squareRoot().rounded(.up))
+                let oppløsning = punkter.count > 200 ? 4 : 10
+                var samlet = USDScene.Mesh(navn: "Farger", punkter: [], trekanter: [], tekstur: "farger.png")
+                for (nr, punkt) in punkter.enumerated() {
+                    let kule = USDScene.Mesh.kule(navn: "", sentrum: p(punkt.posisjon), radius: Float(punkt.radius) * skala,
+                                                  farge: .zero, oppløsning: oppløsning)
+                    let start = Int32(samlet.punkter.count)
+                    let st = SIMD2<Float>((Float(nr % side) + 0.5) / Float(side), 1 - (Float(nr / side) + 0.5) / Float(side))
+                    samlet.punkter += kule.punkter
+                    samlet.uv += Array(repeating: st, count: kule.punkter.count)
+                    samlet.trekanter += kule.trekanter.map { $0 &+ start }
+                }
+                mesher.append(samlet)
+                teksturer["farger.png"] = USDScene.png(bredde: side, høyde: side) { x, y in
+                    let nr = y * side + x
+                    guard nr < punkter.count else { return .init(0.5, 0.5, 0.5) }
+                    let s = punkter[nr].farge.gamutKartlagt(til: .sRGB).sRGB
+                    return .init(s.r, s.g, s.b)
+                }
             }
             return USDScene(navn: navn, mesher: mesher, teksturer: teksturer).usdz()
         }

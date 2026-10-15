@@ -8,6 +8,8 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
   den grå aksen, kulør rundt, metning ut mot overflaten som andel av høyeste kroma i gamut; `kuleposisjon`,
   `kuleflate`) og CIELab D50 (`labposisjon`, `gamutskall(_:)` for RGB- og CMYK-profiler, CMYK tilnærmet med
   K = min(C, M, Y)). `Fargerom3D.Scene` samler flater, punkter og streker og skrives som USDZ (`usdz(navn:størrelse:)`).
+  Også OKLab (`oklabposisjon`), `Flate.omplassert(_:)` (samme flate i et annet rom), og i USDZ samles punktene i én
+  flate med fargene i et teksturatlas (tusenvis av farger, f.eks. et fargebibliotek).
 - **USDZ (`USDScene`):** enkel scene med teksturerte eller ensfargede, eventuelt gjennomsiktige flater, skrevet som
   USDA og pakket som USDZ (ukomprimert zip med 64-byte-justering), med `kule` og `rør` som hjelpeformer – for
   Hurtigvisning og AR Quick Look.

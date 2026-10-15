@@ -70,6 +70,10 @@ struct MineProfilerArk: View {
                     Section {
                         ForEach(bibliotek.fargebiblioteker) { b in
                             bibliotekrad(b)
+                                .contextMenu {
+                                    Button("Vis i 3D …", systemImage: "rotate.3d") { vis3D = .bibliotek(b) }
+                                    Button("Slett biblioteket", systemImage: "trash", role: .destructive) { slettes = .bibliotek(b) }
+                                }
                                 #if os(iOS)
                                 .swipeActions {
                                     Button("Slett", systemImage: "trash", role: .destructive) { slettes = .bibliotek(b) }
@@ -85,7 +89,10 @@ struct MineProfilerArk: View {
                 }
                 if let om = Filamentfarger.om {
                     Section {
-                        ForEach(Filamentfarger.biblioteker) { b in innebygdRad(b) }
+                        ForEach(Filamentfarger.biblioteker) { b in
+                            innebygdRad(b)
+                                .contextMenu { Button("Vis i 3D …", systemImage: "rotate.3d") { vis3D = .bibliotek(b) } }
+                        }
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Filamentfarger for 3D-print fra FilamentColors.xyz: \(om.antall) prøver fra mange produsenter, \(om.målt) av dem målt med kolorimeter. Resten er anslått fra foto og merket slik. Hver farge lenker til prøven hos FilamentColors.xyz.")
                             Text("Dataene er lisensiert under CC BY 4.0. Kolorist har valgt ut opplysninger og regnet om fargene (uttrekk \(om.hentet)) og er ikke tilknyttet FilamentColors.xyz.")

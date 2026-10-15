@@ -58,6 +58,8 @@ struct RekkeMeny: View {
     var tekstfarge: Color = .primary
     /// Gradienter som skrives ut sammen med fargene (f.eks. selve overgangen).
     var gradienter: [PalettGradient] = []
+    /// «Vis i 3D …» for fargene (f.eks. overgangen eller harmonien).
+    var vis3D: (() -> Void)? = nil
 
     var body: some View {
         Menu {
@@ -67,6 +69,7 @@ struct RekkeMeny: View {
                 Button("Skriv ut …", systemImage: "printer") {
                     PalettUtskrift.skrivUt(Palett(navn: navn, farger: farger), gradienter: gradienter)
                 }
+                if let vis3D { Button("Vis i 3D …", systemImage: "rotate.3d", action: vis3D) }
             }
             Section {
                 DelSomLenke(navn: navn, tittel: lenketittel, innhold: lenke)
