@@ -1131,6 +1131,16 @@
         }
       }
     },
+    "Banen i fargekula: kuløren går rundt den grå aksen, lysheten opp eller ned, og metningen ut mot overflaten.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The path in the colour sphere: the hue goes around the grey axis, the lightness up or down, and the saturation out towards the surface."
+          }
+        }
+      }
+    },
     "Bare lysets farge er kjent": {
       "localizations": {
         "en": {
@@ -2470,6 +2480,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour harmonies"
+          }
+        }
+      }
+    },
+    "Fargekule med tonebanen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour sphere with the tone path"
           }
         }
       }
@@ -5480,6 +5500,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hue, start"
+          }
+        }
+      }
+    },
+    "Kuløren går %lld grader rundt kula, lysheten fra %lld %% til %lld %%": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kuløren går %1$lld grader rundt kula, lysheten fra %2$lld %% til %3$lld %%"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hue goes %1$lld degrees around the sphere, the lightness from %2$lld %% to %3$lld %%"
           }
         }
       }
