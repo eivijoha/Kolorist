@@ -12,6 +12,8 @@ struct HarmoniSeksjon: View {
     var lagre: ([PalettFarge], String) -> Void
     /// Melder harmoniens farger og grunnfargens plass, så Studio kan vise dem i fargeflaten øverst.
     var vis: ([Farge], Int?) -> Void = { _, _ in }
+    /// Fargerommet «Vis som» viser: gliderne og flaten for lyshet og metning viser grensen for det.
+    var grense: ICCProfil? = nil
 
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var bredde
@@ -189,7 +191,11 @@ struct HarmoniSeksjon: View {
                         gjeldende: grunnfarge(metning: metning ?? grunnMetning, lyshet: lyshet ?? grunnLyshet).swiftUI,
                         tittel: Text(tittel),
                         verdiTekst: tekst,
-                        stegForTilgjengelighet: 0.05)
+                        stegForTilgjengelighet: 0.05,
+                        innenfor: grense.map { g in
+                            let (m, l) = (metning ?? grunnMetning, lyshet ?? grunnLyshet)
+                            return { v in grunnfarge(metning: metningsakse ? v : m, lyshet: metningsakse ? l : v).erInnenfor(g) }
+                        })
             Text(tekst)
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(Color.sekundærTekst)
@@ -264,7 +270,8 @@ struct HarmoniSeksjon: View {
                         gjeldende: ref.swiftUI,
                         tittel: Text(tittel),
                         verdiTekst: tekst,
-                        stegForTilgjengelighet: 5)
+                        stegForTilgjengelighet: 5,
+                        innenfor: grense.map { g in { v in sirkel.farge(ref, vinkel: v, gamut: gamut).erInnenfor(g) } })
             Text(tekst)
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(Color.sekundærTekst)
@@ -311,7 +318,7 @@ struct HarmoniSeksjon: View {
                              tonebaneSpenn = nyttSpenn
                              settSluttkulør(TonebaneRing<EmptyView>.normaliser(nyStart + nyttSpenn))
                          }) {
-                LyshetMetningFlate(kulør: flatekulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra,
+                LyshetMetningFlate(kulør: flatekulør, gamut: gamut, grense: grense, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra,
                                    visAkser: false, visGrunnfarge: false, merketSlutt: tonebaneSlutt,
                                    redigerer: { tonebaneSlutt = $0 })
             }
@@ -327,7 +334,7 @@ struct HarmoniSeksjon: View {
         } else {
             kulørglider(String(localized: "Kulør"), kulør: monokromKulør, sett: settSluttkulør)
             // Kvadratisk, like høy som fargesirkelen i de andre harmoniene.
-            LyshetMetningFlate(kulør: monokromKulør, gamut: gamut, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra)
+            LyshetMetningFlate(kulør: monokromKulør, gamut: gamut, grense: grense, strek: strek, toner: farger, grunnfarge: grunnfarge, velg: velgHerfra)
                 .frame(width: sirkelhøyde, height: sirkelhøyde)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)

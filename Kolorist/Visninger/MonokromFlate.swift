@@ -7,6 +7,8 @@ import SwiftUI
 struct LyshetMetningFlate: View {
     let kulør: Double
     let gamut: Gamut
+    /// Fargerommet «Vis som» viser: området utenfor stripes, med grensen som kurve.
+    var grense: ICCProfil? = nil
     @Binding var strek: Monokromstrek
     let toner: [Farge]
     /// Grunnfargen, vist som en liten ring for å orientere seg.
@@ -52,6 +54,27 @@ struct LyshetMetningFlate: View {
                     ctx.fill(Path(CGRect(x: r.minX, y: y, width: r.width, height: radH + 0.6)),
                              with: .linearGradient(Gradient(colors: stopp), startPoint: CGPoint(x: r.minX, y: y),
                                                    endPoint: CGPoint(x: r.maxX, y: y)))
+                }
+
+                // Grensen for «Vis som»-rommet: kurven der fargene går ut av rommet, og striper utenfor.
+                if let grense, !grenselinje(grense).isEmpty {
+                    let punkter = grenselinje(grense).map { punkt(.init(lyshet: $0.lyshet, metning: $0.metning), i: r) }
+                    var utenfor = Path()
+                    utenfor.move(to: CGPoint(x: r.maxX, y: r.maxY))
+                    for p in punkter { utenfor.addLine(to: p) }
+                    utenfor.addLine(to: CGPoint(x: r.maxX, y: r.minY))
+                    utenfor.closeSubpath()
+                    var klippet = ctx
+                    klippet.clip(to: utenfor)
+                    var striper = Path()
+                    var x = r.minX - r.height
+                    while x < r.maxX { striper.move(to: CGPoint(x: x, y: r.maxY)); striper.addLine(to: CGPoint(x: x + r.height, y: r.minY)); x += 7 }
+                    klippet.stroke(striper, with: .color(.white.opacity(0.45)), lineWidth: 1.5)
+                    klippet.stroke(striper.offsetBy(dx: 2, dy: 0), with: .color(.black.opacity(0.25)), lineWidth: 1)
+                    var kurve = Path()
+                    kurve.addLines(punkter)
+                    ctx.stroke(kurve, with: .color(.white.opacity(0.9)), lineWidth: 2.5)
+                    ctx.stroke(kurve, with: .color(.black.opacity(0.6)), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
 
                 // Streken og tonene langs den.
@@ -126,6 +149,33 @@ struct LyshetMetningFlate: View {
         .accessibilityLabel(Text("Lyshet og metning"))
         .accessibilityValue(Text("Fra lyshet \(Int(strek.a.lyshet * 100)) % og metning \(Int(strek.a.metning * 100)) % til lyshet \(Int(strek.b.lyshet * 100)) % og metning \(Int(strek.b.metning * 100)) %"))
     }
+
+    /// Grensekurven: for hver lyshet (nedenfra og opp) den høyeste metningen som er innenfor `grense`. Mellomlagres
+    /// per kulør og rom (søket går gjennom profilen for CMYK).
+    private func grenselinje(_ grense: ICCProfil) -> [Monokromstrek.Punkt] {
+        let nøkkel = "\(grense.id)|\(Int((kulør * 2).rounded()))|\(gamut.rawValue)"
+        if let lagret = Self.grenser[nøkkel] { return lagret }
+        let rader = 48
+        let linje = (0...rader).map { j -> Monokromstrek.Punkt in
+            let l = min(max(Double(j) / Double(rader), 0.005), 0.995)
+            func inne(_ m: Double) -> Bool { Monokromstrek.Punkt(lyshet: l, metning: m).farge(kulør: kulør, gamut: gamut).erInnenfor(grense) }
+            if inne(1) { return .init(lyshet: l, metning: 1) }
+            var (lav, høy) = (0.0, 1.0)
+            for _ in 0..<9 { let midt = (lav + høy) / 2; if inne(midt) { lav = midt } else { høy = midt } }
+            return .init(lyshet: l, metning: lav)
+        }
+        // Litt utjevnet (tre naboer): tabellbaserte profiler (CMYK) gir ellers en takkete kurve.
+        let jevn = linje.indices.map { i -> Monokromstrek.Punkt in
+            let naboer = linje[max(i - 1, 0)...min(i + 1, linje.count - 1)]
+            return .init(lyshet: linje[i].lyshet, metning: naboer.map(\.metning).reduce(0, +) / Double(naboer.count))
+        }
+        // Ingen grense å vise når hele flaten er innenfor.
+        let resultat = linje.allSatisfy { $0.metning >= 1 } ? [] : jevn
+        if Self.grenser.count > 64 { Self.grenser.removeAll() }
+        Self.grenser[nøkkel] = resultat
+        return resultat
+    }
+    @MainActor private static var grenser: [String: [Monokromstrek.Punkt]] = [:]
 
     private func nærmesteTone(_ p: CGPoint, pa: CGPoint, pb: CGPoint) -> (indeks: Int, avstand: CGFloat)? {
         guard !toner.isEmpty else { return nil }

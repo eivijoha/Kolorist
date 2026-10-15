@@ -9820,6 +9820,16 @@
         }
       }
     },
+    "Striper på gliderne: utenfor %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stripes on the sliders: outside %@."
+          }
+        }
+      }
+    },
     "Studio": {
       "localizations": {
         "en": {
@@ -10664,6 +10674,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Outside P3"
+          }
+        }
+      }
+    },
+    "Utenfor fargerommet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outside the colour space"
           }
         }
       }

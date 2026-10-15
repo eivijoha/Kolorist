@@ -259,7 +259,8 @@ struct FargeEditor: View {
                                    lagreFarger = farger
                                    lagreNavn = navn
                                },
-                               vis: { harmonifarger = $0; harmoniGrunn = $1 })
+                               vis: { harmonifarger = $0; harmoniGrunn = $1 },
+                               grense: visOgsåBibliotek == nil ? visOgsåProfil : nil)
             }
         }
         .formStyle(.grouped)
@@ -351,13 +352,17 @@ extension FargeEditor {
                 }
             }
             KomponentGlidere(modell: arbeidsbenk.modell, profil: kildeprofil, hensikt: hensikt,
-                             farge: $arbeidsbenk.aktivFarge) { profil, verdier, farge in
+                             farge: $arbeidsbenk.aktivFarge, profilverdier: { profil, verdier, farge in
                 arbeidsbenk.profilverdier = .init(profilID: profil.id, verdier: verdier, farge: farge)
-            }
+            }, grense: visOgsåBibliotek == nil ? visOgsåProfil : nil)
         } fot: {
             VStack(alignment: .leading, spacing: 6) {
                 if let p = kildeprofil {
                     Text("\(arbeidsbenk.modell.navn)-verdiene angis i \(p.navn) og vises slik de gjengis i dette fargerommet.")
+                        .foregroundStyle(Color.sekundærTekst)
+                }
+                if visOgsåBibliotek == nil, visOgsåProfil.id != kildeprofil?.id {
+                    Text("Striper på gliderne: utenfor \(bibliotek.visningsnavn(visOgsåProfil)).")
                         .foregroundStyle(Color.sekundærTekst)
                 }
                 MetodeHenvisning(.cssColor4, .oklab, .cieLab, .lrv, .icc)
@@ -405,6 +410,8 @@ struct KomponentGlidere: View {
     @Binding var farge: Farge
     /// Meldes når verdier er skrevet inn i profilen, så visningen kan vise nøyaktig de verdiene.
     var profilverdier: (ICCProfil, [Double], Farge) -> Void = { _, _, _ in }
+    /// Fargerommet gliderne viser grensene for («Vis som»): delene av sporet utenfor stripes.
+    var grense: ICCProfil? = nil
     @State private var verdier: [Double] = []
     @Environment(\.presentasjonsmodus) private var presentasjon
 
@@ -452,6 +459,20 @@ struct KomponentGlidere: View {
         }
     }
 
+    /// Om komponent `i` med verdien `v` (de andre som de er) gir en farge innenfor `grense`. `nil` når gliderne står i
+    /// samme rom som grensen (da er alt innenfor).
+    private func innenfor(_ i: Int) -> ((Double) -> Bool)? {
+        guard let grense, grense.id != profil?.id else { return nil }
+        let basis = gjeldende
+        let h = hensikt
+        return { v in
+            var verdier = basis
+            guard verdier.indices.contains(i) else { return true }
+            verdier[i] = v
+            return farge(fra: verdier, alfa: 1).erInnenfor(grense, hensikt: h)
+        }
+    }
+
     /// Lokale verdier når de hører til gjeldende modell, ellers utledet fra fargen.
     private var gjeldende: [Double] {
         verdier.count == modell.komponenter.count ? verdier : verdier(for: farge)
@@ -482,7 +503,8 @@ struct KomponentGlidere: View {
                     }
                 ), område: k.område, spor: spor(for: i, område: k.område), gjeldende: farge.swiftUI,
                    tittel: Text(k.navn),
-                   verdiTekst: verditekst(gjeldende[i], k))
+                   verdiTekst: verditekst(gjeldende[i], k),
+                   innenfor: innenfor(i))
                 Text(verditekst(gjeldende[i], k))
                     .koloristFont(.callout)
                     .monospacedDigit()
