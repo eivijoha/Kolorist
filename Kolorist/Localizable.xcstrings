@@ -1574,6 +1574,16 @@
         }
       }
     },
+    "CIELab (D50): L* opp, a* og b* ut. Dra for å dreie, knip for å zoome.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CIELab (D50): L* up, a* and b* outwards. Drag to rotate, pinch to zoom."
+          }
+        }
+      }
+    },
     "CIELab, CIE LCH og Bradford-tilpasning": {
       "localizations": {
         "en": {
@@ -1784,6 +1794,16 @@
         }
       }
     },
+    "Del som 3D-modell": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share as 3D model"
+          }
+        }
+      }
+    },
     "Del som lenke": {
       "localizations": {
         "en": {
@@ -1940,6 +1960,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dominant"
+          }
+        }
+      }
+    },
+    "Dra for å dreie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to rotate"
           }
         }
       }
@@ -2484,6 +2514,16 @@
         }
       }
     },
+    "Fargekule": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour sphere"
+          }
+        }
+      }
+    },
     "Fargekule med tonebanen": {
       "localizations": {
         "en": {
@@ -2710,6 +2750,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Colour space"
+          }
+        }
+      }
+    },
+    "Fargerom i 3D": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour spaces in 3D"
+          }
+        }
+      }
+    },
+    "Fargerom i 3D …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colour spaces in 3D …"
           }
         }
       }
@@ -4180,6 +4240,16 @@
         }
       }
     },
+    "Hurtigvisning": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick Look"
+          }
+        }
+      }
+    },
     "Hver farge får skriftfargen som leses best og når minst 4,5:1. Velg selv i fargens meny.": {
       "localizations": {
         "en": {
@@ -4512,6 +4582,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Info"
+          }
+        }
+      }
+    },
+    "Ingen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
           }
         }
       }
@@ -5506,16 +5586,26 @@
     },
     "Kuløren går %lld grader rundt kula, lysheten fra %lld %% til %lld %%": {
       "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hue goes %1$lld degrees around the sphere, the lightness from %2$lld %% to %3$lld %%"
+          }
+        },
         "nb": {
           "stringUnit": {
             "state": "new",
             "value": "Kuløren går %1$lld grader rundt kula, lysheten fra %2$lld %% til %3$lld %%"
           }
-        },
+        }
+      }
+    },
+    "Kuløren rundt den grå aksen, lysheten opp og metningen ut mot overflaten. Dra for å dreie.": {
+      "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The hue goes %1$lld degrees around the sphere, the lightness from %2$lld %% to %3$lld %%"
+            "value": "Hue around the grey axis, lightness up and saturation out towards the surface. Drag to rotate."
           }
         }
       }
@@ -8352,6 +8442,16 @@
         }
       }
     },
+    "Rom": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Space"
+          }
+        }
+      }
+    },
     "Roter": {
       "localizations": {
         "en": {
@@ -8398,6 +8498,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The same lightness (L*) in every role, so the contrast is the same."
+          }
+        }
+      }
+    },
+    "Sammenlign med": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compare with"
           }
         }
       }
@@ -8452,6 +8562,16 @@
         }
       }
     },
+    "Se i AR": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View in AR"
+          }
+        }
+      }
+    },
     "Se i lys": {
       "localizations": {
         "en": {
@@ -8478,6 +8598,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "View with camera: %@"
+          }
+        }
+      }
+    },
+    "Se og sammenlign fargerommene i CIELab – innebygde og egne ICC-profiler.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See and compare colour spaces in CIELab – built-in and your own ICC profiles."
           }
         }
       }
@@ -10962,12 +11092,32 @@
         }
       }
     },
+    "Vis fargene i paletten i en fargekule eller i CIELab": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the palette’s colours in a colour sphere or in CIELab"
+          }
+        }
+      }
+    },
     "Vis fargene uten lys": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Show the colours without light"
+          }
+        }
+      }
+    },
+    "Vis i 3D …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in 3D …"
           }
         }
       }

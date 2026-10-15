@@ -28,6 +28,8 @@ struct MineProfilerArk: View {
     /// Filer dras over arket (Mac, og iPad).
     @State private var slippMål = false
     @State private var feil: String?
+    /// Fargerommet til en profil i 3D (CIELab).
+    @State private var vis3D: Fargerom3DKilde?
 
     /// ICC-profiler, ASE, ACO og ACB. Bibliotektypene er ikke registrert i systemet, så de hentes fra
     /// filendelsen; `.data` slipper gjennom filer med annen endelse (innholdet avgjør).
@@ -42,10 +44,20 @@ struct MineProfilerArk: View {
                     ContentUnavailableView("Ingen egne fargerom", systemImage: "doc.badge.plus",
                                            description: Text("Importer ICC-profiler eller fargebiblioteker nedenfor. De vises under «Vis som» i Studio."))
                 }
+                Section {
+                    Button("Fargerom i 3D …", systemImage: "rotate.3d") { vis3D = .profil(.sRGB) }
+                        .labelStyle(Handlingsetikett())
+                } footer: {
+                    Text("Se og sammenlign fargerommene i CIELab – innebygde og egne ICC-profiler.")
+                }
                 if !bibliotek.importerte.isEmpty {
                     Section("ICC-profiler") {
                         ForEach(bibliotek.importerte) { profil in
                             rad(profil)
+                                .contextMenu {
+                                    Button("Vis i 3D …", systemImage: "rotate.3d") { vis3D = .profil(profil) }
+                                    Button("Slett profilen", systemImage: "trash", role: .destructive) { slettes = .profil(profil) }
+                                }
                                 #if os(iOS)
                                 .swipeActions {
                                     Button("Slett", systemImage: "trash", role: .destructive) { slettes = .profil(profil) }
@@ -162,6 +174,7 @@ struct MineProfilerArk: View {
                 } catch { feil = error.localizedDescription }
             }
             .sheet(item: $visKort) { ReferansekortDetalj(kort: $0) }
+            .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0) }
             // Slipp filer på arket (Finder på Mac, Filer på iPad).
             .dropDestination(for: URL.self) { urler, _ in
                 let filer = urler.filter(\.isFileURL)

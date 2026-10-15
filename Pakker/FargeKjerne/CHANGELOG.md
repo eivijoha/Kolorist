@@ -4,6 +4,13 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Farger og fargerom i 3D (`Fargerom3D`):** to rom med modellkoordinater i [−1, 1] – fargekule (OKLCH: lyshet langs
+  den grå aksen, kulør rundt, metning ut mot overflaten som andel av høyeste kroma i gamut; `kuleposisjon`,
+  `kuleflate`) og CIELab D50 (`labposisjon`, `gamutskall(_:)` for RGB- og CMYK-profiler, CMYK tilnærmet med
+  K = min(C, M, Y)). `Fargerom3D.Scene` samler flater, punkter og streker og skrives som USDZ (`usdz(navn:størrelse:)`).
+- **USDZ (`USDScene`):** enkel scene med teksturerte eller ensfargede, eventuelt gjennomsiktige flater, skrevet som
+  USDA og pakket som USDZ (ukomprimert zip med 64-byte-justering), med `kule` og `rør` som hjelpeformer – for
+  Hurtigvisning og AR Quick Look.
 - **Lesbarhetsmodell for tekst på fargeflater:** `Tekstvalg.lesbarhet` (`(tekst, bakgrunn) -> Double`, høyere er bedre) kan
   settes av appen ved oppstart; da velger `Farge.lesbarTekstfarge` og `Skriftfarger.beste` etter den, med WCAG 2 som gulv
   der `krav` gis. Uten modell gjelder WCAG+ som før. Kolorist kobler inn APCA (som ligger i appen, ikke i pakken).

@@ -697,6 +697,7 @@ struct PalettDetalj: View {
     @AppStorage("seILys.somFoto") private var somFoto = false
     @State private var lysbibliotek = Lysbibliotek.delt
     @State private var visLagreSom = false
+    @State private var vis3D = false
     @State private var vurdering: PalettVurdering?
     @State private var kiArbeider = false
     @State private var kiFeil: String?
@@ -894,10 +895,15 @@ struct PalettDetalj: View {
                     ToolbarItem(placement: .secondaryAction) { utskriftsknapp }
                 }
                 ToolbarItem(placement: .secondaryAction) { designsystemknapp }
+                ToolbarItem(placement: .secondaryAction) { vis3Dknapp }
             }
         }
         .sheet(isPresented: $visLagreSom) {
             LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter, tekstfarger: dokument.tekstfarger))
+        }
+        .sheet(isPresented: $vis3D) {
+            Fargerom3DArk(kilde: .farger(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn,
+                                         farger: dokument.farger.map(\.farge)))
         }
         .sheet(item: $vurdering) { VurderingArk(vurdering: $0, farger: dokument.farger) }
         .modifier(SlettPalettBekreftelse(navn: dokument.navn, vises: $slettSpørsmål, slett: slettPalett))
@@ -1004,6 +1010,7 @@ struct PalettDetalj: View {
                     Divider()
                     utskriftsknapp
                     designsystemknapp
+                    vis3Dknapp
                     Divider()
                     Button("Slett palett", systemImage: "trash", role: .destructive) { slettSpørsmål = true }
                 } label: {
@@ -1014,6 +1021,13 @@ struct PalettDetalj: View {
             }
             .buttonStyle(.borderless)
         }
+    }
+
+    /// Fargene i paletten i 3D (fargekule eller CIELab).
+    private var vis3Dknapp: some View {
+        Button("Vis i 3D …", systemImage: "rotate.3d") { vis3D = true }
+            .disabled(dokument.farger.isEmpty)
+            .help("Vis fargene i paletten i en fargekule eller i CIELab")
     }
 
     /// Lager et designsystem fra paletten og åpner det (valgfritt; ligger i …-menyen).

@@ -10,19 +10,21 @@ enum Paletthandling: Identifiable, Hashable {
     case omdøp(PalettDokument)
     case slett(PalettDokument)
     case nyGruppe(PalettDokument)
+    case vis3D(PalettDokument)
 
     var id: Self { self }
 
     var palett: PalettDokument {
         switch self {
-        case .vurder(let p), .skriftkontrast(let p), .lagreSom(let p), .omdøp(let p), .slett(let p), .nyGruppe(let p): p
+        case .vurder(let p), .skriftkontrast(let p), .lagreSom(let p), .omdøp(let p), .slett(let p), .nyGruppe(let p),
+             .vis3D(let p): p
         }
     }
 }
 
 /// Menyen for én palett (trykk og hold / høyreklikk), lik i palettlisten og palettkolonnen:
 ///
-/// 1. Vurder paletten · Skriftkontrast · Lag designsystem
+/// 1. Vurder paletten · Skriftkontrast · Lag designsystem · Vis i 3D
 /// 2. Gi nytt navn … · Flytt til gruppe
 /// 3. Kopier til · Del som lenke · Lagre som … · Skriv ut … · kildene (f.eks. filamentprøvene)
 /// 4. Slett palett
@@ -43,6 +45,8 @@ struct PalettMeny: View {
             Button("Skriftkontrast", systemImage: "a.square") { utfør(.skriftkontrast(p)) }
                 .disabled(p.farger.count < 2)
             Button("Lag designsystem", systemImage: "square.stack.3d.up") { lagDesignsystem(p) }
+                .disabled(p.farger.isEmpty)
+            Button("Vis i 3D …", systemImage: "rotate.3d") { utfør(.vis3D(p)) }
                 .disabled(p.farger.isEmpty)
         }
         Section {
@@ -102,7 +106,7 @@ private struct Paletthandlinger: ViewModifier {
     private var ark: Binding<Paletthandling?> {
         Binding(get: {
             switch handling {
-            case .vurder, .skriftkontrast, .lagreSom: handling
+            case .vurder, .skriftkontrast, .lagreSom, .vis3D: handling
             default: nil
             }
         }, set: { if $0 == nil { handling = nil } })
@@ -117,6 +121,9 @@ private struct Paletthandlinger: ViewModifier {
                 case .lagreSom(let p):
                     LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter,
                                                          tekstfarger: p.tekstfarger))
+                case .vis3D(let p):
+                    Fargerom3DArk(kilde: .farger(navn: p.navn.isEmpty ? String(localized: "Uten navn") : p.navn,
+                                                 farger: p.farger.map(\.farge)))
                 default: EmptyView()
                 }
             }

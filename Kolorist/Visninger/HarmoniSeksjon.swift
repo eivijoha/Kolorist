@@ -56,6 +56,8 @@ struct HarmoniSeksjon: View {
     @State private var lyshet: Double?
     /// Ark for å velge grunnfarge blant lagrede farger og paletter (trykk i midten av sirkelen).
     @State private var velgerGrunnfarge = false
+    /// Harmonien i 3D (fargekule eller CIELab).
+    @State private var vis3D: Fargerom3DKilde?
     #if SIRKELEKSPORT
     /// Midlertidig: eksport av fargesirkelen som vektor (SVG/PDF) til arbeidet med app-ikonet.
     @State private var sirkeleksport: (data: Data, type: UTType, navn: String)?
@@ -417,6 +419,13 @@ struct HarmoniSeksjon: View {
                 lagre(farger.map { PalettFarge(farge: $0, opphav: .manuell) }, harmoni.navn)
             }
             KopierTilMeny(farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }, navn: harmoni.navn)
+            Button("Vis i 3D …", systemImage: "rotate.3d") {
+                // Tonebanen med selve banen (tett med toner), så den kan følges gjennom rommet.
+                let bane = harmoni == .tonebane
+                    ? strek.wrappedValue.toner(fraKulør: startKulør, spenn: tonebaneSpenn, antall: 64, gamut: gamut) : nil
+                vis3D = .farger(navn: harmoni.navn, farger: farger, bane: bane)
+            }
+            .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0, gamut: gamut) }
             Button("Skriv ut harmonien …", systemImage: "printer") {
                 PalettUtskrift.skrivUt(Palett(navn: harmoni.navn, farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }))
             }
