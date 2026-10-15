@@ -4,6 +4,9 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Lesbarhetsmodell for tekst på fargeflater:** `Tekstvalg.lesbarhet` (`(tekst, bakgrunn) -> Double`, høyere er bedre) kan
+  settes av appen ved oppstart; da velger `Farge.lesbarTekstfarge` og `Skriftfarger.beste` etter den, med WCAG 2 som gulv
+  der `krav` gis. Uten modell gjelder WCAG+ som før. Kolorist kobler inn APCA (som ligger i appen, ikke i pakken).
 - **Fargerapporter i delingslenker:** `DeltInnhold.rapport` (`DeltRapport`, nøkkel `rp`): slag (`fargesyn`, `flater`,
   `deltaE`), tittel, undertittel, fargepar (`DeltRapportpar`: plassene i `farger`, fargene med avvik som hex, kort tekst)
   og en ferdig formatert tabell (`tabulatortekst` gir den med tabulatorer). Parene kan ha etikett for raden med

@@ -16,3 +16,6 @@ Regel (2026-10-10): FargeKjerne og Kolorist skal ikke inneholde modeller eller d
 (CC BY og CC BY-SA godtas), og andres varemerker brukes ikke som navn på funksjoner. APCA er tatt ut av den grunn (se
 `Dokumentasjon/APCA-gjeninnforing.md`), og Munsell (varemerke; renotasjonsdata med uklart opphav for de ekstrapolerte
 verdiene) ble tatt ut 2026-10-10 (se `Dokumentasjon/Munsell-gjeninnforing.md`).
+
+**APCA (2026-10-15):** Kolorist har tillatelse fra rettighetshaver. Implementasjonen ligger i appen (`Kolorist/APCA/`), ikke
+i FargeKjerne; pakken har bare et nøytralt koblingspunkt (`Tekstvalg`).

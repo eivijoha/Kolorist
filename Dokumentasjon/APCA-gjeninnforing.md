@@ -1,4 +1,9 @@
-# APCA – tatt ut 2026-10-10, og hvordan det kan føres tilbake
+# APCA – tatt ut 2026-10-10, ført tilbake med tillatelse 2026-10-15
+
+**Status 2026-10-15:** Kolorist har fått tillatelse fra rettighetshaver, og APCA er tilbake i 1.4 – i kontrastsjekken,
+designsystemet, toneskalaen og for tekst og ikoner på fargefelt. Implementasjonen ligger samlet i `Kolorist/APCA/` (ikke i
+FargeKjerne) så den kan deles med rettighetshaver; se `Dokumentasjon/APCA-implementasjon.md`. Den følger gjeldende versjon
+og oppdateres jevnlig. Resten av dette dokumentet beskriver uttaket i 1.3.1.
 
 APCA (Accessible Perceptual Contrast Algorithm, Myndex/Andrew Somers, 0.0.98G-4g) ble fjernet fra Kolorist og
 FargeKjerne 2026-10-10 fordi lisensen bare gjelder nettinnhold under W3C-avtalen og kommersiell bruk krever egen

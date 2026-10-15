@@ -47,6 +47,9 @@ nonisolated enum Språkvalg {
 enum Oppstart {
     static func main() {
         Språkvalg.bruk()
+        // APCA for tekst på fargeflater (se Kolorist/APCA); referanseverdiene kontrolleres i Debug.
+        APCA.kobleInn()
+        assert(APCA.kontroller(), "APCA gir ikke referanseverdiene fra apca-w3")
         KoloristApp.main()
     }
 }

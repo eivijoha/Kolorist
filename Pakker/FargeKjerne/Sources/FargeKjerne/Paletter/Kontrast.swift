@@ -12,8 +12,8 @@ public extension Farge {
     /// Med grensen skifter de ved L* ≈ 65, slik øyet foretrekker. Grensen er satt etter visuell vurdering.
     static let lysTekstgrense = 2.7
 
-    /// Passende tekstfarge (sort/hvit) oppå denne fargen: hvit når hvit gir minst `lysTekstgrense` (2,7:1) etter WCAG 2,
-    /// ellers sort.
+    /// Passende tekstfarge (sort/hvit) oppå denne fargen: etter lesbarhetsmodellen appen har koblet inn (`Tekstvalg`),
+    /// ellers hvit når hvit gir minst `lysTekstgrense` (2,7:1) etter WCAG 2, og sort ellers.
     var lesbarTekstfarge: Farge { lesbarTekstfarge(krav: nil) }
 
     /// Som `lesbarTekstfarge`, med WCAG 2 som gulv: holder ikke den foretrukne tekstfargen `krav` (f.eks. 4,5 for vanlig
@@ -23,9 +23,10 @@ public extension Farge {
         return Farge.foretrukketTekst(blant: [hvit, sort], på: self, farge: { $0 }, krav: krav) ?? sort
     }
 
-    /// Tekstfargen blant `kandidater` på `bakgrunn`: den lyse kandidaten med høyest kontrast når den når
-    /// `lysTekstgrense`, ellers kandidaten med høyest kontrast. Med `krav` velges heller en kandidat som holder kravet,
-    /// og holder ingen, den med høyest kontrast.
+    /// Tekstfargen blant `kandidater` på `bakgrunn`: med en lesbarhetsmodell (`Tekstvalg.lesbarhet`) den som leses
+    /// best etter den; ellers den lyse kandidaten med høyest kontrast når den når `lysTekstgrense`, og ellers kandidaten
+    /// med høyest kontrast. Med `krav` velges heller en kandidat som holder kravet etter WCAG 2, og holder ingen, den med
+    /// høyest kontrast.
     static func foretrukketTekst<T>(blant kandidater: [T], på bakgrunn: Farge, farge: (T) -> Farge, krav: Double?) -> T? {
         let yb = bakgrunn.klippet(til: .sRGB).luminans
         let vurdert = kandidater.map { k -> (k: T, kontrast: Double, lys: Bool) in
@@ -33,12 +34,25 @@ public extension Farge {
             return (k, f.wcagKontrast(mot: bakgrunn), f.klippet(til: .sRGB).luminans > yb)
         }
         guard let høyest = vurdert.max(by: { $0.kontrast < $1.kontrast }) else { return nil }
-        let lys = vurdert.filter(\.lys).max(by: { $0.kontrast < $1.kontrast })
-        let valgt = lys.flatMap { $0.kontrast >= lysTekstgrense ? $0 : nil } ?? høyest
+        let valgt: (k: T, kontrast: Double, lys: Bool)
+        if let lesbarhet = Tekstvalg.lesbarhet {
+            valgt = vurdert.max { lesbarhet(farge($0.k).lagtOver(bakgrunn), bakgrunn) < lesbarhet(farge($1.k).lagtOver(bakgrunn), bakgrunn) } ?? høyest
+        } else {
+            let lys = vurdert.filter(\.lys).max(by: { $0.kontrast < $1.kontrast })
+            valgt = lys.flatMap { $0.kontrast >= lysTekstgrense ? $0 : nil } ?? høyest
+        }
         if let krav, valgt.kontrast < krav {
             // WCAG 2 er gulvet: en kandidat som holder kravet, ellers den som kommer nærmest.
             return (vurdert.filter({ $0.kontrast >= krav }).max(by: { $0.kontrast < $1.kontrast }) ?? høyest).k
         }
         return valgt.k
     }
+}
+
+/// Lesbarhetsmodellen for tekst på fargeflater (`Farge.lesbarTekstfarge`, `Skriftfarger.beste`). Uten modell brukes
+/// WCAG+ (hvit når hvit gir minst 2,7:1 etter WCAG 2). En app kan koble inn sin egen modell ved oppstart – Kolorist bruker
+/// APCA, som ligger i appen og ikke i pakken. WCAG 2 er fortsatt gulvet der det stilles krav.
+public enum Tekstvalg {
+    /// Hvor godt `tekst` leses på `bakgrunn` (høyere er bedre, f.eks. |Lc|). Settes én gang ved oppstart, før noe tegnes.
+    nonisolated(unsafe) public static var lesbarhet: (@Sendable (_ tekst: Farge, _ bakgrunn: Farge) -> Double)?
 }

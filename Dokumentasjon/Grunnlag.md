@@ -171,6 +171,12 @@ verktøyene (skalaer, kontrast) ligger der de er.
 - KI: forklar/kritiser palett, foreslå navn, generer varianter («varmere», «mer eksklusiv»)
 - Spotlight-indeksering ved hver lagring (i dag bare ved intents)
 
+## Beslutning 2026-10-15: APCA med tillatelse
+
+Kolorist har fått tillatelse fra rettighetshaver til å bruke APCA. Den ligger i appen (`Kolorist/APCA/`), ikke i
+FargeKjerne, og følger gjeldende versjon (oppdateres jevnlig). Tekst og ikoner på fargefelt velges etter APCA, med WCAG 2 som
+gulv der krav gjelder. Regelen under gjelder fortsatt for modeller og data uten avtale.
+
 ## Beslutning 2026-10-10: ingen lisensbelagte modeller
 
 APCA (Myndex) er tatt ut av Kolorist i 1.3.1 og av FargeKjerne: lisensen gjelder bare nettinnhold under W3C-avtalen,

@@ -57,6 +57,22 @@
         }
       }
     },
+    "%@ %@ · Lc %lld": {
+      "localizations": {
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@ · Lc %3$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@ · Lc %3$lld"
+          }
+        }
+      }
+    },
     "%@ (%lld)": {
       "localizations": {
         "en": {
@@ -815,6 +831,26 @@
         }
       }
     },
+    "APCA følger opplevd lesbarhet bedre enn WCAG 2, særlig for lys tekst på mørk bakgrunn og mettede mellomtoner. Lc er positiv for mørk tekst på lys bakgrunn og negativ for lys tekst på mørk. Nivåene er veiledende og gjelder tekst i vanlig vekt; tynnere og mindre tekst trenger mer. «Rett opp» endrer bare lysheten. Regelverket for universell utforming viser til WCAG 2, så bruk APCA som et supplement.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APCA follows perceived readability better than WCAG 2, especially for light text on a dark background and saturated mid-tones. Lc is positive for dark text on a light background and negative for light text on a dark one. The levels are guidance and apply to text of normal weight; thinner and smaller text needs more. “Fix” changes only the lightness. Accessibility regulations refer to WCAG 2, so use APCA as a supplement."
+          }
+        }
+      }
+    },
+    "APCA – opplevd lesekontrast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APCA – perceived reading contrast"
+          }
+        }
+      }
+    },
     "Aa": {
       "localizations": {
         "en": {
@@ -1381,6 +1417,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Switches that are on"
+          }
+        }
+      }
+    },
+    "Brødtekst (minimum)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body text (minimum)"
           }
         }
       }
@@ -2104,6 +2150,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light, and where colours look less vivid in dim light. Finally it shows the screen colour with the same lightness and colourfulness. Light compensation uses CAT16 with full adaptation to daylight (D65)."
+          }
+        }
+      }
+    },
+    "En perseptuell kontrastmodell for lesbarhet. Den gir lesekontrast som Lc fra omtrent −108 til 106: positiv for mørk tekst på lys bakgrunn, negativ for lys tekst på mørk. Den tar hensyn til at øyet opplever lyse og mørke farger ulikt, og følger opplevd lesbarhet bedre enn WCAG 2 – særlig for mørke og mettede farger. Hvor mye som trengs, avhenger av skriftstørrelse og vekt: Lc 90 er foretrukket og 75 minimum for brødtekst, 60 for større tekst, 45 for store overskrifter, 30 for ikke-viktig tekst og 15 for ikoner og grafikk. Kolorist viser Lc i kontrastsjekken, designsystemet og toneskalaen, og velger sort eller hvit tekst og ikoner på fargefelt etter APCA; der et krav gjelder, som knappetekst i designsystemet, er WCAG 2 gulvet. Regelverket for universell utforming viser til WCAG 2, så bruk APCA som et supplement. APCA har vært kandidat til WCAG 3, som ikke er vedtatt. Implementasjonen følger gjeldende versjon av APCA og oppdateres jevnlig.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A perceptual contrast model for readability. It gives reading contrast as Lc from about −108 to 106: positive for dark text on a light background, negative for light text on a dark one. It takes into account that the eye perceives light and dark colours differently, and follows perceived readability better than WCAG 2 – especially for dark and saturated colours. How much is needed depends on font size and weight: Lc 90 is preferred and 75 the minimum for body text, 60 for larger text, 45 for large headings, 30 for non-essential text and 15 for icons and graphics. Kolorist shows Lc in the contrast check, the design system and the tone scale, and chooses black or white text and icons on colour fields by APCA; where a requirement applies, such as button text in the design system, WCAG 2 is the floor. Accessibility regulations refer to WCAG 2, so use APCA as a supplement. APCA has been a candidate for WCAG 3, which has not been adopted. The implementation follows the current version of APCA and is updated regularly."
           }
         }
       }
@@ -3253,6 +3309,16 @@
         }
       }
     },
+    "For lav til tekst og grafikk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too low for text and graphics"
+          }
+        }
+      }
+    },
     "For vegg, gulv, dør og håndlist: lysrefleksjonsverdien (LRV) er andelen lys flaten reflekterer, som på malingskart.": {
       "localizations": {
         "en": {
@@ -3671,6 +3737,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forget the camera profile"
+          }
+        }
+      }
+    },
+    "Godt nok for all tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good enough for all text"
+          }
+        }
+      }
+    },
+    "Godt nok for all tekst, også brødtekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enough for all text, including body text"
           }
         }
       }
@@ -4256,6 +4342,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Don’t show the colour in this light"
+          }
+        }
+      }
+    },
+    "Ikke-viktig tekst, som plassholdere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non-essential text, such as placeholders"
+          }
+        }
+      }
+    },
+    "Ikoner og grafikk, ikke tekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icons and graphics, not text"
           }
         }
       }
@@ -6386,6 +6492,16 @@
         }
       }
     },
+    "Lesekontrast (APCA)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Readability contrast (APCA)"
+          }
+        }
+      }
+    },
     "Like steg i opplevd lyshet (OKLab).": {
       "localizations": {
         "en": {
@@ -7554,6 +7670,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enter the reflectance (LRV) of a neutral card or a grey or white surface with a known value, such as a painted wall."
+          }
+        }
+      }
+    },
+    "Opplevd lesekontrast (Lc). Nivåene er veiledende for tekst i vanlig vekt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perceived reading contrast (Lc). The levels are guidance for text of normal weight."
+          }
+        }
+      }
+    },
+    "Opplevd lesekontrast etter APCA (Lc)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perceived reading contrast by APCA (Lc)"
           }
         }
       }
@@ -9366,6 +9502,16 @@
         }
       }
     },
+    "Store eller fete overskrifter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large or bold headlines"
+          }
+        }
+      }
+    },
     "Strekene viser hvor godt lyset er kjent:": {
       "localizations": {
         "en": {
@@ -9412,6 +9558,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stand where the colours will be used and measure the light. The camera gives the colour of the light and estimates the illuminance; with a grey or white card in the light it is measured."
+          }
+        }
+      }
+    },
+    "Større tekst, ikke brødtekst": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Larger text, not body text"
           }
         }
       }
@@ -10910,12 +11066,12 @@
         }
       }
     },
-    "W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt. Tekst på fargeflater er hvit når hvit gir minst 2,7:1, ellers sort. Da får mettede mellomtoner hvit tekst, slik øyet foretrekker, i stedet for å bytte til sort allerede ved middels grått. Der kravet gjelder, som knappetekst i designsystemet, er 4,5:1 gulvet.": {
+    "W3Cs krav til kontrast mellom tekst/grafikk og bakgrunn, regnet ut fra relativ luminans. «Rett opp» endrer bare lysheten (OKLCH) til kravet er oppfylt.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The W3C requirements for contrast between text/graphics and background, computed from relative luminance. “Fix” changes only lightness (OKLCH) until the requirement is met. Text on colour fields is white when white gives at least 2.7:1, otherwise black. Saturated mid-tones then get white text, as the eye prefers, instead of switching to black already at middle grey. Where the requirement applies, such as button text in the design system, 4.5:1 is the floor."
+            "value": "The W3C requirements for contrast between text/graphics and background, computed from relative luminance. “Fix” changes only lightness (OKLCH) until the requirement is met."
           }
         }
       }
@@ -10940,12 +11096,12 @@
         }
       }
     },
-    "WCAG-forhold for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).": {
+    "WCAG-forhold og APCA (Lc) for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "WCAG ratio for white and black text on the step. Bold: at least 4.5:1 (all text)."
+            "value": "WCAG ratio and APCA (Lc) for white and black text on the step. Bold: at least 4.5:1 (all text)."
           }
         }
       }
@@ -11080,6 +11236,16 @@
         }
       }
     },
+    "lys tekst på mørk bakgrunn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light text on dark background"
+          }
+        }
+      }
+    },
     "lys.etikett.betraktningsforhold": {
       "localizations": {
         "en": {
@@ -11096,12 +11262,32 @@
         }
       }
     },
+    "minst Lc %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at least Lc %lld"
+          }
+        }
+      }
+    },
     "målt med kameraet, lysstyrken anslått": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "measured with the camera, illuminance estimated"
+          }
+        }
+      }
+    },
+    "mørk tekst på lys bakgrunn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dark text on light background"
           }
         }
       }
@@ -11152,6 +11338,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "spectra"
+          }
+        }
+      }
+    },
+    "versjon %@, brukt med tillatelse fra rettighetshaver": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "version %@, used with permission from the copyright holder"
           }
         }
       }

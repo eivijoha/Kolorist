@@ -1326,7 +1326,7 @@ struct ToneskalaArk: View {
                 } header: {
                     Text("Kontrast per trinn")
                 } footer: {
-                    Text("WCAG-forhold for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).")
+                    Text("WCAG-forhold og APCA (Lc) for hvit og sort tekst på trinnet. Fet skrift: minst 4,5:1 (all tekst).")
                 }
             }
             .formStyle(.grouped)
@@ -1375,7 +1375,8 @@ struct ToneskalaTrinn: View {
 
     private func kontrast(_ tekst: Farge, _ tittel: String) -> some View {
         let k = Kontrasttest(forgrunn: tekst, bakgrunn: farge)
-        return Text("\(tittel) \(k.formatert)")
+        let lc = farge.apcaKontrast(tekst: tekst)
+        return Text("\(tittel) \(k.formatert) · Lc \(Int(lc.rounded(.towardZero)))")
             .font(.caption.monospacedDigit())
             .fontWeight(k.består(.aaTekst) ? .semibold : .regular)
             .foregroundStyle(k.består(.aaTekst) ? Color.primary : Color.sekundærTekst)

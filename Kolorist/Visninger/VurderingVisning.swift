@@ -106,6 +106,7 @@ private struct KontrastVurdering: View {
                     // Vurderingen rett under flaten og typevalget (fargene velges i flaten).
                     switch type {
                     case .wcag: KontrastSeksjon(forgrunn: $arbeidsbenk.aktivFarge)
+                    case .apca: APCASeksjon(forgrunn: $arbeidsbenk.aktivFarge)
                     case .lrv: FlatekontrastSeksjon(flate: $arbeidsbenk.aktivFarge, bakgrunn: bakgrunn)
                     }
                     KontrastVisMedSeksjon()
