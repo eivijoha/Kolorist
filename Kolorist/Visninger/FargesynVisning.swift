@@ -20,6 +20,9 @@ struct FargesynVurdering: View {
     /// Avviket fargefeltet sammenligner med normalt syn (deutan, det vanligste, som standard).
     @AppStorage("fargesynVis") private var visTekst = Fargesynstype.deutan.rawValue
     private var vis: Fargesynstype { Fargesynstype(rawValue: visTekst) ?? .deutan }
+    /// Avviket forvirringslinjene i kromatisitetsdiagrammet gjelder.
+    @AppStorage("fargesynLinjer") private var linjeTekst = Fargesynstype.deutan.rawValue
+    private var linjetype: Fargesynstype { Fargesynstype(rawValue: linjeTekst) ?? .deutan }
 
     var body: some View {
         if paletter.isEmpty {
@@ -39,6 +42,7 @@ struct FargesynVurdering: View {
                 oppsett {
                     kort(valgt, analyse: analyse, bred: bred)
                         .frame(width: bred ? geo.size.width / 2 : nil)
+                    ScrollViewReader { rulling in
                     Form {
                         Section {
                             HStack(spacing: 10) {
@@ -69,9 +73,38 @@ struct FargesynVurdering: View {
                                 .foregroundStyle(Color.sekundærTekst)
                         }
 
+                        Section {
+                            Picker("Avvik", selection: $linjeTekst) {
+                                ForEach([Fargesynstype.protan, .deutan, .tritan]) { Text($0.navn).tag($0.rawValue) }
+                            }
+                            .pickerStyle(.segmented)
+                            .labelsHidden()
+                            Kromatisitetsdiagram(farger: farger.map(\.farge), type: linjetype,
+                                                 forvekslinger: analyse.first { $0.0 == linjetype }?.1 ?? [])
+                                .frame(maxWidth: 420)
+                                .frame(maxWidth: .infinity)
+                        } header: {
+                            Text("Forvirringslinjer").foregroundStyle(Color.sekundærTekst)
+                        } footer: {
+                            KortForklaring("Farger nær samme linje kan forveksles. Rødt: vanskelige par.") {
+                                Text("CIE 1931-kromatisitetsdiagrammet (xy) med palettens farger. For den som mangler én type tapper, ligger farger som ikke kan skilles (med lik lyshet), på rette linjer gjennom ett punkt – kopunktet for avviket. Linjen gjennom hver farge er tegnet; farger nær samme linje kan forveksles, særlig når lysheten også er lik. De vanskelige parene fra analysen er streket sammen i rødt. Kopunktene: G. Wyszecki og W. S. Stiles, Color Science (1982).")
+                            }
+                            .foregroundStyle(Color.sekundærTekst)
+                        }
+                        .id("forvirringslinjer")
+
                         forvekslingsseksjon(farger, alle: analyse.flatMap(\.1), navn: valgt.navn)
                     }
                     .formStyle(.grouped)
+                    #if DEBUG
+                    // `-rullTil forvirringslinjer`: til skjermbilder.
+                    .task {
+                        guard let mål = UserDefaults.standard.string(forKey: "rullTil") else { return }
+                        try? await Task.sleep(for: .seconds(1))
+                        rulling.scrollTo(mål, anchor: .top)
+                    }
+                    #endif
+                    }
                     #if os(iOS)
                     .listSectionSpacing(.compact)
                     #endif

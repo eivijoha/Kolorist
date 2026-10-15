@@ -443,10 +443,16 @@ struct Fargerom3DArk: View {
         }
     }
 
+    /// Etikett til venstre og valget til høyre, så det er tydelig hvilket valg som er hva.
     private func profilvelger(_ tittel: LocalizedStringKey, valgt: Binding<String>, ingen: Bool) -> some View {
-        Picker(tittel, selection: valgt) {
-            if ingen { Text("Ingen").tag("") }
-            ForEach(profiler) { Text(ProfilBibliotek.delt.visningsnavn($0)).tag($0.id) }
+        HStack {
+            Text(tittel).foregroundStyle(Color.sekundærTekst)
+            Spacer(minLength: 8)
+            Picker(tittel, selection: valgt) {
+                if ingen { Text("Ingen").tag("") }
+                ForEach(profiler) { Text(ProfilBibliotek.delt.visningsnavn($0)).tag($0.id) }
+            }
+            .labelsHidden()
         }
     }
 

@@ -196,6 +196,22 @@ NYE_BILDER.update({
     ('nb', 'fargefelt'): ('Fargemenyen på et fargefelt i kontrastsjekken: lagrede farger eller kjent verdi, plukk med kamera eller fra bilde, lim inn', 'Plukk farge fra et fargefelt'),
     ('en', 'fargefelt'): ('The colour menu on a colour field in the contrast check: saved colours or known value, pick with camera or from image, paste', 'Pick a colour from a colour field'),
 })
+NYE_BILDER.update({
+    ('nb', 'apca-kontrast'): ('Kontrastsjekk etter APCA: blå tekst på hvitt, Lc 67, med nivåene fra brødtekst til ikoner og «Rett opp»', 'Lesekontrast etter APCA'),
+    ('en', 'apca-kontrast'): ('Contrast check by APCA: blue text on white, Lc 67, with the levels from body text to icons and “Fix”', 'Reading contrast by APCA'),
+    ('nb', 'apca-tekst'): ('Harmoni i Studio: fem farger med verdiene i hvit eller sort tekst etter APCA, også på mellomtonene', 'Tekst på fargefelt etter APCA'),
+    ('en', 'apca-tekst'): ('Harmony in Studio: five colours with their values in white or black text by APCA, also on the mid tones', 'Text on colour fields by APCA'),
+    ('nb', 'forvirringslinjer'): ('Kromatisitetsdiagram med forvirringslinjene for deuteranopi: palettens farger, og de vanskelige parene streket sammen i rødt', 'Forvirringslinjer'),
+    ('en', 'forvirringslinjer'): ('Chromaticity diagram with the confusion lines for deuteranopia: the palette’s colours, with the hard pairs joined in red', 'Confusion lines'),
+    ('nb', '3d-tonebane'): ('En tonebane i en halvgjennomsiktig fargekule: tonene og banen fra lys turkis til blå, med den grå aksen', 'Tonebanen i fargekula'),
+    ('en', '3d-tonebane'): ('A tone path in a semi-transparent colour sphere: the tones and the path from light turquoise to blue, with the grey axis', 'The tone path in the colour sphere'),
+    ('nb', '3d-gamut'): ('Fargerommet til Generisk CMYK i CIELab, med sRGB som gjennomsiktig skall til sammenligning', 'Fargerom i CIELab'),
+    ('en', '3d-gamut'): ('The colour space of Generic CMYK in CIELab, with sRGB as a transparent shell for comparison', 'Colour spaces in CIELab'),
+    ('nb', '3d-overgang'): ('En overgang fra rødt til turkis i OKLab: den rette OKLab-veien og den stiplede veien gjennom sRGB, som blir mørkere på midten', 'Overgangen: OKLab mot sRGB'),
+    ('en', '3d-overgang'): ('A gradient from red to turquoise in OKLab: the straight OKLab path and the dashed path through sRGB, which gets darker in the middle', 'The gradient: OKLab against sRGB'),
+    ('nb', '3d-filament'): ('Over 2 200 filamentfarger som punktsky i CIELab, med fargen og nærmeste filament markert', 'Filamentfarger i 3D'),
+    ('en', '3d-filament'): ('More than 2,200 filament colours as a point cloud in CIELab, with the colour and the nearest filament marked', 'Filament colours in 3D'),
+})
 # Bilder med annen sti eller størrelse enn iPhone-skjermbildene.
 NYE_STIER = {'del-web-filament': ('ipad/skjermbilde-del-web-filament.png', 1032, 1376)}
 NYE_ALT = {
@@ -262,7 +278,7 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N13}<a href="design.html">Fra palett til designsystem, kontrastsjekk etter WCAG, APCA eller LRV, og farger og gradienter du kopierer rett inn i designprogrammene</a></p>'
+        nyhet = f'<p class="nyhet">{N}<a href="funksjoner.html#3d">Farger og fargerom i 3D – også i AR – fargerapporter du kan dele og skrive ut, og lesekontrast etter APCA</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, CIELab og alle fargerom og ICC-profiler.'),
@@ -278,6 +294,7 @@ def startside(lang):
                       ('arkitektur.html', 'Velg farger til vegger, gulv og dører', 'Med nok kontrast mellom flatene for universell utforming.'),
                       ('lys.html', 'Se fargene i lyset der de skal brukes', 'Og kompenser farger du plukker for lyset de ble fotografert i.'),
                       ('filament.html', 'Finn filament til 3D-print', 'Den nærmeste fargen blant over 2 200 filamenter, de fleste målt.'),
+                      ('funksjoner.html#3d', 'Se fargene i 3D', 'Harmonier, overganger og fargerom – og som 3D-modell i AR.'),
                       ('design.html#lever', 'Få fargene ut', 'I designprogrammer, trykk og kode – eller del dem som lenke.')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter for skjerm og trykk – rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
@@ -291,7 +308,7 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N13}<a href="design.html">From palette to design system, a contrast check by WCAG, APCA or LRV, and colours and gradients you copy straight into your design apps</a></p>'
+        nyhet = f'<p class="nyhet">{N}<a href="features.html#3d">Colours and colour spaces in 3D – in AR too – colour reports you can share and print, and reading contrast by APCA</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, CIELab and every colour space and ICC profile.'),
@@ -307,6 +324,7 @@ def startside(lang):
                       ('architecture.html', 'Choose colours for walls, floors and doors', 'With enough contrast between surfaces for universal design.'),
                       ('light.html', 'See colours in the light where they will be used', 'And compensate colours you pick for the light they were photographed in.'),
                       ('filament.html', 'Find filament for 3D printing', 'The nearest colour among more than 2,200 filaments, most of them measured.'),
+                      ('features.html#3d', 'See colours in 3D', 'Harmonies, gradients and colour spaces – and as a 3D model in AR.'),
                       ('design.html#deliver', 'Get your colours out', 'Into design apps, print and code – or share them as a link.')],
             fagfelt='Two fields',
             dører=[('design.html', 'Design', 'Palettes, tone scales and gradients for screen and print – straight into your design tools.', 'Kolorist for design', 'harmoni'),
@@ -751,15 +769,25 @@ def funksjoner(lang):
                                                   '<li>Finn nærmeste filament til en farge, eller lås paletter og harmonier til filamenter som finnes</li>',
                                                   '<li>Hver farge lenker til prøven hos <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">om dataene</a></li>',
                                                   '<li><a href="filament.html">Les mer om 3D-print og filament</a></li>']))]),
+            ('3d', 'Farger og fargerom i 3D', '3D',
+             '<p class="lesetekst">Se harmonier, paletter, overganger og fargebiblioteker i rommet – og fargerommene til ICC-profiler. Dra for å dreie, del som 3D-modell, og plasser den på bordet med AR på iPhone og iPad.</p>\n'
+             + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Skjermbilder – rull sidelengs'),
+             [('I 3D', ul([f'<li>Tre rom: en fargekule (kulør rundt den grå aksen, lyshet opp og metning ut mot overflaten), OKLab og CIELab {N}</li>',
+                           f'<li>Harmonier og paletter som punkter i rommet – tonebanen med selve banen {N}</li>',
+                           f'<li>Overgangen i OKLab ved siden av veien rett gjennom sRGB, som blir mørk og grumsete på midten {N}</li>',
+                           f'<li>Farger utenfor et fargerom får en pil til der de havner, f.eks. i trykkprofilen {N}</li>',
+                           f'<li>Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone {N}</li>',
+                           f'<li>Fargerommene til ICC-profiler i CIELab, med et annet rom som glass til sammenligning {N}</li>',
+                           f'<li>Del som 3D-modell (USDZ): Hurtigvisning på Mac, AR på iPhone og iPad {N}</li>']))]),
             ('toner', 'Toner, harmonier og overganger', 'Toner og overganger', None,
              [('Toner og harmonier', k['Toner og harmonier']), ('Overganger', k['Overganger'])]),
             ('hent', 'Hent farger', 'Hent farger', None,
              [('Plukk farger', plukk), ('Apple Intelligence på enheten', k['Apple Intelligence på enheten'])]),
             ('kontrast', 'Kontrast og fargesyn', 'Kontrast og fargesyn',
-             plassholdere([('Lesekontrast etter APCA i kontrastsjekken', 'Skjermbilde kommer'), ('Tekst og ikoner på fargefelt etter APCA', 'Skjermbilde kommer')]),
+             skjermbilder(s, ['apca-kontrast', 'apca-tekst', 'forvirringslinjer']).format('Skjermbilder – rull sidelengs'),
              [('Tekst og grafikk (WCAG 2.2 og APCA)', ul([tilg[i] for i in TILG_TEKST])),
               ('Flater og bygg (LRV)', ul([tilg[i] for i in TILG_FLATER])),
-              ('Fargesyn', ul([tilg[i] for i in TILG_FARGESYN])),
+              ('Fargesyn', ul([tilg[i] for i in TILG_FARGESYN] + [f'<li>Forvirringslinjer i kromatisitetsdiagrammet: se hvilke farger som ligger på samme linje for protanopi, deuteranopi og tritanopi {N}</li>'])),
               ('Fargerapporter', ul([tilg[i] for i in TILG_RAPPORTER]))]),
             ('rapporter', 'Fargerapporter', 'Rapporter', '<p class="lesetekst">Kopier vurderingen som tabell, del den som lenke eller skriv den ut som A4-PDF – for kontrast (WCAG 2.2), skriftkontrast, kontrast mellom flater (LRV), vanskelige fargepar med fargesynsavvik, farger i lys og fargeforskjell (ΔE). Mottakere uten appen ser rapporten i nettleseren, med fargeparene og tallene.</p>\n' + plassholdere([('Vanskelige fargepar i appen', 'Skjermbilde kommer'), ('Rapporten i nettleseren', 'Skjermbilde kommer'), ('Rapporten som PDF', 'Skjermbilde kommer')]) + '\n<p><a href="https://kolorist.no/l#zXVBBTsMwEPxKtFzdynHcuPGNQhESUk_AJcrBkRwUxaSRnaBWUa48APGFvqR3HsFL2DhBKlzsnd2d2dntoQCZ9lDhS5c8EitOFnRJI8F9EEZrLjICNUjYPe6eFrk5n4DAATGlK5psYSC_9CimTBBkxyz25DAKWTY18zUTIoZh1no4uhZlbAOyhz3I1naaQOO9KJCUgDIgC2UcpnOQIQGNtFvdtdqqet-UyH7FzLOqXaVN-aKD8ylwVWmMxpJT3iDfJDcjyj2KEsERtQi-PreUBowRHny_fwSChN6aRQMp3CmLctfYeq8P_p8ymzkz_l4AMpL-OcvVfBOM5oUvo3FKhlMcGihGRXesZz8Xa_hKoyxWun8rD1Nzo4xux_O94WGGHw">Åpne en delt eksempelrapport</a></p>', []),
             ('lys', 'Lys og fargemåling', 'Lys', lysdel, []),
@@ -791,15 +819,25 @@ def funksjoner(lang):
                                                        '<li>Find the nearest filament to a colour, or lock palettes and harmonies to filaments that exist</li>',
                                                        '<li>Each colour links to the sample at <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">about the data</a></li>',
                                                        '<li><a href="filament.html">Read more about 3D printing and filament</a></li>']))]),
+            ('3d', 'Colours and colour spaces in 3D', '3D',
+             '<p class="lesetekst">See harmonies, palettes, gradients and colour libraries in space – and the colour spaces of ICC profiles. Drag to rotate, share as a 3D model, and place it on the table with AR on iPhone and iPad.</p>\n'
+             + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Screenshots – scroll sideways'),
+             [('In 3D', ul([f'<li>Three spaces: a colour sphere (hue around the grey axis, lightness up and saturation out towards the surface), OKLab and CIELab {N}</li>',
+                            f'<li>Harmonies and palettes as points in space – the tone path with the path itself {N}</li>',
+                            f'<li>The gradient in OKLab next to the path straight through sRGB, which turns dark and muddy in the middle {N}</li>',
+                            f'<li>Colours outside a colour space get an arrow to where they end up, for example in the print profile {N}</li>',
+                            f'<li>Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone {N}</li>',
+                            f'<li>The colour spaces of ICC profiles in CIELab, with another space as glass for comparison {N}</li>',
+                            f'<li>Share as a 3D model (USDZ): Quick Look on the Mac, AR on iPhone and iPad {N}</li>']))]),
             ('tones', 'Tones, harmonies and gradients', 'Tones and gradients', None,
              [('Tones and harmonies', k['Tones and harmonies']), ('Gradients', k['Gradients'])]),
             ('getting-colours', 'Getting colours', 'Getting colours', None,
              [('Pick colours', plukk), ('Apple Intelligence on device', k['Apple Intelligence on device'])]),
             ('contrast', 'Contrast and colour vision', 'Contrast and colour vision',
-             plassholdere([('Reading contrast by APCA in the contrast check', 'Screenshot coming'), ('Text and icons on colour fields by APCA', 'Screenshot coming')]),
+             skjermbilder(s, ['apca-kontrast', 'apca-tekst', 'forvirringslinjer']).format('Screenshots – scroll sideways'),
              [('Text and graphics (WCAG 2.2 and APCA)', ul([tilg[i] for i in TILG_TEKST])),
               ('Surfaces and buildings (LRV)', ul([tilg[i] for i in TILG_FLATER])),
-              ('Colour vision', ul([tilg[i] for i in TILG_FARGESYN])),
+              ('Colour vision', ul([tilg[i] for i in TILG_FARGESYN] + [f'<li>Confusion lines in the chromaticity diagram: see which colours lie on the same line for protanopia, deuteranopia and tritanopia {N}</li>'])),
               ('Colour reports', ul([tilg[i] for i in TILG_RAPPORTER]))]),
             ('reports', 'Colour reports', 'Reports', '<p class="lesetekst">Copy the assessment as a table, share it as a link or print it as an A4 PDF – for contrast (WCAG 2.2), text contrast, contrast between surfaces (LRV), colour pairs that are hard to tell apart with colour vision deficiencies, colours in light and colour difference (ΔE). Recipients without the app see the report in their browser, with the colour pairs and the figures.</p>\n' + plassholdere([('Hard-to-tell-apart colour pairs in the app', 'Screenshot coming'), ('The report in the browser', 'Screenshot coming'), ('The report as a PDF', 'Screenshot coming')]) + '\n<p><a href="https://kolorist.no/l#zXVBBTsMwEPxKtFzdynHcuPGNQhESUk_AJcrBkRwUxaSRnaBWUa48APGFvqR3HsFL2DhBKlzsnd2d2dntoQCZ9lDhS5c8EitOFnRJI8F9EEZrLjICNUjYPe6eFrk5n4DAATGlK5psYSC_9CimTBBkxyz25DAKWTY18zUTIoZh1no4uhZlbAOyhz3I1naaQOO9KJCUgDIgC2UcpnOQIQGNtFvdtdqqet-UyH7FzLOqXaVN-aKD8ylwVWmMxpJT3iDfJDcjyj2KEsERtQi-PreUBowRHny_fwSChN6aRQMp3CmLctfYeq8P_p8ymzkz_l4AMpL-OcvVfBOM5oUvo3FKhlMcGihGRXesZz8Xa_hKoyxWun8rD1Nzo4xux_O94WGGHw">Open a shared example report</a></p>', []),
             ('light', 'Light and colour measurement', 'Light', lysdel, []),

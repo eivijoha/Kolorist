@@ -436,6 +436,10 @@ struct InnholdsVisning: View {
     @Environment(\.undoManager) private var undoManager
     @Environment(\.modelContext) private var kontekst
     @State private var observertAngring: ObjectIdentifier?
+    #if DEBUG
+    /// `-vis3D tonebane|overgang|filament|profil`: åpner 3D-visningen ved oppstart (skjermbilder).
+    @State private var debug3D: Fargerom3DKilde?
+    #endif
     @Query private var designsystemer: [DesignsystemDokument]
 
     /// Designsystemer-fanen: der palettene ligger i spalten, og bare når det finnes et designsystem eller en
@@ -549,6 +553,11 @@ struct InnholdsVisning: View {
         .task {
             if let tekst = UserDefaults.standard.string(forKey: "åpneLenke"), let url = URL(string: tekst) { arbeidsbenk.åpneLenke(url) }
         }
+        .task {
+            try? await Task.sleep(for: .seconds(1))
+            debug3D = Skjermbildemodus.vis3D()
+        }
+        .sheet(item: $debug3D) { Fargerom3DArk(kilde: $0, gamut: arbeidsbenk.gamut) }
         #endif
         #if os(macOS)
         .handlesExternalEvents(preferring: ["*"], allowing: ["*"])

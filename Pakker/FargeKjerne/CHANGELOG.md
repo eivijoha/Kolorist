@@ -4,6 +4,8 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Kromatisitet (FargeMaaling):** `Kromatisitet` – spektralkurven (380–700 nm), xy for en farge, kopunktene for
+  forvirringslinjene ved protan-, deutan- og tritanopi (Wyszecki og Stiles 1982) og `avstandFraLinje`.
 - **Farger og fargerom i 3D (`Fargerom3D`):** to rom med modellkoordinater i [−1, 1] – fargekule (OKLCH: lyshet langs
   den grå aksen, kulør rundt, metning ut mot overflaten som andel av høyeste kroma i gamut; `kuleposisjon`,
   `kuleflate`) og CIELab D50 (`labposisjon`, `gamutskall(_:)` for RGB- og CMYK-profiler, CMYK tilnærmet med

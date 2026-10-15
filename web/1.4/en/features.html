@@ -55,6 +55,7 @@
       <nav class="innholdsliste" aria-label="On this page">
         <ul>
           <li><a href="#colour-spaces">Colour spaces</a></li>
+          <li><a href="#3d">3D</a></li>
           <li><a href="#tones">Tones and gradients</a></li>
           <li><a href="#getting-colours">Getting colours</a></li>
           <li><a href="#contrast">Contrast and colour vision</a></li>
@@ -79,6 +80,7 @@
             <li>Save colours in their colour model or profile – exports use the same format</li>
             <li>Warnings when a colour is out of gamut</li>
             <li>Optionally limit colours to a chosen profile</li>
+            <li>See colour spaces, harmonies, gradients and palettes in 3D – in CIELab, OKLab or a colour sphere – and as a 3D model in AR <span class="nytt">New in 1.4</span></li>
             <li>Clean CMYK values: grey components move to black (UCR/GCR), with as few inks as possible</li>
             <li>Viewing light: D50 (ICC standard), D65 or one of the viewing conditions</li>
             <li>Absolute colorimetric keeps the paper white from the CMYK profile – 0/0/0/0 shows as the paper</li>
@@ -104,6 +106,50 @@
             <li>Find the nearest filament to a colour, or lock palettes and harmonies to filaments that exist</li>
             <li>Each colour links to the sample at <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">about the data</a></li>
             <li><a href="filament.html">Read more about 3D printing and filament</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section class="funksjonsgruppe" id="3d" aria-labelledby="3d-tittel">
+      <h2 id="3d-tittel">Colours and colour spaces in 3D</h2>
+      <p class="lesetekst">See harmonies, palettes, gradients and colour libraries in space – and the colour spaces of ICC profiles. Drag to rotate, share as a 3D model, and place it on the table with AR on iPhone and iPad.</p>
+      <ul class="skjermbilder" tabindex="0" aria-label="Screenshots – scroll sideways">
+              <li>
+                <figure class="skjermbilde">
+                  <img src="../assets/en/skjermbilde-3d-tonebane.png?v=10" alt="A tone path in a semi-transparent colour sphere: the tones and the path from light turquoise to blue, with the grey axis" width="1284" height="2778" loading="lazy">
+                  <figcaption>The tone path in the colour sphere</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure class="skjermbilde">
+                  <img src="../assets/en/skjermbilde-3d-overgang.png?v=10" alt="A gradient from red to turquoise in OKLab: the straight OKLab path and the dashed path through sRGB, which gets darker in the middle" width="1284" height="2778" loading="lazy">
+                  <figcaption>The gradient: OKLab against sRGB</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure class="skjermbilde">
+                  <img src="../assets/en/skjermbilde-3d-gamut.png?v=10" alt="The colour space of Generic CMYK in CIELab, with sRGB as a transparent shell for comparison" width="1284" height="2778" loading="lazy">
+                  <figcaption>Colour spaces in CIELab</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure class="skjermbilde">
+                  <img src="../assets/en/skjermbilde-3d-filament.png?v=10" alt="More than 2,200 filament colours as a point cloud in CIELab, with the colour and the nearest filament marked" width="1284" height="2778" loading="lazy">
+                  <figcaption>Filament colours in 3D</figcaption>
+                </figure>
+              </li>
+            </ul>
+      <div class="underpunkter">
+        <div>
+          <h3>In 3D</h3>
+          <ul>
+            <li>Three spaces: a colour sphere (hue around the grey axis, lightness up and saturation out towards the surface), OKLab and CIELab <span class="nytt">New in 1.4</span></li>
+            <li>Harmonies and palettes as points in space – the tone path with the path itself <span class="nytt">New in 1.4</span></li>
+            <li>The gradient in OKLab next to the path straight through sRGB, which turns dark and muddy in the middle <span class="nytt">New in 1.4</span></li>
+            <li>Colours outside a colour space get an arrow to where they end up, for example in the print profile <span class="nytt">New in 1.4</span></li>
+            <li>Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone <span class="nytt">New in 1.4</span></li>
+            <li>The colour spaces of ICC profiles in CIELab, with another space as glass for comparison <span class="nytt">New in 1.4</span></li>
+            <li>Share as a 3D model (USDZ): Quick Look on the Mac, AR on iPhone and iPad <span class="nytt">New in 1.4</span></li>
           </ul>
         </div>
       </div>
@@ -174,7 +220,26 @@
     </section>
     <section class="funksjonsgruppe" id="contrast" aria-labelledby="contrast-tittel">
       <h2 id="contrast-tittel">Contrast and colour vision</h2>
-      <div class="plassholdere"><figure class="skjermbilde plassholder"><div class="bilde-plassholder" role="img" aria-label="Reading contrast by APCA in the contrast check">Screenshot coming</div><figcaption>Reading contrast by APCA in the contrast check</figcaption></figure><figure class="skjermbilde plassholder"><div class="bilde-plassholder" role="img" aria-label="Text and icons on colour fields by APCA">Screenshot coming</div><figcaption>Text and icons on colour fields by APCA</figcaption></figure></div>
+      <ul class="skjermbilder" tabindex="0" aria-label="Screenshots – scroll sideways">
+        <li>
+          <figure class="skjermbilde">
+            <img src="../assets/en/skjermbilde-apca-kontrast.png?v=10" alt="Contrast check by APCA: blue text on white, Lc 67, with the levels from body text to icons and “Fix”" width="1284" height="2778" loading="lazy">
+            <figcaption>Reading contrast by APCA</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde">
+            <img src="../assets/en/skjermbilde-apca-tekst.png?v=10" alt="Harmony in Studio: five colours with their values in white or black text by APCA, also on the mid tones" width="1284" height="2778" loading="lazy">
+            <figcaption>Text on colour fields by APCA</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde">
+            <img src="../assets/en/skjermbilde-forvirringslinjer.png?v=10" alt="Chromaticity diagram with the confusion lines for deuteranopia: the palette’s colours, with the hard pairs joined in red" width="1284" height="2778" loading="lazy">
+            <figcaption>Confusion lines</figcaption>
+          </figure>
+        </li>
+      </ul>
       <div class="underpunkter">
         <div>
           <h3>Text and graphics (WCAG 2.2 and APCA)</h3>
@@ -204,6 +269,7 @@
             <li>See the palette with protan, deutan and tritan deficiencies and achromatopsia, at any severity – and which colours become hard to tell apart</li>
             <li>Colour vision deficiencies listed by how common they are, with estimated prevalence</li>
             <li>Camera with a colour vision filter: see your surroundings as they may appear with each deficiency</li>
+            <li>Confusion lines in the chromaticity diagram: see which colours lie on the same line for protanopia, deuteranopia and tritanopia <span class="nytt">New in 1.4</span></li>
           </ul>
         </div>
         <div>

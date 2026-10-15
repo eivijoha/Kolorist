@@ -55,6 +55,7 @@
       <nav class="innholdsliste" aria-label="Innhold på siden">
         <ul>
           <li><a href="#fargerom">Fargerom</a></li>
+          <li><a href="#3d">3D</a></li>
           <li><a href="#toner">Toner og overganger</a></li>
           <li><a href="#hent">Hent farger</a></li>
           <li><a href="#kontrast">Kontrast og fargesyn</a></li>
@@ -77,6 +78,7 @@
             <li>Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst installert ICC-profil</li>
             <li>Varsel når fargen er utenfor fargeområdet</li>
             <li>Begrens farger til en valgt profil om du vil</li>
+            <li>Se fargerom, harmonier, overganger og paletter i 3D – i CIELab, OKLab eller en fargekule – og som 3D-modell i AR <span class="nytt">Nytt i 1.4</span></li>
             <li>Velg kildefargerom for CMYK og RGB – Generisk CMYK og sRGB som standard, eller en hvilken som helst ICC-profil</li>
             <li>Lagre farger i fargemodellen eller profilen – eksporten bruker samme format</li>
             <li>Rene CMYK-verdier: grått innslag flyttes til sort (UCR/GCR), med færrest mulig trykkfarger</li>
@@ -104,6 +106,50 @@
             <li>Finn nærmeste filament til en farge, eller lås paletter og harmonier til filamenter som finnes</li>
             <li>Hver farge lenker til prøven hos <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">om dataene</a></li>
             <li><a href="filament.html">Les mer om 3D-print og filament</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section class="funksjonsgruppe" id="3d" aria-labelledby="3d-tittel">
+      <h2 id="3d-tittel">Farger og fargerom i 3D</h2>
+      <p class="lesetekst">Se harmonier, paletter, overganger og fargebiblioteker i rommet – og fargerommene til ICC-profiler. Dra for å dreie, del som 3D-modell, og plasser den på bordet med AR på iPhone og iPad.</p>
+      <ul class="skjermbilder" tabindex="0" aria-label="Skjermbilder – rull sidelengs">
+              <li>
+                <figure class="skjermbilde">
+                  <img src="assets/skjermbilde-3d-tonebane.png?v=10" alt="En tonebane i en halvgjennomsiktig fargekule: tonene og banen fra lys turkis til blå, med den grå aksen" width="1284" height="2778" loading="lazy">
+                  <figcaption>Tonebanen i fargekula</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure class="skjermbilde">
+                  <img src="assets/skjermbilde-3d-overgang.png?v=10" alt="En overgang fra rødt til turkis i OKLab: den rette OKLab-veien og den stiplede veien gjennom sRGB, som blir mørkere på midten" width="1284" height="2778" loading="lazy">
+                  <figcaption>Overgangen: OKLab mot sRGB</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure class="skjermbilde">
+                  <img src="assets/skjermbilde-3d-gamut.png?v=10" alt="Fargerommet til Generisk CMYK i CIELab, med sRGB som gjennomsiktig skall til sammenligning" width="1284" height="2778" loading="lazy">
+                  <figcaption>Fargerom i CIELab</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure class="skjermbilde">
+                  <img src="assets/skjermbilde-3d-filament.png?v=10" alt="Over 2 200 filamentfarger som punktsky i CIELab, med fargen og nærmeste filament markert" width="1284" height="2778" loading="lazy">
+                  <figcaption>Filamentfarger i 3D</figcaption>
+                </figure>
+              </li>
+            </ul>
+      <div class="underpunkter">
+        <div>
+          <h3>I 3D</h3>
+          <ul>
+            <li>Tre rom: en fargekule (kulør rundt den grå aksen, lyshet opp og metning ut mot overflaten), OKLab og CIELab <span class="nytt">Nytt i 1.4</span></li>
+            <li>Harmonier og paletter som punkter i rommet – tonebanen med selve banen <span class="nytt">Nytt i 1.4</span></li>
+            <li>Overgangen i OKLab ved siden av veien rett gjennom sRGB, som blir mørk og grumsete på midten <span class="nytt">Nytt i 1.4</span></li>
+            <li>Farger utenfor et fargerom får en pil til der de havner, f.eks. i trykkprofilen <span class="nytt">Nytt i 1.4</span></li>
+            <li>Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone <span class="nytt">Nytt i 1.4</span></li>
+            <li>Fargerommene til ICC-profiler i CIELab, med et annet rom som glass til sammenligning <span class="nytt">Nytt i 1.4</span></li>
+            <li>Del som 3D-modell (USDZ): Hurtigvisning på Mac, AR på iPhone og iPad <span class="nytt">Nytt i 1.4</span></li>
           </ul>
         </div>
       </div>
@@ -174,7 +220,26 @@
     </section>
     <section class="funksjonsgruppe" id="kontrast" aria-labelledby="kontrast-tittel">
       <h2 id="kontrast-tittel">Kontrast og fargesyn</h2>
-      <div class="plassholdere"><figure class="skjermbilde plassholder"><div class="bilde-plassholder" role="img" aria-label="Lesekontrast etter APCA i kontrastsjekken">Skjermbilde kommer</div><figcaption>Lesekontrast etter APCA i kontrastsjekken</figcaption></figure><figure class="skjermbilde plassholder"><div class="bilde-plassholder" role="img" aria-label="Tekst og ikoner på fargefelt etter APCA">Skjermbilde kommer</div><figcaption>Tekst og ikoner på fargefelt etter APCA</figcaption></figure></div>
+      <ul class="skjermbilder" tabindex="0" aria-label="Skjermbilder – rull sidelengs">
+        <li>
+          <figure class="skjermbilde">
+            <img src="assets/skjermbilde-apca-kontrast.png?v=10" alt="Kontrastsjekk etter APCA: blå tekst på hvitt, Lc 67, med nivåene fra brødtekst til ikoner og «Rett opp»" width="1284" height="2778" loading="lazy">
+            <figcaption>Lesekontrast etter APCA</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde">
+            <img src="assets/skjermbilde-apca-tekst.png?v=10" alt="Harmoni i Studio: fem farger med verdiene i hvit eller sort tekst etter APCA, også på mellomtonene" width="1284" height="2778" loading="lazy">
+            <figcaption>Tekst på fargefelt etter APCA</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde">
+            <img src="assets/skjermbilde-forvirringslinjer.png?v=10" alt="Kromatisitetsdiagram med forvirringslinjene for deuteranopi: palettens farger, og de vanskelige parene streket sammen i rødt" width="1284" height="2778" loading="lazy">
+            <figcaption>Forvirringslinjer</figcaption>
+          </figure>
+        </li>
+      </ul>
       <div class="underpunkter">
         <div>
           <h3>Tekst og grafikk (WCAG 2.2 og APCA)</h3>
@@ -204,6 +269,7 @@
             <li>Se paletter med protan-, deutan- og tritanavvik og akromatopsi, med valgfri alvorlighetsgrad – og hvilke farger som blir vanskelige å skille</li>
             <li>Fargesynsavvikene står etter hvor vanlige de er, med anslått utbredelse</li>
             <li>Kamera med fargesynsfilter: se omgivelsene slik de kan oppleves med hvert avvik</li>
+            <li>Forvirringslinjer i kromatisitetsdiagrammet: se hvilke farger som ligger på samme linje for protanopi, deuteranopi og tritanopi <span class="nytt">Nytt i 1.4</span></li>
           </ul>
         </div>
         <div>

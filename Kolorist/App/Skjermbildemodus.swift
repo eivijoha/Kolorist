@@ -9,6 +9,30 @@ import SwiftUI
 enum Skjermbildemodus {
     static var på: Bool { UserDefaults.standard.bool(forKey: "skjermbilde") }
 
+    /// `-vis3D <navn>`: det 3D-visningen skal vise ved oppstart. Rommet og profilene settes med `-fargerom3D.rom`,
+    /// `-fargerom3D.profil` og `-fargerom3D.sammenlign`.
+    static func vis3D() -> Fargerom3DKilde? {
+        switch UserDefaults.standard.string(forKey: "vis3D") {
+        case "tonebane":
+            let strek = Monokromstrek(a: .init(lyshet: 0.89, metning: 0.22), b: .init(lyshet: 0.59, metning: 0.75))
+            return .farger(navn: Harmoni.tonebane.navn, farger: strek.toner(fraKulør: 205, spenn: 49, antall: 5),
+                           bane: strek.toner(fraKulør: 205, spenn: 49, antall: 64))
+        case "overgang":
+            // Rød mot turkis: veien rett gjennom sRGB blir mørk og grumsete på midten, OKLab-veien ikke.
+            let (fra, til) = (Farge(hex: "#D7263D")!, Farge(hex: "#1B998B")!)
+            return .overgang(navn: String(localized: "Overgang \(fra.hex()) → \(til.hex())"), fra: fra, til: til, antall: 7)
+        case "filament":
+            return Filamentfarger.biblioteker.first.map { .bibliotek($0, markert: Farge(hex: "#2F7FD8")!) }
+        case "profil":
+            return .profil(.genericCMYK)
+        case "palett":
+            let farger = ["#E4572E", "#F3A712", "#29335C", "#669BBC", "#A8C686", "#F0F0C9"].compactMap { Farge(hex: $0) }
+            return .farger(navn: String(localized: "Palett"), farger: farger)
+        default:
+            return nil
+        }
+    }
+
     static func forbered(_ kontekst: ModelContext) {
         guard på else { return }
         leggInnEksempler(kontekst)

@@ -607,16 +607,16 @@
     },
     "%lld av fargene ligger utenfor %@. Pilene viser hvor de havner.": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld av fargene ligger utenfor %2$@. Pilene viser hvor de havner."
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld of the colours are outside %2$@. The arrows show where they end up."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld av fargene ligger utenfor %2$@. Pilene viser hvor de havner."
           }
         }
       }
@@ -1117,6 +1117,16 @@
         }
       }
     },
+    "Avvik": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deficiency"
+          }
+        }
+      }
+    },
     "Bakgrunn": {
       "localizations": {
         "en": {
@@ -1546,6 +1556,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "CIE 15 (luminance factor Y); BS 8300-2:2018; TEK17 with guidance, NS 11001-1:2018 and Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (draft 2026)"
+          }
+        }
+      }
+    },
+    "CIE 1931-kromatisitetsdiagrammet (xy) med palettens farger. For den som mangler én type tapper, ligger farger som ikke kan skilles (med lik lyshet), på rette linjer gjennom ett punkt – kopunktet for avviket. Linjen gjennom hver farge er tegnet; farger nær samme linje kan forveksles, særlig når lysheten også er lik. De vanskelige parene fra analysen er streket sammen i rødt. Kopunktene: G. Wyszecki og W. S. Stiles, Color Science (1982).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The CIE 1931 chromaticity diagram (xy) with the palette’s colours. For someone missing one type of cone, colours that cannot be told apart (at equal lightness) lie on straight lines through one point – the copunctal point for the deficiency. The line through each colour is drawn; colours near the same line can be confused, especially when their lightness is also similar. The hard pairs from the analysis are joined in red. Copunctal points: G. Wyszecki and W. S. Stiles, Color Science (1982)."
           }
         }
       }
@@ -2740,6 +2760,16 @@
         }
       }
     },
+    "Farger nær samme linje kan forveksles. Rødt: vanskelige par.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colours near the same line can be confused. Red: hard pairs."
+          }
+        }
+      }
+    },
     "Farger utenfor sRGB, som bare vises riktig på P3-skjermer.": {
       "localizations": {
         "en": {
@@ -3557,6 +3587,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The suggestion is made with Apple Intelligence on device when available."
+          }
+        }
+      }
+    },
+    "Forvirringslinjer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confusion lines"
           }
         }
       }
@@ -5576,6 +5616,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chroma damping toward the extremes"
+          }
+        }
+      }
+    },
+    "Kromatisitetsdiagram med forvirringslinjer for %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chromaticity diagram with confusion lines for %@"
           }
         }
       }
@@ -7728,16 +7778,16 @@
     },
     "Nærmeste tone: %@ (ΔE00 %@).": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Nærmeste tone: %1$@ (ΔE00 %2$@)."
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Nearest tone: %1$@ (ΔE00 %2$@)."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nærmeste tone: %1$@ (ΔE00 %2$@)."
           }
         }
       }

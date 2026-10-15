@@ -682,6 +682,32 @@ struct KameraForhåndsvisning: UIViewRepresentable {
         override func layoutSubviews() {
             super.layoutSubviews()
             filterlag?.frame = bounds
+            følgRotasjon()
+            meldOrientering()
+        }
+
+        /// Holder forhåndsvisningen i vater når enheten roteres (iPad): forbindelsen roteres ikke av seg selv.
+        private var rotasjon: AVCaptureDevice.RotationCoordinator?
+        private var rotasjonsenhet: String?
+        private var observasjon: NSKeyValueObservation?
+
+        private func følgRotasjon() {
+            guard let enhet = lag.session?.inputs.compactMap({ ($0 as? AVCaptureDeviceInput)?.device }).first else { return }
+            // Ny koordinator når kameraet byttes (f.eks. fra bakre til fremre).
+            guard rotasjonsenhet != enhet.uniqueID else { return }
+            rotasjonsenhet = enhet.uniqueID
+            let r = AVCaptureDevice.RotationCoordinator(device: enhet, previewLayer: lag)
+            rotasjon = r
+            settVinkel(r.videoRotationAngleForHorizonLevelPreview)
+            observasjon = r.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.new]) { [weak self] r, _ in
+                let vinkel = r.videoRotationAngleForHorizonLevelPreview
+                Task { @MainActor in self?.settVinkel(vinkel) }
+            }
+        }
+
+        private func settVinkel(_ vinkel: CGFloat) {
+            guard let k = lag.connection, k.isVideoRotationAngleSupported(vinkel), k.videoRotationAngle != vinkel else { return }
+            k.videoRotationAngle = vinkel
             meldOrientering()
         }
 
