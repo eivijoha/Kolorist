@@ -203,7 +203,8 @@ struct FargeEditor: View {
                         if beskriver { ProgressView().controlSize(.small) }
                     }
                 // Menyen får plass først; profilnavnet kortes ned når feltet ellers ville blitt for smalt.
-                VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: farge, visMineFargerom: $visMineFargerom)
+                VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: farge, visMineFargerom: $visMineFargerom,
+                            vis3D: { vis3D = $0 })
                     .layoutPriority(1)
             }
             .padding(.horizontal, 16)
@@ -995,6 +996,8 @@ struct VisOgsåMeny: View {
     let farge: Farge
     /// Åpner «Mine fargerom» – eies av Studio, som presenterer arket.
     @Binding var visMineFargerom: Bool
+    /// Viser det valgte fargerommet (eller fargebiblioteket) i 3D – arket eies av visningen menyen står i.
+    var vis3D: ((Fargerom3DKilde) -> Void)? = nil
     @AppStorage("renCMYK") private var renCMYK = false
     @Environment(ProfilBibliotek.self) private var bibliotek
 
@@ -1044,6 +1047,13 @@ struct VisOgsåMeny: View {
             Divider()
             // Import og sletting av ICC-profiler og fargebiblioteker skjer i «Mine fargerom».
             Button("Mine fargerom …", systemImage: "books.vertical") { visMineFargerom = true }
+            if let vis3D {
+                if let b = bibliotek.fargebibliotek(id: valgtID) {
+                    Button("Vis biblioteket i 3D …", systemImage: "rotate.3d") { vis3D(.bibliotek(b, markert: farge)) }
+                } else if let p = bibliotek.profil(id: valgtID), p.modell == .rgb || p.modell == .cmyk {
+                    Button("Vis fargerommet i 3D …", systemImage: "rotate.3d") { vis3D(.profil(p)) }
+                }
+            }
             #if os(macOS)
             let installerte = bibliotek.installerte.filter { p in !bibliotek.importerte.contains { $0.id == p.id } }
             if !installerte.isEmpty {

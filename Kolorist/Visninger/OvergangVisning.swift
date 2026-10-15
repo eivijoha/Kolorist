@@ -101,7 +101,8 @@ struct OvergangVisning: View {
                 .overlay(alignment: .topTrailing) { lagremeny }
             HStack {
                 Spacer(minLength: 0)
-                VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom)
+                VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom,
+                            vis3D: { vis3D = $0 })
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)

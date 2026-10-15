@@ -11154,6 +11154,16 @@
         }
       }
     },
+    "Vis biblioteket i 3D …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the library in 3D …"
+          }
+        }
+      }
+    },
     "Vis farge": {
       "localizations": {
         "en": {
@@ -11210,6 +11220,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show the colours without light"
+          }
+        }
+      }
+    },
+    "Vis fargerommet i 3D …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the colour space in 3D …"
           }
         }
       }

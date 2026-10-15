@@ -354,7 +354,8 @@ struct Fargerom3DArk: View {
     @Environment(\.dismiss) private var lukk
     @AppStorage("fargerom3D.rom") private var lagretRom: Fargerom3DRom = .fargekule
     @AppStorage("fargerom3D.profil") private var profilID = ICCProfil.sRGB.id
-    @AppStorage("fargerom3D.sammenlign") private var sammenlignID = ""
+    /// Rommet en profil sammenlignes med (sRGB til å begynne med; «Ingen» lagres som tom).
+    @AppStorage("fargerom3D.sammenlign") private var sammenlignID = ICCProfil.sRGB.id
     @State private var rom: Fargerom3DRom = .fargekule
     @State private var tegning: Fargerom3DTegning?
     @State private var dreining = 0.0
@@ -364,7 +365,10 @@ struct Fargerom3DArk: View {
     private var erProfil: Bool { if case .profil = kilde { true } else { false } }
     private var profiler: [ICCProfil] { ProfilBibliotek.delt.alle.filter { $0.modell == .rgb || $0.modell == .cmyk } }
     private var profil: ICCProfil { ProfilBibliotek.delt.profil(id: profilID) ?? .sRGB }
-    private var sammenlign: ICCProfil? { sammenlignID.isEmpty ? nil : ProfilBibliotek.delt.profil(id: sammenlignID) }
+    /// Ikke sammenligning med seg selv.
+    private var sammenlign: ICCProfil? {
+        sammenlignID.isEmpty || sammenlignID == profilID ? nil : ProfilBibliotek.delt.profil(id: sammenlignID)
+    }
     private var nøkkel: String { "\(kilde.id)|\(rom.rawValue)|\(profil.id)|\(sammenlignID)" }
     private var romvalg: [Fargerom3DRom] { erProfil ? [.okLab, .cieLab] : Fargerom3DRom.allCases }
 
