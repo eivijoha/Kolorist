@@ -994,7 +994,7 @@ struct Fargeflate: View {
         return FargeRute(farge: f, visTekst: false, hjørne: 0, visMerke: false,
                          lagre: { _ in lagre(pf) }, leggIPalett: { _ in leggIPalett(pf) }, visFarge: false, palettFarge: pf,
                          kopierVerdier: tekst,
-                         ekstraMeny: vis3D.map { vis in AnyView(Button("Vis i 3D …", systemImage: "rotate.3d", action: vis)) })
+                         vis3D: vis3D)
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(tittel).koloristFont(.caption, weight: .semibold).lineLimit(2).minimumScaleFactor(0.85)

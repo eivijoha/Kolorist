@@ -8,8 +8,9 @@ import SwiftUI
 /// 1. Vis farge · Endre i Studio … · Gi navn … · i palett: Lag toneskala, Skriftfarge · valg som bare gjelder her
 ///    (`ekstraMeny`)
 /// 2. Lagre som enkeltfarge · Legg i palett … · Flytt til (etter `Fargeplass`)
-/// 3. Kopier verdier · Kopier hex · Kopier som · Del · Kopier til · Del som lenke · Lagre som … · kilden
-/// 4. Slett farge
+/// 3. Del som lenke · Kopier verdier · Kopier hex · Kopier som · Del · Kopier til · Lagre som … · kilden
+/// 4. Vis i 3D …
+/// 5. Slett farge
 ///
 /// Med `boble` vises valgene i en boble ved prøven i stedet (lister på iPhone og iPad, se `FargeRute.valgBoble`).
 struct Fargemeny: ViewModifier {
@@ -26,6 +27,7 @@ struct Fargemeny: ViewModifier {
     var fjern: (() -> Void)? = nil
     var kopierVerdier: String? = nil
     var ekstraMeny: AnyView? = nil
+    var vis3D: (() -> Void)? = nil
     var boble = false
     var bobleEkstra: ((@escaping () -> Void) -> AnyView)? = nil
 
@@ -183,17 +185,21 @@ struct Fargemeny: ViewModifier {
         }
         // 3. Kopiere og dele.
         Section {
+            let pf = somPalettFarge(farge)
+            DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
             if let kopierVerdier {
                 Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(kopierVerdier) }
             }
             KopierMeny(farge: farge)
-            let pf = somPalettFarge(farge)
             KopierTilMeny(farger: [pf], navn: navn ?? "")
-            DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
             Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
             if let palettFarge { KildeMeny(farger: [palettFarge]) }
         }
-        // 4. Slette.
+        // 4. Vis i 3D (alltid sist før sletting).
+        if let vis3D {
+            Section { Button("Vis i 3D …", systemImage: "rotate.3d", action: vis3D) }
+        }
+        // 5. Slette.
         if let fjern = fjernHandling {
             Section {
                 Button("Slett farge", systemImage: "trash", role: .destructive, action: fjern)

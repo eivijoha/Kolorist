@@ -142,16 +142,16 @@ struct OvergangVisning: View {
     @ViewBuilder private func settvalg(_ sett: [PalettFarge], lukk: @escaping () -> Void, samlet: Bool = false) -> some View {
         let settnavn = String(localized: "Lysere og mørkere \(start.hex()) → \(slutt.hex())")
         let valg = Group {
-            Button("Lagre settet som palett …", systemImage: "square.grid.3x3") {
-                lukk()
-                somPalett = sett
-            }
             DelSomLenke(navn: settnavn, tittel: "Del settet som lenke") {
                 Lenkedeling.palett(navn: settnavn, farger: sett, gradienter: [])
             }
             Button("Skriv ut settet …", systemImage: "printer") {
                 lukk()
                 PalettUtskrift.skrivUt(Palett(navn: settnavn, farger: sett))
+            }
+            Button("Lagre settet som palett …", systemImage: "square.grid.3x3") {
+                lukk()
+                somPalett = sett
             }
             KopierTilMeny(farger: sett, navn: settnavn, tittel: "Kopier settet til", inline: samlet)
         }
@@ -331,12 +331,12 @@ struct CSSGradientSeksjon: View {
                 .frame(height: 96)
                 .overlay(alignment: .topTrailing) {
                     Menu {
-                        Button("Lagre gradient …", systemImage: "square.and.arrow.down", action: lagreGradient)
                         Button("Skriv ut …", systemImage: "printer") {
                             let navn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
                             PalettUtskrift.skrivUt(Palett(navn: navn, farger: toner.map { PalettFarge(farge: $0, opphav: .overgang) }),
                                                    gradienter: [PalettGradient(navn: navn, oppsett: oppsett)])
                         }
+                        Button("Lagre gradient …", systemImage: "square.and.arrow.down", action: lagreGradient)
                         GradientKopierTilMeny(gradient: kopi, tittel: "Kopier gradienten til", inline: true)
                     } label: {
                         Image(systemName: lagret ? "checkmark.square.fill" : "plus.square")

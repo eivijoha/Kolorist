@@ -958,13 +958,15 @@ struct PalettDetalj: View {
     }
 
     /// Lagre som, del og kopier.
+    /// Del som lenke først, så Skriv ut, så kopiering og lagring.
     @ViewBuilder private var delvalg: some View {
-        Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
-            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
-        Divider()
         let navn = dokument.navn, farger = dokument.farger, gradienter = dokument.gradienter
         DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
             .disabled(farger.isEmpty && gradienter.isEmpty)
+        utskriftsknapp
+        Divider()
+        Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
+            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
         Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
         Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
         KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
@@ -1009,8 +1011,8 @@ struct PalettDetalj: View {
                 Menu {
                     delvalg
                     Divider()
-                    utskriftsknapp
                     designsystemknapp
+                    Divider()
                     vis3Dknapp
                     Divider()
                     Button("Slett palett", systemImage: "trash", role: .destructive) { slettSpørsmål = true }

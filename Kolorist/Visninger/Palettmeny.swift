@@ -24,10 +24,11 @@ enum Paletthandling: Identifiable, Hashable {
 
 /// Menyen for én palett (trykk og hold / høyreklikk), lik i palettlisten og palettkolonnen:
 ///
-/// 1. Vurder paletten · Skriftkontrast · Lag designsystem · Vis i 3D
+/// 1. Vurder paletten · Skriftkontrast · Lag designsystem
 /// 2. Gi nytt navn … · Flytt til gruppe
-/// 3. Kopier til · Del som lenke · Lagre som … · Skriv ut … · kildene (f.eks. filamentprøvene)
-/// 4. Slett palett
+/// 3. Del som lenke · Skriv ut … · Kopier til · Lagre som … · kildene (f.eks. filamentprøvene)
+/// 4. Vis i 3D …
+/// 5. Slett palett
 struct PalettMeny: View {
     let palett: PalettDokument
     let utfør: (Paletthandling) -> Void
@@ -46,24 +47,26 @@ struct PalettMeny: View {
                 .disabled(p.farger.count < 2)
             Button("Lag designsystem", systemImage: "square.stack.3d.up") { lagDesignsystem(p) }
                 .disabled(p.farger.isEmpty)
-            Button("Vis i 3D …", systemImage: "rotate.3d") { utfør(.vis3D(p)) }
-                .disabled(p.farger.isEmpty)
         }
         Section {
             Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { utfør(.omdøp(p)) }
             flyttTilGruppe
         }
         Section {
-            KopierTilMeny(farger: p.farger, navn: p.navn)
-                .disabled(p.farger.isEmpty)
             let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
             DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
                 .disabled(tom)
-            Button("Lagre som …", systemImage: "square.and.arrow.down") { utfør(.lagreSom(p)) }
-                .disabled(tom)
             Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                 .disabled(tom)
+            KopierTilMeny(farger: p.farger, navn: p.navn)
+                .disabled(p.farger.isEmpty)
+            Button("Lagre som …", systemImage: "square.and.arrow.down") { utfør(.lagreSom(p)) }
+                .disabled(tom)
             KildeMeny(farger: p.farger)
+        }
+        Section {
+            Button("Vis i 3D …", systemImage: "rotate.3d") { utfør(.vis3D(p)) }
+                .disabled(p.farger.isEmpty)
         }
         Section {
             Button("Slett palett", systemImage: "trash", role: .destructive) { utfør(.slett(p)) }

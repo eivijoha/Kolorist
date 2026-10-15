@@ -142,15 +142,15 @@ private struct Gradientmeny: ViewModifier {
                     LeggGradientIPalettMeny(oppsett: oppsett, navn: navn)
                 }
                 Section {
-                    Button("Kopier CSS", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(oppsett.css) }
-                    GradientKopierTilMeny(gradient: Gradientkopi(farger: [oppsett.fra, oppsett.til], navn: navn))
-                    KopierTilMeny(farger: toner, navn: navn, tittel: "Kopier tonene til")
                     let (o, n) = (oppsett, navn)
                     DelSomLenke(navn: n) { Lenkedeling.gradient(o, navn: n) }
-                    Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = true }
                     Button("Skriv ut …", systemImage: "printer") {
                         PalettUtskrift.skrivUt(Palett(navn: navn, farger: toner), gradienter: [PalettGradient(navn: navn, oppsett: oppsett)])
                     }
+                    Button("Kopier CSS", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(oppsett.css) }
+                    GradientKopierTilMeny(gradient: Gradientkopi(farger: [oppsett.fra, oppsett.til], navn: navn))
+                    KopierTilMeny(farger: toner, navn: navn, tittel: "Kopier tonene til")
+                    Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = true }
                 }
                 Section {
                     Button("Slett gradient", systemImage: "trash", role: .destructive, action: slett)

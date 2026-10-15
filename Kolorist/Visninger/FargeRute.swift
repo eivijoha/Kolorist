@@ -53,6 +53,8 @@ struct FargeRute: View {
     var kopierVerdier: String? = nil
     /// Valg som bare gjelder her (f.eks. «Lag toneskala»), etter Vis/Endre/Gi navn.
     var ekstraMeny: AnyView? = nil
+    /// «Vis i 3D …», sist i menyen (før sletting).
+    var vis3D: (() -> Void)? = nil
 
     /// Valgene vises i en boble ved prøven (trykk og hold) i stedet for som kontekstmeny.
     /// Brukes i lister/skjemaer: der gjelder iOS' kontekstmeny hele raden, så menyen og
@@ -91,7 +93,7 @@ struct FargeRute: View {
         Fargemeny(farge: farge, navn: navn, palettFarge: palettFarge, plass: plass, lagre: lagre, leggIPalett: leggIPalett,
                   åpneIStudio: visFarge ? (åpneIStudio ?? { Arbeidsbenk.delt.visIStudio($0) }) : nil,
                   endre: endre, endreTittel: endreTittel, navngi: navngi, fjern: fjern, kopierVerdier: kopierVerdier,
-                  ekstraMeny: ekstraMeny, boble: boble, bobleEkstra: bobleEkstra)
+                  ekstraMeny: ekstraMeny, vis3D: vis3D, boble: boble, bobleEkstra: bobleEkstra)
     }
 
     private var form: UnevenRoundedRectangle {
@@ -278,6 +280,8 @@ struct FargeValgBoble: View {
                         leggIPalett(farge)
                     }
                 }
+                let pf = palettFarge ?? PalettFarge(navn: navn, farge: farge)
+                DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
                 Button("Kopier hex", systemImage: "doc.on.doc") {
                     Utklippstavle.kopier(farge)
                     lukk()
@@ -300,8 +304,6 @@ struct FargeValgBoble: View {
                 } label: {
                     Label("Kopier til", systemImage: "arrow.up.doc.on.clipboard")
                 }
-                let pf = palettFarge ?? PalettFarge(navn: navn, farge: farge)
-                DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
                 if let kilde { Kildelenke(kilde: kilde) }
                 if let ekstra {
                     Divider()
