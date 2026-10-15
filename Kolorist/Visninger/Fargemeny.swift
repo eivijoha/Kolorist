@@ -8,7 +8,7 @@ import SwiftUI
 /// 1. Vis farge · Endre i Studio … · Gi navn … · i palett: Lag toneskala, Skriftfarge · valg som bare gjelder her
 ///    (`ekstraMeny`)
 /// 2. Lagre som enkeltfarge · Legg i palett … · Flytt til (etter `Fargeplass`)
-/// 3. Lagre som … · Kopier til · Del som lenke · Kopier verdier · Kopier hex · Kopier som · Del · kilden
+/// 3. Kopier til · Del som lenke · Kopier verdier · Kopier hex · Kopier som · Del · kilden
 /// 4. Vis i 3D …
 /// 5. Slett farge
 ///
@@ -33,7 +33,6 @@ struct Fargemeny: ViewModifier {
 
     @Environment(\.modelContext) private var kontekst
     @State private var visValg = false
-    @State private var visLagreSom = false
     @State private var endrerIStudio = false
     @State private var leggesIPalett: [PalettFarge]?
     @State private var navngis: PalettFarge?
@@ -133,10 +132,6 @@ struct Fargemeny: ViewModifier {
                 content.contextMenu { menyvalg }
             }
         }
-        .sheet(isPresented: $visLagreSom) {
-            let pf = somPalettFarge(farge)
-            LagreSomArk(innhold: Lagringsinnhold(navn: pf.navn.isEmpty ? farge.hex() : pf.navn, farger: [pf]))
-        }
         .sheet(isPresented: Binding(get: { leggesIPalett != nil }, set: { if !$0 { leggesIPalett = nil } })) {
             VelgPalettArk(farger: leggesIPalett ?? [], tilbyEnkeltfarger: tilbyEnkeltfarger)
         }
@@ -185,9 +180,8 @@ struct Fargemeny: ViewModifier {
         }
         // 3. Kopiere og dele.
         Section {
-            // Primærhandlingene (Lagre som, Kopier til) først, så deling, så øvrig kopiering.
+            // Kopier til først (primærhandling), så deling, så øvrig kopiering. Enkeltfarger lagres ikke som fil.
             let pf = somPalettFarge(farge)
-            Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
             KopierTilMeny(farger: [pf], navn: navn ?? "")
             DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
             if let kopierVerdier {
