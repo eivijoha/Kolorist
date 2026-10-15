@@ -12,14 +12,14 @@ struct TonebaneRing<Midt: View>: View {
     /// Ringens farge ved en vinkel i valgt fargesirkel.
     let ringfarge: (Double) -> Color
     /// Fargen ved en OKLCH-kulør (til håndtakene).
-    let farge: (Double) -> Color
+    let farge: (Double) -> Farge
     /// OKLCH-kulør → vinkel i valgt fargesirkel, og omvendt.
     let vinkel: (Double) -> Double
     let kulør: (Double) -> Double
     var tekst: (Double) -> String = { "\(Int($0.rounded()))°" }
     var stegForTilgjengelighet: Double = 5
-    /// Håndtaket som redigeres eller sist ble redigert (`true` = slutt), markert med en ekstra ring – kvadratet i midten
-    /// vises i den kuløren.
+    /// Håndtaket som redigeres eller sist ble redigert (`true` = slutt), uthevet som grunnfargen i fargesirkelen (større,
+    /// med kant i fargens lesbare tekstfarge) – kvadratet i midten vises i den kuløren.
     var merketSlutt: Bool? = nil
     /// Kalles når et håndtak begynner å dras (`true` = slutt).
     var redigerer: (Bool) -> Void = { _ in }
@@ -121,17 +121,13 @@ struct TonebaneRing<Midt: View>: View {
 
     private func håndtak(kulør h: Double, tittel: Text, senter: CGPoint, radius: CGFloat, merket: Bool,
                          juster: @escaping (Double) -> Void) -> some View {
-        Circle()
-            .fill(farge(h))
-            .overlay(Circle().strokeBorder(.white, lineWidth: 3))
+        let f = farge(h)
+        return Circle()
+            .fill(f.swiftUI)
+            .overlay(Circle().strokeBorder(merket ? f.lesbarTekstfarge.swiftUI : .white, lineWidth: merket ? 4 : 3))
             .overlay(Circle().strokeBorder(Color.black.opacity(0.25), lineWidth: 0.5))
             .shadow(color: .black.opacity(0.25), radius: 2, y: 1)
-            .frame(width: tommel, height: tommel)
-            .background {
-                if merket {
-                    Circle().strokeBorder(Color.primary.opacity(0.7), lineWidth: 2).frame(width: tommel + 10, height: tommel + 10)
-                }
-            }
+            .frame(width: merket ? tommel + 6 : tommel, height: merket ? tommel + 6 : tommel)
             .position(punkt(vinkel(h), radius: radius, senter: senter))
             .allowsHitTesting(false)
             .accessibilityElement()

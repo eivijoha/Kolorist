@@ -297,7 +297,7 @@ struct HarmoniSeksjon: View {
             let tekst: (Double) -> String = { v in "\(Int(v.rounded()))°" }
             TonebaneRing(start: startKulør, spenn: tonebaneSpenn,
                          ringfarge: { sirkel.farge(ref, vinkel: $0, gamut: gamut).swiftUI },
-                         farge: { referansefarge(okLCHKulør: $0).swiftUI },
+                         farge: { referansefarge(okLCHKulør: $0) },
                          vinkel: { sirkel.vinkel(for: referansefarge(okLCHKulør: $0)) },
                          kulør: { sirkel.farge(ref, vinkel: $0, gamut: gamut).okLCH.h },
                          tekst: tekst,
@@ -432,7 +432,7 @@ struct HarmoniSeksjon: View {
                 if harmoni == .monokrom {
                     KortForklaring("Én kulør i flere toner. Dra endepunktene i flaten for å forme streken.") { Text("Én kulør i flere toner. Dra endepunktene i flaten – lyshet loddrett, metning vannrett – så fordeler tonene seg jevnt langs streken. Trykk på en tone for å gjøre den aktiv. Metningen går fra grå til så mettet som kuløren kan bli ved hver lyshet.") }
                 } else if harmoni == .tonebane {
-                    KortForklaring("Toner langs en bane gjennom lyshet, metning og kulør. Dra endepunktene i flaten og rundt ringen.") { Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren i endepunktet du drar eller sist dro, markert med en ring.") }
+                    KortForklaring("Toner langs en bane gjennom lyshet, metning og kulør. Dra endepunktene i flaten og rundt ringen.") { Text("Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren i endepunktet du drar eller sist dro, uthevet som grunnfargen i de andre harmoniene.") }
                 } else {
                 KortForklaring("Dra i sirkelen for å endre kulør, eller trykk i midten for å starte fra en lagret farge.") {
                     Text(sirkel.forklaring + " "

@@ -10012,12 +10012,12 @@
         }
       }
     },
-    "Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren i endepunktet du drar eller sist dro, markert med en ring.": {
+    "Toner langs en bane gjennom lyshet, metning og kulør. Gi hvert endepunkt sin kulør, og dra endepunktene i flaten – lyshet loddrett, metning vannrett. Dra start og slutt rundt ringen: kuløren går fra start til slutt i retningen pilen viser, opptil en hel runde (OKLCH), og tonene passerer ikke grått slik en rett overgang mellom motfarger gjør. Flaten viser kuløren i endepunktet du drar eller sist dro, uthevet som grunnfargen i de andre harmoniene.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tones along a path through lightness, saturation and hue. Give each end point its own hue, and drag the end points in the field – lightness vertically, saturation horizontally. Drag start and end around the ring: the hue goes from start to end in the direction the arrow shows, up to a full turn (OKLCH), and the tones do not pass through grey as a straight gradient between opposite colours does. The field shows the hue at the end point you are dragging or dragged last, marked with a ring."
+            "value": "Tones along a path through lightness, saturation and hue. Give each end point its own hue, and drag the end points in the field – lightness vertically, saturation horizontally. Drag start and end around the ring: the hue goes from start to end in the direction the arrow shows, up to a full turn (OKLCH), and the tones do not pass through grey as a straight gradient between opposite colours does. The field shows the hue at the end point you are dragging or dragged last, highlighted as the base colour is in the other harmonies."
           }
         }
       }

@@ -16,7 +16,7 @@ struct LyshetMetningFlate: View {
     var visAkser = true
     /// Grunnfargen som stiplet ring (monokrom). Ikke for tonebane, der kvadratet viser kuløren i ett av endepunktene.
     var visGrunnfarge = true
-    /// Endepunktet som redigeres eller sist ble redigert (`true` = `b`), markert med en ekstra ring (tonebane).
+    /// Endepunktet som redigeres eller sist ble redigert (`true` = `b`), uthevet (tonebane).
     var merketSlutt: Bool? = nil
     /// Kalles når et endepunkt begynner å dras (`true` = `b`).
     var redigerer: (Bool) -> Void = { _ in }
@@ -64,16 +64,13 @@ struct LyshetMetningFlate: View {
                     let t = toner.count > 1 ? CGFloat(i) / CGFloat(toner.count - 1) : 0
                     let p = CGPoint(x: pa.x + (pb.x - pa.x) * t, y: pa.y + (pb.y - pa.y) * t)
                     let endepunkt = i == 0 || i == toner.count - 1
-                    let d: CGFloat = endepunkt ? 28 : 16
+                    // Med et merket endepunkt (tonebane) uthevet som grunnfargen i fargesirkelen: større og tykkere kant.
+                    let merket = merketSlutt.map { endepunkt && (i == toner.count - 1) == $0 }
+                    let d: CGFloat = !endepunkt ? 16 : merket == nil ? 28 : merket! ? 30 : 22
+                    let kant: CGFloat = !endepunkt ? 2 : merket == nil ? 3 : merket! ? 4 : 2.5
                     let rute = CGRect(x: p.x - d / 2, y: p.y - d / 2, width: d, height: d)
                     ctx.fill(Path(ellipseIn: rute), with: .color(tone.swiftUI))
-                    ctx.stroke(Path(ellipseIn: rute), with: .color(tone.lesbarTekstfarge.swiftUI), lineWidth: endepunkt ? 3 : 2)
-                    // Endepunktet kvadratets farger hører til: en ekstra ring utenfor.
-                    if let merketSlutt, endepunkt, (i == toner.count - 1) == merketSlutt {
-                        let ytre = rute.insetBy(dx: -5, dy: -5)
-                        ctx.stroke(Path(ellipseIn: ytre), with: .color(.white.opacity(0.9)), lineWidth: 3)
-                        ctx.stroke(Path(ellipseIn: ytre), with: .color(.black.opacity(0.55)), lineWidth: 1)
-                    }
+                    ctx.stroke(Path(ellipseIn: rute), with: .color(tone.lesbarTekstfarge.swiftUI), lineWidth: kant)
                 }
 
                 // Grunnfargen som en liten ring.
