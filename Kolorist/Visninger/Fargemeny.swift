@@ -190,7 +190,7 @@ struct Fargemeny: ViewModifier {
             KopierTilMeny(farger: [pf], navn: navn ?? "")
             DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
             Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
-            if let kilde = palettFarge?.kilde { Kildelenke(kilde: kilde) }
+            if let palettFarge { KildeMeny(farger: [palettFarge]) }
         }
         // 4. Slette.
         if let fjern = fjernHandling {

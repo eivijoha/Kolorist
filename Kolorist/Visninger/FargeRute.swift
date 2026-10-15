@@ -174,6 +174,40 @@ struct Kildelenke: View {
     }
 }
 
+/// Lenkene til kildene for farger som har en (f.eks. filamentprøvene hos FilamentColors.xyz), samme valg for én farge og
+/// for mange: én farge gir lenken rett i menyen, flere gir en undermeny med én lenke per farge. Vises ikke når ingen av
+/// fargene har en lenke.
+struct KildeMeny: View {
+    let farger: [PalettFarge]
+
+    var body: some View {
+        let medLenke = farger.filter { $0.kilde?.lenke != nil }
+        if medLenke.count == 1, let kilde = medLenke.first?.kilde {
+            Kildelenke(kilde: kilde)
+        } else if medLenke.count > 1 {
+            let kildenavn = Set(medLenke.compactMap { $0.kilde?.kildenavn })
+            Menu {
+                ForEach(medLenke) { pf in
+                    if let k = pf.kilde, let lenke = k.lenke {
+                        Link(destination: lenke) { Text(Self.navn(pf)) }
+                    }
+                }
+            } label: {
+                Label(kildenavn.count == 1 ? String(localized: "Se fargene hos \(kildenavn.first!)") : String(localized: "Se fargene hos kildene"),
+                      systemImage: "arrow.up.right.square")
+            }
+        }
+    }
+
+    /// «Produsent – navn», ellers fargens navn eller hex.
+    private static func navn(_ pf: PalettFarge) -> String {
+        if let k = pf.kilde, let navn = k.navn {
+            return [k.produsent, navn].compactMap { $0 }.joined(separator: " – ")
+        }
+        return pf.navn.isEmpty ? pf.farge.hex() : pf.navn
+    }
+}
+
 /// «Kopier som …»-meny, felles for kontekstmenyer og verktøylinjer.
 struct KopierMeny: View {
     let farge: Farge

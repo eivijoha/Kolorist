@@ -24,7 +24,7 @@ enum Paletthandling: Identifiable, Hashable {
 ///
 /// 1. Vurder paletten · Skriftkontrast · Lag designsystem
 /// 2. Gi nytt navn … · Flytt til gruppe
-/// 3. Kopier til · Del som lenke · Lagre som … · Skriv ut …
+/// 3. Kopier til · Del som lenke · Lagre som … · Skriv ut … · kildene (f.eks. filamentprøvene)
 /// 4. Slett palett
 struct PalettMeny: View {
     let palett: PalettDokument
@@ -59,6 +59,7 @@ struct PalettMeny: View {
                 .disabled(tom)
             Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
                 .disabled(tom)
+            KildeMeny(farger: p.farger)
         }
         Section {
             Button("Slett palett", systemImage: "trash", role: .destructive) { utfør(.slett(p)) }

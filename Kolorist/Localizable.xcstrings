@@ -6432,6 +6432,16 @@
         }
       }
     },
+    "Lenke": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Link"
+          }
+        }
+      }
+    },
     "Lenke på bakgrunnen": {
       "localizations": {
         "en": {
@@ -8372,6 +8382,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "See the colour at %@"
+          }
+        }
+      }
+    },
+    "Se fargene hos %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See the colours at %@"
+          }
+        }
+      }
+    },
+    "Se fargene hos kildene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See the colours at the sources"
           }
         }
       }

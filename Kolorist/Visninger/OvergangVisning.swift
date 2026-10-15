@@ -69,8 +69,6 @@ struct OvergangVisning: View {
         Task { try? await Task.sleep(for: .seconds(1.5)); gradientLagret = false }
     }
 
-    private func lagre(_ f: Farge) { lagreEnkeltfarger([PalettFarge(farge: f, opphav: .overgang)], i: kontekst) }
-    private func velgPalett(_ f: Farge) { leggIPalett = [PalettFarge(farge: f, opphav: .overgang)] }
 
     private var toner: [Farge] { Overgang.toner(fra: start, til: slutt, antall: antall).map(arbeidsbenk.begrens) }
 
@@ -164,17 +162,19 @@ struct OvergangVisning: View {
     private var lysereMørkerePanel: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         // Radene regnes én gang per oppdatering (med et fargebibliotek som begrensning er hver tone et søk).
-        let rader = self.rader
-        let sett = rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) }
+        // Med et fargebibliotek som begrensning er tonene bibliotekstoner (navn og lenke til prøven følger med når de lagres).
+        let rader = self.rader.map { $0.map { bibliotekstone($0) ?? PalettFarge(farge: $0, opphav: .overgang) } }
+        let sett = rader.flatMap { $0 }
         return PanelSeksjon(panel: .lysereMørkere) {
             if rader.count > 1 {
                 Grid(horizontalSpacing: 3, verticalSpacing: 3) {
                     let midtrad = arbeidsbenk.lyshetstrinn.antallLysere
                     ForEach(Array(rader.enumerated()), id: \.offset) { r, rad in
                         GridRow {
-                            ForEach(Array(rad.enumerated()), id: \.offset) { _, farge in
-                                FargeRute(farge: farge, visTekst: false, hjørne: 4, lagre: lagre, leggIPalett: velgPalett,
-                                          åpneIStudio: { arbeidsbenk.visIStudio($0) }, palettFarge: bibliotekstone(farge),
+                            ForEach(Array(rad.enumerated()), id: \.offset) { _, pf in
+                                let farge = pf.farge
+                                FargeRute(farge: farge, visTekst: false, hjørne: 4,
+                                          åpneIStudio: { arbeidsbenk.visIStudio($0) }, palettFarge: pf,
                                           ekstraMeny: AnyView(settvalg(sett, lukk: {})), valgBoble: true,
                                           bobleEkstra: { lukk in AnyView(settvalg(sett, lukk: lukk, samlet: true)) })
                                     .frame(minHeight: 36)

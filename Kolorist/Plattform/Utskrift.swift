@@ -38,6 +38,14 @@ enum PalettUtskrift {
             }
             let lab = pf.farge.cieLab
             rader.append(("CIELab (D50)", String(format: "L* %.2f   a* %.2f   b* %.2f", lab.l, lab.a, lab.b)))
+            // Kilden (f.eks. filamentprøven): produsent, navn og materiale, og lenken til prøven.
+            if let k = pf.kilde, k.importert != true {
+                let detaljer = [k.produsent, k.navn, k.materiale].compactMap { $0 }.joined(separator: " · ")
+                if !detaljer.isEmpty { rader.append((k.kildenavn ?? String(localized: "Kilde"), detaljer)) }
+                if let lenke = k.lenke {
+                    rader.append((String(localized: "Lenke"), lenke.host().map { $0 + lenke.path() } ?? lenke.absoluteString))
+                }
+            }
             // Skriftfargen (fra 1.3, når paletten har skriftfarger), med kontrastforholdet.
             if let skrift = palett.skriftfarge(for: pf) {
                 let k = Kontrasttest(forgrunn: skrift.farge, bakgrunn: pf.farge)

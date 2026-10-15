@@ -961,6 +961,7 @@ struct PalettDetalj: View {
         Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
         Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
         KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
+        KildeMeny(farger: dokument.farger)
     }
 
     /// Hva visningen viser, i én setning under valget (palettkolonnen).
@@ -1349,10 +1350,24 @@ struct NavngiArk: View {
                             Text(Fargebeskrivelse.beskriv(farge.farge)).font(.caption).foregroundStyle(Color.sekundærTekst)
                         }
                     }
-                    TextField("Navn, f.eks. «Fjordblå»", text: $navn)
-                        .focused($fokus)
-                        .submitLabel(.done)
-                        .onSubmit(lagreOgLukk)
+                }
+                // Eget felt med blyant og tøm-knapp, så det ses som et felt å skrive i (ikke bare en tekstlinje).
+                Section {
+                    HStack(spacing: 10) {
+                        Image(systemName: "pencil").foregroundStyle(.tint).accessibilityHidden(true)
+                        TextField("Navn, f.eks. «Fjordblå»", text: $navn)
+                            .focused($fokus)
+                            .submitLabel(.done)
+                            .onSubmit(lagreOgLukk)
+                        if !navn.isEmpty {
+                            Button("Tøm", systemImage: "xmark.circle.fill") { navn = ""; fokus = true }
+                                .labelStyle(.iconOnly)
+                                .foregroundStyle(Color.sekundærTekst)
+                                .buttonStyle(.borderless)
+                        }
+                    }
+                } header: {
+                    Text("Navn")
                 }
                 Section {
                     Button {
@@ -1375,8 +1390,10 @@ struct NavngiArk: View {
                 ToolbarItem(placement: .confirmationAction) { Button("Lagre", action: lagreOgLukk) }
             }
             .labelStyle(Handlingsetikett())
-            .onAppear {
-                navn = farge.navn
+            .onAppear { navn = farge.navn }
+            // Fokus etter at arket er vist: tastaturet og markøren viser at feltet kan redigeres.
+            .task {
+                try? await Task.sleep(for: .milliseconds(350))
                 fokus = true
             }
         }
