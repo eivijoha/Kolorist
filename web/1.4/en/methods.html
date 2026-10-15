@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Methods and sources – Kolorist</title>
-  <meta name="description" content="The methods and sources Kolorist builds on: OKLab, CSS Color 4, CIELab, CIEDE2000, WCAG 2.2, LRV, simulation of colour vision deficiencies, ICC, and what was developed for the app.">
+  <meta name="description" content="The methods and sources Kolorist builds on: OKLab, CSS Color 4, CIELab, CIEDE2000, WCAG 2.2, APCA, LRV, simulation of colour vision deficiencies, ICC, and what was developed for the app.">
   <meta name="color-scheme" content="light dark">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
@@ -84,6 +84,12 @@
     <p>Palettes from value words and “Describe a colour” build on a knowledge base of colour concepts made for the app. The on-device language model interprets the words and chooses hue families and expression. The palette itself is then composed by fixed rules in OKLCH: harmony principle, equal value or equal saturation, one accent, a light or dark background and text with at least 7:1 contrast. Text about colour meaning describes conventions, not scientific facts.</p>
     <p class="dempet">Source: Developed for Kolorist; language model from Apple (Foundation Models)</p>
     
+    <h2 id="apca">Reading contrast by APCA</h2>
+    <p>APCA (Accessible Perceptual Contrast Algorithm) is a perceptual contrast model for readability. It gives reading contrast as Lc from about −108 to 106 – positive for dark text on a light background, negative for light text on a dark one – and accounts for the eye perceiving light and dark colours differently. It follows perceived readability better than WCAG 2, especially for dark and saturated colours.</p>
+    <p>How much is needed depends on font size and weight: Lc 90 is preferred and 75 the minimum for body text, 60 for larger text, 45 for large or bold headlines, 30 for non-essential text and 15 for icons and graphics. Choose APCA in the contrast check to see Lc and what the contrast is good for, and use auto-fix to reach a level. Whether text and icons on the app’s colour fields are black or white is also decided with APCA; where a requirement applies, such as button text in the design system, WCAG 2 is the floor.</p>
+    <p>Accessibility regulations refer to WCAG 2. Use APCA as a supplement to WCAG 2.2, which is the requirement in the regulations. APCA has been a candidate for WCAG 3, which has not been adopted. Kolorist uses APCA with permission from the copyright holder, and the implementation follows the current version and is updated regularly.</p>
+    <p class="dempet">Source: <a href="https://github.com/Myndex/apca-w3">Andrew Somers (Myndex Research): Accessible Perceptual Contrast Algorithm (APCA™) 0.0.98G-4g (apca-w3 0.1.9)</a>, used with permission</p>
+
     <h2 id="lrv">Light reflectance value and luminance contrast</h2>
     <p>LRV is the CIE luminance Y in per cent – the share of visible light a surface reflects, as paint manufacturers state it. Kolorist computes it for the colour as shown in sRGB. Contrast between surfaces is calculated with the chosen method, each with its own requirements: difference in LRV points (BS 8300: at least 30, or 20 for large surfaces and above 200 lux); Weber luminance contrast, |Yo − Yb| / Yb with the background as reference, as used by the Norwegian building regulations TEK17 and NS 11001 (0.4 for orientation and wayfinding, 0.8 for stair nosings, handrails and hazard fields); and Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), per ISO 21542 (30 % for large surfaces, 60 % for hazards and text, with values from the Canadian draft CAN-ASC-2.4). The figures cannot be compared across methods. LRV from the camera or an image without a grey card or reference card is only indicative.</p>
     <p class="dempet">Source: CIE 15 (luminance factor Y); BS 8300-2:2018; TEK17 with guidance, NS 11001-1:2018 and Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (draft 2026)</p>

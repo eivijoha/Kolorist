@@ -7,9 +7,9 @@ personvern er som i 1.3 (`Dokumentasjon/1.3/AppStore.md`).
 
 Nyheter:
 
-- **Tekst på fargeflater (WCAG+, internt navn):** hvit tekst når hvit gir minst 2,7:1 etter WCAG 2, ellers sort. Mettede
-  mellomtoner får hvit tekst slik øyet foretrekker; knappetekst i designsystemet holder fortsatt 4,5:1. Navnet «WCAG+»
-  brukes ikke i appen eller tekstene.
+- **APCA tilbake (med tillatelse fra rettighetshaver, 2026-10-15):** lesekontrast (Lc) i kontrastsjekken med «Rett opp»,
+  tekst og ikoner på fargefelt etter APCA (WCAG 2 som gulv der krav gjelder), Lc i designsystem og toneskala. WCAG+ (hvit
+  ved minst 2,7:1) brukes bare når ingen lesbarhetsmodell er koblet inn i FargeKjerne.
 
 - **Fargerapporter:** vanskelige fargepar, kontrast mellom flater (LRV) og ΔE kan kopieres som tabell, deles som lenke
   (kolorist.no viser rapporten) og skrives ut som A4-PDF.
@@ -18,14 +18,16 @@ Nyheter:
 - **Spørsmål om omtale** nederst i palettpanelet (nevnes ikke).
 
 ```
-• Tekst på fargeflater følger øyet: mettede mellomtoner får hvit tekst, og knappetekst i designsystemet holder fortsatt kravet i WCAG.
+• APCA er tilbake: lesekontrast (Lc) i kontrastsjekken, med «Rett opp» til nivået, og Lc i designsystem og toneskala.
+• Tekst og ikoner på fargefelt i sort eller hvit etter opplevd lesbarhet (APCA) – knappetekst i designsystemet holder fortsatt kravet i WCAG.
 • Fargerapporter: kopier vurderingen av vanskelige fargepar, kontrast mellom flater og ΔE som tabell, del den som lenke eller skriv den ut.
 • Dra en hel palett inn i andre programmer – som lenke eller som hex-verdier.
 • På Mac: velg blant ICC-profilene som er installert på maskinen.
 ```
 
 ```
-• Text on colour fields follows the eye: saturated mid-tones get white text, and button text in the design system still meets the WCAG requirement.
+• APCA is back: reading contrast (Lc) in the contrast check, with auto-fix to the level, and Lc in the design system and tone scale.
+• Text and icons on colour fields in black or white by perceived readability (APCA) – button text in the design system still meets the WCAG requirement.
 • Colour reports: copy the assessment of hard-to-tell-apart colour pairs, contrast between surfaces and ΔE as a table, share it as a link or print it.
 • Drag a whole palette into other apps – as a link or as hex values.
 • On the Mac: choose among the ICC profiles installed on the computer.
