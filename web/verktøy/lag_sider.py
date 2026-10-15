@@ -23,7 +23,7 @@ kilde = {'nb': open(f'{S}/webkilde/index.html').read(), 'en': open(f'{S}/webkild
 
 # Sidepar nb ↔ en
 PAR = {'index.html': 'index.html', 'design.html': 'design.html', 'arkitektur.html': 'architecture.html',
-       'lys.html': 'light.html', 'funksjoner.html': 'features.html', 'plattformer.html': 'platforms.html', 'filament.html': 'filament.html', 'support.html': 'support.html',
+       'lys.html': 'light.html', 'funksjoner.html': 'features.html', 'plattformer.html': 'platforms.html', 'filament.html': 'filament.html', 'visualisering.html': 'visualisation.html', 'support.html': 'support.html',
        'privacy.html': 'privacy.html', 'terms.html': 'terms.html', 'methods.html': 'methods.html'}
 TIL_NB = {v: k for k, v in PAR.items()}
 
@@ -32,7 +32,7 @@ T = {
         nytt=f'Nytt i {VERSJON}', hopp='Hopp til hovedinnhold', hovedmeny='Hovedmeny', bunnmeny='Bunnmeny', språk='Språk',
         nav=[('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('filament.html', '3D-print'), ('plattformer.html', 'Plattformer'), ('support.html', 'Støtte')],
         bunn=[('index.html', 'Om appen'), ('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('plattformer.html', 'Plattformer'), ('filament.html', '3D-print'),
-              ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('support.html', 'Støtte'),
+              ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('visualisering.html', 'Fargevisualisering'), ('support.html', 'Støtte'),
               ('methods.html', 'Metoder og kilder'), ('privacy.html', 'Personvern'), ('terms.html', 'Vilkår')],
         annet='English', annet_lang='en', locale='nb_NO',
         utvikler='Kolorist er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.',
@@ -42,7 +42,7 @@ T = {
         nytt=f'New in {VERSJON}', hopp='Skip to main content', hovedmeny='Main menu', bunnmeny='Footer menu', språk='Language',
         nav=[('design.html', 'Design'), ('architecture.html', 'Architecture'), ('filament.html', '3D printing'), ('platforms.html', 'Platforms'), ('support.html', 'Support')],
         bunn=[('index.html', 'About'), ('design.html', 'Design'), ('architecture.html', 'Architecture'), ('platforms.html', 'Platforms'), ('filament.html', '3D printing'),
-              ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('support.html', 'Support'),
+              ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('visualisation.html', 'Colour visualisation'), ('support.html', 'Support'),
               ('methods.html', 'Methods and sources'), ('privacy.html', 'Privacy'), ('terms.html', 'Terms')],
         annet='Norsk', annet_lang='nb', locale='en_US',
         utvikler='Kolorist is developed by Eivind Arnstein Johansen – Department of Design, NTNU.',
@@ -298,7 +298,7 @@ def startside(lang):
                       ('arkitektur.html', 'Velg farger til vegger, gulv og dører', 'Med nok kontrast mellom flatene for universell utforming.'),
                       ('lys.html', 'Se fargene i lyset der de skal brukes', 'Og kompenser farger du plukker for lyset de ble fotografert i.'),
                       ('filament.html', 'Finn filament til 3D-print', 'Den nærmeste fargen blant over 2 200 filamenter, de fleste målt.'),
-                      ('funksjoner.html#3d', 'Se fargene i 3D', 'Harmonier, overganger og fargerom – og som 3D-modell i AR.'),
+                      ('visualisering.html', 'Se fargene i 3D', 'Harmonier, overganger og fargerom – og som 3D-modell i AR.'),
                       ('design.html#lever', 'Få fargene ut', 'I designprogrammer, trykk og kode – eller del dem som lenke.')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter for skjerm og trykk – rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
@@ -328,7 +328,7 @@ def startside(lang):
                       ('architecture.html', 'Choose colours for walls, floors and doors', 'With enough contrast between surfaces for universal design.'),
                       ('light.html', 'See colours in the light where they will be used', 'And compensate colours you pick for the light they were photographed in.'),
                       ('filament.html', 'Find filament for 3D printing', 'The nearest colour among more than 2,200 filaments, most of them measured.'),
-                      ('features.html#3d', 'See colours in 3D', 'Harmonies, gradients and colour spaces – and as a 3D model in AR.'),
+                      ('visualisation.html', 'See colours in 3D', 'Harmonies, gradients and colour spaces – and as a 3D model in AR.'),
                       ('design.html#deliver', 'Get your colours out', 'Into design apps, print and code – or share them as a link.')],
             fagfelt='Two fields',
             dører=[('design.html', 'Design', 'Palettes, tone scales and gradients for screen and print – straight into your design tools.', 'Kolorist for design', 'harmoni'),
@@ -776,7 +776,8 @@ def funksjoner(lang):
                                                   '<li><a href="filament.html">Les mer om 3D-print og filament</a></li>']))]),
             ('3d', 'Farger og fargerom i 3D', '3D',
              '<p class="lesetekst">Se harmonier, paletter, overganger og fargebiblioteker i rommet – og fargerommene til ICC-profiler. Dra for å dreie, del som 3D-modell, og plasser den på bordet med AR på iPhone og iPad.</p>\n'
-             + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Skjermbilder – rull sidelengs'),
+             + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Skjermbilder – rull sidelengs')
+             + '\n<p><a href="visualisering.html">Les mer om fargevisualisering →</a></p>',
              [('I 3D', ul([f'<li>Tre rom: en fargekule (kulør rundt den grå aksen, lyshet opp og metning ut mot overflaten), OKLab og CIELab {N}</li>',
                            f'<li>Harmonier og paletter som punkter i rommet – tonebanen med selve banen {N}</li>',
                            f'<li>Overgangen i OKLab ved siden av veien rett gjennom sRGB, som blir mørk og grumsete på midten {N}</li>',
@@ -828,7 +829,8 @@ def funksjoner(lang):
                                                        '<li><a href="filament.html">Read more about 3D printing and filament</a></li>']))]),
             ('3d', 'Colours and colour spaces in 3D', '3D',
              '<p class="lesetekst">See harmonies, palettes, gradients and colour libraries in space – and the colour spaces of ICC profiles. Drag to rotate, share as a 3D model, and place it on the table with AR on iPhone and iPad.</p>\n'
-             + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Screenshots – scroll sideways'),
+             + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Screenshots – scroll sideways')
+             + '\n<p><a href="visualisation.html">Read more about colour visualisation →</a></p>',
              [('In 3D', ul([f'<li>Three spaces: a colour sphere (hue around the grey axis, lightness up and saturation out towards the surface), OKLab and CIELab {N}</li>',
                             f'<li>Harmonies and palettes as points in space – the tone path with the path itself {N}</li>',
                             f'<li>The gradient in OKLab next to the path straight through sRGB, which turns dark and muddy in the middle {N}</li>',
@@ -1200,6 +1202,78 @@ def filamentside(lang):
                    'From the colour on screen to the filament on the spool: find the nearest filament among more than 2,200 colours, build palettes you can print, and share them with a link on to each sample.',
                    steg, ('Read on', [('design.html', 'Kolorist for design'), ('platforms.html#del', 'Share with others'), ('features.html', 'All features')]))
 
+def visualiseringsside(lang):
+    # Hele siden er ny i 1.4: merket står én gang, i ingressen, ikke på hvert punkt.
+    N = ''
+    merke = f'<span class="nytt">{T[lang]["nytt"]}</span> '
+    if lang == 'nb':
+        steg = [
+            ('Se fargene i rommet', 'Harmonier, paletter og tonebaner som punkter i et fargerom du kan dreie – i en fargekule, i OKLab eller i CIELab.',
+             ['Fargekula: kulør rundt den grå aksen, lyshet opp og metning ut mot overflaten' + N,
+              'OKLab, rommet Kolorist regner overganger og toner i, og CIELab, rommet ICC-profilene bruker' + N,
+              'Tonebanen med selve banen – se hvordan kuløren går rundt mens lysheten endres' + N,
+              'Dra for å dreie og knip for å zoome, på iPhone, iPad og Mac'], '3d-tonebane', None),
+            ('Sammenlign fargerom', 'Se fargerommet til en ICC-profil i sin virkelige form, og legg et annet rom over som glass.',
+             ['Innebygde rom – sRGB, Display P3, Adobe RGB, Rec. 2020, ProPhoto RGB, Generisk CMYK – og dine egne profiler' + N,
+              'Velg tilpasningsmetode: perseptuell, relativ kolorimetrisk, metning eller absolutt kolorimetrisk' + N,
+              'Farger utenfor rommet får en pil til der de havner, f.eks. i trykkprofilen' + N,
+              'Åpnes rett fra «Vis som» i Studio'], '3d-gamut', ('methods.html#icc', 'Les om fargestyring')),
+            ('Forstå overgangene', 'Hvorfor en overgang i OKLab ser jevn ut, og en vanlig overgang ofte blir grumsete på midten.',
+             ['Veien gjennom OKLab, som Kolorist bruker, er en rett linje' + N,
+              'Veien rett gjennom sRGB, som i vanlige CSS-overganger, bøyer av og blir mørkere på midten' + N,
+              'Tonene fra begge, side om side'], '3d-overgang', ('methods.html#oklab', 'Les om OKLab')),
+            ('Se grensene mens du jobber', 'Grensen for fargerommet du har valgt under «Vis som», rett i gliderne og i flaten for lyshet og metning.',
+             ['Striper på gliderne der fargen havner utenfor – med et merke der grensen går' + N,
+              'Grensen tegnet inn i flaten for monokrome harmonier og tonebaner' + N,
+              'Varsel og avstand (ΔE00) når fargen er utenfor'], 'gamutgrense', None),
+            ('Fargesyn i kromatisitetsdiagrammet', 'Forvirringslinjene viser hvilke farger som kan forveksles med fargesynsavvik.',
+             ['Palettens farger i CIE 1931-diagrammet, med linjen gjennom hver farge for protanopi, deuteranopi og tritanopi' + N,
+              'Parene som blir vanskelige å skille, streket sammen i rødt' + N,
+              'Sammen med simuleringen av hvordan paletten ser ut'], 'forvirringslinjer', ('methods.html#forvirringslinjer', 'Les om forvirringslinjer')),
+            ('Ta modellen med deg', 'Del 3D-visningen som modell og se den der du er.',
+             ['Del som 3D-modell (USDZ)' + N,
+              'Plasser den på bordet med AR på iPhone og iPad, eller se den i Hurtigvisning på Mac' + N,
+              'Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone' + N], '3d-filament', None),
+        ]
+        return fagside('nb', 'visualisering.html', 'Fargevisualisering – farger og fargerom i 3D',
+                       'Se harmonier, paletter, overganger og fargerom i 3D, sammenlign ICC-profiler i CIELab, se gamutgrensene i gliderne og forvirringslinjer for fargesyn – og ta modellen med i AR.',
+                       'Kolorist for', 'fargevisualisering',
+                       merke + 'Farger er tredimensjonale. Se dem som det: i rommet, mot fargerommene de skal gjengis i, og med grensene synlige mens du jobber.',
+                       steg, ('Les videre', [('funksjoner.html#3d', 'Alle funksjoner i 3D'), ('design.html', 'Kolorist for design'), ('lys.html', 'Lys og fargemåling')]))
+    steg = [
+        ('See colours in space', 'Harmonies, palettes and tone paths as points in a colour space you can rotate – in a colour sphere, in OKLab or in CIELab.',
+         ['The colour sphere: hue around the grey axis, lightness up and saturation out towards the surface' + N,
+          'OKLab, the space Kolorist computes gradients and tones in, and CIELab, the space ICC profiles use' + N,
+          'The tone path with the path itself – see how the hue turns while the lightness changes' + N,
+          'Drag to rotate and pinch to zoom, on iPhone, iPad and Mac'], '3d-tonebane', None),
+        ('Compare colour spaces', 'See the colour space of an ICC profile in its real shape, and lay another space over it as glass.',
+         ['Built-in spaces – sRGB, Display P3, Adobe RGB, Rec. 2020, ProPhoto RGB, Generic CMYK – and your own profiles' + N,
+          'Choose the rendering intent: perceptual, relative colorimetric, saturation or absolute colorimetric' + N,
+          'Colours outside the space get an arrow to where they end up, for example in the print profile' + N,
+          'Opened right from “Show as” in Studio'], '3d-gamut', ('methods.html#icc', 'Read about colour management')),
+        ('Understand gradients', 'Why a gradient in OKLab looks even, while an ordinary gradient often turns muddy in the middle.',
+         ['The path through OKLab, which Kolorist uses, is a straight line' + N,
+          'The path straight through sRGB, as in ordinary CSS gradients, bends and gets darker in the middle' + N,
+          'The tones from both, side by side'], '3d-overgang', ('methods.html#oklab', 'Read about OKLab')),
+        ('See the limits as you work', 'The limit of the colour space you have chosen under “Show as”, right on the sliders and in the lightness and saturation field.',
+         ['Stripes on the sliders where the colour falls outside – with a mark where the limit is' + N,
+          'The limit drawn in the field for monochromatic harmonies and tone paths' + N,
+          'A warning and the distance (ΔE00) when the colour is outside'], 'gamutgrense', None),
+        ('Colour vision in the chromaticity diagram', 'The confusion lines show which colours can be confused with colour vision deficiencies.',
+         ['The palette’s colours in the CIE 1931 diagram, with the line through each colour for protanopia, deuteranopia and tritanopia' + N,
+          'The pairs that become hard to tell apart, joined in red' + N,
+          'Together with the simulation of how the palette looks'], 'forvirringslinjer', ('methods.html#confusion-lines', 'Read about confusion lines')),
+        ('Take the model with you', 'Share the 3D view as a model and see it where you are.',
+         ['Share as a 3D model (USDZ)' + N,
+          'Place it on the table with AR on iPhone and iPad, or view it in Quick Look on the Mac' + N,
+          'Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone' + N], '3d-filament', None),
+    ]
+    return fagside('en', 'visualisation.html', 'Colour visualisation – colours and colour spaces in 3D',
+                   'See harmonies, palettes, gradients and colour spaces in 3D, compare ICC profiles in CIELab, see the gamut limits on the sliders and confusion lines for colour vision – and take the model with you in AR.',
+                   'Kolorist for', 'colour visualisation',
+                   merke + 'Colours are three-dimensional. See them that way: in space, against the colour spaces they will be reproduced in, and with the limits visible as you work.',
+                   steg, ('Read on', [('features.html#3d', 'All 3D features'), ('design.html', 'Kolorist for design'), ('light.html', 'Light and colour measurement')]))
+
 
 # ---------- Skriv ----------
 
@@ -1253,6 +1327,8 @@ skriv('lys.html', lysside('nb'))
 skriv('en/light.html', lysside('en'))
 skriv('filament.html', filamentside('nb'))
 skriv('en/filament.html', filamentside('en'))
+skriv('visualisering.html', visualiseringsside('nb'))
+skriv('en/visualisation.html', visualiseringsside('en'))
 skriv('plattformer.html', plattformer('nb'))
 skriv('en/platforms.html', plattformer('en'))
 skriv('funksjoner.html', funksjoner('nb'))
@@ -1270,7 +1346,7 @@ for lang, mappe in (('nb', ''), ('en', 'en/')):
         open(sti, 'w').write(h)
 
 # Nettstedskart
-sider = ['', 'design.html', 'arkitektur.html', 'plattformer.html', 'filament.html', 'lys.html', 'funksjoner.html', 'support.html', 'privacy.html', 'terms.html', 'methods.html']
+sider = ['', 'design.html', 'arkitektur.html', 'plattformer.html', 'filament.html', 'lys.html', 'visualisering.html', 'funksjoner.html', 'support.html', 'privacy.html', 'terms.html', 'methods.html']
 linjer = []
 for nbfil in sider:
     enfil = PAR.get(nbfil or 'index.html')

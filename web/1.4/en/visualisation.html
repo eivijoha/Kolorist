@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Colour visualisation – colours and colour spaces in 3D</title>
+  <meta name="description" content="See harmonies, palettes, gradients and colour spaces in 3D, compare ICC profiles in CIELab, see the gamut limits on the sliders and confusion lines for colour vision – and take the model with you in AR.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Kolorist">
+  <meta property="og:title" content="Colour visualisation – colours and colour spaces in 3D">
+  <meta property="og:description" content="See harmonies, palettes, gradients and colour spaces in 3D, compare ICC profiles in CIELab, see the gamut limits on the sliders and confusion lines for colour vision – and take the model with you in AR.">
+  <meta property="og:url" content="https://kolorist.no/en/visualisation.html">
+  <meta property="og:locale" content="en_US">
+  <meta name="color-scheme" content="light dark">
+  <meta name="referrer" content="no-referrer">
+  <!-- Smart App Banner i Safari på iPhone/iPad -->
+  <meta name="apple-itunes-app" content="app-id=6818636272">
+  <link rel="icon" href="../assets/ikon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/stil.css?v=8">
+  <link rel="canonical" href="https://kolorist.no/en/visualisation.html">
+  <link rel="alternate" hreflang="nb" href="https://kolorist.no/visualisering.html">
+  <link rel="alternate" hreflang="en" href="https://kolorist.no/en/visualisation.html">
+  <link rel="alternate" hreflang="x-default" href="https://kolorist.no/visualisering.html">
+</head>
+<body>
+  <a class="hopp" href="#hovedinnhold">Skip to main content</a>
+  <div class="regnbuestripe" aria-hidden="true"></div>
+
+  <header class="topp">
+    <div class="topp-innhold">
+      <a class="merkenavn" href="index.html">
+        <img src="../assets/ikon.svg" alt="" width="32" height="32">
+        Kolorist
+      </a>
+      <nav class="hovednav" aria-label="Main menu">
+        <ul>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+          <li><a href="filament.html">3D printing</a></li>
+          <li><a href="platforms.html">Platforms</a></li>
+          <li><a href="support.html">Support</a></li>
+        </ul>
+      </nav>
+      <nav class="sprakvalg" aria-label="Language">
+        <a href="../visualisering.html" hreflang="nb" lang="nb">Norsk</a>
+        <span aria-current="true" lang="en">English</span>
+      </nav>
+    </div>
+  </header>
+
+  <main id="hovedinnhold" class="innhold" tabindex="-1">
+    <header class="sidetopp">
+      <p class="overtittel">Kolorist for</p>
+      <h1>colour visualisation</h1>
+      <p class="ingress"><span class="nytt">New in 1.4</span> Colours are three-dimensional. See them that way: in space, against the colour spaces they will be reproduced in, and with the limits visible as you work.</p>
+    </header>
+
+    <div class="fagsteg-liste">
+    <section class="fagsteg med-bilde" aria-labelledby="see-colours-in-space">
+      <div>
+        <h2 id="see-colours-in-space">See colours in space</h2>
+        <p class="lesetekst">Harmonies, palettes and tone paths as points in a colour space you can rotate – in a colour sphere, in OKLab or in CIELab.</p>
+        <ul>
+          <li>The colour sphere: hue around the grey axis, lightness up and saturation out towards the surface</li>
+          <li>OKLab, the space Kolorist computes gradients and tones in, and CIELab, the space ICC profiles use</li>
+          <li>The tone path with the path itself – see how the hue turns while the lightness changes</li>
+          <li>Drag to rotate and pinch to zoom, on iPhone, iPad and Mac</li>
+        </ul>
+      </div>
+      <figure class="skjermbilde">
+        <img src="../assets/en/skjermbilde-3d-tonebane.png?v=11" alt="A tone path in a semi-transparent colour sphere: the tones and the path from light turquoise to blue, with the grey axis" width="1284" height="2778" loading="lazy">
+        <figcaption>The tone path in the colour sphere</figcaption>
+      </figure>
+    </section>
+    <section class="fagsteg med-bilde" aria-labelledby="compare-colour-spaces">
+      <div>
+        <h2 id="compare-colour-spaces">Compare colour spaces</h2>
+        <p class="lesetekst">See the colour space of an ICC profile in its real shape, and lay another space over it as glass.</p>
+        <ul>
+          <li>Built-in spaces – sRGB, Display P3, Adobe RGB, Rec. 2020, ProPhoto RGB, Generic CMYK – and your own profiles</li>
+          <li>Choose the rendering intent: perceptual, relative colorimetric, saturation or absolute colorimetric</li>
+          <li>Colours outside the space get an arrow to where they end up, for example in the print profile</li>
+          <li>Opened right from “Show as” in Studio</li>
+        </ul>
+        <p><a href="methods.html#icc">Read about colour management →</a></p>
+      </div>
+      <figure class="skjermbilde">
+        <img src="../assets/en/skjermbilde-3d-gamut.png?v=12" alt="The colour space of Generic CMYK in CIELab, with sRGB as a transparent shell for comparison" width="1284" height="2778" loading="lazy">
+        <figcaption>Colour spaces in CIELab</figcaption>
+      </figure>
+    </section>
+    <section class="fagsteg med-bilde" aria-labelledby="understand-gradients">
+      <div>
+        <h2 id="understand-gradients">Understand gradients</h2>
+        <p class="lesetekst">Why a gradient in OKLab looks even, while an ordinary gradient often turns muddy in the middle.</p>
+        <ul>
+          <li>The path through OKLab, which Kolorist uses, is a straight line</li>
+          <li>The path straight through sRGB, as in ordinary CSS gradients, bends and gets darker in the middle</li>
+          <li>The tones from both, side by side</li>
+        </ul>
+        <p><a href="methods.html#oklab">Read about OKLab →</a></p>
+      </div>
+      <figure class="skjermbilde">
+        <img src="../assets/en/skjermbilde-3d-overgang.png?v=12" alt="A gradient from red to turquoise in OKLab: the straight OKLab path and the dashed path through sRGB, which gets darker in the middle" width="1284" height="2778" loading="lazy">
+        <figcaption>The gradient: OKLab against sRGB</figcaption>
+      </figure>
+    </section>
+    <section class="fagsteg med-bilde" aria-labelledby="see-the-limits-as-you-work">
+      <div>
+        <h2 id="see-the-limits-as-you-work">See the limits as you work</h2>
+        <p class="lesetekst">The limit of the colour space you have chosen under “Show as”, right on the sliders and in the lightness and saturation field.</p>
+        <ul>
+          <li>Stripes on the sliders where the colour falls outside – with a mark where the limit is</li>
+          <li>The limit drawn in the field for monochromatic harmonies and tone paths</li>
+          <li>A warning and the distance (ΔE00) when the colour is outside</li>
+        </ul>
+      </div>
+      <figure class="skjermbilde">
+        <img src="../assets/en/skjermbilde-gamutgrense.png?v=11" alt="Studio with Generic CMYK under “Show as”: the lightness, chroma and hue sliders are striped where the colour falls outside CMYK" width="1284" height="2778" loading="lazy">
+        <figcaption>The limits on the sliders</figcaption>
+      </figure>
+    </section>
+    <section class="fagsteg med-bilde" aria-labelledby="colour-vision-in-the-chromaticity-diagram">
+      <div>
+        <h2 id="colour-vision-in-the-chromaticity-diagram">Colour vision in the chromaticity diagram</h2>
+        <p class="lesetekst">The confusion lines show which colours can be confused with colour vision deficiencies.</p>
+        <ul>
+          <li>The palette’s colours in the CIE 1931 diagram, with the line through each colour for protanopia, deuteranopia and tritanopia</li>
+          <li>The pairs that become hard to tell apart, joined in red</li>
+          <li>Together with the simulation of how the palette looks</li>
+        </ul>
+        <p><a href="methods.html#confusion-lines">Read about confusion lines →</a></p>
+      </div>
+      <figure class="skjermbilde">
+        <img src="../assets/en/skjermbilde-forvirringslinjer.png?v=10" alt="Chromaticity diagram with the confusion lines for deuteranopia: the palette’s colours, with the hard pairs joined in red" width="1284" height="2778" loading="lazy">
+        <figcaption>Confusion lines</figcaption>
+      </figure>
+    </section>
+    <section class="fagsteg med-bilde" aria-labelledby="take-the-model-with-you">
+      <div>
+        <h2 id="take-the-model-with-you">Take the model with you</h2>
+        <p class="lesetekst">Share the 3D view as a model and see it where you are.</p>
+        <ul>
+          <li>Share as a 3D model (USDZ)</li>
+          <li>Place it on the table with AR on iPhone and iPad, or view it in Quick Look on the Mac</li>
+          <li>Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone</li>
+        </ul>
+      </div>
+      <figure class="skjermbilde">
+        <img src="../assets/en/skjermbilde-3d-filament.png?v=12" alt="More than 2,200 filament colours as a point cloud in CIELab, with the colour and the nearest filament marked" width="1284" height="2778" loading="lazy">
+        <figcaption>Filament colours in 3D</figcaption>
+      </figure>
+    </section>
+    </div>
+
+    <section class="seksjon" aria-labelledby="les-videre">
+      <div class="boks videre-boks">
+        <h2 id="les-videre">Read on</h2>
+        <ul>
+          <li><a href="features.html#3d">All 3D features</a></li>
+          <li><a href="design.html">Kolorist for design</a></li>
+          <li><a href="light.html">Light and colour measurement</a></li>
+        </ul>
+        <div class="handlinger">
+          <a class="knapp" href="https://apps.apple.com/app/kolorist-fargepaletter/id6818636272">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1Zm-7 15a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/></svg>
+            <span>Download for iPhone, iPad and Mac</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bunn">
+    <div class="bunn-innhold">
+      <nav aria-label="Footer menu">
+        <ul>
+          <li><a href="index.html">About</a></li>
+          <li><a href="design.html">Design</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+          <li><a href="platforms.html">Platforms</a></li>
+          <li><a href="filament.html">3D printing</a></li>
+          <li><a href="features.html">All features</a></li>
+          <li><a href="light.html">Light and colour measurement</a></li>
+          <li><a href="visualisation.html">Colour visualisation</a></li>
+          <li><a href="support.html">Support</a></li>
+          <li><a href="methods.html">Methods and sources</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="../visualisering.html" hreflang="nb" lang="nb">Norsk</a></li>
+        </ul>
+      </nav>
+      <p class="utvikler">Kolorist is developed by Eivind Arnstein Johansen – Department of Design, NTNU.</p>
+      <p>© 2026 Eivind Arnstein Johansen. Apple, iPhone, iPad, Mac, iCloud, Siri and Apple Intelligence are trademarks of Apple Inc.</p>
+    </div>
+  </footer>
+</body>
+</html>
