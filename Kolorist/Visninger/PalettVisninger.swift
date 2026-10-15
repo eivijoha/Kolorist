@@ -249,14 +249,14 @@ struct PalettListe: View {
                                     }
                                     Divider()
                                     // Hele gruppen: skriv ut (hver palett på egne sider), lagre som filer eller kopier.
-                                    Button("Skriv ut gruppen …", systemImage: "printer") {
-                                        PalettUtskrift.skrivUt(iGruppen.map { ($0.palett, $0.gradienter) }, navn: g.navn)
-                                    }
-                                    .disabled(iGruppen.isEmpty)
                                     Button("Lagre gruppen som …", systemImage: "square.and.arrow.down") { lagresGruppe = g }
                                         .disabled(iGruppen.isEmpty)
                                     KopierTilMeny(farger: iGruppen.flatMap(\.farger), navn: g.navn, tittel: "Kopier gruppen til")
                                         .disabled(iGruppen.isEmpty)
+                                    Button("Skriv ut gruppen …", systemImage: "printer") {
+                                        PalettUtskrift.skrivUt(iGruppen.map { ($0.palett, $0.gradienter) }, navn: g.navn)
+                                    }
+                                    .disabled(iGruppen.isEmpty)
                                     Divider()
                                     Button("Slett gruppe …", systemImage: "trash", role: .destructive) { slettesGruppe = g }
                                 } label: {
@@ -958,18 +958,19 @@ struct PalettDetalj: View {
     }
 
     /// Lagre som, del og kopier.
-    /// Del som lenke først, så Skriv ut, så kopiering og lagring.
+    /// Primærhandlingene (Lagre som, Kopier til) først, så Del som lenke og Skriv ut, så øvrig kopiering.
     @ViewBuilder private var delvalg: some View {
         let navn = dokument.navn, farger = dokument.farger, gradienter = dokument.gradienter
+        Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
+            .disabled(farger.isEmpty && gradienter.isEmpty)
+        KopierTilMeny(farger: farger, navn: navn)
+        Divider()
         DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
             .disabled(farger.isEmpty && gradienter.isEmpty)
         utskriftsknapp
         Divider()
-        Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
-            .disabled(dokument.farger.isEmpty && dokument.gradienter.isEmpty)
         Button("Kopier alle som hex") { Utklippstavle.kopier(dokument.palett) }
         Button("Kopier alle som OKLCH") { Utklippstavle.kopier(dokument.palett, som: .okLCH) }
-        KopierTilMeny(farger: dokument.farger, navn: dokument.navn)
         KildeMeny(farger: dokument.farger)
     }
 

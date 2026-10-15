@@ -64,19 +64,19 @@ struct RekkeMeny: View {
     var body: some View {
         Menu {
             Section {
+                Button("Lagre som palett …", systemImage: "swatchpalette", action: lagreSomPalett)
+                if let flereLagringsvalg { flereLagringsvalg }
+            }
+            KopierTilMeny(farger: farger, navn: navn, inline: true)
+            Section {
                 DelSomLenke(navn: navn, tittel: lenketittel, innhold: lenke)
                 Button("Skriv ut …", systemImage: "printer") {
                     PalettUtskrift.skrivUt(Palett(navn: navn, farger: farger), gradienter: gradienter)
                 }
-            }
-            Section {
-                Button("Lagre som palett …", systemImage: "swatchpalette", action: lagreSomPalett)
-                if let flereLagringsvalg { flereLagringsvalg }
                 Button("Kopier alle som hex", systemImage: "number") {
                     Utklippstavle.kopierTekst(farger.map { $0.farge.hex() }.joined(separator: "\n"))
                 }
             }
-            KopierTilMeny(farger: farger, navn: navn, inline: true)
             if let vis3D {
                 Section { Button("Vis i 3D …", systemImage: "rotate.3d", action: vis3D) }
             }

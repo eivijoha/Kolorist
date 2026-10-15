@@ -280,12 +280,6 @@ struct FargeValgBoble: View {
                         leggIPalett(farge)
                     }
                 }
-                let pf = palettFarge ?? PalettFarge(navn: navn, farge: farge)
-                DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
-                Button("Kopier hex", systemImage: "doc.on.doc") {
-                    Utklippstavle.kopier(farge)
-                    lukk()
-                }
                 // «Kopier til …»: formatet målprogrammet tar imot (også via universell utklippstavle).
                 Menu {
                     ForEach(Kopiinnstillinger.synlige(Kopimål.tilgjengelige.map(\.rawValue), rekkefølge: rekkefølge, skjult: skjult)
@@ -303,6 +297,12 @@ struct FargeValgBoble: View {
                     }
                 } label: {
                     Label("Kopier til", systemImage: "arrow.up.doc.on.clipboard")
+                }
+                let pf = palettFarge ?? PalettFarge(navn: navn, farge: farge)
+                DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
+                Button("Kopier hex", systemImage: "doc.on.doc") {
+                    Utklippstavle.kopier(farge)
+                    lukk()
                 }
                 if let kilde { Kildelenke(kilde: kilde) }
                 if let ekstra {

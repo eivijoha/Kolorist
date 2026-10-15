@@ -26,7 +26,7 @@ enum Paletthandling: Identifiable, Hashable {
 ///
 /// 1. Vurder paletten · Skriftkontrast · Lag designsystem
 /// 2. Gi nytt navn … · Flytt til gruppe
-/// 3. Del som lenke · Skriv ut … · Kopier til · Lagre som … · kildene (f.eks. filamentprøvene)
+/// 3. Lagre som … · Kopier til · Del som lenke · Skriv ut … · kildene (f.eks. filamentprøvene)
 /// 4. Vis i 3D …
 /// 5. Slett palett
 struct PalettMeny: View {
@@ -53,14 +53,14 @@ struct PalettMeny: View {
             flyttTilGruppe
         }
         Section {
+            Button("Lagre som …", systemImage: "square.and.arrow.down") { utfør(.lagreSom(p)) }
+                .disabled(tom)
+            KopierTilMeny(farger: p.farger, navn: p.navn)
+                .disabled(p.farger.isEmpty)
             let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
             DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
                 .disabled(tom)
             Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
-                .disabled(tom)
-            KopierTilMeny(farger: p.farger, navn: p.navn)
-                .disabled(p.farger.isEmpty)
-            Button("Lagre som …", systemImage: "square.and.arrow.down") { utfør(.lagreSom(p)) }
                 .disabled(tom)
             KildeMeny(farger: p.farger)
         }

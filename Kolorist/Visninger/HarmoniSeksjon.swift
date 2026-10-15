@@ -437,7 +437,11 @@ struct HarmoniSeksjon: View {
                 }
             }
             }
-            // Del som lenke først og Skriv ut som nummer to; «Vis i 3D …» sist.
+            // Lagre og Kopier til først (primærhandlinger), så Del som lenke og Skriv ut; «Vis i 3D …» sist.
+            Button("Legg harmonien i palett", systemImage: "plus.square.on.square") {
+                lagre(farger.map { PalettFarge(farge: $0, opphav: .manuell) }, harmoni.navn)
+            }
+            KopierTilMeny(farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }, navn: harmoni.navn)
             let (h, s, f, a, v, o, i) = (harmoni, sirkel, farger, antall, vinkel, lyshetsrekkefølge, grunnIndeks)
             let grunn = i.flatMap { f.indices.contains($0) ? f[$0] : nil } ?? juster(grunnfarge).gamutKartlagt(til: gamut)
             DelSomLenke(navn: harmoni.navn, tittel: "Del harmonien som lenke") {
@@ -446,10 +450,6 @@ struct HarmoniSeksjon: View {
             Button("Skriv ut harmonien …", systemImage: "printer") {
                 PalettUtskrift.skrivUt(Palett(navn: harmoni.navn, farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }))
             }
-            Button("Legg harmonien i palett", systemImage: "plus.square.on.square") {
-                lagre(farger.map { PalettFarge(farge: $0, opphav: .manuell) }, harmoni.navn)
-            }
-            KopierTilMeny(farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }, navn: harmoni.navn)
             Button("Vis i 3D …", systemImage: "rotate.3d") {
                 // Tonebanen med selve banen (tett med toner), så den kan følges gjennom rommet.
                 let bane = harmoni == .tonebane

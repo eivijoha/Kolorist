@@ -8,7 +8,7 @@ import SwiftUI
 /// 1. Vis farge · Endre i Studio … · Gi navn … · i palett: Lag toneskala, Skriftfarge · valg som bare gjelder her
 ///    (`ekstraMeny`)
 /// 2. Lagre som enkeltfarge · Legg i palett … · Flytt til (etter `Fargeplass`)
-/// 3. Del som lenke · Kopier verdier · Kopier hex · Kopier som · Del · Kopier til · Lagre som … · kilden
+/// 3. Lagre som … · Kopier til · Del som lenke · Kopier verdier · Kopier hex · Kopier som · Del · kilden
 /// 4. Vis i 3D …
 /// 5. Slett farge
 ///
@@ -185,14 +185,15 @@ struct Fargemeny: ViewModifier {
         }
         // 3. Kopiere og dele.
         Section {
+            // Primærhandlingene (Lagre som, Kopier til) først, så deling, så øvrig kopiering.
             let pf = somPalettFarge(farge)
+            Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
+            KopierTilMeny(farger: [pf], navn: navn ?? "")
             DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
             if let kopierVerdier {
                 Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(kopierVerdier) }
             }
             KopierMeny(farge: farge)
-            KopierTilMeny(farger: [pf], navn: navn ?? "")
-            Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
             if let palettFarge { KildeMeny(farger: [palettFarge]) }
         }
         // 4. Vis i 3D (alltid sist før sletting).

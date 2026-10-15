@@ -162,8 +162,8 @@ struct DesignsystemRutenett: View {
                             }
                             Section {
                                 let ds = d.designsystem
-                                DelSomLenke(navn: d.navn) { Lenkedeling.designsystem(ds) }
                                 Button("Eksporter …", systemImage: "square.and.arrow.up") { eksporteres = d }
+                                DelSomLenke(navn: d.navn) { Lenkedeling.designsystem(ds) }
                             }
                             Section {
                                 Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
