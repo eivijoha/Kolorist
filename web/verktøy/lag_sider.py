@@ -282,7 +282,7 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N}<a href="funksjoner.html#3d">Farger og fargerom i 3D – også i AR – fargerapporter du kan dele og skrive ut, og lesekontrast etter APCA</a></p>'
+        nyhet = f'<p class="nyhet">{N}<a href="funksjoner.html#3d">Farger og fargerom i 3D – også i det fysiske rommet gjennom AR (utvidet virkelighet) – fargerapporter du kan dele og skrive ut, og lesekontrast etter APCA</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, CIELab og alle fargerom og ICC-profiler.'),
@@ -312,7 +312,7 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N}<a href="features.html#3d">Colours and colour spaces in 3D – in AR too – colour reports you can share and print, and reading contrast by APCA</a></p>'
+        nyhet = f'<p class="nyhet">{N}<a href="features.html#3d">Colours and colour spaces in 3D – in your physical surroundings through AR (augmented reality) too – colour reports you can share and print, and reading contrast by APCA</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, CIELab and every colour space and ICC profile.'),
@@ -775,11 +775,11 @@ def funksjoner(lang):
                                                   '<li>Hver farge lenker til prøven hos <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">om dataene</a></li>',
                                                   '<li><a href="filament.html">Les mer om 3D-print og filament</a></li>']))]),
             ('3d', 'Farger og fargerom i 3D', '3D',
-             '<p class="lesetekst">Se harmonier, paletter, overganger og fargebiblioteker i rommet – og fargerommene til ICC-profiler. Dra for å dreie, del som 3D-modell, og plasser den på bordet med AR på iPhone og iPad.</p>\n'
+             '<p class="lesetekst">Se harmonier, paletter, overganger og fargebiblioteker i 3D – og fargerommene til ICC-profiler. Dra for å dreie, del som 3D-modell, og se fargene i det fysiske rommet gjennom AR på iPhone og iPad.</p>\n'
              + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Skjermbilder – rull sidelengs')
              + '\n<p><a href="visualisering.html">Les mer om fargevisualisering →</a></p>',
              [('I 3D', ul([f'<li>Tre rom: en fargekule (kulør rundt den grå aksen, lyshet opp og metning ut mot overflaten), OKLab og CIELab {N}</li>',
-                           f'<li>Harmonier og paletter som punkter i rommet – tonebanen med selve banen {N}</li>',
+                           f'<li>Harmonier og paletter som punkter i fargerommet – tonebanen med selve banen {N}</li>',
                            f'<li>Overgangen i OKLab ved siden av veien rett gjennom sRGB, som blir mørk og grumsete på midten {N}</li>',
                            f'<li>Farger utenfor et fargerom får en pil til der de havner, f.eks. i trykkprofilen {N}</li>',
                            f'<li>Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone {N}</li>',
@@ -829,11 +829,11 @@ def funksjoner(lang):
                                                        '<li>Each colour links to the sample at <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a> (CC BY 4.0) – <a href="methods.html#filamentfarger">about the data</a></li>',
                                                        '<li><a href="filament.html">Read more about 3D printing and filament</a></li>']))]),
             ('3d', 'Colours and colour spaces in 3D', '3D',
-             '<p class="lesetekst">See harmonies, palettes, gradients and colour libraries in space – and the colour spaces of ICC profiles. Drag to rotate, share as a 3D model, and place it on the table with AR on iPhone and iPad.</p>\n'
+             '<p class="lesetekst">See harmonies, palettes, gradients and colour libraries in 3D – and the colour spaces of ICC profiles. Drag to rotate, share as a 3D model, and see the colours in your physical surroundings through AR on iPhone and iPad.</p>\n'
              + skjermbilder(s, ['3d-tonebane', '3d-overgang', '3d-gamut', '3d-filament']).format('Screenshots – scroll sideways')
              + '\n<p><a href="visualisation.html">Read more about colour visualisation →</a></p>',
              [('In 3D', ul([f'<li>Three spaces: a colour sphere (hue around the grey axis, lightness up and saturation out towards the surface), OKLab and CIELab {N}</li>',
-                            f'<li>Harmonies and palettes as points in space – the tone path with the path itself {N}</li>',
+                            f'<li>Harmonies and palettes as points in the colour space – the tone path with the path itself {N}</li>',
                             f'<li>The gradient in OKLab next to the path straight through sRGB, which turns dark and muddy in the middle {N}</li>',
                             f'<li>Colours outside a colour space get an arrow to where they end up, for example in the print profile {N}</li>',
                             f'<li>Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone {N}</li>',
@@ -1210,7 +1210,7 @@ def visualiseringsside(lang):
     merke = f'<span class="nytt">{T[lang]["nytt"]}</span> '
     if lang == 'nb':
         steg = [
-            ('Se fargene i rommet', 'Harmonier, paletter og tonebaner som punkter i et fargerom du kan dreie – i en fargekule, i OKLab eller i CIELab.',
+            ('Se fargene i 3D', 'Harmonier, paletter og tonebaner som punkter i et fargerom du kan dreie – i en fargekule, i OKLab eller i CIELab.',
              ['Fargekula: kulør rundt den grå aksen, lyshet opp og metning ut mot overflaten' + N,
               'OKLab, rommet Kolorist regner overganger og toner i, og CIELab, rommet ICC-profilene bruker' + N,
               'Tonebanen med selve banen – se hvordan kuløren går rundt mens lysheten endres' + N,
@@ -1232,19 +1232,19 @@ def visualiseringsside(lang):
              ['Palettens farger i CIE 1931-diagrammet, med linjen gjennom hver farge for protanopi, deuteranopi og tritanopi' + N,
               'Parene som blir vanskelige å skille, streket sammen i rødt' + N,
               'Sammen med simuleringen av hvordan paletten ser ut'], 'forvirringslinjer', ('methods.html#forvirringslinjer', 'Les om forvirringslinjer')),
-            ('Ta modellen med deg', 'Del 3D-visningen som modell og se den der du er.',
+            ('Ta modellen med deg', 'Del 3D-visningen som modell og se fargene i det fysiske rommet gjennom AR.',
              ['Del som 3D-modell (USDZ)' + N,
               'Plasser den på bordet med AR på iPhone og iPad, eller vis 3D-modellen på Mac' + N,
               'På Mac åpnes 3D-visningen i eget vindu, ved siden av paletten' + N,
               'Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone' + N], '3d-filament', None),
         ]
         return fagside('nb', 'visualisering.html', 'Fargevisualisering – farger og fargerom i 3D',
-                       'Se harmonier, paletter, overganger og fargerom i 3D, sammenlign ICC-profiler i CIELab, se gamutgrensene i gliderne og forvirringslinjer for fargesyn – og ta modellen med i AR.',
+                       'Se harmonier, paletter, overganger og fargerom i 3D, sammenlign ICC-profiler i CIELab, se gamutgrensene i gliderne og forvirringslinjer for fargesyn – og se fargene i det fysiske rommet gjennom AR (utvidet virkelighet).',
                        'Kolorist for', 'fargevisualisering',
-                       merke + 'Farger er tredimensjonale. Se dem som det: i rommet, mot fargerommene de skal gjengis i, og med grensene synlige mens du jobber.',
+                       merke + 'Farger er tredimensjonale. Se dem som det: i 3D, mot fargerommene de skal gjengis i, med grensene synlige mens du jobber – og i det fysiske rommet gjennom AR (utvidet virkelighet).',
                        steg, ('Les videre', [('funksjoner.html#3d', 'Alle funksjoner i 3D'), ('design.html', 'Kolorist for design'), ('lys.html', 'Lys og fargemåling')]))
     steg = [
-        ('See colours in space', 'Harmonies, palettes and tone paths as points in a colour space you can rotate – in a colour sphere, in OKLab or in CIELab.',
+        ('See colours in 3D', 'Harmonies, palettes and tone paths as points in a colour space you can rotate – in a colour sphere, in OKLab or in CIELab.',
          ['The colour sphere: hue around the grey axis, lightness up and saturation out towards the surface' + N,
           'OKLab, the space Kolorist computes gradients and tones in, and CIELab, the space ICC profiles use' + N,
           'The tone path with the path itself – see how the hue turns while the lightness changes' + N,
@@ -1266,16 +1266,16 @@ def visualiseringsside(lang):
          ['The palette’s colours in the CIE 1931 diagram, with the line through each colour for protanopia, deuteranopia and tritanopia' + N,
           'The pairs that become hard to tell apart, joined in red' + N,
           'Together with the simulation of how the palette looks'], 'forvirringslinjer', ('methods.html#confusion-lines', 'Read about confusion lines')),
-        ('Take the model with you', 'Share the 3D view as a model and see it where you are.',
+        ('Take the model with you', 'Share the 3D view as a model and see the colours in your physical surroundings through AR.',
          ['Share as a 3D model (USDZ)' + N,
           'Place it on the table with AR on iPhone and iPad, or view the 3D model on the Mac' + N,
           'On the Mac the 3D view opens in a window of its own, next to the palette' + N,
           'Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone' + N], '3d-filament', None),
     ]
     return fagside('en', 'visualisation.html', 'Colour visualisation – colours and colour spaces in 3D',
-                   'See harmonies, palettes, gradients and colour spaces in 3D, compare ICC profiles in CIELab, see the gamut limits on the sliders and confusion lines for colour vision – and take the model with you in AR.',
+                   'See harmonies, palettes, gradients and colour spaces in 3D, compare ICC profiles in CIELab, see the gamut limits on the sliders and confusion lines for colour vision – and see the colours in your physical surroundings through AR (augmented reality).',
                    'Kolorist for', 'colour visualisation',
-                   merke + 'Colours are three-dimensional. See them that way: in space, against the colour spaces they will be reproduced in, and with the limits visible as you work.',
+                   merke + 'Colours are three-dimensional. See them that way: in 3D, against the colour spaces they will be reproduced in, with the limits visible as you work – and in your physical surroundings through AR (augmented reality).',
                    steg, ('Read on', [('features.html#3d', 'All 3D features'), ('design.html', 'Kolorist for design'), ('light.html', 'Light and colour measurement')]))
 
 
