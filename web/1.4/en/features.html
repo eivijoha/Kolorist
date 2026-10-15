@@ -70,6 +70,20 @@
 
     <section class="funksjonsgruppe" id="colour-spaces" aria-labelledby="colour-spaces-tittel">
       <h2 id="colour-spaces-tittel">Colours and colour spaces</h2>
+      <ul class="skjermbilder" tabindex="0" aria-label="Screenshots – scroll sideways">
+        <li>
+          <figure class="skjermbilde">
+            <img src="../assets/en/skjermbilde-gamutgrense.png?v=11" alt="Studio with Generic CMYK under “Show as”: the lightness, chroma and hue sliders are striped where the colour falls outside CMYK" width="1284" height="2778" loading="lazy">
+            <figcaption>The limits on the sliders</figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="skjermbilde">
+            <img src="../assets/en/skjermbilde-gamutgrense-flate.png?v=11" alt="Monochromatic harmony with the limit of Generic CMYK drawn in the lightness and saturation field" width="1284" height="2778" loading="lazy">
+            <figcaption>The limit in the field</figcaption>
+          </figure>
+        </li>
+      </ul>
       <div class="underpunkter">
         <div>
           <h3>Every colour space</h3>
@@ -79,6 +93,7 @@
             <li>Choose the source colour space for CMYK and RGB – Generic CMYK and sRGB by default, or any ICC profile</li>
             <li>Save colours in their colour model or profile – exports use the same format</li>
             <li>Warnings when a colour is out of gamut</li>
+            <li>See the limits of the colour space right on the sliders and in the lightness and saturation field <span class="nytt">New in 1.4</span></li>
             <li>Optionally limit colours to a chosen profile</li>
             <li>See colour spaces, harmonies, gradients and palettes in 3D – in CIELab, OKLab or a colour sphere – and as a 3D model in AR <span class="nytt">New in 1.4</span></li>
             <li>Clean CMYK values: grey components move to black (UCR/GCR), with as few inks as possible</li>
@@ -116,25 +131,25 @@
       <ul class="skjermbilder" tabindex="0" aria-label="Screenshots – scroll sideways">
               <li>
                 <figure class="skjermbilde">
-                  <img src="../assets/en/skjermbilde-3d-tonebane.png?v=10" alt="A tone path in a semi-transparent colour sphere: the tones and the path from light turquoise to blue, with the grey axis" width="1284" height="2778" loading="lazy">
+                  <img src="../assets/en/skjermbilde-3d-tonebane.png?v=11" alt="A tone path in a semi-transparent colour sphere: the tones and the path from light turquoise to blue, with the grey axis" width="1284" height="2778" loading="lazy">
                   <figcaption>The tone path in the colour sphere</figcaption>
                 </figure>
               </li>
               <li>
                 <figure class="skjermbilde">
-                  <img src="../assets/en/skjermbilde-3d-overgang.png?v=10" alt="A gradient from red to turquoise in OKLab: the straight OKLab path and the dashed path through sRGB, which gets darker in the middle" width="1284" height="2778" loading="lazy">
+                  <img src="../assets/en/skjermbilde-3d-overgang.png?v=11" alt="A gradient from red to turquoise in OKLab: the straight OKLab path and the dashed path through sRGB, which gets darker in the middle" width="1284" height="2778" loading="lazy">
                   <figcaption>The gradient: OKLab against sRGB</figcaption>
                 </figure>
               </li>
               <li>
                 <figure class="skjermbilde">
-                  <img src="../assets/en/skjermbilde-3d-gamut.png?v=10" alt="The colour space of Generic CMYK in CIELab, with sRGB as a transparent shell for comparison" width="1284" height="2778" loading="lazy">
+                  <img src="../assets/en/skjermbilde-3d-gamut.png?v=11" alt="The colour space of Generic CMYK in CIELab, with sRGB as a transparent shell for comparison" width="1284" height="2778" loading="lazy">
                   <figcaption>Colour spaces in CIELab</figcaption>
                 </figure>
               </li>
               <li>
                 <figure class="skjermbilde">
-                  <img src="../assets/en/skjermbilde-3d-filament.png?v=10" alt="More than 2,200 filament colours as a point cloud in CIELab, with the colour and the nearest filament marked" width="1284" height="2778" loading="lazy">
+                  <img src="../assets/en/skjermbilde-3d-filament.png?v=11" alt="More than 2,200 filament colours as a point cloud in CIELab, with the colour and the nearest filament marked" width="1284" height="2778" loading="lazy">
                   <figcaption>Filament colours in 3D</figcaption>
                 </figure>
               </li>
@@ -148,7 +163,8 @@
             <li>The gradient in OKLab next to the path straight through sRGB, which turns dark and muddy in the middle <span class="nytt">New in 1.4</span></li>
             <li>Colours outside a colour space get an arrow to where they end up, for example in the print profile <span class="nytt">New in 1.4</span></li>
             <li>Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone <span class="nytt">New in 1.4</span></li>
-            <li>The colour spaces of ICC profiles in CIELab, with another space as glass for comparison <span class="nytt">New in 1.4</span></li>
+            <li>The colour spaces of ICC profiles in CIELab, with another space as glass for comparison – opened right from “Show as” <span class="nytt">New in 1.4</span></li>
+            <li>Choose the rendering intent for the colour space and for where the colours outside end up <span class="nytt">New in 1.4</span></li>
             <li>Share as a 3D model (USDZ): Quick Look on the Mac, AR on iPhone and iPad <span class="nytt">New in 1.4</span></li>
           </ul>
         </div>

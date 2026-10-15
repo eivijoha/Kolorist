@@ -201,6 +201,10 @@ NYE_BILDER.update({
     ('en', 'apca-kontrast'): ('Contrast check by APCA: blue text on white, Lc 67, with the levels from body text to icons and “Fix”', 'Reading contrast by APCA'),
     ('nb', 'apca-tekst'): ('Harmoni i Studio: fem farger med verdiene i hvit eller sort tekst etter APCA, også på mellomtonene', 'Tekst på fargefelt etter APCA'),
     ('en', 'apca-tekst'): ('Harmony in Studio: five colours with their values in white or black text by APCA, also on the mid tones', 'Text on colour fields by APCA'),
+    ('nb', 'gamutgrense'): ('Studio med Generisk CMYK under «Vis som»: gliderne for lyshet, kroma og kulør er stripet der fargen havner utenfor CMYK', 'Grensene i gliderne'),
+    ('en', 'gamutgrense'): ('Studio with Generic CMYK under “Show as”: the lightness, chroma and hue sliders are striped where the colour falls outside CMYK', 'The limits on the sliders'),
+    ('nb', 'gamutgrense-flate'): ('Monokromatisk harmoni med grensen for Generisk CMYK tegnet inn i flaten for lyshet og metning', 'Grensen i flaten'),
+    ('en', 'gamutgrense-flate'): ('Monochromatic harmony with the limit of Generic CMYK drawn in the lightness and saturation field', 'The limit in the field'),
     ('nb', 'forvirringslinjer'): ('Kromatisitetsdiagram med forvirringslinjene for deuteranopi: palettens farger, og de vanskelige parene streket sammen i rødt', 'Forvirringslinjer'),
     ('en', 'forvirringslinjer'): ('Chromaticity diagram with the confusion lines for deuteranopia: the palette’s colours, with the hard pairs joined in red', 'Confusion lines'),
     ('nb', '3d-tonebane'): ('En tonebane i en halvgjennomsiktig fargekule: tonene og banen fra lys turkis til blå, med den grå aksen', 'Tonebanen i fargekula'),
@@ -762,7 +766,8 @@ def funksjoner(lang):
 
     if nb:
         grupper = [
-            ('fargerom', 'Farger og fargerom', 'Fargerom', None,
+            ('fargerom', 'Farger og fargerom', 'Fargerom',
+             skjermbilder(s, ['gamutgrense', 'gamutgrense-flate']).format('Skjermbilder – rull sidelengs'),
              [('Alle fargerom', k['Alle fargerom']), ('ICC-profiler og fargebiblioteker', k['ICC-profiler og fargebiblioteker']),
               ('Filamentfarger for 3D-print', ul([f'<li>Over 2 200 filamentfarger fra 150 produsenter, i ett bibliotek per materiale: PLA, PETG, ABS og ASA, TPU og TPE og andre {N12}</li>',
                                                   '<li>De fleste målt med kolorimeter på utskrevne prøver; resten anslått fra foto og merket slik</li>',
@@ -777,7 +782,8 @@ def funksjoner(lang):
                            f'<li>Overgangen i OKLab ved siden av veien rett gjennom sRGB, som blir mørk og grumsete på midten {N}</li>',
                            f'<li>Farger utenfor et fargerom får en pil til der de havner, f.eks. i trykkprofilen {N}</li>',
                            f'<li>Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone {N}</li>',
-                           f'<li>Fargerommene til ICC-profiler i CIELab, med et annet rom som glass til sammenligning {N}</li>',
+                           f'<li>Fargerommene til ICC-profiler i CIELab, med et annet rom som glass til sammenligning – åpnes rett fra «Vis som» {N}</li>',
+                           f'<li>Velg gjengivelseshensikt for fargerommet og for hvor fargene utenfor havner {N}</li>',
                            f'<li>Del som 3D-modell (USDZ): Hurtigvisning på Mac, AR på iPhone og iPad {N}</li>']))]),
             ('toner', 'Toner, harmonier og overganger', 'Toner og overganger', None,
              [('Toner og harmonier', k['Toner og harmonier']), ('Overganger', k['Overganger'])]),
@@ -812,7 +818,8 @@ def funksjoner(lang):
         innholdsliste = 'Innhold på siden'
     else:
         grupper = [
-            ('colour-spaces', 'Colours and colour spaces', 'Colour spaces', None,
+            ('colour-spaces', 'Colours and colour spaces', 'Colour spaces',
+             skjermbilder(s, ['gamutgrense', 'gamutgrense-flate']).format('Screenshots – scroll sideways'),
              [('Every colour space', k['Every colour space']), ('ICC profiles and colour libraries', k['ICC profiles and colour libraries']),
               ('Filament colours for 3D printing', ul([f'<li>More than 2,200 filament colours from 150 manufacturers, in one library per material: PLA, PETG, ABS and ASA, TPU and TPE and others {N12}</li>',
                                                        '<li>Most measured with a colorimeter on printed samples; the rest estimated from photos and marked as such</li>',
@@ -827,7 +834,8 @@ def funksjoner(lang):
                             f'<li>The gradient in OKLab next to the path straight through sRGB, which turns dark and muddy in the middle {N}</li>',
                             f'<li>Colours outside a colour space get an arrow to where they end up, for example in the print profile {N}</li>',
                             f'<li>Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone {N}</li>',
-                            f'<li>The colour spaces of ICC profiles in CIELab, with another space as glass for comparison {N}</li>',
+                            f'<li>The colour spaces of ICC profiles in CIELab, with another space as glass for comparison – opened right from “Show as” {N}</li>',
+                            f'<li>Choose the rendering intent for the colour space and for where the colours outside end up {N}</li>',
                             f'<li>Share as a 3D model (USDZ): Quick Look on the Mac, AR on iPhone and iPad {N}</li>']))]),
             ('tones', 'Tones, harmonies and gradients', 'Tones and gradients', None,
              [('Tones and harmonies', k['Tones and harmonies']), ('Gradients', k['Gradients'])]),
@@ -1226,6 +1234,8 @@ def lenke_på(url, lang):
 def skriv(sti, tekst):
     # Nye skjermbilder: ny versjon i adressen, så nettleser og Varnish henter dem på nytt.
     tekst = re.sub(r'\.png\?v=\d+', '.png?v=10', tekst)
+    # Bilder som er tatt på nytt etter at de først ble lagt ut (3D-arket med gjengivelseshensikt), og gamutgrensene.
+    tekst = re.sub(r'(skjermbilde-(?:3d-[a-z]+|gamutgrense[a-z-]*)\.png)\?v=10', r'\1?v=11', tekst)
     lang = 'en' if sti.startswith('en/') else 'nb'
     tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)
