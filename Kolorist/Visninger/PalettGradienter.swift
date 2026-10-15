@@ -67,12 +67,12 @@ struct PalettGradientListe: View {
                     }
                     .contentShape(Rectangle())
                     .onTapGesture { åpne(g) }
-                    .contextMenu {
-                        Button("Åpne i Overgang", systemImage: "arrow.up.forward.app") { åpne(g) }
-                        GradientKopierTilMeny(gradient: Gradientkopi(farger: [g.oppsett.fra, g.oppsett.til], navn: g.navn))
-                        DelSomLenke(navn: g.navn) { Lenkedeling.gradient(g.oppsett, navn: g.navn) }
-                        Button("Slett", systemImage: "trash", role: .destructive) { slettes = g }
-                    }
+                    .gradientmeny(g.oppsett, navn: g.navn, åpne: { åpne(g) }, giNavn: { navn in
+                        let id = g.id
+                        kontekst.angresteg("Gi gradienten navn") {
+                            dokument.gradienter = dokument.gradienter.map { var x = $0; if x.id == id { x.navn = navn }; return x }
+                        }
+                    }, slett: { slettes = g })
                     .accessibilityElement(children: .combine)
                     .accessibilityAddTraits(.isButton)
                     .accessibilityAction(named: "Åpne i Overgang") { åpne(g) }
@@ -104,5 +104,81 @@ struct PalettGradientListe: View {
     /// Åpner gradienten i Overgang (i palettkolonnen vises Overgang ved siden av).
     private func åpne(_ g: PalettGradient) {
         arbeidsbenk.åpne(g.oppsett)
+    }
+}
+
+/// Menyen for én gradient (trykk og hold / høyreklikk), lik for lagrede gradienter og gradientene i en palett:
+///
+/// 1. Åpne i Overgang · Gi nytt navn …
+/// 2. Lagre farger som palett … · Legg gradienten i palett
+/// 3. Kopier CSS · Kopier til · Kopier tonene til · Del som lenke · Lagre som … · Skriv ut …
+/// 4. Slett gradient
+private struct Gradientmeny: ViewModifier {
+    let oppsett: Gradientoppsett
+    let navn: String
+    let åpne: () -> Void
+    let giNavn: (String) -> Void
+    /// Ber om å slette (visningen bekrefter først).
+    let slett: () -> Void
+    @State private var omdøpes = false
+    @State private var nyttNavn = ""
+    @State private var lagresSom = false
+    @State private var somPalett = false
+
+    private var toner: [PalettFarge] { oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) } }
+
+    func body(content: Content) -> some View {
+        content
+            .contextMenu {
+                Section {
+                    Button("Åpne i Overgang", systemImage: "arrow.up.forward.app", action: åpne)
+                    Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") {
+                        nyttNavn = navn
+                        omdøpes = true
+                    }
+                }
+                Section {
+                    Button("Lagre farger som palett …", systemImage: "swatchpalette") { somPalett = true }
+                    LeggGradientIPalettMeny(oppsett: oppsett, navn: navn)
+                }
+                Section {
+                    Button("Kopier CSS", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(oppsett.css) }
+                    GradientKopierTilMeny(gradient: Gradientkopi(farger: [oppsett.fra, oppsett.til], navn: navn))
+                    KopierTilMeny(farger: toner, navn: navn, tittel: "Kopier tonene til")
+                    let (o, n) = (oppsett, navn)
+                    DelSomLenke(navn: n) { Lenkedeling.gradient(o, navn: n) }
+                    Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = true }
+                    Button("Skriv ut …", systemImage: "printer") {
+                        PalettUtskrift.skrivUt(Palett(navn: navn, farger: toner), gradienter: [PalettGradient(navn: navn, oppsett: oppsett)])
+                    }
+                }
+                Section {
+                    Button("Slett gradient", systemImage: "trash", role: .destructive, action: slett)
+                }
+            }
+            .alert("Gi gradienten navn", isPresented: $omdøpes) {
+                TextField("Navn", text: $nyttNavn)
+                Button("Avbryt", role: .cancel) {}
+                Button("Lagre") {
+                    let rent = nyttNavn.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !rent.isEmpty { giNavn(rent) }
+                }
+            }
+            .sheet(isPresented: $lagresSom) {
+                LagreSomArk(innhold: Lagringsinnhold(navn: navn, farger: toner,
+                                                     gradienter: [PalettGradient(navn: navn, oppsett: oppsett)]))
+            }
+            .sheet(isPresented: $somPalett) {
+                VelgPalettArk(farger: oppsett.rader.flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) },
+                              foreslåttNavn: navn)
+            }
+    }
+}
+
+extension View {
+    /// Den felles gradientmenyen (se `Gradientmeny`).
+    func gradientmeny(_ oppsett: Gradientoppsett, navn: String, åpne: @escaping () -> Void, giNavn: @escaping (String) -> Void,
+                      slett: @escaping () -> Void) -> some View {
+        modifier(Gradientmeny(oppsett: oppsett, navn: navn, åpne: åpne, giNavn: giNavn, slett: slett))
     }
 }

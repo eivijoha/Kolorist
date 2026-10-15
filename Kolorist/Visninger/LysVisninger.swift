@@ -174,7 +174,10 @@ struct LysmiljøSeksjon: View {
                     visningsmerke(miljø)
                 }
                 .swipeActions { Button("Slett", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) } }
-                .contextMenu { Button("Slett", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) } }
+                .contextMenu {
+                    Button("Rediger …", systemImage: "pencil") { redigerer = miljø }
+                    Button("Slett betraktningsforhold", systemImage: "trash", role: .destructive) { bibliotek.slett(miljø) }
+                }
             }
         } fot: {
             #if os(macOS)

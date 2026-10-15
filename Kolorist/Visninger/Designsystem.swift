@@ -141,6 +141,9 @@ struct DesignsystemRutenett: View {
     @Environment(\.modelContext) private var kontekst
     let åpne: (DesignsystemDokument) -> Void
     @State private var slettes: DesignsystemDokument?
+    @State private var omdøpes: DesignsystemDokument?
+    @State private var nyttNavn = ""
+    @State private var eksporteres: DesignsystemDokument?
 
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)], alignment: .leading, spacing: 12) {
@@ -149,10 +152,22 @@ struct DesignsystemRutenett: View {
                 SveipForÅSlette(slett: { slettes = d }) {
                     DesignsystemKort(dokument: d)
                         .onTapGesture { åpne(d) }
+                        // Som menyen i designsystemet (og palettmenyen): navn, deling og eksport, slett.
                         .contextMenu {
-                            let ds = d.designsystem
-                            DelSomLenke(navn: d.navn) { Lenkedeling.designsystem(ds) }
-                            Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
+                            Section {
+                                Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") {
+                                    nyttNavn = d.navn
+                                    omdøpes = d
+                                }
+                            }
+                            Section {
+                                let ds = d.designsystem
+                                DelSomLenke(navn: d.navn) { Lenkedeling.designsystem(ds) }
+                                Button("Eksporter …", systemImage: "square.and.arrow.up") { eksporteres = d }
+                            }
+                            Section {
+                                Button("Slett designsystem", systemImage: "trash", role: .destructive) { slettes = d }
+                            }
                         }
                 }
             }
@@ -163,6 +178,15 @@ struct DesignsystemRutenett: View {
                 if let d = slettes { kontekst.angresteg("Slett designsystem") { kontekst.delete(d) } }
             }
         } message: { Text("Paletten det ble laget fra, beholdes.") }
+        .alert("Gi nytt navn", isPresented: Binding(get: { omdøpes != nil }, set: { if !$0 { omdøpes = nil } })) {
+            TextField("Navn", text: $nyttNavn)
+            Button("Avbryt", role: .cancel) {}
+            Button("Lagre") {
+                let navn = nyttNavn.trimmingCharacters(in: .whitespacesAndNewlines)
+                if let d = omdøpes, !navn.isEmpty { kontekst.angresteg("Gi nytt navn") { d.navn = navn } }
+            }
+        }
+        .sheet(item: $eksporteres) { DesignsystemEksportArk(designsystem: $0.designsystem, navn: $0.navn) }
     }
 }
 
@@ -1095,10 +1119,7 @@ struct DesignsystemSkalaer: View {
                         Rectangle().fill(f.swiftUI).frame(height: 36)
                         Text(trinn).font(.system(size: 9).monospacedDigit()).foregroundStyle(Color.sekundærTekst)
                     }
-                    .contextMenu {
-                        Button("Vis farge", systemImage: "slider.horizontal.3") { Arbeidsbenk.delt.visIStudio(f) }
-                        Button("Kopier \(f.hex())", systemImage: "doc.on.doc") { Utklippstavle.kopier(f) }
-                    }
+                    .fargemeny(f, palettFarge: PalettFarge(farge: f, opphav: .toneskala))
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(Text(verbatim: trinn))
                     .accessibilityValue(f.hex())

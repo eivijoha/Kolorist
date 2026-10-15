@@ -20,12 +20,8 @@ struct PalettListe: View {
     /// Navigasjonssti: oversikten fyller hele hovedvisningen (også på Mac og iPad), valgt palett åpnes over.
     @State private var sti: [Valg] = []
     @State private var målrettet: Valg?
-    @State private var slettes: PalettDokument?
-    @State private var omdøpes: PalettDokument?
-    @State private var vurderes: PalettDokument?
-    @State private var matrise: PalettDokument?
+    @State private var paletthandling: Paletthandling?
     @State private var visVerdiord = false
-    @State private var lagresSom: PalettDokument?
     @State private var visNyPalett = false
     @State private var nyPalettNavn = ""
     @State private var importererASE = false
@@ -33,7 +29,6 @@ struct PalettListe: View {
     /// Palettgrupper: ny gruppe (ev. med en palett som skal flyttes dit), nytt navn og sletting.
     @State private var visNyGruppe = false
     @State private var gruppenavn = ""
-    @State private var flyttesTilNyGruppe: PalettDokument?
     @State private var omdøpesGruppe: PalettGruppe?
     @State private var slettesGruppe: PalettGruppe?
     @State private var lagresGruppe: PalettGruppe?
@@ -114,27 +109,6 @@ struct PalettListe: View {
         kontekst.angresteg("Ny palettgruppe") {
             let g = PalettGruppe(navn: navn)
             kontekst.insert(g)
-            flyttesTilNyGruppe?.gruppeID = g.id
-        }
-        flyttesTilNyGruppe = nil
-    }
-
-    /// Menyen for å flytte en palett til en gruppe (eller ut av den).
-    @ViewBuilder private func flyttTilGruppeMeny(_ p: PalettDokument) -> some View {
-        Menu("Flytt til gruppe", systemImage: "folder") {
-            ForEach(sorterteGrupper) { g in
-                Button(g.navn.isEmpty ? String(localized: "Uten navn") : g.navn) { flyttPalett(p, til: g.id) }
-                    .disabled(p.gruppeID == g.id)
-            }
-            if p.gruppeID != nil {
-                Button("Uten gruppe", systemImage: "tray") { flyttPalett(p, til: nil) }
-            }
-            Divider()
-            Button("Ny gruppe …", systemImage: "folder.badge.plus") {
-                gruppenavn = ""
-                flyttesTilNyGruppe = p
-                visNyGruppe = true
-            }
         }
     }
 
@@ -143,7 +117,7 @@ struct PalettListe: View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12, alignment: .top)],
                   alignment: .leading, spacing: 12) {
             ForEach(liste) { p in
-                SveipForÅSlette(slett: { slettes = p }) {
+                SveipForÅSlette(slett: { paletthandling = .slett(p) }) {
                     kort(.palett(p)) {
                         PalettRad(dokument: p, velg: velgFarge)
                     } slipp: { farger in
@@ -159,24 +133,7 @@ struct PalettListe: View {
                             .background(.regularMaterial, in: Capsule())
                     }
                     .contextMenu {
-                        Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
-                            .disabled(p.farger.isEmpty)
-                        Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
-                            .disabled(p.farger.count < 2)
-                        Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
-                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                        Button("Lag designsystem", systemImage: "square.stack.3d.up") { åpneDesignsystem(nyttDesignsystem(fra: p)) }
-                            .disabled(p.farger.isEmpty)
-                        Divider()
-                        Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") { omdøpes = p }
-                        flyttTilGruppeMeny(p)
-                        KopierTilMeny(farger: p.farger, navn: p.navn)
-                        let (navn, farger, gradienter) = (p.navn, p.farger, p.gradienter)
-                        DelSomLenke(navn: navn) { Lenkedeling.palett(navn: navn, farger: farger, gradienter: gradienter) }
-                            .disabled(farger.isEmpty && gradienter.isEmpty)
-                        Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = p }
-                            .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-                        Button("Slett palett", systemImage: "trash", role: .destructive) { slettes = p }
+                        PalettMeny(palett: p, utfør: { paletthandling = $0 }) { åpneDesignsystem(nyttDesignsystem(fra: $0)) }
                     }
                 }
             }
@@ -205,7 +162,6 @@ struct PalettListe: View {
             Divider()
             Button("Ny palettgruppe …", systemImage: "folder.badge.plus") {
                 gruppenavn = ""
-                flyttesTilNyGruppe = nil
                 visNyGruppe = true
             }
         }
@@ -352,7 +308,7 @@ struct PalettListe: View {
             }
             #if DEBUG
             // Test: `-lagreSomTest` åpner «Lagre som» for første palett.
-            .task { if UserDefaults.standard.bool(forKey: "lagreSomTest") { lagresSom = paletter.first } }
+            .task { if UserDefaults.standard.bool(forKey: "lagreSomTest") { paletthandling = paletter.first.map { .lagreSom($0) } } }
             // Skjermbilder: `-visDesignsystem YES` åpner det første designsystemet.
             .task(id: designsystemer.count) {
                 // I palettspalten (bredt vindu) åpner Designsystemer-fanen det i stedet.
@@ -364,19 +320,14 @@ struct PalettListe: View {
             .sheet(item: $lagresGruppe) { g in
                 LagreSomArk(innhold: .gruppe(navn: g.navn, paletter: ordnet(paletter.filter { $0.gruppeID == g.id })))
             }
-            .sheet(item: $lagresSom) { p in
-                LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter, tekstfarger: p.tekstfarger))
-            }
             .fileImporter(isPresented: $importererASE, allowedContentTypes: [UTType(filenameExtension: "ase") ?? .data, .data],
                           allowsMultipleSelection: true) { resultat in
                 if let urler = try? resultat.get() { importerASE(urler) }
             }
             .alert("Ny palettgruppe", isPresented: $visNyGruppe) {
                 TextField("Navn", text: $gruppenavn)
-                Button("Avbryt", role: .cancel) { flyttesTilNyGruppe = nil }
+                Button("Avbryt", role: .cancel) {}
                 Button("Opprett", action: opprettGruppe)
-            } message: {
-                if let p = flyttesTilNyGruppe { Text("«\(p.navn)» flyttes til den nye gruppen.") }
             }
             .alert("Gi gruppen nytt navn", isPresented: Binding(get: { omdøpesGruppe != nil }, set: { if !$0 { omdøpesGruppe = nil } })) {
                 TextField("Navn", text: $gruppenavn)
@@ -411,16 +362,7 @@ struct PalettListe: View {
                 }
             }
             // Varsel midt på skjermen: en boble (iPad) bundet til et kort i rutenettet havnet på uventede steder.
-            .modifier(SlettPalettBekreftelse(navn: slettes?.navn ?? "",
-                                             vises: Binding(get: { slettes != nil }, set: { if !$0 { slettes = nil } })) {
-                if let p = slettes {
-                    sti.removeAll { $0 == .palett(p) }
-                    kontekst.angresteg("Slett palett") { kontekst.delete(p) }
-                }
-            })
-            .omdøpPalett($omdøpes)
-            .sheet(item: $vurderes) { PalettVurderingArk(palett: $0.palett) }
-            .sheet(item: $matrise) { KontrastmatriseArk(palett: $0.palett) }
+            .paletthandlinger($paletthandling) { p in sti.removeAll { $0 == .palett(p) } }
             .modifier(ÅpneDesignsystemFraLenke(iKolonne: iKolonne) { velg(.designsystem($0)) })
             // ⌘N (Arkiv › Ny palett).
             .onChange(of: arbeidsbenk.nyPalettForespurt) { _, ny in
@@ -610,10 +552,8 @@ struct EnkeltfargerRad: View {
                     }
                     .frame(width: 44, height: 44)
                     ForEach(farger.prefix(60)) { pf in
-                        FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
-                                  fjern: { slettEnkeltfarge(pf.id, i: kontekst) },
-                                  endre: { ny in endreEnkeltfarge(pf.id, til: ny, i: kontekst) },
-                                  palettFarge: pf, ekstraMeny: AnyView(FlyttMeny(farge: pf, fra: nil)))
+                        FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6, plass: .enkeltfarge,
+                                  palettFarge: pf)
                             .frame(width: 44, height: 44)
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
@@ -633,7 +573,6 @@ struct EnkeltfargerVisning: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Query(sort: \LagretFarge.opprettet, order: .reverse) private var lagrede: [LagretFarge]
     @State private var leggIPalett: [PalettFarge]?
-    @State private var navngis: LagretFarge?
     @Environment(\.iPalettkolonne) private var iKolonne
 
     private let rutenett = [GridItem(.adaptive(minimum: 96), spacing: 10)]
@@ -648,12 +587,7 @@ struct EnkeltfargerVisning: View {
                 .aspectRatio(1, contentMode: .fit)
                 ForEach(lagrede) { lagret in
                     let pf = lagret.palettFarge
-                    FargeRute(farge: pf.farge, navn: pf.navn,
-                              leggIPalett: { _ in leggIPalett = [pf] },
-                              fjern: { kontekst.angresteg("Slett farge") { kontekst.delete(lagret) } },
-                              navngi: { navngis = lagret },
-                              endre: { ny in kontekst.angresteg("Endre farge") { lagret.palettFarge = pf.endret(til: ny) } },
-                              palettFarge: pf)
+                    FargeRute(farge: pf.farge, navn: pf.navn, plass: .enkeltfarge, palettFarge: pf)
                         .aspectRatio(1, contentMode: .fit)
                         .onTapGesture {
                             arbeidsbenk.aktivFarge = pf.farge
@@ -686,13 +620,6 @@ struct EnkeltfargerVisning: View {
         }
         .sheet(isPresented: Binding(get: { leggIPalett != nil }, set: { if !$0 { leggIPalett = nil } })) {
             VelgPalettArk(farger: leggIPalett ?? [], tilbyEnkeltfarger: false)
-        }
-        .sheet(item: $navngis) { lagret in
-            NavngiArk(farge: lagret.palettFarge) { navn in
-                var pf = lagret.palettFarge
-                pf.navn = navn
-                lagret.palettFarge = pf
-            }
         }
     }
 }
@@ -728,10 +655,8 @@ struct PalettRad: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(dokument.farger) { pf in
-                        FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
-                                  fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
-                                  endre: { ny in dokument.endreFarge(pf.id, til: ny, i: kontekst) }, palettFarge: pf,
-                                  ekstraMeny: AnyView(FlyttMeny(farge: pf, fra: dokument)))
+                        FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6, plass: .palett(dokument),
+                                  palettFarge: pf)
                             .frame(width: 44, height: 44)
                             .onTapGesture { velg(pf.farge) }
                             .accessibilityAction(named: "Gjør til aktiv farge") { velg(pf.farge) }
@@ -763,7 +688,6 @@ struct PalettDetalj: View {
     @Bindable var dokument: PalettDokument
     @Environment(\.modelContext) private var kontekst
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
-    @State private var visSkala: PalettFarge?
     /// Hva palettvisningen viser: fargene, fargene i et lysmiljø (rett i rutene), eller skriftkontrasten mellom dem.
     /// Huskes mellom palettene.
     enum Visning: String { case farger, lys, skriftkontrast }
@@ -776,7 +700,6 @@ struct PalettDetalj: View {
     @State private var vurdering: PalettVurdering?
     @State private var kiArbeider = false
     @State private var kiFeil: String?
-    @State private var navngisPalettfarge: PalettFarge?
     @State private var slettSpørsmål = false
     /// Fargen det dras over (for å endre rekkefølge), markert med ramme.
     @State private var slippMål: UUID?
@@ -907,14 +830,7 @@ struct PalettDetalj: View {
                         FargeRute(farge: pf.farge, navn: pf.navn, visTekst: iLyset == nil,
                                   tekstfarge: skrift?.farge,
                                   skriftvurdering: skrift.map { Skriftfarger.vurdering(tekst: $0.farge, på: pf.farge) },
-                                  fjern: { kontekst.angresteg("Slett farge") { dokument.farger.removeAll { $0.id == pf.id } } },
-                                  navngi: { navngisPalettfarge = pf },
-                                  endre: { ny in dokument.endreFarge(pf.id, til: ny, i: kontekst) }, palettFarge: pf,
-                                  ekstraMeny: AnyView(Group {
-                                      Button("Lag toneskala", systemImage: "square.3.layers.3d") { visSkala = pf }
-                                      if !dokument.tekstfarger.isEmpty { SkriftfargeValgMeny(dokument: dokument, farge: pf) }
-                                      FlyttMeny(farge: pf, fra: dokument)
-                                  }))
+                                  plass: .palett(dokument), palettFarge: pf)
                             .aspectRatio(1, contentMode: .fit)
                             // Se i lys: fargen i lyset i nedre halvdel.
                             .overlay {
@@ -980,18 +896,8 @@ struct PalettDetalj: View {
                 ToolbarItem(placement: .secondaryAction) { designsystemknapp }
             }
         }
-        .sheet(item: $visSkala) { pf in
-            ToneskalaArk(grunnfarge: pf) { nye in dokument.farger += nye }
-        }
         .sheet(isPresented: $visLagreSom) {
             LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter, tekstfarger: dokument.tekstfarger))
-        }
-        .sheet(item: $navngisPalettfarge) { pf in
-            NavngiArk(farge: pf) { navn in
-                var f = dokument.farger
-                if let i = f.firstIndex(where: { $0.id == pf.id }) { f[i].navn = navn }
-                dokument.farger = f
-            }
         }
         .sheet(item: $vurdering) { VurderingArk(vurdering: $0, farger: dokument.farger) }
         .modifier(SlettPalettBekreftelse(navn: dokument.navn, vises: $slettSpørsmål, slett: slettPalett))
@@ -1400,27 +1306,19 @@ struct ToneskalaTrinn: View {
     }
 }
 
-/// «Flytt til» en annen palett. Uten `fra` (enkeltfarger) vises «Legg i palett».
-/// «Kopier til» er forbeholdt kopiering til andre programmer (`KopierTilMeny`).
+/// «Flytt til» en annen palett. «Kopier til» er forbeholdt kopiering til andre programmer (`KopierTilMeny`).
 struct FlyttMeny: View {
     let farge: PalettFarge
-    let fra: PalettDokument?
+    let fra: PalettDokument
     @Query(sort: \PalettDokument.opprettet, order: .reverse) private var paletter: [PalettDokument]
 
     var body: some View {
-        let andre = paletter.filter { $0.id != fra?.id }
+        let andre = paletter.filter { $0.id != fra.id }
         if !andre.isEmpty {
-            if fra == nil {
-                Menu("Legg i palett", systemImage: "plus.square.on.square") {
-                    ForEach(andre) { p in Button(p.navn.isEmpty ? String(localized: "Uten navn") : p.navn) { leggTil([farge], i: p) } }
-                }
-            }
-            if let fra {
-                Menu("Flytt til", systemImage: "arrow.right.square") {
-                    ForEach(andre) { p in
-                        Button(p.navn.isEmpty ? String(localized: "Uten navn") : p.navn) {
-                            if leggTil([farge], i: p) { fra.farger.removeAll { $0.id == farge.id } }
-                        }
+            Menu("Flytt til", systemImage: "arrow.right.square") {
+                ForEach(andre) { p in
+                    Button(p.navn.isEmpty ? String(localized: "Uten navn") : p.navn) {
+                        if leggTil([farge], i: p) { fra.farger.removeAll { $0.id == farge.id } }
                     }
                 }
             }
@@ -1445,7 +1343,7 @@ struct NavngiArk: View {
             Form {
                 Section {
                     HStack(spacing: 12) {
-                        FargeRute(farge: farge.farge, visTekst: false, hjørne: 8).frame(width: 56, height: 40)
+                        FargeRute(farge: farge.farge, visTekst: false, hjørne: 8, plass: .lagret).frame(width: 56, height: 40)
                         VStack(alignment: .leading, spacing: 1) {
                             Text(farge.farge.hex()).font(.callout.monospaced())
                             Text(Fargebeskrivelse.beskriv(farge.farge)).font(.caption).foregroundStyle(Color.sekundærTekst)
@@ -1760,6 +1658,14 @@ extension PalettFarge {
     }
 }
 
+func navngiEnkeltfarge(_ id: UUID, navn: String, i kontekst: ModelContext) {
+    for lagret in (try? kontekst.fetch(FetchDescriptor<LagretFarge>())) ?? [] where lagret.id == id {
+        var pf = lagret.palettFarge
+        pf.navn = navn
+        lagret.palettFarge = pf
+    }
+}
+
 func slettEnkeltfarge(_ id: UUID, i kontekst: ModelContext) {
     for lagret in (try? kontekst.fetch(FetchDescriptor<LagretFarge>())) ?? [] where lagret.id == id {
         kontekst.delete(lagret)
@@ -1768,7 +1674,7 @@ func slettEnkeltfarge(_ id: UUID, i kontekst: ModelContext) {
 
 /// «Slette «navn»?» med angremulighet, felles for palettlista og palettvisningen. Et varsel midt på skjermen, så det
 /// ikke er avhengig av hvor knappen eller kortet står.
-private struct SlettPalettBekreftelse: ViewModifier {
+struct SlettPalettBekreftelse: ViewModifier {
     let navn: String
     @Binding var vises: Bool
     let slett: () -> Void

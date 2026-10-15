@@ -1,5 +1,19 @@
 import FargeKjerne
+import SwiftData
 import SwiftUI
+
+/// Hvor en farge hører hjemme. Bestemmer lagringsvalgene i fargemenyen, så samme slags farge får de samme valgene
+/// overalt (se `Fargemeny`).
+enum Fargeplass {
+    /// Ikke lagret (harmoni, overgang, kamera, bilde, lys …): «Lagre som enkeltfarge» og «Legg i palett …».
+    case løs
+    /// Lagret som enkeltfarge: «Legg i palett …».
+    case enkeltfarge
+    /// I en palett: «Flytt til».
+    case palett(PalettDokument)
+    /// Lagret et annet sted og bare vist her (f.eks. i en fargevelger): ingen lagringsvalg.
+    case lagret
+}
 
 /// Fargeprøve som kan kopieres, dras og deles. Brukes overalt der farger vises.
 struct FargeRute: View {
@@ -17,7 +31,9 @@ struct FargeRute: View {
     var tekstfarge: Farge? = nil
     /// Hvor godt skriftfargen holder (vises som et lite «Aa»-merke når paletten har skriftfarger).
     var skriftvurdering: Skriftfarger.Vurdering? = nil
-    /// Valgfrie handlinger i kontekstmenyen (trykk og hold / høyreklikk).
+    /// Hvor fargen hører hjemme; gir lagringsvalgene i menyen (se `Fargemeny`).
+    var plass: Fargeplass = .løs
+    /// Egne lagringshandlinger i stedet for standarden for `plass` (f.eks. når fargen skal begrenses først).
     var lagre: ((Farge) -> Void)? = nil
     var leggIPalett: ((Farge) -> Void)? = nil
     /// «Vis farge»: åpner fargen i Studio (Farge). Standard er å vise nettopp denne fargen; sett en egen handling når
@@ -33,7 +49,9 @@ struct FargeRute: View {
     var endreTittel: String? = nil
     /// Når satt, dras fargen med navn (mellom paletter); ellers som ren farge.
     var palettFarge: PalettFarge? = nil
-    /// Ekstra menypunkter (f.eks. «Flytt til …»).
+    /// «Kopier verdier»: teksten som vises på prøven (f.eks. verdiene i Studio og harmonien).
+    var kopierVerdier: String? = nil
+    /// Valg som bare gjelder her (f.eks. «Lag toneskala»), etter Vis/Endre/Gi navn.
     var ekstraMeny: AnyView? = nil
 
     /// Valgene vises i en boble ved prøven (trykk og hold) i stedet for som kontekstmeny.
@@ -42,9 +60,6 @@ struct FargeRute: View {
     var valgBoble = false
     /// Ekstra valg nederst i boblen (får en funksjon som lukker boblen). På Mac brukes `ekstraMeny` i stedet.
     var bobleEkstra: ((@escaping () -> Void) -> AnyView)? = nil
-    @State private var visValg = false
-    @State private var visLagreSom = false
-    @State private var endrerIStudio = false
 
     var body: some View {
         #if os(macOS)
@@ -54,18 +69,9 @@ struct FargeRute: View {
         #else
         let boble = valgBoble
         #endif
+        let medMeny = rute.modifier(meny(boble: boble))
         if boble {
-            rute
-                .onLongPressGesture(minimumDuration: 0.35) { visValg = true }
-                .sensoryFeedback(.impact(weight: .medium), trigger: visValg) { _, ny in ny }
-                // Lukk boblen når ruten forsvinner, så den ikke blir hengende uten ruten den hørte til.
-                .onDisappear { visValg = false }
-                .popover(isPresented: $visValg, arrowEdge: .bottom) {
-                    FargeValgBoble(farge: farge, lagre: lagre, leggIPalett: leggIPalett, åpneIStudio: visFarge ? visIStudio : nil,
-                                   kilde: palettFarge?.kilde, ekstra: bobleEkstra?({ visValg = false })) { visValg = false }
-                        .presentationCompactAdaptation(.popover)
-                }
-                .accessibilityAction(named: "Valg for fargen") { visValg = true }
+            medMeny
         } else {
             #if os(macOS)
             medMeny.onDrag { dragLeverandør(farge: farge, palettFarge: palettFarge) } preview: {
@@ -81,43 +87,11 @@ struct FargeRute: View {
         }
     }
 
-    private var visIStudio: (Farge) -> Void { åpneIStudio ?? { Arbeidsbenk.delt.visIStudio($0) } }
-
-    private var medMeny: some View {
-        rute
-            .contextMenu {
-                if visFarge {
-                    Button("Vis farge", systemImage: "slider.horizontal.3") { visIStudio(farge) }
-                }
-                if endre != nil {
-                    Button("Endre i Studio …", systemImage: "slider.horizontal.3") { endrerIStudio = true }
-                }
-                if let navngi {
-                    Button("Gi navn …", systemImage: "character.cursor.ibeam", action: navngi)
-                }
-                if let lagre {
-                    Button("Lagre som enkeltfarge", systemImage: "plus.square") { lagre(farge) }
-                }
-                if let leggIPalett {
-                    Button("Legg i palett …", systemImage: "plus.square.on.square") { leggIPalett(farge) }
-                }
-                KopierMeny(farge: farge)
-                KopierTilMeny(farger: [palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)], navn: navn ?? "")
-                if let kilde = palettFarge?.kilde { Kildelenke(kilde: kilde) }
-                let delt = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
-                DelSomLenke(navn: navn ?? farge.hex()) { Lenkedeling.farge(delt) }
-                Button("Lagre som …", systemImage: "square.and.arrow.down") { visLagreSom = true }
-                if let ekstraMeny { ekstraMeny }
-                if let fjern {
-                    Button("Slett", systemImage: "trash", role: .destructive, action: fjern)
-                }
-            }
-            .sheet(isPresented: $visLagreSom) {
-                let pf = palettFarge ?? PalettFarge(navn: navn ?? "", farge: farge)
-                LagreSomArk(innhold: Lagringsinnhold(navn: pf.navn.isEmpty ? farge.hex() : pf.navn, farger: [pf]))
-            }
-            .endreIStudio(tittel: endreTittel ?? navn.flatMap { $0.isEmpty ? nil : $0 } ?? farge.hex(), vises: $endrerIStudio,
-                          farge: farge) { endre?($0) }
+    private func meny(boble: Bool) -> Fargemeny {
+        Fargemeny(farge: farge, navn: navn, palettFarge: palettFarge, plass: plass, lagre: lagre, leggIPalett: leggIPalett,
+                  åpneIStudio: visFarge ? (åpneIStudio ?? { Arbeidsbenk.delt.visIStudio($0) }) : nil,
+                  endre: endre, endreTittel: endreTittel, navngi: navngi, fjern: fjern, kopierVerdier: kopierVerdier,
+                  ekstraMeny: ekstraMeny, boble: boble, bobleEkstra: bobleEkstra)
     }
 
     private var form: UnevenRoundedRectangle {
@@ -219,6 +193,7 @@ struct KopierMeny: View {
 /// den trykkede fargen, og lagring/kopiering.
 struct FargeValgBoble: View {
     let farge: Farge
+    var navn: String = ""
     var lagre: ((Farge) -> Void)?
     var leggIPalett: ((Farge) -> Void)?
     var åpneIStudio: ((Farge) -> Void)? = nil
@@ -289,6 +264,8 @@ struct FargeValgBoble: View {
                 } label: {
                     Label("Kopier til", systemImage: "arrow.up.doc.on.clipboard")
                 }
+                let pf = PalettFarge(navn: navn, farge: farge)
+                DelSomLenke(navn: navn.isEmpty ? farge.hex() : navn) { Lenkedeling.farge(pf) }
                 if let kilde { Kildelenke(kilde: kilde) }
                 if let ekstra {
                     Divider()

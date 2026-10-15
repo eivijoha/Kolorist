@@ -13,8 +13,7 @@ struct PalettKolonne: View {
     /// Paletter som er foldet ut (id-er), husket mellom oppstarter.
     @AppStorage("palettkolonneÅpne") private var åpneTekst = ""
     @State private var nyPalett = false
-    @State private var vurderes: PalettDokument?
-    @State private var matrise: PalettDokument?
+    @State private var paletthandling: Paletthandling?
     @State private var nyttNavn = ""
 
     private var åpne: Set<String> { Set(åpneTekst.split(separator: ",").map(String.init)) }
@@ -56,8 +55,7 @@ struct PalettKolonne: View {
             }
         }
         .listStyle(.sidebar)
-        .sheet(item: $vurderes) { PalettVurderingArk(palett: $0.palett) }
-        .sheet(item: $matrise) { KontrastmatriseArk(palett: $0.palett) }
+        .paletthandlinger($paletthandling)
         // Ingen egen verktøylinje: på Mac blir knapper fra en lukket inspektør hengende igjen.
         .alert("Ny palett", isPresented: $nyPalett) {
             TextField("Navn", text: $nyttNavn)
@@ -143,14 +141,7 @@ struct PalettKolonne: View {
         .padding(.vertical, 2)
         .tarImotFarger { farger in flytt(farger, til: p, i: kontekst) }
         .contextMenu {
-            Button("Vurder paletten", systemImage: "text.magnifyingglass") { vurderes = p }
-                .disabled(p.farger.isEmpty)
-            Button("Skriftkontrast", systemImage: "a.square") { matrise = p }
-                .disabled(p.farger.count < 2)
-            Button("Skriv ut …", systemImage: "printer") { PalettUtskrift.skrivUt(p) }
-                .disabled(p.farger.isEmpty && p.gradienter.isEmpty)
-            Button("Lag designsystem", systemImage: "square.stack.3d.up") { arbeidsbenk.åpneDesignsystem(nyttDesignsystem(fra: p)) }
-                .disabled(p.farger.isEmpty)
+            PalettMeny(palett: p, utfør: { paletthandling = $0 }) { arbeidsbenk.åpneDesignsystem(nyttDesignsystem(fra: $0)) }
         }
         .accessibilityElement(children: .contain)
     }
@@ -159,11 +150,7 @@ struct PalettKolonne: View {
         LazyVGrid(columns: rutenett, alignment: .leading, spacing: 4) {
             ForEach(farger) { pf in
                 FargeRute(farge: pf.farge, navn: pf.navn, visTekst: false, hjørne: 6,
-                          fjern: {
-                              if let palett { palett.farger.removeAll { $0.id == pf.id } } else { slettEnkeltfarge(pf.id, i: kontekst) }
-                          },
-                          palettFarge: pf,
-                          ekstraMeny: palett.map { AnyView(FlyttMeny(farge: pf, fra: $0)) })
+                          plass: palett.map { .palett($0) } ?? .enkeltfarge, palettFarge: pf)
                     .aspectRatio(1, contentMode: .fit)
                     .onTapGesture { arbeidsbenk.aktivFarge = pf.farge }
                     .help(pf.navn.isEmpty ? pf.farge.hex() : "\(pf.navn) · \(pf.farge.hex())")

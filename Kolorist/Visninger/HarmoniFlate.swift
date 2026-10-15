@@ -109,7 +109,7 @@ struct HarmoniFlate: View {
         return FargeRute(farge: m.farge.farge, visTekst: false, hjørne: 0, visMerke: false,
                          lagre: { _ in lagre(m.farge) }, leggIPalett: { _ in leggIPalett(m.farge) },
                          åpneIStudio: { _ in Arbeidsbenk.delt.visIStudio(original) }, palettFarge: m.farge,
-                         ekstraMeny: AnyView(Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(m.tekst) }))
+                         kopierVerdier: m.tekst)
             .overlay {
                 if erGrunn && rammeRundtGrunn {
                     UnevenRoundedRectangle(topLeadingRadius: hjørner.venstre, topTrailingRadius: hjørner.høyre, style: .continuous)

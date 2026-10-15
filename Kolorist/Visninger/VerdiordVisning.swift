@@ -104,7 +104,9 @@ struct VerdiordVisning: View {
             }
             ForEach(forslag.farger) { f in
                 HStack(alignment: .top, spacing: 12) {
-                    FargeRute(farge: f.farge, visTekst: false, hjørne: 8).frame(width: 44, height: 44)
+                    FargeRute(farge: f.farge, navn: f.navn, visTekst: false, hjørne: 8,
+                              palettFarge: PalettFarge(navn: f.navn, farge: f.farge, opphav: .ki))
+                        .frame(width: 44, height: 44)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(f.navn.isEmpty ? "…" : f.navn).font(.headline)
                         Text(([f.rollenavn] + (f.spesifikasjon.map { [$0.familie.navn] } ?? []) + [f.farge.hex()] + kontrast(f, i: forslag)).joined(separator: " · "))
@@ -115,10 +117,7 @@ struct VerdiordVisning: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture { arbeidsbenk.aktivFarge = f.farge }
-                .contextMenu {
-                    Button("Vis farge", systemImage: "slider.horizontal.3") { arbeidsbenk.visIStudio(f.farge) }
-                    KopierMeny(farge: f.farge)
-                }
+                .fargemeny(f.farge, navn: f.navn, palettFarge: PalettFarge(navn: f.navn, farge: f.farge, opphav: .ki))
                 .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         } header: { Group {

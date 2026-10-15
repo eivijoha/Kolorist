@@ -321,7 +321,7 @@ struct LagretFargeArk: View {
                         lukk()
                     } label: {
                         VStack(spacing: 3) {
-                            FargeRute(farge: pf.farge, visTekst: false, hjørne: 8)
+                            FargeRute(farge: pf.farge, visTekst: false, hjørne: 8, plass: .lagret, palettFarge: pf)
                                 .frame(height: 52)
                                 .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(.secondary.opacity(0.3), lineWidth: 1))
                             if !pf.navn.isEmpty {

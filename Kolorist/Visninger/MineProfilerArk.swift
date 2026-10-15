@@ -109,7 +109,7 @@ struct MineProfilerArk: View {
                         Button { visKort = kort } label: { kortrad(kort) }
                             .buttonStyle(.plain)
                             .swipeActions { Button("Slett", systemImage: "trash", role: .destructive) { lys.slett(kort) } }
-                            .contextMenu { Button("Slett", systemImage: "trash", role: .destructive) { lys.slett(kort) } }
+                            .contextMenu { Button("Slett referansekort", systemImage: "trash", role: .destructive) { lys.slett(kort) } }
                     }
                     Button("Importer referanseverdier …", systemImage: "square.grid.3x2") { importererKort = true; importerer = true }
                     #if os(macOS)

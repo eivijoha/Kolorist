@@ -7,11 +7,7 @@ struct GradientSeksjon: View {
     @Environment(\.modelContext) private var kontekst
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Query(sort: \LagretGradient.endret, order: .reverse) private var gradienter: [LagretGradient]
-    @State private var omdøpes: LagretGradient?
-    @State private var nyttNavn = ""
     @State private var slettes: LagretGradient?
-    @State private var somPalett: LagretGradient?
-    @State private var lagresSom: LagretGradient?
 
     var body: some View {
         Listeseksjon("gradienter", tittel: "Gradienter") {
@@ -29,38 +25,12 @@ struct GradientSeksjon: View {
                         GradientKort(navn: g.navn, oppsett: oppsett)
                             .onTapGesture { arbeidsbenk.åpne(oppsett) }
                             .accessibilityAction { arbeidsbenk.åpne(oppsett) }
-                            .contextMenu {
-                                Button("Åpne i Overgang", systemImage: "arrow.up.forward.app") { arbeidsbenk.åpne(oppsett) }
-                                Button("Gi nytt navn …", systemImage: "character.cursor.ibeam") {
-                                    nyttNavn = g.navn
-                                    omdøpes = g
-                                }
-                                Button("Kopier CSS", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(oppsett.css) }
-                                GradientKopierTilMeny(gradient: Gradientkopi(farger: [oppsett.fra, oppsett.til], navn: g.navn))
-                                KopierTilMeny(farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) }, navn: g.navn,
-                                              tittel: "Kopier tonene til")
-                                LeggGradientIPalettMeny(oppsett: oppsett, navn: g.navn)
-                                let navn = g.navn
-                                DelSomLenke(navn: navn) { Lenkedeling.gradient(oppsett, navn: navn) }
-                                Button("Lagre farger som palett …", systemImage: "swatchpalette") { somPalett = g }
-                            Button("Lagre som …", systemImage: "square.and.arrow.down") { lagresSom = g }
-                                Button("Skriv ut …", systemImage: "printer") {
-                                    PalettUtskrift.skrivUt(Palett(navn: g.navn, farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) }),
-                                                           gradienter: [PalettGradient(navn: g.navn, oppsett: oppsett)])
-                                }
-                                Button("Slett gradient", systemImage: "trash", role: .destructive) { slettes = g }
-                            }
+                            .gradientmeny(oppsett, navn: g.navn, åpne: { arbeidsbenk.åpne(oppsett) }, giNavn: { navn in
+                                kontekst.angresteg("Gi gradienten navn") { g.navn = navn; g.endret = .now }
+                            }, slett: { slettes = g })
                         }
                     }
                 }
-            }
-        }
-        .alert("Gi gradienten navn", isPresented: Binding(get: { omdøpes != nil }, set: { if !$0 { omdøpes = nil } })) {
-            TextField("Navn", text: $nyttNavn)
-            Button("Avbryt", role: .cancel) {}
-            Button("Lagre") {
-                let rent = nyttNavn.trimmingCharacters(in: .whitespacesAndNewlines)
-                if let omdøpes, !rent.isEmpty { omdøpes.navn = rent; omdøpes.endret = .now }
             }
         }
         // Varsel midt på skjermen (ikke en popover som havner der kortet sto på iPad).
@@ -75,16 +45,6 @@ struct GradientSeksjon: View {
             #else
             Text("Rist for å angre.")
             #endif
-        }
-        .sheet(item: $lagresSom) { g in
-            if let oppsett = g.oppsett {
-                LagreSomArk(innhold: Lagringsinnhold(navn: g.navn, farger: oppsett.toner.map { PalettFarge(farge: $0, opphav: .overgang) },
-                                                     gradienter: [PalettGradient(navn: g.navn, oppsett: oppsett)]))
-            }
-        }
-        .sheet(item: $somPalett) { g in
-            VelgPalettArk(farger: (g.oppsett?.rader ?? []).flatMap { $0 }.map { PalettFarge(farge: $0, opphav: .overgang) },
-                          foreslåttNavn: g.navn)
         }
     }
 }

@@ -49,7 +49,7 @@ struct ICCSeksjon: View {
                         .textSelection(.enabled)
                 }
                 .contextMenu {
-                    Button("Kopier verdier") { Utklippstavle.kopierTekst(formatert(verdier)) }
+                    Button("Kopier verdier", systemImage: "doc.on.doc") { Utklippstavle.kopierTekst(formatert(verdier)) }
                 }
                 if let avvik = farge.avvik(i: profil, hensikt: hensikt), avvik > 0.02 {
                     Text("Utenfor profilens gamut (ΔE\u{2009}OK \(avvik, format: .number.precision(.fractionLength(3))))")

@@ -336,7 +336,8 @@ struct BildeVisning: View {
             } else {
             HStack(spacing: 12) {
                 FargeRute(farge: gjeldende ?? Farge(hex: "#808080")!, hjørne: 10,
-                          leggIPalett: { lagre = [PalettFarge(farge: $0, opphav: .bilde)] })
+                          leggIPalett: { lagre = [PalettFarge(farge: $0, opphav: .bilde)] },
+                          palettFarge: PalettFarge(farge: gjeldende ?? Farge(hex: "#808080")!, opphav: .bilde))
                     .frame(width: 88, height: 56)
                 LagreMeny(lagre: {
                     guard let f = arbeidsbenk.målinger.last ?? gjeldende else { return }

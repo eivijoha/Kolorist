@@ -220,7 +220,8 @@ private struct LevendeKamerafarge: View {
     var leggIPalett: (Farge) -> Void
 
     var body: some View {
-        FargeRute(farge: plukker.gjeldende ?? Farge(hex: "#808080")!, hjørne: 10, leggIPalett: leggIPalett)
+        let farge = plukker.gjeldende ?? Farge(hex: "#808080")!
+        FargeRute(farge: farge, hjørne: 10, leggIPalett: leggIPalett, palettFarge: PalettFarge(farge: farge, opphav: .kamera))
     }
 }
 

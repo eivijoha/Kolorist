@@ -59,15 +59,15 @@
     },
     "%@ %@ · Lc %lld": {
       "localizations": {
-        "nb": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ %2$@ · Lc %3$lld"
-          }
-        },
         "en": {
           "stringUnit": {
             "state": "translated",
+            "value": "%1$@ %2$@ · Lc %3$lld"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
             "value": "%1$@ %2$@ · Lc %3$lld"
           }
         }
@@ -6302,16 +6302,6 @@
         }
       }
     },
-    "Legg i palett": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add to palette"
-          }
-        }
-      }
-    },
     "Legg i palett …": {
       "localizations": {
         "en": {
@@ -8172,6 +8162,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The framed row is the gradient itself. Rows above are lighter, rows below darker."
+          }
+        }
+      }
+    },
+    "Rediger …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit …"
           }
         }
       }
