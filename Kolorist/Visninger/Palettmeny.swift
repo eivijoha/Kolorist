@@ -106,7 +106,7 @@ private struct Paletthandlinger: ViewModifier {
     private var ark: Binding<Paletthandling?> {
         Binding(get: {
             switch handling {
-            case .vurder, .skriftkontrast, .lagreSom, .vis3D: handling
+            case .vurder, .skriftkontrast, .lagreSom: handling
             default: nil
             }
         }, set: { if $0 == nil { handling = nil } })
@@ -121,12 +121,13 @@ private struct Paletthandlinger: ViewModifier {
                 case .lagreSom(let p):
                     LagreSomArk(innhold: Lagringsinnhold(navn: p.navn, farger: p.farger, gradienter: p.gradienter,
                                                          tekstfarger: p.tekstfarger))
-                case .vis3D(let p):
-                    Fargerom3DArk(kilde: .farger(navn: p.navn.isEmpty ? String(localized: "Uten navn") : p.navn,
-                                                 farger: p.farger.map(\.farge)))
                 default: EmptyView()
                 }
             }
+            .fargerom3D(Binding(get: {
+                guard case .vis3D(let p) = handling else { return nil }
+                return .farger(navn: p.navn.isEmpty ? String(localized: "Uten navn") : p.navn, farger: p.farger.map(\.farge))
+            }, set: { if $0 == nil { handling = nil } }))
             .omdøpPalett(binding { if case .omdøp(let p) = $0 { p } else { nil } })
             .modifier(SlettPalettBekreftelse(navn: handling?.palett.navn ?? "",
                                              vises: Binding(get: { if case .slett = handling { true } else { false } },

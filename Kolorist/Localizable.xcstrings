@@ -4296,16 +4296,6 @@
         }
       }
     },
-    "Hurtigvisning": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quick Look"
-          }
-        }
-      }
-    },
     "Hver farge får skriftfargen som leses best og når minst 4,5:1. Velg selv i fargens meny.": {
       "localizations": {
         "en": {
@@ -11170,6 +11160,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Show"
+          }
+        }
+      }
+    },
+    "Vis 3D-modell": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View 3D model"
           }
         }
       }

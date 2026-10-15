@@ -297,7 +297,7 @@ struct FargeEditor: View {
         #endif
         // Arket presenteres herfra, ikke fra menyen: iOS viser ikke ark fra et menyvalg som er i ferd med å lukkes.
         .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }
-        .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0, gamut: arbeidsbenk.gamut, startprofil: visOgsåProfil) }
+        .fargerom3D($vis3D, gamut: arbeidsbenk.gamut, startprofil: visOgsåProfil)
         .sheet(isPresented: Binding(get: { lagreFarger != nil }, set: { if !$0 { lagreFarger = nil } })) {
             VelgPalettArk(farger: lagreFarger ?? [], foreslåttNavn: lagreNavn)
         }

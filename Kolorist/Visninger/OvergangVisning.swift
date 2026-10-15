@@ -277,7 +277,7 @@ struct OvergangVisning: View {
         } message: {
             Text("Gradienten lagres under «Gradienter» i Paletter og kan åpnes igjen her.")
         }
-        .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0, gamut: arbeidsbenk.gamut) }
+        .fargerom3D($vis3D, gamut: arbeidsbenk.gamut)
         .sheet(isPresented: Binding(get: { leggIPalett != nil }, set: { if !$0 { leggIPalett = nil } })) {
             VelgPalettArk(farger: leggIPalett ?? [])
         }

@@ -447,7 +447,7 @@ struct HarmoniSeksjon: View {
                     ? strek.wrappedValue.toner(fraKulør: startKulør, spenn: tonebaneSpenn, antall: 64, gamut: gamut) : nil
                 vis3D = .farger(navn: harmoni.navn, farger: farger, bane: bane)
             }
-            .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0, gamut: gamut) }
+            .fargerom3D($vis3D, gamut: gamut)
             Button("Skriv ut harmonien …", systemImage: "printer") {
                 PalettUtskrift.skrivUt(Palett(navn: harmoni.navn, farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }))
             }

@@ -902,10 +902,10 @@ struct PalettDetalj: View {
         .sheet(isPresented: $visLagreSom) {
             LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter, tekstfarger: dokument.tekstfarger))
         }
-        .sheet(isPresented: $vis3D) {
-            Fargerom3DArk(kilde: .farger(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn,
-                                         farger: dokument.farger.map(\.farge)))
-        }
+        .fargerom3D(Binding(get: {
+            vis3D ? .farger(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn,
+                            farger: dokument.farger.map(\.farge)) : nil
+        }, set: { if $0 == nil { vis3D = false } }))
         .sheet(item: $vurdering) { VurderingArk(vurdering: $0, farger: dokument.farger) }
         .modifier(SlettPalettBekreftelse(navn: dokument.navn, vises: $slettSpørsmål, slett: slettPalett))
         .alert("KI", isPresented: Binding(get: { kiFeil != nil }, set: { if !$0 { kiFeil = nil } })) {

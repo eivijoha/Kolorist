@@ -181,7 +181,7 @@ struct MineProfilerArk: View {
                 } catch { feil = error.localizedDescription }
             }
             .sheet(item: $visKort) { ReferansekortDetalj(kort: $0) }
-            .sheet(item: $vis3D) { Fargerom3DArk(kilde: $0) }
+            .fargerom3D($vis3D)
             // Slipp filer på arket (Finder på Mac, Filer på iPad).
             .dropDestination(for: URL.self) { urler, _ in
                 let filer = urler.filter(\.isFileURL)

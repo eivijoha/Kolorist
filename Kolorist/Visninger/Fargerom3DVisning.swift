@@ -1,3 +1,6 @@
+#if os(macOS)
+import AppKit
+#endif
 import FargeKjerne
 import QuickLook
 import SwiftUI
@@ -349,7 +352,64 @@ struct Fargerom3DVisning: View {
     }
 }
 
-/// Ark med 3D-visningen: valg av rom og profil, deling som 3D-modell (USDZ) og Hurtigvisning (AR på iPhone og iPad).
+extension View {
+    /// Viser 3D-visningen for kilden: som ark på iPhone og iPad, i eget vindu på Mac.
+    func fargerom3D(_ kilde: Binding<Fargerom3DKilde?>, gamut: Gamut = .displayP3, startprofil: ICCProfil? = nil) -> some View {
+        modifier(Fargerom3DÅpner(kilde: kilde, gamut: gamut, startprofil: startprofil))
+    }
+}
+
+private struct Fargerom3DÅpner: ViewModifier {
+    @Binding var kilde: Fargerom3DKilde?
+    let gamut: Gamut
+    let startprofil: ICCProfil?
+    #if os(macOS)
+    @Environment(\.openWindow) private var åpneVindu
+    #endif
+
+    func body(content: Content) -> some View {
+        #if os(iOS)
+        content.sheet(item: $kilde) { Fargerom3DArk(kilde: $0, gamut: gamut, startprofil: startprofil) }
+        #else
+        content.onChange(of: kilde?.id) {
+            guard let k = kilde else { return }
+            kilde = nil
+            let id = UUID()
+            Fargerom3DVindu.åpne[id] = Fargerom3DVindu(kilde: k, gamut: gamut, startprofil: startprofil)
+            åpneVindu(id: Fargerom3DVindu.scene, value: id)
+        }
+        #endif
+    }
+}
+
+#if os(macOS)
+/// Mac: et vindu med 3D-visningen. Kilden kan ikke kodes til vindustilstand, så vinduet får en nøkkel til innholdet her
+/// (vinduet gjenopprettes ikke etter omstart; finnes ikke innholdet, lukkes det).
+struct Fargerom3DVindu {
+    static let scene = "fargerom3D"
+    static var åpne: [UUID: Fargerom3DVindu] = [:]
+    let kilde: Fargerom3DKilde
+    let gamut: Gamut
+    let startprofil: ICCProfil?
+}
+
+struct Fargerom3DVinduInnhold: View {
+    let id: UUID?
+    @Environment(\.dismiss) private var lukk
+
+    var body: some View {
+        if let id, let v = Fargerom3DVindu.åpne[id] {
+            Fargerom3DArk(kilde: v.kilde, gamut: v.gamut, startprofil: v.startprofil)
+                .onDisappear { Fargerom3DVindu.åpne[id] = nil }
+        } else {
+            Color.clear.frame(width: 1, height: 1).onAppear { lukk() }
+        }
+    }
+}
+#endif
+
+/// 3D-visningen: valg av rom og profil, deling som 3D-modell (USDZ) og AR på iPhone og iPad. Ark på iPhone og iPad,
+/// eget vindu på Mac (se `fargerom3D(_:gamut:startprofil:)`).
 struct Fargerom3DArk: View {
     let kilde: Fargerom3DKilde
     var gamut: Gamut = .displayP3
@@ -430,23 +490,24 @@ struct Fargerom3DArk: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .confirmationAction) { Button("Ferdig") { lukk() } }
+                #endif
                 ToolbarItemGroup(placement: .primaryAction) {
                     if let fil {
-                        Button {
-                            forhåndsvisning = fil
-                        } label: {
-                            #if os(iOS)
-                            Label("Se i AR", systemImage: "arkit")
-                            #else
-                            Label("Hurtigvisning", systemImage: "eye")
-                            #endif
-                        }
+                        // iPhone og iPad: AR Quick Look (modellen på bordet). Mac: 3D-modellen i eget vindu, uten AR.
+                        #if os(iOS)
+                        Button { forhåndsvisning = fil } label: { Label("Se i AR", systemImage: "arkit") }
+                        #else
+                        Button { NSWorkspace.shared.open(fil) } label: { Label("Vis 3D-modell", systemImage: "cube") }
+                        #endif
                         ShareLink(item: fil) { Label("Del som 3D-modell", systemImage: "square.and.arrow.up") }
                     }
                 }
             }
+            #if os(iOS)
             .quickLookPreview($forhåndsvisning)
+            #endif
             .onAppear {
                 if case .profil(let p) = kilde { øktprofilID = p.id } else if let startprofil { øktprofilID = startprofil.id }
                 rom = kilde.foretrukketRom ?? lagretRom

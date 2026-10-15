@@ -56,6 +56,16 @@ struct KoloristApp: App {
             }
         }
         #endif
+
+        #if os(macOS)
+        // 3D-visningen i eget vindu (ark på iPhone og iPad).
+        WindowGroup("Fargerom i 3D", id: Fargerom3DVindu.scene, for: UUID.self) { $id in
+            Fargerom3DVinduInnhold(id: id)
+        }
+        .defaultSize(width: 640, height: 760)
+        // Innholdet ligger bare i minnet, så vinduene gjenopprettes ikke ved neste oppstart.
+        .restorationBehavior(.disabled)
+        #endif
     }
 }
 
@@ -559,7 +569,7 @@ struct InnholdsVisning: View {
             try? await Task.sleep(for: .seconds(1))
             debug3D = Skjermbildemodus.vis3D()
         }
-        .sheet(item: $debug3D) { Fargerom3DArk(kilde: $0, gamut: arbeidsbenk.gamut) }
+        .fargerom3D($debug3D, gamut: arbeidsbenk.gamut)
         #endif
         #if os(macOS)
         .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
