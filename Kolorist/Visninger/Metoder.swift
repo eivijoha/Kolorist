@@ -212,6 +212,7 @@ private struct MetodeRad: View {
                         Label("Les kilden", systemImage: "arrow.up.right.square")
                     }
                     .font(.footnote)
+                    .labelStyle(Handlingsetikett())
                 }
             }
             .padding(.vertical, 2)

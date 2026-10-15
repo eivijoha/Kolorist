@@ -36,6 +36,7 @@ struct VerdiordVisning: View {
                 Button(action: foreslå) {
                     Label(samtale.forslag == nil ? "Foreslå palett" : "Nytt forslag", systemImage: "sparkles")
                 }
+                .labelStyle(Handlingsetikett())
                 .disabled(verdiord.trimmingCharacters(in: .whitespaces).isEmpty || samtale.arbeider)
             } header: { Group {
                 Text("Verdiord")

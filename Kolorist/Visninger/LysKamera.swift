@@ -361,6 +361,7 @@ struct KortkalibreringArk: View {
             }
             Section {
                 Button("Plasser hjørnene på nytt", systemImage: "arrow.uturn.backward") { resultat = nil }
+                    .labelStyle(Handlingsetikett())
             } footer: {
                 VStack(alignment: .leading, spacing: 6) {
                     KortForklaring("Under 3 er godt for et telefonkamera.") { Text("Tallene er kryssvalidert: hvert felt er forutsagt av en modell tilpasset uten det. Under 3 er godt for et telefonkamera. Kompensasjonen gjelder dette lyset og dette kameraet.") }

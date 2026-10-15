@@ -74,6 +74,7 @@ struct KopimålArk: View {
                         skjult = ""
                     }
                     .disabled(rekkefølge.isEmpty && skjult.isEmpty)
+                    .labelStyle(Handlingsetikett())
                 }
             }
             #if os(iOS)

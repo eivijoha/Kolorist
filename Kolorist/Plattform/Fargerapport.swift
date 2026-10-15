@@ -46,9 +46,13 @@ struct RapportValg: View {
 
     var body: some View {
         let innhold = rapport.innhold
-        Button("Kopier som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(rapport.rapport.tabulatortekst) }
-        DelSomLenke(navn: rapport.tittel, tittel: "Del rapporten som lenke") { innhold }
-        Button("Skriv ut rapporten …", systemImage: "printer") { PalettUtskrift.skrivUt(pdf: rapport.pdf, jobb: rapport.tittel) }
+        // I skjema og ark: ikonet i aksentfarge og teksten i vanlig tekstfarge (menyer tegner etiketten selv).
+        Group {
+            Button("Kopier som tabell", systemImage: "tablecells") { Utklippstavle.kopierTekst(rapport.rapport.tabulatortekst) }
+            DelSomLenke(navn: rapport.tittel, tittel: "Del rapporten som lenke") { innhold }
+            Button("Skriv ut rapporten …", systemImage: "printer") { PalettUtskrift.skrivUt(pdf: rapport.pdf, jobb: rapport.tittel) }
+        }
+        .labelStyle(Handlingsetikett())
     }
 }
 

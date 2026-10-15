@@ -90,6 +90,7 @@ struct MineProfilerArk: View {
                 }
                 Section {
                     Button("Importer …", systemImage: "square.and.arrow.down") { importererKort = false; importerer = true }
+                        .labelStyle(Handlingsetikett())
                     VStack(alignment: .leading, spacing: 6) {
                         #if os(macOS)
                         Text("Du kan også dra filer hit.")
@@ -112,6 +113,7 @@ struct MineProfilerArk: View {
                             .contextMenu { Button("Slett referansekort", systemImage: "trash", role: .destructive) { lys.slett(kort) } }
                     }
                     Button("Importer referanseverdier …", systemImage: "square.grid.3x2") { importererKort = true; importerer = true }
+                        .labelStyle(Handlingsetikett())
                     #if os(macOS)
                     KortForklaring("Referansekort gir nøyaktig lyskompensasjon i Utplukk.") { Text("Referansekort med kjente verdier gir nøyaktig lyskompensasjon i Utplukk – på iPhone og iPad, og på Mac med iPhone som kamera (Continuity) – og synkroniseres mellom enhetene. Verdiene følger ikke med appen; importer filen som hører til kortet ditt: CGATS (.txt, .cgats, .it8), CxF3, CSV/TSV eller en tabell med Lab-, XYZ- eller spektralverdier. Spektre gir fasiten i ethvert lys.") }
                         .forklaring()

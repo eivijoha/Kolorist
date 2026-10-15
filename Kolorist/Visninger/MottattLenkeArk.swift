@@ -98,6 +98,7 @@ struct MottattLenkeArk: View {
                 if let rapport = innhold.rapport { rapportseksjon(rapport) }
 
                 Section { handlinger }
+                    .labelStyle(Handlingsetikett())
             }
             .formStyle(.grouped)
             .navigationTitle("Delt med deg")
