@@ -77,7 +77,7 @@
     <p class="dempet">Kilde: Etablert trykkteknikk; søket er utviklet for Kolorist</p>
     
     <h2 id="harmonier">Fargesirkler og harmonier</h2>
-    <p>Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB, Munsell eller Herings motfargesirkel. Med Munsell brukes ekte Munsell-farger i bokas trinn (kulør 2,5, valør 1, kroma 2). RYB- og Hering-sirklene er stykkevis lineære avbildninger laget for appen. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.</p>
+    <p>Komplementær, split-komplementær, analog (også med komplementær aksent), triade, kvadrat, dobbelt komplementær og jevn fordeling beregnes som vinkler på valgt fargesirkel: OKLCH, CIE LCH, HSL, RYB eller Herings motfargesirkel. RYB- og Hering-sirklene er stykkevis lineære avbildninger laget for appen. Naturlig lyshetsrekkefølge flytter lysheten etter kulørens egen lyshet – lysheten der kuløren er mest mettet innenfor gamut – med 60 % av forskjellen fra grunnfargen (etter Judds prinsipp om naturlig fargeorden); omvendt rekkefølge speiler forskyvningen.</p>
     <p class="dempet">Kilde: Klassisk fargelære (Johannes Itten for RYB); avbildningene er utviklet for Kolorist</p>
     
     <h2 id="ki">Fargesemantikk og KI</h2>
@@ -87,10 +87,6 @@
     <h2 id="lrv">Lysrefleksjonsverdi og luminanskontrast</h2>
     <p>LRV er CIE-luminansen Y i prosent – andelen synlig lys en flate reflekterer, slik malingsprodusentene oppgir den. Kolorist regner den for fargen slik den vises i sRGB. Kontrast mellom flater oppgis som forskjell i LRV-poeng (BS 8300: minst 30) og som luminanskontrast (Y₁ − Y₂)/(Y₁ + Y₂) etter NS 11001 (0,4 for viktige flater, 0,8 for skilt).</p>
     <p class="dempet">Kilde: CIE 15 (luminansfaktor Y); BS 8300-2:2018; NS 11001-1:2018 og Byggforsk 220.300</p>
-
-    <h2 id="munsell">Munsell-systemet</h2>
-    <p>Kulør, valør og kroma etter Munsell. Omregningen bruker renotasjonsdataene fra 1943 (CIE xyY under lyskilde C, offentlige data) med interpolasjon i kroma, kulør og valør, Bradford-tilpasning til D65, og ASTM D1535 for sammenhengen mellom valør og luminans. Notasjonen er en tilnærming; fysiske Munsell-prøver kan avvike.</p>
-    <p class="dempet">Kilde: <a href="https://doi.org/10.1364/JOSA.33.000385">Newhall, Nickerson &amp; Judd: «Final Report of the O.S.A. Subcommittee on the Spacing of the Munsell Colors», JOSA 33(7), 1943</a>; ASTM D1535</p>
 
     <h2 id="cam16">CAM16 og CAT16 – fargeinntrykk i ulikt lys</h2>
     <p>En modell for hvordan farger oppleves under gitte forhold: lysets farge, hvor sterkt det er, og omgivelsene. «Se i lys» regner først ut flaten under lyset – spektralt når lysets spekter er kjent, med et glatt anslått refleksjonsspekter for fargen – og deretter inntrykket i rommet, der øyet bare delvis tilpasser seg lysets farge og svakt lys gir mindre fargerike farger. Til slutt vises den skjermfargen som gir samme lyshet og fargerikhet. Kompensasjon for lys bruker CAT16 med full tilpasning til dagslys (D65).</p>

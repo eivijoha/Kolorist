@@ -9,7 +9,7 @@ visualiseringer som gjør det usynlige synlig.
 - **For hvem:** designere og arkitekter som vil forstå hvorfor farger oppfører seg som de gjør, studenter (Institutt for
   design, NTNU) og alle som bruker Kolorist og lurer på «hvorfor».
 - **Lære ved å gjøre** (Albers): hvert tema bygger på øvelser i ekte verktøy, ikke tekst. Teorien kommer etter erfaringen.
-- **Bygger på det appen kan:** OKLab/OKLCH, CIELab, Munsell, ICC og gamut, betraktningsforhold og spektre, fargesyn,
+- **Bygger på det appen kan:** OKLab/OKLCH, CIELab, ICC og gamut, betraktningsforhold og spektre, fargesyn,
   kontrast, harmonier og monokrome serier. Modulen er en vei inn i verktøyene, ikke et eget produkt ved siden av.
 - **Vitenskap og tradisjon skilles tydelig:** fargevitenskap (CIE, fargeutseendemodeller) presenteres som målbar
   kunnskap; Goethe, Itten og andre som perspektiver og tradisjon.
@@ -65,7 +65,7 @@ Ni kapitler i en naturlig rekkefølge – men hvert kan stå alene og nås fra v
 ### 4. Fargerom i 3D
 
 - **Kjerne:** Farge har tre dimensjoner. Fargerom er former – og formen avslører hvordan rommet er bygget.
-- **Visualiseringer:** interaktive 3D-modeller av OKLab/OKLCH, CIELab, Munsell-treet, sRGB-kuben, HSL/HSB, Runges
+- **Visualiseringer:** interaktive 3D-modeller av OKLab/OKLCH, CIELab, sRGB-kuben, HSL/HSB, Runges
   fargekule (historisk); gamut-skall for sRGB, P3 og CMYK-profiler; palettens farger som punkter i rommet; den
   monokromatiske flaten som et snitt; harmonier som punkter rundt kuløraksen.
 - **Øvelser:**
@@ -127,7 +127,7 @@ Ni kapitler i en naturlig rekkefølge – men hvert kan stå alene og nås fra v
 
 - **Kjerne:** Fargesirkler og fargesystemer er ulike svar på hva «motsatt» og «jevnt» betyr.
 - **Historie:** Newton, Goethe, Runge, Munsell (valør og kroma), Ostwald (skyggeserier), Itten (sju kontraster), Hering.
-- **Visualiseringer:** samme farge og dens komplementærfarge i seks sirkler (OKLCH, CIE LCH, HSL, RYB, Munsell,
+- **Visualiseringer:** samme farge og dens komplementærfarge i seks sirkler (OKLCH, CIE LCH, HSL, RYB,
   Hering, Goethe); Ittens kontraster for en palett som et diagram; arealbalanse etter lyshet.
 - **Øvelser:**
   - *Finn komplementærfargen i fem sirkler* – hvorfor blir svaret ulikt?
@@ -156,7 +156,7 @@ Ni kapitler i en naturlig rekkefølge – men hvert kan stå alene og nås fra v
 | Planck- og dagslyskurve | Lyskildenes plass; CCT og Duv | 3, 7 | Sortlegemeformel; CIE-dagslys; målt lys |
 | MacAdam-ellipser | At xy ikke er perseptuelt jevnt | 3 | Publiserte ellipser |
 | Forvekslingslinjer | Hvilke farger som forveksles ved protan, deutan, tritan | 5 | Kopunktale punkter (u′v′/xy), linjer gjennom palettens farger |
-| 3D-fargelegemer | OKLab, CIELab, Munsell, sRGB-kube, HSL, Runges kule | 4, 8 | Gitter i fargerommet; mesh av gamut-kanten |
+| 3D-fargelegemer | OKLab, CIELab, sRGB-kube, HSL, Runges kule | 4, 8 | Gitter i fargerommet; mesh av gamut-kanten |
 | Gamut-skall i 3D | Hva skjerm og trykk kan vise | 4, 9 | `maksKroma` per lyshet og kulør; ICC-prøving for CMYK |
 | Snittplan | Monokromatisk flate som snitt | 4, 8 | Kuløren fra Monokromatisk |
 | Bakgrunnsforskyvning | Simultankontrast beregnet | 6 | Fargeutseendemodell (CAM16) med bakgrunn |

@@ -183,6 +183,6 @@ APCA (Myndex) er tatt ut av Kolorist i 1.3.1 og av FargeKjerne: lisensen gjelder
 kommersiell bruk krever egen avtale, og koden kan revideres av Myndex. Kolorist skal bare bygge på åpne standarder og
 metoder (WCAG 2, CIE, ICC, LRV-standardene m.m.) og egne metoder. Tekst på fargeflater velges etter WCAG 2-kontrast.
 
-Munsell er tatt ut samme dag (1.3.1): navnet er et registrert varemerke (X-Rite), og omtrent halvparten av
-renotasjonsdataene i appen var ekstrapolerte verdier med uklart opphav (RITs `all.dat`). Andres varemerker brukes ikke
-som navn på funksjoner. Se `Dokumentasjon/Munsell-gjeninnforing.md`.
+Fargemodellen med kulør, valør og kroma er tatt ut samme dag (1.3.1): navnet var et registrert varemerke, og omtrent
+halvparten av dataene var ekstrapolerte verdier med uklart opphav. Andres varemerker brukes ikke som navn på funksjoner.
+Se `Dokumentasjon/HVC-gjeninnforing.md`.

@@ -13,7 +13,7 @@ som ligger i App Store:
 | Mappe | Innhold |
 |---|---|
 | `1.0/` | Versjon 1.0 – det som sendes til App Review først |
-| `1.1/` | Versjon 1.1 – i tillegg fargebiblioteker (ASE/ACO/ACB) og «Mine fargerom», Munsell som fargemodell, LRV og kontrast mellom flater |
+| `1.1/` | Versjon 1.1 – i tillegg fargebiblioteker (ASE/ACO/ACB) og «Mine fargerom», en fargemodell med kulør, valør og kroma, LRV og kontrast mellom flater |
 
 Publiser **innholdet** i mappen for versjonen som er godkjent i App Store (se «Publisering på kolorist.no»).
 Ny versjon: kopier forrige mappe (`cp -R 1.1 1.2`) og oppdater tekstene der. Rett feil i alle mapper

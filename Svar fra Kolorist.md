@@ -47,21 +47,16 @@ varemerker som navn på funksjoner. Det gir to brytende endringer i FargeKjerne 
 - Om WCAG 3: dere har rett i at APCA ikke er vedtatt. Når APCA ikke lenger er med, faller kommentaren bort. Forelesning 5
   kan omtale APCA som en kandidat som ble tatt ut av WCAG 3-utkastene i 2023, uten å bruke algoritmen.
 
-### Munsell — **tatt ut** (nytt, påvirker Kolorist underviser)
+### Fargemodellen med kulør, valør og kroma — **tatt ut** (påvirker Kolorist underviser)
 
-- Munsell® er et registrert varemerke (X-Rite), og `Munsell.json` var RITs `all.dat`. Omtrent halvparten av verdiene der
-  er ekstrapolert, med uklart opphav og uten lisens.
-- Fjernet: typen `Munsell`, `Farge.munsell`, `Farge(munsell:)`, `Farge.innenforMunsell`, `Fargemodell.munsell`,
-  `Fargesirkel.munsell` med `trinn` og `avrundet(_:)`, notasjonen i `Fargetolk`, `DeltFarge.munsell` (`mu`) og ressursen.
-- **Lenker:** `DeltVisning(fargemodell: "munsell")` ignoreres, så Studio beholder modellen som er valgt. En
-  harmonilenke med sirkelen `munsell` viser fargene, men med sirkelen brukeren har valgt. Farger lagret med Munsell åpnes
-  uten representasjon. Ta `munsell` ut av lenkene dere lager. Fargemodellene er nå `okLCH`, `okLab`, `cieLCH`, `cieLab`,
-  `hsb`, `hsl`, `rgb`, `displayP3`, `cmyk`.
-- **Forelesningene:** læringsmodulen (forelesning 4 og 8) har Munsell-treet, Munsells sirkel og Munsell som
-  fargemodell. Historien (A. H. Munsell, valør og kroma) kan fortsatt fortelles; det er bruken av navnet som funksjon og de
-  ekstrapolerte dataene som er problemet. Skal dere vise et kulør–valør–kroma-rom, bør det bygge på de målte dataene i
-  Newhall, Nickerson & Judd (1943) og Judd & Wyszecki (1956), ha et nøytralt navn og et varemerkeforbehold. Se
-  `Dokumentasjon/Munsell-gjeninnforing.md` for vilkårene. Det er Eivinds avgjørelse om forelesningene skal endres.
+- Navnet var et registrert varemerke, og omtrent halvparten av dataene var ekstrapolerte verdier med uklart opphav.
+- Fjernet fra FargeKjerne: typen, fargemodellen og fargesirkelen for den (med `Fargesirkel.trinn` og `avrundet(_:)`),
+  notasjonen i `Fargetolk`, feltet `mu` i `DeltFarge` og datafila.
+- **Lenker:** en lenke som ber om den gamle fargemodellen eller fargesirkelen, gir modellen og sirkelen brukeren har valgt.
+  Farger lagret med den åpnes uten representasjon. Ta den ut av lenkene dere lager. Fargemodellene er nå `okLCH`, `okLab`,
+  `cieLCH`, `cieLab`, `hsb`, `hsl`, `rgb`, `displayP3`, `cmyk`.
+- **Forelesningene:** det er Eivinds avgjørelse om forelesningene skal endres; se `Dokumentasjon/HVC-gjeninnforing.md`
+  for vilkårene om modellen skal brukes igjen.
 
 ### CIE-data (CC BY-SA 4.0)
 
@@ -99,7 +94,7 @@ let url = try Delingslenke.appLenke(innhold)   // kolorist://l#… – åpner ap
 |---|---|---|
 | `fane` | `studio`, `paletter`, `overgang`, `utplukk`, `vurdering` | Fanen som vises |
 | `studiomodus` | `farge`, `harmoni` | Modus i Studio |
-| `fargemodell` | `okLCH`, `okLab`, `cieLCH`, `cieLab`, `hsb`, `hsl`, `rgb`, `cmyk` (`munsell` er tatt ut i 0.4.0) | Fargemodellen i Studio |
+| `fargemodell` | `okLCH`, `okLab`, `cieLCH`, `cieLab`, `hsb`, `hsl`, `rgb`, `cmyk` | Fargemodellen i Studio |
 | `vurdering` | `kontrast`, `sammenlign`, `fargesyn`, `lys` | Delen av Vurdering |
 | `bakgrunn` | en farge | Bakgrunnen i kontrastsjekken (forgrunnen er aktiv farge) |
 | `bruk` | `true` | Innholdet tas i bruk direkte: farge → aktiv farge, harmoni → Studio › Harmoni med samme oppsett, gradient → Overgang. **Paletter vises alltid i ark** (lagres bare når brukeren velger det). Uten `bruk`: arket som før, og visningstilstanden settes i tillegg. |

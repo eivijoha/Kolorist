@@ -57,10 +57,10 @@
   };
   const SIRKLER = en ? {
     okLCH: "OKLCH (perceptual)", cieLCH: "CIE LCH (Lab)", hsl: "HSL (RGB screen)", ryb: "RYB (artist's wheel)",
-    munsell: "Munsell", hering: "Hering (opponent colours)",
+    hering: "Hering (opponent colours)",
   } : {
     okLCH: "OKLCH (perseptuell)", cieLCH: "CIE LCH (Lab)", hsl: "HSL (RGB-skjerm)", ryb: "RYB (kunstnersirkel)",
-    munsell: "Munsell", hering: "Hering (motfarger)",
+    hering: "Hering (motfarger)",
   };
 
   // ---------- Lesing av lenken ----------
@@ -208,7 +208,6 @@
     if (hex(f)) rad("Hex (sRGB)", hex(f));
     rad("OKLCH", `${tall(L * 100, 0)}% ${tall(C, 3)} ${tall(H, 0)}°`);
     rad("CIELab (D50)", `${tall(lab[0], 1)} ${tall(lab[1], 1)} ${tall(lab[2], 1)}`);
-    if (f.mu && f.rn !== "Munsell") rad("Munsell", tekst(f.mu));
     const q = f.q && typeof f.q === "object" ? f.q : null;
     if (q) {
       if (q.p) rad(T.produsent, tekst(q.p));

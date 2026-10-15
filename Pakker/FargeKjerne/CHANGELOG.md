@@ -21,13 +21,11 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## 0.4.0 – 2026-10-10
 
-- **Munsell er fjernet (brytende endring).** Munsell er et registrert varemerke (X-Rite), og renotasjonsdataene i
-  `Munsell.json` var RITs `all.dat`, der omtrent halvparten er ekstrapolerte verdier med uklart opphav. Fjernet: typen
-  `Munsell`, `Farge.munsell`, `Farge(munsell:alfa:)`, `Farge.innenforMunsell(_:alfa:gamut:)`, `Fargemodell.munsell`,
-  `Fargesirkel.munsell`, `Fargesirkel.trinn` og `Fargesirkel.avrundet(_:)` (bare brukt av Munsell), `DeltFarge.munsell`
-  (nøkkel `mu`, hoppes over i eldre lenker), Munsell-notasjon i `Fargetolk` og ressursen `Munsell.json`. Lagrede farger
-  og lenker med `modell:munsell` leses som farger uten representasjon; `DeltVisning.fargemodell = "munsell"` gir
-  standardmodellen.
+- **Fargemodellen med kulør, valør og kroma er fjernet (brytende endring).** Den bygde på et varemerke og på data med
+  uklart opphav (omtrent halvparten ekstrapolerte verdier). Fjernet: typen for modellen, fargemodellen og fargesirkelen
+  for den, `Fargesirkel.trinn` og `Fargesirkel.avrundet(_:)` (bare brukt av den), notasjonen i `Fargetolk`, feltet `mu` i
+  `DeltFarge` (hoppes over i eldre lenker) og datafila. Lagrede farger og lenker med den gamle modellen leses som farger uten
+  representasjon, og en lenke som ber om den, gir standardmodellen.
 - **Datalisenser:** `DATALISENSER.md` lister dataene i pakken og lisensene deres. CIE-dataene i `CIEData.json` er
   © CIE under CC BY-SA 4.0; uttrekket er publisert på https://kolorist.no/data/cie/ under samme lisens.
 - **APCA er fjernet (brytende endring).** APCA er lisensbelagt (Myndex; bare nettinnhold under W3C-avtalen, kommersiell

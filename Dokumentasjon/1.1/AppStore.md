@@ -7,7 +7,7 @@ Tekster klare til å lime inn for versjon 1.1. Én app-post med universelt kjøp
 Tegngrensene står i parentes, og alle tekstene er innenfor. Tekstene og skjermbildene for 1.0 ligger uendret i
 `Dokumentasjon/1.0/`.
 
-Nytt i 1.1 i forhold til 1.0-tekstene: «Nytt i denne versjonen» for iOS og macOS, Munsell, LRV, fargebiblioteker,
+Nytt i 1.1 i forhold til 1.0-tekstene: «Nytt i denne versjonen» for iOS og macOS, LRV, fargebiblioteker,
 palettkolonne, dra og slipp, plukkede farger, angre og tilpasning av paneler – og «colour» også i de engelske
 overskriftene.
 
@@ -65,7 +65,7 @@ Fargepaletter for designere
 **Reklametekst (170)** – kan endres uten ny versjon
 
 ```
-Bygg paletter i OKLCH, CMYK med ICC-profiler og Munsell, kontroller kontrast og fargesyn-problematikk, og kopier fargene rett inn i annen design-programvare.
+Bygg paletter i OKLCH og CMYK med ICC-profiler, kontroller kontrast og fargesyn-problematikk, og kopier fargene rett inn i annen design-programvare.
 ```
 
 **Nytt i denne versjonen (4000)**
@@ -74,7 +74,6 @@ Bygg paletter i OKLCH, CMYK med ICC-profiler og Munsell, kontroller kontrast og 
 Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og gjør det raskere å jobbe med paletter.
 
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
-• Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
 • Harmoni: se hele harmonier i valgt fargerom med verdier eller tonenavn, med grunnfarger tydelig merket.
 • LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 – for bygg og interiør.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
@@ -96,12 +95,12 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 Kolorist er et fargeverktøy for designere og arkitekter på iPhone, iPad og Mac. Bygg paletter på tvers av fargerom, med perseptuelt jevne overganger, kontrastsjekk, simulering av fargesyn, ICC-profiler og egne fargebiblioteker – og få fargene inn i verktøyene du allerede bruker.
 
 ALLE FARGEROM
-• Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst ICC-profil
 • Varsel når fargen er utenfor fargeområdet – farger kartlegges inn i fargerommet uten å klippes
 • Angi CMYK eller RGB direkte i en valgt ICC-profil
 • Rene CMYK-verdier: grått innslag flyttes til sort (UCR/GCR)
-• Feltet for fargeverdi forstår hex, CSS-farger, Munsell-notasjon og vanlige beskrivelser som «dyp havblå»
+• Feltet for fargeverdi forstår hex, CSS-farger og vanlige beskrivelser som «dyp havblå»
 
 FARGEBIBLIOTEKER OG ICC-PROFILER
 • Importer egne fargekart i ASE, ACO eller ACB (Adobe Color Book) med navngitte toner
@@ -114,7 +113,7 @@ OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
 • CSS-gradient i oklab med sRGB-reserve – lineær, radiell eller konisk
 • Toneskalaer fra 50 til 950
-• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB
+• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Hering, HSL eller RYB
 
 TILGJENGELIGHET OG FARGESYN
 • WCAG 2.2-kontrast: AA og AAA, stor tekst og grafikk, og «Rett opp» som justerer fargen til den består
@@ -150,7 +149,7 @@ SIRI OG SNARVEIER
 Lag palett fra verdiord, beskriv en farge, lag overgang, konverter farge og sjekk kontrast.
 
 ÅPENT OM METODENE
-Hver del av appen viser hvilke metoder den bygger på – OKLab, CSS Color 4, CIEDE2000, WCAG, LRV, Munsell, simulering av fargesyn og ICC – med kilde og forklaring.
+Hver del av appen viser hvilke metoder den bygger på – OKLab, CSS Color 4, CIEDE2000, WCAG, LRV, simulering av fargesyn og ICC – med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -161,7 +160,7 @@ Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet e
 **Nøkkelord (100, kommaseparert uten mellomrom)**
 
 ```
-farge,palett,fargekart,OKLCH,CMYK,ICC,Munsell,LRV,kontrast,WCAG,overgang,pipette,harmoni,fargeblind
+farge,palett,fargekart,OKLCH,CMYK,ICC,LRV,kontrast,WCAG,overgang,pipette,harmoni,fargeblind
 ```
 
 ---
@@ -177,7 +176,7 @@ Colour palettes for designers
 **Promotional text (170)**
 
 ```
-Build palettes in OKLCH, CMYK with ICC profiles and Munsell, check for contrast and colour vision challenges, and copy colours straight into other design software.
+Build palettes in OKLCH and CMYK with ICC profiles, check for contrast and colour vision challenges, and copy colours straight into other design software.
 ```
 
 **What’s New in This Version (4000)**
@@ -186,7 +185,6 @@ Build palettes in OKLCH, CMYK with ICC profiles and Munsell, check for contrast 
 Kolorist 1.1 reaches more disciplines – including architecture and interiors – and makes working with palettes faster.
 
 • Colour libraries: import your own colour charts in ASE, ACO or ACB with named tones. Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names.
-• Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell and Hering colour wheels for harmonies.
 • Harmony: see the whole harmony in the chosen colour space with values or tone names, with the base colour clearly marked.
 • LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 – for buildings and interiors.
 • Rec. 2020 and ProPhoto RGB as built-in colour spaces.
@@ -208,12 +206,12 @@ Kolorist 1.1 reaches more disciplines – including architecture and interiors �
 Kolorist is a colour tool for designers and architects on iPhone, iPad and Mac. Build palettes across colour spaces, with perceptually even gradients, contrast checks, colour vision simulation, ICC profiles and your own colour libraries – and get your colours into the tools you already use.
 
 EVERY COLOUR SPACE
-• Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK or any ICC profile
 • Out-of-gamut warnings – colours are gamut-mapped, never clipped
 • Enter CMYK or RGB directly in a chosen ICC profile
 • Clean CMYK values: grey components move to black (UCR/GCR)
-• The colour field understands hex, CSS colours, Munsell notation and plain descriptions like “deep ocean blue”
+• The colour field understands hex, CSS colours and plain descriptions like “deep ocean blue”
 
 COLOUR LIBRARIES AND ICC PROFILES
 • Import your own colour charts in ASE, ACO or ACB (Adobe Color Book) with named tones
@@ -226,7 +224,7 @@ GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • CSS gradients in oklab with an sRGB fallback – linear, radial or conic
 • Tone scales from 50 to 950
-• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel
+• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Hering, HSL or RYB colour wheel
 
 ACCESSIBILITY AND COLOUR VISION
 • WCAG 2.2 contrast: AA and AAA, large text and graphics, and auto-fix that adjusts the colour until it passes
@@ -262,7 +260,7 @@ SIRI AND SHORTCUTS
 Create a palette from value words, describe a colour, create a gradient, convert a colour and check contrast.
 
 OPEN ABOUT METHODS
-Every part of the app shows the methods it builds on – OKLab, CSS Color 4, CIEDE2000, WCAG, LRV, Munsell, colour vision simulation and ICC – with source and explanation.
+Every part of the app shows the methods it builds on – OKLab, CSS Color 4, CIEDE2000, WCAG, LRV, colour vision simulation and ICC – with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -273,7 +271,7 @@ Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported 
 **Keywords (100)**
 
 ```
-colour,color,palette,picker,OKLCH,CMYK,ICC,Munsell,LRV,contrast,WCAG,gradient,eyedropper,colorblind
+colour,color,palette,picker,OKLCH,CMYK,ICC,LRV,contrast,WCAG,gradient,eyedropper,colorblind
 ```
 
 ---
@@ -292,7 +290,7 @@ markedsførings-URL er de samme som for iOS.
 **Reklametekst (170)**
 
 ```
-Bygg paletter i OKLCH, CMYK med ICC-profiler og Munsell, kontroller kontrast og fargesyn, plukk farger fra hele skjermen og dra dem rett inn i annen design-programvare.
+Bygg paletter i OKLCH og CMYK med ICC-profiler, kontroller kontrast og fargesyn, plukk farger fra hele skjermen og dra dem rett inn i annen design-programvare.
 ```
 
 **Nytt i denne versjonen (4000)**
@@ -303,7 +301,6 @@ Kolorist 1.1 er laget for flere fagfelt – også arkitektur og interiør – og
 • Paletter for hånden: i et bredt vindu har du paletter ved siden av verktøyene hele tiden.
 • Dra og slipp: flytt farger fra paletter dit du jobber – og hent farger inn fra systemets fargepanel og andre programmer.
 • Fargebiblioteker: importer egne fargekart i ASE, ACO eller ACB med navngitte toner. Farger, toner og harmonier låses til bibliotekets toner, og Studio viser tonenavnene.
-• Munsell: ny fargemodell med kulør i steg på 2,5, valør og kroma – og Munsells og Herings fargesirkler for harmonier.
 • Harmoni: se hele harmonier i valgt fargerom med verdier eller tonenavn, med grunnfarger tydelig merket.
 • LRV: lysrefleksjonsverdi og flatekontrast etter BS 8300 og NS 11001 – for bygg og interiør.
 • Rec. 2020 og ProPhoto RGB som innebygde fargerom.
@@ -333,12 +330,12 @@ PLUKK OG DRA
 • Kopier aktiv farge som OKLCH med ⌥⌘C, lim inn en farge med ⌥⌘V, og angre med ⌘Z
 
 ALLE FARGEROM
-• Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst ICC-profil
 • Varsel utenfor fargeområdet – farger kartlegges, aldri klippes
 • Angi CMYK eller RGB direkte i en valgt ICC-profil
 • Rene CMYK-verdier: grått innslag flyttes til sort (UCR/GCR)
-• Feltet for fargeverdi forstår hex, CSS-farger, Munsell-notasjon og vanlige beskrivelser som «dyp havblå»
+• Feltet for fargeverdi forstår hex, CSS-farger og vanlige beskrivelser som «dyp havblå»
 
 FARGEBIBLIOTEKER OG ICC-PROFILER
 • Importer egne fargekart i ASE, ACO eller ACB (Adobe Color Book) med navngitte toner
@@ -352,7 +349,7 @@ OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader
 • CSS-gradient i oklab med sRGB-reserve – lineær, radiell eller konisk
 • Toneskalaer fra 50 til 950
-• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB
+• Komplementær, split-komplementær, analog og jevn fordeling på fargesirkel i OKLCH, CIE LCH, Hering, HSL eller RYB
 • Se hele harmonier i valgt fargerom eller fargebibliotek, med grunnfargen merket
 
 TILGJENGELIGHET OG FARGESYN
@@ -393,7 +390,7 @@ Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 **Nøkkelord (100)**
 
 ```
-farge,palett,fargekart,pipette,OKLCH,CMYK,ICC,Munsell,LRV,kontrast,WCAG,overgang,harmoni,fargeblind
+farge,palett,fargekart,pipette,OKLCH,CMYK,ICC,LRV,kontrast,WCAG,overgang,harmoni,fargeblind
 ```
 
 ---
@@ -403,7 +400,7 @@ farge,palett,fargekart,pipette,OKLCH,CMYK,ICC,Munsell,LRV,kontrast,WCAG,overgang
 **Promotional text (170)**
 
 ```
-Build palettes in OKLCH, CMYK with ICC profiles and Munsell, check contrast and colour vision, pick colours anywhere on screen and drag them into other design apps.
+Build palettes in OKLCH and CMYK with ICC profiles, check contrast and colour vision, pick colours anywhere on screen and drag them into other design apps.
 ```
 
 **What’s New in This Version (4000)**
@@ -414,7 +411,6 @@ Kolorist 1.1 reaches more disciplines – including architecture and interiors �
 • Palettes at hand: in a wide window your palettes stay beside the tools all the time.
 • Drag and drop: move colours from your palettes to where you work – and bring colours in from the system colour panel and other apps.
 • Colour libraries: import your own colour charts in ASE, ACO or ACB with named tones. Colours, tones and harmonies are locked to the library’s tones, and Studio shows the tone names.
-• Munsell: a new colour model with hue in steps of 2.5, value and chroma – and the Munsell and Hering colour wheels for harmonies.
 • Harmony: see the whole harmony in the chosen colour space with values or tone names, with the base colour clearly marked.
 • LRV: light reflectance value and surface contrast to BS 8300 and NS 11001 – for buildings and interiors.
 • Rec. 2020 and ProPhoto RGB as built-in colour spaces.
@@ -444,12 +440,12 @@ PICK AND DRAG
 • OKLCH with ⌥⌘C, paste with ⌥⌘V, undo with ⌘Z
 
 EVERY COLOUR SPACE
-• Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK or any ICC profile
 • Out-of-gamut warnings – mapped, never clipped
 • Enter CMYK or RGB directly in a chosen ICC profile
 • Clean CMYK values: grey components move to black (UCR/GCR)
-• The colour field understands hex, CSS colours, Munsell notation and plain descriptions like “deep ocean blue”
+• The colour field understands hex, CSS colours and plain descriptions like “deep ocean blue”
 
 COLOUR LIBRARIES AND ICC PROFILES
 • Import your own colour charts in ASE, ACO or ACB (Adobe Color Book) with named tones
@@ -463,7 +459,7 @@ GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • CSS gradients in oklab with an sRGB fallback – linear, radial or conic
 • Tone scales from 50 to 950
-• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel
+• Complementary, split complementary, analogous and even distributions on an OKLCH, CIE LCH, Hering, HSL or RYB colour wheel
 • See the whole harmony in the chosen colour space or colour library, with the base colour marked
 
 ACCESSIBILITY AND COLOUR VISION
@@ -504,7 +500,7 @@ Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
 **Keywords (100)**
 
 ```
-colour,color,palette,picker,eyedropper,OKLCH,CMYK,ICC,Munsell,LRV,contrast,WCAG,gradient,colorblind
+colour,color,palette,picker,eyedropper,OKLCH,CMYK,ICC,LRV,contrast,WCAG,gradient,colorblind
 ```
 
 ---
@@ -548,7 +544,7 @@ NO ACCOUNT NEEDED
 All features work without signing in. There is no account, no server of our own, no analytics, no ads and no in-app purchases. Palettes sync through the user's private iCloud database (CloudKit) when the device is signed in to iCloud; without iCloud everything is stored on device.
 
 WHERE TO FIND THE MAIN FEATURES
-• Studio (first tab): edit the active colour in OKLCH, Lab, Munsell, RGB, CMYK etc. "Show as" picks a second colour space, an ICC profile or a colour library shown side by side. Colour | Tones | Harmony switches between editing, tone scales and harmonies.
+• Studio (first tab): edit the active colour in OKLCH, Lab, RGB, CMYK etc. "Show as" picks a second colour space, an ICC profile or a colour library shown side by side. Colour | Tones | Harmony switches between editing, tone scales and harmonies.
 • Palettes: tap + to create a palette, either empty or "New palette from value words (AI)". Tap a colour to select it; tap a palette's title to open it. Touch and hold (right-click on Mac) a palette for "Critique the palette" and "Contrast matrix", or a colour for "Copy to" (Figma, Adobe apps, Pages/Keynote/Numbers, CSS, SwiftUI) and other actions.
 • Gradient: perceptual gradients between two colours, with lighter/darker rows and CSS export.
 • Pick: camera, photos and (on Mac) a screen eyedropper. Picked colours appear at the top of Palettes, marked "Not saved".
@@ -556,7 +552,6 @@ WHERE TO FIND THE MAIN FEATURES
 
 NEW IN 1.1 – HOW TO TEST
 • Colour libraries: export any palette as ASE (open a palette › Export › ASE), then import that file under Studio › Show as › My colour spaces … › Import. Choose the library under "Show as" to see the nearest named tone.
-• Munsell: Studio › Colour model › Munsell.
 • LRV: Assess › Contrast › Surfaces (LRV).
 • Palette column: on a 13-inch iPad in landscape, or on a Mac with a window at least 1300 points wide. Drag a colour from the column onto From or To in Gradient.
 • Undo: ⌘Z (Edit › Undo) after changing a colour or editing a palette.
@@ -570,7 +565,7 @@ APPLE INTELLIGENCE
 Value-word palettes, "Describe a colour", free-text adjustments, colour naming and palette critique use the on-device Foundation Models framework. On devices without Apple Intelligence, or when it is turned off, palettes are generated from a built-in knowledge base instead, and the app explains what is unavailable. No text leaves the device.
 
 ICC PROFILES AND COLOUR LIBRARIES
-No ICC profiles or colour libraries are bundled. The app uses the system's built-in colour spaces (sRGB, Display P3, Adobe RGB, Rec. 2020, ProPhoto RGB, Generic CMYK) and profiles and libraries the user imports under "My colour spaces". Imported files are stored in the app's iCloud Drive folder and can be deleted in the app. The Munsell conversion uses the published Munsell renotation data.
+No ICC profiles or colour libraries are bundled. The app uses the system's built-in colour spaces (sRGB, Display P3, Adobe RGB, Rec. 2020, ProPhoto RGB, Generic CMYK) and profiles and libraries the user imports under "My colour spaces". Imported files are stored in the app's iCloud Drive folder and can be deleted in the app.
 
 SIRI AND SHORTCUTS
 App Shortcuts: "Describe a colour in Kolorist", "Create a palette in Kolorist", plus actions to create a gradient, convert a colour and check contrast.
@@ -590,11 +585,11 @@ Contact: eivind.johansen@ntnu.no
 - [ ] Nettsiden for 1.1 (`web/1.1/`) er publisert på kolorist.no.
 - [x] `MARKETING_VERSION` er `1.1`. `CURRENT_PROJECT_VERSION` (nå `5`) økes for hver opplasting.
 - [ ] Ny versjon opprettet i App Store Connect for både iOS og macOS (1.1), med «Nytt i denne versjonen» fra over.
-- [ ] Nøkkelord og beskrivelse oppdatert (nye: Munsell, LRV, fargebiblioteker).
+- [ ] Nøkkelord og beskrivelse oppdatert (nye: LRV, fargebiblioteker).
 - [x] Skjermbilder for iPhone, iPad og Mac på norsk og engelsk (se 3d).
 - [x] CloudKit-skjemaet er rullet ut til produksjon (3.10.2026): nytt felt `CD_gradientData` på paletter, og Core Datas `…_ckAsset`- og `CD_moveReceipt`-felt (lagt inn med `initializeCloudKitSchema`, som også dekker store paletter som synkroniseres som asset). Eldre versjoner (1.0) ignorerer feltene.
 - [ ] Notes for App Review byttet til teksten over.
 - [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) med begrunnelse `CA92.1` for `UserDefaults` – finnes fortsatt ikke i prosjektet.
 - [ ] `ITSAppUsesNonExemptEncryption = NO` – står fortsatt ikke i Info.plist eller byggeinnstillingene.
-- [x] Lagringsformatet er bakoverkompatibelt: paletter med Munsell-farger og farger fra fargebiblioteker kan
+- [x] Lagringsformatet er bakoverkompatibelt: paletter med farger fra fargebiblioteker kan
       leses av 1.0 på enheter som ikke er oppdatert ennå (se `PalettFarge` i `Palett.swift` og `LagringsformatTests`).

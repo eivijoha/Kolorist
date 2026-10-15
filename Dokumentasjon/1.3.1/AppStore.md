@@ -1,7 +1,7 @@
 # App Store Connect – Kolorist 1.3.1
 
 Fullstendige tekster for 1.3.1, per plattform og språk, i den rekkefølgen de legges inn i App Store Connect. Alle tekstene
-er uten APCA og Munsell. App-informasjon, URL-er, personvernetiketten og eksportregler er uendret.
+er uten APCA og den uttatte fargemodellen. App-informasjon, URL-er, personvernetiketten og eksportregler er uendret.
 
 1. [iPhone og iPad – norsk](#1-iphone-og-ipad--norsk-bokmål)
 2. [iPhone og iPad – engelsk](#2-iphone-og-ipad--engelsk)
@@ -12,9 +12,9 @@ er uten APCA og Munsell. App-informasjon, URL-er, personvernetiketten og eksport
 **Perspektiv:** 1.3.1 spisser utvalget av modeller. Kontrastsjekken bygger på WCAG 2.2 og LRV, og fargemodellen og
 fargesirkelen med kulør, valør og kroma er tatt ut. Tekstene beskriver hva som er endret, uten begrunnelse.
 
-Bakgrunn (bare internt): APCA (Myndex) er lisensbelagt – lisensen gjelder bare nettinnhold under W3C-avtalen. Munsell er
-et registrert varemerke (X-Rite), og de ekstrapolerte renotasjonsdataene har uklart opphav. Se
-`Dokumentasjon/APCA-gjeninnforing.md` og `Dokumentasjon/Munsell-gjeninnforing.md`.
+Bakgrunn (bare internt): APCA (Myndex) er lisensbelagt – lisensen gjelder bare nettinnhold under W3C-avtalen. Fargemodellen
+med kulør, valør og kroma bygde på et varemerke og på data med uklart opphav. Se
+`Dokumentasjon/APCA-gjeninnforing.md` og `Dokumentasjon/HVC-gjeninnforing.md`.
 
 **Versjonsløp:** iOS og iPadOS går rett fra 1.2 til 1.3.1 (1.3 ble trukket fra gjennomgang), så iOS-tekstene tar med
 alle nyhetene fra 1.3. Mac går fra 1.3 til 1.3.1 og har den korte teksten.
@@ -497,7 +497,7 @@ Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu
 
 ### Skjermbilder
 
-Hele settet for 1.3.1 ligger i `Dokumentasjon/1.3.1/Skjermbilder/`, uten APCA og Munsell (kontrollert med
+Hele settet for 1.3.1 ligger i `Dokumentasjon/1.3.1/Skjermbilder/`, uten APCA og den uttatte fargemodellen (kontrollert med
 tekstgjenkjenning 2026-10-10):
 
 | Mappe | Enhet | Størrelse |
@@ -510,15 +510,15 @@ tekstgjenkjenning 2026-10-10):
 
 Foreslått rekkefølge (høyst ti): designsystem, toneskala, kontrast, flatekontrast, studio, harmoni, lys, fargesyn,
 overgang, fargefelt (Mac uten fargefelt). Endret siden 1.3: Studio-bildet i alle settene (`studio.png`, `5-studio.png`
-for 6,3″) – metodelinja nevnte Munsell. Slik bildene er tatt: se `Dokumentasjon/1.3/AppStore.md`.
+for 6,3″) – metodelinja nevnte den uttatte fargemodellen. Slik bildene er tatt: se `Dokumentasjon/1.3/AppStore.md`.
 
 ### Før du sender inn
 
 - [ ] Xcode på grenen `versjon-1.3.1`; `MARKETING_VERSION` 1.3.1, `CURRENT_PROJECT_VERSION` 13 (14 hvis 13 alt er lastet opp).
 - [ ] iOS: 1.3 er trukket fra gjennomgang; 1.3.1 sendes i stedet, med iOS-tekstene over (fra 1.2).
 - [ ] Ny versjon 1.3.1 for iOS og macOS, med tekstene over.
-- [ ] Reklametekst, beskrivelse og nøkkelord byttet (Munsell er byttet med harmoni/palette i nøkkelordene).
+- [ ] Reklametekst, beskrivelse og nøkkelord byttet (nøkkelordet for den uttatte fargemodellen er byttet med harmoni/palette).
 - [ ] Studio-bildet byttet i alle settene (iPhone, iPad og Mac; norsk og engelsk).
 - [ ] Notes for App Review byttet til teksten over.
-- [x] Nettsiden uten APCA og Munsell (rota, /neste/ og historisk/), lastet opp 2026-10-10.
+- [x] Nettsiden uten APCA og den uttatte fargemodellen (rota, /neste/ og historisk/), lastet opp 2026-10-10.
 - [x] CloudKit-skjemaet er uendret siden 1.3.

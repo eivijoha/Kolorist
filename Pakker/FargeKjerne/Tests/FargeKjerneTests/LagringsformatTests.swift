@@ -35,7 +35,7 @@ struct LagringsformatTests {
     @Test func uttattModellGirFargeUtenRepresentasjon() throws {
         let farge = Farge(hex: "#2F7FD8")!
         var json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(PalettFarge(farge: farge))) as! [String: Any]
-        json["representasjonUtvidet"] = ["rom": ["modell": ["_0": "munsell"]], "verdier": [72.5, 5, 10], "tekst": "7.5PB 5/10"]
+        json["representasjonUtvidet"] = ["rom": ["modell": ["_0": "fjernetModell"]], "verdier": [72.5, 5, 10], "tekst": "x"]
         let lest = try JSONDecoder().decode(PalettFarge.self, from: JSONSerialization.data(withJSONObject: json))
         #expect(lest.representasjon == nil)
         #expect(lest.farge == farge)

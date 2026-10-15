@@ -29,7 +29,7 @@ Fargepaletter for designere
 **Reklametekst (170)** – kan endres uten ny versjon
 
 ```
-Bygg paletter i OKLCH, CMYK og Munsell, se fargene i lyset der de skal brukes, kontroller kontrast og fargesyn, og kopier fargene rett inn i annen design-programvare.
+Bygg paletter i OKLCH og CMYK, se fargene i lyset der de skal brukes, kontroller kontrast og fargesyn, og kopier fargene rett inn i annen design-programvare.
 ```
 
 **Nytt i denne versjonen (4000)**
@@ -47,7 +47,6 @@ Kolorist 1.2 tar lyset med i regnestykket.
 • Lagre som: velg formater etter hvor filene skal brukes, og lagre dem i en mappe – også i OneDrive – eller del dem. Nå også utklipp med redigerbare gradienter for layoutprogram.
 • Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament.
 • Nye harmonier: analog med komplementær aksent, triade og kvadrat – og naturlig lyshetsrekkefølge, der gule farger blir lysere og blå mørkere, som i naturen.
-• Munsell i trinnene fra Munsell-boka.
 • Gradienter kopieres med færre stopp, så de er enkle å redigere videre.
 • Legg til farger rett i lista, legg sammen seksjoner du ikke bruker, og angre ved å riste.
 ```
@@ -58,10 +57,10 @@ Kolorist 1.2 tar lyset med i regnestykket.
 Kolorist er et fargeverktøy for designere og arkitekter på iPhone, iPad og Mac. Bygg paletter på tvers av fargerom, kontroller kontrast og fargesyn, se fargene i lyset der de skal brukes – og få dem inn i verktøyene du allerede bruker.
 
 ALLE FARGEROM
-• Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
 • Angi CMYK eller RGB direkte i en ICC-profil, og få rene CMYK-verdier (UCR/GCR)
-• Skriv hex, CSS-farger, Munsell-notasjon eller beskrivelser som «dyp havblå»
+• Skriv hex, CSS-farger eller beskrivelser som «dyp havblå»
 
 FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 • Importer egne fargekart i ASE, ACO eller ACB med navngitte toner – farger, toner og harmonier låses til tonene
@@ -72,7 +71,7 @@ FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader og CSS-gradienter
 • Toneskalaer fra 50 til 950
-• Harmonier – fra komplementær til triade, kvadrat og analog med aksent – på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB, med naturlig lyshetsrekkefølge
+• Harmonier – fra komplementær til triade, kvadrat og analog med aksent – på fargesirkel i OKLCH, CIE LCH, Hering, HSL eller RYB, med naturlig lyshetsrekkefølge
 
 LYS OG FARGEMÅLING
 • Se farger og hele paletter i lysmiljøer – stua om kvelden, kontoret – eller standard betraktningsforhold for grafisk vurdering, arbeidsplasser, skoler og museer
@@ -107,7 +106,7 @@ PALETTER OG ICLOUD
 Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser via din egen, private iCloud.
 
 ÅPENT OM METODENE
-Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell og ICC – med kilde og forklaring.
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV og ICC – med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -118,7 +117,7 @@ Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet e
 **Nøkkelord (100, kommaseparert uten mellomrom)**
 
 ```
-farge,palett,fargekart,OKLCH,CMYK,ICC,Munsell,LRV,kontrast,WCAG,lys,filament,3D-print,pipette
+farge,palett,fargekart,OKLCH,CMYK,ICC,LRV,kontrast,WCAG,lys,filament,3D-print,pipette
 ```
 
 **Skjermbilder:** `Skjermbilder/nb/` (iPhone 6,5″) og `Skjermbilder/ipad-nb/` (iPad 13″) – Studio, Harmoni, Overgang, Kontrast, Fargesyn, Lys; for iPhone i tillegg paletten i lys og Skriftkontrast (valgfrie).
@@ -136,7 +135,7 @@ Colour palettes for designers
 **Promotional text (170)** – can be changed without a new version
 
 ```
-Build palettes in OKLCH, CMYK and Munsell, see colours in the light where they will be used, check contrast and colour vision, and copy them into other design software.
+Build palettes in OKLCH and CMYK, see colours in the light where they will be used, check contrast and colour vision, and copy them into other design software.
 ```
 
 **What’s New in This Version (4000)**
@@ -154,7 +153,6 @@ Kolorist 1.2 brings light into the equation.
 • Save as: choose formats by where the files will be used, and save them to a folder – including OneDrive – or share them. Now also snippets with editable gradients for layout apps.
 • Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament.
 • New harmonies: analogous with a complementary accent, triad and square – and natural lightness order, where yellows become lighter and blues darker, as in nature.
-• Munsell in the steps of the Munsell book.
 • Gradients are copied with fewer stops, so they are easy to edit further.
 • Add colours right in the list, collapse sections you don't use, and shake to undo.
 ```
@@ -165,10 +163,10 @@ Kolorist 1.2 brings light into the equation.
 Kolorist is a colour tool for designers and architects on iPhone, iPad and Mac. Build palettes across colour spaces, check contrast and colour vision, see colours in the light where they will be used – and get them into the tools you already use.
 
 EVERY COLOUR SPACE
-• Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK or any ICC profile – mapped, never clipped
 • Enter CMYK or RGB directly in an ICC profile, and get clean CMYK values (UCR/GCR)
-• Type hex, CSS colours, Munsell notation or descriptions like “deep ocean blue”
+• Type hex, CSS colours or descriptions like “deep ocean blue”
 
 COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 • Import your own colour charts in ASE, ACO or ACB with named tones – colours, tones and harmonies are locked to the tones
@@ -179,7 +177,7 @@ COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
 • Tone scales from 50 to 950
-• Harmonies – from complementary to triad, square and analogous with an accent – on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel, with natural lightness order
+• Harmonies – from complementary to triad, square and analogous with an accent – on an OKLCH, CIE LCH, Hering, HSL or RYB colour wheel, with natural lightness order
 
 LIGHT AND COLOUR MEASUREMENT
 • See colours and whole palettes in viewing conditions – the living room in the evening, the office – or standard viewing conditions for graphic arts, workplaces, schools and museums
@@ -214,7 +212,7 @@ PALETTES AND ICLOUD
 Collect colours and gradients in palettes, save single colours and whole gradients, and sync through your own private iCloud.
 
 OPEN ABOUT METHODS
-The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell and ICC – with source and explanation.
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV and ICC – with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -225,7 +223,7 @@ Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported 
 **Keywords (100, comma-separated without spaces)**
 
 ```
-colour,color,palette,OKLCH,CMYK,ICC,Munsell,LRV,contrast,WCAG,light,filament,3D print,eyedropper
+colour,color,palette,OKLCH,CMYK,ICC,LRV,contrast,WCAG,light,filament,3D print,eyedropper
 ```
 
 **Screenshots:** `Skjermbilder/en/` (iPhone 6.5″) and `Skjermbilder/ipad-en/` (iPad 13″).
@@ -239,7 +237,7 @@ colour,color,palette,OKLCH,CMYK,ICC,Munsell,LRV,contrast,WCAG,light,filament,3D 
 **Reklametekst (170)** – kan endres uten ny versjon
 
 ```
-Bygg paletter i OKLCH, CMYK og Munsell, se fargene i lyset der de skal brukes, plukk farger fra hele skjermen og dra dem rett inn i annen design-programvare.
+Bygg paletter i OKLCH og CMYK, se fargene i lyset der de skal brukes, plukk farger fra hele skjermen og dra dem rett inn i annen design-programvare.
 ```
 
 **Nytt i denne versjonen (4000)**
@@ -257,7 +255,6 @@ Kolorist 1.2 tar lyset med i regnestykket.
 • Lagre som: velg formater etter hvor filene skal brukes, og lagre dem i en mappe – også i OneDrive – eller del dem. Nå også utklipp med redigerbare gradienter for layoutprogram.
 • Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament.
 • Nye harmonier: analog med komplementær aksent, triade og kvadrat – og naturlig lyshetsrekkefølge, der gule farger blir lysere og blå mørkere, som i naturen.
-• Munsell i trinnene fra Munsell-boka.
 • Gradienter kopieres med færre stopp, så de er enkle å redigere videre.
 • Legg til farger rett i lista og legg sammen seksjoner du ikke bruker.
 • Hurtigtaster: ⌘N ny palett, ⇧⌘S lagre som, ⌘1–5 for fanene, ⌘C og ⌘V for farger.
@@ -270,10 +267,10 @@ Kolorist 1.2 tar lyset med i regnestykket.
 Kolorist er et fargeverktøy for designere og arkitekter på Mac – og på iPhone og iPad med samme kjøp. Bygg paletter på tvers av fargerom, kontroller kontrast og fargesyn, se fargene i lyset der de skal brukes – og få dem inn i verktøyene du allerede bruker.
 
 ALLE FARGEROM
-• Rediger i OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB og CMYK
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
 • Display P3 side om side med sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
 • Angi CMYK eller RGB direkte i en ICC-profil, og få rene CMYK-verdier (UCR/GCR)
-• Skriv hex, CSS-farger, Munsell-notasjon eller beskrivelser som «dyp havblå»
+• Skriv hex, CSS-farger eller beskrivelser som «dyp havblå»
 
 FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 • Importer egne fargekart i ASE, ACO eller ACB med navngitte toner – farger, toner og harmonier låses til tonene
@@ -284,7 +281,7 @@ FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
 OVERGANGER, TONER OG HARMONIER
 • Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader og CSS-gradienter
 • Toneskalaer fra 50 til 950
-• Harmonier – fra komplementær til triade, kvadrat og analog med aksent – på fargesirkel i OKLCH, CIE LCH, Munsell, Hering, HSL eller RYB, med naturlig lyshetsrekkefølge
+• Harmonier – fra komplementær til triade, kvadrat og analog med aksent – på fargesirkel i OKLCH, CIE LCH, Hering, HSL eller RYB, med naturlig lyshetsrekkefølge
 
 LYS OG FARGEMÅLING
 • Se farger og hele paletter i lysmiljøer – stua om kvelden, kontoret – eller standard betraktningsforhold for grafisk vurdering, arbeidsplasser, skoler og museer
@@ -321,7 +318,7 @@ PALETTER OG ICLOUD
 Samle farger og gradienter i paletter, lagre enkeltfarger og hele gradienter, og synkroniser via din egen, private iCloud.
 
 ÅPENT OM METODENE
-Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell og ICC – med kilde og forklaring.
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, LRV og ICC – med kilde og forklaring.
 
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
@@ -332,7 +329,7 @@ Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 **Nøkkelord (100, kommaseparert uten mellomrom)**
 
 ```
-farge,palett,fargekart,pipette,OKLCH,CMYK,ICC,Munsell,LRV,kontrast,WCAG,lys,filament,harmoni
+farge,palett,fargekart,pipette,OKLCH,CMYK,ICC,LRV,kontrast,WCAG,lys,filament,harmoni
 ```
 
 **Skjermbilder:** `Skjermbilder/mac-nb/` (2880 × 1800) – Studio, Harmoni, Overgang, Kontrast, Fargesyn, Lys.
@@ -346,7 +343,7 @@ farge,palett,fargekart,pipette,OKLCH,CMYK,ICC,Munsell,LRV,kontrast,WCAG,lys,fila
 **Promotional text (170)** – can be changed without a new version
 
 ```
-Build palettes in OKLCH, CMYK and Munsell, see colours in the light where they will be used, pick colours anywhere on screen and drag them into other design apps.
+Build palettes in OKLCH and CMYK, see colours in the light where they will be used, pick colours anywhere on screen and drag them into other design apps.
 ```
 
 **What’s New in This Version (4000)**
@@ -364,7 +361,6 @@ Kolorist 1.2 brings light into the equation.
 • Save as: choose formats by where the files will be used, and save them to a folder – including OneDrive – or share them. Now also snippets with editable gradients for layout apps.
 • Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament.
 • New harmonies: analogous with a complementary accent, triad and square – and natural lightness order, where yellows become lighter and blues darker, as in nature.
-• Munsell in the steps of the Munsell book.
 • Gradients are copied with fewer stops, so they are easy to edit further.
 • Add colours right in the list and collapse sections you don't use.
 • Keyboard shortcuts: ⌘N new palette, ⇧⌘S Save as, ⌘1–5 for the tabs, ⌘C and ⌘V for colours.
@@ -377,10 +373,10 @@ Kolorist 1.2 brings light into the equation.
 Kolorist is a colour tool for designers and architects on Mac – and on iPhone and iPad with the same purchase. Build palettes across colour spaces, check contrast and colour vision, see colours in the light where they will be used – and get them into the tools you already use.
 
 EVERY COLOUR SPACE
-• Edit in OKLCH, OKLab, CIE LCH, CIELab, Munsell, HSB, HSL, RGB and CMYK
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
 • Display P3 side by side with sRGB, Adobe RGB, Rec. 2020, ProPhoto RGB, CMYK or any ICC profile – mapped, never clipped
 • Enter CMYK or RGB directly in an ICC profile, and get clean CMYK values (UCR/GCR)
-• Type hex, CSS colours, Munsell notation or descriptions like “deep ocean blue”
+• Type hex, CSS colours or descriptions like “deep ocean blue”
 
 COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 • Import your own colour charts in ASE, ACO or ACB with named tones – colours, tones and harmonies are locked to the tones
@@ -391,7 +387,7 @@ COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 GRADIENTS, TONES AND HARMONIES
 • Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
 • Tone scales from 50 to 950
-• Harmonies – from complementary to triad, square and analogous with an accent – on an OKLCH, CIE LCH, Munsell, Hering, HSL or RYB colour wheel, with natural lightness order
+• Harmonies – from complementary to triad, square and analogous with an accent – on an OKLCH, CIE LCH, Hering, HSL or RYB colour wheel, with natural lightness order
 
 LIGHT AND COLOUR MEASUREMENT
 • See colours and whole palettes in viewing conditions – the living room in the evening, the office – or standard viewing conditions for graphic arts, workplaces, schools and museums
@@ -428,7 +424,7 @@ PALETTES AND ICLOUD
 Collect colours and gradients in palettes, save single colours and whole gradients, and sync through your own private iCloud.
 
 OPEN ABOUT METHODS
-The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV, Munsell and ICC – with source and explanation.
+The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, LRV and ICC – with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -439,7 +435,7 @@ Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
 **Keywords (100, comma-separated without spaces)**
 
 ```
-colour,color,palette,eyedropper,OKLCH,CMYK,ICC,Munsell,LRV,contrast,WCAG,light,filament,picker
+colour,color,palette,eyedropper,OKLCH,CMYK,ICC,LRV,contrast,WCAG,light,filament,picker
 ```
 
 **Screenshots:** `Skjermbilder/mac-en/` (2880 × 1800).
@@ -518,7 +514,7 @@ https://kolorist.no/l#znZJLTsMwEIavYlliFxw_M-PuaEpZVLAoK4S6CCWUkL6UtIiq6nE4CRdjn
 • Undo: shake (iPhone/iPad) or ⌘Z.
 
 WHERE TO FIND THE MAIN FEATURES
-• Studio: edit the active colour in OKLCH, Lab, Munsell, RGB, CMYK etc. "Show as" picks an ICC profile or colour library shown side by side.
+• Studio: edit the active colour in OKLCH, Lab, RGB, CMYK etc. "Show as" picks an ICC profile or colour library shown side by side.
 • Palettes: + creates a palette (empty or from value words, AI). Touch and hold (right-click on Mac) for more actions.
 • Gradient: perceptual gradients with lighter/darker rows.
 • Pick: camera, photos and (on Mac) a screen eyedropper.
@@ -606,6 +602,6 @@ Skriftkontrast med `-startfane paletter -palett.visning lys|skriftkontrast` og e
 - [ ] Notes for App Review byttet til teksten over (iOS og macOS).
 - [x] Privacy manifest (`Kolorist/PrivacyInfo.xcprivacy`) finnes.
 - [x] `ITSAppUsesNonExemptEncryption = NO` står i byggeinnstillingene.
-- [x] Lagringsformatet er bakoverkompatibelt: paletter med Munsell-farger og farger fra fargebiblioteker kan
+- [x] Lagringsformatet er bakoverkompatibelt: paletter med farger fra fargebiblioteker kan
       leses av 1.0 på enheter som ikke er oppdatert ennå (se `PalettFarge` i `Palett.swift` og `LagringsformatTests`).
 - [x] 1.2-nettsiden ligger i roten (2026-10-04); 1.1 er flyttet til `historisk/1.1/`; `l/` og `.well-known/` er beholdt.

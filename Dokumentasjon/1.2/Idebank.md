@@ -92,7 +92,7 @@ kontrastpar. Ikke referansekort (referanseverdiene er rettighetsbelagt).
 **Visningssiden** (én HTML-side med lite skript, ~20–40 kB, ingen avhengigheter – ikke en web-app):
 - Viser farger (hex, OKLCH, CIELab, egen modell), paletter som rutenett, gradienter som CSS i OKLab, harmonier og
   kontrastpar med WCAG-tall. Lysmiljøer bare som parametre (K, lux) – «Se i lys» krever spektre og CAM16.
-- Munsell- og CMYK-verdier ligger ferdig utregnet i lenken som tekst, så siden ikke trenger egen fargevitenskap.
+- CMYK-verdier ligger ferdig utregnet i lenken som tekst, så siden ikke trenger egen fargevitenskap.
 - «Kopier som hex/CSS». Filnedlasting overlates til delingsmappa (unngå to implementasjoner av formatene).
 
 **Forutsetninger og risiko**
@@ -260,7 +260,7 @@ Idé: en App Clip – en liten del av appen som åpnes uten installasjon – for
 Kolorist på iPhone eller iPad.
 
 **Hva den kan gi utover visningssiden på nettet**
-- Fargene vist riktig i Display P3 (nettleseren klipper ofte til sRGB) og med appens egne verdier (Munsell, CMYK i profil).
+- Fargene vist riktig i Display P3 (nettleseren klipper ofte til sRGB) og med appens egne verdier (CMYK i profil).
 - «Kopier til» og «Lagre som» med appens egne formater – ASE, design tokens, gradienter til designprogrammer – rett fra
   lenken, uten å lage formatene på nytt i JavaScript.
 - Kort vei til full app: App Clip-kortet viser appen, og fargene kan følge med over når appen installeres (felles
@@ -269,7 +269,7 @@ Kolorist på iPhone eller iPad.
 **Begrensninger**
 - Bare iPhone og iPad. Mac og Windows får fortsatt visningssiden.
 - Lite lagring og ingen iCloud-synk; paletter kan ikke lagres i App Clip-en, bare vises, kopieres og eksporteres.
-- Størrelsesgrense for App Clips: FargeKjerne med Munsell-data, ICC og eksport må holde seg under. Filamentdata og
+- Størrelsesgrense for App Clips: FargeKjerne med ICC og eksport må holde seg under. Filamentdata og
   KI-biblioteket utelates.
 - Eget mål i prosjektet, egen gjennomgang hos Apple og «App Clip-opplevelse» i App Store Connect (bilde, tekst, knapp).
 
@@ -291,7 +291,7 @@ ikke å vise lenkede farger, men å la noen prøve det Kolorist gjør bedre enn 
   rett fra nettsiden – da blir nettsiden selv en inngang, ikke bare lenkene), og Meldinger. (QR- og NFC-koder er mulig
   for App Clips, men ikke aktuelt – se over.)
 - *Innhold – én kort oppgave, ikke hele appen:* åpne en farge eller palett og
-  - se den i OKLCH, Munsell og CMYK side om side,
+  - se den i OKLCH og CMYK side om side,
   - se harmonier rundt den,
   - sjekke kontrast mot hvitt/sort,
   - se den i et par lysmiljøer,

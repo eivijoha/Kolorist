@@ -103,7 +103,7 @@ referansedata følger med appen; brukeren importerer sine egne filer (samme prin
 | **Ett felt med kjent verdi** | Gråkort (f.eks. 18 %), hvitt ark | Refleksjon eller Lab for nivå B |
 
 **Verdityper**, i prioritert rekkefølge: spektral refleksjon (best – fasit i ethvert lys) → XYZ → Lab (med lys og
-observatør; standard D50/2° når filen ikke sier noe) → Munsell-notasjon (regnes om) → RGB (bare med kjent fargerom,
+observatør; standard D50/2° når filen ikke sier noe) → RGB (bare med kjent fargerom,
 og med varsel om lavere verdi som referanse).
 
 **Tolkning av tabeller uten overskrift:** antall verdier per rad avgjør typen – 3 (Lab eller XYZ, brukeren velger),
@@ -222,5 +222,5 @@ Rekkefølgen kan justeres: lysmiljøer med standardlys (fase 4) kan komme før r
 5. **Hvor «Se i lys» bor:** én felles visningstransformasjon (som «Vis som») som Studio, paletter, harmonier og
    utskrift bruker, i stedet for logikk spredt i hver visning.
 6. **Utskrift/PDF:** skal lysforhold og «sett i lysmiljø» kunne skrives ut (f.eks. side om side i CIELab)?
-7. **Ytelse:** CAM16 for mange farger og ringen i fargesirkelen – mellomlagring som for Munsell.
+7. **Ytelse:** CAM16 for mange farger og ringen i fargesirkelen – mellomlagring.
 8. **Personvern:** miniatyrbilder og eventuelle stedsnavn – hva lagres og synkroniseres.
