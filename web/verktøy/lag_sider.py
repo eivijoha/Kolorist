@@ -290,7 +290,7 @@ def startside(lang):
                    ('Farger i ulikt lys', 'Simuler farger under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
                    ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
             oppgaver_tittel='Dette kan du gjøre',
-            oppgaver=[('design.html#finn-fargene', 'Lag en palett', 'Fra et ord, et bilde eller en farge du allerede har.'),
+            oppgaver=[('design.html#finn-fargene', 'Lag en palett', 'Fra et bilde, en harmoni eller en farge du allerede har.'),
                       ('design.html#bygg-fargesystemet', 'Bygg toneskalaer med lik kontrast', 'Trinnene holder de samme kontrastkravene for alle kulører.'),
                       ('design.html#bygg-fargesystemet', 'Gjør paletten om til et designsystem', 'Med farger for lys og mørk modus, og filer til apputvikling, designverktøy og nettet.'),
                       ('design.html#kontroller', 'Sjekk kontrasten på tekst og knapper', 'Etter WCAG, APCA eller LRV – og rett opp farger som ikke holder kravet.'),
@@ -320,7 +320,7 @@ def startside(lang):
                    ('Colours in different light', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
                    ('One app – one or more devices', 'The same app on iPhone, iPad and Mac. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
             oppgaver_tittel='What you can do',
-            oppgaver=[('design.html#find-the-colours', 'Make a palette', 'From a word, a photo or a colour you already have.'),
+            oppgaver=[('design.html#find-the-colours', 'Make a palette', 'From a photo, a harmony or a colour you already have.'),
                       ('design.html#build-the-colour-system', 'Build tone scales with consistent contrast', 'The steps meet the same contrast requirements for every hue.'),
                       ('design.html#build-the-colour-system', 'Turn a palette into a design system', 'With colours for light and dark mode, and files for app development, design tools and the web.'),
                       ('design.html#check', 'Check the contrast of text and buttons', 'By WCAG, APCA or LRV – and fix colours that fall short.'),
@@ -476,14 +476,14 @@ def design(lang):
     N = f' <span class="nytt">{T[lang]["nytt"]}</span>'
     if lang == 'nb':
         steg = [
-            ('Finn fargene', 'Start fra et ord, et bilde eller en farge du allerede har.',
-             ['Fra verdiord til palett med Apple Intelligence på enheten, forankret i en kunnskapsbase med over hundre fargebegreper',
-              'Harmonier på fargesirkler i OKLCH, CIE LCH, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N12,
+            ('Finn fargene', 'Start fra et bilde, en harmoni eller en farge du allerede har.',
+             [              'Harmonier på fargesirkler i OKLCH, CIE LCH, Hering, HSL eller RYB – også triade, kvadrat og analog med komplementær aksent' + N12,
               'Goethes fargesirkel fra Farbenlehre (1810), med purpur, oransje, gul, grønn, blå og fiolett' + N13,
               'Monokromatiske paletter: én kulør i toner du former fritt i lyshet og metning' + N13,
               'Tonebaner: toner langs en bane gjennom lyshet, metning og kulør – kuløren går i bue mellom to endepunkter' + N13,
               'Naturlig lyshetsrekkefølge: gule farger lysere og blå mørkere, som i naturen – eller omvendt for bevisst spenning' + N12,
-              'Plukk farger med kameraet eller fra bilder rett fra fargefeltene – og fra hele skjermen på Mac' + N13], 'monokrom', None),
+              'Plukk farger med kameraet eller fra bilder rett fra fargefeltene – og fra hele skjermen på Mac' + N13,
+              'Eksperimentelt: forslag til palett fra verdiord med Apple Intelligence på enheten, som et utgangspunkt å jobbe videre fra'], 'monokrom', None),
             ('Bygg fargesystemet', 'Toner og overganger i like perseptuelle steg, så trinnene oppleves jevne.',
              ['Toneskalaer fra 50 til 950 med lik kontrast for alle kulører, rett i Studio: trinn 400 holder minst 3:1 og trinn 600 minst 4,5:1 mot hvitt' + N13,
               'Fra palett til designsystem: roller for aksent, nøytral og status i lys og mørk modus, med og uten økt kontrast. Merkefargen beholdes der den holder kravene, og du kan legge til egne roller som info eller tilbud' + N13,
@@ -530,14 +530,14 @@ def design(lang):
                        'Fra første idé til ferdige fargefiler: paletter, toneskalaer og gradienter i like opplevde steg. Kontroller kontrasten, se fargene slik de ser ut med fargesynsavvik, og kopier dem rett inn i verktøyene du bruker.',
                        steg, ('Les videre', [('lys.html', 'Lys og fargemåling'), ('funksjoner.html', 'Alle funksjoner'), ('arkitektur.html', 'Kolorist for arkitektur og interiørarkitektur')]))
     steg = [
-        ('Find the colours', 'Start from a word, a photo or a colour you already have.',
-         ['From value words to a palette with Apple Intelligence on device, grounded in a knowledge base of more than a hundred colour concepts',
-          'Harmonies on an OKLCH, CIE LCH, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N12,
+        ('Find the colours', 'Start from a photo, a harmony or a colour you already have.',
+         [          'Harmonies on an OKLCH, CIE LCH, Hering, HSL or RYB colour wheel – including triad, square and analogous with a complementary accent' + N12,
           'Goethe’s colour wheel from his Theory of Colours (1810), with purple, orange, yellow, green, blue and violet' + N13,
           'Monochromatic palettes: one hue in tones you shape freely in lightness and saturation' + N13,
           'Tone paths: tones along a path through lightness, saturation and hue – the hue arcs between two end points' + N13,
           'Natural lightness order: yellows lighter and blues darker, as in nature – or reversed for deliberate tension' + N12,
-          'Pick colours with the camera or from photos right from the colour fields – and from anywhere on screen on the Mac' + N13], 'monokrom', None),
+          'Pick colours with the camera or from photos right from the colour fields – and from anywhere on screen on the Mac' + N13,
+          'Experimental: a suggested palette from value words with Apple Intelligence on device, as a starting point to work from'], 'monokrom', None),
         ('Build the colour system', 'Tones and gradients in perceptually equal steps, so the steps look even.',
          ['Tone scales from 50 to 950 with the same contrast for every hue, right in Studio: step 400 holds at least 3:1 and step 600 at least 4.5:1 against white' + N13,
           'From palette to design system: roles for accent, neutral and status in light and dark mode, with and without increased contrast. Your brand colour is kept wherever it meets the requirements, and you can add your own roles, such as info or offers' + N13,
@@ -790,7 +790,7 @@ def funksjoner(lang):
             ('toner', 'Toner, harmonier og overganger', 'Toner og overganger', None,
              [('Toner og harmonier', k['Toner og harmonier']), ('Overganger', k['Overganger'])]),
             ('hent', 'Hent farger', 'Hent farger', None,
-             [('Plukk farger', plukk), ('Apple Intelligence på enheten', k['Apple Intelligence på enheten'])]),
+             [('Plukk farger', plukk), ('Apple Intelligence på enheten (eksperimentelt)', k['Apple Intelligence på enheten'])]),
             ('kontrast', 'Kontrast og fargesyn', 'Kontrast og fargesyn',
              skjermbilder(s, ['apca-kontrast', 'apca-tekst', 'forvirringslinjer']).format('Skjermbilder – rull sidelengs'),
              [('Tekst og grafikk (WCAG 2.2 og APCA)', ul([tilg[i] for i in TILG_TEKST])),
@@ -844,7 +844,7 @@ def funksjoner(lang):
             ('tones', 'Tones, harmonies and gradients', 'Tones and gradients', None,
              [('Tones and harmonies', k['Tones and harmonies']), ('Gradients', k['Gradients'])]),
             ('getting-colours', 'Getting colours', 'Getting colours', None,
-             [('Pick colours', plukk), ('Apple Intelligence on device', k['Apple Intelligence on device'])]),
+             [('Pick colours', plukk), ('Apple Intelligence on device (experimental)', k['Apple Intelligence on device'])]),
             ('contrast', 'Contrast and colour vision', 'Contrast and colour vision',
              skjermbilder(s, ['apca-kontrast', 'apca-tekst', 'forvirringslinjer']).format('Screenshots – scroll sideways'),
              [('Text and graphics (WCAG 2.2 and APCA)', ul([tilg[i] for i in TILG_TEKST])),
@@ -966,7 +966,7 @@ def plattformer(lang):
                  ('Mål fargetemperatur og belysningsstyrke', ja, ja, nei),
                  ('Pipette for hele skjermen', nei, nei, ja),
                  ('Lyskilde for kameraet', 'Lykt', 'Lykt der den finnes', 'Lysfelt på skjermen'),
-                 ('Apple Intelligence på enheten¹', ja, ja, ja),
+                 ('Apple Intelligence på enheten (eksperimentelt)¹', ja, ja, ja),
                  ('Siri og Snarveier', ja, ja, ja)]
         fotnote = '¹ Der Apple Intelligence er tilgjengelig. Ellers brukes den innebygde kunnskapsbasen.'
         krav = 'Krever iOS 26, iPadOS 26 eller macOS 26.'
@@ -1005,7 +1005,7 @@ def plattformer(lang):
                  ('Measure colour temperature and illuminance', ja, ja, nei),
                  ('Eyedropper for the whole screen', nei, nei, ja),
                  ('Light source for the camera', 'Torch', 'Torch where available', 'Light panel on screen'),
-                 ('Apple Intelligence on device¹', ja, ja, ja),
+                 ('Apple Intelligence on device (experimental)¹', ja, ja, ja),
                  ('Siri and Shortcuts', ja, ja, ja)]
         fotnote = '¹ Where Apple Intelligence is available. Otherwise the built-in knowledge base is used.'
         krav = 'Requires iOS 26, iPadOS 26 or macOS 26.'
