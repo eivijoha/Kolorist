@@ -977,16 +977,6 @@
         }
       }
     },
-    "Alle gjengivelseshensikter": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All rendering intents"
-          }
-        }
-      }
-    },
     "Alle metoder og kilder": {
       "localizations": {
         "en": {
@@ -1003,6 +993,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "All palettes"
+          }
+        }
+      }
+    },
+    "Alle tilpasningsmetoder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All rendering intents"
           }
         }
       }
@@ -3847,16 +3847,6 @@
         }
       }
     },
-    "Gjengivelseshensikt": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rendering intent"
-          }
-        }
-      }
-    },
     "Gjør til aktiv farge": {
       "localizations": {
         "en": {
@@ -5310,7 +5300,7 @@
         }
       }
     },
-    "Konvertering mellom fargerom via ICC-profiler, med valgt gjengivelseshensikt. Gjøres av Apples fargestyring (ColorSync). Profiler følger ikke med appen; Kolorist bruker systemets profiler og profiler du importerer.": {
+    "Konvertering mellom fargerom via ICC-profiler, med valgt tilpasningsmetode. Gjøres av Apples fargestyring (ColorSync). Profiler følger ikke med appen; Kolorist bruker systemets profiler og profiler du importerer.": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -10210,6 +10200,16 @@
         }
       }
     },
+    "Tilpasningsmetode": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendering intent"
+          }
+        }
+      }
+    },
     "Tilpass listen …": {
       "localizations": {
         "en": {
@@ -12008,7 +12008,7 @@
         }
       }
     },
-    "ΔE00 måler avviket fra kildefargen. Hensiktene skiller seg bare når profilene har egne tabeller for dem, typisk CMYK-profiler fra trykkerier; rene matriseprofiler som sRGB og Display P3 gir samme svar for alle.": {
+    "ΔE00 måler avviket fra kildefargen. Tilpasningsmetodene skiller seg bare når profilene har egne tabeller for dem, typisk CMYK-profiler fra trykkerier; rene matriseprofiler som sRGB og Display P3 gir samme svar for alle.": {
       "localizations": {
         "en": {
           "stringUnit": {

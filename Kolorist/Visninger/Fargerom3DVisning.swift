@@ -398,9 +398,9 @@ struct Fargerom3DArk: View {
                                                             set: { øktprofilID = nil; profilID = $0 }), ingen: false)
                     if erProfil { profilvelger("Sammenlign med", valgt: $sammenlignID, ingen: true) }
                     HStack {
-                        Text("Gjengivelseshensikt").foregroundStyle(Color.sekundærTekst)
+                        Text("Tilpasningsmetode").foregroundStyle(Color.sekundærTekst)
                         Spacer(minLength: 8)
-                        Picker("Gjengivelseshensikt", selection: $hensikt) {
+                        Picker("Tilpasningsmetode", selection: $hensikt) {
                             ForEach(Gjengivelseshensikt.allCases, id: \.self) { Text($0.visningsnavn).tag($0) }
                         }
                         .labelsHidden()

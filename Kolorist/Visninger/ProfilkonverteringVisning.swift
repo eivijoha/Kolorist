@@ -43,7 +43,7 @@ struct ProfilkonverteringVisning: View {
 
             Seksjon("Til") {
                 profilvelger("Målprofil", valgt: $tilID)
-                Picker("Gjengivelseshensikt", selection: $hensikt) {
+                Picker("Tilpasningsmetode", selection: $hensikt) {
                     ForEach(Gjengivelseshensikt.allCases, id: \.self) { Text($0.visningsnavn).tag($0) }
                 }
                 if let resultat = ICCProfil.konverter(gyldigeVerdier, fra: fra, til: til, hensikt: hensikt) {
@@ -70,10 +70,10 @@ struct ProfilkonverteringVisning: View {
                     hensiktsrad(h)
                 }
             } header: { Group {
-                Text("Alle gjengivelseshensikter")
+                Text("Alle tilpasningsmetoder")
             }.foregroundStyle(Color.sekundærTekst) } footer: {
                 VStack(alignment: .leading, spacing: 6) {
-                    KortForklaring("ΔE00 måler avviket fra kildefargen.") { Text("ΔE00 måler avviket fra kildefargen. Hensiktene skiller seg bare når profilene har egne tabeller for dem, typisk CMYK-profiler fra trykkerier; rene matriseprofiler som sRGB og Display P3 gir samme svar for alle.") }
+                    KortForklaring("ΔE00 måler avviket fra kildefargen.") { Text("ΔE00 måler avviket fra kildefargen. Tilpasningsmetodene skiller seg bare når profilene har egne tabeller for dem, typisk CMYK-profiler fra trykkerier; rene matriseprofiler som sRGB og Display P3 gir samme svar for alle.") }
                     MetodeHenvisning(.icc, .ciede2000)
                 }
             }

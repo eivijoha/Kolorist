@@ -783,7 +783,7 @@ def funksjoner(lang):
                            f'<li>Farger utenfor et fargerom får en pil til der de havner, f.eks. i trykkprofilen {N}</li>',
                            f'<li>Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone {N}</li>',
                            f'<li>Fargerommene til ICC-profiler i CIELab, med et annet rom som glass til sammenligning – åpnes rett fra «Vis som» {N}</li>',
-                           f'<li>Velg gjengivelseshensikt for fargerommet og for hvor fargene utenfor havner {N}</li>',
+                           f'<li>Velg tilpasningsmetode for fargerommet og for hvor fargene utenfor havner {N}</li>',
                            f'<li>Del som 3D-modell (USDZ): Hurtigvisning på Mac, AR på iPhone og iPad {N}</li>']))]),
             ('toner', 'Toner, harmonier og overganger', 'Toner og overganger', None,
              [('Toner og harmonier', k['Toner og harmonier']), ('Overganger', k['Overganger'])]),
@@ -1234,8 +1234,10 @@ def lenke_på(url, lang):
 def skriv(sti, tekst):
     # Nye skjermbilder: ny versjon i adressen, så nettleser og Varnish henter dem på nytt.
     tekst = re.sub(r'\.png\?v=\d+', '.png?v=10', tekst)
-    # Bilder som er tatt på nytt etter at de først ble lagt ut (3D-arket med gjengivelseshensikt), og gamutgrensene.
+    # Bilder som er tatt på nytt etter at de først ble lagt ut (3D-arket med tilpasningsmetode), og gamutgrensene.
     tekst = re.sub(r'(skjermbilde-(?:3d-[a-z]+|gamutgrense[a-z-]*)\.png)\?v=10', r'\1?v=11', tekst)
+    # Tatt på nytt med «Tilpasningsmetode» i 3D-arket.
+    tekst = re.sub(r'(skjermbilde-3d-(?:gamut|overgang|filament)\.png)\?v=11', r'\1?v=12', tekst)
     lang = 'en' if sti.startswith('en/') else 'nb'
     tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)

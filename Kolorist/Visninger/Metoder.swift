@@ -98,7 +98,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .machado:
             String(localized: "Fysiologisk basert modell for protan-, deutan- og tritanavvik, med matriser i lineær sRGB og alvorlighetsgrad som blanding med normalt syn. Akromatopsi vises som luminans alene. Brukes i fargesynsvurderingen, i fargeflaten i kontrastsjekken og i kamerafilteret. Simuleringen er en tilnærming; opplevelsen varierer mellom personer.")
         case .icc:
-            String(localized: "Konvertering mellom fargerom via ICC-profiler, med valgt gjengivelseshensikt. Gjøres av Apples fargestyring (ColorSync). Profiler følger ikke med appen; Kolorist bruker systemets profiler og profiler du importerer.")
+            String(localized: "Konvertering mellom fargerom via ICC-profiler, med valgt tilpasningsmetode. Gjøres av Apples fargestyring (ColorSync). Profiler følger ikke med appen; Kolorist bruker systemets profiler og profiler du importerer.")
         case .renCMYK:
             String(localized: "Felles grått innslag i C, M og Y flyttes til sort, og Kolorist søker etter separasjonen med færrest trykkfarger som holder seg innenfor 1 ΔE00 av profilens egen separasjon.")
         case .harmonier:
