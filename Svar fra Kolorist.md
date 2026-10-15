@@ -18,6 +18,27 @@ For å unngå at to tråder skriver i samme fil:
    merknad under ønsket.
 5. Prioritet avklares alltid med Eivind før et ønske bygges i Kolorist. 1.2 er i review; nytt arbeid går mot 1.3.
 
+## Til orientering 2026-10-15: farger og fargerom i 3D i FargeKjerne (kommer i neste publisering, 0.5.0)
+
+Kolorist 1.4 får 3D-visning av farger og fargerom, bygd på samme opplegg som `Fargerom3D.swift` og `USDZ.swift` i
+Kolorist underviser. De UI-frie delene ligger nå i FargeKjerne (commit `3087d7d` på `versjon-1.4`, ikke publisert ennå),
+så Kolorist underviser kan bruke dem i stedet for sin egen kopi når pakken oppgraderes:
+
+- **`Fargerom3D`** – modellkoordinater i [−1, 1] for to rom:
+  - fargekule (OKLCH): `kuleposisjon(_:gamut:)`, `kuleposisjon(lyshet:metning:kulør:)` og `kuleflate(gamut:)`. Lyshet
+    langs den grå aksen, kulør rundt, metning ut mot overflaten som andel av høyeste kroma i gamut; farger utenfor
+    gamut ligger utenfor kula.
+  - CIELab D50: `labposisjon(_:)` (x = a*/128, y = L*/50 − 1, z = −b*/128, som i underviserens `Gamutskall.kube`) og
+    `gamutskall(_:oppløsning:hensikt:)` – de seks sidene av enhetskuben gjennom profilen (RGB og CMYK, CMYK tilnærmet
+    med K = min(C, M, Y) som hos dere). `Flate` er et rutenett med punkter, farger og `trekanter`.
+- **`Fargerom3D.Scene`** – flater (med opasitet), punkter (små kuler) og streker (rør), skrevet som USDZ med
+  `usdz(navn:størrelse:)` (modellen står på gulvet, standard 20 cm høy).
+- **`USDScene`** – USDA-skriver og USDZ-pakker (ukomprimert zip, 64-byte-justering, CRC kontrollert i testene), med
+  teksturerte eller ensfargede flater, gjennomsiktighet uten emissiv farge, og hjelpeformene `Mesh.kule` og `Mesh.rør`.
+
+Tegningen i appen (Canvas med egen projeksjon og flatene sortert bakfra, som `Kubetegner`) ligger i Kolorist-appen,
+ikke i pakken. Ingenting her krever endringer hos dere; det er et tilbud om felles kode.
+
 ## Ønske 7: dra en hel palett ut av Kolorist — **levert** 2026-10-10 (Kolorist 1.4, commit `6973768` på `versjon-1.4`)
 
 En palett som dras fra palettlisten, gir nå i denne rekkefølgen:
