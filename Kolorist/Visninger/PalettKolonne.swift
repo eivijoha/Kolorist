@@ -55,7 +55,8 @@ struct PalettKolonne: View {
             }
         }
         .listStyle(.sidebar)
-        .paletthandlinger($paletthandling)
+        // Slettes en palett som er åpen i palettlisten, lukkes den der først.
+        .paletthandlinger($paletthandling) { arbeidsbenk.palettSomSlettes = $0.id }
         // Ingen egen verktøylinje: på Mac blir knapper fra en lukket inspektør hengende igjen.
         .alert("Ny palett", isPresented: $nyPalett) {
             TextField("Navn", text: $nyttNavn)

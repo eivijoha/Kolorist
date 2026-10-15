@@ -690,6 +690,8 @@ struct KameraForhåndsvisning: UIViewRepresentable {
         private var rotasjon: AVCaptureDevice.RotationCoordinator?
         private var rotasjonsenhet: String?
         private var observasjon: NSKeyValueObservation?
+        /// Økten får kameraet etter at visningen er lagt ut (konfigureres i bakgrunnen): følg rotasjonen når den starter.
+        var øktstart: NSObjectProtocol?
 
         private func følgRotasjon() {
             guard let enhet = lag.session?.inputs.compactMap({ ($0 as? AVCaptureDeviceInput)?.device }).first else { return }
@@ -738,6 +740,10 @@ struct KameraForhåndsvisning: UIViewRepresentable {
     func makeUIView(context: Context) -> Visning {
         let v = Visning()
         v.lag.session = økt
+        v.øktstart = NotificationCenter.default.addObserver(forName: AVCaptureSession.didStartRunningNotification, object: økt,
+                                                           queue: .main) { [weak v] _ in
+            MainActor.assumeIsolated { v?.setNeedsLayout() }
+        }
         v.lag.videoGravity = .resizeAspectFill
         let enkelt = UITapGestureRecognizer(target: v, action: #selector(Visning.trykket(_:)))
         let dobbelt = UITapGestureRecognizer(target: v, action: #selector(Visning.dobbelttrykket(_:)))

@@ -93,7 +93,7 @@ struct Fargerom3DTegning: Sendable {
 
     /// Bygger innholdet (tungt for ICC-profiler og biblioteker: kjøres i bakgrunnen).
     nonisolated static func lag(_ kilde: Fargerom3DKilde, rom: Fargerom3DRom, profil: ICCProfil, sammenlign: ICCProfil?,
-                                gamut: Gamut) -> Fargerom3DTegning {
+                                gamut: Gamut, hensikt: Gjengivelseshensikt = .relativKolorimetrisk) -> Fargerom3DTegning {
         var t = Fargerom3DTegning()
         let rom: Fargerom3DRom = if case .profil = kilde { rom == .fargekule ? .cieLab : rom } else { rom }
         t.rom = rom
@@ -108,7 +108,7 @@ struct Fargerom3DTegning: Sendable {
             t.scene.flater.append((f, opasitet))
         }
         func skall(_ p: ICCProfil, opasitet: Double, oppløsning: Int) {
-            guard let sider = Fargerom3D.gamutskall(p, oppløsning: oppløsning) else { return }
+            guard let sider = Fargerom3D.gamutskall(p, oppløsning: oppløsning, hensikt: hensikt) else { return }
             for s in sider { flate(rom == .cieLab ? s : s.omplassert(posisjon), opasitet: opasitet) }
         }
         func linje(_ punkter: [SIMD3<Double>], farger: [Color], bredde: CGFloat, stiplet: Bool = false) {
@@ -121,12 +121,15 @@ struct Fargerom3DTegning: Sendable {
             t.punkter.append(.init(p: p, farge: f.swiftUI, størrelse: størrelse, kant: kant))
             t.scene.punkter.append((p, f, radius))
         }
-        /// Fargen slik profilen kan gjengi den: gamut-kartlagt i OKLCH for sRGB og Display P3, ellers gjennom profilen
-        /// og tilbake (som ved utskrift).
+        /// Fargen slik profilen gjengir den med valgt hensikt: gjennom profilen og tilbake (som ved utskrift). sRGB og
+        /// Display P3 har ingen egne tabeller for hensiktene; der gir perseptuell og metning Kolorists gamut-kartlegging
+        /// (OKLCH, kulør og lyshet bevares), og de kolorimetriske klipper.
         func kartlagt(_ f: Farge) -> Farge {
-            if profil.id == ICCProfil.sRGB.id { return f.gamutKartlagt(til: .sRGB) }
-            if profil.id == ICCProfil.displayP3.id { return f.gamutKartlagt(til: .displayP3) }
-            guard let k = f.komponenter(i: profil), let tilbake = Farge(komponenter: k, i: profil) else { return f }
+            let perseptuell = hensikt == .perseptuell || hensikt == .metning
+            if profil.id == ICCProfil.sRGB.id, perseptuell { return f.gamutKartlagt(til: .sRGB) }
+            if profil.id == ICCProfil.displayP3.id, perseptuell { return f.gamutKartlagt(til: .displayP3) }
+            guard let k = f.komponenter(i: profil, hensikt: hensikt),
+                  let tilbake = Farge(komponenter: k, i: profil, hensikt: hensikt) else { return f }
             return tilbake
         }
         /// Piler fra farger utenfor profilen til der de havner.
@@ -172,7 +175,8 @@ struct Fargerom3DTegning: Sendable {
             } else {
                 skall(profil, opasitet: 0.14, oppløsning: 12)
             }
-            // OKLab-veien (Kolorist) og veien gjennom sRGB (vanlige CSS-overganger og de fleste designprogrammer).
+            // OKLab-veien (Kolorist) og veien gjennom sRGB (vanlige CSS-overganger og de fleste designprogrammer). Veien
+            // gjennom sRGB er et bevisst unntak fra regelen om at all interpolasjon skjer i OKLab: den vises til sammenligning.
             let ok = Overgang.toner(fra: fra, til: til, antall: 48)
             let (a, b) = (fra.gamutKartlagt(til: .sRGB).sRGB, til.gamutKartlagt(til: .sRGB).sRGB)
             let srgb = (0..<48).map { i -> Farge in
@@ -356,6 +360,12 @@ struct Fargerom3DArk: View {
     @AppStorage("fargerom3D.profil") private var profilID = ICCProfil.sRGB.id
     /// Rommet en profil sammenlignes med (sRGB til å begynne med; «Ingen» lagres som tom).
     @AppStorage("fargerom3D.sammenlign") private var sammenlignID = ICCProfil.sRGB.id
+    @AppStorage("fargerom3D.hensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
+    /// Profilen arket ble åpnet med (en profil eller «Vis som» i Studio) – gjelder bare dette arket, så det lagrede
+    /// valget for paletter og harmonier står urørt.
+    @State private var øktprofilID: String?
+    /// Om visningen er snudd til utgangsstillingen (én gang per ark).
+    @State private var orientert = false
     @State private var rom: Fargerom3DRom = .fargekule
     @State private var tegning: Fargerom3DTegning?
     @State private var dreining = 0.0
@@ -364,12 +374,12 @@ struct Fargerom3DArk: View {
 
     private var erProfil: Bool { if case .profil = kilde { true } else { false } }
     private var profiler: [ICCProfil] { ProfilBibliotek.delt.alle.filter { $0.modell == .rgb || $0.modell == .cmyk } }
-    private var profil: ICCProfil { ProfilBibliotek.delt.profil(id: profilID) ?? .sRGB }
+    private var profil: ICCProfil { ProfilBibliotek.delt.profil(id: øktprofilID ?? profilID) ?? .sRGB }
     /// Ikke sammenligning med seg selv.
     private var sammenlign: ICCProfil? {
-        sammenlignID.isEmpty || sammenlignID == profilID ? nil : ProfilBibliotek.delt.profil(id: sammenlignID)
+        sammenlignID.isEmpty || sammenlignID == profil.id ? nil : ProfilBibliotek.delt.profil(id: sammenlignID)
     }
-    private var nøkkel: String { "\(kilde.id)|\(rom.rawValue)|\(profil.id)|\(sammenlignID)" }
+    private var nøkkel: String { "\(kilde.id)|\(rom.rawValue)|\(profil.id)|\(sammenlignID)|\(hensikt.rawValue)" }
     private var romvalg: [Fargerom3DRom] { erProfil ? [.okLab, .cieLab] : Fargerom3DRom.allCases }
 
     var body: some View {
@@ -383,8 +393,18 @@ struct Fargerom3DArk: View {
                 if rom.erLab {
                     // Fargerommet (heldekkende for en profil, som glass rundt fargene ellers) og for en profil et annet
                     // rom til sammenligning (som glass).
-                    profilvelger("Fargerom", valgt: $profilID, ingen: false)
+                    // Et valg her gjelder videre (lagres); profilen arket ble åpnet med, gjelder bare til den byttes.
+                    profilvelger("Fargerom", valgt: Binding(get: { øktprofilID ?? profilID },
+                                                            set: { øktprofilID = nil; profilID = $0 }), ingen: false)
                     if erProfil { profilvelger("Sammenlign med", valgt: $sammenlignID, ingen: true) }
+                    HStack {
+                        Text("Gjengivelseshensikt").foregroundStyle(Color.sekundærTekst)
+                        Spacer(minLength: 8)
+                        Picker("Gjengivelseshensikt", selection: $hensikt) {
+                            ForEach(Gjengivelseshensikt.allCases, id: \.self) { Text($0.visningsnavn).tag($0) }
+                        }
+                        .labelsHidden()
+                    }
                 }
                 ZStack {
                     if let tegning {
@@ -428,7 +448,7 @@ struct Fargerom3DArk: View {
             }
             .quickLookPreview($forhåndsvisning)
             .onAppear {
-                if case .profil(let p) = kilde { profilID = p.id } else if let startprofil { profilID = startprofil.id }
+                if case .profil(let p) = kilde { øktprofilID = p.id } else if let startprofil { øktprofilID = startprofil.id }
                 rom = kilde.foretrukketRom ?? lagretRom
             }
             .onChange(of: rom) { _, ny in if kilde.foretrukketRom == nil { lagretRom = ny } }
@@ -463,13 +483,15 @@ struct Fargerom3DArk: View {
     /// Regner ut tegningen (og USDZ-fila) i bakgrunnen.
     private func bygg() async {
         let navn = erProfil ? ProfilBibliotek.delt.visningsnavn(profil) : kilde.navn
-        let (k, r, p, s, g) = (kilde, rom, profil, sammenlign, gamut)
-        if dreining == 0, case .overgang(_, let fra, let til, _) = kilde {
+        let (k, r, p, s, g, h) = (kilde, rom, profil, sammenlign, gamut, hensikt)
+        if !orientert, case .overgang(_, let fra, let til, _) = kilde {
             // Overgangen på tvers av synsretningen, så forskjellen mellom de to veiene ses fra siden.
             let d = Fargerom3D.oklabposisjon(til) - Fargerom3D.oklabposisjon(fra)
             dreining = atan2(d.z, d.x) + (abs(d.x) + abs(d.z) < 0.01 ? 0.6 : 0)
+            orientert = true
         }
-        if dreining == 0 {
+        if !orientert {
+            orientert = true
             // Snu kula så snittkuløren av fargene vender mot betrakteren.
             let farger: [Farge] = switch kilde {
             case .farger(_, let f, _): f
@@ -486,7 +508,7 @@ struct Fargerom3DArk: View {
             }
         }
         let ny = await Task.detached(priority: .userInitiated) {
-            Fargerom3DTegning.lag(k, rom: r, profil: p, sammenlign: s, gamut: g)
+            Fargerom3DTegning.lag(k, rom: r, profil: p, sammenlign: s, gamut: g, hensikt: h)
         }.value
         guard !Task.isCancelled else { return }
         tegning = ny

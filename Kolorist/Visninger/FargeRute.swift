@@ -228,6 +228,8 @@ struct KopierMeny: View {
 struct FargeValgBoble: View {
     let farge: Farge
     var navn: String = ""
+    /// Fargen med navn og kilde (f.eks. en filamentprøve), til «Del som lenke».
+    var palettFarge: PalettFarge? = nil
     var lagre: ((Farge) -> Void)?
     var leggIPalett: ((Farge) -> Void)?
     var åpneIStudio: ((Farge) -> Void)? = nil
@@ -298,8 +300,8 @@ struct FargeValgBoble: View {
                 } label: {
                     Label("Kopier til", systemImage: "arrow.up.doc.on.clipboard")
                 }
-                let pf = PalettFarge(navn: navn, farge: farge)
-                DelSomLenke(navn: navn.isEmpty ? farge.hex() : navn) { Lenkedeling.farge(pf) }
+                let pf = palettFarge ?? PalettFarge(navn: navn, farge: farge)
+                DelSomLenke(navn: pf.navn.isEmpty ? farge.hex() : pf.navn) { Lenkedeling.farge(pf) }
                 if let kilde { Kildelenke(kilde: kilde) }
                 if let ekstra {
                     Divider()

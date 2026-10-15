@@ -156,13 +156,19 @@ struct HarmoniSeksjon: View {
 
     /// Grunnfargen med gitt metning og lyshet (samme regler som harmonien).
     private func grunnfarge(metning m: Double, lyshet l: Double) -> Farge {
-        if brukerHSL {
-            var h = grunnfarge.hsl
+        Self.harmonifarge(grunnfarge, hsl: brukerHSL, gamut: gamut, metning: m, lyshet: l)
+    }
+
+    /// Grunnfargen med felles metning og lyshet (HSL med HSL- og RYB-sirkelen, ellers OKLCH med metning som andel av
+    /// høyeste kroma). Uten visningens tilstand, så den kan brukes i bakgrunnen.
+    nonisolated static func harmonifarge(_ grunn: Farge, hsl: Bool, gamut: Gamut, metning m: Double, lyshet l: Double) -> Farge {
+        if hsl {
+            var h = grunn.hsl
             h.s = m
             h.l = l
             return Farge(hsl: h)
         }
-        let h = grunnfarge.okLCH.h
+        let h = grunn.okLCH.h
         return Farge(okLCH: OKLCH(l: l, c: m * Farge.maksKroma(lyshet: l, kulør: h, i: gamut), h: h))
     }
 
@@ -193,9 +199,14 @@ struct HarmoniSeksjon: View {
                         verdiTekst: tekst,
                         stegForTilgjengelighet: 0.05,
                         innenfor: grense.map { g in
-                            let (m, l) = (metning ?? grunnMetning, lyshet ?? grunnLyshet)
-                            return { v in grunnfarge(metning: metningsakse ? v : m, lyshet: metningsakse ? l : v).erInnenfor(g) }
-                        })
+                            let (m, l, base, hsl, gam) = (metning ?? grunnMetning, lyshet ?? grunnLyshet, grunnfarge, brukerHSL, gamut)
+                            return { v in
+                                Self.harmonifarge(base, hsl: hsl, gamut: gam, metning: metningsakse ? v : m, lyshet: metningsakse ? l : v)
+                                    .erInnenfor(g)
+                            }
+                        },
+                        grensenøkkel: "\(grense?.id ?? "")|\(metningsakse)|\(grunnfarge.hex())|\(brukerHSL)|\(gamut.rawValue)|"
+                            + String(format: "%.3f", metningsakse ? (lyshet ?? grunnLyshet) : (metning ?? grunnMetning)))
             Text(tekst)
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(Color.sekundærTekst)
@@ -271,7 +282,11 @@ struct HarmoniSeksjon: View {
                         tittel: Text(tittel),
                         verdiTekst: tekst,
                         stegForTilgjengelighet: 5,
-                        innenfor: grense.map { g in { v in sirkel.farge(ref, vinkel: v, gamut: gamut).erInnenfor(g) } })
+                        innenfor: grense.map { g in
+                            let (s, gam) = (sirkel, gamut)
+                            return { v in s.farge(ref, vinkel: v, gamut: gam).erInnenfor(g) }
+                        },
+                        grensenøkkel: "\(grense?.id ?? "")|kulør|\(ref.hex())|\(sirkel.rawValue)|\(gamut.rawValue)")
             Text(tekst)
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(Color.sekundærTekst)

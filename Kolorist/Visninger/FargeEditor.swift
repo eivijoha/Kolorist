@@ -461,16 +461,22 @@ struct KomponentGlidere: View {
 
     /// Om komponent `i` med verdien `v` (de andre som de er) gir en farge innenfor `grense`. `nil` når gliderne står i
     /// samme rom som grensen (da er alt innenfor).
-    private func innenfor(_ i: Int) -> ((Double) -> Bool)? {
+    private func innenfor(_ i: Int) -> (@Sendable (Double) -> Bool)? {
         guard let grense, grense.id != profil?.id else { return nil }
-        let basis = gjeldende
-        let h = hensikt
+        let (basis, h, kilde, modell) = (gjeldende, hensikt, profil, modell)
         return { v in
             var verdier = basis
             guard verdier.indices.contains(i) else { return true }
             verdier[i] = v
-            return farge(fra: verdier, alfa: 1).erInnenfor(grense, hensikt: h)
+            let f = kilde.flatMap { Farge(komponenter: verdier, i: $0, alfa: 1, hensikt: h) } ?? modell.farge(fra: verdier, alfa: 1)
+            return f.erInnenfor(grense, hensikt: h)
         }
+    }
+
+    /// Alt grensen for glider `i` avhenger av: rommene, modellen og de andre komponentene.
+    private func grensenøkkel(_ i: Int) -> String {
+        let andre = gjeldende.enumerated().filter { $0.offset != i }.map { String(format: "%.3f", $0.element) }
+        return "\(grense?.id ?? "")|\(profil?.id ?? "")|\(modell.rawValue)|\(hensikt.rawValue)|\(i)|\(andre.joined(separator: ","))"
     }
 
     /// Lokale verdier når de hører til gjeldende modell, ellers utledet fra fargen.
@@ -504,7 +510,7 @@ struct KomponentGlidere: View {
                 ), område: k.område, spor: spor(for: i, område: k.område), gjeldende: farge.swiftUI,
                    tittel: Text(k.navn),
                    verdiTekst: verditekst(gjeldende[i], k),
-                   innenfor: innenfor(i))
+                   innenfor: innenfor(i), grensenøkkel: grensenøkkel(i))
                 Text(verditekst(gjeldende[i], k))
                     .koloristFont(.callout)
                     .monospacedDigit()

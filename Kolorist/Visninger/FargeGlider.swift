@@ -13,8 +13,11 @@ struct FargeGlider: View {
     var verdiTekst: String = ""
     var stegForTilgjengelighet: Double? = nil
     /// Om verdien gir en farge innenfor fargerommet som vises (f.eks. «Vis som» i Studio). Delene av sporet utenfor
-    /// stripes, med et merke der grensen går. `nil` = ingen grense.
-    var innenfor: ((Double) -> Bool)? = nil
+    /// stripes, med et merke der grensen går. `nil` = ingen grense. Regnes i bakgrunnen, og bare når `grensenøkkel`
+    /// endres (den skal beskrive alt predikatet avhenger av: rommet og de andre komponentene).
+    var innenfor: (@Sendable (Double) -> Bool)? = nil
+    var grensenøkkel: String = ""
+    @State private var utenforDeler: [ClosedRange<Double>] = []
 
     private let høyde: CGFloat = 10
     private let tommel: CGFloat = 26
@@ -33,9 +36,7 @@ struct FargeGlider: View {
                     .fill(LinearGradient(colors: spor.isEmpty ? [.gray] : spor, startPoint: .leading, endPoint: .trailing))
                     .frame(height: høyde)
                     .overlay {
-                        if let innenfor {
-                            Gamutgrense(utenfor: Self.utenfor(innenfor, område: område))
-                        }
+                        if innenfor != nil, !utenforDeler.isEmpty { Gamutgrense(utenfor: utenforDeler) }
                     }
                     .overlay(Capsule().strokeBorder(Color.sekundærTekst.opacity(0.35), lineWidth: 0.5))
                     .padding(.horizontal, tommel / 2 - høyde / 2)
@@ -57,6 +58,12 @@ struct FargeGlider: View {
             )
         }
         .frame(height: 44)
+        .task(id: innenfor == nil ? "" : grensenøkkel) {
+            guard let innenfor else { utenforDeler = []; return }
+            let o = område
+            let deler = await Task.detached(priority: .userInitiated) { Self.utenfor(innenfor, område: o) }.value
+            if !Task.isCancelled { utenforDeler = deler }
+        }
         .accessibilityElement()
         .accessibilityHint(innenfor.map { $0(verdi) ? Text("") : Text("Utenfor fargerommet") } ?? Text(""))
         .accessibilityLabel(tittel)
@@ -69,7 +76,7 @@ struct FargeGlider: View {
     }
 
     /// Delene av området (som andeler 0…1) der fargen er utenfor: 40 prøver, og hver grense funnet nøyaktig ved halvering.
-    static func utenfor(_ innenfor: (Double) -> Bool, område: ClosedRange<Double>) -> [ClosedRange<Double>] {
+    nonisolated static func utenfor(_ innenfor: (Double) -> Bool, område: ClosedRange<Double>) -> [ClosedRange<Double>] {
         let n = 40
         let spenn = område.upperBound - område.lowerBound
         func inne(_ t: Double) -> Bool { innenfor(område.lowerBound + t * spenn) }
@@ -110,14 +117,7 @@ struct Gamutgrense: View {
                 let rute = CGRect(x: del.lowerBound * w, y: 0, width: (del.upperBound - del.lowerBound) * w, height: h)
                 var klippet = ctx
                 klippet.clip(to: Path(rute))
-                var striper = Path()
-                var x = rute.minX - h
-                while x < rute.maxX + h {
-                    striper.move(to: CGPoint(x: x, y: h)); striper.addLine(to: CGPoint(x: x + h, y: 0))
-                    x += 4
-                }
-                klippet.stroke(striper, with: .color(.white.opacity(0.7)), lineWidth: 1.2)
-                klippet.stroke(striper.offsetBy(dx: 1.4, dy: 0), with: .color(.black.opacity(0.35)), lineWidth: 0.8)
+                klippet.tegnGamutstriper(i: rute, avstand: 4)
                 // Merket ved grensen (ikke ved endene av sporet).
                 for g in [del.lowerBound, del.upperBound] where g > 0.001 && g < 0.999 {
                     var linje = Path()
@@ -128,5 +128,21 @@ struct Gamutgrense: View {
         }
         .clipShape(Capsule())
         .allowsHitTesting(false)
+    }
+}
+
+extension GraphicsContext {
+    /// Skrå striper over et område utenfor fargerommet (hvit med en mørk skygge, så de ses på både lyse og mørke farger).
+    /// Klipp konteksten til området først.
+    func tegnGamutstriper(i rute: CGRect, avstand: CGFloat) {
+        var striper = Path()
+        let h = rute.height
+        var x = rute.minX - h
+        while x < rute.maxX + h {
+            striper.move(to: CGPoint(x: x, y: rute.maxY)); striper.addLine(to: CGPoint(x: x + h, y: rute.minY))
+            x += avstand
+        }
+        stroke(striper, with: .color(.white.opacity(0.65)), lineWidth: 1.2)
+        stroke(striper.offsetBy(dx: 1.4, dy: 0), with: .color(.black.opacity(0.3)), lineWidth: 0.8)
     }
 }

@@ -363,6 +363,7 @@ struct PalettListe: View {
             }
             // Varsel midt på skjermen: en boble (iPad) bundet til et kort i rutenettet havnet på uventede steder.
             .paletthandlinger($paletthandling) { p in sti.removeAll { $0 == .palett(p) } }
+            .modifier(LukkSlettetPalett(sti: $sti))
             .modifier(ÅpneDesignsystemFraLenke(iKolonne: iKolonne) { velg(.designsystem($0)) })
             // ⌘N (Arkiv › Ny palett).
             .onChange(of: arbeidsbenk.nyPalettForespurt) { _, ny in
@@ -1738,6 +1739,20 @@ private struct ÅpneDesignsystemFraLenke: ViewModifier {
             do { try await Task.sleep(for: .milliseconds(300)) } catch { return }
             åpne(d)
             arbeidsbenk.designsystemSomÅpnes = nil
+        }
+    }
+}
+
+/// En palett som slettes fra palettkolonnen, lukkes i palettlisten om den er åpen der.
+private struct LukkSlettetPalett: ViewModifier {
+    @Binding var sti: [PalettListe.Valg]
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+
+    func body(content: Content) -> some View {
+        content.onChange(of: arbeidsbenk.palettSomSlettes) { _, id in
+            guard let id else { return }
+            sti.removeAll { if case .palett(let p) = $0 { p.id == id } else { false } }
+            arbeidsbenk.palettSomSlettes = nil
         }
     }
 }

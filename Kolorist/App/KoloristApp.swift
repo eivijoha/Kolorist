@@ -207,6 +207,8 @@ final class Arbeidsbenk {
     var designsystemFane: Bool { palettkolonneMulig }
     /// Et designsystem som skal åpnes i Designsystemer-fanen (se `åpneDesignsystem`).
     var designsystemSomÅpnes: DesignsystemDokument?
+    /// En palett som slettes et annet sted (f.eks. fra palettkolonnen): palettlisten lukker den om den er åpen.
+    var palettSomSlettes: UUID?
     /// Forhåndsvisningen som er åpen i fanen og ikke lagret ennå, så fanen vises også uten lagrede designsystemer.
     var designsystemUtkast: DesignsystemDokument?
 

@@ -66,11 +66,7 @@ struct LyshetMetningFlate: View {
                     utenfor.closeSubpath()
                     var klippet = ctx
                     klippet.clip(to: utenfor)
-                    var striper = Path()
-                    var x = r.minX - r.height
-                    while x < r.maxX { striper.move(to: CGPoint(x: x, y: r.maxY)); striper.addLine(to: CGPoint(x: x + r.height, y: r.minY)); x += 7 }
-                    klippet.stroke(striper, with: .color(.white.opacity(0.45)), lineWidth: 1.5)
-                    klippet.stroke(striper.offsetBy(dx: 2, dy: 0), with: .color(.black.opacity(0.25)), lineWidth: 1)
+                    klippet.tegnGamutstriper(i: r, avstand: 6)
                     var kurve = Path()
                     kurve.addLines(punkter)
                     ctx.stroke(kurve, with: .color(.white.opacity(0.9)), lineWidth: 2.5)

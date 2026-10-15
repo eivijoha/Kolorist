@@ -133,7 +133,8 @@ private struct Paletthandlinger: ViewModifier {
                                                             set: { if !$0 { handling = nil } })) {
                 if case .slett(let p) = handling {
                     slettes(p)
-                    kontekst.angresteg("Slett palett") { kontekst.delete(p) }
+                    // Slett etter at visninger som viser paletten, har lukket den (neste runde i hovedløkken).
+                    Task { @MainActor in kontekst.angresteg("Slett palett") { kontekst.delete(p) } }
                 }
             })
             .alert("Ny palettgruppe", isPresented: Binding(get: { if case .nyGruppe = handling { true } else { false } },

@@ -120,7 +120,8 @@ struct Fargemeny: ViewModifier {
                     // Lukk boblen når ruten forsvinner, så den ikke blir hengende uten ruten den hørte til.
                     .onDisappear { visValg = false }
                     .popover(isPresented: $visValg, arrowEdge: .bottom) {
-                        FargeValgBoble(farge: farge, navn: navn ?? "", lagre: lagreHandling, leggIPalett: leggIPalettHandling,
+                        FargeValgBoble(farge: farge, navn: navn ?? "", palettFarge: somPalettFarge(farge),
+                                       lagre: lagreHandling, leggIPalett: leggIPalettHandling,
                                        åpneIStudio: åpneIStudio, kilde: palettFarge?.kilde,
                                        ekstra: bobleEkstra?({ visValg = false })) { visValg = false }
                             .presentationCompactAdaptation(.popover)
