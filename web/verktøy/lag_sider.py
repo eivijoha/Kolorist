@@ -30,7 +30,7 @@ TIL_NB = {v: k for k, v in PAR.items()}
 T = {
     'nb': dict(
         nytt=f'Nytt i {VERSJON}', hopp='Hopp til hovedinnhold', hovedmeny='Hovedmeny', bunnmeny='Bunnmeny', språk='Språk',
-        nav=[('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('filament.html', '3D-print'), ('plattformer.html', 'Plattformer'), ('support.html', 'Støtte')],
+        nav=[('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('filament.html', '3D-print'), ('visualisering.html', 'Visualisering'), ('plattformer.html', 'Plattformer'), ('support.html', 'Støtte')],
         bunn=[('index.html', 'Om appen'), ('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('plattformer.html', 'Plattformer'), ('filament.html', '3D-print'),
               ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('visualisering.html', 'Fargevisualisering'), ('support.html', 'Støtte'),
               ('methods.html', 'Metoder og kilder'), ('privacy.html', 'Personvern'), ('terms.html', 'Vilkår')],
@@ -40,7 +40,7 @@ T = {
     ),
     'en': dict(
         nytt=f'New in {VERSJON}', hopp='Skip to main content', hovedmeny='Main menu', bunnmeny='Footer menu', språk='Language',
-        nav=[('design.html', 'Design'), ('architecture.html', 'Architecture'), ('filament.html', '3D printing'), ('platforms.html', 'Platforms'), ('support.html', 'Support')],
+        nav=[('design.html', 'Design'), ('architecture.html', 'Architecture'), ('filament.html', '3D printing'), ('visualisation.html', 'Visualisation'), ('platforms.html', 'Platforms'), ('support.html', 'Support')],
         bunn=[('index.html', 'About'), ('design.html', 'Design'), ('architecture.html', 'Architecture'), ('platforms.html', 'Platforms'), ('filament.html', '3D printing'),
               ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('visualisation.html', 'Colour visualisation'), ('support.html', 'Support'),
               ('methods.html', 'Methods and sources'), ('privacy.html', 'Privacy'), ('terms.html', 'Terms')],
