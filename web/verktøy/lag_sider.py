@@ -16,6 +16,10 @@ VERSJON = '1.4'
 N12 = ''
 # Det som var nytt i 1.3 (merket fjernet i 1.4, som N12 i 1.3).
 N13 = ''
+# iPhone Duo vises ikke på nettsiden før Apple har lansert den: 1.4 ble avvist i App Review 2026-10-16 på grunn av
+# Duo-referansene. Sett til True for å få tilbake Duo-siden, brikkene, nyheten og omtalen (bildene ligger i git, se
+# commit-meldingen der de ble tatt ut).
+VIS_DUO = False
 
 S = str(pathlib.Path(__file__).resolve().parent)
 W = str(pathlib.Path(__file__).resolve().parent.parent / VERSJON)
@@ -33,7 +37,7 @@ T = {
         nytt=f'Nytt i {VERSJON}', hopp='Hopp til hovedinnhold', hovedmeny='Hovedmeny', bunnmeny='Bunnmeny', språk='Språk',
         nav=[('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('filament.html', '3D-print'), ('visualisering.html', 'Visualisering'), ('plattformer.html', 'Plattformer'), ('support.html', 'Støtte')],
         bunn=[('index.html', 'Om appen'), ('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('plattformer.html', 'Plattformer'), ('filament.html', '3D-print'),
-              ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('visualisering.html', 'Fargevisualisering'), ('duo.html', 'iPhone Duo'), ('support.html', 'Støtte'),
+              ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('visualisering.html', 'Fargevisualisering'), ('support.html', 'Støtte'),
               ('methods.html', 'Metoder og kilder'), ('privacy.html', 'Personvern'), ('terms.html', 'Vilkår')],
         annet='English', annet_lang='en', locale='nb_NO',
         utvikler='Kolorist er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.',
@@ -43,7 +47,7 @@ T = {
         nytt=f'New in {VERSJON}', hopp='Skip to main content', hovedmeny='Main menu', bunnmeny='Footer menu', språk='Language',
         nav=[('design.html', 'Design'), ('architecture.html', 'Architecture'), ('filament.html', '3D printing'), ('visualisation.html', 'Visualisation'), ('platforms.html', 'Platforms'), ('support.html', 'Support')],
         bunn=[('index.html', 'About'), ('design.html', 'Design'), ('architecture.html', 'Architecture'), ('platforms.html', 'Platforms'), ('filament.html', '3D printing'),
-              ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('visualisation.html', 'Colour visualisation'), ('duo.html', 'iPhone Duo'), ('support.html', 'Support'),
+              ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('visualisation.html', 'Colour visualisation'), ('support.html', 'Support'),
               ('methods.html', 'Methods and sources'), ('privacy.html', 'Privacy'), ('terms.html', 'Terms')],
         annet='Norsk', annet_lang='nb', locale='en_US',
         utvikler='Kolorist is developed by Eivind Arnstein Johansen – Department of Design, NTNU.',
@@ -321,13 +325,13 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N}<a href="duo.html">Skreddersydd for iPhone Duo</a> · <a href="funksjoner.html#3d">Farger og fargerom i 3D – også i det fysiske rommet gjennom AR (utvidet virkelighet) – fargerapporter du kan dele og skrive ut, og lesekontrast etter APCA</a></p>'
+        nyhet = f'<p class="nyhet">{N}' + ('<a href="duo.html">Skreddersydd for iPhone Duo</a> · ' if VIS_DUO else '') + f'<a href="funksjoner.html#3d">Farger og fargerom i 3D – også i det fysiske rommet gjennom AR (utvidet virkelighet) – fargerapporter du kan dele og skrive ut, og lesekontrast etter APCA</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, CIELab og alle fargerom og ICC-profiler.'),
                    ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG, APCA og LRV, og farger slik de ser ut med fargesynsavvik.'),
                    ('Farger i ulikt lys', 'Simuler farger under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
-                   ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac – skreddersydd for iPhone Duo. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
+                   ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac' + (' – skreddersydd for iPhone Duo' if VIS_DUO else '') + '. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
             oppgaver_tittel='Dette kan du gjøre',
             oppgaver=[('design.html#finn-fargene', 'Lag en palett', 'Fra et bilde, en harmoni eller en farge du allerede har.'),
                       ('design.html#bygg-fargesystemet', 'Bygg toneskalaer med lik kontrast', 'Trinnene holder de samme kontrastkravene for alle kulører.'),
@@ -338,7 +342,7 @@ def startside(lang):
                       ('lys.html', 'Se fargene i lyset der de skal brukes', 'Og kompenser farger du plukker for lyset de ble fotografert i.'),
                       ('filament.html', 'Finn filament til 3D-print', 'Den nærmeste fargen blant over 2 200 filamenter, de fleste målt.'),
                       ('visualisering.html', 'Se fargene i 3D', 'Harmonier, overganger og fargerom – og som 3D-modell i AR.'),
-                      ('duo.html', 'Bruk to skjermhalvdeler på iPhone Duo', 'Fargene på venstre halvdel og verktøyene til høyre.'),
+                      *([('duo.html', 'Bruk to skjermhalvdeler på iPhone Duo', 'Fargene på venstre halvdel og verktøyene til høyre.')] if VIS_DUO else []),
                       ('design.html#lever', 'Få fargene ut', 'I designprogrammer, trykk og kode – eller del dem som lenke.')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter for skjerm og trykk – rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
@@ -352,13 +356,13 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N}<a href="duo.html">Tailored for iPhone Duo</a> · <a href="features.html#3d">Colours and colour spaces in 3D – in your physical surroundings through AR (augmented reality) too – colour reports you can share and print, and reading contrast by APCA</a></p>'
+        nyhet = f'<p class="nyhet">{N}' + ('<a href="duo.html">Tailored for iPhone Duo</a> · ' if VIS_DUO else '') + f'<a href="features.html#3d">Colours and colour spaces in 3D – in your physical surroundings through AR (augmented reality) too – colour reports you can share and print, and reading contrast by APCA</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, CIELab and every colour space and ICC profile.'),
                    ('Contrast and colour vision', 'Contrast for text and surfaces by WCAG, APCA and LRV, and colours as they appear with colour vision deficiencies.'),
                    ('Colours in different light', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
-                   ('One app – one or more devices', 'The same app on iPhone, iPad and Mac – tailored for iPhone Duo. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
+                   ('One app – one or more devices', 'The same app on iPhone, iPad and Mac' + (' – tailored for iPhone Duo' if VIS_DUO else '') + '. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
             oppgaver_tittel='What you can do',
             oppgaver=[('design.html#find-the-colours', 'Make a palette', 'From a photo, a harmony or a colour you already have.'),
                       ('design.html#build-the-colour-system', 'Build tone scales with consistent contrast', 'The steps meet the same contrast requirements for every hue.'),
@@ -369,7 +373,7 @@ def startside(lang):
                       ('light.html', 'See colours in the light where they will be used', 'And compensate colours you pick for the light they were photographed in.'),
                       ('filament.html', 'Find filament for 3D printing', 'The nearest colour among more than 2,200 filaments, most of them measured.'),
                       ('visualisation.html', 'See colours in 3D', 'Harmonies, gradients and colour spaces – and as a 3D model in AR.'),
-                      ('duo.html', 'Use both halves on iPhone Duo', 'The colours on the left half and the tools on the right.'),
+                      *([('duo.html', 'Use both halves on iPhone Duo', 'The colours on the left half and the tools on the right.')] if VIS_DUO else []),
                       ('design.html#deliver', 'Get your colours out', 'Into design apps, print and code – or share them as a link.')],
             fagfelt='Two fields',
             dører=[('design.html', 'Design', 'Palettes, tone scales and gradients for screen and print – straight into your design tools.', 'Kolorist for design', 'harmoni'),
@@ -824,7 +828,7 @@ def funksjoner(lang):
              + '\n<p><a href="visualisering.html">Les mer om fargevisualisering →</a></p>',
              [('I 3D', ul([f'<li>Tre rom: en fargekule (kulør rundt den grå aksen, lyshet opp og metning ut mot overflaten), OKLab og CIELab {N}</li>',
                            f'<li>Harmonier og paletter som punkter i fargerommet – tonebanen med selve banen {N}</li>',
-                           f'<li>Live 3D-visning av valgte farger: ved siden av verktøyene følger modellen fargene mens du justerer harmonier, overganger og paletter – på iPad, iPhone Duo og Mac {N}</li>',
+                           f'<li>Live 3D-visning av valgte farger: ved siden av verktøyene følger modellen fargene mens du justerer harmonier, overganger og paletter – på iPad{", iPhone Duo" if VIS_DUO else ""} og Mac {N}</li>',
                            f'<li>Overgangen i OKLab ved siden av veien rett gjennom sRGB, som blir mørk og grumsete på midten {N}</li>',
                            f'<li>Farger utenfor et fargerom får en pil til der de havner, f.eks. i trykkprofilen {N}</li>',
                            f'<li>Fargebiblioteker som punktsky – over 2 200 filamentfarger – med fargen din og nærmeste tone {N}</li>',
@@ -879,7 +883,7 @@ def funksjoner(lang):
              + '\n<p><a href="visualisation.html">Read more about colour visualisation →</a></p>',
              [('In 3D', ul([f'<li>Three spaces: a colour sphere (hue around the grey axis, lightness up and saturation out towards the surface), OKLab and CIELab {N}</li>',
                             f'<li>Harmonies and palettes as points in the colour space – the tone path with the path itself {N}</li>',
-                            f'<li>Live 3D view of the selected colours: next to the tools, the model follows the colours as you adjust harmonies, gradients and palettes – on iPad, iPhone Duo and Mac {N}</li>',
+                            f'<li>Live 3D view of the selected colours: next to the tools, the model follows the colours as you adjust harmonies, gradients and palettes – on iPad{", iPhone Duo" if VIS_DUO else ""} and Mac {N}</li>',
                             f'<li>The gradient in OKLab next to the path straight through sRGB, which turns dark and muddy in the middle {N}</li>',
                             f'<li>Colours outside a colour space get an arrow to where they end up, for example in the print profile {N}</li>',
                             f'<li>Colour libraries as a point cloud – more than 2,200 filament colours – with your colour and the nearest tone {N}</li>',
@@ -983,7 +987,7 @@ def plattformer(lang):
         ingress = 'Én app for iPhone, iPad og Mac. Bruk den på enheten du har – eller på flere, med palettene, betraktningsforholdene og profilene dine synkronisert via iCloud.'
         styrker_tittel = 'Hver enhet sin styrke'
         styrker = [('iPhone', 'Alltid med deg: plukk farger med kameraet, mål lyset og simuler farger under andre betraktningsforhold.'),
-                   ('iPhone Duo' + N, 'Skreddersydd: lukket står fargene i en stripe langs kanten, og åpnet får de hele venstre halvdel – med verktøyene til høyre. <a href="duo.html">Se hvordan</a>'),
+                   *([('iPhone Duo' + N, 'Skreddersydd: lukket står fargene i en stripe langs kanten, og åpnet får de hele venstre halvdel – med verktøyene til høyre. <a href="duo.html">Se hvordan</a>')] if VIS_DUO else []),
                    ('iPad', 'Mer plass: i liggende format ligger fargeflatene ved siden av verktøyene, og på store iPader er palettene for hånden.'),
                    ('Mac', 'Bredt vindu: pipette for hele skjermen og fargeprøver du drar rett inn i andre programmer.')]
         sammen_tittel = 'På tvers av enhetene'
@@ -1016,7 +1020,7 @@ def plattformer(lang):
                  ('Apple Intelligence på enheten (eksperimentelt)¹', ja, ja, ja),
                  ('Siri og Snarveier', ja, ja, ja)]
         fotnote = '¹ Der Apple Intelligence er tilgjengelig. Ellers brukes den innebygde kunnskapsbasen.'
-        krav = 'Krever iOS 26, iPadOS 26 eller macOS 26. iPhone Duo krever iOS 27.1.'
+        krav = 'Krever iOS 26, iPadOS 26 eller macOS 26.' + (' iPhone Duo krever iOS 27.1.' if VIS_DUO else '')
     else:
         tittel = 'iPhone, iPad and Mac – Kolorist'
         beskr = 'Kolorist is one app for iPhone, iPad and Mac. Use one or several – your palettes, viewing conditions and profiles follow along through iCloud.'
@@ -1024,7 +1028,7 @@ def plattformer(lang):
         ingress = 'One app for iPhone, iPad and Mac. Use it on the device you have – or on several, with your palettes, viewing conditions and profiles synced through iCloud.'
         styrker_tittel = 'Each device has its strength'
         styrker = [('iPhone', 'Always with you: pick colours with the camera, measure the light and simulate colours in other viewing conditions.'),
-                   ('iPhone Duo' + N, 'Tailored: closed, the colours sit in a strip along the edge, and open they fill the whole left half – with the tools on the right. <a href="duo.html">See how</a>'),
+                   *([('iPhone Duo' + N, 'Tailored: closed, the colours sit in a strip along the edge, and open they fill the whole left half – with the tools on the right. <a href="duo.html">See how</a>')] if VIS_DUO else []),
                    ('iPad', 'More room: in landscape the swatches sit beside the tools, and on large iPads your palettes are at hand.'),
                    ('Mac', 'Wide window: an eyedropper for the whole screen and swatches you drag straight into other apps.')]
         sammen_tittel = 'Across your devices'
@@ -1056,7 +1060,7 @@ def plattformer(lang):
                  ('Apple Intelligence on device (experimental)¹', ja, ja, ja),
                  ('Siri and Shortcuts', ja, ja, ja)]
         fotnote = '¹ Where Apple Intelligence is available. Otherwise the built-in knowledge base is used.'
-        krav = 'Requires iOS 26, iPadOS 26 or macOS 26. iPhone Duo requires iOS 27.1.'
+        krav = 'Requires iOS 26, iPadOS 26 or macOS 26.' + (' iPhone Duo requires iOS 27.1.' if VIS_DUO else '')
 
     pre = '' if nb else '../'
     ipadmappe = 'assets/ipad' if nb else '../assets/en/ipad'
@@ -1143,8 +1147,7 @@ def plattformer(lang):
       <p class="ingress">{ingress}</p>
       <ul class="plattformer" aria-label="{'Plattformer' if nb else 'Platforms'}">
         <li>iPhone</li>
-        <li>iPhone Duo</li>
-        <li>iPad</li>
+{'        <li>iPhone Duo</li>' + chr(10) if VIS_DUO else ''}        <li>iPad</li>
         <li>Mac</li>
       </ul>
     </header>
@@ -1371,6 +1374,9 @@ def skriv(sti, tekst):
     tekst = re.sub(r'(mac/skjermbilde-(?:studio|harmoni|overgang|kontrast|flatekontrast|fargesyn)\.png)\?v=\d+', r'\1?v=13', tekst)
     # Overgang på iPhone tatt på nytt uten tittellinje (som Studio og Vurdering).
     tekst = re.sub(r'(assets/(?:en/)?skjermbilde-overgang\.png)\?v=\d+', r'\1?v=14', tekst)
+    if not VIS_DUO:
+        tekst = re.sub(r'\n *<li>iPhone Duo</li>', '', tekst)
+        tekst = tekst.replace(' iPhone Duo krever iOS 27.1.', '').replace(' iPhone Duo requires iOS 27.1.', '')
     lang = 'en' if sti.startswith('en/') else 'nb'
     tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)
@@ -1499,8 +1505,9 @@ skriv('filament.html', filamentside('nb'))
 skriv('en/filament.html', filamentside('en'))
 skriv('visualisering.html', visualiseringsside('nb'))
 skriv('en/visualisation.html', visualiseringsside('en'))
-skriv('duo.html', duoside('nb'))
-skriv('en/duo.html', duoside('en'))
+if VIS_DUO:
+    skriv('duo.html', duoside('nb'))
+    skriv('en/duo.html', duoside('en'))
 skriv('plattformer.html', plattformer('nb'))
 skriv('en/platforms.html', plattformer('en'))
 skriv('funksjoner.html', funksjoner('nb'))
@@ -1518,7 +1525,7 @@ for lang, mappe in (('nb', ''), ('en', 'en/')):
         open(sti, 'w').write(h)
 
 # Nettstedskart
-sider = ['', 'design.html', 'arkitektur.html', 'plattformer.html', 'filament.html', 'lys.html', 'visualisering.html', 'duo.html', 'funksjoner.html', 'support.html', 'privacy.html', 'terms.html', 'methods.html']
+sider = ['', 'design.html', 'arkitektur.html', 'plattformer.html', 'filament.html', 'lys.html', 'visualisering.html', *(['duo.html'] if VIS_DUO else []), 'funksjoner.html', 'support.html', 'privacy.html', 'terms.html', 'methods.html']
 linjer = []
 for nbfil in sider:
     enfil = PAR.get(nbfil or 'index.html')
