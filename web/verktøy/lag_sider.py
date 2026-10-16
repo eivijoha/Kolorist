@@ -236,7 +236,7 @@ def duobilde(lang, tilstand, navn, alt):
         src = f'../assets/en/duo/{fil}' if os.path.exists(f'{W}/assets/en/duo/{fil}') else f'../assets/duo/{fil}'
     else:
         src = f'assets/duo/{fil}'
-    return f'<img src="{src}?d=3" alt="{alt}" width="{b}" height="{h}" loading="lazy">'
+    return f'<img src="{src}?d=4" alt="{alt}" width="{b}" height="{h}" loading="lazy">'
 
 
 def duofigur(lang, art, navn, alt):
@@ -1360,6 +1360,8 @@ def skriv(sti, tekst):
     tekst = re.sub(r'(skjermbilde-(?:3d-[a-z]+|gamutgrense[a-z-]*)\.png)\?v=10', r'\1?v=11', tekst)
     # Tatt på nytt med «Tilpasningsmetode» i 3D-arket.
     tekst = re.sub(r'(skjermbilde-3d-(?:gamut|overgang|filament)\.png)\?v=11', r'\1?v=12', tekst)
+    # Mac-bildene tatt på nytt med 1.4 (bredt kortoppsett, Fargesyn med én rad per farge).
+    tekst = re.sub(r'(mac/skjermbilde-(?:studio|harmoni|overgang|kontrast|flatekontrast|fargesyn)\.png)\?v=\d+', r'\1?v=13', tekst)
     lang = 'en' if sti.startswith('en/') else 'nb'
     tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)
@@ -1406,6 +1408,11 @@ def duoside(lang):
              ['Fargen på skjermen og under hvert merkede betraktningsforhold, over hverandre',
               'Lyset, kvaliteten og fargeskiftet til høyre'],
              ('par', 'lys', 'En farge under flere betraktningsforhold'), None),
+            ('Farger i 3D', 'Tonebanen på fargekula, med verktøyene ved siden av.',
+             ['Åpen: 3D-visningen på venstre halvdel, og harmonien kan justeres til høyre',
+              'Se fargene i det fysiske rommet gjennom AR (utvidet virkelighet), eller del dem som 3D-modell',
+              'Lukket: 3D-visningen over hele skjermen'],
+             ('par', '3d', 'En tonebane på fargekula'), ('visualisering.html', 'Les om fargevisualisering')),
             ('Stående', 'Åpen og stående er Kolorist som på en stor iPhone: fargene øverst og verktøyene under.',
              ['Harmonier, overganger og fargesyn med god plass til fargene',
               'Samme app og samme paletter – lukket, åpen eller stående'],
@@ -1453,6 +1460,11 @@ def duoside(lang):
          ['The colour on screen and under each ticked viewing condition, stacked',
           'The light, its quality and the colour shift on the right'],
          ('par', 'lys', 'A colour under several viewing conditions'), None),
+        ('Colours in 3D', 'The tone path on the colour sphere, with the tools next to it.',
+         ['Open: the 3D view on the left half, and the harmony can be adjusted on the right',
+          'See the colours in your physical surroundings through AR (augmented reality), or share them as a 3D model',
+          'Closed: the 3D view across the whole screen'],
+         ('par', '3d', 'A tone path on the colour sphere'), ('visualisation.html', 'Read about colour visualisation')),
         ('Upright', 'Open and upright, Kolorist works like on a large iPhone: the colours at the top and the tools below.',
          ['Harmonies, gradients and colour vision with plenty of room for the colours',
           'The same app and the same palettes – closed, open or upright'],
