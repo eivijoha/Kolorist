@@ -355,8 +355,31 @@ struct Fargerom3DVisning: View {
 extension View {
     /// Viser 3D-visningen for kilden: i venstre halvdel i bredt oppsett med fargekort (åpen iPhone Duo, iPad liggende,
     /// bred Mac), ellers som ark (iPhone, iPad) eller i eget vindu (Mac).
-    func fargerom3D(_ kilde: Binding<Fargerom3DKilde?>, gamut: Gamut = .displayP3, startprofil: ICCProfil? = nil) -> some View {
-        modifier(Fargerom3DÅpner(kilde: kilde, gamut: gamut, startprofil: startprofil))
+    /// `opphav`: hva som åpnet 3D-visningen (f.eks. «harmoni»). I venstre halvdel følger den da fargene derfra
+    /// (`levende3D(opphav:kilde:)`).
+    func fargerom3D(_ kilde: Binding<Fargerom3DKilde?>, gamut: Gamut = .displayP3, startprofil: ICCProfil? = nil,
+                    opphav: String? = nil) -> some View {
+        modifier(Fargerom3DÅpner(kilde: kilde, gamut: gamut, startprofil: startprofil, opphav: opphav))
+    }
+
+    /// Levende 3D: står 3D-visningen for `opphav` i venstre halvdel, bygges den på nytt med `kilde` når fargene endres
+    /// (harmonien, fargen, overgangen eller paletten man arbeider med). Dreiningen beholdes.
+    func levende3D(opphav: String, kilde: Fargerom3DKilde?) -> some View {
+        modifier(Levende3D(opphav: opphav, kilde: kilde))
+    }
+}
+
+private struct Levende3D: ViewModifier {
+    let opphav: String
+    let kilde: Fargerom3DKilde?
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.venstre3DFane) private var fane
+
+    func body(content: Content) -> some View {
+        content.onChange(of: kilde?.id) {
+            guard let fane, let v = arbeidsbenk.venstre3D[fane], v.opphav == opphav, let k = kilde, k.id != v.kilde.id else { return }
+            arbeidsbenk.venstre3D[fane] = Fargerom3DVindu(kilde: k, gamut: v.gamut, startprofil: v.startprofil, opphav: opphav)
+        }
     }
 }
 
@@ -364,6 +387,7 @@ private struct Fargerom3DÅpner: ViewModifier {
     @Binding var kilde: Fargerom3DKilde?
     let gamut: Gamut
     let startprofil: ICCProfil?
+    let opphav: String?
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.venstre3DFane) private var venstreFane
     #if os(macOS)
@@ -379,7 +403,7 @@ private struct Fargerom3DÅpner: ViewModifier {
     private func flyttTilVenstreHalvdel() {
         guard let fane = tilVenstre, let k = kilde else { return }
         kilde = nil
-        arbeidsbenk.venstre3D[fane] = Fargerom3DVindu(kilde: k, gamut: gamut, startprofil: startprofil)
+        arbeidsbenk.venstre3D[fane] = Fargerom3DVindu(kilde: k, gamut: gamut, startprofil: startprofil, opphav: opphav)
     }
 
     func body(content: Content) -> some View {
@@ -413,6 +437,8 @@ struct Fargerom3DVindu {
     let kilde: Fargerom3DKilde
     let gamut: Gamut
     let startprofil: ICCProfil?
+    /// Hva som åpnet visningen (levende 3D, se `levende3D(opphav:kilde:)`).
+    var opphav: String? = nil
 }
 
 #if os(macOS)
@@ -565,6 +591,8 @@ struct Fargerom3DArk: View {
             rom = kilde.foretrukketRom ?? lagretRom
         }
         .onChange(of: rom) { _, ny in if kilde.foretrukketRom == nil { lagretRom = ny } }
+        // Levende 3D: et nytt fargerom (f.eks. «Vis som» byttet) vises med en gang.
+        .onChange(of: kilde.id) { if case .profil(let p) = kilde { øktprofilID = p.id } }
         .task(id: nøkkel) { await bygg() }
     }
 
@@ -591,6 +619,11 @@ struct Fargerom3DArk: View {
 
     /// Regner ut tegningen (og USDZ-fila) i bakgrunnen.
     private func bygg() async {
+        // Levende 3D: når fargene endres fortløpende (glidere), bygges modellen først når de har stoppet et øyeblikk.
+        if tegning != nil {
+            try? await Task.sleep(for: .milliseconds(120))
+            guard !Task.isCancelled else { return }
+        }
         let navn = erProfil ? ProfilBibliotek.delt.visningsnavn(profil) : kilde.navn
         let (k, r, p, s, g, h) = (kilde, rom, profil, sammenlign, gamut, hensikt)
         if !orientert, case .overgang(_, let fra, let til, _) = kilde {

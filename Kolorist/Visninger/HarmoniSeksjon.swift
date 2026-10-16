@@ -359,6 +359,13 @@ struct HarmoniSeksjon: View {
         }
     }
 
+    /// Harmonien i 3D – tonebanen med selve banen (tett med toner), så den kan følges gjennom rommet.
+    private func harmonikilde3D(_ farger: [Farge]) -> Fargerom3DKilde {
+        let bane = harmoni == .tonebane
+            ? strek.wrappedValue.toner(fraKulør: startKulør, spenn: tonebaneSpenn, antall: 64, gamut: gamut) : nil
+        return .farger(navn: harmoni.navn, farger: farger, bane: bane)
+    }
+
     var body: some View {
         Section {
             // Gruppert med skillelinjer: én kulør, naboer, motsatte kulører, jevnt rundt sirkelen.
@@ -450,13 +457,10 @@ struct HarmoniSeksjon: View {
             Button("Skriv ut harmonien …", systemImage: "printer") {
                 PalettUtskrift.skrivUt(Palett(navn: harmoni.navn, farger: farger.map { PalettFarge(farge: $0, opphav: .manuell) }))
             }
-            Button("Vis i 3D …", systemImage: "rotate.3d") {
-                // Tonebanen med selve banen (tett med toner), så den kan følges gjennom rommet.
-                let bane = harmoni == .tonebane
-                    ? strek.wrappedValue.toner(fraKulør: startKulør, spenn: tonebaneSpenn, antall: 64, gamut: gamut) : nil
-                vis3D = .farger(navn: harmoni.navn, farger: farger, bane: bane)
-            }
-            .fargerom3D($vis3D, gamut: gamut)
+            Button("Vis i 3D …", systemImage: "rotate.3d") { vis3D = harmonikilde3D(farger) }
+            .fargerom3D($vis3D, gamut: gamut, opphav: "harmoni")
+            // Levende 3D i venstre halvdel: modellen følger harmonien mens den justeres.
+            .levende3D(opphav: "harmoni", kilde: harmonikilde3D(farger))
         } header: {
             Text("Fargeharmonier")
         } footer: {

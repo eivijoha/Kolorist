@@ -39,6 +39,7 @@ Se farger og fargerom i 3D, kontroller lesbarheten etter APCA og WCAG, og bruk b
 Kolorist 1.4 viser fargene i tre dimensjoner – og gir dem plass på iPhone Duo.
 
 • Farger og fargerom i 3D: harmonier, paletter, overganger og fargebiblioteker som punkter i en fargekule, i OKLab eller i CIELab. Dra for å dreie og knip for å zoome.
+• Live 3D-visning av valgte farger: på iPad, iPhone Duo og Mac står 3D-visningen ved siden av verktøyene og følger fargene mens du justerer harmonier, overganger og paletter.
 • Sammenlign fargerommene til ICC-profiler, velg tilpasningsmetode, og se hvor farger utenfor rommet havner.
 • Del 3D-visningen som 3D-modell, og se fargene i det fysiske rommet gjennom AR (utvidet virkelighet).
 • iPhone Duo: lukket står fargene i en stripe langs kanten. Åpnet får de hele venstre halvdel, og verktøyene står til høyre. På iPad i liggende format legger 3D-visningen seg ved siden av verktøyene.
@@ -71,6 +72,7 @@ ALLE FARGEROM
 
 FARGER OG FARGEROM I 3D
 • Harmonier, paletter, overganger og fargebiblioteker i en fargekule, i OKLab eller i CIELab
+• Live 3D-visning av valgte farger ved siden av verktøyene
 • Sammenlign fargerommene til ICC-profiler, med valgfri tilpasningsmetode
 • Del som 3D-modell, og se fargene i det fysiske rommet gjennom AR (utvidet virkelighet)
 
@@ -149,6 +151,7 @@ See colours and colour spaces in 3D, check readability by APCA and WCAG, and use
 Kolorist 1.4 shows your colours in three dimensions – and gives them room on iPhone Duo.
 
 • Colours and colour spaces in 3D: harmonies, palettes, gradients and colour libraries as points in a colour sphere, in OKLab or in CIELab. Drag to rotate and pinch to zoom.
+• Live 3D view of the selected colours: on iPad, iPhone Duo and Mac, the 3D view sits next to the tools and follows the colours as you adjust harmonies, gradients and palettes.
 • Compare the colour spaces of ICC profiles, choose a rendering intent, and see where colours outside the space end up.
 • Share the 3D view as a 3D model, and see the colours in your physical surroundings through AR (augmented reality).
 • iPhone Duo: closed, the colours sit in a strip along the edge. Open, they fill the whole left half, and the tools sit on the right. On iPad in landscape, the 3D view sits next to the tools.
@@ -181,21 +184,22 @@ EVERY COLOUR SPACE
 
 COLOURS AND COLOUR SPACES IN 3D
 • Harmonies, palettes, gradients and colour libraries in a colour sphere, in OKLab or in CIELab
+• Live 3D view of the selected colours next to the tools
 • Compare the colour spaces of ICC profiles, with a choice of rendering intent
 • Share as a 3D model, and see the colours in your physical surroundings through AR (augmented reality)
 
 COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 • Import your own colour charts in ASE, ACO or ACB with named tones
 • Filament colours for 3D printing: more than 2,200 colours from 150 manufacturers, most of them measured – find the nearest filament
-• Your own ICC profiles, synced through iCloud Drive
+• Your own ICC profiles, synced through iCloud
 
 GRADIENTS, TONES AND HARMONIES
-• Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
+• Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Hering, Goethe, HSL or RYB colour wheels
 
 CONTRAST AND COLOUR VISION
 • Contrast check by WCAG 2.2, APCA or LRV, with auto-fix that adjusts the colour until it passes
-• Text contrast and text colours for whole palettes
+• Text contrast and text colours for palettes
 • Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson – in the chosen light too
 • See palettes with colour vision deficiencies, with confusion lines in a chromaticity diagram – and which colours become hard to tell apart
 • Colour reports you can copy, share as a link and print
@@ -218,10 +222,10 @@ SHARE, SAVE AND EXPORT
 • Print palettes and palette groups on A4 in CIELab
 
 PALETTES AND ICLOUD
-Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
+Collect colours and gradients in palettes and groups, synced through your private iCloud.
 
 OPEN ABOUT METHODS
-The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV, ICC and design tokens – with source and explanation.
+The app shows the methods it builds on, from OKLab and CIEDE2000 to WCAG and APCA, with source and explanation.
 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
@@ -251,6 +255,7 @@ Se farger og fargerom i 3D ved siden av verktøyene, kontroller lesbarheten ette
 Kolorist 1.4 for Mac viser fargene i tre dimensjoner.
 
 • Farger og fargerom i 3D: harmonier, paletter, overganger og fargebiblioteker som punkter i en fargekule, i OKLab eller i CIELab – ved siden av verktøyene når vinduet er bredt. Dra for å dreie.
+• Live 3D-visning av valgte farger: modellen følger fargene mens du justerer harmonier, overganger og paletter.
 • Sammenlign fargerommene til ICC-profiler, velg tilpasningsmetode, og se hvor farger utenfor rommet havner.
 • Del 3D-visningen som 3D-modell, og se modellen i eget vindu.
 • Gamutgrenser i gliderne og i flaten for lyshet og metning – se hvor fargen havner utenfor fargerommet du har valgt.
@@ -283,6 +288,7 @@ ALLE FARGEROM
 
 FARGER OG FARGEROM I 3D
 • Harmonier, paletter, overganger og fargebiblioteker i en fargekule, i OKLab eller i CIELab
+• Live 3D-visning av valgte farger ved siden av verktøyene
 • Sammenlign fargerommene til ICC-profiler, med valgfri tilpasningsmetode
 • Del som 3D-modell, og se modellen i eget vindu
 
@@ -352,6 +358,7 @@ See colours and colour spaces in 3D next to your tools, check readability by APC
 Kolorist 1.4 for Mac shows your colours in three dimensions.
 
 • Colours and colour spaces in 3D: harmonies, palettes, gradients and colour libraries as points in a colour sphere, in OKLab or in CIELab – next to the tools when the window is wide. Drag to rotate.
+• Live 3D view of the selected colours: the model follows the colours as you adjust harmonies, gradients and palettes.
 • Compare the colour spaces of ICC profiles, choose a rendering intent, and see where colours outside the space end up.
 • Share the 3D view as a 3D model, and view the model in its own window.
 • Gamut limits on the sliders and in the lightness and saturation field – see where the colour falls outside the colour space you have chosen.
@@ -384,21 +391,22 @@ EVERY COLOUR SPACE
 
 COLOURS AND COLOUR SPACES IN 3D
 • Harmonies, palettes, gradients and colour libraries in a colour sphere, in OKLab or in CIELab
+• Live 3D view of the selected colours next to the tools
 • Compare the colour spaces of ICC profiles, with a choice of rendering intent
 • Share as a 3D model, and view the model in its own window
 
 COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
 • Import your own colour charts in ASE, ACO or ACB with named tones
 • Filament colours for 3D printing: more than 2,200 colours, most of them measured – find the nearest filament
-• Your own ICC profiles, synced through iCloud Drive
+• Your own ICC profiles, synced through iCloud
 
 GRADIENTS, TONES AND HARMONIES
-• Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
+• Gradients in equal perceptual steps in OKLab, with lighter and darker rows
 • Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Hering, Goethe, HSL or RYB colour wheels
 
 CONTRAST AND COLOUR VISION
 • Contrast check by WCAG 2.2, APCA or LRV, with auto-fix that adjusts the colour until it passes
-• Text contrast and text colours for whole palettes
+• Text contrast and text colours for palettes
 • Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson
 • See palettes with colour vision deficiencies, with confusion lines in a chromaticity diagram – and which colours become hard to tell apart
 • Colour reports you can copy, share as a link and print
@@ -411,7 +419,7 @@ LIGHT AND COLOUR MEASUREMENT
 PICK AND DRAG
 • An eyedropper that picks colours from anywhere on screen
 • Drag swatches into other apps and colour wells – and drag colours in from them
-• Put palettes in the Mac colour picker, as a colour list in every app
+• Put palettes in the Mac colour picker for every app
 
 APPLE INTELLIGENCE ON DEVICE (EXPERIMENTAL)
 • Suggested palettes from value words, grounded in a knowledge base of more than a hundred colour concepts
@@ -424,7 +432,7 @@ SHARE, SAVE AND EXPORT
 • Print palettes and palette groups on A4 in CIELab
 
 PALETTES AND ICLOUD
-Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
+Collect colours and gradients in palettes and groups, synced through your private iCloud.
 
 OPEN ABOUT METHODS
 The app shows the methods it builds on, from OKLab and CIEDE2000 to WCAG and APCA, with source and explanation.
@@ -450,7 +458,7 @@ NO ACCOUNT NEEDED
 No account, no server of our own, no analytics, ads or in-app purchases. Data syncs through the user's private iCloud when signed in; otherwise everything stays on device.
 
 NEW IN 1.4 – HOW TO TEST
-• 3D: Studio › Harmony › Show in 3D … (also from a palette's menu, and Show as › Show the colour space in 3D …). Drag to rotate, pinch to zoom. The share button exports a USDZ model; on iPhone and iPad the AR button opens AR Quick Look. On iPad in landscape and on a wide Mac window, the 3D view replaces the colour card on the left.
+• 3D: Studio › Harmony › Show in 3D … (also from a palette's menu, and Show as › Show the colour space in 3D …). Drag to rotate, pinch to zoom. The share button exports a USDZ model; on iPhone and iPad the AR button opens AR Quick Look. On iPad in landscape, on an open iPhone Duo and in a wide Mac window, the 3D view replaces the colour card on the left and updates live as the harmony, gradient or palette is adjusted.
 • iPhone Duo (iOS 27.1): closed, the large swatches become a strip along the left edge; open (fully or partly), the colours fill the left half and the app works as on iPhone on the right.
 • Gamut limits: Studio › Show as › choose e.g. Generic CMYK; the sliders are striped where the colour falls outside.
 • Confusion lines: Assess › Colour vision, scroll to the chromaticity diagram.

@@ -328,8 +328,8 @@ private struct Venstre3D: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
 
     var body: some View {
+        // Uten `.id(kilde)`: levende 3D bygger modellen på nytt i samme visning, så dreiningen beholdes.
         Fargerom3DArk(kilde: v.kilde, gamut: v.gamut, startprofil: v.startprofil, ferdig: { arbeidsbenk.venstre3D[fane] = nil })
-            .id(v.kilde.id)
     }
 }
 

@@ -23,6 +23,8 @@ struct FargeEditor: View {
     @State private var harmoniGrunn: Int?
     /// Fargen (eller harmonien) i 3D.
     @State private var vis3D: Fargerom3DKilde?
+    /// Hva som åpnet 3D-visningen (levende 3D i venstre halvdel): «farge», «harmoniflate» eller «visOgså».
+    @State private var vis3DOpphav: String?
     @Environment(\.modelContext) private var kontekst
     @AppStorage("studioModus") private var lagretModus: Modus = .farge
     private var modus: Modus { bareFarge ? .farge : lagretModus }
@@ -114,6 +116,17 @@ struct FargeEditor: View {
                             gamut: arbeidsbenk.gamut, begrens: arbeidsbenk.begrens)
     }
 
+    /// 3D for den aktive fargen: med et fargebibliotek alle tonene, med fargen og nærmeste tone markert.
+    private func fargekilde3D(_ farge: Farge) -> Fargerom3DKilde {
+        visOgsåBibliotek.map { .bibliotek($0, markert: farge) } ?? .farger(navn: farge.hex(), farger: [farge])
+    }
+
+    /// 3D for «Vis som»: biblioteket med fargen markert, eller fargerommet til profilen (RGB og CMYK).
+    private var visOgsåKilde3D: Fargerom3DKilde? {
+        if let b = visOgsåBibliotek { return .bibliotek(b, markert: arbeidsbenk.aktivFarge) }
+        return visOgsåProfil.modell == .rgb || visOgsåProfil.modell == .cmyk ? .profil(visOgsåProfil) : nil
+    }
+
     /// Fargene de store flatene viser (toneskalaen, harmonien eller den aktive fargen) – også fargelinjen på iPhone Duo.
     private func flatefarger(_ farge: Farge) -> [Farge] {
         if modus == .toneskala { return toneskala(farge) }
@@ -188,7 +201,7 @@ struct FargeEditor: View {
                                       lenke: { Lenkedeling.harmoni(h, sirkel: s, grunn: grunn, farger: farger, antall: a, vinkel: v,
                                                                    lyshetsrekkefølge: o, grunnIndeks: i) },
                                       tekstfarge: (farger.last ?? farge).lesbarTekstfarge.swiftUI,
-                                      vis3D: { vis3D = .farger(navn: h.navn, farger: farger) })
+                                      vis3D: { vis3DOpphav = "harmoniflate"; vis3D = .farger(navn: h.navn, farger: farger) })
                         }
                 } else {
                     // Samme rom som «Vis som»: én flate med verdiene. Ellers verdiene i kildefargerommet til venstre.
@@ -201,11 +214,7 @@ struct FargeEditor: View {
                                stablet: bred,
                                lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                                leggIPalett: { lagreNavn = ""; lagreFarger = [$0] },
-                               vis3D: {
-                                   // Med et fargebibliotek: alle tonene, med fargen og nærmeste tone markert.
-                                   vis3D = visOgsåBibliotek.map { .bibliotek($0, markert: farge) }
-                                       ?? .farger(navn: farge.hex(), farger: [farge])
-                               })
+                               vis3D: { vis3DOpphav = "farge"; vis3D = fargekilde3D(farge) })
                 }
             }
     }
@@ -247,7 +256,7 @@ struct FargeEditor: View {
                     }
                 // Menyen får plass først; profilnavnet kortes ned når feltet ellers ville blitt for smalt.
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: farge, visMineFargerom: $visMineFargerom,
-                            vis3D: { vis3D = $0 })
+                            vis3D: { vis3DOpphav = "visOgså"; vis3D = $0 })
                     .layoutPriority(1)
             }
             .padding(.horizontal, 16)
@@ -293,6 +302,10 @@ struct FargeEditor: View {
             }
         }
         .formStyle(.grouped)
+        // Levende 3D i venstre halvdel: modellen følger fargen, harmonien og «Vis som».
+        .levende3D(opphav: "farge", kilde: fargekilde3D(farge))
+        .levende3D(opphav: "harmoniflate", kilde: harmonifarger.isEmpty ? nil : .farger(navn: harmonitype.navn, farger: harmonifarger))
+        .levende3D(opphav: "visOgså", kilde: visOgsåKilde3D)
         #if os(iOS)
         .listSectionSpacing(.compact)
         #endif
@@ -325,7 +338,7 @@ struct FargeEditor: View {
         #endif
         // Arket presenteres herfra, ikke fra menyen: iOS viser ikke ark fra et menyvalg som er i ferd med å lukkes.
         .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }
-        .fargerom3D($vis3D, gamut: arbeidsbenk.gamut, startprofil: visOgsåProfil)
+        .fargerom3D($vis3D, gamut: arbeidsbenk.gamut, startprofil: visOgsåProfil, opphav: vis3DOpphav)
         .sheet(isPresented: Binding(get: { lagreFarger != nil }, set: { if !$0 { lagreFarger = nil } })) {
             VelgPalettArk(farger: lagreFarger ?? [], foreslåttNavn: lagreNavn)
         }

@@ -130,7 +130,7 @@ private struct Paletthandlinger: ViewModifier {
             .fargerom3D(Binding(get: {
                 guard case .vis3D(let p) = handling else { return nil }
                 return .farger(navn: p.navn.isEmpty ? String(localized: "Uten navn") : p.navn, farger: p.farger.map(\.farge))
-            }, set: { if $0 == nil { handling = nil } }))
+            }, set: { if $0 == nil { handling = nil } }), opphav: { if case .vis3D(let p) = handling { "palett-\(p.id.uuidString)" } else { nil } }())
             .omdøpPalett(binding { if case .omdøp(let p) = $0 { p } else { nil } })
             .modifier(SlettPalettBekreftelse(navn: handling?.palett.navn ?? "",
                                              vises: Binding(get: { if case .slett = handling { true } else { false } },

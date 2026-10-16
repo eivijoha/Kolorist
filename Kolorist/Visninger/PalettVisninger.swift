@@ -907,7 +907,11 @@ struct PalettDetalj: View {
         .fargerom3D(Binding(get: {
             vis3D ? .farger(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn,
                             farger: dokument.farger.map(\.farge)) : nil
-        }, set: { if $0 == nil { vis3D = false } }))
+        }, set: { if $0 == nil { vis3D = false } }), opphav: "palett-\(dokument.id.uuidString)")
+        // Levende 3D i venstre halvdel (åpen iPhone Duo): modellen følger fargene i paletten.
+        .levende3D(opphav: "palett-\(dokument.id.uuidString)",
+                   kilde: .farger(navn: dokument.navn.isEmpty ? String(localized: "Uten navn") : dokument.navn,
+                                  farger: dokument.farger.map(\.farge)))
         .sheet(item: $vurdering) { VurderingArk(vurdering: $0, farger: dokument.farger) }
         .modifier(SlettPalettBekreftelse(navn: dokument.navn, vises: $slettSpørsmål, slett: slettPalett))
         .alert("KI", isPresented: Binding(get: { kiFeil != nil }, set: { if !$0 { kiFeil = nil } })) {

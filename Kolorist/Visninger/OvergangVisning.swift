@@ -39,6 +39,8 @@ struct OvergangVisning: View {
     @State private var leggIPalett: [PalettFarge]?
     /// Overgangen i 3D: OKLab-veien mot veien gjennom sRGB.
     @State private var vis3D: Fargerom3DKilde?
+    /// Hva som åpnet 3D-visningen (levende 3D): «overgang» eller «visOgså».
+    @State private var vis3DOpphav: String?
     @Environment(\.modelContext) private var kontekst
     @Environment(ProfilBibliotek.self) private var bibliotek
     /// Samme «Vis som»-rom og hensikt som Studio, så feltene øverst viser verdiene der.
@@ -54,6 +56,11 @@ struct OvergangVisning: View {
 
     /// «+» i øvre høyre hjørne av feltene: lagre, kopiere eller dele hele overgangen. Hver tone har sine egne valg
     /// i trykk og hold-menyen (høyreklikk på Mac).
+    /// Overgangen i 3D (OKLab-veien mot veien rett gjennom sRGB).
+    private var overgangskilde3D: Fargerom3DKilde {
+        .overgang(navn: String(localized: "Overgang \(start.hex()) → \(slutt.hex())"), fra: start, til: slutt, antall: antall)
+    }
+
     private var lagremeny: some View {
         let farger = toner.map { PalettFarge(farge: $0, opphav: .overgang) }
         let navn = String(localized: "Overgang \(start.hex()) → \(slutt.hex())")
@@ -70,7 +77,7 @@ struct OvergangVisning: View {
                          // På flaten: lesbar mot siste tone. iPhone Duo: i raden under, på kortbakgrunnen.
                          tekstfarge: duoLukket ? .primary : (toner.last ?? slutt).lesbarTekstfarge.swiftUI,
                          gradienter: [PalettGradient(navn: navn, oppsett: oppsett)],
-                         vis3D: { vis3D = .overgang(navn: navn, fra: start, til: slutt, antall: antall) })
+                         vis3D: { vis3DOpphav = "overgang"; vis3D = overgangskilde3D })
     }
 
     private func lagreGradient() {
@@ -117,7 +124,7 @@ struct OvergangVisning: View {
                 if !medFlate { lagremeny }
                 Spacer(minLength: 0)
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom,
-                            vis3D: { vis3D = $0 })
+                            vis3D: { vis3DOpphav = "visOgså"; vis3D = $0 })
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)
@@ -279,6 +286,10 @@ struct OvergangVisning: View {
         .formStyle(.grouped)
         // Grunnfarge-sirkelen fra lyshetsstigen løftet over fingeren, utenfor radens klipping.
         .lyshetslupe(lyshetslupe)
+        // Levende 3D i venstre halvdel: modellen følger overgangen og «Vis som».
+        .levende3D(opphav: "overgang", kilde: overgangskilde3D)
+        .levende3D(opphav: "visOgså", kilde: visOgsåBibliotek.map { .bibliotek($0, markert: start) }
+                   ?? (visOgsåProfil.modell == .rgb || visOgsåProfil.modell == .cmyk ? .profil(visOgsåProfil) : nil))
         }
         .background(Color.skjemabakgrunn)
         .navigationTitle("Overgang")
@@ -291,7 +302,7 @@ struct OvergangVisning: View {
         } message: {
             Text("Gradienten lagres under «Gradienter» i Paletter og kan åpnes igjen her.")
         }
-        .fargerom3D($vis3D, gamut: arbeidsbenk.gamut)
+        .fargerom3D($vis3D, gamut: arbeidsbenk.gamut, opphav: vis3DOpphav)
         .sheet(isPresented: Binding(get: { leggIPalett != nil }, set: { if !$0 { leggIPalett = nil } })) {
             VelgPalettArk(farger: leggIPalett ?? [])
         }
