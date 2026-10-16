@@ -319,9 +319,11 @@ struct HarmoniSeksjon: View {
             // Kulørringen rundt flaten: start og slutt som håndtak, banen som bue med pil (opptil en hel runde).
             let ref = referansefarge(okLCHKulør: startKulør)
             let tekst: (Double) -> String = { v in "\(Int(v.rounded()))°" }
+            // Håndtakene i ringen viser endepunktene slik de faktisk blir, med lysheten og metningen fra flaten.
+            let ender = strek.wrappedValue.toner(fraKulør: startKulør, spenn: tonebaneSpenn, antall: 2, gamut: gamut).map(begrens)
             TonebaneRing(start: startKulør, spenn: tonebaneSpenn,
                          ringfarge: { sirkel.farge(ref, vinkel: $0, gamut: gamut).swiftUI },
-                         farge: { referansefarge(okLCHKulør: $0) },
+                         startfarge: ender[0], sluttfarge: ender[1],
                          vinkel: { sirkel.vinkel(for: referansefarge(okLCHKulør: $0)) },
                          kulør: { sirkel.farge(ref, vinkel: $0, gamut: gamut).okLCH.h },
                          tekst: tekst,

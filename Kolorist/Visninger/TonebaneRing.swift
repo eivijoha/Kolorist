@@ -11,8 +11,9 @@ struct TonebaneRing<Midt: View>: View {
     let spenn: Double
     /// Ringens farge ved en vinkel i valgt fargesirkel.
     let ringfarge: (Double) -> Color
-    /// Fargen ved en OKLCH-kulør (til håndtakene).
-    let farge: (Double) -> Farge
+    /// Tonebanens faktiske første og siste tone (med lyshet og metning fra flaten), vist i håndtakene.
+    let startfarge: Farge
+    let sluttfarge: Farge
     /// OKLCH-kulør → vinkel i valgt fargesirkel, og omvendt.
     let vinkel: (Double) -> Double
     let kulør: (Double) -> Double
@@ -109,20 +110,19 @@ struct TonebaneRing<Midt: View>: View {
                 midt
                     .frame(width: indre * 1.41 + 24, height: indre * 1.41 + 24)
                     .position(senter)
-                håndtak(kulør: start, tittel: Text("Kulør, start"), senter: senter, radius: ringR, merket: merketSlutt == false) {
+                håndtak(kulør: start, farge: startfarge, tittel: Text("Kulør, start"), senter: senter, radius: ringR, merket: merketSlutt == false) {
                     endre(Self.normaliser(start + $0), spenn - $0)
                 }
-                håndtak(kulør: slutt, tittel: Text("Kulør, slutt"), senter: senter, radius: ringR, merket: merketSlutt == true) {
+                håndtak(kulør: slutt, farge: sluttfarge, tittel: Text("Kulør, slutt"), senter: senter, radius: ringR, merket: merketSlutt == true) {
                     endre(start, min(max(spenn + $0, -360), 360))
                 }
             }
         }
     }
 
-    private func håndtak(kulør h: Double, tittel: Text, senter: CGPoint, radius: CGFloat, merket: Bool,
+    private func håndtak(kulør h: Double, farge f: Farge, tittel: Text, senter: CGPoint, radius: CGFloat, merket: Bool,
                          juster: @escaping (Double) -> Void) -> some View {
-        let f = farge(h)
-        return Circle()
+        Circle()
             .fill(f.swiftUI)
             .overlay(Circle().strokeBorder(merket ? f.lesbarTekstfarge.swiftUI : .white, lineWidth: merket ? 4 : 3))
             .overlay(Circle().strokeBorder(Color.black.opacity(0.25), lineWidth: 0.5))
