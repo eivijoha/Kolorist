@@ -236,7 +236,7 @@ def duobilde(lang, tilstand, navn, alt):
         src = f'../assets/en/duo/{fil}' if os.path.exists(f'{W}/assets/en/duo/{fil}') else f'../assets/duo/{fil}'
     else:
         src = f'assets/duo/{fil}'
-    return f'<img src="{src}?d=2" alt="{alt}" width="{b}" height="{h}" loading="lazy">'
+    return f'<img src="{src}?d=3" alt="{alt}" width="{b}" height="{h}" loading="lazy">'
 
 
 def duofigur(lang, art, navn, alt):
