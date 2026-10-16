@@ -94,7 +94,24 @@ struct Fargerom3DTegning: Sendable {
     /// Det samme som USDZ-scene.
     var scene = Fargerom3D.Scene()
 
-    /// Bygger innholdet (tungt for ICC-profiler og biblioteker: kjøres i bakgrunnen).
+    /// Kula og gamutskallene mellomlagres per rom, profil, gamut og tilpasningsmetode – de er det tunge (skallene regnes
+    /// gjennom ICC-profilen), og de endres ikke mens fargene justeres. Da kan levende 3D følge fargene fortløpende.
+    nonisolated private static let bufferlås = NSLock()
+    nonisolated(unsafe) private static var flatebuffer: [String: [Fargerom3D.Flate]] = [:]
+
+    nonisolated private static func buffret(_ nøkkel: String, _ lag: () -> [Fargerom3D.Flate]) -> [Fargerom3D.Flate] {
+        bufferlås.lock()
+        if let f = flatebuffer[nøkkel] { bufferlås.unlock(); return f }
+        bufferlås.unlock()
+        let f = lag()
+        bufferlås.lock()
+        if flatebuffer.count > 24 { flatebuffer.removeAll() }
+        flatebuffer[nøkkel] = f
+        bufferlås.unlock()
+        return f
+    }
+
+    /// Bygger innholdet (tungt for ICC-profiler og biblioteker første gang: kjøres i bakgrunnen).
     nonisolated static func lag(_ kilde: Fargerom3DKilde, rom: Fargerom3DRom, profil: ICCProfil, sammenlign: ICCProfil?,
                                 gamut: Gamut, hensikt: Gjengivelseshensikt = .relativKolorimetrisk) -> Fargerom3DTegning {
         var t = Fargerom3DTegning()
@@ -111,8 +128,16 @@ struct Fargerom3DTegning: Sendable {
             t.scene.flater.append((f, opasitet))
         }
         func skall(_ p: ICCProfil, opasitet: Double, oppløsning: Int) {
-            guard let sider = Fargerom3D.gamutskall(p, oppløsning: oppløsning, hensikt: hensikt) else { return }
-            for s in sider { flate(rom == .cieLab ? s : s.omplassert(posisjon), opasitet: opasitet) }
+            let sider = buffret("skall|\(p.id)|\(oppløsning)|\(hensikt.rawValue)|\(rom.rawValue)|\(String(describing: gamut))") {
+                guard let sider = Fargerom3D.gamutskall(p, oppløsning: oppløsning, hensikt: hensikt) else { return [] }
+                return rom == .cieLab ? sider : sider.map { $0.omplassert(posisjon) }
+            }
+            for s in sider { flate(s, opasitet: opasitet) }
+        }
+        func kule(opasitet: Double) {
+            for f in buffret("kule|\(String(describing: gamut))", { [Fargerom3D.kuleflate(gamut: gamut, kolonner: 49, rader: 25)] }) {
+                flate(f, opasitet: opasitet)
+            }
         }
         func linje(_ punkter: [SIMD3<Double>], farger: [Color], bredde: CGFloat, stiplet: Bool = false) {
             for i in 1..<punkter.count {
@@ -158,7 +183,7 @@ struct Fargerom3DTegning: Sendable {
         switch kilde {
         case .farger(_, let farger, let bane):
             if rom == .fargekule {
-                flate(Fargerom3D.kuleflate(gamut: gamut, kolonner: 49, rader: 25), opasitet: 0.22)
+                kule(opasitet: 0.22)
                 let ekvator = (0...72).map { Fargerom3D.kuleposisjon(lyshet: 0.5, metning: 1, kulør: Double($0) * 5) }
                 linje(ekvator, farger: [.primary.opacity(0.35)], bredde: 0.75, stiplet: true)
             } else {
@@ -174,7 +199,7 @@ struct Fargerom3DTegning: Sendable {
 
         case .overgang(_, let fra, let til, let antall):
             if rom == .fargekule {
-                flate(Fargerom3D.kuleflate(gamut: gamut, kolonner: 49, rader: 25), opasitet: 0.18)
+                kule(opasitet: 0.18)
             } else {
                 skall(profil, opasitet: 0.14, oppløsning: 12)
             }
@@ -202,7 +227,7 @@ struct Fargerom3DTegning: Sendable {
 
         case .bibliotek(let bibliotek, let markert):
             if rom == .fargekule {
-                flate(Fargerom3D.kuleflate(gamut: gamut, kolonner: 49, rader: 25), opasitet: 0.12)
+                kule(opasitet: 0.12)
             } else {
                 skall(profil, opasitet: 0.12, oppløsning: 12)
             }
@@ -619,11 +644,6 @@ struct Fargerom3DArk: View {
 
     /// Regner ut tegningen (og USDZ-fila) i bakgrunnen.
     private func bygg() async {
-        // Levende 3D: når fargene endres fortløpende (glidere), bygges modellen først når de har stoppet et øyeblikk.
-        if tegning != nil {
-            try? await Task.sleep(for: .milliseconds(120))
-            guard !Task.isCancelled else { return }
-        }
         let navn = erProfil ? ProfilBibliotek.delt.visningsnavn(profil) : kilde.navn
         let (k, r, p, s, g, h) = (kilde, rom, profil, sammenlign, gamut, hensikt)
         if !orientert, case .overgang(_, let fra, let til, _) = kilde {
@@ -654,6 +674,11 @@ struct Fargerom3DArk: View {
         }.value
         guard !Task.isCancelled else { return }
         tegning = ny
+        // 3D-modellen (USDZ) til deling og AR først når fargene har stått stille litt (levende 3D under dragning).
+        if fil != nil {
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
+        }
         let scene = ny.scene
         fil = await Task.detached(priority: .utility) { () -> URL? in
             let trygt = navn.replacingOccurrences(of: "/", with: "-").trimmingCharacters(in: .whitespaces)
