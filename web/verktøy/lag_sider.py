@@ -983,9 +983,9 @@ def plattformer(lang):
         ingress = 'Én app for iPhone, iPad og Mac. Bruk den på enheten du har – eller på flere, med palettene, betraktningsforholdene og profilene dine synkronisert via iCloud.'
         styrker_tittel = 'Hver enhet sin styrke'
         styrker = [('iPhone', 'Alltid med deg: plukk farger med kameraet, mål lyset og simuler farger under andre betraktningsforhold.'),
+                   ('iPhone Duo' + N, 'Skreddersydd: lukket står fargene i en stripe langs kanten, og åpnet får de hele venstre halvdel – med verktøyene til høyre. <a href="duo.html">Se hvordan</a>'),
                    ('iPad', 'Mer plass: i liggende format ligger fargeflatene ved siden av verktøyene, og på store iPader er palettene for hånden.'),
-                   ('Mac', 'Bredt vindu: pipette for hele skjermen og fargeprøver du drar rett inn i andre programmer.'),
-                   ('iPhone Duo', f'Skreddersydd: lukket står fargene i en stripe langs kanten, og åpnet får de hele venstre halvdel – med verktøyene til høyre. <a href="duo.html">Se hvordan</a>{N}')]
+                   ('Mac', 'Bredt vindu: pipette for hele skjermen og fargeprøver du drar rett inn i andre programmer.')]
         sammen_tittel = 'På tvers av enhetene'
         sammen = ['Paletter, enkeltfarger og gradienter følger med mellom enhetene via din egen iCloud',
                   'ICC-profiler og fargekart ligger i appens mappe i iCloud Drive',
@@ -1024,9 +1024,9 @@ def plattformer(lang):
         ingress = 'One app for iPhone, iPad and Mac. Use it on the device you have – or on several, with your palettes, viewing conditions and profiles synced through iCloud.'
         styrker_tittel = 'Each device has its strength'
         styrker = [('iPhone', 'Always with you: pick colours with the camera, measure the light and simulate colours in other viewing conditions.'),
+                   ('iPhone Duo' + N, 'Tailored: closed, the colours sit in a strip along the edge, and open they fill the whole left half – with the tools on the right. <a href="duo.html">See how</a>'),
                    ('iPad', 'More room: in landscape the swatches sit beside the tools, and on large iPads your palettes are at hand.'),
-                   ('Mac', 'Wide window: an eyedropper for the whole screen and swatches you drag straight into other apps.'),
-                   ('iPhone Duo', f'Tailored: closed, the colours sit in a strip along the edge, and open they fill the whole left half – with the tools on the right. <a href="duo.html">See how</a>{N}')]
+                   ('Mac', 'Wide window: an eyedropper for the whole screen and swatches you drag straight into other apps.')]
         sammen_tittel = 'Across your devices'
         sammen = ['Palettes, single colours and gradients follow you between devices through your own iCloud',
                   'ICC profiles and colour libraries live in the app’s folder in iCloud Drive',
@@ -1143,7 +1143,7 @@ def plattformer(lang):
       <p class="ingress">{ingress}</p>
       <ul class="plattformer" aria-label="{'Plattformer' if nb else 'Platforms'}">
         <li>iPhone</li>
-        <li>iPhone Duo{N}</li>
+        <li>iPhone Duo</li>
         <li>iPad</li>
         <li>Mac</li>
       </ul>
