@@ -128,7 +128,7 @@ fraråder produktnavn og varemerker i nøkkelordene.
 farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,ICC
 ```
 
-**Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/iphone63-nb/` (iPhone 6,3″) og `ipad-nb/` (iPad 13″), 01–10 i opplastingsrekkefølge.
+**Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/iphone63-nb/` (iPhone 6,3″) og `ipad-nb/` (iPad 13″) og `iphoneduo-nb/` (iPhone Duo), 01–10 i opplastingsrekkefølge.
 
 ---
 
@@ -241,7 +241,7 @@ already in the subtitle).
 color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,ICC
 ```
 
-**Screenshots:** `Dokumentasjon/1.4/Skjermbilder/iphone63-en/` (iPhone 6.3″) and `ipad-en/` (iPad 13″), 01–10 in upload order.
+**Screenshots:** `Dokumentasjon/1.4/Skjermbilder/iphone63-en/` (iPhone 6.3″) and `ipad-en/` (iPad 13″) and `iphoneduo-en/` (iPhone Duo), 01–10 in upload order.
 
 ---
 
@@ -528,12 +528,14 @@ harmoni, lys, overgang, flatekontrast):
 | `iphone63-nb/`, `iphone63-en/` | iPhone 6,1″/6,3″ (simulator «Skjermbilder 6,3») | 1206 × 2622 |
 | `ipad-nb/`, `ipad-en/` | iPad 13″, stående (simulator «Skjermbilder iPad 13») – 3D som ark | 2064 × 2752 |
 | `mac-nb/`, `mac-en/` | Mac (vindu 1440 × 900 pt, `-skjermbildevindu YES`) – 3D i venstre halvdel | 2880 × 1800 |
+| `iphoneduo-nb/`, `iphoneduo-en/` | iPhone Duo (simulator, Device Hub) – eget utvalg, se under | åpen 2853 × 2007, høyde 2007 × 2853, lukket 1398 × 2034 |
 
 Felles argumenter som i 1.3 (`-skjermbilde YES -visOgsåProfil kCGColorSpaceGenericCMYK -harmoniAntall 5 -harmoniSirkel
 okLCH -harmoniLyshetsrekkefølge lik`), og for hvert bilde: 3D `-studioModus harmoni -harmoni tonebane -vis3D tonebane`;
 kontrast `-kontrastType apca`; fargesyn `-rullTil forvirringslinjer`; resten som i 1.3 med `-harmoni jevn`. Mac med
-signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud). iPhone Duo-bildene til nettsiden ligger i
-`web/1.4/assets/duo/` (App Store Connect har foreløpig ikke egen størrelse for Duo).
+signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud). iPhone Duo har eget utvalg i full oppløsning
+(de samme skuddene som til nettsiden, `web/1.4/assets/duo/`, uten alfakanal): 01 3D med tonebanen, 02 harmoni, 03 toneskala,
+04 kontrast, 05 fargesyn, 06 lys, 07 overgang (alle åpen), 08 harmoni åpen i høydeformat, 09 overgang og 10 fargesyn lukket.
 
 ### Header og søkeresultat (iOS 27 / iPadOS 27)
 
@@ -550,7 +552,7 @@ Duo-bildet er `apen-3d` fra iPhone Duo-simulatoren).
 
 - [x] Datamodellen er uendret siden 1.3.2 – CloudKit-skjemaet trenger ikke publiseres.
 - [ ] Ny versjon 1.4 opprettet for iOS og macOS, med tekstene over.
-- [ ] Skjermbilder lastet opp (iPhone, iPad og Mac, norsk og engelsk).
+- [ ] Skjermbilder lastet opp (iPhone, iPhone Duo, iPad og Mac, norsk og engelsk).
 - [ ] Notes for App Review byttet til teksten over.
 - [ ] 1.4-nettsiden publisert på kolorist.no (1.3 til `historisk/1.3/`).
 - [ ] `CURRENT_PROJECT_VERSION` økt for opplastingen.
