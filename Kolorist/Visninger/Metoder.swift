@@ -67,7 +67,7 @@ enum Metode: String, CaseIterable, Identifiable {
         case .lrv: String(localized: "CIE 15 (luminansfaktor Y); BS 8300-2:2018; TEK17 med veiledning, NS 11001-1:2018 og Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (utkast 2026)")
         case .machado: "G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009"
         case .icc: "International Color Consortium (ICC.1); Apple ColorSync via Core Graphics"
-        case .renCMYK: String(localized: "Etablert trykkteknikk; søket er utviklet for Kolorist")
+        case .renCMYK: String(localized: "R. W. G. Hunt: «The Reproduction of Colour», 6. utg., Wiley 2004 (kap. 29, GCR og underfargekorreksjon); H. Kipphan (red.): «Handbook of Print Media», Springer 2001; Y. Kuznetsov og M. Ermoshina: «Does the use of black ink still comprise the “darkest” issue of CMYK printing?», Journal of Print and Media Technology Research 5(3), 2016; søket er utviklet for Kolorist")
         case .harmonier: String(localized: "Klassisk fargelære (Johannes Itten for RYB); D. B. Judd og G. Wyszecki: «Color in Business, Science, and Industry» (naturlig fargeorden); A. Zeileis, K. Hornik, P. Murrell: «Escaping RGBland: Selecting colors for statistical graphics», Computational Statistics & Data Analysis 53(9), 2009, og D. A. Green: «A colour scheme for the display of astronomical intensity images», Bulletin of the Astronomical Society of India 39, 2011 (tonebane); avbildningene er utviklet for Kolorist")
         case .kunnskapsbase: String(localized: "Utviklet for Kolorist; språkmodell fra Apple (Foundation Models)")
         case .cam16: "C. Li, Z. Li, Z. Wang mfl.: «Comprehensive color solutions: CAM16, CAT16, and CAM16-UCS», Color Research & Application 42(6), 2017"
@@ -134,7 +134,8 @@ enum Metode: String, CaseIterable, Identifiable {
         case .kamerakarakterisering: URL(string: "https://doi.org/10.1109/TIP.2015.2405336")
         case .filamentfarger: URL(string: "https://filamentcolors.xyz/about/")
         case .designsystem: URL(string: "https://www.designtokens.org/TR/2025.10/format/")
-        case .renCMYK, .harmonier, .kunnskapsbase: nil
+        case .renCMYK: URL(string: "https://doi.org/10.14622/JPMTR-1511")
+        case .harmonier, .kunnskapsbase: nil
         }
     }
 }
