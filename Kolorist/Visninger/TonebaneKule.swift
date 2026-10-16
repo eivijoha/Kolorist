@@ -20,11 +20,16 @@ struct TonebaneKule: View {
     nonisolated private static let piksler = 240
     /// Hvor dekkende overflaten er.
     nonisolated private static let dekning = 0.45
+    /// Hvor langt lerretet går utenfor rammen (halve sluttonen og kanten).
+    nonisolated private static let utenfor: CGFloat = 10
 
     private var midtkulør: Double { startKulør + spenn / 2 }
 
     var body: some View {
-        Canvas { ctx, størrelse in
+        Canvas { ctx, lerret in
+            // Lerretet går litt utenfor rammen, så tonene på kulas omriss tegnes helt.
+            ctx.translateBy(x: Self.utenfor, y: Self.utenfor)
+            let størrelse = CGSize(width: lerret.width - 2 * Self.utenfor, height: lerret.height - 2 * Self.utenfor)
             let side = min(størrelse.width, størrelse.height)
             let senter = CGPoint(x: størrelse.width / 2, y: størrelse.height / 2)
             let r = side / 2 - 2
@@ -76,7 +81,8 @@ struct TonebaneKule: View {
                 ctx.stroke(sirkel, with: .color(.white.opacity(foranMidten ? 1 : 0.6)), lineWidth: 2)
             }
         }
-        .frame(width: 200, height: 200)
+        .frame(width: 200 + 2 * Self.utenfor, height: 200 + 2 * Self.utenfor)
+        .padding(-Self.utenfor)
         .frame(maxWidth: .infinity)
         .task(id: Int(midtkulør.rounded())) {
             let midt = midtkulør

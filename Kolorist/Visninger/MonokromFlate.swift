@@ -30,6 +30,8 @@ struct LyshetMetningFlate: View {
 
     private static let rader = 96
     private let marg: CGFloat = 14
+    /// Hvor langt lerretet med tonene går utenfor flaten: det merkede endepunktet (30 pt med 4 pt kant) er større enn margen.
+    private static let utenfor: CGFloat = 8
 
     private func punkt(_ p: Monokromstrek.Punkt, i r: CGRect) -> CGPoint {
         CGPoint(x: r.minX + r.width * p.metning, y: r.maxY - r.height * p.lyshet)
@@ -73,31 +75,40 @@ struct LyshetMetningFlate: View {
                     ctx.stroke(kurve, with: .color(.black.opacity(0.6)), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 }
 
-                // Streken og tonene langs den.
-                var linje = Path()
-                linje.move(to: pa)
-                linje.addLine(to: pb)
-                ctx.stroke(linje, with: .color(.white.opacity(0.9)), lineWidth: 3)
-                ctx.stroke(linje, with: .color(.black.opacity(0.55)), lineWidth: 1)
-                for (i, tone) in toner.enumerated() {
-                    let t = toner.count > 1 ? CGFloat(i) / CGFloat(toner.count - 1) : 0
-                    let p = CGPoint(x: pa.x + (pb.x - pa.x) * t, y: pa.y + (pb.y - pa.y) * t)
-                    let endepunkt = i == 0 || i == toner.count - 1
-                    // Med et merket endepunkt (tonebane) uthevet som grunnfargen i fargesirkelen: større og tykkere kant.
-                    let merket = merketSlutt.map { endepunkt && (i == toner.count - 1) == $0 }
-                    let d: CGFloat = !endepunkt ? 16 : merket == nil ? 28 : merket! ? 30 : 22
-                    let kant: CGFloat = !endepunkt ? 2 : merket == nil ? 3 : merket! ? 4 : 2.5
-                    let rute = CGRect(x: p.x - d / 2, y: p.y - d / 2, width: d, height: d)
-                    ctx.fill(Path(ellipseIn: rute), with: .color(tone.swiftUI))
-                    ctx.stroke(Path(ellipseIn: rute), with: .color(tone.lesbarTekstfarge.swiftUI), lineWidth: kant)
-                }
+            }
+            // Streken og tonene på et eget lerret som går litt utenfor flaten (se `utenfor`), så et endepunkt helt ute i
+            // kanten tegnes helt; det tar ikke imot berøring, så flaten og ringen rundt beholder sine områder.
+            .overlay {
+                Canvas { ctx, _ in
+                    ctx.translateBy(x: Self.utenfor, y: Self.utenfor)
+                    // Streken og tonene langs den.
+                    var linje = Path()
+                    linje.move(to: pa)
+                    linje.addLine(to: pb)
+                    ctx.stroke(linje, with: .color(.white.opacity(0.9)), lineWidth: 3)
+                    ctx.stroke(linje, with: .color(.black.opacity(0.55)), lineWidth: 1)
+                    for (i, tone) in toner.enumerated() {
+                        let t = toner.count > 1 ? CGFloat(i) / CGFloat(toner.count - 1) : 0
+                        let p = CGPoint(x: pa.x + (pb.x - pa.x) * t, y: pa.y + (pb.y - pa.y) * t)
+                        let endepunkt = i == 0 || i == toner.count - 1
+                        // Med et merket endepunkt (tonebane) uthevet som grunnfargen i fargesirkelen: større og tykkere kant.
+                        let merket = merketSlutt.map { endepunkt && (i == toner.count - 1) == $0 }
+                        let d: CGFloat = !endepunkt ? 16 : merket == nil ? 28 : merket! ? 30 : 22
+                        let kant: CGFloat = !endepunkt ? 2 : merket == nil ? 3 : merket! ? 4 : 2.5
+                        let rute = CGRect(x: p.x - d / 2, y: p.y - d / 2, width: d, height: d)
+                        ctx.fill(Path(ellipseIn: rute), with: .color(tone.swiftUI))
+                        ctx.stroke(Path(ellipseIn: rute), with: .color(tone.lesbarTekstfarge.swiftUI), lineWidth: kant)
+                    }
 
-                // Grunnfargen som en liten ring.
-                if visGrunnfarge {
-                    let g = punkt(.fra(lyshet: grunnfarge.okLCH.l, kroma: grunnfarge.okLCH.c, kulør: kulør, gamut: gamut), i: r)
-                    ctx.stroke(Path(ellipseIn: CGRect(x: g.x - 6, y: g.y - 6, width: 12, height: 12)),
-                               with: .color(grunnfarge.lesbarTekstfarge.swiftUI), style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
+                    // Grunnfargen som en liten ring.
+                    if visGrunnfarge {
+                        let g = punkt(.fra(lyshet: grunnfarge.okLCH.l, kroma: grunnfarge.okLCH.c, kulør: kulør, gamut: gamut), i: r)
+                        ctx.stroke(Path(ellipseIn: CGRect(x: g.x - 6, y: g.y - 6, width: 12, height: 12)),
+                                   with: .color(grunnfarge.lesbarTekstfarge.swiftUI), style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
+                    }
                 }
+                .padding(-Self.utenfor)
+                .allowsHitTesting(false)
             }
             .contentShape(Rectangle())
             .gesture(
