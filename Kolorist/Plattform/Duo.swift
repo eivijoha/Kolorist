@@ -20,7 +20,7 @@ extension View {
     }
 
     /// Rammen rundt appen på iPhone Duo: lukket en fargelinje på 20 pt langs venstre kant, åpen fargeprøvene i venstre
-    /// halvdel og 10 pt inn på høyre, der appen står som på andre iPhoner.
+    /// halvdel og 20 pt inn på høyre, der appen står som på andre iPhoner.
     func duoramme() -> some View {
         modifier(Duoramme())
     }
@@ -47,9 +47,7 @@ private struct Duoramme: ViewModifier {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @State private var lukket = false
 
-    /// Hvor langt fargeprøvene går inn på høyre halvdel når telefonen er åpen.
-    static let overlapp: CGFloat = 10
-    /// Bredden på fargelinjen når telefonen er lukket.
+    /// Bredden på fargelinjen (lukket) – og hvor langt fargeprøvene går inn på høyre halvdel (åpen).
     static let linje: CGFloat = 20
 
     private var farger: [Duofarge] {
@@ -72,7 +70,7 @@ private struct Duoramme: ViewModifier {
                         Duoflater(farger: farger)
                             .frame(width: max(deling.minX, 0))
                         Fargelinje(farger: farger)
-                            .frame(width: deling.width + Self.overlapp)
+                            .frame(width: deling.width + Self.linje)
                     } else if lukket {
                         Fargelinje(farger: farger)
                             .frame(width: Self.linje)
