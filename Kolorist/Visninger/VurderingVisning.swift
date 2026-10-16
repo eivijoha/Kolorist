@@ -119,6 +119,9 @@ private struct KontrastVurdering: View {
             }
             .background(Color.skjemabakgrunn)
         }
+        // iPhone Duo: tekstfargen (aktiv farge) og bakgrunnen i fargelinjen og venstre halvdel.
+        .duofarger([Duofarge(farge: arbeidsbenk.aktivFarge, navn: String(localized: "Tekst")),
+                    Duofarge(farge: bakgrunn, navn: String(localized: "Bakgrunn"))], fane: .vurdering)
         .navigationTitle("Kontrast")
     }
 

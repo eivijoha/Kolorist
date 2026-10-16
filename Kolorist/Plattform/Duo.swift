@@ -40,6 +40,9 @@ private struct DuofargeRapport: ViewModifier {
             .onChange(of: duo) {
                 if duo { arbeidsbenk.duofarger[fane] = farger }
             }
+            // Tilbake til visningen (fane eller navigasjon): fargene igjen. Borte: panelet viser aktiv farge.
+            .onAppear { if duo { arbeidsbenk.duofarger[fane] = farger } }
+            .onDisappear { if duo, arbeidsbenk.duofarger[fane] == farger { arbeidsbenk.duofarger[fane] = nil } }
     }
 }
 

@@ -899,6 +899,8 @@ struct PalettDetalj: View {
                 ToolbarItem(placement: .secondaryAction) { vis3Dknapp }
             }
         }
+        // iPhone Duo: palettens farger, med navn, i fargelinjen og venstre halvdel.
+        .duofarger(dokument.farger.map { Duofarge(farge: $0.farge, navn: $0.navn) }, fane: .paletter)
         .sheet(isPresented: $visLagreSom) {
             LagreSomArk(innhold: Lagringsinnhold(navn: dokument.navn, farger: dokument.farger, gradienter: dokument.gradienter, tekstfarger: dokument.tekstfarger))
         }
