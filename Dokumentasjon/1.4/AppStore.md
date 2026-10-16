@@ -30,19 +30,18 @@ Fargepaletter for designere
 **Reklametekst (170)**
 
 ```
-Se farger og fargerom i 3D, kontroller lesbarheten etter APCA og WCAG, og bruk begge skjermhalvdelene på iPhone Duo – fra palett til designsystem.
+Se farger og fargerom i 3D, kontroller lesbarheten etter APCA og WCAG, og del fargerapporter – fra palett til designsystem.
 ```
 
 **Nytt i denne versjonen (4000)**
 
 ```
-Kolorist 1.4 viser fargene i tre dimensjoner – og gir dem plass på iPhone Duo.
+Kolorist 1.4 viser fargene i tre dimensjoner.
 
 • Farger og fargerom i 3D: harmonier, paletter, overganger og fargebiblioteker som punkter i en fargekule, i OKLab eller i CIELab. Dra for å dreie og knip for å zoome.
-• Live 3D-visning av valgte farger: på iPad, iPhone Duo og Mac står 3D-visningen ved siden av verktøyene og følger fargene mens du justerer harmonier, overganger og paletter.
+• Live 3D-visning av valgte farger: på iPad i liggende format og på Mac står 3D-visningen ved siden av verktøyene og følger fargene mens du justerer harmonier, overganger og paletter.
 • Sammenlign fargerommene til ICC-profiler, velg tilpasningsmetode, og se hvor farger utenfor rommet havner.
 • Del 3D-visningen som 3D-modell, og se fargene i det fysiske rommet gjennom AR (utvidet virkelighet).
-• iPhone Duo: lukket står fargene i en stripe langs kanten. Åpnet får de hele venstre halvdel, og verktøyene står til høyre. På iPad i liggende format legger 3D-visningen seg ved siden av verktøyene.
 • Gamutgrenser i gliderne og i flaten for lyshet og metning – se hvor fargen havner utenfor fargerommet du har valgt.
 • Forvirringslinjer for fargesyn i et kromatisitetsdiagram, med de vanskelige fargeparene streket sammen.
 • Lesekontrast etter APCA i kontrastsjekken, med «Rett opp» til nivået – og tekst og ikoner på fargefelt i sort eller hvit etter opplevd lesbarhet.
@@ -96,9 +95,6 @@ LYS OG FARGEMÅLING
 • Se farger og hele paletter under egne og standardiserte betraktningsforhold
 • Mål lyset med kameraet, og kompenser farger du plukker med gråkort eller referansekort (beta)
 
-IPHONE DUO
-Lukket står fargene i en stripe langs kanten. Åpnet får fargene hele venstre halvdel, og verktøyene står til høyre.
-
 APPLE INTELLIGENCE PÅ ENHETEN (EKSPERIMENTELT)
 • Forslag til palett fra verdiord, forankret i en kunnskapsbase med over hundre fargebegreper
 Alt kjøres på enheten. Uten Apple Intelligence lages forslagene direkte fra kunnskapsbasen.
@@ -118,17 +114,17 @@ Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
 
-Krever iOS 26, iPadOS 26 eller macOS 26; iPhone Duo krever iOS 27.1. Apple Intelligence krever en støttet enhet.
+Krever iOS 26, iPadOS 26 eller macOS 26. Apple Intelligence krever en støttet enhet.
 ```
 
-**Nøkkelord (100)** – nye for 1.4 (fargerom, 3D og APCA inn; interiør og harmoni ut). «iPhone Duo» brukes ikke: Apple
-fraråder produktnavn og varemerker i nøkkelordene.
+**Nøkkelord (100)** – nye for 1.4 (fargerom, 3D og APCA inn; interiør og harmoni ut). Produktnavn og varemerker brukes
+ikke: Apple fraråder dem i nøkkelordene.
 
 ```
 farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,ICC
 ```
 
-**Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/iphone63-nb/` (iPhone 6,3″), `ipad-nb/` (iPad 13″) og `iphoneduo-nb/` (iPhone Duo), 01–10 i opplastingsrekkefølge.
+**Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/iphone63-nb/` (iPhone 6,3″) og `ipad-nb/` (iPad 13″), 01–10 i opplastingsrekkefølge.
 
 ---
 
@@ -143,19 +139,18 @@ Colour palettes for designers
 **Promotional text (170)**
 
 ```
-See colours and colour spaces in 3D, check readability by APCA and WCAG, and use both halves of iPhone Duo – from palette to design system.
+See colours and colour spaces in 3D, check readability by APCA and WCAG, and share colour reports – from palette to design system.
 ```
 
 **What’s New in This Version (4000)**
 
 ```
-Kolorist 1.4 shows your colours in three dimensions – and gives them room on iPhone Duo.
+Kolorist 1.4 shows your colours in three dimensions.
 
 • Colours and colour spaces in 3D: harmonies, palettes, gradients and colour libraries as points in a colour sphere, in OKLab or in CIELab. Drag to rotate and pinch to zoom.
-• Live 3D view of the selected colours: on iPad, iPhone Duo and Mac, the 3D view sits next to the tools and follows the colours as you adjust harmonies, gradients and palettes.
+• Live 3D view of the selected colours: on iPad in landscape and on the Mac, the 3D view sits next to the tools and follows the colours as you adjust harmonies, gradients and palettes.
 • Compare the colour spaces of ICC profiles, choose a rendering intent, and see where colours outside the space end up.
 • Share the 3D view as a 3D model, and see the colours in your physical surroundings through AR (augmented reality).
-• iPhone Duo: closed, the colours sit in a strip along the edge. Open, they fill the whole left half, and the tools sit on the right. On iPad in landscape, the 3D view sits next to the tools.
 • Gamut limits on the sliders and in the lightness and saturation field – see where the colour falls outside the colour space you have chosen.
 • Confusion lines for colour vision in a chromaticity diagram, with the hard-to-tell-apart colour pairs joined.
 • Reading contrast by APCA in the contrast check, with auto-fix to the level – and text and icons on colour fields in black or white by perceived readability.
@@ -209,9 +204,6 @@ LIGHT AND COLOUR MEASUREMENT
 • See colours and whole palettes in your own and standard viewing conditions
 • Measure the light with the camera, and compensate the colours you pick with a grey card or reference card (beta)
 
-IPHONE DUO
-Closed, the colours sit in a strip along the edge. Open, they fill the whole left half, and the tools sit on the right.
-
 APPLE INTELLIGENCE ON DEVICE (EXPERIMENTAL)
 • Suggested palettes from value words, grounded in a knowledge base of more than a hundred colour concepts
 Everything runs on device. Without Apple Intelligence, the suggestions are built straight from the knowledge base.
@@ -231,7 +223,7 @@ The app shows the methods it builds on, from OKLab and CIEDE2000 to WCAG and APC
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
 
-Requires iOS 26, iPadOS 26 or macOS 26; iPhone Duo requires iOS 27.1. Apple Intelligence requires a supported device.
+Requires iOS 26, iPadOS 26 or macOS 26. Apple Intelligence requires a supported device.
 ```
 
 **Keywords (100)** – new for 1.4 (color space, 3D, APCA and gamut in; interior, harmony and palette out – «palette» is
@@ -241,7 +233,7 @@ already in the subtitle).
 color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,ICC
 ```
 
-**Screenshots:** `Dokumentasjon/1.4/Skjermbilder/iphone63-en/` (iPhone 6.3″), `ipad-en/` (iPad 13″) and `iphoneduo-en/` (iPhone Duo), 01–10 in upload order.
+**Screenshots:** `Dokumentasjon/1.4/Skjermbilder/iphone63-en/` (iPhone 6.3″) and `ipad-en/` (iPad 13″), 01–10 in upload order.
 
 ---
 
@@ -470,19 +462,11 @@ color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect
 ```
 Thank you for reviewing Kolorist 1.4, a colour palette tool for designers and architects on iPhone, iPad and Mac (one universal purchase).
 
-NEW: BUILT FOR IPHONE DUO
-Kolorist 1.4 adds tailored support for iPhone Duo (iOS 27.1). We would be grateful if you could look at it on iPhone Duo:
-• Closed: the large colour swatches become a colour strip along the left edge; colour input (text and background, colours A and B) moves to the top, and the rest of the app works as on other iPhones.
-• Open (partly or fully, landscape): the colour card fills the left half and continues across the fold; the tabs and tools work as on iPhone on the right half. Unfolding animates the colours out from the fold.
-• Studio › Harmony › Show in 3D …: on an open iPhone Duo the 3D view sits in the left half and updates live while the harmony is adjusted on the right.
-• Open and upright, the app uses the iPhone layout with more room.
-It uses the hinge (onHingeChange) and the fold (reserved division region) and has been tested in the iPhone Duo simulator closed, partly open and fully open, with every tab. On other devices nothing changes.
-
 NO ACCOUNT NEEDED
 No account, no server of our own, no analytics, ads or in-app purchases. Data syncs through the user's private iCloud when signed in; otherwise everything stays on device.
 
-ALSO NEW IN 1.4 – HOW TO TEST
-• 3D: Studio › Harmony › Show in 3D … (also from a palette's menu, and Show as › Show the colour space in 3D …). Drag to rotate, pinch to zoom. The share button exports a USDZ model; on iPhone and iPad the AR button opens AR Quick Look. On iPad in landscape, on an open iPhone Duo and in a wide Mac window, the 3D view replaces the colour card on the left and updates live as the harmony, gradient or palette is adjusted.
+NEW IN 1.4 – HOW TO TEST
+• 3D: Studio › Harmony › Show in 3D … (also from a palette's menu, and Show as › Show the colour space in 3D …). Drag to rotate, pinch to zoom. The share button exports a USDZ model; on iPhone and iPad the AR button opens AR Quick Look. On iPad in landscape and in a wide Mac window, the 3D view replaces the colour card on the left and updates live as the harmony, gradient or palette is adjusted.
 • Gamut limits: Studio › Show as › choose e.g. Generic CMYK; the sliders are striped where the colour falls outside.
 • Confusion lines: Assess › Colour vision, scroll to the chromaticity diagram.
 • APCA: Assess › Contrast › APCA. APCA is used with permission from its copyright holder, Myndex Research (Andrew Somers).
@@ -512,7 +496,6 @@ Takk for at du tester Kolorist 1.4! Prøv gjerne dette:
 • Fargesyn: forvirringslinjene i kromatisitetsdiagrammet.
 • Kontrast med APCA, og fargerapporter du kan kopiere, dele og skrive ut.
 • Menyene på farger, paletter og gradienter (trykk og hold / høyreklikk).
-• Har du iPhone Duo: lukket og åpen, også mens du bretter.
 
 Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu.no.
 ```
@@ -528,22 +511,23 @@ toneskala, designsystem, overgang, kontrast med APCA, flatekontrast, fargesyn me
 | `iphone63-nb/`, `iphone63-en/` | iPhone 6,1″/6,3″ (simulator «Skjermbilder 6,3») | 1206 × 2622 |
 | `ipad-nb/`, `ipad-en/` | iPad 13″, stående (simulator «Skjermbilder iPad 13») – 3D som ark | 2064 × 2752 |
 | `mac-nb/`, `mac-en/` | Mac (vindu 1440 × 900 pt, `-skjermbildevindu YES`) – 3D i venstre halvdel | 2880 × 1800 |
-| `iphoneduo-nb/`, `iphoneduo-en/` | iPhone Duo (simulator, Device Hub) – eget utvalg, se under | åpen 2853 × 2007, høyde 2007 × 2853, lukket 1398 × 2034 |
 
 Felles argumenter som i 1.3 (`-skjermbilde YES -visOgsåProfil kCGColorSpaceGenericCMYK -harmoniAntall 5 -harmoniSirkel
 okLCH -harmoniLyshetsrekkefølge lik`), og for hvert bilde: 3D `-studioModus harmoni -harmoni tonebane -vis3D tonebane`;
 kontrast `-kontrastType apca`; fargesyn `-rullTil forvirringslinjer`; resten som i 1.3 med `-harmoni jevn`. Mac med
-signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud). iPhone Duo har eget utvalg i full oppløsning
-(de samme skuddene som til nettsiden, `web/1.4/assets/duo/`, uten alfakanal): 01 farge, 02 harmoni, 03 harmoni i høydeformat,
-04 3D med tonebanen, 05 toneskala, 06 overgang, 07 overgang lukket, 08 kontrast, 09 fargesyn, 10 lys (resten åpen, liggende).
+signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud).
+
+**Ingen iPhone Duo i App Store-materialet:** 1.4 ble avvist i App Review (2026-10-16) på grunn av referansene til iPhone
+Duo. Tekstene, App Review-notatet, skjermbildene og headeren nevner eller viser derfor ikke Duo (Duo-skjermbildene er tatt
+ut; slett dem også i App Store Connect).
 
 ### Header og søkeresultat (iOS 27 / iPadOS 27)
 
 `Dokumentasjon/1.4/Skjermbilder/`: `header-nb.png` / `header-en.png` (produktsidens header, 21:9, 3840 × 1646) og
 `sokeresultat-nb.png` / `sokeresultat-en.png` (søkeresultat, 3:2, 3840 × 2560), med tittelen «Finn farger, se farger,
 jobb med farger» / «Find colours, see colours, work with colours» (SF, halvfet) – det primære er å finne, se og jobbe med
-farger, med 3D som ett av flere verktøy. Headeren viser Studio (iPhone, `01-studio`), Harmoni på åpen iPhone Duo
-(`02-apen-studio-harmoni`) og designsystem (iPhone, `05-designsystem`); søkeresultatet tonebanen i Harmoni, fargesyn med
+farger, med 3D som ett av flere verktøy. Headeren viser Studio (iPhone, `01-studio`), Harmoni (iPad, `02-harmoni`)
+og designsystem (iPhone, `05-designsystem`); søkeresultatet tonebanen i Harmoni, fargesyn med
 forvirringslinjer (`09-fargesyn`) og tonebanen på kula. Lages på nytt med `lag_header.py` og `lag_sokeresultat.py` fra
 App Store-skjermbildene og `skudd/` (simulatoren «Skjermbilder 6,3»: `-studioModus harmoni -harmoni tonebane [-vis3D tonebane]`).
 
@@ -551,7 +535,7 @@ App Store-skjermbildene og `skudd/` (simulatoren «Skjermbilder 6,3»: `-studioM
 
 - [x] Datamodellen er uendret siden 1.3.2 – CloudKit-skjemaet trenger ikke publiseres.
 - [ ] Ny versjon 1.4 opprettet for iOS og macOS, med tekstene over.
-- [ ] Skjermbilder lastet opp (iPhone, iPhone Duo, iPad og Mac, norsk og engelsk).
+- [ ] Skjermbilder lastet opp (iPhone, iPad og Mac, norsk og engelsk) – ingen for iPhone Duo.
 - [ ] Notes for App Review byttet til teksten over.
 - [ ] 1.4-nettsiden publisert på kolorist.no (1.3 til `historisk/1.3/`).
 - [ ] `CURRENT_PROJECT_VERSION` økt for opplastingen.

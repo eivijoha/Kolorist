@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
-# Header (21:9, 3840 × 1646) for 1.4: finne, se og jobbe med farger – Studio (iPhone), Harmoni på åpen iPhone Duo og
-# designsystem (iPhone). Kilder: App Store-skjermbildene i iphone63-<språk>/ og iphoneduo-<språk>/, se AppStore.md.
+# Header (21:9, 3840 × 1646) for 1.4: finne, se og jobbe med farger – Studio (iPhone), Harmoni (iPad) og designsystem
+# (iPhone). Kilder: App Store-skjermbildene i iphone63-<språk>/ og ipad-<språk>/, se AppStore.md.
 S='skudd/'
 W,H=3840,1646
 BG=(244,242,238); TXT=(28,37,48)
@@ -18,7 +18,7 @@ for L in ['nb','en']:
     t=titler[L]; b=d.textbbox((0,0),t,font=font); d.text(((W-(b[2]-b[0]))/2-b[0],120),t,font=font,fill=TXT)
     h=1180; topp=380
     venstre=Image.open(f'iphone63-{L}/01-studio.png').convert('RGB')
-    duo=Image.open(f'iphoneduo-{L}/02-apen-studio-harmoni.png').convert('RGB')
+    duo=Image.open(f'ipad-{L}/02-harmoni.png').convert('RGB')
     høyre=Image.open(f'iphone63-{L}/05-designsystem.png').convert('RGB')
     tlf=lambda i: i.resize((round(i.width*h/i.height),h),Image.LANCZOS)
     venstre, høyre = tlf(venstre), tlf(høyre)
