@@ -226,14 +226,25 @@ public extension USDScene.Mesh {
     }
 
     /// Rør langs en rekke punkter (som en strek i rommet), ensfarget.
-    static func rør(navn: String, langs sti: [SIMD3<Float>], radius: Float, farge: SIMD3<Float>, opasitet: Float = 1,
+    static func rør(navn: String, langs stien: [SIMD3<Float>], radius: Float, farge: SIMD3<Float>, opasitet: Float = 1,
                     sider: Int = 8) -> USDScene.Mesh {
+        // Punkter som faller sammen (f.eks. en farge og nærmeste tone med ΔE 0), gir ingen retning – de hoppes over.
+        var sti: [SIMD3<Float>] = []
+        for p in stien where sti.last.map({ simd_distance($0, p) > 1e-6 }) ?? true { sti.append(p) }
         guard sti.count > 1 else { return .init(navn: navn, punkter: [], trekanter: [], farge: farge, opasitet: opasitet) }
         var punkter: [SIMD3<Float>] = [], trekanter: [SIMD3<Int32>] = []
+        // Rammen føres videre fra punkt til punkt (parallelltransport), så røret ikke vrir seg der retningen skifter.
+        var u = SIMD3<Float>(0, 0, 0)
         for (k, p) in sti.enumerated() {
             let fram = simd_normalize(sti[min(k + 1, sti.count - 1)] - sti[max(k - 1, 0)])
-            let hjelp: SIMD3<Float> = abs(fram.y) < 0.9 ? [0, 1, 0] : [1, 0, 0]
-            let u = simd_normalize(simd_cross(fram, hjelp)), v = simd_cross(fram, u)
+            if k == 0 {
+                let hjelp: SIMD3<Float> = abs(fram.y) < 0.9 ? [0, 1, 0] : [1, 0, 0]
+                u = simd_normalize(simd_cross(fram, hjelp))
+            } else {
+                let rettet = u - simd_dot(u, fram) * fram
+                if simd_length(rettet) > 1e-6 { u = simd_normalize(rettet) }
+            }
+            let v = simd_cross(fram, u)
             for s in 0..<sider {
                 let a = Float(s) / Float(sider) * 2 * .pi
                 punkter.append(p + radius * (cos(a) * u + sin(a) * v))

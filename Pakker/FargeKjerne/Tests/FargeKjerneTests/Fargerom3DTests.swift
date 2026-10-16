@@ -53,4 +53,20 @@ struct Fargerom3DTests {
     @Test func crc32() {
         #expect(USDZPakke.crc32(Data("123456789".utf8)) == 0xCBF4_3926)
     }
+
+    @Test func rørMedLikePunkterHarIngenNaN() {
+        let rør = USDScene.Mesh.rør(navn: "Linje", langs: [[0, 0, 0], [0, 0, 0], [0.5, 0, 0], [0.5, 0.9, 0]], radius: 0.01,
+                                    farge: [1, 1, 1])
+        #expect(!rør.punkter.isEmpty)
+        #expect(rør.punkter.allSatisfy { !$0.x.isNaN && !$0.y.isNaN && !$0.z.isNaN })
+        #expect(Fargerom3D.Flate(kolonner: 0, rader: 0, punkter: [], farger: [], lukket: false).trekanter.isEmpty)
+    }
+
+    @Test func storRapportKuttesIStedetForÅForkastes() {
+        let rader = (0..<500).map { r in (0..<80).map { "\(r)-\($0)" } }
+        let rapport = DeltRapport(slag: "skriftkontrast", tittel: "T", tabell: rader)
+        let r = rapport.kontrollert(antallFarger: 1)
+        #expect(r?.tabell.count == DeltRapport.maksRader)
+        #expect(r?.tabell.first?.count == DeltRapport.maksKolonner)
+    }
 }

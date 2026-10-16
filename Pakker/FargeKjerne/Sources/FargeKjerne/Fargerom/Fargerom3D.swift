@@ -39,6 +39,7 @@ public enum Fargerom3D {
 
         /// Trekantene i rutenettet (indekser i `punkter`).
         public var trekanter: [SIMD3<Int32>] {
+            guard kolonner >= 2, rader >= 2 else { return [] }
             var t: [SIMD3<Int32>] = []
             t.reserveCapacity((kolonner - 1) * (rader - 1) * 2)
             for j in 0..<(rader - 1) {
@@ -73,6 +74,7 @@ public enum Fargerom3D {
 
     /// Overflaten av fargekula: den mest mettede fargen innenfor `gamut` ved hver lyshet og kulør.
     public static func kuleflate(gamut: Gamut = .sRGB, kolonner: Int = 73, rader: Int = 33) -> Flate {
+        let kolonner = max(kolonner, 2), rader = max(rader, 2)
         var punkter: [SIMD3<Double>] = [], farger: [Farge] = []
         for j in 0..<rader {
             let l = Double(j) / Double(rader - 1)

@@ -36,14 +36,19 @@ public extension Farge {
         guard let høyest = vurdert.max(by: { $0.kontrast < $1.kontrast }) else { return nil }
         let valgt: (k: T, kontrast: Double, lys: Bool)
         if let lesbarhet = Tekstvalg.lesbarhet {
-            valgt = vurdert.max { lesbarhet(farge($0.k).lagtOver(bakgrunn), bakgrunn) < lesbarhet(farge($1.k).lagtOver(bakgrunn), bakgrunn) } ?? høyest
+            valgt = vurdert.map { ($0, lesbarhet(farge($0.k).lagtOver(bakgrunn), bakgrunn)) }.max { $0.1 < $1.1 }?.0 ?? høyest
         } else {
             let lys = vurdert.filter(\.lys).max(by: { $0.kontrast < $1.kontrast })
             valgt = lys.flatMap { $0.kontrast >= lysTekstgrense ? $0 : nil } ?? høyest
         }
         if let krav, valgt.kontrast < krav {
-            // WCAG 2 er gulvet: en kandidat som holder kravet, ellers den som kommer nærmest.
-            return (vurdert.filter({ $0.kontrast >= krav }).max(by: { $0.kontrast < $1.kontrast }) ?? høyest).k
+            // WCAG 2 er gulvet: den mest lesbare blant kandidatene som holder kravet, ellers den som kommer nærmest.
+            let holder = vurdert.filter { $0.kontrast >= krav }
+            if let lesbarhet = Tekstvalg.lesbarhet {
+                let best = holder.map { ($0, lesbarhet(farge($0.k).lagtOver(bakgrunn), bakgrunn)) }.max { $0.1 < $1.1 }
+                return (best?.0 ?? høyest).k
+            }
+            return (holder.max(by: { $0.kontrast < $1.kontrast }) ?? høyest).k
         }
         return valgt.k
     }

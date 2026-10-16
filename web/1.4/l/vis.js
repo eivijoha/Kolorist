@@ -166,20 +166,21 @@
   // Fargerapport (fra 1.4): tekstene er ferdig formatert hos avsenderen; en skadet rapport droppes, fargene vises likevel.
   function lesRapport(rp, antallFarger) {
     if (!rp || typeof rp !== "object" || typeof rp.s !== "string" || typeof rp.t !== "string") return null;
-    const tabell = Array.isArray(rp.r) ? rp.r : [];
-    if (tabell.length > 160 || !tabell.every((rad) => Array.isArray(rad) && rad.length <= 10 && rad.every((c) => typeof c === "string"))) return null;
-    const par = Array.isArray(rp.p) ? rp.p : [];
+    // Som i appen (DeltRapport): lange tabeller og mange par kuttes, rapporten vises likevel.
+    const tabell = (Array.isArray(rp.r) ? rp.r : []).slice(0, 400);
+    if (!tabell.every((rad) => Array.isArray(rad) && rad.every((c) => typeof c === "string"))) return null;
+    const par = (Array.isArray(rp.p) ? rp.p : []).slice(0, 400);
     const plass = (i) => Number.isInteger(i) && i >= 0 && i < antallFarger;
-    if (par.length > 160 || !par.every((p) => p && plass(p.a) && plass(p.b))) return null;
+    if (!par.every((p) => p && plass(p.a) && plass(p.b))) return null;
     // Skriftkontrast som matrise: rader og kolonner peker på fargene, og hver celle har en godkjenning.
     let matrise = null;
-    if (Array.isArray(rp.mr) && Array.isArray(rp.mk) && Array.isArray(rp.g) && rp.mr.length <= 24 && rp.mk.length <= 24
+    if (Array.isArray(rp.mr) && Array.isArray(rp.mk) && Array.isArray(rp.g) && rp.mr.length <= 64 && rp.mk.length <= 64
         && rp.mr.every(plass) && rp.mk.every(plass) && rp.g.length === rp.mr.length
         && rp.g.every((rad) => Array.isArray(rad) && rad.length === rp.mk.length && rad.every((x) => typeof x === "boolean"))) {
       matrise = { rader: rp.mr, kolonner: rp.mk, godkjent: rp.g };
     }
     return { slag: tekst(rp.s), tittel: tekst(rp.t), undertittel: tekst(rp.u), overskrift: rp.o === true, matrise,
-             tabell: tabell.map((rad) => rad.map(tekst)),
+             tabell: tabell.map((rad) => rad.slice(0, 65).map(tekst)),
              par: par.map((p) => ({ a: p.a, b: p.b, sa: erHex(p.sa) ? `#${p.sa}` : null, sb: erHex(p.sb) ? `#${p.sb}` : null,
                                     etikett: tekst(p.e), tekst: tekst(p.t), merke: tekst(p.m), alvorlig: p.al === true })) };
   }

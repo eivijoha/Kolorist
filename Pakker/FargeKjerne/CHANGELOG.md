@@ -2,11 +2,11 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
-## Ikke publisert
+## 0.5.0 – 2026-10-16
 
 - **Kromatisitet (FargeMaaling):** `Kromatisitet` – spektralkurven (380–700 nm), xy for en farge, kopunktene for
   forvirringslinjene ved protan-, deutan- og tritanopi (Wyszecki og Stiles 1982) og `avstandFraLinje`.
-- **Farger og fargerom i 3D (`Fargerom3D`):** to rom med modellkoordinater i [−1, 1] – fargekule (OKLCH: lyshet langs
+- **Farger og fargerom i 3D (`Fargerom3D`):** rom med modellkoordinater i [−1, 1] – fargekule (OKLCH: lyshet langs
   den grå aksen, kulør rundt, metning ut mot overflaten som andel av høyeste kroma i gamut; `kuleposisjon`,
   `kuleflate`) og CIELab D50 (`labposisjon`, `gamutskall(_:)` for RGB- og CMYK-profiler, CMYK tilnærmet med
   K = min(C, M, Y)). `Fargerom3D.Scene` samler flater, punkter og streker og skrives som USDZ (`usdz(navn:størrelse:)`).
@@ -14,16 +14,20 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
   flate med fargene i et teksturatlas (tusenvis av farger, f.eks. et fargebibliotek).
 - **USDZ (`USDScene`):** enkel scene med teksturerte eller ensfargede, eventuelt gjennomsiktige flater, skrevet som
   USDA og pakket som USDZ (ukomprimert zip med 64-byte-justering), med `kule` og `rør` som hjelpeformer – for
-  Hurtigvisning og AR Quick Look.
+  Hurtigvisning og AR Quick Look. Røret hopper over punkter som faller sammen og fører rammen videre langs streken, så
+  det ikke får ugyldige punkter eller vrir seg.
 - **Lesbarhetsmodell for tekst på fargeflater:** `Tekstvalg.lesbarhet` (`(tekst, bakgrunn) -> Double`, høyere er bedre) kan
   settes av appen ved oppstart; da velger `Farge.lesbarTekstfarge` og `Skriftfarger.beste` etter den, med WCAG 2 som gulv
-  der `krav` gis. Uten modell gjelder WCAG+ som før. Kolorist kobler inn APCA (som ligger i appen, ikke i pakken).
+  der `krav` gis (blant kandidatene som holder kravet, velges den mest lesbare). Uten modell gjelder WCAG+ som før.
+  Kolorist kobler inn APCA (som ligger i appen, ikke i pakken).
 - **Fargerapporter i delingslenker:** `DeltInnhold.rapport` (`DeltRapport`, nøkkel `rp`): slag (`fargesyn`, `flater`,
   `deltaE`), tittel, undertittel, fargepar (`DeltRapportpar`: plassene i `farger`, fargene med avvik som hex, kort tekst)
   og en ferdig formatert tabell (`tabulatortekst` gir den med tabulatorer). Parene kan ha etikett for raden med
   avviket, vurdering (`merke`) og `alvorlig`; skriftkontrast sendes som matrise (`matriseRader`, `matriseKolonner`,
   `godkjent`). Lenken er en palett med fargene i
-  rapporten, så eldre versjoner viser fargene; en skadet rapport droppes. `Testlenker.json` har fått eksempelet `rapport`.
+  rapporten, så eldre versjoner viser fargene; en skadet rapport droppes, og en rapport over grensene (400 rader, 65
+  kolonner, 400 par, matrise opptil 64 × 64) kuttes i stedet for å forkastes. Slagene er `fargesyn`, `flater`, `deltaE`,
+  `wcag`, `skriftkontrast`, `lys` og `lyspalett`. `Testlenker.json` har fått eksempelet `rapport`.
 - **Tekstfarge på fargeflater (endret oppførsel):** `Farge.lesbarTekstfarge` velger hvit når hvit gir minst 2,7:1 etter
   WCAG 2 (`Farge.lysTekstgrense`), ellers sort. Skiftet flyttes fra L* ≈ 50 til L* ≈ 65, så mettede mellomtoner får hvit
   tekst. Ny `lesbarTekstfarge(krav:)` med WCAG 2 som gulv. `Skriftfarger.beste(for:blant:krav:)` følger samme regel (den

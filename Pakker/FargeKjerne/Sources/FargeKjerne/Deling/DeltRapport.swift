@@ -5,7 +5,8 @@ import Foundation
 /// uten rapportstøtte viser fargene. Tekstene er ferdig formatert hos avsenderen (på språket i `DeltInnhold.språk`), så
 /// visningssiden viser rapporten uten å regne.
 public struct DeltRapport: Codable, Equatable, Sendable {
-    /// `fargesyn`, `flater` eller `deltaE`. Et ukjent slag vises likevel, som tittel, par og tabell.
+    /// `fargesyn`, `flater`, `deltaE`, `wcag`, `skriftkontrast`, `lys` eller `lyspalett`. Et ukjent slag vises likevel, som
+    /// tittel, par og tabell.
     public var slag: String
     public var tittel: String
     public var undertittel: String?
@@ -25,10 +26,12 @@ public struct DeltRapport: Codable, Equatable, Sendable {
         case matriseRader = "mr", matriseKolonner = "mk", godkjent = "g"
     }
 
-    static let maksRader = 160
-    static let maksKolonner = 10
-    static let maksPar = 160
-    static let maksMatrise = 24
+    /// Grensene for en rapport som leses fra en lenke. Lengre tabeller og flere par kuttes (rapporten vises likevel); en
+    /// matrise over grensen vises som tabell. Kolonnene rommer en skriftkontrastmatrise (én kolonne per farge + navn).
+    static let maksRader = 400
+    static let maksKolonner = 65
+    static let maksPar = 400
+    static let maksMatrise = 64
 
     public init(slag: String, tittel: String, undertittel: String? = nil, par: [DeltRapportpar] = [],
                 tabell: [[String]], overskrift: Bool = false,
@@ -75,11 +78,12 @@ public struct DeltRapport: Codable, Equatable, Sendable {
         tabell.map { $0.joined(separator: "\t") }.joined(separator: "\n")
     }
 
-    /// Innenfor grensene og med par som peker på fargene; ellers `nil` (lenken vises da bare som palett).
+    /// Med par som peker på fargene, kuttet til grensene; ellers `nil` (lenken vises da bare som palett).
     func kontrollert(antallFarger: Int) -> DeltRapport? {
-        guard tabell.count <= Self.maksRader, tabell.allSatisfy({ $0.count <= Self.maksKolonner }), par.count <= Self.maksPar,
-              par.allSatisfy({ (0..<antallFarger).contains($0.a) && (0..<antallFarger).contains($0.b) }) else { return nil }
+        guard par.allSatisfy({ (0..<antallFarger).contains($0.a) && (0..<antallFarger).contains($0.b) }) else { return nil }
         var r = self
+        r.tabell = tabell.prefix(Self.maksRader).map { Array($0.prefix(Self.maksKolonner)) }
+        r.par = Array(par.prefix(Self.maksPar))
         // En matrise må peke på fargene og ha én godkjenning per celle; ellers vises bare tabellen.
         if let rader = matriseRader, let kolonner = matriseKolonner, let godkjent,
            rader.count <= Self.maksMatrise, kolonner.count <= Self.maksMatrise,
@@ -93,8 +97,8 @@ public struct DeltRapport: Codable, Equatable, Sendable {
         r.slag = DeltInnhold.rensket(slag)
         r.tittel = DeltInnhold.rensket(tittel)
         r.undertittel = undertittel.map(DeltInnhold.rensket)
-        r.tabell = tabell.map { $0.map(DeltInnhold.rensket) }
-        r.par = par.map { $0.rensket }
+        r.tabell = r.tabell.map { $0.map(DeltInnhold.rensket) }
+        r.par = r.par.map { $0.rensket }
         return r
     }
 }
@@ -129,7 +133,7 @@ public struct DeltRapportpar: Codable, Equatable, Sendable {
     }
 
     var rensket: DeltRapportpar {
-        func hex(_ s: String?) -> String? { s.flatMap { $0.count == 6 && $0.allSatisfy(\.isHexDigit) ? $0 : nil } }
+        func hex(_ s: String?) -> String? { s.flatMap { $0.count == 6 && $0.allSatisfy({ $0.isASCII && $0.isHexDigit }) ? $0 : nil } }
         var p = self
         p.simulertA = hex(simulertA)
         p.simulertB = hex(simulertB)
