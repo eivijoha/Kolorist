@@ -28,6 +28,10 @@ struct LysVurdering: View {
             TilpassKnapp(skjerm: .lys)
         }
         .formStyle(.grouped)
+        // iPhone Duo: fargen på skjermen, så under det valgte og de andre merkede betraktningsforholdene.
+        .duofarger([Duofarge(farge: farge)] + ([primær] + miljøer).map {
+            Duofarge(farge: somFoto ? $0.somFoto(farge) : $0.sett(farge), navn: $0.navn)
+        }, fane: .vurdering)
         .navigationTitle("Lys")
         .sheet(isPresented: Binding(get: { leggIPalett != nil }, set: { if !$0 { leggIPalett = nil } })) {
             VelgPalettArk(farger: leggIPalett ?? [])

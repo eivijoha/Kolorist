@@ -112,6 +112,8 @@ struct FargesynVurdering: View {
                 }
                 .background(Color.skjemabakgrunn)
             }
+            // iPhone Duo: paletten slik den ses med det valgte avviket, i fargelinjen og venstre halvdel.
+            .duofarger(farger.map { Duofarge(farge: $0.farge.simulert(vis, grad: grad), navn: $0.navn) }, fane: .vurdering)
             .navigationTitle("Fargesyn")
             #if os(iOS)
             .fullScreenCover(item: $kameratype) { FargesynKamera(type: $0) }

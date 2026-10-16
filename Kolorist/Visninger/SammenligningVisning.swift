@@ -49,6 +49,9 @@ struct SammenligningVisning: View {
             }
             .background(Color.skjemabakgrunn)
         }
+        // iPhone Duo (fanen Vurdering): A og B i fargelinjen og venstre halvdel.
+        .duofarger(innebygd ? [Duofarge(farge: a, navn: String(localized: "Farge A")),
+                               Duofarge(farge: b, navn: String(localized: "Farge B"))] : [], fane: .vurdering)
         .navigationTitle(Text(verbatim: "ΔE"))
     }
 
