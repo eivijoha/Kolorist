@@ -182,6 +182,8 @@ struct MineProfilerArk: View {
             }
             .sheet(item: $visKort) { ReferansekortDetalj(kort: $0) }
             .fargerom3D($vis3D)
+            // Fra arket: 3D som ark eller eget vindu, ikke i venstre halvdel bak arket.
+            .environment(\.venstre3DFane, nil)
             // Slipp filer på arket (Finder på Mac, Filer på iPad).
             .dropDestination(for: URL.self) { urler, _ in
                 let filer = urler.filter(\.isFileURL)

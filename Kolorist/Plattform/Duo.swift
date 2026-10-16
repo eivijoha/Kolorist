@@ -19,6 +19,10 @@ extension EnvironmentValues {
     @Entry var duoDeling: CGRect? = nil
     /// Hvor langt fargene i venstre halvdel har vokst ut fra brettelinjen når telefonen brettes ut (0…1).
     @Entry var duoUtfolding: CGFloat = 1
+    /// Fanen 3D-visningen kan legges i venstre halvdel for (bredt oppsett med fargekort, eller åpen iPhone Duo);
+    /// `nil`: ark (iPhone, iPad) eller eget vindu (Mac).
+    @Entry var venstre3DFane: Arbeidsbenk.Fane? = nil
+
 }
 
 extension View {
@@ -46,6 +50,12 @@ extension View {
         anchorPreference(key: DuokantNøkkel.self, value: .bounds) { $0 }
     }
 
+    /// Hele kortet (`Kortoppsett`): på åpen iPhone Duo fortsetter kortbakgrunnen 20 pt over brettelinjen, så raden under
+    /// fargene ikke får et hakk.
+    func duokortflate() -> some View {
+        anchorPreference(key: DuokortNøkkel.self, value: .bounds) { $0 }
+    }
+
     /// Rammen rundt appen på iPhone Duo: lukket en fargelinje på 20 pt langs venstre kant, åpen fargeprøvene i venstre
     /// halvdel og 20 pt inn på høyre, der appen står som på andre iPhoner.
     func duoramme() -> some View {
@@ -54,6 +64,11 @@ extension View {
 }
 
 private struct DuokantNøkkel: PreferenceKey {
+    static let defaultValue: Anchor<CGRect>? = nil
+    static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) { value = value ?? nextValue() }
+}
+
+private struct DuokortNøkkel: PreferenceKey {
     static let defaultValue: Anchor<CGRect>? = nil
     static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) { value = value ?? nextValue() }
 }
@@ -121,14 +136,23 @@ struct Duoramme: ViewModifier {
                 let global = geo.frame(in: .global).origin
                 HStack(spacing: 0) {
                     if let deling, !egetKort {
-                        Duoflater(farger: farger)
-                            .vokserFraBrettelinjen(utfolding)
-                            .frame(width: max(deling.minX, 0))
+                        Group {
+                            if let v = arbeidsbenk.venstre3D[arbeidsbenk.valgtFane] {
+                                Venstre3D(v: v, fane: arbeidsbenk.valgtFane)
+                            } else {
+                                Duoflater(farger: farger)
+                                    .ignoresSafeArea(edges: .vertical)
+                            }
+                        }
+                        .vokserFraBrettelinjen(utfolding)
+                        .frame(width: max(deling.minX, 0))
                         Fargelinje(farger: farger)
                             .frame(width: deling.width + Self.linje)
+                            .ignoresSafeArea(edges: .vertical)
                     } else if lukket == true {
                         Fargelinje(farger: farger, ramme: arbeidsbenk.duorammer[arbeidsbenk.valgtFane] ?? nil)
                             .frame(width: Self.linje)
+                            .ignoresSafeArea(edges: .vertical)
                     }
                     // Appen står alltid sist, så den beholder tilstanden når telefonen åpnes og lukkes.
                     // Smal bredde som på andre iPhoner (vinduet er bredt når telefonen er åpen, men appen har én halvdel).
@@ -139,10 +163,14 @@ struct Duoramme: ViewModifier {
                         .environment(\.duoDeling, egetKort ? deling.map { $0.offsetBy(dx: global.x, dy: global.y) } : nil)
                         .environment(\.horizontalSizeClass, duo ? .compact : breddeklasse)
                         .environment(\.duoUtfolding, utfolding)
+                        .environment(\.venstre3DFane, deling != nil && !egetKort ? arbeidsbenk.valgtFane : nil)
+
                 }
-                .ignoresSafeArea(edges: duo ? .vertical : [])
+                // Bare fargene (fargelinjen og fargeprøvene) går helt ut i kanten; appen holder seg innenfor den trygge
+                // sonen, så toppen ikke blir trang mot de avrundede hjørnene.
                 // Brettet ut: fargene vokser fra stripen ved brettelinjen og fyller venstre halvdel.
-                .onChange(of: deling != nil) { _, åpen in
+                .onChange(of: deling != nil, initial: true) { _, åpen in
+                    if arbeidsbenk.duoÅpen != åpen { arbeidsbenk.duoÅpen = åpen }
                     guard åpen, utfoldes else { return }
                     utfoldes = false
                     utfolding = 0
@@ -152,6 +180,8 @@ struct Duoramme: ViewModifier {
             .onHingeChange { gammel, ny in
                 if gammel.hinge?.status == .closed, let s = ny.hinge?.status, s != .closed { utfoldes = true }
                 lukket = ny.hinge.map { $0.status == .closed }
+                // Lukket: 3D-visningen i venstre halvdel forsvinner (den åpnes som ark igjen ved behov).
+                if lukket == true { arbeidsbenk.venstre3D = [:] }
             }
         } else {
             content
@@ -167,6 +197,15 @@ struct Duoramme: ViewModifier {
 /// - iPhone Duo åpen: kortet til venstre for brettelinjen, fargene 20 pt inn på høyre halvdel, skjemaet til høyre
 /// - iPhone Duo lukket: bare `topp` (inndataene) over skjemaet – fargene står i fargelinjen langs venstre kant
 struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
+    /// Luft øverst på iPhone Duo (ingen trygg sone øverst: statuslinjen står loddrett til høyre).
+    static var duoTopp: CGFloat { 12 }
+    private static var erIPad: Bool {
+        #if os(iOS)
+        UIDevice.current.userInterfaceIdiom == .pad
+        #else
+        false
+        #endif
+    }
     /// Fanen kortet hører til (`nil` i ark, f.eks. Studio for én farge).
     let fane: Arbeidsbenk.Fane?
     /// Fargene i kortet – fargelinjen (lukket) og de 20 pt over brettelinjen (åpen).
@@ -196,18 +235,53 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
             oppsett {
                 if lukket {
                     topp()
+                        .padding(.top, Self.duoTopp)
+                } else if bred, let fane, let v = arbeidsbenk.venstre3D[fane] {
+                    // 3D-visningen i stedet for kortet (bredt oppsett).
+                    Venstre3D(v: v, fane: fane)
+                        .padding(.top, delt == nil ? 0 : Self.duoTopp)
+                        .frame(width: delt.map { $0.minX - felt.minX } ?? geo.size.width / 2)
                 } else {
                     kort(bred)
                         .vokserFraBrettelinjen(delt == nil ? 1 : utfolding)
                         .frame(width: bred ? (delt.map { $0.minX - felt.minX } ?? geo.size.width / 2) : nil)
+                        // Åpen iPhone Duo: kortet fyller hele høyden, med samme marg øverst, nederst og til venstre, så
+                        // hjørnene følger skjermens.
+                        // iPad liggende: ned til bunnen, så hjørnet nede til venstre følger skjermens (øverst står
+                        // fanelinjen).
+                        .ignoresSafeArea(edges: delt != nil ? .vertical : (bred && Self.erIPad ? .bottom : []))
                 }
                 if let delt {
                     // Plassen for fargene over brettelinjen; selve fargene tegnes i høyde med fargeområdet (under).
                     Color.clear.frame(width: delt.width + Duoramme.linje)
                 }
                 // Bredt: luft mellom fargene og boksene i skjemaet (som når skjemaet står alene), ikke kant i kant.
+                // iPhone Duo: luft øverst – statuslinjen står loddrett til høyre, så toppen har ingen trygg sone mot
+                // de avrundede hjørnene.
                 skjema()
                     .safeAreaPadding(.leading, bred ? 16 : 0)
+                    .safeAreaPadding(.top, delt != nil || lukket ? Self.duoTopp : 0)
+            }
+            // Bredt oppsett: 3D kan legges i venstre halvdel. Smalt igjen: 3D-visningen der forsvinner.
+            .environment(\.venstre3DFane, bred && !lukket ? fane : nil)
+            .onChange(of: bred, initial: true) { _, ny in
+                guard let fane else { return }
+                if !ny { arbeidsbenk.venstre3D[fane] = nil }
+                if ny != arbeidsbenk.bredeKort.contains(fane) {
+                    if ny { arbeidsbenk.bredeKort.insert(fane) } else { arbeidsbenk.bredeKort.remove(fane) }
+                }
+            }
+            // Åpen: kortbakgrunnen fortsetter over brettelinjen i hele kortets høyde (under fargene).
+            .backgroundPreferenceValue(DuokortNøkkel.self) { anker in
+                if let delt, !lukket, let anker {
+                    GeometryReader { p in
+                        let r = p[anker]
+                        let bredde = delt.width + Duoramme.linje
+                        Rectangle().fill(Color.kortbakgrunn)
+                            .frame(width: bredde, height: r.height)
+                            .position(x: r.maxX + bredde / 2, y: r.midY)
+                    }
+                }
             }
             .overlayPreferenceValue(DuokantNøkkel.self) { anker in
                 if let delt, !lukket, let anker {
@@ -222,16 +296,17 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
                         let høyde = r.height / CGFloat(max(felter.count, 1))
                         ForEach(Array(felter.enumerated()), id: \.offset) { i, f in
                             if f.markert {
-                                UnevenRoundedRectangle(topLeadingRadius: i == 0 ? 20 : 0, style: .continuous)
-                                    .strokeBorder(f.farge.lesbarTekstfarge.swiftUI, lineWidth: 3)
+                                Kortform.kantstrek(ConcentricRectangle(topLeadingCorner: i == 0 ? Kortform.hjørne : .fixed(0),
+                                                                       topTrailingCorner: .fixed(0), bottomLeadingCorner: .fixed(0),
+                                                                       bottomTrailingCorner: .fixed(0)),
+                                                   f.farge.lesbarTekstfarge.swiftUI)
                                     .frame(width: r.width + bredde, height: høyde)
                                     .position(x: r.minX + (r.width + bredde) / 2, y: r.minY + høyde * (CGFloat(i) + 0.5))
                                     .allowsHitTesting(false)
                             }
                         }
                         if let ramme {
-                            UnevenRoundedRectangle(topLeadingRadius: 20, style: .continuous)
-                                .strokeBorder(ramme, lineWidth: 3)
+                            Kortform.kantstrek(Kortform.toppflate(høyre: 0), ramme)
                                 .frame(width: r.width + bredde, height: r.height)
                                 .position(x: r.minX + (r.width + bredde) / 2, y: r.midY)
                                 .allowsHitTesting(false)
@@ -243,6 +318,18 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
         .duofarger(fane == nil ? [] : farger, fane: fane ?? .studio, ramme: ramme)
         .onAppear { if let fane { arbeidsbenk.duoEgetKort[fane, default: 0] += 1 } }
         .onDisappear { if let fane { arbeidsbenk.duoEgetKort[fane, default: 1] -= 1 } }
+    }
+}
+
+/// 3D-visningen i venstre halvdel (bredt oppsett), med «Ferdig» tilbake til fargene.
+private struct Venstre3D: View {
+    let v: Fargerom3DVindu
+    let fane: Arbeidsbenk.Fane
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+
+    var body: some View {
+        Fargerom3DArk(kilde: v.kilde, gamut: v.gamut, startprofil: v.startprofil, ferdig: { arbeidsbenk.venstre3D[fane] = nil })
+            .id(v.kilde.id)
     }
 }
 

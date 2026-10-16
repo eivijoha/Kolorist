@@ -353,7 +353,8 @@ struct Fargerom3DVisning: View {
 }
 
 extension View {
-    /// Viser 3D-visningen for kilden: som ark på iPhone og iPad, i eget vindu på Mac.
+    /// Viser 3D-visningen for kilden: i venstre halvdel i bredt oppsett med fargekort (åpen iPhone Duo, iPad liggende,
+    /// bred Mac), ellers som ark (iPhone, iPad) eller i eget vindu (Mac).
     func fargerom3D(_ kilde: Binding<Fargerom3DKilde?>, gamut: Gamut = .displayP3, startprofil: ICCProfil? = nil) -> some View {
         modifier(Fargerom3DÅpner(kilde: kilde, gamut: gamut, startprofil: startprofil))
     }
@@ -363,16 +364,37 @@ private struct Fargerom3DÅpner: ViewModifier {
     @Binding var kilde: Fargerom3DKilde?
     let gamut: Gamut
     let startprofil: ICCProfil?
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.venstre3DFane) private var venstreFane
     #if os(macOS)
     @Environment(\.openWindow) private var åpneVindu
     #endif
 
+    /// Fanen 3D-visningen legges i venstre halvdel for, eller `nil` (ark / eget vindu). Rotvisningen (skjermbilder)
+    /// har ingen fane i miljøet, men følger åpen iPhone Duo.
+    private var tilVenstre: Arbeidsbenk.Fane? {
+        venstreFane ?? (arbeidsbenk.duoÅpen || arbeidsbenk.bredeKort.contains(arbeidsbenk.valgtFane) ? arbeidsbenk.valgtFane : nil)
+    }
+
+    private func flyttTilVenstreHalvdel() {
+        guard let fane = tilVenstre, let k = kilde else { return }
+        kilde = nil
+        arbeidsbenk.venstre3D[fane] = Fargerom3DVindu(kilde: k, gamut: gamut, startprofil: startprofil)
+    }
+
     func body(content: Content) -> some View {
         #if os(iOS)
-        content.sheet(item: $kilde) { Fargerom3DArk(kilde: $0, gamut: gamut, startprofil: startprofil) }
+        content
+            .sheet(item: Binding(get: { tilVenstre == nil ? kilde : nil }, set: { kilde = $0 })) {
+                Fargerom3DArk(kilde: $0, gamut: gamut, startprofil: startprofil)
+            }
+            .onChange(of: kilde?.id) { flyttTilVenstreHalvdel() }
+            // Brettet ut / snudd til liggende med arket oppe: 3D-visningen flytter til venstre halvdel.
+            .onChange(of: tilVenstre) { flyttTilVenstreHalvdel() }
         #else
         content.onChange(of: kilde?.id) {
             guard let k = kilde else { return }
+            if tilVenstre != nil { flyttTilVenstreHalvdel(); return }
             kilde = nil
             let id = UUID()
             Fargerom3DVindu.åpne[id] = Fargerom3DVindu(kilde: k, gamut: gamut, startprofil: startprofil)
@@ -382,9 +404,9 @@ private struct Fargerom3DÅpner: ViewModifier {
     }
 }
 
-#if os(macOS)
-/// Mac: et vindu med 3D-visningen. Kilden kan ikke kodes til vindustilstand, så vinduet får en nøkkel til innholdet her
-/// (vinduet gjenopprettes ikke etter omstart; finnes ikke innholdet, lukkes det).
+/// 3D-visningen for en kilde: i venstre halvdel i bredt oppsett (`Arbeidsbenk.venstre3D`), ellers i eget vindu på Mac
+/// (kilden kan ikke kodes til vindustilstand, så vinduet får en nøkkel til innholdet i `åpne`; vinduet gjenopprettes ikke
+/// etter omstart, og finnes ikke innholdet, lukkes det).
 struct Fargerom3DVindu {
     static let scene = "fargerom3D"
     static var åpne: [UUID: Fargerom3DVindu] = [:]
@@ -393,6 +415,7 @@ struct Fargerom3DVindu {
     let startprofil: ICCProfil?
 }
 
+#if os(macOS)
 struct Fargerom3DVinduInnhold: View {
     let id: UUID?
     @Environment(\.dismiss) private var lukk
@@ -415,6 +438,8 @@ struct Fargerom3DArk: View {
     var gamut: Gamut = .displayP3
     /// Profilen visningen starter med (f.eks. den som er valgt under «Vis som» i Studio).
     var startprofil: ICCProfil? = nil
+    /// I venstre halvdel (åpen iPhone Duo): «Ferdig» viser fargekortet igjen i stedet for å lukke et ark.
+    var ferdig: (() -> Void)? = nil
     @Environment(\.dismiss) private var lukk
     @AppStorage("fargerom3D.rom") private var lagretRom: Fargerom3DRom = .fargekule
     @AppStorage("fargerom3D.profil") private var profilID = ICCProfil.sRGB.id
@@ -443,81 +468,104 @@ struct Fargerom3DArk: View {
     private var romvalg: [Fargerom3DRom] { erProfil ? [.okLab, .cieLab] : Fargerom3DRom.allCases }
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 12) {
-                Picker("Rom", selection: $rom) {
-                    ForEach(romvalg) { Text($0.navn).tag($0) }
+        if let ferdig {
+            // I venstre halvdel (åpen iPhone Duo, iPad liggende, bred Mac): egen topplinje – et navigasjonsoppsett inne
+            // i fanens viser ikke verktøylinjen.
+            VStack(spacing: 0) {
+                HStack(spacing: 16) {
+                    Text(kilde.navn).font(.headline).lineLimit(1)
+                    Spacer(minLength: 8)
+                    modellknapper.labelStyle(.iconOnly)
+                    Button("Ferdig", action: ferdig).fontWeight(.semibold)
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                if rom.erLab {
-                    // Fargerommet (heldekkende for en profil, som glass rundt fargene ellers) og for en profil et annet
-                    // rom til sammenligning (som glass).
-                    // Et valg her gjelder videre (lagres); profilen arket ble åpnet med, gjelder bare til den byttes.
-                    profilvelger("Fargerom", valgt: Binding(get: { øktprofilID ?? profilID },
-                                                            set: { øktprofilID = nil; profilID = $0 }), ingen: false)
-                    if erProfil { profilvelger("Sammenlign med", valgt: $sammenlignID, ingen: true) }
-                    HStack {
-                        Text("Tilpasningsmetode").foregroundStyle(Color.sekundærTekst)
-                        Spacer(minLength: 8)
-                        Picker("Tilpasningsmetode", selection: $hensikt) {
-                            ForEach(Gjengivelseshensikt.allCases, id: \.self) { Text($0.visningsnavn).tag($0) }
-                        }
-                        .labelsHidden()
-                    }
-                }
-                ZStack {
-                    if let tegning {
-                        Fargerom3DVisning(tegning: tegning, dreining: $dreining)
-                    } else {
-                        ProgressView()
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                VStack(spacing: 4) {
-                    if let merknad = tegning?.merknad {
-                        Text(merknad).font(.footnote)
-                    }
-                    Text(forklaring)
-                        .font(.footnote)
-                        .foregroundStyle(Color.sekundærTekst)
-                }
-                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+                .padding(.top, 12)
+                hovedinnhold
             }
-            .padding()
-            .navigationTitle(kilde.navn)
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
-            .toolbar {
-                #if os(iOS)
-                ToolbarItem(placement: .confirmationAction) { Button("Ferdig") { lukk() } }
-                #endif
-                ToolbarItemGroup(placement: .primaryAction) {
-                    if let fil {
-                        // iPhone og iPad: AR Quick Look (modellen på bordet). Mac: 3D-modellen i eget vindu, uten AR.
+        } else {
+            NavigationStack {
+                hovedinnhold
+                    .navigationTitle(kilde.navn)
+                    #if os(iOS)
+                    .navigationBarTitleDisplayMode(.inline)
+                    #endif
+                    .toolbar {
                         #if os(iOS)
-                        Button { forhåndsvisning = fil } label: { Label("Se i AR", systemImage: "arkit") }
-                        #else
-                        Button { NSWorkspace.shared.open(fil) } label: { Label("Vis 3D-modell", systemImage: "cube") }
+                        ToolbarItem(placement: .confirmationAction) { Button("Ferdig") { lukk() } }
                         #endif
-                        ShareLink(item: fil) { Label("Del som 3D-modell", systemImage: "square.and.arrow.up") }
+                        ToolbarItemGroup(placement: .primaryAction) { modellknapper }
                     }
+            }
+            #if os(macOS)
+            .frame(minWidth: 520, minHeight: 600)
+            #endif
+        }
+    }
+
+    /// AR / 3D-modellen og deling som 3D-modell (når modellen er laget).
+    @ViewBuilder private var modellknapper: some View {
+        if let fil {
+            // iPhone og iPad: AR Quick Look (modellen på bordet). Mac: 3D-modellen i eget vindu, uten AR.
+            #if os(iOS)
+            Button { forhåndsvisning = fil } label: { Label("Se i AR", systemImage: "arkit") }
+            #else
+            Button { NSWorkspace.shared.open(fil) } label: { Label("Vis 3D-modell", systemImage: "cube") }
+            #endif
+            ShareLink(item: fil) { Label("Del som 3D-modell", systemImage: "square.and.arrow.up") }
+        }
+    }
+
+    private var hovedinnhold: some View {
+        VStack(spacing: 12) {
+            Picker("Rom", selection: $rom) {
+                ForEach(romvalg) { Text($0.navn).tag($0) }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            if rom.erLab {
+                // Fargerommet (heldekkende for en profil, som glass rundt fargene ellers) og for en profil et annet
+                // rom til sammenligning (som glass).
+                // Et valg her gjelder videre (lagres); profilen arket ble åpnet med, gjelder bare til den byttes.
+                profilvelger("Fargerom", valgt: Binding(get: { øktprofilID ?? profilID },
+                                                        set: { øktprofilID = nil; profilID = $0 }), ingen: false)
+                if erProfil { profilvelger("Sammenlign med", valgt: $sammenlignID, ingen: true) }
+                HStack {
+                    Text("Tilpasningsmetode").foregroundStyle(Color.sekundærTekst)
+                    Spacer(minLength: 8)
+                    Picker("Tilpasningsmetode", selection: $hensikt) {
+                        ForEach(Gjengivelseshensikt.allCases, id: \.self) { Text($0.visningsnavn).tag($0) }
+                    }
+                    .labelsHidden()
                 }
             }
-            #if os(iOS)
-            .quickLookPreview($forhåndsvisning)
-            #endif
-            .onAppear {
-                if case .profil(let p) = kilde { øktprofilID = p.id } else if let startprofil { øktprofilID = startprofil.id }
-                rom = kilde.foretrukketRom ?? lagretRom
+            ZStack {
+                if let tegning {
+                    Fargerom3DVisning(tegning: tegning, dreining: $dreining)
+                } else {
+                    ProgressView()
+                }
             }
-            .onChange(of: rom) { _, ny in if kilde.foretrukketRom == nil { lagretRom = ny } }
-            .task(id: nøkkel) { await bygg() }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            VStack(spacing: 4) {
+                if let merknad = tegning?.merknad {
+                    Text(merknad).font(.footnote)
+                }
+                Text(forklaring)
+                    .font(.footnote)
+                    .foregroundStyle(Color.sekundærTekst)
+            }
+            .multilineTextAlignment(.center)
         }
-        #if os(macOS)
-        .frame(minWidth: 520, minHeight: 600)
+        .padding()
+        #if os(iOS)
+        .quickLookPreview($forhåndsvisning)
         #endif
+        .onAppear {
+            if case .profil(let p) = kilde { øktprofilID = p.id } else if let startprofil { øktprofilID = startprofil.id }
+            rom = kilde.foretrukketRom ?? lagretRom
+        }
+        .onChange(of: rom) { _, ny in if kilde.foretrukketRom == nil { lagretRom = ny } }
+        .task(id: nøkkel) { await bygg() }
     }
 
     private var forklaring: LocalizedStringKey {

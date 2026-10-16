@@ -20,6 +20,7 @@ struct VurderingVisning: View {
     }
 
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.duo) private var duo
     @Environment(\.duoDeling) private var duoDeling
     @AppStorage("vurderingDel") private var del: Del = .kontrast
 
@@ -49,10 +50,13 @@ struct VurderingVisning: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 16)
-                // Åpen iPhone Duo: valget står over høyre halvdel, med resten av navigasjonen.
-                .padding(.leading, duoDeling.map { $0.maxX + Duoramme.linje } ?? 0)
                 .padding(.vertical, 8)
+                // iPhone Duo: luft øverst (ingen trygg sone der).
+                .padding(.top, duo ? 12 : 0)
                 .background(Color.skjemabakgrunn)
+                // Åpen iPhone Duo: valget står over høyre halvdel, med resten av navigasjonen – kortet til venstre
+                // fortsetter opp bak.
+                .padding(.leading, duoDeling.map { $0.maxX + Duoramme.linje } ?? 0)
             }
         }
         .toolbar(påTelefon ? .hidden : .automatic, for: .navigationBar)
@@ -144,7 +148,7 @@ private struct KontrastVurdering: View {
             Kontrastflate(type: type, forgrunn: $arbeidsbenk.aktivFarge,
                           bakgrunn: Binding(get: { bakgrunn }, set: { bakgrunnHex = Kontrastbakgrunn.tekst($0) }),
                           fargesyn: Fargesynstype(rawValue: fargesyn))
-                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: bred ? 0 : 20, style: .continuous))
+                .clipShape(Kortform.toppflate(høyre: bred ? 0 : 20))
                 // Smal visning: fast høyde (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
                 .frame(height: bred ? nil : (presentasjon ? 330 : 250))
                 .frame(maxHeight: bred ? .infinity : nil)
@@ -169,6 +173,7 @@ private struct KontrastVurdering: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .duokortflate()
         .padding(.leading, 16)
         .padding(.trailing, bred ? 0 : 16)
         .padding(.top, bred ? 16 : 4)

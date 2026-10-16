@@ -240,6 +240,7 @@ struct FargesynVurdering: View {
         .frame(maxHeight: bred ? .infinity : nil)
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .duokortflate()
         .clipShape(Kortform.fargepanel(bred: bred))
         .padding(.leading, 16)
         .padding(.trailing, bred ? 0 : 16)

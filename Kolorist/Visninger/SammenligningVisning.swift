@@ -89,6 +89,7 @@ struct SammenligningVisning: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .duokortflate()
         .padding(.leading, 16)
         .padding(.trailing, bred ? 0 : 16)
         .padding(.top, bred ? 16 : 4)

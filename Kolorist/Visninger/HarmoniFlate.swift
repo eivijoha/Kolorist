@@ -77,13 +77,12 @@ struct HarmoniFlate: View {
                 }
             }
         }
-        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: høyreHjørne, style: .continuous))
+        .clipShape(Kortform.toppflate(høyre: høyreHjørne))
         .overlay {
             if rammeRundtAlle {
                 // Samme regel som grunnfarge-sirkelen: lesbar tekstfarge når flatene er enige, ellers primærfargen.
                 let kanter = Set(farger.map(\.lesbarTekstfarge))
-                UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: høyreHjørne, style: .continuous)
-                    .strokeBorder(kanter.count == 1 ? kanter.first!.swiftUI : Color.primary, lineWidth: 3)
+                Kortform.kantstrek(Kortform.toppflate(høyre: høyreHjørne), kanter.count == 1 ? kanter.first!.swiftUI : Color.primary)
                     .allowsHitTesting(false)
             }
         }

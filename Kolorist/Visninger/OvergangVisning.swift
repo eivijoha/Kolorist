@@ -124,6 +124,7 @@ struct OvergangVisning: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .duokortflate()
         .padding(.leading, 16)
         .padding(.trailing, bred ? 0 : 16)
         // Bred visning: like mye luft over som til venstre for kortet.

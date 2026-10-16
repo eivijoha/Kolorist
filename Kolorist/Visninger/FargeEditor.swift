@@ -144,6 +144,7 @@ struct FargeEditor: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .duokortflate()
         .padding(.leading, 16)
         .padding(.trailing, bred ? 0 : 16)
         // Bred visning: like mye luft over som til venstre for kortet.
@@ -812,9 +813,23 @@ private struct Lyshetsstige: View {
 /// Formen på kortet med de store fargefeltene: avrundet rundt hele i smal visning, og bare på venstre side i bred
 /// visning, der kortet ligger til venstre og møter kontrollene til høyre.
 enum Kortform {
-    static func fargepanel(bred: Bool) -> UnevenRoundedRectangle {
-        UnevenRoundedRectangle(topLeadingRadius: 20, bottomLeadingRadius: 20,
-                               bottomTrailingRadius: bred ? 0 : 20, topTrailingRadius: bred ? 0 : 20, style: .continuous)
+    /// Hjørnet følger skjermens hjørne når kortet står inn mot det (f.eks. iPhone Duo), ellers minst 20 pt.
+    static let hjørne = Edge.Corner.Style.concentric(minimum: .fixed(20))
+
+    static func fargepanel(bred: Bool) -> ConcentricRectangle {
+        ConcentricRectangle(topLeadingCorner: hjørne, topTrailingCorner: bred ? .fixed(0) : hjørne,
+                            bottomLeadingCorner: hjørne, bottomTrailingCorner: bred ? .fixed(0) : hjørne)
+    }
+
+    /// Strek innenfor kanten av formen (ConcentricRectangle har ikke `strokeBorder`): dobbel bredde, klippet til formen.
+    static func kantstrek(_ form: ConcentricRectangle, _ farge: Color, bredde: CGFloat = 3) -> some View {
+        form.stroke(farge, lineWidth: bredde * 2).clipShape(form)
+    }
+
+    /// Fargeflatene øverst i kortet: de øvre hjørnene som kortets, rette hjørner nederst (mot raden under).
+    static func toppflate(høyre: CGFloat) -> ConcentricRectangle {
+        ConcentricRectangle(topLeadingCorner: hjørne, topTrailingCorner: høyre > 0 ? hjørne : .fixed(0),
+                            bottomLeadingCorner: .fixed(0), bottomTrailingCorner: .fixed(0))
     }
 }
 
@@ -1004,7 +1019,7 @@ struct Fargeflate: View {
             }
         }
         // Bred visning (halvdelene stablet til venstre): skarpt øvre høyre hjørne mot kontrollene til høyre.
-        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: stablet ? 0 : 20, style: .continuous))
+        .clipShape(Kortform.toppflate(høyre: stablet ? 0 : 20))
         .task(id: renNøkkel) {
             guard let nøkkel = renNøkkel else { return }
             try? await Task.sleep(for: .milliseconds(120))

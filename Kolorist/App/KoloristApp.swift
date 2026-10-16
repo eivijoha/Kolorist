@@ -97,6 +97,13 @@ final class Arbeidsbenk {
     var duoEgetKort: [Fane: Int] = [:]
     /// iPhone Duo: streken rundt fargefeltet per fane (Overgang), også rundt fargelinjen.
     var duorammer: [Fane: Color?] = [:]
+    /// 3D-visningen i venstre halvdel per fane (bredt oppsett: åpen iPhone Duo, iPad liggende, bred Mac) i stedet for
+    /// ark eller eget vindu, til «Ferdig» eller oppsettet blir smalt.
+    var venstre3D: [Fane: Fargerom3DVindu] = [:]
+    /// Fanene som viser fargekortet i bredt oppsett nå (Kortoppsett) – der kan 3D legges i venstre halvdel.
+    var bredeKort: Set<Fane> = []
+    /// iPhone Duo åpen og liggende (venstre halvdel finnes): 3D-visningen legges der i stedet for i et ark.
+    var duoÅpen = false
 
     var aktivFarge = Arbeidsbenk.startfarge {
         didSet {
