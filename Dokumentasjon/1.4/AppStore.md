@@ -242,7 +242,7 @@ color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect
 **Reklametekst (170)**
 
 ```
-Se farger og fargerom i 3D ved siden av verktøyene, kontroller lesbarheten etter APCA og WCAG – plukk fra hele skjermen og dra fargene videre.
+Se farger og fargerom i 3D ved siden av verktøyene, kontroller lesbarheten etter APCA og WCAG – plukk fra hele skjermen og bruk fargene videre.
 ```
 
 **Nytt i denne versjonen (4000)**
@@ -351,7 +351,7 @@ farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkite
 **Promotional text (170)**
 
 ```
-See colours and colour spaces in 3D next to your tools, check readability by APCA and WCAG – pick from anywhere on screen and drag colours on.
+See colours and colour spaces in 3D next to your tools, check readability by APCA and WCAG – pick from anywhere on screen and put the colours to use.
 ```
 
 **What’s New in This Version (4000)**
