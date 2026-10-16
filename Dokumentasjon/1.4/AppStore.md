@@ -125,7 +125,7 @@ Krever iOS 26, iPadOS 26 eller macOS 26; iPhone Duo krever iOS 27.1. Apple Intel
 fraråder produktnavn og varemerker i nøkkelordene.
 
 ```
-farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,CMYK
+farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,ICC
 ```
 
 **Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/iphone63-nb/` (iPhone 6,3″) og `ipad-nb/` (iPad 13″), 01–10 i opplastingsrekkefølge.
@@ -238,7 +238,7 @@ Requires iOS 26, iPadOS 26 or macOS 26; iPhone Duo requires iOS 27.1. Apple Inte
 already in the subtitle).
 
 ```
-color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,CMYK
+color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,ICC
 ```
 
 **Screenshots:** `Dokumentasjon/1.4/Skjermbilder/iphone63-en/` (iPhone 6.3″) and `ipad-en/` (iPad 13″), 01–10 in upload order.
@@ -347,7 +347,7 @@ Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 **Nøkkelord (100)**
 
 ```
-farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,CMYK
+farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,ICC
 ```
 
 **Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/mac-nb/` (2880 × 1800), 01–10 i opplastingsrekkefølge.
@@ -456,7 +456,7 @@ Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
 **Keywords (100)**
 
 ```
-color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,CMYK
+color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,ICC
 ```
 
 **Screenshots:** `Dokumentasjon/1.4/Skjermbilder/mac-en/` (2880 × 1800), 01–10 in upload order.
