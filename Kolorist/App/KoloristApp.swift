@@ -90,6 +90,8 @@ final class Arbeidsbenk {
     /// Presentasjonsmodus: større tekst og kontroller (Vis-menyen, ⌥⌘P, eller en delingslenke). Gjelder økten; lagres
     /// ikke (startargumentet `-presentasjon YES` slår den på ved oppstart).
     var presentasjon = UserDefaults.standard.bool(forKey: "presentasjon")
+    /// iPhone Duo: fargene hver fane viser i de store fargeprøvene (se `duofarger(_:fane:)`).
+    var duofarger: [Fane: [Duofarge]] = [:]
 
     var aktivFarge = Arbeidsbenk.startfarge {
         didSet {
@@ -522,6 +524,8 @@ struct InnholdsVisning: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
+        // iPhone Duo: fargelinjen (lukket) eller fargeprøvene i venstre halvdel (åpen); appen som på andre iPhoner.
+        .duoramme()
         // Paletter til høyre når vinduet er bredt nok. Mac: hele palettvisningen, fast (ikke i menyen).
         // Store iPader i liggende format: en kompakt kolonne som kan vises og skjules.
         .inspector(isPresented: Binding(

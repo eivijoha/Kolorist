@@ -5,6 +5,7 @@ import SwiftUI
 /// Overgangstoner i like OKLab-steg mellom to farger, med lysere/mørkere rader.
 struct OvergangVisning: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.duo) private var duo
     // Lagres som CSS-tekst (hex, eller Display P3 utenfor sRGB), så endepunktene huskes.
     @AppStorage("overgangFra") private var startTekst = "#1B3A6B"
     @AppStorage("overgangTil") private var sluttTekst = "#F2B84B"
@@ -59,7 +60,8 @@ struct OvergangVisning: View {
                          lenketittel: "Del overgangen som lenke",
                          // Tonene i trinn og selve gradienten, så mottakeren ser begge.
                          lenke: { Lenkedeling.palett(navn: navn, farger: farger, gradienter: [PalettGradient(navn: navn, oppsett: oppsett)]) },
-                         tekstfarge: (toner.last ?? slutt).lesbarTekstfarge.swiftUI,
+                         // På flaten: lesbar mot siste tone. iPhone Duo: i raden under, på kortbakgrunnen.
+                         tekstfarge: duo ? .primary : (toner.last ?? slutt).lesbarTekstfarge.swiftUI,
                          gradienter: [PalettGradient(navn: navn, oppsett: oppsett)],
                          vis3D: { vis3D = .overgang(navn: navn, fra: start, til: slutt, antall: antall) })
     }
@@ -88,6 +90,8 @@ struct OvergangVisning: View {
     private func overgangsflate(bred: Bool) -> some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         return VStack(spacing: 0) {
+            // iPhone Duo: tonene står i fargelinjen eller venstre halvdel; menyen flyttes ned i raden.
+            if !duo {
             HarmoniFlate(farger: toner, grunnIndeks: nil, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                          romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
                          verditekst: arbeidsbenk.modell.kortTekst,
@@ -99,7 +103,9 @@ struct OvergangVisning: View {
                 .frame(height: bred ? nil : 140)
                 .frame(maxHeight: bred ? .infinity : nil)
                 .overlay(alignment: .topTrailing) { lagremeny }
+            }
             HStack {
+                if duo { lagremeny }
                 Spacer(minLength: 0)
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom,
                             vis3D: { vis3D = $0 })
@@ -267,6 +273,8 @@ struct OvergangVisning: View {
         }
         }
         .background(Color.skjemabakgrunn)
+        // iPhone Duo: tonene i fargelinjen og venstre halvdel.
+        .duofarger(toner.map { Duofarge(farge: $0) }, fane: .overgang)
         .navigationTitle("Overgang")
         // Arket presenteres herfra, ikke fra menyen (iOS viser ikke ark fra et menyvalg som lukkes).
         .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }

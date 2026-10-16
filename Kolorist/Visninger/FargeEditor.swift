@@ -12,6 +12,7 @@ struct FargeEditor: View {
     var tittel: String? = nil
     @Environment(\.presentasjonsmodus) private var presentasjon
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.duo) private var duo
     @State private var hexTekst = ""
     @State private var lagreFarger: [PalettFarge]?
     @State private var lagreNavn = ""
@@ -113,11 +114,40 @@ struct FargeEditor: View {
                             gamut: arbeidsbenk.gamut, begrens: arbeidsbenk.begrens)
     }
 
+    /// Fargene de store flatene viser (toneskalaen, harmonien eller den aktive fargen) – også fargelinjen på iPhone Duo.
+    private func flatefarger(_ farge: Farge) -> [Farge] {
+        if modus == .toneskala { return toneskala(farge) }
+        if modus == .harmoni, !harmonifarger.isEmpty { return harmonifarger }
+        return [farge]
+    }
+
     /// Fargeflaten med feltet for verdi og «Vis også» – fast øverst mens resten ruller.
+    /// `medFlater: false` (iPhone Duo): bare raden med kontroller; flatene står i venstre halvdel eller som fargelinje.
     @ViewBuilder
-    private func fargepanel(_ farge: Farge, bred: Bool) -> some View {
-        @Bindable var arbeidsbenk = arbeidsbenk
+    private func fargepanel(_ farge: Farge, bred: Bool, medFlater: Bool = true) -> some View {
         VStack(spacing: 0) {
+            if medFlater {
+                flater(farge, bred: bred)
+                    // Smal visning: fast høyde øverst (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
+                    .frame(height: bred ? nil : (presentasjon ? 220 : 140))
+                    .frame(maxHeight: bred ? .infinity : nil)
+            }
+            kontrollrad(farge)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
+        .padding(.leading, 16)
+        .padding(.trailing, bred ? 0 : 16)
+        // Bred visning: like mye luft over som til venstre for kortet.
+        .padding(.top, bred ? 16 : 4)
+        .padding(.bottom, bred ? 16 : 8)
+        .background(Color.skjemabakgrunn)
+    }
+
+    /// De store fargeflatene (fargen, toneskalaen eller harmonien), med navn og verdier.
+    @ViewBuilder
+    private func flater(_ farge: Farge, bred: Bool) -> some View {
+        @Bindable var arbeidsbenk = arbeidsbenk
             Group {
                 if modus == .toneskala {
                     // Toneskala: trinnene 50–950 i «Vis også»-rommet. Trykk endrer ikke grunnfargen (skalaen ville drive).
@@ -167,10 +197,12 @@ struct FargeEditor: View {
                                })
                 }
             }
-                // Smal visning: fast høyde øverst (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
-                .frame(height: bred ? nil : (presentasjon ? 220 : 140))
-                .frame(maxHeight: bred ? .infinity : nil)
-            HStack {
+    }
+
+    /// Raden under flatene: kamera/bilde, feltet for hex, CSS eller beskrivelse, og «Vis som».
+    private func kontrollrad(_ farge: Farge) -> some View {
+        @Bindable var arbeidsbenk = arbeidsbenk
+        return HStack {
                 #if os(macOS)
                 // Skjermpipette (hele skjermen), først i raden. På iPhone/iPad brukes Utplukk-fanen.
                 PipetteKnapp {
@@ -209,15 +241,6 @@ struct FargeEditor: View {
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 48)
-        }
-        .frame(maxWidth: .infinity)
-        .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
-        .padding(.leading, 16)
-        .padding(.trailing, bred ? 0 : 16)
-        // Bred visning: like mye luft over som til venstre for kortet.
-        .padding(.top, bred ? 16 : 4)
-        .padding(.bottom, bred ? 16 : 8)
-        .background(Color.skjemabakgrunn)
     }
 
     /// Bred visning (iPad i landskap, åpen foldetelefon i landskap): fargeflatene får venstre halvdel,
@@ -229,11 +252,12 @@ struct FargeEditor: View {
         let farge = arbeidsbenk.aktivFarge
 
         GeometryReader { geo in
-        let bred = erBred(geo.size)
+        // iPhone Duo: som på andre iPhoner, med flatene i fargelinjen eller venstre halvdel i stedet for øverst.
+        let bred = erBred(geo.size) && !duo
         // AnyLayout bevarer skjemaets tilstand (rulleposisjon, glidere) når enheten roteres.
         let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
         oppsett {
-        fargepanel(farge, bred: bred)
+        fargepanel(farge, bred: bred, medFlater: !duo)
             .frame(width: bred ? geo.size.width / 2 : nil)
         Form {
             if !velgerIVerktøylinje && !bareFarge {
@@ -272,6 +296,8 @@ struct FargeEditor: View {
         }
         .background(Color.skjemabakgrunn)
         }
+        // iPhone Duo: Studio-fanens flater i fargelinjen og venstre halvdel (ikke når Studio er et ark for én farge).
+        .duofarger(bareFarge ? [] : flatefarger(farge).map { Duofarge(farge: $0) }, fane: .studio)
         .navigationTitle(tittel ?? String(localized: "Studio"))
         // Ny gjengivelseshensikt: behold verdiene i kildefargerommet og regn fargen om, så f.eks. CMYK 0/0/0/0 blir
         // papirhvitt med absolutt kolorimetrisk (og hvitt igjen med relativ).
