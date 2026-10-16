@@ -20,8 +20,9 @@ extension EnvironmentValues {
 extension View {
     /// Fargene fanen viser i de store fargeprøvene – på iPhone Duo vises de i fargelinjen (lukket) og i venstre
     /// halvdel (åpen). Ellers uten virkning.
-    func duofarger(_ farger: [Duofarge], fane: Arbeidsbenk.Fane) -> some View {
-        modifier(DuofargeRapport(farger: farger, fane: fane))
+    /// `ramme`: streken rundt fargefeltet (Overgang), som da også går rundt fargelinjen.
+    func duofarger(_ farger: [Duofarge], fane: Arbeidsbenk.Fane, ramme: Color? = nil) -> some View {
+        modifier(DuofargeRapport(farger: farger, fane: fane, ramme: ramme))
     }
 
     /// Fargeområdet i et kort (`Kortoppsett`): på åpen iPhone Duo fortsetter fargene herfra 20 pt over brettelinjen,
@@ -45,20 +46,28 @@ private struct DuokantNøkkel: PreferenceKey {
 private struct DuofargeRapport: ViewModifier {
     let farger: [Duofarge]
     let fane: Arbeidsbenk.Fane
+    let ramme: Color?
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.duo) private var duo
 
+    private func meld() {
+        if arbeidsbenk.duofarger[fane] != farger { arbeidsbenk.duofarger[fane] = farger }
+        if arbeidsbenk.duorammer[fane] != ramme { arbeidsbenk.duorammer[fane] = ramme }
+    }
+
     func body(content: Content) -> some View {
         content
-            .onChange(of: farger, initial: true) {
-                if duo, arbeidsbenk.duofarger[fane] != farger { arbeidsbenk.duofarger[fane] = farger }
-            }
-            .onChange(of: duo) {
-                if duo { arbeidsbenk.duofarger[fane] = farger }
-            }
+            .onChange(of: farger, initial: true) { if duo { meld() } }
+            .onChange(of: ramme) { if duo { meld() } }
+            .onChange(of: duo) { if duo { meld() } }
             // Tilbake til visningen (fane eller navigasjon): fargene igjen. Borte: panelet viser aktiv farge.
-            .onAppear { if duo { arbeidsbenk.duofarger[fane] = farger } }
-            .onDisappear { if duo, arbeidsbenk.duofarger[fane] == farger { arbeidsbenk.duofarger[fane] = nil } }
+            .onAppear { if duo { meld() } }
+            .onDisappear {
+                if duo, arbeidsbenk.duofarger[fane] == farger {
+                    arbeidsbenk.duofarger[fane] = nil
+                    arbeidsbenk.duorammer[fane] = nil
+                }
+            }
     }
 }
 
@@ -99,7 +108,7 @@ struct Duoramme: ViewModifier {
                         Fargelinje(farger: farger)
                             .frame(width: deling.width + Self.linje)
                     } else if lukket == true {
-                        Fargelinje(farger: farger)
+                        Fargelinje(farger: farger, ramme: arbeidsbenk.duorammer[arbeidsbenk.valgtFane] ?? nil)
                             .frame(width: Self.linje)
                     }
                     // Appen står alltid sist, så den beholder tilstanden når telefonen åpnes og lukkes.
@@ -135,6 +144,9 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
     /// Fargene langs kortets høyre kant, som fortsetter over brettelinjen (åpen) – når de ikke er `farger` over hverandre
     /// (f.eks. B til høyre i ΔE).
     var kant: [Duofarge]? = nil
+    /// Streken rundt fargefeltet (Overgang): åpen går den rundt kortets fargeområde og fargene over brettelinjen samlet
+    /// (kortet tegner da ikke sin egen), lukket rundt fargelinjen.
+    var ramme: Color? = nil
     @ViewBuilder let kort: (_ bred: Bool) -> Kort
     @ViewBuilder let topp: () -> Topp
     @ViewBuilder let skjema: () -> Skjema
@@ -144,9 +156,9 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
 
     var body: some View {
         GeometryReader { geo in
-            let ramme = geo.frame(in: .global)
+            let felt = geo.frame(in: .global)
             // Åpen: bare når visningen strekker seg over brettelinjen (hele vinduet).
-            let delt = deling.flatMap { d in d.minX > ramme.minX && d.maxX < ramme.maxX ? d : nil }
+            let delt = deling.flatMap { d in d.minX > felt.minX && d.maxX < felt.maxX ? d : nil }
             let bred = delt != nil || (!lukket && Breddeoppsett.erBred(geo.size))
             // AnyLayout bevarer skjemaets tilstand (rulleposisjon, glidere) når enheten roteres eller brettes.
             let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
@@ -155,7 +167,7 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
                     topp()
                 } else {
                     kort(bred)
-                        .frame(width: bred ? (delt.map { $0.minX - ramme.minX } ?? geo.size.width / 2) : nil)
+                        .frame(width: bred ? (delt.map { $0.minX - felt.minX } ?? geo.size.width / 2) : nil)
                 }
                 if let delt {
                     // Plassen for fargene over brettelinjen; selve fargene tegnes i høyde med fargeområdet (under).
@@ -173,19 +185,27 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
                         Fargelinje(farger: kant ?? farger)
                             .frame(width: bredde, height: r.height)
                             .position(x: r.maxX + bredde / 2, y: r.midY)
+                        if let ramme {
+                            UnevenRoundedRectangle(topLeadingRadius: 20, style: .continuous)
+                                .strokeBorder(ramme, lineWidth: 3)
+                                .frame(width: r.width + bredde, height: r.height)
+                                .position(x: r.minX + (r.width + bredde) / 2, y: r.midY)
+                                .allowsHitTesting(false)
+                        }
                     }
                 }
             }
         }
-        .duofarger(fane == nil ? [] : farger, fane: fane ?? .studio)
+        .duofarger(fane == nil ? [] : farger, fane: fane ?? .studio, ramme: ramme)
         .onAppear { if let fane { arbeidsbenk.duoEgetKort[fane, default: 0] += 1 } }
         .onDisappear { if let fane { arbeidsbenk.duoEgetKort[fane, default: 1] -= 1 } }
     }
 }
 
-/// Fargelinjen: fargene over hverandre i like store felt, uten tekst.
+/// Fargelinjen: fargene over hverandre i like store felt, uten tekst – med streken rundt når fanen har en (Overgang).
 private struct Fargelinje: View {
     let farger: [Duofarge]
+    var ramme: Color? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -193,6 +213,7 @@ private struct Fargelinje: View {
                 Rectangle().fill(f.farge.swiftUI)
             }
         }
+        .overlay { if let ramme { Rectangle().strokeBorder(ramme, lineWidth: 3) } }
         .accessibilityHidden(true)
     }
 }

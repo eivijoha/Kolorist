@@ -95,6 +95,8 @@ final class Arbeidsbenk {
     /// iPhone Duo: fanene som viser sitt eget fargekort (Kortoppsett) – der deler ikke rammen vinduet selv.
     /// Telles, så en visning som dukker opp før den forrige er borte (bytte mellom delene i Vurdering), ikke nullstiller.
     var duoEgetKort: [Fane: Int] = [:]
+    /// iPhone Duo: streken rundt fargefeltet per fane (Overgang), også rundt fargelinjen.
+    var duorammer: [Fane: Color?] = [:]
 
     var aktivFarge = Arbeidsbenk.startfarge {
         didSet {

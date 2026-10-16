@@ -6,6 +6,13 @@ import SwiftUI
 struct OvergangVisning: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.duoLukket) private var duoLukket
+    @Environment(\.duoDeling) private var duoDeling
+
+    /// Streken rundt tonene, som i HarmoniFlate: lesbar tekstfarge når tonene er enige, ellers primærfargen.
+    private var tonramme: Color {
+        let kanter = Set(toner.map(\.lesbarTekstfarge))
+        return kanter.count == 1 ? kanter.first!.swiftUI : .primary
+    }
     // Lagres som CSS-tekst (hex, eller Display P3 utenfor sRGB), så endepunktene huskes.
     @AppStorage("overgangFra") private var startTekst = "#1B3A6B"
     @AppStorage("overgangTil") private var sluttTekst = "#F2B84B"
@@ -96,7 +103,8 @@ struct OvergangVisning: View {
                          romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
                          verditekst: arbeidsbenk.modell.kortTekst,
                          stablet: bred,
-                         rammeRundtAlle: true,
+                         // Åpen iPhone Duo: streken tegnes rundt flatene og fargene over brettelinjen samlet (Kortoppsett).
+                         rammeRundtAlle: duoDeling == nil,
                          velg: { arbeidsbenk.aktivFarge = $0 },
                          lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                          leggIPalett: { leggIPalett = [$0] })
@@ -225,7 +233,7 @@ struct OvergangVisning: View {
 
     var body: some View {
         // Tonene øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo) eller i fargelinjen (lukket iPhone Duo).
-        Kortoppsett(fane: .overgang, farger: toner.map { Duofarge(farge: $0) }) { bred in
+        Kortoppsett(fane: .overgang, farger: toner.map { Duofarge(farge: $0) }, ramme: tonramme) { bred in
             overgangsflate(bred: bred)
         } topp: {
             overgangsflate(bred: false, medFlate: false)
