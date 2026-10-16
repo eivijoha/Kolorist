@@ -128,7 +128,7 @@ fraråder produktnavn og varemerker i nøkkelordene.
 farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,ICC
 ```
 
-**Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/iphone63-nb/` (iPhone 6,3″) og `ipad-nb/` (iPad 13″) og `iphoneduo-nb/` (iPhone Duo), 01–10 i opplastingsrekkefølge.
+**Skjermbilder:** `Dokumentasjon/1.4/Skjermbilder/iphone63-nb/` (iPhone 6,3″), `ipad-nb/` (iPad 13″) og `iphoneduo-nb/` (iPhone Duo), 01–10 i opplastingsrekkefølge.
 
 ---
 
@@ -241,7 +241,7 @@ already in the subtitle).
 color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,ICC
 ```
 
-**Screenshots:** `Dokumentasjon/1.4/Skjermbilder/iphone63-en/` (iPhone 6.3″) and `ipad-en/` (iPad 13″) and `iphoneduo-en/` (iPhone Duo), 01–10 in upload order.
+**Screenshots:** `Dokumentasjon/1.4/Skjermbilder/iphone63-en/` (iPhone 6.3″), `ipad-en/` (iPad 13″) and `iphoneduo-en/` (iPhone Duo), 01–10 in upload order.
 
 ---
 
@@ -519,9 +519,9 @@ Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu
 
 ### Skjermbilder
 
-Tatt 2026-10-16 med 1.4 i `Dokumentasjon/1.4/Skjermbilder/`, nummerert i opplastingsrekkefølge (01–10: 3D med tonebanen
-på fargekula, designsystem, toneskala, kontrast med APCA, fargesyn med forvirringslinjer, studio med gamutgrenser,
-harmoni, lys, overgang, flatekontrast):
+Tatt 2026-10-16 med 1.4 i `Dokumentasjon/1.4/Skjermbilder/`, nummerert i opplastingsrekkefølge – Studio først, så paletter og
+designsystem, overgang og vurderingene til sist (01–10: studio med gamutgrenser, harmoni, 3D med tonebanen på fargekula,
+toneskala, designsystem, overgang, kontrast med APCA, flatekontrast, fargesyn med forvirringslinjer, lys):
 
 | Mappe | Plattform | Størrelse |
 |---|---|---|
@@ -534,8 +534,8 @@ Felles argumenter som i 1.3 (`-skjermbilde YES -visOgsåProfil kCGColorSpaceGene
 okLCH -harmoniLyshetsrekkefølge lik`), og for hvert bilde: 3D `-studioModus harmoni -harmoni tonebane -vis3D tonebane`;
 kontrast `-kontrastType apca`; fargesyn `-rullTil forvirringslinjer`; resten som i 1.3 med `-harmoni jevn`. Mac med
 signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud). iPhone Duo har eget utvalg i full oppløsning
-(de samme skuddene som til nettsiden, `web/1.4/assets/duo/`, uten alfakanal): 01 3D med tonebanen, 02 harmoni, 03 toneskala,
-04 kontrast, 05 fargesyn, 06 lys, 07 overgang (alle åpen), 08 harmoni åpen i høydeformat, 09 overgang og 10 fargesyn lukket.
+(de samme skuddene som til nettsiden, `web/1.4/assets/duo/`, uten alfakanal): 01 farge, 02 harmoni, 03 harmoni i høydeformat,
+04 3D med tonebanen, 05 toneskala, 06 overgang, 07 overgang lukket, 08 kontrast, 09 fargesyn, 10 lys (resten åpen, liggende).
 
 ### Header og søkeresultat (iOS 27 / iPadOS 27)
 
