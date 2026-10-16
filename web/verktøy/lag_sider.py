@@ -321,13 +321,13 @@ def startside(lang):
     helt = re.search(r'(    <section class="helt".*?</section>)', s, re.S).group(1)
     if lang == 'nb':
         ingress = 'Fargeverktøy for design og arkitektur – på iPhone, iPad og Mac.'
-        nyhet = f'<p class="nyhet">{N}<a href="funksjoner.html#3d">Farger og fargerom i 3D – også i det fysiske rommet gjennom AR (utvidet virkelighet) – fargerapporter du kan dele og skrive ut, og lesekontrast etter APCA</a></p>'
+        nyhet = f'<p class="nyhet">{N}<a href="duo.html">Skreddersydd for iPhone Duo</a> · <a href="funksjoner.html#3d">Farger og fargerom i 3D – også i det fysiske rommet gjennom AR (utvidet virkelighet) – fargerapporter du kan dele og skrive ut, og lesekontrast etter APCA</a></p>'
         tekster = dict(
             kort='Kort fortalt',
             poeng=[('Farger slik øyet ser dem', 'Paletter, toner og overganger i like opplevde steg – i OKLCH, CIELab og alle fargerom og ICC-profiler.'),
                    ('Kontrast og fargesyn', 'Kontrast for tekst og flater etter WCAG, APCA og LRV, og farger slik de ser ut med fargesynsavvik.'),
                    ('Farger i ulikt lys', 'Simuler farger under andre betraktningsforhold, og kompenser plukkede farger for lyset de ble fotografert i – med gråkort eller referansekort.'),
-                   ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
+                   ('Én app – én eller flere enheter', 'Samme app på iPhone, iPad og Mac – skreddersydd for iPhone Duo. Bruk den på enheten du har eller på flere – alt synkroniseres via iCloud. <a href="plattformer.html">Se forskjellene</a>')],
             oppgaver_tittel='Dette kan du gjøre',
             oppgaver=[('design.html#finn-fargene', 'Lag en palett', 'Fra et bilde, en harmoni eller en farge du allerede har.'),
                       ('design.html#bygg-fargesystemet', 'Bygg toneskalaer med lik kontrast', 'Trinnene holder de samme kontrastkravene for alle kulører.'),
@@ -352,13 +352,13 @@ def startside(lang):
         )
     else:
         ingress = 'A colour tool for design and architecture – on iPhone, iPad and Mac.'
-        nyhet = f'<p class="nyhet">{N}<a href="features.html#3d">Colours and colour spaces in 3D – in your physical surroundings through AR (augmented reality) too – colour reports you can share and print, and reading contrast by APCA</a></p>'
+        nyhet = f'<p class="nyhet">{N}<a href="duo.html">Tailored for iPhone Duo</a> · <a href="features.html#3d">Colours and colour spaces in 3D – in your physical surroundings through AR (augmented reality) too – colour reports you can share and print, and reading contrast by APCA</a></p>'
         tekster = dict(
             kort='In short',
             poeng=[('Colours as the eye sees them', 'Palettes, tones and gradients in perceptually equal steps – in OKLCH, CIELab and every colour space and ICC profile.'),
                    ('Contrast and colour vision', 'Contrast for text and surfaces by WCAG, APCA and LRV, and colours as they appear with colour vision deficiencies.'),
                    ('Colours in different light', 'Simulate colours in other viewing conditions, and compensate picked colours for the light they were photographed in – with a grey card or reference card.'),
-                   ('One app – one or more devices', 'The same app on iPhone, iPad and Mac. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
+                   ('One app – one or more devices', 'The same app on iPhone, iPad and Mac – tailored for iPhone Duo. Use it on the device you have or on several – everything syncs through iCloud. <a href="platforms.html">See the differences</a>')],
             oppgaver_tittel='What you can do',
             oppgaver=[('design.html#find-the-colours', 'Make a palette', 'From a photo, a harmony or a colour you already have.'),
                       ('design.html#build-the-colour-system', 'Build tone scales with consistent contrast', 'The steps meet the same contrast requirements for every hue.'),
@@ -982,7 +982,8 @@ def plattformer(lang):
         styrker_tittel = 'Hver enhet sin styrke'
         styrker = [('iPhone', 'Alltid med deg: plukk farger med kameraet, mål lyset og simuler farger under andre betraktningsforhold.'),
                    ('iPad', 'Mer plass: i liggende format ligger fargeflatene ved siden av verktøyene, og på store iPader er palettene for hånden.'),
-                   ('Mac', 'Bredt vindu: pipette for hele skjermen og fargeprøver du drar rett inn i andre programmer.')]
+                   ('Mac', 'Bredt vindu: pipette for hele skjermen og fargeprøver du drar rett inn i andre programmer.'),
+                   ('iPhone Duo', f'Skreddersydd: lukket står fargene i en stripe langs kanten, og åpnet får de hele venstre halvdel – med verktøyene til høyre. <a href="duo.html">Se hvordan</a>{N}')]
         sammen_tittel = 'Sammen'
         sammen = ['Paletter, enkeltfarger og gradienter følger med mellom enhetene via din egen iCloud',
                   'ICC-profiler og fargekart ligger i appens mappe i iCloud Drive',
@@ -1013,7 +1014,7 @@ def plattformer(lang):
                  ('Apple Intelligence på enheten (eksperimentelt)¹', ja, ja, ja),
                  ('Siri og Snarveier', ja, ja, ja)]
         fotnote = '¹ Der Apple Intelligence er tilgjengelig. Ellers brukes den innebygde kunnskapsbasen.'
-        krav = 'Krever iOS 26, iPadOS 26 eller macOS 26.'
+        krav = 'Krever iOS 26, iPadOS 26 eller macOS 26. iPhone Duo krever iOS 27.1.'
     else:
         tittel = 'iPhone, iPad and Mac – Kolorist'
         beskr = 'Kolorist is one app for iPhone, iPad and Mac. Use one or several – your palettes, viewing conditions and profiles follow along through iCloud.'
@@ -1022,7 +1023,8 @@ def plattformer(lang):
         styrker_tittel = 'Each device has its strength'
         styrker = [('iPhone', 'Always with you: pick colours with the camera, measure the light and simulate colours in other viewing conditions.'),
                    ('iPad', 'More room: in landscape the swatches sit beside the tools, and on large iPads your palettes are at hand.'),
-                   ('Mac', 'Wide window: an eyedropper for the whole screen and swatches you drag straight into other apps.')]
+                   ('Mac', 'Wide window: an eyedropper for the whole screen and swatches you drag straight into other apps.'),
+                   ('iPhone Duo', f'Tailored: closed, the colours sit in a strip along the edge, and open they fill the whole left half – with the tools on the right. <a href="duo.html">See how</a>{N}')]
         sammen_tittel = 'Together'
         sammen = ['Palettes, single colours and gradients follow you between devices through your own iCloud',
                   'ICC profiles and colour libraries live in the app’s folder in iCloud Drive',
@@ -1052,7 +1054,7 @@ def plattformer(lang):
                  ('Apple Intelligence on device (experimental)¹', ja, ja, ja),
                  ('Siri and Shortcuts', ja, ja, ja)]
         fotnote = '¹ Where Apple Intelligence is available. Otherwise the built-in knowledge base is used.'
-        krav = 'Requires iOS 26, iPadOS 26 or macOS 26.'
+        krav = 'Requires iOS 26, iPadOS 26 or macOS 26. iPhone Duo requires iOS 27.1.'
 
     pre = '' if nb else '../'
     ipadmappe = 'assets/ipad' if nb else '../assets/en/ipad'

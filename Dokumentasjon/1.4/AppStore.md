@@ -116,7 +116,7 @@ Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV
 PERSONVERN
 Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
 
-Krever iOS 26, iPadOS 26 eller macOS 26. Støtte for iPhone Duo krever iOS 27.1. Apple Intelligence krever en støttet enhet.
+Krever iOS 26, iPadOS 26 eller macOS 26; iPhone Duo krever iOS 27.1. Apple Intelligence krever en støttet enhet.
 ```
 
 **Nøkkelord (100)** – uendret
@@ -226,7 +226,7 @@ The app shows the methods it builds on – OKLab, CIEDE2000, CAM16, WCAG, APCA, 
 PRIVACY
 No account, no analytics, no ads and no tracking. The developer collects no data.
 
-Requires iOS 26, iPadOS 26 or macOS 26. iPhone Duo support requires iOS 27.1. Apple Intelligence requires a supported device.
+Requires iOS 26, iPadOS 26 or macOS 26; iPhone Duo requires iOS 27.1. Apple Intelligence requires a supported device.
 ```
 
 **Keywords (100)** – unchanged
@@ -264,16 +264,75 @@ Kolorist 1.4 for Mac viser fargene i tre dimensjoner.
 • Rettet: når du bruker en konvertert farge som aktiv farge, får du den i målprofilens fargemodell og fargerom, med de konverterte verdiene.
 ```
 
-**Beskrivelse (4000)**: som for iPhone og iPad, men med disse endringene:
+**Beskrivelse (4000)**
 
-- Første avsnitt: «… på Mac – og på iPhone og iPad med samme kjøp. …»
-- «FARGER OG FARGEROM I 3D», tredje punkt: «Del som 3D-modell, og se modellen i eget vindu»
-- Avsnittet «IPHONE DUO» tas ut.
-- «LYS OG FARGEMÅLING», andre punkt: «Mål lyset med iPhone eller iPad – betraktningsforholdene følger med til Macen via
-  iCloud», og et tredje: «Kompenser farger for lyset med gråkort eller referansekort, med iPhone som kamera (beta)»
-- Avsnittet «PLUKK OG DRA» fra 1.3 i stedet for «PLUKK FARGER».
-- «Lagre som …» får med «fargeliste for macOS».
-- Siste linje: «Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.»
+```
+Kolorist er et fargeverktøy for designere og arkitekter på Mac – og på iPhone og iPad med samme kjøp. Bygg paletter på tvers av fargerom, gjør dem om til designsystemer, kontroller kontrast og fargesyn, se fargene i 3D og i lyset der de skal brukes – og få dem inn i verktøyene du allerede bruker.
+
+FRA PALETT TIL DESIGNSYSTEM
+• Roller for aksent, nøytral og status gir farger for lys og mørk modus, med og uten økt kontrast – merkefargen beholdes der den holder kravene
+• Se fargene på knapper, felt, brytere, varsler og faner, med kontrasten for hvert fargepar
+• Toneskalaer med lik kontrast for alle kulører, rett i Studio
+• Eksporter som fargesett for apputvikling, design tokens og CSS med lys og mørk modus – eller del designsystemet som lenke
+
+ALLE FARGEROM
+• Rediger i OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB og CMYK
+• Display P3 side om side med sRGB, Adobe RGB, CMYK eller en hvilken som helst ICC-profil – kartlagt, aldri klippet
+• Gamutgrenser i gliderne viser hvor fargen havner utenfor fargerommet
+• Angi CMYK eller RGB i profilen de skal brukes i, og få rene CMYK-verdier
+
+FARGER OG FARGEROM I 3D
+• Harmonier, paletter, overganger og fargebiblioteker i en fargekule, i OKLab eller i CIELab
+• Sammenlign fargerommene til ICC-profiler, med valgfri tilpasningsmetode
+• Del som 3D-modell, og se modellen i eget vindu
+
+FARGEBIBLIOTEKER, ICC-PROFILER OG FILAMENT
+• Importer egne fargekart i ASE, ACO eller ACB med navngitte toner
+• Filamentfarger for 3D-print: over 2 200 farger fra 150 produsenter, de fleste målt – finn nærmeste filament
+• Egne ICC-profiler, synkronisert via iCloud Drive
+
+OVERGANGER, TONER OG HARMONIER
+• Overganger i like perseptuelle steg i OKLab, med lysere og mørkere rader og CSS-gradienter
+• Harmonier fra monokromatisk og tonebane til triade og kvadrat, på fargesirkler i OKLCH, CIE LCH, Hering, Goethe, HSL eller RYB
+
+KONTRAST OG FARGESYN
+• Kontrastsjekk etter WCAG 2.2, APCA eller LRV, med «Rett opp» som justerer fargen til den består
+• Skriftkontrast og skriftfarger for hele paletter
+• Kontrast mellom flater for bygg og interiør: LRV-forskjell, Weber eller Michelson – også i valgt lys
+• Se paletter med fargesynsavvik, med forvirringslinjer i et kromatisitetsdiagram – og hvilke farger som blir vanskelige å skille
+• Fargerapporter du kan kopiere, dele som lenke og skrive ut
+
+LYS OG FARGEMÅLING
+• Se farger og hele paletter under egne og standardiserte betraktningsforhold
+• Mål lyset med iPhone eller iPad – betraktningsforholdene følger med til Macen via iCloud
+• Kompenser farger for lyset med gråkort eller referansekort, med iPhone som kamera (beta)
+
+PLUKK OG DRA
+• Skjermpipette som plukker farger fra hvor som helst på skjermen
+• Dra fargeprøver inn i andre programmer og fargebrønner – og dra farger inn fra dem
+• Legg paletter i fargevelgeren på Macen, som fargeliste i alle programmer
+
+APPLE INTELLIGENCE PÅ ENHETEN (EKSPERIMENTELT)
+• Forslag til palett fra verdiord, forankret i en kunnskapsbase med over hundre fargebegreper
+Alt kjøres på enheten. Uten Apple Intelligence lages forslagene direkte fra kunnskapsbasen.
+
+DEL, LAGRE OG EKSPORTER
+• Del farger, paletter, gradienter og harmonier som lenke – mottakere uten appen ser dem i nettleseren
+• Lagre som ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex, PDF og fargeliste for macOS
+• Kopier farger og gradienter rett inn i design-, layout- og presentasjonsprogrammer – eller som RGB-verdier til CAD, BIM og video
+• Skriv ut paletter og palettgrupper på A4 i CIELab
+
+PALETTER OG ICLOUD
+Samle farger og gradienter i paletter og palettgrupper, og synkroniser via din egen, private iCloud.
+
+ÅPENT OM METODENE
+Appen viser metodene den bygger på – OKLab, CIEDE2000, CAM16, WCAG, APCA, LRV, ICC og design tokens – med kilde og forklaring.
+
+PERSONVERN
+Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ikke inn data.
+
+Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
+```
 
 **Nøkkelord (100)** – uendret, som for iPhone og iPad.
 
@@ -306,10 +365,77 @@ Kolorist 1.4 for Mac shows your colours in three dimensions.
 • Fixed: when you use a converted colour as the active colour, you now get it in the target profile’s colour model and colour space, with the converted values.
 ```
 
-**Description (4000)**: as for iPhone and iPad, with the same changes as the Norwegian Mac text (on the Mac – and on
-iPhone and iPad with the same purchase; share as a 3D model and view it in its own window; no iPHONE DUO section; light
-measured with iPhone or iPad; PICK AND DRAG from 1.3; colour list for macOS; «Requires macOS 26. Apple Intelligence
-requires a Mac with Apple silicon.»).
+**Description (4000)**
+
+```
+Kolorist is a colour tool for designers and architects on the Mac – and on iPhone and iPad with the same purchase. Build palettes across colour spaces, turn them into design systems, check contrast and colour vision, see colours in 3D and in the light where they will be used – and get them into the tools you already use.
+
+FROM PALETTE TO DESIGN SYSTEM
+• Roles for accent, neutral and status give colours for light and dark mode, with and without increased contrast
+• See the colours on buttons, fields, switches, alerts and tabs, with the contrast for each colour pair
+• Tone scales with the same contrast for every hue, right in Studio
+• Export as colour sets for app development, design tokens and CSS with light and dark mode – or share the design system as a link
+
+EVERY COLOUR SPACE
+• Edit in OKLCH, OKLab, CIE LCH, CIELab, HSB, HSL, RGB and CMYK
+• Display P3 side by side with sRGB, Adobe RGB, CMYK or any ICC profile – mapped, never clipped
+• Gamut limits on the sliders show where the colour falls outside the colour space
+• Enter CMYK or RGB in the profile they will be used in, and get clean CMYK values
+
+COLOURS AND COLOUR SPACES IN 3D
+• Harmonies, palettes, gradients and colour libraries in a colour sphere, in OKLab or in CIELab
+• Compare the colour spaces of ICC profiles, with a choice of rendering intent
+• Share as a 3D model, and view the model in its own window
+
+COLOUR LIBRARIES, ICC PROFILES AND FILAMENT
+• Import your own colour charts in ASE, ACO or ACB with named tones
+• Filament colours for 3D printing: more than 2,200 colours, most of them measured – find the nearest filament
+• Your own ICC profiles, synced through iCloud Drive
+
+GRADIENTS, TONES AND HARMONIES
+• Gradients in equal perceptual steps in OKLab, with lighter and darker rows and CSS gradients
+• Harmonies from monochromatic and tone path to triad and square, on OKLCH, CIE LCH, Hering, Goethe, HSL or RYB colour wheels
+
+CONTRAST AND COLOUR VISION
+• Contrast check by WCAG 2.2, APCA or LRV, with auto-fix that adjusts the colour until it passes
+• Text contrast and text colours for whole palettes
+• Contrast between surfaces for buildings and interiors: LRV difference, Weber or Michelson
+• See palettes with colour vision deficiencies, with confusion lines in a chromaticity diagram – and which colours become hard to tell apart
+• Colour reports you can copy, share as a link and print
+
+LIGHT AND COLOUR MEASUREMENT
+• See colours and whole palettes in your own and standard viewing conditions
+• Measure the light with iPhone or iPad – the viewing conditions come with you to the Mac through iCloud
+• Compensate colours for the light with a grey card or reference card, with iPhone as the camera (beta)
+
+PICK AND DRAG
+• An eyedropper that picks colours from anywhere on screen
+• Drag swatches into other apps and colour wells – and drag colours in from them
+• Put palettes in the Mac colour picker, as a colour list in every app
+
+APPLE INTELLIGENCE ON DEVICE (EXPERIMENTAL)
+• Suggested palettes from value words, grounded in a knowledge base of more than a hundred colour concepts
+Everything runs on device. Without Apple Intelligence, the suggestions are built straight from the knowledge base.
+
+SHARE, SAVE AND EXPORT
+• Share colours, palettes, gradients and harmonies as links – recipients without the app see them in their browser
+• Save as ASE, ACO, design tokens, CSS, SwiftUI, GPL, SVG, hex, PDF and colour lists for macOS
+• Copy colours and gradients straight into design, layout and presentation apps, CAD, BIM and video
+• Print palettes and palette groups on A4 in CIELab
+
+PALETTES AND ICLOUD
+Collect colours and gradients in palettes and palette groups, and sync through your own private iCloud.
+
+OPEN ABOUT METHODS
+The app shows the methods it builds on, from OKLab and CIEDE2000 to WCAG and APCA, with source and explanation.
+
+PRIVACY
+No account, no analytics, no ads and no tracking. The developer collects no data.
+
+Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
+```
+
+**Keywords (100)** – unchanged, as for iPhone and iPad.
 
 ---
 
@@ -362,12 +488,21 @@ Gi tilbakemelding med skjermbilde via TestFlight, eller til eivind.johansen@ntnu
 
 ### Skjermbilder
 
-Skjermbildene fra 1.3 (`Dokumentasjon/1.3/Skjermbilder/`) kan brukes, men 1.4 bør få med 3D og iPhone Duo. Forslag
-(høyst ti, i opplastingsrekkefølge): 3D (tonebane på kula), designsystem, toneskala, kontrast (APCA), fargesyn med
-forvirringslinjer, studio med gamutgrenser, harmoni, lys, overgang, flatekontrast. Tas i simulatorene «Skjermbilder 6,3»,
-«Skjermbilder 6,5» og «Skjermbilder iPad 13» etter oppskriften i 1.3-dokumentet; legges i
-`Dokumentasjon/1.4/Skjermbilder/`. iPhone Duo-bildene til nettsiden ligger i `web/1.4/assets/duo/` (App Store Connect
-har foreløpig ikke egen størrelse for Duo).
+Tatt 2026-10-16 med 1.4 i `Dokumentasjon/1.4/Skjermbilder/`, nummerert i opplastingsrekkefølge (01–10: 3D med tonebanen
+på fargekula, designsystem, toneskala, kontrast med APCA, fargesyn med forvirringslinjer, studio med gamutgrenser,
+harmoni, lys, overgang, flatekontrast):
+
+| Mappe | Plattform | Størrelse |
+|---|---|---|
+| `iphone63-nb/`, `iphone63-en/` | iPhone 6,1″/6,3″ (simulator «Skjermbilder 6,3») | 1206 × 2622 |
+| `ipad-nb/`, `ipad-en/` | iPad 13″, stående (simulator «Skjermbilder iPad 13») – 3D som ark | 2064 × 2752 |
+| `mac-nb/`, `mac-en/` | Mac (vindu 1440 × 900 pt, `-skjermbildevindu YES`) – 3D i venstre halvdel | 2880 × 1800 |
+
+Felles argumenter som i 1.3 (`-skjermbilde YES -visOgsåProfil kCGColorSpaceGenericCMYK -harmoniAntall 5 -harmoniSirkel
+okLCH -harmoniLyshetsrekkefølge lik`), og for hvert bilde: 3D `-studioModus harmoni -harmoni tonebane -vis3D tonebane`;
+kontrast `-kontrastType apca`; fargesyn `-rullTil forvirringslinjer`; resten som i 1.3 med `-harmoni jevn`. Mac med
+signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud). iPhone Duo-bildene til nettsiden ligger i
+`web/1.4/assets/duo/` (App Store Connect har foreløpig ikke egen størrelse for Duo).
 
 ### Før du sender inn
 

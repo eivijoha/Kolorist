@@ -583,7 +583,14 @@ struct InnholdsVisning: View {
         }
         .task {
             try? await Task.sleep(for: .seconds(1))
+            #if os(macOS)
+            // Mac: rett i venstre halvdel av fanen (skjermbilder), ikke i eget vindu.
+            if let k = Skjermbildemodus.vis3D() {
+                arbeidsbenk.venstre3D[arbeidsbenk.valgtFane] = Fargerom3DVindu(kilde: k, gamut: arbeidsbenk.gamut, startprofil: nil)
+            }
+            #else
             debug3D = Skjermbildemodus.vis3D()
+            #endif
         }
         .fargerom3D($debug3D, gamut: arbeidsbenk.gamut)
         #endif
