@@ -17,6 +17,19 @@ extension EnvironmentValues {
     /// iPhone Duo åpen (delvis eller helt): brettelinjen i vinduets koordinater. Faner med eget fargekort
     /// (`Kortoppsett`) legger kortet til venstre for den.
     @Entry var duoDeling: CGRect? = nil
+    /// Hvor langt fargene i venstre halvdel har vokst ut fra brettelinjen når telefonen brettes ut (0…1).
+    @Entry var duoUtfolding: CGFloat = 1
+}
+
+extension View {
+    /// Venstre halvdel (åpen iPhone Duo) vokser ut fra brettelinjen når telefonen brettes ut (`duoUtfolding`).
+    fileprivate func vokserFraBrettelinjen(_ utfolding: CGFloat) -> some View {
+        mask(alignment: .trailing) {
+            GeometryReader { geo in
+                Rectangle().frame(width: geo.size.width * utfolding).frame(maxWidth: .infinity, alignment: .trailing)
+            }
+        }
+    }
 }
 
 extension View {
@@ -78,6 +91,9 @@ struct Duoramme: ViewModifier {
     @Environment(\.horizontalSizeClass) private var breddeklasse
     /// Hengselen: `nil` uten hengsel (andre enheter), ellers lukket eller åpen (delvis og helt åpen likt).
     @State private var lukket: Bool?
+    /// Satt når telefonen nettopp er brettet ut, til venstre halvdel har vokst ut fra brettelinjen.
+    @State private var utfoldes = false
+    @State private var utfolding: CGFloat = 1
 
     /// Bredden på fargelinjen (lukket) – og hvor langt fargeprøvene går inn på høyre halvdel (åpen).
     static let linje: CGFloat = 20
@@ -106,6 +122,7 @@ struct Duoramme: ViewModifier {
                 HStack(spacing: 0) {
                     if let deling, !egetKort {
                         Duoflater(farger: farger)
+                            .vokserFraBrettelinjen(utfolding)
                             .frame(width: max(deling.minX, 0))
                         Fargelinje(farger: farger)
                             .frame(width: deling.width + Self.linje)
@@ -121,10 +138,21 @@ struct Duoramme: ViewModifier {
                         // Bare når fanen selv strekker seg over brettelinjen (eget kort); ellers står den i høyre halvdel.
                         .environment(\.duoDeling, egetKort ? deling.map { $0.offsetBy(dx: global.x, dy: global.y) } : nil)
                         .environment(\.horizontalSizeClass, duo ? .compact : breddeklasse)
+                        .environment(\.duoUtfolding, utfolding)
                 }
                 .ignoresSafeArea(edges: duo ? .vertical : [])
+                // Brettet ut: fargene vokser fra stripen ved brettelinjen og fyller venstre halvdel.
+                .onChange(of: deling != nil) { _, åpen in
+                    guard åpen, utfoldes else { return }
+                    utfoldes = false
+                    utfolding = 0
+                    withAnimation(.smooth(duration: 0.6)) { utfolding = 1 }
+                }
             }
-            .onHingeChange { _, ny in lukket = ny.hinge.map { $0.status == .closed } }
+            .onHingeChange { gammel, ny in
+                if gammel.hinge?.status == .closed, let s = ny.hinge?.status, s != .closed { utfoldes = true }
+                lukket = ny.hinge.map { $0.status == .closed }
+            }
         } else {
             content
         }
@@ -155,6 +183,7 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.duoLukket) private var lukket
     @Environment(\.duoDeling) private var deling
+    @Environment(\.duoUtfolding) private var utfolding
 
     var body: some View {
         GeometryReader { geo in
@@ -169,6 +198,7 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
                     topp()
                 } else {
                     kort(bred)
+                        .vokserFraBrettelinjen(delt == nil ? 1 : utfolding)
                         .frame(width: bred ? (delt.map { $0.minX - felt.minX } ?? geo.size.width / 2) : nil)
                 }
                 if let delt {

@@ -1157,15 +1157,17 @@ struct VisOgsåMeny: View {
             }
             .pickerStyle(.inline)
         } label: {
-            HStack(spacing: 4) {
+            // «Vis som» over profilnavnet, så navnet får hele bredden (lange navn kortes ned til slutt).
+            VStack(alignment: .trailing, spacing: 0) {
                 // Eksplisitte farger: menyetiketter tones ellers i aksentfarge, og «sekundær» av
                 // aksenten ga bare 1,9:1 kontrast.
-                Text("Vis som:").foregroundStyle(Color.sekundærTekst).fixedSize()
-                // Lange profilnavn kortes ned i stedet for å presse panelet utenfor skjermen.
-                Text(valgtNavn).lineLimit(1).truncationMode(.tail).foregroundStyle(Color.accentColor)
-                Image(systemName: "chevron.down").font(.caption.weight(.semibold)).foregroundStyle(Color.accentColor)
+                Text("Vis som").font(.caption).foregroundStyle(Color.sekundærTekst).fixedSize()
+                HStack(spacing: 4) {
+                    Text(valgtNavn).lineLimit(1).truncationMode(.tail).foregroundStyle(Color.accentColor)
+                    Image(systemName: "chevron.down").font(.caption.weight(.semibold)).foregroundStyle(Color.accentColor)
+                }
+                .font(.callout)
             }
-            .font(.callout)
         }
         .menuIndicator(.hidden)
         // Fast rekkefølge: ellers snur iPadOS lista når menyen åpnes oppover, og bryterne havner nederst.
