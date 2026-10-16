@@ -512,6 +512,17 @@ kontrast `-kontrastType apca`; fargesyn `-rullTil forvirringslinjer`; resten som
 signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud). iPhone Duo-bildene til nettsiden ligger i
 `web/1.4/assets/duo/` (App Store Connect har foreløpig ikke egen størrelse for Duo).
 
+### Header og søkeresultat (iOS 27 / iPadOS 27)
+
+`Dokumentasjon/1.4/Skjermbilder/`: `header-nb.png` / `header-en.png` (produktsidens header, 21:9, 3840 × 1646) og
+`sokeresultat-nb.png` / `sokeresultat-en.png` (søkeresultat, 3:2, 3840 × 2560), med tittelen «Farger og fargerom i 3D –
+live mens du jobber» / «Colours and colour spaces in 3D – live as you work» (SF, halvfet). Headeren viser tonebanen på
+kula (iPhone), live 3D på åpen iPhone Duo og fargerom sammenlignet (iPhone); søkeresultatet tonebanen i Harmoni → på kula,
+og fargerom sammenlignet. Lages på nytt med `lag_header.py` og `lag_sokeresultat.py` fra `skudd/` (simulatoren
+«Skjermbilder 6,3»: `-studioModus harmoni -harmoni tonebane [-vis3D tonebane]` og `-vis3D profil -fargerom3D.rom cieLab
+-fargerom3D.profil kCGColorSpaceGenericCMYK -fargerom3D.sammenlign kCGColorSpaceSRGB -fargerom3D.hensikt perseptuell`;
+Duo-bildet er `apen-3d` fra iPhone Duo-simulatoren).
+
 ### Før du sender inn
 
 - [x] Datamodellen er uendret siden 1.3.2 – CloudKit-skjemaet trenger ikke publiseres.
