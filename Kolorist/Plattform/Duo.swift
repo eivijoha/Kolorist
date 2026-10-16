@@ -49,7 +49,8 @@ private struct DuofargeRapport: ViewModifier {
 private struct Duoramme: ViewModifier {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.horizontalSizeClass) private var breddeklasse
-    @State private var lukket = false
+    /// Hengselen: `nil` uten hengsel (andre enheter), ellers lukket eller åpen (delvis og helt åpen likt).
+    @State private var lukket: Bool?
 
     /// Bredden på fargelinjen (lukket) – og hvor langt fargeprøvene går inn på høyre halvdel (åpen).
     static let linje: CGFloat = 20
@@ -63,19 +64,22 @@ private struct Duoramme: ViewModifier {
         #if os(iOS)
         if #available(iOS 27.1, *) {
             GeometryReader { geo in
-                // Brettelinjen (loddrett) når telefonen er åpen.
-                let deling = geo.reservedRegions(kind: .division)
-                    .first { $0.isActive && $0.frame.height > $0.frame.width }
+                // Åpen (delvis eller helt) og liggende: delt ved brettelinjen – også når den ikke er aktiv (delvis
+                // åpen) – eller midt på skjermen om systemet ikke oppgir den.
+                let åpen = lukket == false && geo.size.width > geo.size.height
+                let deling: CGRect? = åpen ? (geo.reservedRegions(kind: .division, options: .includeInactive)
+                    .first { $0.frame.height > $0.frame.width }
                     .map { $0.frame.inset(by: UIEdgeInsets(top: $0.margins.top, left: $0.margins.leading,
                                                           bottom: $0.margins.bottom, right: $0.margins.trailing)) }
-                let duo = deling != nil || lukket
+                    ?? CGRect(x: geo.size.width / 2, y: 0, width: 0, height: geo.size.height)) : nil
+                let duo = deling != nil || lukket == true
                 HStack(spacing: 0) {
                     if let deling {
                         Duoflater(farger: farger)
                             .frame(width: max(deling.minX, 0))
                         Fargelinje(farger: farger)
                             .frame(width: deling.width + Self.linje)
-                    } else if lukket {
+                    } else if lukket == true {
                         Fargelinje(farger: farger)
                             .frame(width: Self.linje)
                     }
@@ -87,7 +91,7 @@ private struct Duoramme: ViewModifier {
                 }
                 .ignoresSafeArea(edges: duo ? .vertical : [])
             }
-            .onHingeChange { _, ny in lukket = ny.hinge?.status == .closed }
+            .onHingeChange { _, ny in lukket = ny.hinge.map { $0.status == .closed } }
         } else {
             content
         }
