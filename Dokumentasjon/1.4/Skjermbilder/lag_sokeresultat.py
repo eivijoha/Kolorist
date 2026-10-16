@@ -4,7 +4,7 @@ S='skudd/'
 W,H=3840,2560
 BG=(244,242,238); TXT=(28,37,48); GRA=(150,158,166)
 font=ImageFont.truetype('/System/Library/Fonts/SFNS.ttf',150); font.set_variation_by_axes([100,96,400,600])
-titler={'nb':'Farger og fargerom i 3D – live mens du jobber','en':'Colours and colour spaces in 3D – live as you work'}
+titler={'nb':'Finn farger, se farger, jobb med farger','en':'Find colours, see colours, work with colours'}
 def maske(sz,r):
     m=Image.new('L',sz,0); ImageDraw.Draw(m).rounded_rectangle([0,0,sz[0]-1,sz[1]-1],r,fill=255); return m
 def legg(c,im,x,y,r):
