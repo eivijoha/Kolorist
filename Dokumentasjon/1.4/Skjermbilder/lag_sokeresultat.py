@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
-# Søkeresultat (3:2, 3840 × 2560) i samme stil som headeren: tonebanen i Harmoni, tonebanen på kula og fargerom sammenlignet.
+# Søkeresultat (3:2, 3840 × 2560) i samme stil som headeren: tonebanen i Harmoni, fargesyn med forvirringslinjer og tonebanen på kula.
 S='skudd/'
 W,H=3840,2560
 BG=(244,242,238); TXT=(28,37,48); GRA=(150,158,166)
@@ -17,11 +17,10 @@ def pil(d,x0,x1,y):
 for L in ['nb','en']:
     c=Image.new('RGB',(W,H),BG); d=ImageDraw.Draw(c)
     t=titler[L]; b=d.textbbox((0,0),t,font=font); d.text(((W-(b[2]-b[0]))/2-b[0],170),t,font=font,fill=TXT)
-    tlf=[Image.open(S+f).convert('RGB') for f in [f'tonebane-{L}.png',f'3d-tonebane-{L}.png',f'3d-gamut-{L}.png']]
+    tlf=[Image.open(S+f).convert('RGB') for f in [f'tonebane-{L}.png',f'../iphone63-{L}/09-fargesyn.png',f'3d-tonebane-{L}.png']]
     h=1960; tlf=[i.resize((round(i.width*h/i.height),h),Image.LANCZOS) for i in tlf]
     gap=230; total=sum(i.width for i in tlf)+2*gap; x=(W-total)//2; y=470
     for n,i in enumerate(tlf):
         legg(c,i,x,y,120); x+=i.width
-        if n==0: pil(d,x+50,x+gap-50,y+h//2)
         if n<2: x+=gap
     c.save(f'sokeresultat-{L}.png'); c.resize((W//4,H//4),Image.LANCZOS).save(f'sokeresultat-{L}-sml.png'); print(L,c.size)

@@ -542,8 +542,8 @@ signert Debug-bygg (skjermbildemodus bruker en database i minnet uten iCloud). i
 `Dokumentasjon/1.4/Skjermbilder/`: `header-nb.png` / `header-en.png` (produktsidens header, 21:9, 3840 × 1646) og
 `sokeresultat-nb.png` / `sokeresultat-en.png` (søkeresultat, 3:2, 3840 × 2560), med tittelen «Farger og fargerom i 3D –
 live mens du jobber» / «Colours and colour spaces in 3D – live as you work» (SF, halvfet). Headeren viser tonebanen på
-kula (iPhone), live 3D på åpen iPhone Duo og fargerom sammenlignet (iPhone); søkeresultatet tonebanen i Harmoni → på kula,
-og fargerom sammenlignet. Lages på nytt med `lag_header.py` og `lag_sokeresultat.py` fra `skudd/` (simulatoren
+kula (iPhone), live 3D på åpen iPhone Duo og fargerom sammenlignet (iPhone); søkeresultatet tonebanen i Harmoni, fargesyn med
+forvirringslinjer (`iphone63-*/09-fargesyn.png`) og tonebanen på kula. Lages på nytt med `lag_header.py` og `lag_sokeresultat.py` fra `skudd/` (simulatoren
 «Skjermbilder 6,3»: `-studioModus harmoni -harmoni tonebane [-vis3D tonebane]` og `-vis3D profil -fargerom3D.rom cieLab
 -fargerom3D.profil kCGColorSpaceGenericCMYK -fargerom3D.sammenlign kCGColorSpaceSRGB -fargerom3D.hensikt perseptuell`;
 Duo-bildet er `apen-3d` fra iPhone Duo-simulatoren).
