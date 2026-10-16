@@ -241,7 +241,7 @@ struct OvergangVisning: View {
 
     var body: some View {
         // Tonene øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo) eller i fargelinjen (lukket iPhone Duo).
-        Kortoppsett(fane: .overgang, farger: toner.map { Duofarge(farge: $0) }, ramme: tonramme) { bred in
+        Kortoppsett(fane: .overgang, farger: toner.map { Duofarge(farge: $0) }, ramme: tonramme, tittel: "Overgang") { bred in
             overgangsflate(bred: bred)
         } topp: {
             overgangsflate(bred: false, medFlate: false)
