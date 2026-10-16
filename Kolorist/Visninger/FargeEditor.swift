@@ -12,6 +12,7 @@ struct FargeEditor: View {
     var tittel: String? = nil
     @Environment(\.presentasjonsmodus) private var presentasjon
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.duoDeling) private var duoDeling
     @State private var hexTekst = ""
     @State private var lagreFarger: [PalettFarge]?
     @State private var lagreNavn = ""
@@ -120,6 +121,13 @@ struct FargeEditor: View {
         return [farge]
     }
 
+    /// Flatefargene med grunnfargen i harmonien merket (fargelinjen og rammen over brettelinjen på iPhone Duo).
+    private func duoflatefarger(_ farge: Farge) -> [Duofarge] {
+        let farger = flatefarger(farge)
+        let grunn = modus == .harmoni && !harmonifarger.isEmpty ? harmoniGrunn : nil
+        return farger.enumerated().map { Duofarge(farge: $1, markert: $0 == grunn) }
+    }
+
     /// Fargeflaten med feltet for verdi og «Vis også» – fast øverst mens resten ruller.
     /// `medFlater: false` (iPhone Duo): bare raden med kontroller; flatene står i venstre halvdel eller som fargelinje.
     @ViewBuilder
@@ -164,6 +172,8 @@ struct FargeEditor: View {
                                  romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
                                  verditekst: harmonisirkel.verditekst,
                                  stablet: bred,
+                                 // Åpen iPhone Duo: rammen tegnes rundt feltet og fargene over brettelinjen samlet.
+                                 rammeRundtGrunn: duoDeling == nil,
                                  velg: { arbeidsbenk.aktivFarge = $0 },
                                  lagre: { lagreEnkeltfarger([$0], i: kontekst) },
                                  leggIPalett: { lagreNavn = ""; lagreFarger = [$0] })
@@ -248,7 +258,7 @@ struct FargeEditor: View {
         let farge = arbeidsbenk.aktivFarge
 
         // Flatene øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo) eller i fargelinjen (lukket iPhone Duo).
-        Kortoppsett(fane: bareFarge ? nil : .studio, farger: flatefarger(farge).map { Duofarge(farge: $0) }) { bred in
+        Kortoppsett(fane: bareFarge ? nil : .studio, farger: duoflatefarger(farge)) { bred in
             fargepanel(farge, bred: bred)
         } topp: {
             fargepanel(farge, bred: false, medFlater: false)

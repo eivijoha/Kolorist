@@ -5,6 +5,8 @@ import SwiftUI
 struct Duofarge: Equatable {
     let farge: Farge
     var navn: String = ""
+    /// Merket med ramme, som grunnfargen i en harmoni – rammen går da også rundt feltet i fargelinjen.
+    var markert = false
 }
 
 extension EnvironmentValues {
@@ -182,9 +184,21 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
                     GeometryReader { p in
                         let r = p[anker]
                         let bredde = delt.width + Duoramme.linje
-                        Fargelinje(farger: kant ?? farger)
+                        Fargelinje(farger: kant ?? farger, merk: false)
                             .frame(width: bredde, height: r.height)
                             .position(x: r.maxX + bredde / 2, y: r.midY)
+                        // Merkede felt (grunnfargen): rammen rundt feltet i kortet og fargene over brettelinjen samlet.
+                        let felter = kant ?? farger
+                        let høyde = r.height / CGFloat(max(felter.count, 1))
+                        ForEach(Array(felter.enumerated()), id: \.offset) { i, f in
+                            if f.markert {
+                                UnevenRoundedRectangle(topLeadingRadius: i == 0 ? 20 : 0, style: .continuous)
+                                    .strokeBorder(f.farge.lesbarTekstfarge.swiftUI, lineWidth: 3)
+                                    .frame(width: r.width + bredde, height: høyde)
+                                    .position(x: r.minX + (r.width + bredde) / 2, y: r.minY + høyde * (CGFloat(i) + 0.5))
+                                    .allowsHitTesting(false)
+                            }
+                        }
                         if let ramme {
                             UnevenRoundedRectangle(topLeadingRadius: 20, style: .continuous)
                                 .strokeBorder(ramme, lineWidth: 3)
@@ -206,11 +220,14 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
 private struct Fargelinje: View {
     let farger: [Duofarge]
     var ramme: Color? = nil
+    /// Rammen rundt merkede felt (lukket); åpen tegner Kortoppsett den rundt kortet og fargelinjen samlet.
+    var merk = true
 
     var body: some View {
         VStack(spacing: 0) {
             ForEach(Array(farger.enumerated()), id: \.offset) { _, f in
                 Rectangle().fill(f.farge.swiftUI)
+                    .overlay { if merk && f.markert { Rectangle().strokeBorder(f.farge.lesbarTekstfarge.swiftUI, lineWidth: 3) } }
             }
         }
         .overlay { if let ramme { Rectangle().strokeBorder(ramme, lineWidth: 3) } }
