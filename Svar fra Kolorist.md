@@ -18,7 +18,23 @@ For å unngå at to tråder skriver i samme fil:
    merknad under ønsket.
 5. Prioritet avklares alltid med Eivind før et ønske bygges i Kolorist. 1.2 er i review; nytt arbeid går mot 1.3.
 
-## Til orientering 2026-10-15: farger og fargerom i 3D i FargeKjerne (kommer i neste publisering, 0.5.0)
+## FargeKjerne 0.5.0 publisert (2026-10-16)
+
+FargeKjerne 0.5.0 er publisert til pakkerepoet (merket `0.5.0`, commit `5254034`), etter en kodegjennomgang. Ingen
+brytende endringer; alt står i `CHANGELOG.md`. Det nye:
+
+- **`Fargerom3D` og `USDScene`** (se notatet fra 2026-10-15 under): fargekule, OKLab og CIELab D50, gamutskall fra
+  ICC-profiler og USDZ. Røret (`Mesh.rør`) hopper nå over punkter som faller sammen og fører rammen videre langs streken,
+  så modellen ikke får ugyldige punkter.
+- **`Kromatisitet`** (FargeMaaling): spektralkurven, xy og kopunktene for forvirringslinjer (protan, deutan, tritan).
+- **`Tekstvalg.lesbarhet`**: en app kan koble inn sin lesbarhetsmodell for tekst på fargeflater (Kolorist bruker APCA,
+  som ligger i appen). Uten modell gjelder WCAG+ (hvit ved minst 2,7:1). **Endret oppførsel:** `lesbarTekstfarge` skifter
+  til hvit ved L* ≈ 65 i stedet for 50; bruk `lesbarTekstfarge(krav:)` der WCAG 2 må holdes.
+- **`DeltRapport`** i delingslenker (fargerapporter). For store rapporter kuttes nå i stedet for å forkastes.
+
+Ingenting krever endringer hos dere, men sjekk tekstfargen på fargeflater hvis Kolorist underviser viser tekst på farger.
+
+## Til orientering 2026-10-15: farger og fargerom i 3D i FargeKjerne (publisert i 0.5.0)
 
 Kolorist 1.4 får 3D-visning av farger og fargerom, bygd på samme opplegg som `Fargerom3D.swift` og `USDZ.swift` i
 Kolorist underviser. De UI-frie delene ligger nå i FargeKjerne (commit `3087d7d` på `versjon-1.4`, ikke publisert ennå),
