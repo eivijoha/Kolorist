@@ -1145,6 +1145,7 @@ def plattformer(lang):
         <li>iPhone</li>
         <li>iPad</li>
         <li>Mac</li>
+        <li>iPhone Duo</li>
       </ul>
     </header>
 
