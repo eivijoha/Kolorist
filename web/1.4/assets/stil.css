@@ -656,6 +656,45 @@ main {
   text-align: center;
 }
 
+/* ---------- iPhone Duo: lukket og åpen side om side, i samme høyde ---------- */
+.fagsteg.duo-steg {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.duo-bilder {
+  display: grid;
+  /* 699 × 1017 og 1427 × 1004: kolonnene i forholdet som gir lik høyde. */
+  grid-template-columns: minmax(0, 0.484fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: end;
+  max-width: 56rem;
+}
+
+.duo-bilder.høyde {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 44rem;
+}
+
+.fagsteg .duo-bilder figure {
+  margin: 0;
+  max-width: none;
+}
+
+.duo-bilder img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: var(--skygge);
+}
+
+.duo-bilder figcaption {
+  font-size: 0.9rem;
+  color: var(--tekst-dempet);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
 /* ---------- Karusell (Mac-skjermbilder) ---------- */
 
 .skjermbilder-tittel {

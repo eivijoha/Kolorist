@@ -8,6 +8,7 @@ Skriver sidene i web/<VERSJON> (nå 1.4; sidene i web/1.2 og web/1.3 er ferdige 
 webkilde/ eller her, ikke i de ferdige sidene (de skrives over). Det som er nytt i versjonen, merkes med N; det som
 var nytt i forrige versjon, står med N12 (tomt), så merket kan flyttes tilbake om det trengs."""
 import pathlib
+import os
 import re
 
 VERSJON = '1.4'
@@ -23,7 +24,7 @@ kilde = {'nb': open(f'{S}/webkilde/index.html').read(), 'en': open(f'{S}/webkild
 
 # Sidepar nb ↔ en
 PAR = {'index.html': 'index.html', 'design.html': 'design.html', 'arkitektur.html': 'architecture.html',
-       'lys.html': 'light.html', 'funksjoner.html': 'features.html', 'plattformer.html': 'platforms.html', 'filament.html': 'filament.html', 'visualisering.html': 'visualisation.html', 'support.html': 'support.html',
+       'lys.html': 'light.html', 'funksjoner.html': 'features.html', 'plattformer.html': 'platforms.html', 'filament.html': 'filament.html', 'visualisering.html': 'visualisation.html', 'duo.html': 'duo.html', 'support.html': 'support.html',
        'privacy.html': 'privacy.html', 'terms.html': 'terms.html', 'methods.html': 'methods.html'}
 TIL_NB = {v: k for k, v in PAR.items()}
 
@@ -32,7 +33,7 @@ T = {
         nytt=f'Nytt i {VERSJON}', hopp='Hopp til hovedinnhold', hovedmeny='Hovedmeny', bunnmeny='Bunnmeny', språk='Språk',
         nav=[('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('filament.html', '3D-print'), ('visualisering.html', 'Visualisering'), ('plattformer.html', 'Plattformer'), ('support.html', 'Støtte')],
         bunn=[('index.html', 'Om appen'), ('design.html', 'Design'), ('arkitektur.html', 'Arkitektur'), ('plattformer.html', 'Plattformer'), ('filament.html', '3D-print'),
-              ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('visualisering.html', 'Fargevisualisering'), ('support.html', 'Støtte'),
+              ('funksjoner.html', 'Alle funksjoner'), ('lys.html', 'Lys og fargemåling'), ('visualisering.html', 'Fargevisualisering'), ('duo.html', 'iPhone Duo'), ('support.html', 'Støtte'),
               ('methods.html', 'Metoder og kilder'), ('privacy.html', 'Personvern'), ('terms.html', 'Vilkår')],
         annet='English', annet_lang='en', locale='nb_NO',
         utvikler='Kolorist er utviklet av Eivind Arnstein Johansen – Institutt for design, NTNU.',
@@ -42,7 +43,7 @@ T = {
         nytt=f'New in {VERSJON}', hopp='Skip to main content', hovedmeny='Main menu', bunnmeny='Footer menu', språk='Language',
         nav=[('design.html', 'Design'), ('architecture.html', 'Architecture'), ('filament.html', '3D printing'), ('visualisation.html', 'Visualisation'), ('platforms.html', 'Platforms'), ('support.html', 'Support')],
         bunn=[('index.html', 'About'), ('design.html', 'Design'), ('architecture.html', 'Architecture'), ('platforms.html', 'Platforms'), ('filament.html', '3D printing'),
-              ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('visualisation.html', 'Colour visualisation'), ('support.html', 'Support'),
+              ('features.html', 'All features'), ('light.html', 'Light and colour measurement'), ('visualisation.html', 'Colour visualisation'), ('duo.html', 'iPhone Duo'), ('support.html', 'Support'),
               ('methods.html', 'Methods and sources'), ('privacy.html', 'Privacy'), ('terms.html', 'Terms')],
         annet='Norsk', annet_lang='nb', locale='en_US',
         utvikler='Kolorist is developed by Eivind Arnstein Johansen – Department of Design, NTNU.',
@@ -104,7 +105,7 @@ def side(lang, fil, tittel, beskrivelse, innhold, karusell=False):
   <!-- Smart App Banner i Safari på iPhone/iPad -->
   <meta name="apple-itunes-app" content="app-id=6818636272">
   <link rel="icon" href="{p}assets/ikon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="{p}assets/stil.css?v=8">
+  <link rel="stylesheet" href="{p}assets/stil.css?v=10">
   <link rel="canonical" href="{egen}">
   <link rel="alternate" hreflang="nb" href="{nburl}">
   <link rel="alternate" hreflang="en" href="{enurl}">
@@ -224,6 +225,44 @@ NYE_ALT = {
 }
 
 
+# iPhone Duo: skjermbildene ligger i assets/duo/ (nb) og assets/en/duo/ (en); mangler et engelsk, brukes det norske.
+DUO_MÅL = {'lukket': (699, 1017), 'apen': (1427, 1004), 'hoyde': (1004, 1427)}
+
+
+def duobilde(lang, tilstand, navn, alt):
+    fil = f'{tilstand}-{navn}.png'
+    b, h = DUO_MÅL[tilstand]
+    if lang == 'en':
+        src = f'../assets/en/duo/{fil}' if os.path.exists(f'{W}/assets/en/duo/{fil}') else f'../assets/duo/{fil}'
+    else:
+        src = f'assets/duo/{fil}'
+    return f'<img src="{src}?v=1" alt="{alt}" width="{b}" height="{h}" loading="lazy">'
+
+
+def duofigur(lang, art, navn, alt):
+    """Lukket og åpen side om side (`art` 'par'), eller noen skjermbilder i høydeformat (`art` 'høyde', `navn` en liste)."""
+    lukket, åpen = ('Closed', 'Open') if lang == 'en' else ('Lukket', 'Åpen')
+    if art == 'høyde':
+        bilder = '\n'.join(f'''        <figure class="duo-høyde">
+          {duobilde(lang, 'hoyde', n, a)}
+        </figure>''' for n, a in zip(navn, alt))
+        return f'''
+      <div class="duo-bilder høyde">
+{bilder}
+      </div>'''
+    return f'''
+      <div class="duo-bilder">
+        <figure class="duo-lukket">
+          {duobilde(lang, 'lukket', navn, f'{alt} – {lukket.lower()}')}
+          <figcaption>{lukket}</figcaption>
+        </figure>
+        <figure class="duo-åpen">
+          {duobilde(lang, 'apen', navn, f'{alt} – {åpen.lower()}')}
+          <figcaption>{åpen}</figcaption>
+        </figure>
+      </div>'''
+
+
 def iphonebilde(s, navn):
     lang = 'en' if '<html lang="en">' in s else 'nb'
     if (lang, navn) in NYE_BILDER:
@@ -299,6 +338,7 @@ def startside(lang):
                       ('lys.html', 'Se fargene i lyset der de skal brukes', 'Og kompenser farger du plukker for lyset de ble fotografert i.'),
                       ('filament.html', 'Finn filament til 3D-print', 'Den nærmeste fargen blant over 2 200 filamenter, de fleste målt.'),
                       ('visualisering.html', 'Se fargene i 3D', 'Harmonier, overganger og fargerom – og som 3D-modell i AR.'),
+                      ('duo.html', 'Bruk to skjermhalvdeler på iPhone Duo', 'Fargene på venstre halvdel og verktøyene til høyre.'),
                       ('design.html#lever', 'Få fargene ut', 'I designprogrammer, trykk og kode – eller del dem som lenke.')],
             fagfelt='To fagfelt',
             dører=[('design.html', 'Design', 'Paletter, toneskalaer og gradienter for skjerm og trykk – rett inn i designverktøyene.', 'Kolorist for design', 'harmoni'),
@@ -329,6 +369,7 @@ def startside(lang):
                       ('light.html', 'See colours in the light where they will be used', 'And compensate colours you pick for the light they were photographed in.'),
                       ('filament.html', 'Find filament for 3D printing', 'The nearest colour among more than 2,200 filaments, most of them measured.'),
                       ('visualisation.html', 'See colours in 3D', 'Harmonies, gradients and colour spaces – and as a 3D model in AR.'),
+                      ('duo.html', 'Use both halves on iPhone Duo', 'The colours on the left half and the tools on the right.'),
                       ('design.html#deliver', 'Get your colours out', 'Into design apps, print and code – or share them as a link.')],
             fagfelt='Two fields',
             dører=[('design.html', 'Design', 'Palettes, tone scales and gradients for screen and print – straight into your design tools.', 'Kolorist for design', 'harmoni'),
@@ -420,7 +461,10 @@ def fagside(lang, fil, tittel, beskrivelse, overtittel, h1, ingress, steg, vider
         lis = '\n'.join(f'          <li>{p}</li>' for p in punkter)
         lenke_html = f'\n        <p><a href="{lenke[0]}">{lenke[1]} →</a></p>' if lenke else ''
         figur = ''
-        if bildenavn and bildenavn.startswith('kommer:'):
+        duo = isinstance(bildenavn, tuple)
+        if duo:
+            figur = duofigur(lang, *bildenavn)
+        elif bildenavn and bildenavn.startswith('kommer:'):
             # Plassholder til skjermbildet er tatt.
             kommer = 'Screenshot coming' if lang == 'en' else 'Skjermskudd kommer'
             figur = f'''
@@ -437,7 +481,7 @@ def fagside(lang, fil, tittel, beskrivelse, overtittel, h1, ingress, steg, vider
       </figure>'''
         # Aksenter bort (é → e), men æ, ø og å beholdes.
         id_ = re.sub(r'[^a-zæøå0-9]+', '-', overskrift.lower().translate(str.maketrans('éèêáàóòôúü', 'eeeaaooouu'))).strip('-')
-        deler.append(f'''    <section class="fagsteg{' med-bilde' if bildenavn else ''}" aria-labelledby="{id_}">
+        deler.append(f'''    <section class="fagsteg{' duo-steg' if duo else (' med-bilde' if bildenavn else '')}" aria-labelledby="{id_}">
       <div>
         <h2 id="{id_}">{overskrift}</h2>
         <p class="lesetekst">{tekst}</p>
@@ -1321,6 +1365,107 @@ def skriv(sti, tekst):
     open(f'{W}/{sti}', 'w').write(tekst)
 
 
+
+def duoside(lang):
+    # Hele siden er ny i 1.4: merket står én gang, i ingressen.
+    merke = f'<span class="nytt">{T[lang]["nytt"]}</span> '
+    if lang == 'nb':
+        steg = [
+            ('Farger', 'Fargen du jobber med, stort og tydelig – med gliderne rett ved siden av.',
+             ['Lukket: fargen i stripen langs kanten, og alle verktøyene som på andre iPhoner',
+              'Åpen: fargen på hele venstre halvdel, med verdiene i fargemodellen og fargerommet du har valgt',
+              'Fargene fortsetter litt forbi brettelinjen, så de to halvdelene henger sammen'],
+             ('par', 'studio-farge', 'Studio med fargen og gliderne'), None),
+            ('Harmonier', 'Harmonien som store flater mens du justerer på fargesirkelen.',
+             ['Fargene over hverandre, med verdiene og grunnfargen merket',
+              'Fargesirkelen og gliderne får hele høyre halvdel',
+              'Lukket: harmonien i stripen, og fargesirkelen i full størrelse'],
+             ('par', 'studio-harmoni', 'En split-komplementær harmoni'), None),
+            ('Toneskalaer', 'Hele skalaen fra lys til mørk, ved siden av kontrasten for hvert trinn.',
+             ['Trinnene over hverandre, med fargekodene',
+              'Kontrasten mot hvitt og sort for hvert trinn til høyre'],
+             ('par', 'studio-toneskala', 'En toneskala med elleve trinn'), None),
+            ('Overganger', 'Tonene i overgangen side om side med endepunktene.',
+             ['Tonene over hverandre i OKLab, fra start til slutt',
+              'Endepunktene og antall toner til høyre'],
+             ('par', 'overgang', 'En overgang i sju toner'), None),
+            ('Kontrast', 'Tekst og grafikk på bakgrunnen i stort format, med kravene ved siden av.',
+             ['Åpen: forhåndsvisningen på venstre halvdel og kravene etter WCAG, APCA eller LRV til høyre',
+              'Lukket: tekst- og bakgrunnsfargen som små fargevalg øverst, og fargene i stripen'],
+             ('par', 'kontrast', 'Kontrastsjekk for tekst på hvit bakgrunn'), None),
+            ('Fargeforskjell', 'To farger over hverandre, med ΔE00 og hvor synlig forskjellen er.',
+             ['Åpen: de to fargene på venstre halvdel og detaljene til høyre',
+              'Lukket: verdien og de to fargevalgene øverst'],
+             ('par', 'deltae', 'Fargeforskjellen mellom to farger'), None),
+            ('Fargesyn', 'Paletten med normalt syn ved siden av slik den ses med fargesynsavvik.',
+             ['Én rad per farge: normalt syn til venstre og avviket til høyre',
+              'Stripen viser paletten slik den ses med avviket',
+              'Vanskelige par og forvirringslinjer til høyre'],
+             ('par', 'fargesyn', 'En palett med normalt syn og deuteranopi'), ('methods.html#forvirringslinjer', 'Les om forvirringslinjer')),
+            ('Betraktningsforhold', 'Fargen under flere betraktningsforhold samtidig.',
+             ['Fargen på skjermen og under hvert merkede betraktningsforhold, over hverandre',
+              'Lyset, kvaliteten og fargeskiftet til høyre'],
+             ('par', 'lys', 'En farge under flere betraktningsforhold'), None),
+            ('Stående', 'Åpen og stående er Kolorist som på en stor iPhone: fargene øverst og verktøyene under.',
+             ['Harmonier, overganger og fargesyn med god plass til fargene',
+              'Samme app og samme paletter – lukket, åpen eller stående'],
+             ('høyde', ['studio-harmoni', 'overgang', 'fargesyn'],
+              ['En harmoni, stående', 'En overgang, stående', 'Fargesyn, stående']), None),
+        ]
+        return fagside('nb', 'duo.html', 'Kolorist på iPhone Duo – fargene på to skjermhalvdeler',
+                       'Kolorist på iPhone Duo: lukket står fargene i en stripe langs kanten, og åpnet får de hele venstre halvdel med verktøyene til høyre.',
+                       'Kolorist på', 'iPhone Duo',
+                       merke + 'Lukket er Kolorist som på andre iPhoner, med fargene i en stripe langs kanten. Åpnet får fargene hele venstre halvdel, og verktøyene står til høyre.',
+                       steg, ('Les videre', [('plattformer.html', 'Kolorist på iPhone, iPad og Mac'), ('funksjoner.html', 'Alle funksjoner'), ('visualisering.html', 'Fargevisualisering')]))
+    steg = [
+        ('Colours', 'The colour you are working on, large and clear – with the sliders right next to it.',
+         ['Closed: the colour in the strip along the edge, and every tool as on other iPhones',
+          'Open: the colour across the whole left half, with its values in the colour model and colour space you have chosen',
+          'The colours continue a little past the fold, so the two halves belong together'],
+         ('par', 'studio-farge', 'Studio with the colour and the sliders'), None),
+        ('Harmonies', 'The harmony as large swatches while you adjust it on the colour wheel.',
+         ['The colours stacked, with their values and the base colour marked',
+          'The colour wheel and sliders get the whole right half',
+          'Closed: the harmony in the strip, and the colour wheel at full size'],
+         ('par', 'studio-harmoni', 'A split-complementary harmony'), None),
+        ('Tone scales', 'The whole scale from light to dark, next to the contrast for each step.',
+         ['The steps stacked, with their colour codes',
+          'Contrast against white and black for each step on the right'],
+         ('par', 'studio-toneskala', 'A tone scale with eleven steps'), None),
+        ('Gradients', 'The tones of the gradient side by side with its end points.',
+         ['The tones stacked in OKLab, from start to end',
+          'The end points and number of tones on the right'],
+         ('par', 'overgang', 'A gradient in seven tones'), None),
+        ('Contrast', 'Text and graphics on the background at full size, with the requirements next to them.',
+         ['Open: the preview on the left half, and the WCAG, APCA or LRV requirements on the right',
+          'Closed: the text and background colours as small colour choices at the top, and the colours in the strip'],
+         ('par', 'kontrast', 'Contrast check for text on a white background'), None),
+        ('Colour difference', 'Two colours stacked, with ΔE00 and how visible the difference is.',
+         ['Open: the two colours on the left half and the details on the right',
+          'Closed: the value and the two colour choices at the top'],
+         ('par', 'deltae', 'The colour difference between two colours'), None),
+        ('Colour vision', 'The palette with normal vision next to how it looks with colour vision deficiencies.',
+         ['One row per colour: normal vision on the left and the deficiency on the right',
+          'The strip shows the palette as seen with the deficiency',
+          'Difficult pairs and confusion lines on the right'],
+         ('par', 'fargesyn', 'A palette with normal vision and deuteranopia'), ('methods.html#confusion-lines', 'Read about confusion lines')),
+        ('Viewing conditions', 'The colour under several viewing conditions at once.',
+         ['The colour on screen and under each ticked viewing condition, stacked',
+          'The light, its quality and the colour shift on the right'],
+         ('par', 'lys', 'A colour under several viewing conditions'), None),
+        ('Upright', 'Open and upright, Kolorist works like on a large iPhone: the colours at the top and the tools below.',
+         ['Harmonies, gradients and colour vision with plenty of room for the colours',
+          'The same app and the same palettes – closed, open or upright'],
+         ('høyde', ['studio-harmoni', 'overgang', 'fargesyn'],
+          ['A harmony, upright', 'A gradient, upright', 'Colour vision, upright']), None),
+    ]
+    return fagside('en', 'duo.html', 'Kolorist on iPhone Duo – colours on two halves of the screen',
+                   'Kolorist on iPhone Duo: closed, the colours sit in a strip along the edge; open, they fill the whole left half with the tools on the right.',
+                   'Kolorist on', 'iPhone Duo',
+                   merke + 'Closed, Kolorist works as on other iPhones, with the colours in a strip along the edge. Open, the colours fill the whole left half, and the tools sit on the right.',
+                   steg, ('Read on', [('platforms.html', 'Kolorist on iPhone, iPad and Mac'), ('features.html', 'All features'), ('visualisation.html', 'Colour visualisation')]))
+
+
 skriv('index.html', startside('nb'))
 skriv('en/index.html', startside('en'))
 skriv('design.html', design('nb'))
@@ -1333,6 +1478,8 @@ skriv('filament.html', filamentside('nb'))
 skriv('en/filament.html', filamentside('en'))
 skriv('visualisering.html', visualiseringsside('nb'))
 skriv('en/visualisation.html', visualiseringsside('en'))
+skriv('duo.html', duoside('nb'))
+skriv('en/duo.html', duoside('en'))
 skriv('plattformer.html', plattformer('nb'))
 skriv('en/platforms.html', plattformer('en'))
 skriv('funksjoner.html', funksjoner('nb'))
@@ -1345,12 +1492,12 @@ for lang, mappe in (('nb', ''), ('en', 'en/')):
         h = open(sti).read()
         h = re.sub(r'<nav class="hovednav".*?</nav>', hovednav(lang, fil), h, count=1, flags=re.S)
         h = re.sub(r'<nav aria-label="(Bunnmeny|Footer menu)">.*?</nav>', bunnnav(lang, fil), h, count=1, flags=re.S)
-        h = re.sub(r'stil\.css\?v=\d+', 'stil.css?v=8', h)
+        h = re.sub(r'stil\.css\?v=\d+', 'stil.css?v=10', h)
         h = h.replace('index.html#lys', 'lys.html' if lang == 'nb' else 'light.html')
         open(sti, 'w').write(h)
 
 # Nettstedskart
-sider = ['', 'design.html', 'arkitektur.html', 'plattformer.html', 'filament.html', 'lys.html', 'visualisering.html', 'funksjoner.html', 'support.html', 'privacy.html', 'terms.html', 'methods.html']
+sider = ['', 'design.html', 'arkitektur.html', 'plattformer.html', 'filament.html', 'lys.html', 'visualisering.html', 'duo.html', 'funksjoner.html', 'support.html', 'privacy.html', 'terms.html', 'methods.html']
 linjer = []
 for nbfil in sider:
     enfil = PAR.get(nbfil or 'index.html')
