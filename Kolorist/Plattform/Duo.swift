@@ -48,6 +48,7 @@ private struct DuofargeRapport: ViewModifier {
 
 private struct Duoramme: ViewModifier {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.horizontalSizeClass) private var breddeklasse
     @State private var lukket = false
 
     /// Bredden på fargelinjen (lukket) – og hvor langt fargeprøvene går inn på høyre halvdel (åpen).
@@ -79,8 +80,10 @@ private struct Duoramme: ViewModifier {
                             .frame(width: Self.linje)
                     }
                     // Appen står alltid sist, så den beholder tilstanden når telefonen åpnes og lukkes.
+                    // Smal bredde som på andre iPhoner (vinduet er bredt når telefonen er åpen, men appen har én halvdel).
                     content
                         .environment(\.duo, duo)
+                        .environment(\.horizontalSizeClass, duo ? .compact : breddeklasse)
                 }
                 .ignoresSafeArea(edges: duo ? .vertical : [])
             }
