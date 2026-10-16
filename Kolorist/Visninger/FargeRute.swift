@@ -67,26 +67,20 @@ struct FargeRute: View {
         #if os(macOS)
         // På Mac kan alle prøver dras (til paletter, fargebrønner og andre apper), og valgene ligger i
         // høyreklikkmenyen – der gjelder menyen bare prøven, ikke hele raden som på iOS.
-        let boble = false
-        #else
-        let boble = valgBoble
-        #endif
-        let medMeny = rute.modifier(meny(boble: boble))
-        if boble {
-            medMeny
-        } else {
-            #if os(macOS)
-            medMeny.onDrag { dragLeverandør(farge: farge, palettFarge: palettFarge) } preview: {
+        rute.modifier(meny(boble: false))
+            .onDrag { dragLeverandør(farge: farge, palettFarge: palettFarge) } preview: {
                 FargeRute(farge: farge, visTekst: false, hjørne: 8).frame(width: 56, height: 56)
             }
-            #else
-            if let palettFarge {
-                medMeny.draggable(palettFarge) { FargeRute(farge: farge, visTekst: false, hjørne: 8).frame(width: 56, height: 56) }
-            } else {
-                medMeny.draggable(farge)
-            }
-            #endif
+        #else
+        let medMeny = rute.modifier(meny(boble: valgBoble))
+        if valgBoble {
+            medMeny
+        } else if let palettFarge {
+            medMeny.draggable(palettFarge) { FargeRute(farge: farge, visTekst: false, hjørne: 8).frame(width: 56, height: 56) }
+        } else {
+            medMeny.draggable(farge)
         }
+        #endif
     }
 
     private func meny(boble: Bool) -> Fargemeny {

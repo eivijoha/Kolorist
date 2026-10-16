@@ -16,10 +16,10 @@ struct TonebaneKule: View {
     @State private var kule: CGImage?
 
     /// Vinkelen kula vippes mot betrakteren (sett ovenfra).
-    private static let vipp = 22.0 * .pi / 180
-    private static let piksler = 240
+    nonisolated private static let vipp = 22.0 * .pi / 180
+    nonisolated private static let piksler = 240
     /// Hvor dekkende overflaten er.
-    private static let dekning = 0.45
+    nonisolated private static let dekning = 0.45
 
     private var midtkulør: Double { startKulør + spenn / 2 }
 

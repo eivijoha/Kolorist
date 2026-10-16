@@ -13,7 +13,7 @@ struct Kromatisitetsdiagram: View {
     @State private var fyll: CGImage?
 
     /// Utsnittet av diagrammet (x 0…0,8, y 0…0,9).
-    private static let maksX = 0.8, maksY = 0.9
+    nonisolated private static let maksX = 0.8, maksY = 0.9
 
     var body: some View {
         Canvas { ctx, størrelse in
