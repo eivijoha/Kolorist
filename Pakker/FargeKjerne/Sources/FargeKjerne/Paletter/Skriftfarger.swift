@@ -52,12 +52,13 @@ public enum Skriftfarger {
 }
 
 public extension Palett {
-    /// Skriftfargen for en palettfarge: den brukeren har valgt, ellers den beste (`Skriftfarger.beste`). `nil` når paletten
-    /// ikke har skriftfarger.
+    /// Skriftfargen for en palettfarge: den brukeren har valgt, ellers den beste (`Skriftfarger.beste`) med WCAG 2 som gulv
+    /// (4,5:1 for tekst): den mest lesbare blant skriftfargene som holder kravet, ellers den med høyest kontrast. `nil` når
+    /// paletten ikke har skriftfarger.
     func skriftfarge(for pf: PalettFarge) -> PalettFarge? {
         guard !tekstfarger.isEmpty else { return nil }
         if let id = pf.tekstfarge, let valgt = tekstfarger.first(where: { $0.id == id }) { return valgt }
-        return Skriftfarger.beste(for: pf.farge, blant: tekstfarger)
+        return Skriftfarger.beste(for: pf.farge, blant: tekstfarger, krav: 4.5)
     }
 }
 

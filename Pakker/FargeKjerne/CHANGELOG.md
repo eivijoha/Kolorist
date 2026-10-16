@@ -2,6 +2,12 @@
 
 API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning). Nyeste først.
 
+## Ikke publisert
+
+- **Skriftfarger i paletter med WCAG 2 som gulv:** `Palett.skriftfarge(for:)` velger nå den mest lesbare skriftfargen blant
+  dem som holder 4,5:1 (med lesbarhetsmodell, f.eks. APCA, eller WCAG+ uten), og den med høyest kontrast når ingen gjør
+  det – som knappeteksten i designsystemet. Før kunne den automatiske skriftfargen falle under WCAG 2.
+
 ## 0.5.0 – 2026-10-16
 
 - **Kromatisitet (FargeMaaling):** `Kromatisitet` – spektralkurven (380–700 nm), xy for en farge, kopunktene for
