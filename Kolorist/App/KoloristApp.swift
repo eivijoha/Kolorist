@@ -92,6 +92,9 @@ final class Arbeidsbenk {
     var presentasjon = UserDefaults.standard.bool(forKey: "presentasjon")
     /// iPhone Duo: fargene hver fane viser i de store fargeprøvene (se `duofarger(_:fane:)`).
     var duofarger: [Fane: [Duofarge]] = [:]
+    /// iPhone Duo: fanene som viser sitt eget fargekort (Kortoppsett) – der deler ikke rammen vinduet selv.
+    /// Telles, så en visning som dukker opp før den forrige er borte (bytte mellom delene i Vurdering), ikke nullstiller.
+    var duoEgetKort: [Fane: Int] = [:]
 
     var aktivFarge = Arbeidsbenk.startfarge {
         didSet {

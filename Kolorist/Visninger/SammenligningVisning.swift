@@ -35,29 +35,29 @@ struct SammenligningVisning: View {
 
     /// Som Kontrast: kortet med verdien og de to fargene øverst (til venstre i bred visning), detaljene under.
     private var fane: some View {
-        GeometryReader { geo in
-            let bred = Breddeoppsett.erBred(geo.size)
-            let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
-            oppsett {
-                kort(bred: bred).frame(width: bred ? geo.size.width / 2 : nil)
-                Form { detaljseksjon }
-                    .formStyle(.grouped)
-                    #if os(iOS)
-                    .listSectionSpacing(.compact)
-                    #endif
-                    .contentMargins(.top, 0, for: .scrollContent)
-            }
-            .background(Color.skjemabakgrunn)
+        // Kortet øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo), eller verdien og fargevalgene øverst og
+        // fargene i fargelinjen (lukket iPhone Duo).
+        Kortoppsett(fane: innebygd ? .vurdering : nil,
+                    farger: [Duofarge(farge: a, navn: String(localized: "Farge A")), Duofarge(farge: b, navn: String(localized: "Farge B"))]) { bred in
+            kort(bred: bred)
+        } topp: {
+            kort(bred: false, medFlater: false)
+        } skjema: {
+            Form { detaljseksjon }
+                .formStyle(.grouped)
+                #if os(iOS)
+                .listSectionSpacing(.compact)
+                #endif
+                .contentMargins(.top, 0, for: .scrollContent)
         }
-        // iPhone Duo (fanen Vurdering): A og B i fargelinjen og venstre halvdel.
-        .duofarger(innebygd ? [Duofarge(farge: a, navn: String(localized: "Farge A")),
-                               Duofarge(farge: b, navn: String(localized: "Farge B"))] : [], fane: .vurdering)
+        .background(Color.skjemabakgrunn)
         .navigationTitle(Text(verbatim: "ΔE"))
     }
 
     /// Verdien og hvor synlig forskjellen er over de to fargene, som i kontrastsjekken. Fargene er likeverdige flater med
     /// rette hjørner der de møtes; trykk på en flate for å velge fargen.
-    private func kort(bred: Bool) -> some View {
+    /// `medFlater: false` (lukket iPhone Duo): verdien og A og B som fargevalg, uten flatene.
+    private func kort(bred: Bool, medFlater: Bool = true) -> some View {
         let de00 = a.deltaE2000(til: b)
         return VStack(spacing: 0) {
             VStack(spacing: 0) {
@@ -66,13 +66,25 @@ struct SammenligningVisning: View {
                     .padding(.top, 14)
                     .padding(.bottom, 10)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                HStack(spacing: 0) {
-                    felt("A", String(localized: "Farge A"), farge: $a)
-                    felt("B", String(localized: "Farge B"), farge: $b)
+                if medFlater {
+                    // Bred visning: A over B, som fargelinjen på iPhone Duo. Smal: side om side.
+                    let oppsett = bred ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
+                    oppsett {
+                        felt("A", String(localized: "Farge A"), farge: $a)
+                        felt("B", String(localized: "Farge B"), farge: $b)
+                    }
+                    .duokant()
+                } else {
+                    HStack(spacing: 12) {
+                        Fargevalgbrikke(tittel: String(localized: "Farge A"), farge: $a, visHvitOgSort: true)
+                        Fargevalgbrikke(tittel: String(localized: "Farge B"), farge: $b, visHvitOgSort: true)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12)
                 }
             }
             .clipShape(Kortform.fargepanel(bred: bred))
-            .frame(height: bred ? nil : (presentasjon ? 330 : 250))
+            .frame(height: bred || !medFlater ? nil : (presentasjon ? 330 : 250))
             .frame(maxHeight: bred ? .infinity : nil)
         }
         .frame(maxWidth: .infinity)

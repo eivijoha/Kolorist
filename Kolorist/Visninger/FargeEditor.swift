@@ -12,7 +12,6 @@ struct FargeEditor: View {
     var tittel: String? = nil
     @Environment(\.presentasjonsmodus) private var presentasjon
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
-    @Environment(\.duo) private var duo
     @State private var hexTekst = ""
     @State private var lagreFarger: [PalettFarge]?
     @State private var lagreNavn = ""
@@ -131,6 +130,7 @@ struct FargeEditor: View {
                     // Smal visning: fast høyde øverst (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
                     .frame(height: bred ? nil : (presentasjon ? 220 : 140))
                     .frame(maxHeight: bred ? .infinity : nil)
+                    .duokant()
             }
             kontrollrad(farge)
         }
@@ -243,22 +243,16 @@ struct FargeEditor: View {
             .frame(minHeight: 48)
     }
 
-    /// Bred visning (iPad i landskap, åpen foldetelefon i landskap): fargeflatene får venstre halvdel,
-    /// over/under hverandre, og kontrollene ligger til høyre.
-    private func erBred(_ størrelse: CGSize) -> Bool { Breddeoppsett.erBred(størrelse) }
-
     var body: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         let farge = arbeidsbenk.aktivFarge
 
-        GeometryReader { geo in
-        // iPhone Duo: som på andre iPhoner, med flatene i fargelinjen eller venstre halvdel i stedet for øverst.
-        let bred = erBred(geo.size) && !duo
-        // AnyLayout bevarer skjemaets tilstand (rulleposisjon, glidere) når enheten roteres.
-        let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
-        oppsett {
-        fargepanel(farge, bred: bred, medFlater: !duo)
-            .frame(width: bred ? geo.size.width / 2 : nil)
+        // Flatene øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo) eller i fargelinjen (lukket iPhone Duo).
+        Kortoppsett(fane: bareFarge ? nil : .studio, farger: flatefarger(farge).map { Duofarge(farge: $0) }) { bred in
+            fargepanel(farge, bred: bred)
+        } topp: {
+            fargepanel(farge, bred: false, medFlater: false)
+        } skjema: {
         Form {
             if !velgerIVerktøylinje && !bareFarge {
                 // iPhone: tittellinjen er skjult, så velgeren står sentrert og fritt øverst i skjemaet.
@@ -295,9 +289,6 @@ struct FargeEditor: View {
         .contentMargins(.top, 0, for: .scrollContent)
         }
         .background(Color.skjemabakgrunn)
-        }
-        // iPhone Duo: Studio-fanens flater i fargelinjen og venstre halvdel (ikke når Studio er et ark for én farge).
-        .duofarger(bareFarge ? [] : flatefarger(farge).map { Duofarge(farge: $0) }, fane: .studio)
         .navigationTitle(tittel ?? String(localized: "Studio"))
         // Ny gjengivelseshensikt: behold verdiene i kildefargerommet og regn fargen om, så f.eks. CMYK 0/0/0/0 blir
         // papirhvitt med absolutt kolorimetrisk (og hvitt igjen med relativ).

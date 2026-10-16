@@ -8058,6 +8058,16 @@
         }
       }
     },
+    "Paletten %@, med normalt syn til venstre og %@ til høyre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The palette %1$@, with normal vision on the left and %2$@ on the right"
+          }
+        }
+      }
+    },
     "Paletten %@, med normalt syn øverst og %@ under": {
       "localizations": {
         "en": {

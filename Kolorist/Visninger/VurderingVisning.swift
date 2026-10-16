@@ -20,6 +20,7 @@ struct VurderingVisning: View {
     }
 
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.duoDeling) private var duoDeling
     @AppStorage("vurderingDel") private var del: Del = .kontrast
 
     var body: some View {
@@ -48,6 +49,8 @@ struct VurderingVisning: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 16)
+                // Åpen iPhone Duo: valget står over høyre halvdel, med resten av navigasjonen.
+                .padding(.leading, duoDeling.map { $0.maxX + Duoramme.linje } ?? 0)
                 .padding(.vertical, 8)
                 .background(Color.skjemabakgrunn)
             }
@@ -95,13 +98,15 @@ private struct KontrastVurdering: View {
 
     var body: some View {
         @Bindable var arbeidsbenk = arbeidsbenk
-        GeometryReader { geo in
-            let bred = Breddeoppsett.erBred(geo.size)
-            // AnyLayout bevarer skjemaets tilstand når enheten roteres.
-            let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
-            oppsett {
-                kort(bred: bred)
-                    .frame(width: bred ? geo.size.width / 2 : nil)
+        // Flaten øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo), eller fargevalgene øverst og fargene i
+        // fargelinjen (lukket iPhone Duo).
+        Kortoppsett(fane: .vurdering, farger: [Duofarge(farge: arbeidsbenk.aktivFarge, navn: String(localized: "Tekst")),
+                                               Duofarge(farge: bakgrunn, navn: String(localized: "Bakgrunn"))],
+                    kant: [Duofarge(farge: bakgrunn)]) { bred in
+            kort(bred: bred)
+        } topp: {
+            kort(bred: false, medFlate: false)
+        } skjema: {
                 Form {
                     // Vurderingen rett under flaten og typevalget (fargene velges i flaten).
                     switch type {
@@ -116,19 +121,26 @@ private struct KontrastVurdering: View {
                 .listSectionSpacing(.compact)
                 #endif
                 .contentMargins(.top, 0, for: .scrollContent)
-            }
-            .background(Color.skjemabakgrunn)
         }
-        // iPhone Duo: tekstfargen (aktiv farge) og bakgrunnen i fargelinjen og venstre halvdel.
-        .duofarger([Duofarge(farge: arbeidsbenk.aktivFarge, navn: String(localized: "Tekst")),
-                    Duofarge(farge: bakgrunn, navn: String(localized: "Bakgrunn"))], fane: .vurdering)
+        .background(Color.skjemabakgrunn)
         .navigationTitle("Kontrast")
     }
 
     /// Flaten med valget av kontrastsjekk under – fast øverst mens skjemaet ruller.
-    private func kort(bred: Bool) -> some View {
+    /// `medFlate: false` (lukket iPhone Duo): tekst og bakgrunn som fargevalg i stedet for flaten.
+    private func kort(bred: Bool, medFlate: Bool = true) -> some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         return VStack(spacing: 0) {
+            if !medFlate {
+                HStack(spacing: 12) {
+                    Fargevalgbrikke(tittel: String(localized: "Tekst"), farge: $arbeidsbenk.aktivFarge, visAktivFarge: false)
+                    Fargevalgbrikke(tittel: String(localized: "Bakgrunn"),
+                                    farge: Binding(get: { bakgrunn }, set: { bakgrunnHex = Kontrastbakgrunn.tekst($0) }),
+                                    visHvitOgSort: true)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 10)
+            } else {
             Kontrastflate(type: type, forgrunn: $arbeidsbenk.aktivFarge,
                           bakgrunn: Binding(get: { bakgrunn }, set: { bakgrunnHex = Kontrastbakgrunn.tekst($0) }),
                           fargesyn: Fargesynstype(rawValue: fargesyn))
@@ -136,6 +148,8 @@ private struct KontrastVurdering: View {
                 // Smal visning: fast høyde (større i presentasjonsmodus). Bred visning: fyller høyden til venstre.
                 .frame(height: bred ? nil : (presentasjon ? 330 : 250))
                 .frame(maxHeight: bred ? .infinity : nil)
+                .duokant()
+            }
             HStack(spacing: 12) {
                 Picker("Kontrastsjekk", selection: $type) {
                     ForEach(Kontrasttype.allCases) { Text(verbatim: $0.navn).help($0.hjelp).tag($0) }

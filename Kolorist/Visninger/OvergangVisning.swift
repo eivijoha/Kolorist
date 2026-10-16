@@ -5,7 +5,7 @@ import SwiftUI
 /// Overgangstoner i like OKLab-steg mellom to farger, med lysere/mørkere rader.
 struct OvergangVisning: View {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
-    @Environment(\.duo) private var duo
+    @Environment(\.duoLukket) private var duoLukket
     // Lagres som CSS-tekst (hex, eller Display P3 utenfor sRGB), så endepunktene huskes.
     @AppStorage("overgangFra") private var startTekst = "#1B3A6B"
     @AppStorage("overgangTil") private var sluttTekst = "#F2B84B"
@@ -61,7 +61,7 @@ struct OvergangVisning: View {
                          // Tonene i trinn og selve gradienten, så mottakeren ser begge.
                          lenke: { Lenkedeling.palett(navn: navn, farger: farger, gradienter: [PalettGradient(navn: navn, oppsett: oppsett)]) },
                          // På flaten: lesbar mot siste tone. iPhone Duo: i raden under, på kortbakgrunnen.
-                         tekstfarge: duo ? .primary : (toner.last ?? slutt).lesbarTekstfarge.swiftUI,
+                         tekstfarge: duoLukket ? .primary : (toner.last ?? slutt).lesbarTekstfarge.swiftUI,
                          gradienter: [PalettGradient(navn: navn, oppsett: oppsett)],
                          vis3D: { vis3D = .overgang(navn: navn, fra: start, til: slutt, antall: antall) })
     }
@@ -87,11 +87,11 @@ struct OvergangVisning: View {
     /// Feltene øverst, som i Studio: tonene i «Vis som»-rommet (venstre ende er nøyaktig «Fra», høyre nøyaktig
     /// «Til»), med «Vis som» under. Fast øverst mens resten ruller.
     /// Bred visning (Mac, iPad i liggende format): feltene stablet til venstre, kontrollene til høyre.
-    private func overgangsflate(bred: Bool) -> some View {
+    /// `medFlate: false` (lukket iPhone Duo): bare raden – tonene står i fargelinjen, og menyen flyttes ned i raden.
+    private func overgangsflate(bred: Bool, medFlate: Bool = true) -> some View {
         @Bindable var arbeidsbenk = arbeidsbenk
         return VStack(spacing: 0) {
-            // iPhone Duo: tonene står i fargelinjen eller venstre halvdel; menyen flyttes ned i raden.
-            if !duo {
+            if medFlate {
             HarmoniFlate(farger: toner, grunnIndeks: nil, profil: visOgsåProfil, fargebibliotek: visOgsåBibliotek, hensikt: hensikt,
                          romnavn: visOgsåBibliotek?.navn ?? bibliotek.visningsnavn(visOgsåProfil),
                          verditekst: arbeidsbenk.modell.kortTekst,
@@ -102,10 +102,11 @@ struct OvergangVisning: View {
                          leggIPalett: { leggIPalett = [$0] })
                 .frame(height: bred ? nil : 140)
                 .frame(maxHeight: bred ? .infinity : nil)
+                .duokant()
                 .overlay(alignment: .topTrailing) { lagremeny }
             }
             HStack {
-                if duo { lagremeny }
+                if !medFlate { lagremeny }
                 Spacer(minLength: 0)
                 VisOgsåMeny(valgtID: $visOgsåID, begrens: $arbeidsbenk.begrensAktiv, farge: start, visMineFargerom: $visMineFargerom,
                             vis3D: { vis3D = $0 })
@@ -223,13 +224,12 @@ struct OvergangVisning: View {
     }
 
     var body: some View {
-        GeometryReader { geo in
-        let bred = Breddeoppsett.erBred(geo.size)
-        // AnyLayout bevarer skjemaets tilstand (rulleposisjon) når oppsettet skifter.
-        let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
-        oppsett {
-        overgangsflate(bred: bred)
-            .frame(width: bred ? geo.size.width / 2 : nil)
+        // Tonene øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo) eller i fargelinjen (lukket iPhone Duo).
+        Kortoppsett(fane: .overgang, farger: toner.map { Duofarge(farge: $0) }) { bred in
+            overgangsflate(bred: bred)
+        } topp: {
+            overgangsflate(bred: false, medFlate: false)
+        } skjema: {
         Form {
             // Første valg under feltene, som i Studio. Fargemodellen deles med Studio.
             Section {
@@ -271,10 +271,7 @@ struct OvergangVisning: View {
         // Grunnfarge-sirkelen fra lyshetsstigen løftet over fingeren, utenfor radens klipping.
         .lyshetslupe(lyshetslupe)
         }
-        }
         .background(Color.skjemabakgrunn)
-        // iPhone Duo: tonene i fargelinjen og venstre halvdel.
-        .duofarger(toner.map { Duofarge(farge: $0) }, fane: .overgang)
         .navigationTitle("Overgang")
         // Arket presenteres herfra, ikke fra menyen (iOS viser ikke ark fra et menyvalg som lukkes).
         .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }

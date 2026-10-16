@@ -10,6 +10,11 @@ struct Duofarge: Equatable {
 extension EnvironmentValues {
     /// iPhone Duo (lukket eller åpen): de store fargeprøvene står i fargelinjen eller i venstre halvdel, ikke i fanen.
     @Entry var duo = false
+    /// iPhone Duo lukket: fargelinjen står til venstre, og fanene har bare inndataene øverst (se `Kortoppsett`).
+    @Entry var duoLukket = false
+    /// iPhone Duo åpen (delvis eller helt): brettelinjen i vinduets koordinater. Faner med eget fargekort
+    /// (`Kortoppsett`) legger kortet til venstre for den.
+    @Entry var duoDeling: CGRect? = nil
 }
 
 extension View {
@@ -19,11 +24,22 @@ extension View {
         modifier(DuofargeRapport(farger: farger, fane: fane))
     }
 
+    /// Fargeområdet i et kort (`Kortoppsett`): på åpen iPhone Duo fortsetter fargene herfra 20 pt over brettelinjen,
+    /// i samme høyde som området.
+    func duokant() -> some View {
+        anchorPreference(key: DuokantNøkkel.self, value: .bounds) { $0 }
+    }
+
     /// Rammen rundt appen på iPhone Duo: lukket en fargelinje på 20 pt langs venstre kant, åpen fargeprøvene i venstre
     /// halvdel og 20 pt inn på høyre, der appen står som på andre iPhoner.
     func duoramme() -> some View {
         modifier(Duoramme())
     }
+}
+
+private struct DuokantNøkkel: PreferenceKey {
+    static let defaultValue: Anchor<CGRect>? = nil
+    static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) { value = value ?? nextValue() }
 }
 
 private struct DuofargeRapport: ViewModifier {
@@ -46,7 +62,7 @@ private struct DuofargeRapport: ViewModifier {
     }
 }
 
-private struct Duoramme: ViewModifier {
+struct Duoramme: ViewModifier {
     @Environment(Arbeidsbenk.self) private var arbeidsbenk
     @Environment(\.horizontalSizeClass) private var breddeklasse
     /// Hengselen: `nil` uten hengsel (andre enheter), ellers lukket eller åpen (delvis og helt åpen likt).
@@ -73,8 +89,11 @@ private struct Duoramme: ViewModifier {
                                                           bottom: $0.margins.bottom, right: $0.margins.trailing)) }
                     ?? CGRect(x: geo.size.width / 2, y: 0, width: 0, height: geo.size.height)) : nil
                 let duo = deling != nil || lukket == true
+                // Fanen har eget fargekort (Kortoppsett): kortet står selv til venstre, og appen får hele vinduet.
+                let egetKort = arbeidsbenk.duoEgetKort[arbeidsbenk.valgtFane, default: 0] > 0
+                let global = geo.frame(in: .global).origin
                 HStack(spacing: 0) {
-                    if let deling {
+                    if let deling, !egetKort {
                         Duoflater(farger: farger)
                             .frame(width: max(deling.minX, 0))
                         Fargelinje(farger: farger)
@@ -87,6 +106,9 @@ private struct Duoramme: ViewModifier {
                     // Smal bredde som på andre iPhoner (vinduet er bredt når telefonen er åpen, men appen har én halvdel).
                     content
                         .environment(\.duo, duo)
+                        .environment(\.duoLukket, lukket == true)
+                        // Bare når fanen selv strekker seg over brettelinjen (eget kort); ellers står den i høyre halvdel.
+                        .environment(\.duoDeling, egetKort ? deling.map { $0.offsetBy(dx: global.x, dy: global.y) } : nil)
                         .environment(\.horizontalSizeClass, duo ? .compact : breddeklasse)
                 }
                 .ignoresSafeArea(edges: duo ? .vertical : [])
@@ -98,6 +120,64 @@ private struct Duoramme: ViewModifier {
         #else
         content
         #endif
+    }
+}
+
+/// Felles oppsett for faner med et fargekort og et skjema (Studio, Overgang, Vurdering):
+/// - smalt (iPhone): kortet øverst og skjemaet under; bredt (iPad, Mac): kortet i venstre halvdel og skjemaet til høyre
+/// - iPhone Duo åpen: kortet til venstre for brettelinjen, fargene 20 pt inn på høyre halvdel, skjemaet til høyre
+/// - iPhone Duo lukket: bare `topp` (inndataene) over skjemaet – fargene står i fargelinjen langs venstre kant
+struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
+    /// Fanen kortet hører til (`nil` i ark, f.eks. Studio for én farge).
+    let fane: Arbeidsbenk.Fane?
+    /// Fargene i kortet – fargelinjen (lukket) og de 20 pt over brettelinjen (åpen).
+    let farger: [Duofarge]
+    /// Fargene langs kortets høyre kant, som fortsetter over brettelinjen (åpen) – når de ikke er `farger` over hverandre
+    /// (f.eks. B til høyre i ΔE).
+    var kant: [Duofarge]? = nil
+    @ViewBuilder let kort: (_ bred: Bool) -> Kort
+    @ViewBuilder let topp: () -> Topp
+    @ViewBuilder let skjema: () -> Skjema
+    @Environment(Arbeidsbenk.self) private var arbeidsbenk
+    @Environment(\.duoLukket) private var lukket
+    @Environment(\.duoDeling) private var deling
+
+    var body: some View {
+        GeometryReader { geo in
+            let ramme = geo.frame(in: .global)
+            // Åpen: bare når visningen strekker seg over brettelinjen (hele vinduet).
+            let delt = deling.flatMap { d in d.minX > ramme.minX && d.maxX < ramme.maxX ? d : nil }
+            let bred = delt != nil || (!lukket && Breddeoppsett.erBred(geo.size))
+            // AnyLayout bevarer skjemaets tilstand (rulleposisjon, glidere) når enheten roteres eller brettes.
+            let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
+            oppsett {
+                if lukket {
+                    topp()
+                } else {
+                    kort(bred)
+                        .frame(width: bred ? (delt.map { $0.minX - ramme.minX } ?? geo.size.width / 2) : nil)
+                }
+                if let delt {
+                    // Plassen for fargene over brettelinjen; selve fargene tegnes i høyde med fargeområdet (under).
+                    Color.clear.frame(width: delt.width + Duoramme.linje)
+                }
+                skjema()
+            }
+            .overlayPreferenceValue(DuokantNøkkel.self) { anker in
+                if let delt, !lukket, let anker {
+                    GeometryReader { p in
+                        let r = p[anker]
+                        let bredde = delt.width + Duoramme.linje
+                        Fargelinje(farger: kant ?? farger)
+                            .frame(width: bredde, height: r.height)
+                            .position(x: r.maxX + bredde / 2, y: r.midY)
+                    }
+                }
+            }
+        }
+        .duofarger(fane == nil ? [] : farger, fane: fane ?? .studio)
+        .onAppear { if let fane { arbeidsbenk.duoEgetKort[fane, default: 0] += 1 } }
+        .onDisappear { if let fane { arbeidsbenk.duoEgetKort[fane, default: 1] -= 1 } }
     }
 }
 
@@ -143,5 +223,33 @@ private struct Duoflater: View {
                     .accessibilityElement(children: .combine)
             }
         }
+    }
+}
+
+/// Et fargevalg som liten brikke (lukket iPhone Duo): prøven, tittelen og hex-verdien, med samme meny som feltet i
+/// kortet (lagrede farger, utplukk, Studio).
+struct Fargevalgbrikke: View {
+    let tittel: String
+    @Binding var farge: Farge
+    var visAktivFarge = true
+    var visHvitOgSort = false
+
+    var body: some View {
+        FargeVelgerMeny(tittel: tittel, farge: $farge, visAktivFarge: visAktivFarge, visHvitOgSort: visHvitOgSort) {
+            HStack(spacing: 8) {
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(farge.swiftUI)
+                    .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous).strokeBorder(.primary.opacity(0.2)))
+                    .frame(width: 28, height: 28)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(verbatim: tittel).font(.caption).foregroundStyle(Color.sekundærTekst)
+                    Text(verbatim: farge.hex()).font(.subheadline.monospaced())
+                }
+                .lineLimit(1)
+                Image(systemName: "chevron.up.chevron.down").font(.caption2).foregroundStyle(Color.sekundærTekst)
+            }
+            .contentShape(Rectangle())
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

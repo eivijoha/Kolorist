@@ -35,13 +35,14 @@ struct FargesynVurdering: View {
             let analyse = Fargesynstype.allCases.map {
                 ($0, Fargesynsanalyse.forvekslinger(i: farger.map(\.farge), type: $0, grad: grad))
             }
-            GeometryReader { geo in
-                let bred = Breddeoppsett.erBred(geo.size)
-                // AnyLayout bevarer skjemaets tilstand når enheten roteres.
-                let oppsett = bred ? AnyLayout(HStackLayout(spacing: 0)) : AnyLayout(VStackLayout(spacing: 0))
-                oppsett {
-                    kort(valgt, analyse: analyse, bred: bred)
-                        .frame(width: bred ? geo.size.width / 2 : nil)
+            // Kortet øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo), eller uten fargefeltet øverst og med
+            // paletten slik den ses i fargelinjen (lukket iPhone Duo).
+            let sett = farger.map { Duofarge(farge: $0.farge.simulert(vis, grad: grad), navn: $0.navn) }
+            Kortoppsett(fane: .vurdering, farger: sett) { bred in
+                kort(valgt, analyse: analyse, bred: bred)
+            } topp: {
+                kort(valgt, analyse: analyse, bred: false, medFelt: false)
+            } skjema: {
                     ScrollViewReader { rulling in
                     Form {
                         Section {
@@ -109,11 +110,8 @@ struct FargesynVurdering: View {
                     .listSectionSpacing(.compact)
                     #endif
                     .contentMargins(.top, 0, for: .scrollContent)
-                }
-                .background(Color.skjemabakgrunn)
             }
-            // iPhone Duo: paletten slik den ses med det valgte avviket, i fargelinjen og venstre halvdel.
-            .duofarger(farger.map { Duofarge(farge: $0.farge.simulert(vis, grad: grad), navn: $0.navn) }, fane: .vurdering)
+            .background(Color.skjemabakgrunn)
             .navigationTitle("Fargesyn")
             #if os(iOS)
             .fullScreenCover(item: $kameratype) { FargesynKamera(type: $0) }
@@ -125,7 +123,8 @@ struct FargesynVurdering: View {
 
     /// Kortet øverst: hvor mange fargepar som blir vanskelige å skille, paletten i et stort fargefelt (med valgt
     /// fargesynsavvik simulert), og valg av palett og syn. Samme oppbygning som kontrastsjekken.
-    private func kort(_ valgt: PalettDokument, analyse: [(Fargesynstype, [Forveksling])], bred: Bool) -> some View {
+    /// `medFelt: false` (lukket iPhone Duo): tittelen, palettvalget og synsvalget, uten fargefeltet.
+    private func kort(_ valgt: PalettDokument, analyse: [(Fargesynstype, [Forveksling])], bred: Bool, medFelt: Bool = true) -> some View {
         let farger = valgt.farger
         let vist = farger.map { $0.farge.simulert(vis, grad: grad) }
         let antall = analyse.first { $0.0 == vis }?.1.count ?? 0
@@ -176,8 +175,32 @@ struct FargesynVurdering: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             // Paletten med normalt syn øverst og valgt avvik under, så de sammenlignes direkte. Én kolonne per farge,
             // med navn eller hex i den øverste når det er plass.
+            if medFelt {
             GeometryReader { geo in
                 let bredde = geo.size.width / CGFloat(max(vist.count, 1))
+                if bred {
+                    // Bred visning: én rad per farge, normalt syn til venstre og avviket til høyre – fargene over
+                    // hverandre, som fargelinjen på iPhone Duo.
+                    let høyde = geo.size.height / CGFloat(max(vist.count, 1))
+                    VStack(spacing: 0) {
+                        ForEach(Array(farger.enumerated()), id: \.offset) { i, pf in
+                            HStack(spacing: 0) {
+                                ZStack(alignment: .leading) {
+                                    pf.farge.swiftUI
+                                    if høyde >= 24 {
+                                        Text(pf.navn.isEmpty ? pf.farge.hex() : pf.navn)
+                                            .koloristFont(.caption2, weight: .medium)
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.8)
+                                            .foregroundStyle(pf.farge.lesbarTekstfarge.swiftUI)
+                                            .padding(.horizontal, 8)
+                                    }
+                                }
+                                (vist.indices.contains(i) ? vist[i] : pf.farge).swiftUI
+                            }
+                        }
+                    }
+                } else {
                 VStack(spacing: 0) {
                     HStack(spacing: 0) {
                         ForEach(Array(farger.enumerated()), id: \.offset) { _, pf in
@@ -198,9 +221,13 @@ struct FargesynVurdering: View {
                         ForEach(Array(vist.enumerated()), id: \.offset) { _, f in f.swiftUI }
                     }
                 }
+                }
             }
+            .duokant()
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(String(localized: "Paletten \(valgt.navn), med normalt syn øverst og \(grad >= 1 ? vis.navn : vis.delvisNavn) under"))
+            .accessibilityLabel(bred ? String(localized: "Paletten \(valgt.navn), med normalt syn til venstre og \(grad >= 1 ? vis.navn : vis.delvisNavn) til høyre")
+                                     : String(localized: "Paletten \(valgt.navn), med normalt syn øverst og \(grad >= 1 ? vis.navn : vis.delvisNavn) under"))
+            }
             // Fanerad under fargefeltet: de fire avvikene (fulle navn når det er plass).
             ViewThatFits(in: .horizontal) {
                 synsvalg(kort: false)
@@ -209,7 +236,7 @@ struct FargesynVurdering: View {
             .padding(.horizontal, 12)
             .frame(minHeight: 48)
         }
-        .frame(height: bred ? nil : (presentasjon ? 330 : 250))
+        .frame(height: bred || !medFelt ? nil : (presentasjon ? 330 : 250))
         .frame(maxHeight: bred ? .infinity : nil)
         .frame(maxWidth: .infinity)
         .background(Color.kortbakgrunn, in: Kortform.fargepanel(bred: bred))
