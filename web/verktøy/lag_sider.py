@@ -1143,9 +1143,9 @@ def plattformer(lang):
       <p class="ingress">{ingress}</p>
       <ul class="plattformer" aria-label="{'Plattformer' if nb else 'Platforms'}">
         <li>iPhone</li>
+        <li>iPhone Duo</li>
         <li>iPad</li>
         <li>Mac</li>
-        <li>iPhone Duo</li>
       </ul>
     </header>
 
