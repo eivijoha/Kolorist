@@ -121,10 +121,11 @@ Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ik
 Krever iOS 26, iPadOS 26 eller macOS 26; iPhone Duo krever iOS 27.1. Apple Intelligence krever en støttet enhet.
 ```
 
-**Nøkkelord (100)** – uendret
+**Nøkkelord (100)** – nye for 1.4 (fargerom, 3D og APCA inn; interiør og harmoni ut). «iPhone Duo» brukes ikke: Apple
+fraråder produktnavn og varemerker i nøkkelordene.
 
 ```
-farge,fargevelger,kontrast,universell utforming,LRV,WCAG,arkitekt,interiør,designsystem,CMYK,harmoni
+farge,fargevelger,kontrast,fargerom,3D,APCA,WCAG,LRV,universell utforming,arkitekt,designsystem,CMYK
 ```
 
 **Skjermbilder:** se [Skjermbilder](#skjermbilder) under Felles.
@@ -233,10 +234,11 @@ No account, no analytics, no ads and no tracking. The developer collects no data
 Requires iOS 26, iPadOS 26 or macOS 26; iPhone Duo requires iOS 27.1. Apple Intelligence requires a supported device.
 ```
 
-**Keywords (100)** – unchanged
+**Keywords (100)** – new for 1.4 (color space, 3D, APCA and gamut in; interior, harmony and palette out – «palette» is
+already in the subtitle).
 
 ```
-color,picker,contrast,accessibility,WCAG,LRV,architect,interior,design system,harmony,CMYK,palette
+color,picker,contrast,color space,3D,APCA,WCAG,LRV,gamut,accessibility,architect,design system,CMYK
 ```
 
 ---
@@ -340,7 +342,7 @@ Ingen konto, ingen analyse, ingen reklame og ingen sporing. Utvikleren samler ik
 Krever macOS 26. Apple Intelligence krever en Mac med Apple-chip.
 ```
 
-**Nøkkelord (100)** – uendret, som for iPhone og iPad.
+**Nøkkelord (100)** – som for iPhone og iPad (nye for 1.4).
 
 ---
 
@@ -443,7 +445,7 @@ No account, no analytics, no ads and no tracking. The developer collects no data
 Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
 ```
 
-**Keywords (100)** – unchanged, as for iPhone and iPad.
+**Keywords (100)** – as for iPhone and iPad (new for 1.4).
 
 ---
 
@@ -454,12 +456,19 @@ Requires macOS 26. Apple Intelligence requires a Mac with Apple silicon.
 ```
 Thank you for reviewing Kolorist 1.4, a colour palette tool for designers and architects on iPhone, iPad and Mac (one universal purchase).
 
+NEW: BUILT FOR IPHONE DUO
+Kolorist 1.4 adds tailored support for iPhone Duo (iOS 27.1). We would be grateful if you could look at it on iPhone Duo:
+• Closed: the large colour swatches become a colour strip along the left edge; colour input (text and background, colours A and B) moves to the top, and the rest of the app works as on other iPhones.
+• Open (partly or fully, landscape): the colour card fills the left half and continues across the fold; the tabs and tools work as on iPhone on the right half. Unfolding animates the colours out from the fold.
+• Studio › Harmony › Show in 3D …: on an open iPhone Duo the 3D view sits in the left half and updates live while the harmony is adjusted on the right.
+• Open and upright, the app uses the iPhone layout with more room.
+It uses the hinge (onHingeChange) and the fold (reserved division region) and has been tested in the iPhone Duo simulator closed, partly open and fully open, with every tab. On other devices nothing changes.
+
 NO ACCOUNT NEEDED
 No account, no server of our own, no analytics, ads or in-app purchases. Data syncs through the user's private iCloud when signed in; otherwise everything stays on device.
 
-NEW IN 1.4 – HOW TO TEST
+ALSO NEW IN 1.4 – HOW TO TEST
 • 3D: Studio › Harmony › Show in 3D … (also from a palette's menu, and Show as › Show the colour space in 3D …). Drag to rotate, pinch to zoom. The share button exports a USDZ model; on iPhone and iPad the AR button opens AR Quick Look. On iPad in landscape, on an open iPhone Duo and in a wide Mac window, the 3D view replaces the colour card on the left and updates live as the harmony, gradient or palette is adjusted.
-• iPhone Duo (iOS 27.1): closed, the large swatches become a strip along the left edge; open (fully or partly), the colours fill the left half and the app works as on iPhone on the right.
 • Gamut limits: Studio › Show as › choose e.g. Generic CMYK; the sliders are striped where the colour falls outside.
 • Confusion lines: Assess › Colour vision, scroll to the chromaticity diagram.
 • APCA: Assess › Contrast › APCA. APCA is used with permission from its copyright holder, Myndex Research (Andrew Somers).
