@@ -241,7 +241,7 @@ struct OvergangVisning: View {
 
     var body: some View {
         // Tonene øverst (iPhone), til venstre (iPad, Mac, åpen iPhone Duo) eller i fargelinjen (lukket iPhone Duo).
-        Kortoppsett(fane: .overgang, farger: toner.map { Duofarge(farge: $0) }, ramme: tonramme, tittel: "Overgang") { bred in
+        Kortoppsett(fane: .overgang, farger: toner.map { Duofarge(farge: $0) }, ramme: tonramme) { bred in
             overgangsflate(bred: bred)
         } topp: {
             overgangsflate(bred: false, medFlate: false)
@@ -293,6 +293,12 @@ struct OvergangVisning: View {
         }
         .background(Color.skjemabakgrunn)
         .navigationTitle("Overgang")
+        #if os(iOS)
+        // Som Studio og Vurdering: liten tittel, og på iPhone ingen tittellinje – fanen sier allerede «Overgang», og
+        // overgangen får plassen (på åpen iPhone Duo ville en stor tittel dessuten lagt seg over kortet til venstre).
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(UIDevice.current.userInterfaceIdiom == .phone ? .hidden : .automatic, for: .navigationBar)
+        #endif
         // Arket presenteres herfra, ikke fra menyen (iOS viser ikke ark fra et menyvalg som lukkes).
         .sheet(isPresented: $visMineFargerom) { MineProfilerArk(valgtID: $visOgsåID) }
         .alert("Lagre gradient", isPresented: $navngirGradient) {

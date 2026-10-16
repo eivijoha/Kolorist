@@ -216,9 +216,6 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
     /// Streken rundt fargefeltet (Overgang): åpen går den rundt kortets fargeområde og fargene over brettelinjen samlet
     /// (kortet tegner da ikke sin egen), lukket rundt fargelinjen.
     var ramme: Color? = nil
-    /// Sidetittelen (stor tittel). Åpen iPhone Duo: navigasjonslinjen går over hele bredden, så den store tittelen ville
-    /// lagt seg over kortet i venstre halvdel – den står i stedet øverst i skjemaet til høyre, og linjen skjules.
-    var tittel: LocalizedStringKey? = nil
     @ViewBuilder let kort: (_ bred: Bool) -> Kort
     @ViewBuilder let topp: () -> Topp
     @ViewBuilder let skjema: () -> Skjema
@@ -262,22 +259,9 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
                 // iPhone Duo: luft øverst – statuslinjen står loddrett til høyre, så toppen har ingen trygg sone mot
                 // de avrundede hjørnene.
                 skjema()
-                    .safeAreaInset(edge: .top, spacing: 0) {
-                        if delt != nil, let tittel {
-                            Text(tittel)
-                                .font(.largeTitle.bold())
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal, 20)
-                                .padding(.bottom, 8)
-                                .background(Color.skjemabakgrunn)
-                        }
-                    }
                     .safeAreaPadding(.leading, bred ? 16 : 0)
                     .safeAreaPadding(.top, delt != nil || lukket ? Self.duoTopp : 0)
             }
-            #if os(iOS)
-            .toolbar(delt != nil && tittel != nil ? .hidden : .automatic, for: .navigationBar)
-            #endif
             // Bredt oppsett: 3D kan legges i venstre halvdel. Smalt igjen: 3D-visningen der forsvinner.
             .environment(\.venstre3DFane, bred && !lukket ? fane : nil)
             .onChange(of: bred, initial: true) { _, ny in

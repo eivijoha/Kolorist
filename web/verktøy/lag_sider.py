@@ -1369,6 +1369,8 @@ def skriv(sti, tekst):
     tekst = re.sub(r'(skjermbilde-3d-(?:gamut|overgang|filament)\.png)\?v=11', r'\1?v=12', tekst)
     # Mac-bildene tatt på nytt med 1.4 (bredt kortoppsett, Fargesyn med én rad per farge).
     tekst = re.sub(r'(mac/skjermbilde-(?:studio|harmoni|overgang|kontrast|flatekontrast|fargesyn)\.png)\?v=\d+', r'\1?v=13', tekst)
+    # Overgang på iPhone tatt på nytt uten tittellinje (som Studio og Vurdering).
+    tekst = re.sub(r'(assets/(?:en/)?skjermbilde-overgang\.png)\?v=\d+', r'\1?v=14', tekst)
     lang = 'en' if sti.startswith('en/') else 'nb'
     tekst = re.sub(r'https://kolorist\.no/l#z[A-Za-z0-9_-]+', lambda m: lenke_på(m.group(0), lang), tekst)
     open(f'{W}/{sti}', 'w').write(tekst)
