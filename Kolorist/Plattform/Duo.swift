@@ -161,7 +161,9 @@ struct Kortoppsett<Kort: View, Topp: View, Skjema: View>: View {
                     // Plassen for fargene over brettelinjen; selve fargene tegnes i høyde med fargeområdet (under).
                     Color.clear.frame(width: delt.width + Duoramme.linje)
                 }
+                // Bredt: luft mellom fargene og boksene i skjemaet (som når skjemaet står alene), ikke kant i kant.
                 skjema()
+                    .safeAreaPadding(.leading, bred ? 16 : 0)
             }
             .overlayPreferenceValue(DuokantNøkkel.self) { anker in
                 if let delt, !lukket, let anker {
