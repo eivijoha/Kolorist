@@ -45,76 +45,109 @@
     <h1>Methods and sources</h1>
     <p class="ingress">Kolorist builds on established colour science and open standards. This page lists what the app uses, where it comes from, and what was developed for the app. The same explanations are in the app: tap “Method: …” below a section, or choose <strong>Methods and sources</strong> at the bottom of Palettes.</p>
     
-    <h2 id="oklab">OKLab and OKLCH</h2>
+    <nav class="boks metodeinnhold" aria-labelledby="metodeinnhold">
+      <h2 id="metodeinnhold">Contents</h2>
+      <ul>
+        <li><a href="#fargerom">Colour spaces and colour calculation</a>: <a href="#oklab">OKLab and OKLCH</a> · <a href="#css">CSS Color Module Level 4</a> · <a href="#cielab">CIELab, CIE LCH and Bradford adaptation</a> · <a href="#ciede2000">CIEDE2000 (ΔE00)</a> · <a href="#harmonier">Colour wheels and harmonies</a></li>
+        <li><a href="#fargestyring">Colour management and print</a>: <a href="#icc">ICC profiles and colour management</a> · <a href="#cmyk">Clean CMYK values (UCR/GCR)</a></li>
+        <li><a href="#kontrast">Contrast and readability</a>: <a href="#wcag">WCAG 2.2 contrast</a> · <a href="#apca">Reading contrast by APCA</a> · <a href="#lrv">Light reflectance value and luminance contrast</a></li>
+        <li><a href="#syn">Colour vision</a>: <a href="#fargesyn">Colour vision deficiency simulation</a> · <a href="#confusion-lines">Confusion lines</a></li>
+        <li><a href="#lysmaling">Light and colour measurement</a>: <a href="#cam16">CAM16 and CAT16 – colour appearance in different light</a> · <a href="#kolorimetri">Spectra, light sources and colour temperature</a> · <a href="#kamerakarakterisering">Camera characterisation with a reference card</a></li>
+        <li><a href="#data">Data and AI</a>: <a href="#filamentfarger">Filament colours from FilamentColors.xyz</a> · <a href="#ki">Colour semantics and AI</a></li>
+      </ul>
+    </nav>
+
+    <h2 id="fargerom">Colour spaces and colour calculation</h2>
+
+    <h3 id="oklab">OKLab and OKLCH</h3>
     <p>A perceptual colour space where equal numeric steps are perceived as equally large colour differences. Kolorist computes gradients in OKLab, and tone scales, lighter/darker steps, harmonies and saturation in OKLCH (lightness, chroma, hue).</p>
     <p class="dempet">Source: <a href="https://bottosson.github.io/posts/oklab/">Björn Ottosson: “A perceptual color space for image processing” (2020)</a></p>
     
-    <h2 id="css">CSS Color Module Level 4</h2>
+
+    <h3 id="css">CSS Color Module Level 4</h3>
     <p>The standard for colour on the web. Kolorist uses the specification’s matrices and transfer functions for sRGB, Display P3, Adobe RGB, Lab and OKLab, its gamut mapping (chroma is reduced in OKLCH while lightness and hue are preserved) and its colour text syntax.</p>
     <p class="dempet">Source: <a href="https://www.w3.org/TR/css-color-4/">W3C: CSS Color Module Level 4 (Candidate Recommendation)</a></p>
     
-    <h2 id="cielab">CIELab, CIE LCH and Bradford adaptation</h2>
+
+    <h3 id="cielab">CIELab, CIE LCH and Bradford adaptation</h3>
     <p>The CIE colour space based on human colour vision. Kolorist reports Lab and LCH with a D50 white point, like ICC profiles and Photoshop, and uses the Bradford transform between D65 and D50.</p>
     <p class="dempet">Source: <a href="https://cie.co.at/publications/colorimetry-4th-edition">CIE 15:2018 Colorimetry; K. M. Lam (1985), the Bradford transform</a></p>
     
-    <h2 id="ciede2000">CIEDE2000 (ΔE00)</h2>
+
+    <h3 id="ciede2000">CIEDE2000 (ΔE00)</h3>
     <p>The CIE formula for perceived colour difference. Used when comparing colours, for gamut deviations and in the analysis of colours that become hard to tell apart with colour vision deficiency. The implementation is checked against the test data in Sharma et al.</p>
     <p class="dempet">Source: <a href="https://doi.org/10.1002/col.20070">G. Sharma, W. Wu, E. N. Dalal: Color Research &amp; Application 30(1), 2005; CIE 142-2001</a></p>
     
-    <h2 id="wcag">WCAG 2.2 contrast</h2>
-    <p>The W3C requirements for contrast between text/graphics and background, computed from relative luminance. “Fix” changes only lightness (OKLCH) until the requirement is met. Text on colour fields is white when white gives at least 2.7:1, otherwise black. Saturated mid-tones then get white text, as the eye prefers, instead of switching to black already at middle grey. Where the requirement applies, such as button text in the design system, 4.5:1 is the floor.</p>
-    <p class="dempet">Source: <a href="https://www.w3.org/TR/WCAG22/">W3C: Web Content Accessibility Guidelines 2.2, success criteria 1.4.3, 1.4.6 and 1.4.11</a></p>
 
-    <h2 id="fargesyn">Colour vision deficiency simulation</h2>
-    <p>A physiologically based model of protan, deutan and tritan deficiencies, with matrices in linear sRGB and severity as a blend with normal vision. Achromatopsia is shown as luminance alone. Used in the colour vision assessment, in the colour field of the contrast check and in the camera filter. The simulation is an approximation; experience varies between people.</p>
-    <p class="dempet">Source: <a href="https://doi.org/10.1109/TVCG.2009.113">G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009</a></p>
-
-    <h2 id="confusion-lines">Confusion lines</h2>
-    <p>In the CIE 1931 chromaticity diagram (xy), colours a dichromat cannot tell apart (at equal lightness) lie on straight lines through one point – the copunctal point for the deficiency. Kolorist draws the line through each colour in the palette for protanopia, deuteranopia and tritanopia, and joins the pairs the analysis finds hard. Copunctal points (x, y): protan 0.7465 / 0.2535, deutan 1.4 / −0.4, tritan 0.1748 / 0.0044.</p>
-    <p class="dempet">Source: G. Wyszecki and W. S. Stiles: Color Science, 2nd ed., Wiley 1982</p>
-    
-    <h2 id="icc">ICC profiles and colour management</h2>
-    <p>Conversion between colour spaces via ICC profiles, with the chosen rendering intent. Performed by Apple’s colour management (ColorSync). Profiles are not bundled with the app; Kolorist uses the system’s profiles and profiles you import.</p>
-    <p class="dempet">Source: <a href="https://www.color.org/specification/ICC.1-2022-05.pdf">International Colour Consortium (ICC.1); Apple ColorSync via Core Graphics</a></p>
-    
-    <h2 id="cmyk">Clean CMYK values (UCR/GCR)</h2>
-    <p>The common grey component of C, M and Y is moved to black, and Kolorist searches for the separation with the fewest inks that stays within 1 ΔE00 of the profile’s own separation.</p>
-    <p class="dempet">Source: Established print technique; the search was developed for Kolorist</p>
-    
-    <h2 id="harmonier">Colour wheels and harmonies</h2>
+    <h3 id="harmonier">Colour wheels and harmonies</h3>
     <p>Complementary, split-complementary, analogous (also with a complementary accent), triad, square, double complementary and even distributions are computed as angles on the chosen colour wheel: OKLCH, CIE LCH, HSL, RYB, Hering’s opponent-colour wheel or Goethe’s wheel from his Theory of Colours (1810). The RYB, Hering and Goethe wheels are piecewise linear mappings made for the app. The monochromatic harmony keeps the hue fixed and spreads the tones evenly along a line in lightness (OKLCH) and saturation, taken as a share of the highest chroma within the gamut at each lightness. The tone path does the same, but gives each end point its own hue and spreads the hue evenly too, in an arc around the OKLCH wheel in the direction and as far as the user chooses, up to a full turn – unlike gradients, which run in a straight line in OKLab and can pass through grey between opposite colours. The principle is known from sequential palettes in HCL (Zeileis et al.) and cubehelix (Green); the field and the two hue handles were made for Kolorist. Natural lightness order shifts lightness according to the hue’s own lightness – the lightness at which the hue is most saturated within the gamut – by 60% of the difference from the base colour (after Judd’s principle of natural colour order); reversed order mirrors the shift.</p>
     <p class="dempet">Source: Classical colour theory (Johannes Itten for RYB); D. B. Judd and G. Wyszecki: “Color in Business, Science, and Industry” (natural colour order); A. Zeileis, K. Hornik, P. Murrell: “Escaping RGBland: Selecting colors for statistical graphics”, Computational Statistics &amp; Data Analysis 53(9), 2009, and D. A. Green: “A colour scheme for the display of astronomical intensity images”, Bulletin of the Astronomical Society of India 39, 2011 (tone path); the mappings were developed for Kolorist</p>
     
-    <h2 id="ki">Colour semantics and AI</h2>
-    <p><em>Experimental.</em> The suggestions are a starting point to work from, not a finished answer.</p>
-    <p>Palettes from value words and “Describe a colour” build on a knowledge base of colour concepts made for the app. The on-device language model interprets the words and chooses hue families and expression. The palette itself is then composed by fixed rules in OKLCH: harmony principle, equal value or equal saturation, one accent, a light or dark background and text with at least 7:1 contrast. Text about colour meaning describes conventions, not scientific facts.</p>
-    <p class="dempet">Source: Developed for Kolorist; language model from Apple (Foundation Models)</p>
+
+    <h2 id="fargestyring">Colour management and print</h2>
+
+    <h3 id="icc">ICC profiles and colour management</h3>
+    <p>Conversion between colour spaces via ICC profiles, with the chosen rendering intent. Performed by Apple’s colour management (ColorSync). Profiles are not bundled with the app; Kolorist uses the system’s profiles and profiles you import.</p>
+    <p class="dempet">Source: <a href="https://www.color.org/specification/ICC.1-2022-05.pdf">International Colour Consortium (ICC.1); Apple ColorSync via Core Graphics</a></p>
     
-    <h2 id="apca">Reading contrast by APCA</h2>
+
+    <h3 id="cmyk">Clean CMYK values (UCR/GCR)</h3>
+    <p>The common grey component of C, M and Y is moved to black, and Kolorist searches for the separation with the fewest inks that stays within 1 ΔE00 of the profile’s own separation.</p>
+    <p class="dempet">Source: Established print technique; the search was developed for Kolorist</p>
+    
+
+    <h2 id="kontrast">Contrast and readability</h2>
+
+    <h3 id="wcag">WCAG 2.2 contrast</h3>
+    <p>The W3C requirements for contrast between text/graphics and background, computed from relative luminance. “Fix” changes only lightness (OKLCH) until the requirement is met. Text on colour fields is white when white gives at least 2.7:1, otherwise black. Saturated mid-tones then get white text, as the eye prefers, instead of switching to black already at middle grey. Where the requirement applies, such as button text in the design system, 4.5:1 is the floor.</p>
+    <p class="dempet">Source: <a href="https://www.w3.org/TR/WCAG22/">W3C: Web Content Accessibility Guidelines 2.2, success criteria 1.4.3, 1.4.6 and 1.4.11</a></p>
+
+    <h3 id="apca">Reading contrast by APCA</h3>
     <p>APCA (Accessible Perceptual Contrast Algorithm) is a perceptual contrast model for readability. It gives reading contrast as Lc from about −108 to 106 – positive for dark text on a light background, negative for light text on a dark one – and accounts for the eye perceiving light and dark colours differently. It follows perceived readability better than WCAG 2, especially for dark and saturated colours.</p>
     <p>How much is needed depends on font size and weight: Lc 90 is preferred and 75 the minimum for body text, 60 for larger text, 45 for large or bold headlines, 30 for non-essential text and 15 for icons and graphics. Choose APCA in the contrast check to see Lc and what the contrast is good for, and use auto-fix to reach a level. Whether text and icons on the app’s colour fields are black or white is also decided with APCA; where a requirement applies, such as button text in the design system, WCAG 2 is the floor.</p>
     <p>Accessibility regulations refer to WCAG 2. Use APCA as a supplement to WCAG 2.2, which is the requirement in the regulations. Kolorist uses APCA with permission from the copyright holder, and the implementation follows the current version and is updated regularly.</p>
     <p class="dempet">Source: <a href="https://github.com/Myndex/apca-w3">Andrew Somers (Myndex Research): Accessible Perceptual Contrast Algorithm (APCA™) 0.0.98G-4g (apca-w3 0.1.9)</a>, used with permission</p>
 
-    <h2 id="lrv">Light reflectance value and luminance contrast</h2>
+    <h3 id="lrv">Light reflectance value and luminance contrast</h3>
     <p>LRV is the CIE luminance Y in per cent – the share of visible light a surface reflects, as paint manufacturers state it. Kolorist computes it for the colour as shown in sRGB. Contrast between surfaces is calculated with the chosen method, each with its own requirements: difference in LRV points (BS 8300: at least 30, or 20 for large surfaces and above 200 lux); Weber luminance contrast, |Yo − Yb| / Yb with the background as reference, as used by the Norwegian building regulations TEK17 and NS 11001 (0.4 for orientation and wayfinding, 0.8 for stair nosings, handrails and hazard fields); and Michelson, |Y₁ − Y₂| / (Y₁ + Y₂), per ISO 21542 (30 % for large surfaces, 60 % for hazards and text, with values from the Canadian draft CAN-ASC-2.4). The figures cannot be compared across methods. LRV from the camera or an image without a grey card or reference card is only indicative.</p>
     <p class="dempet">Source: CIE 15 (luminance factor Y); BS 8300-2:2018; TEK17 with guidance, NS 11001-1:2018 and Byggforsk 220.114; NBKF Faglig veileder 3-2024; ISO 21542:2021; CAN-ASC-2.4 (draft 2026)</p>
 
-    <h2 id="cam16">CAM16 and CAT16 – colour appearance in different light</h2>
+    <h2 id="syn">Colour vision</h2>
+
+    <h3 id="fargesyn">Colour vision deficiency simulation</h3>
+    <p>A physiologically based model of protan, deutan and tritan deficiencies, with matrices in linear sRGB and severity as a blend with normal vision. Achromatopsia is shown as luminance alone. Used in the colour vision assessment, in the colour field of the contrast check and in the camera filter. The simulation is an approximation; experience varies between people.</p>
+    <p class="dempet">Source: <a href="https://doi.org/10.1109/TVCG.2009.113">G. M. Machado, M. M. Oliveira, L. A. F. Fernandes: IEEE TVCG 15(6), 2009</a></p>
+
+    <h3 id="confusion-lines">Confusion lines</h3>
+    <p>In the CIE 1931 chromaticity diagram (xy), colours a dichromat cannot tell apart (at equal lightness) lie on straight lines through one point – the copunctal point for the deficiency. Kolorist draws the line through each colour in the palette for protanopia, deuteranopia and tritanopia, and joins the pairs the analysis finds hard. Copunctal points (x, y): protan 0.7465 / 0.2535, deutan 1.4 / −0.4, tritan 0.1748 / 0.0044.</p>
+    <p class="dempet">Source: G. Wyszecki and W. S. Stiles: Color Science, 2nd ed., Wiley 1982</p>
+    
+
+    <h2 id="lysmaling">Light and colour measurement</h2>
+
+    <h3 id="cam16">CAM16 and CAT16 – colour appearance in different light</h3>
     <p>A model of how colours appear under given conditions: the colour of the light, its intensity and the surround. “See in light” first calculates the surface under the light – spectrally when the spectrum of the light is known, using a smooth estimated reflectance spectrum for the colour – and then its appearance in the room, where the eye only partly adapts to the colour of the light, and where colours look less vivid in dim light. Finally it shows the screen colour with the same lightness and colourfulness. Light compensation uses CAT16 with full adaptation to daylight (D65).</p>
     <p class="dempet">Source: <a href="https://doi.org/10.1002/col.22131">C. Li, Z. Li, Z. Wang et al.: “Comprehensive color solutions: CAM16, CAT16, and CAM16-UCS”, Color Research &amp; Application 42(6), 2017</a></p>
 
-    <h2 id="kolorimetri">Spectra, light sources and colour temperature</h2>
+    <h3 id="kolorimetri">Spectra, light sources and colour temperature</h3>
     <p>Light sources are described by CIE spectra (the daylight series, illuminant A, fluorescent and LED types) or as blackbodies. Correlated colour temperature and distance from the Planckian locus (Duv) are calculated after Ohno. Colours without a measured spectrum get the smoothest spectrum that gives the colour in daylight, using the method of S. A. Burns (2020), implemented for Kolorist. Colour rendering is estimated from the reference card’s spectra, compared with a reference light of the same colour temperature; the figure is scaled to lie close to Ra, but is not an official colour rendering index. Standard viewing conditions follow the illuminance in ISO 3664, EN 12464-1 and CIE 157.</p>
     <p class="dempet">Source: <a href="https://cie.co.at/publications/colorimetry-4th-edition">CIE 15:2018 Colorimetry</a> – the CIE data (observer, daylight series, FL and LED sources) are © CIE and licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>; <a href="../data/cie/">the extract Kolorist uses</a> is published under the same licence; Y. Ohno: “Practical use and calculation of CCT and Duv”, LEUKOS 10(1), 2014; <a href="https://doi.org/10.1002/col.22437">S. A. Burns: “Numerical methods for smoothest reflectance reconstruction”, Color Research &amp; Application 45(1), 2020</a></p>
 
-    <h2 id="kamerakarakterisering">Camera characterisation with a reference card</h2>
+    <h3 id="kamerakarakterisering">Camera characterisation with a reference card</h3>
     <p>With a reference card in the image, Kolorist fits a tone curve per channel from the grey patches and then a matrix or root polynomial from camera colours to the reference values in daylight – whichever predicts best. Accuracy is given as mean and maximum ΔE00, cross-validated: each patch is predicted by a model fitted without it. A camera profile made once lets a grey card do the job in new light. The card is found automatically in the image (Vision), and the lightness of the patches tells which way round it is. The reference values for the card are not included with the app; you import them yourself.</p>
     <p class="dempet">Source: <a href="https://doi.org/10.1109/TIP.2015.2405336">G. D. Finlayson, M. Mackiewicz, A. Hurlbert: “Color correction using root-polynomial regression”, IEEE TIP 24(5), 2015</a>; ISO 17321-1</p>
 
-    <h2 id="filamentfarger">Filament colours from FilamentColors.xyz</h2>
+    <h2 id="data">Data and AI</h2>
+
+    <h3 id="filamentfarger">Filament colours from FilamentColors.xyz</h3>
     <p>The built-in filament colours come from FilamentColors.xyz, which prints samples of filament from many manufacturers and measures them with a colorimeter. The values are CIELab under D65 with the 10° observer, as stated in their source code. Kolorist converts Lab to XYZ with the D65 white point for 10° and adapts to 2° with Bradford; the difference between the observers can’t be converted exactly without spectra, but it is small. Older samples without a measurement have a colour from a photograph and are marked as estimated. Each colour links to the sample at FilamentColors.xyz. The extract ships with the app and is updated with new versions; the app fetches nothing from the internet. Photos, purchase links and links to other colour systems are not included. Colours vary between production batches and with surface finish.</p>
     <p class="dempet">Source: <a href="https://filamentcolors.xyz/">FilamentColors.xyz</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Kolorist has selected information and converted the colours, and is not affiliated with FilamentColors.xyz.</p>
+
+    <h3 id="ki">Colour semantics and AI</h3>
+    <p><em>Experimental.</em> The suggestions are a starting point to work from, not a finished answer.</p>
+    <p>Palettes from value words and “Describe a colour” build on a knowledge base of colour concepts made for the app. The on-device language model interprets the words and chooses hue families and expression. The palette itself is then composed by fixed rules in OKLCH: harmony principle, equal value or equal saturation, one accent, a light or dark background and text with at least 7:1 contrast. Text about colour meaning describes conventions, not scientific facts.</p>
+    <p class="dempet">Source: Developed for Kolorist; language model from Apple (Foundation Models)</p>
+    
 
     <div class="boks">
       <h2>About the implementation</h2>
