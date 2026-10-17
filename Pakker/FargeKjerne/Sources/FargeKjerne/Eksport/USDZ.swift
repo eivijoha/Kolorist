@@ -93,14 +93,18 @@ public struct USDScene: Sendable {
             u += "    uniform token[] xformOpOrder = [\"xformOp:rotateY\"]\n\n"
         }
         for (m, mn) in zip(mesher, meshnavn) {
+            // Hver trekant i begge retninger: AR Quick Look ser bort fra doubleSided og skjuler baksidene, så flater
+            // (f.eks. sidene i et gamutskall) forsvant når de ble sett fra den andre siden. Med baksidene skjult er bare
+            // én av de to synlig om gangen – også gjennomsiktige flater blir ikke dobbelt så dekkende.
+            let trekanter = m.trekanter + m.trekanter.map { SIMD3($0.x, $0.z, $0.y) }
             u += """
                 def Mesh "\(mn)" (
                     prepend apiSchemas = ["MaterialBindingAPI"]
                 )
                 {
-                    uniform bool doubleSided = 1
-                    int[] faceVertexCounts = [\(Array(repeating: "3", count: m.trekanter.count).joined(separator: ", "))]
-                    int[] faceVertexIndices = [\(m.trekanter.map { "\($0.x), \($0.y), \($0.z)" }.joined(separator: ", "))]
+                    uniform bool doubleSided = 0
+                    int[] faceVertexCounts = [\(Array(repeating: "3", count: trekanter.count).joined(separator: ", "))]
+                    int[] faceVertexIndices = [\(trekanter.map { "\($0.x), \($0.y), \($0.z)" }.joined(separator: ", "))]
                     point3f[] points = [\(m.punkter.map { "(\(Self.tall($0.x)), \(Self.tall($0.y)), \(Self.tall($0.z)))" }.joined(separator: ", "))]
 
             """
@@ -135,7 +139,7 @@ public struct USDScene: Sendable {
                 \(heldekkende ? "                color3f inputs:emissiveColor.connect = <\(sti)/Tekstur.outputs:rgb>\n" : "")\
                                 float inputs:roughness = 1
                                 float inputs:metallic = 0
-                                float inputs:opacity = \(Self.tall(m.opasitet))
+                \(heldekkende ? "" : "                float inputs:opacity = \(Self.tall(m.opasitet))\n")\
                                 token outputs:surface
                             }
                             def Shader "StLeser"
@@ -170,7 +174,7 @@ public struct USDScene: Sendable {
                 \(heldekkende ? "                color3f inputs:emissiveColor = \(f)\n" : "")\
                                 float inputs:roughness = 1
                                 float inputs:metallic = 0
-                                float inputs:opacity = \(Self.tall(m.opasitet))
+                \(heldekkende ? "" : "                float inputs:opacity = \(Self.tall(m.opasitet))\n")\
                                 token outputs:surface
                             }
                         }
