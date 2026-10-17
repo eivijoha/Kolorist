@@ -128,7 +128,7 @@ struct Fargerom3DTegning: Sendable {
             t.scene.flater.append((f, opasitet))
         }
         func skall(_ p: ICCProfil, opasitet: Double, oppløsning: Int) {
-            let sider = buffret("skall|\(p.id)|\(oppløsning)|\(hensikt.rawValue)|\(rom.rawValue)|\(String(describing: gamut))") {
+            let sider = buffret("skall|\(p.id)|\(oppløsning)|\(hensikt.kolorimetrisk.rawValue)|\(rom.rawValue)|\(String(describing: gamut))") {
                 guard let sider = Fargerom3D.gamutskall(p, oppløsning: oppløsning, hensikt: hensikt) else { return [] }
                 return rom == .cieLab ? sider : sider.map { $0.omplassert(posisjon) }
             }
@@ -149,15 +149,17 @@ struct Fargerom3DTegning: Sendable {
             t.punkter.append(.init(p: p, farge: f.swiftUI, størrelse: størrelse, kant: kant))
             t.scene.punkter.append((p, f, radius))
         }
-        /// Fargen slik profilen gjengir den med valgt hensikt: gjennom profilen og tilbake (som ved utskrift). sRGB og
-        /// Display P3 har ingen egne tabeller for hensiktene; der gir perseptuell og metning Kolorists gamut-kartlegging
-        /// (OKLCH, kulør og lyshet bevares), og de kolorimetriske klipper.
+        /// Fargen slik profilen gjengir den med valgt hensikt: inn i profilen med hensikten, og tilbake kolorimetrisk –
+        /// det trykket faktisk gir. Med perseptuell i en trykkprofil kan fargene da havne inne i skallet (og farger
+        /// innenfor flyttes også litt). sRGB, Display P3 og andre matriseprofiler har ingen egne tabeller for
+        /// hensiktene; der gir perseptuell og metning Kolorists gamut-kartlegging for sRGB og P3 (OKLCH, kulør og
+        /// lyshet bevares, til overflaten), og ellers klipper alle.
         func kartlagt(_ f: Farge) -> Farge {
             let perseptuell = hensikt == .perseptuell || hensikt == .metning
             if profil.id == ICCProfil.sRGB.id, perseptuell { return f.gamutKartlagt(til: .sRGB) }
             if profil.id == ICCProfil.displayP3.id, perseptuell { return f.gamutKartlagt(til: .displayP3) }
             guard let k = f.komponenter(i: profil, hensikt: hensikt),
-                  let tilbake = Farge(komponenter: k, i: profil, hensikt: hensikt) else { return f }
+                  let tilbake = Farge(komponenter: k, i: profil, hensikt: hensikt.kolorimetrisk) else { return f }
             return tilbake
         }
         /// Piler fra farger utenfor profilen til der de havner.

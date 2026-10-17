@@ -107,6 +107,8 @@ public enum Fargerom3D {
     /// Overflaten av fargerommet til en profil (gamutskallet): de seks sidene av enhetskuben i profilens komponenter,
     /// regnet om til CIELab. For CMYK brukes C, M og Y med K = min(C, M, Y) mot den mørke enden – en tilnærming, siden
     /// det nøyaktige skallet avhenger av separasjonen i profilen. `nil` for profiler som ikke er RGB eller CMYK.
+    /// Skallet er det enheten faktisk gjengir, så enhetsverdiene regnes om kolorimetrisk (`hensikt.kolorimetrisk`:
+    /// absolutt med papirhvitt, ellers relativ) uansett valgt hensikt.
     public static func gamutskall(_ profil: ICCProfil, oppløsning n: Int = 16,
                                   hensikt: Gjengivelseshensikt = .relativKolorimetrisk) -> [Flate]? {
         guard profil.modell == .rgb || profil.modell == .cmyk else { return nil }
@@ -117,10 +119,10 @@ public enum Fargerom3D {
             farge = { Farge(displayP3: DisplayP3(r: $0, g: $1, b: $2)) }
         } else if profil.modell == .cmyk {
             farge = { a, b, c in
-                Farge(komponenter: [a, b, c, min(a, b, c)], i: profil, hensikt: hensikt) ?? Farge(lineærR: 0, g: 0, b: 0)
+                Farge(komponenter: [a, b, c, min(a, b, c)], i: profil, hensikt: hensikt.kolorimetrisk) ?? Farge(lineærR: 0, g: 0, b: 0)
             }
         } else {
-            farge = { a, b, c in Farge(komponenter: [a, b, c], i: profil, hensikt: hensikt) ?? Farge(lineærR: 0, g: 0, b: 0) }
+            farge = { a, b, c in Farge(komponenter: [a, b, c], i: profil, hensikt: hensikt.kolorimetrisk) ?? Farge(lineærR: 0, g: 0, b: 0) }
         }
         return (0..<6).map { side in
             var punkter: [SIMD3<Double>] = [], farger: [Farge] = []

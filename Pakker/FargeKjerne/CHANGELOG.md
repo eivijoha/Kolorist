@@ -4,6 +4,11 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Gjengivelseshensikt tilbake fra enheten:** `Gjengivelseshensikt.kolorimetrisk` (absolutt for absolutt, ellers
+  relativ) – hensikten for veien fra enhetsverdier til farge. `Fargerom3D.gamutskall` bruker den nå uansett valgt
+  hensikt, så skallet er det enheten faktisk gjengir (før ga perseptuell og metning skallet til profilens perseptuelle
+  referanserom).
+
 - **Roterende 3D-modell (USDZ):** `USDScene.rundetid` og `Fargerom3D.Scene.usdz(navn:størrelse:rundetid:)` – med en
   rundetid (sekunder) roterer modellen rundt den loddrette aksen, som en animasjon Hurtigvisning og AR Quick Look spiller
   av i løkke. Uten (standard) står den stille som før.

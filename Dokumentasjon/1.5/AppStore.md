@@ -27,6 +27,24 @@ English:
 
 Feilrettinger (nevnes i «Nytt i denne versjonen», ikke som nyhet på nettsiden):
 
+- **Tilpasningsmetode i trykkprofiler:** perseptuell og metning ble også brukt på veien tilbake fra profilen, så fargene
+  havnet på overflaten av profilens perseptuelle referanserom. Nå regnes de tilbake kolorimetrisk – det trykket faktisk
+  gir: i 3D (skallet og pilene), i «Vis som» i Studio og i paletter. Med perseptuell havner farger utenfor da inne i
+  skallet, og farger innenfor flyttes litt. Matriseprofiler (sRGB, Display P3, Adobe RGB, Rec. 2020, ProPhoto) har ingen
+  egne perseptuelle tabeller og er uendret; Generisk CMYK har like tabeller for alle metodene.
+
+Norsk:
+
+```
+• Rettet: med perseptuell tilpasning i en trykkprofil viser 3D og «Vis som» nå fargen slik den faktisk blir på trykk.
+```
+
+English:
+
+```
+• Fixed: with perceptual rendering in a print profile, 3D and “Show as” now show the colour as it will actually print.
+```
+
 - **Tonebane og monokrom:** et endepunkt helt ute i kanten av flaten for lyshet og metning ble klippet (særlig det
   merkede, som er større); tonene ved omrisset av fargekula likeså. Nå tegnes de helt (`92e7f99`).
 
