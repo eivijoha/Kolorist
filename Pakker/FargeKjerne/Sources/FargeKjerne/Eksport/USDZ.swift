@@ -79,8 +79,13 @@ public struct USDScene: Sendable {
         for (m, mn) in zip(mesher, meshnavn) {
             // Hver trekant i begge retninger: AR Quick Look ser bort fra doubleSided og skjuler baksidene, så flater
             // (f.eks. sidene i et gamutskall) forsvant når de ble sett fra den andre siden. Med baksidene skjult er bare
-            // én av de to synlig om gangen – også gjennomsiktige flater blir ikke dobbelt så dekkende.
-            let trekanter = m.trekanter + m.trekanter.map { SIMD3($0.x, $0.z, $0.y) }
+            // én av de to synlig om gangen – også gjennomsiktige flater blir ikke dobbelt så dekkende. Baksidene får
+            // egne punkter: med felles punkter ville normalene (snittet av flatene rundt) oppheve hverandre, og
+            // lyssettingen bli flekkete.
+            let n = Int32(m.punkter.count)
+            let trekanter = m.trekanter + m.trekanter.map { SIMD3($0.x &+ n, $0.z &+ n, $0.y &+ n) }
+            let punkter = m.punkter + m.punkter
+            let uv = m.uv.isEmpty ? m.uv : m.uv + m.uv
             u += """
                 def Mesh "\(mn)" (
                     prepend apiSchemas = ["MaterialBindingAPI"]
@@ -89,12 +94,12 @@ public struct USDScene: Sendable {
                     uniform bool doubleSided = 0
                     int[] faceVertexCounts = [\(Array(repeating: "3", count: trekanter.count).joined(separator: ", "))]
                     int[] faceVertexIndices = [\(trekanter.map { "\($0.x), \($0.y), \($0.z)" }.joined(separator: ", "))]
-                    point3f[] points = [\(m.punkter.map { "(\(Self.tall($0.x)), \(Self.tall($0.y)), \(Self.tall($0.z)))" }.joined(separator: ", "))]
+                    point3f[] points = [\(punkter.map { "(\(Self.tall($0.x)), \(Self.tall($0.y)), \(Self.tall($0.z)))" }.joined(separator: ", "))]
 
             """
-            if !m.uv.isEmpty {
+            if !uv.isEmpty {
                 u += """
-                        texCoord2f[] primvars:st = [\(m.uv.map { "(\(Self.tall($0.x)), \(Self.tall($0.y)))" }.joined(separator: ", "))] (
+                        texCoord2f[] primvars:st = [\(uv.map { "(\(Self.tall($0.x)), \(Self.tall($0.y)))" }.joined(separator: ", "))] (
                             interpolation = "vertex"
                         )
 
