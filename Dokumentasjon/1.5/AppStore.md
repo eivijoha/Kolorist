@@ -30,6 +30,9 @@ English:
 
 Feilrettinger (nevnes i «Nytt i denne versjonen», ikke som nyhet på nettsiden):
 
+- **Flater som forsvant i AR** (`36a3081`, også i 1.4.1): trekantene skrives i begge retninger, og heldekkende
+  materialer får ingen opasitet.
+
 - **Tilpasningsmetode i trykkprofiler:** perseptuell og metning ble også brukt på veien tilbake fra profilen, så fargene
   havnet på overflaten av profilens perseptuelle referanserom. Nå regnes de tilbake kolorimetrisk – det trykket faktisk
   gir: i 3D (skallet og pilene), i «Vis som» i Studio og i paletter. Med perseptuell havner farger utenfor da inne i
