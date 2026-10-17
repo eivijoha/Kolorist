@@ -50,6 +50,20 @@ struct Fargerom3DTests {
         #expect(usda.hasPrefix("#usda 1.0"))
     }
 
+    @Test func flaterVisesFraBeggeSiderOgHeldekkendeErUgjennomsiktige() {
+        let heldekkende = USDScene.Mesh(navn: "Skall", punkter: [[0, 0, 0], [1, 0, 0], [0, 1, 0]], trekanter: [[0, 1, 2]])
+        var glass = heldekkende
+        glass.navn = "Glass"
+        glass.opasitet = 0.3
+        let usda = USDScene(navn: "Modell", mesher: [heldekkende, glass]).usda()
+        // Begge retninger (AR Quick Look skjuler baksidene), og doubleSided av så bare én av dem vises om gangen.
+        #expect(usda.contains("int[] faceVertexIndices = [0, 1, 2, 0, 2, 1]"))
+        #expect(usda.contains("uniform bool doubleSided = 0"))
+        // Opasitet bare på det gjennomsiktige materialet.
+        #expect(usda.components(separatedBy: "inputs:opacity").count == 2)
+        #expect(usda.contains("float inputs:opacity = 0.3"))
+    }
+
     @Test func crc32() {
         #expect(USDZPakke.crc32(Data("123456789".utf8)) == 0xCBF4_3926)
     }
