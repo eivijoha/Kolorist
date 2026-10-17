@@ -4,7 +4,7 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
-- **USDZ i AR:** hver trekant skrives i begge retninger (med `doubleSided = 0`), siden AR Quick Look ser bort fra
+- **USDZ i AR:** hver trekant skrives i begge retninger, baksidene med egne punkter (med `doubleSided = 0`), siden AR Quick Look ser bort fra
   doubleSided og skjulte baksidene – sider av et gamutskall kunne forsvinne. Heldekkende materialer får ikke lenger
   `inputs:opacity` (de ble ellers behandlet som gjennomsiktige og sortert feil).
 

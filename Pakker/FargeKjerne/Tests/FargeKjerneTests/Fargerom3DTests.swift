@@ -69,7 +69,9 @@ struct Fargerom3DTests {
         glass.opasitet = 0.3
         let usda = USDScene(navn: "Modell", mesher: [heldekkende, glass]).usda()
         // Begge retninger (AR Quick Look skjuler baksidene), og doubleSided av så bare én av dem vises om gangen.
-        #expect(usda.contains("int[] faceVertexIndices = [0, 1, 2, 0, 2, 1]"))
+        // Baksidene med egne punkter, så normalene ikke opphever hverandre.
+        #expect(usda.contains("int[] faceVertexIndices = [0, 1, 2, 3, 5, 4]"))
+        #expect(usda.contains("point3f[] points = [(0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 0), (1, 0, 0), (0, 1, 0)]"))
         #expect(usda.contains("uniform bool doubleSided = 0"))
         // Opasitet bare på det gjennomsiktige materialet.
         #expect(usda.components(separatedBy: "inputs:opacity").count == 2)
