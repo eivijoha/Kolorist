@@ -971,11 +971,12 @@ struct Fargeflate: View {
             return (s, s.hex(), [v.r, v.g, v.b])
         }
         if let nøkkel = renNøkkel, let ren, ren.nøkkel == nøkkel,
-           let f = Farge(komponenter: ren.verdier, i: profil, alfa: farge.alfa, hensikt: hensikt) {
+           let f = Farge(komponenter: ren.verdier, i: profil, alfa: farge.alfa, hensikt: hensikt.kolorimetrisk) {
             return (f, profil.formatert(ren.verdier), ren.verdier)
         }
         guard let k = farge.komponenter(i: profil, hensikt: hensikt),
-              let f = Farge(komponenter: k, i: profil, alfa: farge.alfa, hensikt: hensikt)
+              // Tilbake kolorimetrisk: fargen slik profilen faktisk gjengir verdiene (perseptuell gjelder bare veien inn).
+              let f = Farge(komponenter: k, i: profil, alfa: farge.alfa, hensikt: hensikt.kolorimetrisk)
         else { return (farge, "–", []) }
         return (f, profil.formatert(k), k)
     }

@@ -4,6 +4,11 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Gjengivelseshensikt tilbake fra enheten:** `Gjengivelseshensikt.kolorimetrisk` (absolutt for absolutt, ellers
+  relativ) – hensikten for veien fra enhetsverdier til farge. `Fargerom3D.gamutskall` bruker den nå uansett valgt
+  hensikt, så skallet er det enheten faktisk gjengir (før ga perseptuell og metning skallet til profilens perseptuelle
+  referanserom).
+
 - **Skriftfarger i paletter med WCAG 2 som gulv:** `Palett.skriftfarge(for:)` velger nå den mest lesbare skriftfargen blant
   dem som holder 4,5:1 (med lesbarhetsmodell, f.eks. APCA, eller WCAG+ uten), og den med høyest kontrast når ingen gjør
   det – som knappeteksten i designsystemet. Før kunne den automatiske skriftfargen falle under WCAG 2.

@@ -117,6 +117,11 @@ public enum Gjengivelseshensikt: String, CaseIterable, Codable, Sendable {
         case .absoluttKolorimetrisk: .absoluteColorimetric
         }
     }
+
+    /// Hensikten for veien tilbake fra enhetsverdiene til fargen de gir (som på trykk): kolorimetrisk – absolutt
+    /// beholder papirhvitt, de andre relativ. Perseptuell og metning gjelder bare veien inn i profilen; regnes de også
+    /// tilbake, havner fargen på overflaten av profilens perseptuelle referanserom, ikke der den faktisk blir.
+    public var kolorimetrisk: Gjengivelseshensikt { self == .absoluttKolorimetrisk ? .absoluttKolorimetrisk : .relativKolorimetrisk }
 }
 
 public extension Farge {
