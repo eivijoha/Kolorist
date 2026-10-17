@@ -372,7 +372,8 @@ extension FargeEditor {
             switch panel {
             case .fargemodell: modellpanel(farge)
             case .verdier: verdipanel(farge)
-            case .fargestyring: ICCSeksjon(farge: $arbeidsbenk.aktivFarge, profilID: $visOgsåID, visMineFargerom: $visMineFargerom)
+            case .fargestyring: ICCSeksjon(farge: $arbeidsbenk.aktivFarge, profilID: $visOgsåID, visMineFargerom: $visMineFargerom,
+                                           vis3D: { vis3DOpphav = "visOgså"; vis3D = $0 })
             default: EmptyView()
             }
         }

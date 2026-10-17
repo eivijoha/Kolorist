@@ -8614,6 +8614,16 @@
         }
       }
     },
+    "Sammenlign fargerom …": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compare colour spaces …"
+          }
+        }
+      }
+    },
     "Sammenlign med": {
       "localizations": {
         "en": {

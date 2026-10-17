@@ -28,6 +28,9 @@ English:
 - **Papirhvitt bak 3D-modellen:** med absolutt kolorimetrisk står modellen mot profilens hvitpunkt (papirets farge), så
   fargene ses mot underlaget de gjengis på. Bare på skjermen; 3D-modellen (USDZ) og AR er uendret. (Også i 1.4.1.)
 
+- **Sammenlign fargerom:** egen inngang under Fargestyring i Studio, mellom «Konverter mellom profiler …» og «Mine
+  fargerom …» – åpner profilens fargerom i 3D med et annet rom som glass (sRGB til å begynne med).
+
 Feilrettinger (nevnes i «Nytt i denne versjonen», ikke som nyhet på nettsiden):
 
 - **Flater som forsvant i AR** (`36a3081`, også i 1.4.1): trekantene skrives i begge retninger, og heldekkende

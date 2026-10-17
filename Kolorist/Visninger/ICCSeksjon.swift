@@ -11,6 +11,8 @@ struct ICCSeksjon: View {
     @Binding var profilID: String
     /// Åpner «Mine fargerom». Arket presenteres av Studio – et `.sheet` på en seksjon i et skjema er upålitelig.
     @Binding var visMineFargerom: Bool
+    /// Åpner 3D-visningen av profilens fargerom, med et annet rom til sammenligning.
+    var vis3D: ((Fargerom3DKilde) -> Void)? = nil
     @Environment(ProfilBibliotek.self) private var bibliotek
     @AppStorage("gjengivelseshensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
     /// Visningslyset for «Vis som» (tom = D50, ICC-standarden).
@@ -70,6 +72,12 @@ struct ICCSeksjon: View {
                 ProfilkonverteringVisning()
             } label: {
                 Label("Konverter mellom profiler …", systemImage: "arrow.triangle.swap")
+            }
+            if let vis3D {
+                // Profilens fargerom i 3D (CIELab), med et annet rom som glass rundt – sRGB til å begynne med.
+                Button { vis3D(.profil(profil.modell == .rgb || profil.modell == .cmyk ? profil : .displayP3)) } label: {
+                    Label("Sammenlign fargerom …", systemImage: "rotate.3d")
+                }
             }
             // Import og sletting av ICC-profiler og fargebiblioteker, med bekreftelse.
             Button { visMineFargerom = true } label: {
