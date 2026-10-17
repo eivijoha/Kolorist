@@ -8554,6 +8554,16 @@
         }
       }
     },
+    "Roter av seg selv": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotate automatically"
+          }
+        }
+      }
+    },
     "Rotpolynom": {
       "localizations": {
         "en": {
@@ -9776,6 +9786,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stop"
+          }
+        }
+      }
+    },
+    "Stopp rotasjonen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop rotation"
           }
         }
       }

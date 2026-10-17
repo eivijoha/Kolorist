@@ -38,11 +38,15 @@ public struct USDScene: Sendable {
     public var mesher: [Mesh]
     /// PNG-data per teksturnavn (f.eks. «kule.png»), i sRGB.
     public var teksturer: [String: Data]
+    /// Sekunder per runde når modellen skal rotere rundt den loddrette aksen (Y), eller `nil` for stillestående.
+    /// Hurtigvisning og AR Quick Look spiller animasjonen av i løkke.
+    public var rundetid: Double?
 
-    public init(navn: String, mesher: [Mesh], teksturer: [String: Data] = [:]) {
+    public init(navn: String, mesher: [Mesh], teksturer: [String: Data] = [:], rundetid: Double? = nil) {
         self.navn = navn
         self.mesher = mesher
         self.teksturer = teksturer
+        self.rundetid = rundetid
     }
 
     /// Scenen som USDZ-fil.
@@ -62,12 +66,20 @@ public struct USDScene: Sendable {
             navnIBruk.insert(n)
             return n
         }
+        // Rotasjon: én runde fra tid 0 til slutt (24 bilder i sekundet), lineært, så løkken går jevnt over i neste runde.
+        let bilder = rundetid.map { max(Int(($0 * 24).rounded()), 24) }
         var u = """
         #usda 1.0
         (
             defaultPrim = "\(rot)"
             metersPerUnit = 1
             upAxis = "Y"
+
+        """
+        if let bilder {
+            u += "    startTimeCode = 0\n    endTimeCode = \(bilder)\n    timeCodesPerSecond = 24\n"
+        }
+        u += """
         )
 
         def Xform "\(rot)" (
@@ -76,6 +88,10 @@ public struct USDScene: Sendable {
         {
 
         """
+        if let bilder {
+            u += "    float xformOp:rotateY.timeSamples = {\n        0: 0,\n        \(bilder): 360,\n    }\n"
+            u += "    uniform token[] xformOpOrder = [\"xformOp:rotateY\"]\n\n"
+        }
         for (m, mn) in zip(mesher, meshnavn) {
             u += """
                 def Mesh "\(mn)" (

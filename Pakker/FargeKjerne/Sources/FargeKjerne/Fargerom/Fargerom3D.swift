@@ -162,7 +162,9 @@ public enum Fargerom3D {
         }
 
         /// Scenen som USDZ: modellen `størrelse` meter høy (standard 20 cm), stående på gulvet, fargene i sRGB.
-        public func usdz(navn: String, størrelse: Float = 0.2) -> Data {
+        /// `rundetid`: sekunder per runde om modellen skal rotere rundt den grå aksen (Hurtigvisning og AR Quick Look
+        /// spiller den av i løkke); `nil` står den stille.
+        public func usdz(navn: String, størrelse: Float = 0.2, rundetid: Double? = nil) -> Data {
             let skala = størrelse / 2
             func p(_ v: SIMD3<Double>) -> SIMD3<Float> { SIMD3<Float>(Float(v.x), Float(v.y) + 1, Float(v.z)) * skala }
             func rgb(_ f: Farge) -> SIMD3<Float> {
@@ -210,7 +212,7 @@ public enum Fargerom3D {
                     return .init(s.r, s.g, s.b)
                 }
             }
-            return USDScene(navn: navn, mesher: mesher, teksturer: teksturer).usdz()
+            return USDScene(navn: navn, mesher: mesher, teksturer: teksturer, rundetid: rundetid).usdz()
         }
     }
 }

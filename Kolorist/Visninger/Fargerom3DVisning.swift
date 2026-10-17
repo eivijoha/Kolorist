@@ -183,11 +183,11 @@ struct Fargerom3DTegning: Sendable {
         switch kilde {
         case .farger(_, let farger, let bane):
             if rom == .fargekule {
-                kule(opasitet: 0.22)
+                kule(opasitet: 0.32)
                 let ekvator = (0...72).map { Fargerom3D.kuleposisjon(lyshet: 0.5, metning: 1, kulør: Double($0) * 5) }
                 linje(ekvator, farger: [.primary.opacity(0.35)], bredde: 0.75, stiplet: true)
             } else {
-                skall(profil, opasitet: 0.2, oppløsning: 12)
+                skall(profil, opasitet: 0.28, oppløsning: 12)
             }
             if let bane, bane.count > 1 {
                 let punkter = bane.map(posisjon)
@@ -199,9 +199,9 @@ struct Fargerom3DTegning: Sendable {
 
         case .overgang(_, let fra, let til, let antall):
             if rom == .fargekule {
-                kule(opasitet: 0.18)
+                kule(opasitet: 0.26)
             } else {
-                skall(profil, opasitet: 0.14, oppløsning: 12)
+                skall(profil, opasitet: 0.2, oppløsning: 12)
             }
             // OKLab-veien (Kolorist) og veien gjennom sRGB (vanlige CSS-overganger og de fleste designprogrammer). Veien
             // gjennom sRGB er et bevisst unntak fra regelen om at all interpolasjon skjer i OKLab: den vises til sammenligning.
@@ -227,9 +227,9 @@ struct Fargerom3DTegning: Sendable {
 
         case .bibliotek(let bibliotek, let markert):
             if rom == .fargekule {
-                kule(opasitet: 0.12)
+                kule(opasitet: 0.17)
             } else {
-                skall(profil, opasitet: 0.12, oppløsning: 12)
+                skall(profil, opasitet: 0.17, oppløsning: 12)
             }
             let små: CGFloat = bibliotek.farger.count > 400 ? 5 : 8
             for pf in bibliotek.farger { punkt(pf.farge, størrelse: små, radius: 0.018, kant: false) }
@@ -246,7 +246,7 @@ struct Fargerom3DTegning: Sendable {
 
         case .profil:
             skall(profil, opasitet: 1, oppløsning: 16)
-            if let sammenlign { skall(sammenlign, opasitet: 0.22, oppløsning: 12) }
+            if let sammenlign { skall(sammenlign, opasitet: 0.3, oppløsning: 12) }
         }
 
         // Den grå aksen, fra sort til hvit.
@@ -266,10 +266,15 @@ struct Fargerom3DTegning: Sendable {
 }
 
 /// 3D-visningen: tegnet med egen projeksjon og flatene sortert bakfra (virker likt på iPhone, iPad og Mac, og takler
-/// gjennomsiktige flater). Dra for å dreie, knip for å zoome.
+/// gjennomsiktige flater). Dra for å dreie, knip for å zoome, trykk for å la den rotere av seg selv.
 struct Fargerom3DVisning: View {
+    /// Sekunder per runde når modellen roterer av seg selv (også i den roterende 3D-modellen til AR).
+    nonisolated static let rundetid = 36.0
     let tegning: Fargerom3DTegning
     @Binding var dreining: Double
+    /// Rotasjon av seg selv rundt den grå aksen: trykk på modellen eller knappen i hjørnet. Dra eller knip stopper den.
+    @Binding var roterer: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduserBevegelse
     @State private var helning = 0.38
     @State private var zoom = 1.0
     @State private var start: (dreining: Double, helning: Double)?
@@ -351,9 +356,11 @@ struct Fargerom3DVisning: View {
             }
         }
         .contentShape(Rectangle())
+        .onTapGesture { if !reduserBevegelse { roterer.toggle() } }
         .gesture(
             DragGesture(minimumDistance: 1)
                 .onChanged { g in
+                    if roterer { roterer = false }
                     let s = start ?? (dreining, helning)
                     start = s
                     dreining = s.dreining + g.translation.width * 0.01
@@ -364,13 +371,39 @@ struct Fargerom3DVisning: View {
         .simultaneousGesture(
             MagnifyGesture()
                 .onChanged { g in
+                    if roterer { roterer = false }
                     let s = zoomStart ?? zoom
                     zoomStart = s
                     zoom = min(max(s * g.magnification, 0.6), 2.5)
                 }
                 .onEnded { _ in zoomStart = nil }
         )
-        .accessibilityElement()
+        // Rotasjonen: om lag 30 bilder i sekundet mens den står på og visningen er synlig (oppgaven stopper ellers).
+        // «Reduser bevegelse» i systemet holder den av.
+        .task(id: roterer && !reduserBevegelse) {
+            guard roterer, !reduserBevegelse else { return }
+            var forrige = Date.now
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(33))
+                let nå = Date.now
+                dreining += nå.timeIntervalSince(forrige) * 2 * .pi / Self.rundetid
+                forrige = nå
+            }
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if !reduserBevegelse {
+                Button { roterer.toggle() } label: {
+                    Label(roterer ? "Stopp rotasjonen" : "Roter av seg selv", systemImage: roterer ? "pause.fill" : "rotate.3d")
+                        .labelStyle(.iconOnly)
+                        .frame(width: 20, height: 20)
+                }
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.circle)
+                .tint(roterer ? Color.accentColor : Color.secondary)
+                .help(roterer ? "Stopp rotasjonen" : "Roter av seg selv")
+            }
+        }
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Fargerom i 3D"))
         .accessibilityHint(Text("Dra for å dreie"))
         .accessibilityAdjustableAction { retning in dreining += retning == .increment ? 0.2 : -0.2 }
@@ -497,6 +530,9 @@ struct Fargerom3DArk: View {
     /// Rommet en profil sammenlignes med (sRGB til å begynne med; «Ingen» lagres som tom).
     @AppStorage("fargerom3D.sammenlign") private var sammenlignID = ICCProfil.sRGB.id
     @AppStorage("fargerom3D.hensikt") private var hensikt: Gjengivelseshensikt = .relativKolorimetrisk
+    /// Om modellen roterer av seg selv (huskes). AR og 3D-modellen på Mac roterer da også; delt 3D-modell står stille.
+    @AppStorage("fargerom3D.roterer") private var roterer = false
+    @Environment(\.accessibilityReduceMotion) private var reduserBevegelse
     /// Profilen arket ble åpnet med (en profil eller «Vis som» i Studio) – gjelder bare dette arket, så det lagrede
     /// valget for paletter og harmonier står urørt.
     @State private var øktprofilID: String?
@@ -558,9 +594,9 @@ struct Fargerom3DArk: View {
         if let fil {
             // iPhone og iPad: AR Quick Look (modellen på bordet). Mac: 3D-modellen i eget vindu, uten AR.
             #if os(iOS)
-            Button { forhåndsvisning = fil } label: { Label("Se i AR", systemImage: "arkit") }
+            Button { Task { forhåndsvisning = await visningsfil(fil) } } label: { Label("Se i AR", systemImage: "arkit") }
             #else
-            Button { NSWorkspace.shared.open(fil) } label: { Label("Vis 3D-modell", systemImage: "cube") }
+            Button { Task { NSWorkspace.shared.open(await visningsfil(fil)) } } label: { Label("Vis 3D-modell", systemImage: "cube") }
             #endif
             ShareLink(item: fil) { Label("Del som 3D-modell", systemImage: "square.and.arrow.up") }
         }
@@ -591,7 +627,7 @@ struct Fargerom3DArk: View {
             }
             ZStack {
                 if let tegning {
-                    Fargerom3DVisning(tegning: tegning, dreining: $dreining)
+                    Fargerom3DVisning(tegning: tegning, dreining: $dreining, roterer: $roterer)
                 } else {
                     ProgressView()
                 }
@@ -640,6 +676,22 @@ struct Fargerom3DArk: View {
             }
             .labelsHidden()
         }
+    }
+
+    /// Fila til AR / 3D-modellen: den samme som deles, eller – når modellen roterer – en roterende variant med samme
+    /// navn (i egen mappe), så modellen snurrer også der.
+    private func visningsfil(_ fil: URL) async -> URL {
+        guard roterer, !reduserBevegelse, let scene = tegning?.scene else { return fil }
+        let navn = fil.deletingPathExtension().lastPathComponent
+        return await Task.detached(priority: .userInitiated) { () -> URL in
+            let mappe = FileManager.default.temporaryDirectory.appendingPathComponent("Roterende", isDirectory: true)
+            let url = mappe.appendingPathComponent(fil.lastPathComponent)
+            do {
+                try FileManager.default.createDirectory(at: mappe, withIntermediateDirectories: true)
+                try scene.usdz(navn: navn, rundetid: Fargerom3DVisning.rundetid).write(to: url, options: .atomic)
+                return url
+            } catch { return fil }
+        }.value
     }
 
     /// Regner ut tegningen (og USDZ-fila) i bakgrunnen.

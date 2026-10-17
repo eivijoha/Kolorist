@@ -4,6 +4,10 @@ API-endringer per versjon, for dem som bygger på pakken (som Kolorist utdanning
 
 ## Ikke publisert
 
+- **Roterende 3D-modell (USDZ):** `USDScene.rundetid` og `Fargerom3D.Scene.usdz(navn:størrelse:rundetid:)` – med en
+  rundetid (sekunder) roterer modellen rundt den loddrette aksen, som en animasjon Hurtigvisning og AR Quick Look spiller
+  av i løkke. Uten (standard) står den stille som før.
+
 - **Skriftfarger i paletter med WCAG 2 som gulv:** `Palett.skriftfarge(for:)` velger nå den mest lesbare skriftfargen blant
   dem som holder 4,5:1 (med lesbarhetsmodell, f.eks. APCA, eller WCAG+ uten), og den med høyest kontrast når ingen gjør
   det – som knappeteksten i designsystemet. Før kunne den automatiske skriftfargen falle under WCAG 2.

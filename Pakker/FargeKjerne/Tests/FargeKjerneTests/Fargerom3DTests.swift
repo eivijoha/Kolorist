@@ -50,6 +50,18 @@ struct Fargerom3DTests {
         #expect(usda.hasPrefix("#usda 1.0"))
     }
 
+    @Test func roterendeModell() {
+        let mesh = USDScene.Mesh(navn: "Flate", punkter: [[0, 0, 0], [1, 0, 0], [0, 1, 0]], trekanter: [[0, 1, 2]])
+        let stille = USDScene(navn: "Modell", mesher: [mesh]).usda()
+        #expect(!stille.contains("timeSamples") && !stille.contains("TimeCode"))
+        let roterer = USDScene(navn: "Modell", mesher: [mesh], rundetid: 30).usda()
+        #expect(roterer.contains("endTimeCode = 720"))
+        #expect(roterer.contains("timeCodesPerSecond = 24"))
+        #expect(roterer.contains("xformOp:rotateY.timeSamples"))
+        #expect(roterer.contains("720: 360"))
+        #expect(roterer.contains("uniform token[] xformOpOrder = [\"xformOp:rotateY\"]"))
+    }
+
     @Test func crc32() {
         #expect(USDZPakke.crc32(Data("123456789".utf8)) == 0xCBF4_3926)
     }
