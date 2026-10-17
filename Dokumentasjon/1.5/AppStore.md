@@ -25,6 +25,9 @@ English:
 ```
 
 
+- **Papirhvitt bak 3D-modellen:** med absolutt kolorimetrisk står modellen mot profilens hvitpunkt (papirets farge), så
+  fargene ses mot underlaget de gjengis på. Bare på skjermen; 3D-modellen (USDZ) og AR er uendret. (Også i 1.4.1.)
+
 Feilrettinger (nevnes i «Nytt i denne versjonen», ikke som nyhet på nettsiden):
 
 - **Tilpasningsmetode i trykkprofiler:** perseptuell og metning ble også brukt på veien tilbake fra profilen, så fargene

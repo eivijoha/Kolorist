@@ -1157,6 +1157,16 @@
         }
       }
     },
+    "Bakgrunnen er papirhvitt i %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The background is paper white in %@."
+          }
+        }
+      }
+    },
     "Banen i fargekula: kuløren går rundt den grå aksen, lysheten opp eller ned, og metningen ut mot overflaten.": {
       "localizations": {
         "en": {
