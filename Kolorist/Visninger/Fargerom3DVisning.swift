@@ -519,6 +519,12 @@ struct Fargerom3DArk: View {
     }
     private var nøkkel: String { "\(kilde.id)|\(rom.rawValue)|\(profil.id)|\(sammenlignID)|\(hensikt.rawValue)" }
     private var romvalg: [Fargerom3DRom] { erProfil ? [.okLab, .cieLab] : Fargerom3DRom.allCases }
+    /// Profilens hvitt (CMYK 0/0/0/0, RGB 1/1/1) med absolutt kolorimetrisk – papirets farge – når den er valgt.
+    private var papirhvitt: Farge? {
+        guard rom.erLab, hensikt == .absoluttKolorimetrisk, profil.modell == .rgb || profil.modell == .cmyk else { return nil }
+        let hvitt = Array(repeating: profil.modell == .cmyk ? 0.0 : 1.0, count: profil.antallKomponenter)
+        return Farge(komponenter: hvitt, i: profil, hensikt: .absoluttKolorimetrisk)
+    }
 
     var body: some View {
         if let ferdig {
@@ -599,7 +605,17 @@ struct Fargerom3DArk: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // Absolutt kolorimetrisk: papirhvitt (profilens hvitpunkt) bak modellen, så fargene ses mot underlaget de
+            // gjengis på. Bare på skjermen – 3D-modellen (USDZ) og AR er uendret.
+            .background {
+                if let papirhvitt {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous).fill(papirhvitt.swiftUI)
+                }
+            }
             VStack(spacing: 4) {
+                if papirhvitt != nil {
+                    Text("Bakgrunnen er papirhvitt i \(ProfilBibliotek.delt.visningsnavn(profil)).").font(.footnote)
+                }
                 if let merknad = tegning?.merknad {
                     Text(merknad).font(.footnote)
                 }
