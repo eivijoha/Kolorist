@@ -151,6 +151,14 @@ verktøyene (skalaer, kontrast) ligger der de er.
    DTCG med primitiver, alias og resolver, Figma (én fil per modus), CSS `light-dark()`.
 5. Senere: Web-stil, Tokens Studio, Compose; tonebane/monokrom som nøytral skala.
 
+**2.0 – egen 3D og AR med RealityKit, også visionOS** (notert 2026-10-17). I 1.4/1.5 vises 3D-modellen i AR gjennom
+AR Quick Look (USDZ fra FargeKjerne): appen får ikke trykk inne i AR, så rotasjon av seg selv velges i appen før AR
+åpnes (USDZ med rotasjon som animasjon), og lyssettingen styres av Quick Look. Til 2.0: egen AR-visning med RealityKit
+(`RealityView`/`ARView` med forankring på bord eller gulv) – trykk slår rotasjonen av og på, dra flytter, knip skalerer,
+to fingre dreier; egen materialstyring (f.eks. ulyste heldekkende flater, så fargene ikke farges av rommet), og en egen
+«Ferdig». Samme modellkode til visionOS (volum eller vindu med modellen, kanskje rommet), der 3D-fargerommene passer
+naturlig. Litt mer spesialtilpasning kan vente til da. iPhone og iPad; Mac har ikke AR.
+
 ### Semantisk grunnlag for KI (2026-09-30)
 
 - `Fargesemantikk.json`: ~115 begreper (fargeord, natur, tid, materialer, verdier, stiler) med norske og engelske
