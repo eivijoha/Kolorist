@@ -6,6 +6,25 @@ ut etter hvert som 1.5 tar form; App-informasjon, URL-er, personvern, nøkkelord
 
 ## Nytt i denne versjonen – utkast
 
+Nyheter:
+
+- **3D som roterer av seg selv:** trykk på modellen (eller knappen nede til høyre) for en rolig rotasjon rundt den grå
+  aksen; dra eller knip stopper den. «Se i AR» og 3D-modellen på Mac roterer da også; «Del som 3D-modell» står stille.
+  Av når «Reduser bevegelse» er slått på. Flatene i 3D er også litt mer dekkende, så fargene står tydeligere frem.
+
+Norsk:
+
+```
+• 3D-modellen kan rotere av seg selv: trykk på den for å starte eller stoppe – også i AR.
+```
+
+English:
+
+```
+• The 3D model can rotate on its own: tap it to start or stop – in AR too.
+```
+
+
 Feilrettinger (nevnes i «Nytt i denne versjonen», ikke som nyhet på nettsiden):
 
 - **Tonebane og monokrom:** et endepunkt helt ute i kanten av flaten for lyshet og metning ble klippet (særlig det
