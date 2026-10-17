@@ -9,7 +9,7 @@ ut etter hvert som 1.5 tar form; App-informasjon, URL-er, personvern, nøkkelord
 Nyheter:
 
 - **3D som roterer av seg selv:** trykk på modellen (eller knappen nede til høyre) for en rolig rotasjon rundt den grå
-  aksen; dra eller knip stopper den. «Se i AR» og 3D-modellen på Mac roterer da også; «Del som 3D-modell» står stille.
+  aksen; mens du drar eller knipser, står den stille, og den fortsetter når du slipper. «Se i AR» og 3D-modellen på Mac roterer da også; «Del som 3D-modell» står stille.
   Av når «Reduser bevegelse» er slått på. Flatene i 3D er også litt mer dekkende, så fargene står tydeligere frem.
 
 Norsk:

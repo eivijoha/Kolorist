@@ -272,8 +272,12 @@ struct Fargerom3DVisning: View {
     nonisolated static let rundetid = 36.0
     let tegning: Fargerom3DTegning
     @Binding var dreining: Double
-    /// Rotasjon av seg selv rundt den grå aksen: trykk på modellen eller knappen i hjørnet. Dra eller knip stopper den.
+    /// Rotasjon av seg selv rundt den grå aksen: trykk på modellen eller knappen i hjørnet. Mens du drar eller knipser,
+    /// står den stille, og den fortsetter litt etter at du slipper.
     @Binding var roterer: Bool
+    /// Rotasjonen holdt igjen av et grep (dra eller knip), og oppgaven som slipper den løs igjen.
+    @State private var holdt = false
+    @State private var slipp: Task<Void, Never>?
     @Environment(\.accessibilityReduceMotion) private var reduserBevegelse
     @State private var helning = 0.38
     @State private var zoom = 1.0
@@ -360,28 +364,28 @@ struct Fargerom3DVisning: View {
         .gesture(
             DragGesture(minimumDistance: 1)
                 .onChanged { g in
-                    if roterer { roterer = false }
+                    hold()
                     let s = start ?? (dreining, helning)
                     start = s
                     dreining = s.dreining + g.translation.width * 0.01
                     helning = min(max(s.helning + g.translation.height * 0.01, -1.4), 1.4)
                 }
-                .onEnded { _ in start = nil }
+                .onEnded { _ in start = nil; slippEtterHvert() }
         )
         .simultaneousGesture(
             MagnifyGesture()
                 .onChanged { g in
-                    if roterer { roterer = false }
+                    hold()
                     let s = zoomStart ?? zoom
                     zoomStart = s
                     zoom = min(max(s * g.magnification, 0.6), 2.5)
                 }
-                .onEnded { _ in zoomStart = nil }
+                .onEnded { _ in zoomStart = nil; slippEtterHvert() }
         )
         // Rotasjonen: om lag 30 bilder i sekundet mens den står på og visningen er synlig (oppgaven stopper ellers).
         // «Reduser bevegelse» i systemet holder den av.
-        .task(id: roterer && !reduserBevegelse) {
-            guard roterer, !reduserBevegelse else { return }
+        .task(id: roterer && !holdt && !reduserBevegelse) {
+            guard roterer, !holdt, !reduserBevegelse else { return }
             var forrige = Date.now
             while !Task.isCancelled {
                 try? await Task.sleep(for: .milliseconds(33))
@@ -403,10 +407,29 @@ struct Fargerom3DVisning: View {
                 .help(roterer ? "Stopp rotasjonen" : "Roter av seg selv")
             }
         }
+        .onDisappear { slipp?.cancel() }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Fargerom i 3D"))
         .accessibilityHint(Text("Dra for å dreie"))
         .accessibilityAdjustableAction { retning in dreining += retning == .increment ? 0.2 : -0.2 }
+    }
+}
+
+extension Fargerom3DVisning {
+    /// Et grep begynner: rotasjonen står stille så lenge det varer.
+    private func hold() {
+        slipp?.cancel()
+        if !holdt { holdt = true }
+    }
+
+    /// Grepet er sluppet: rotasjonen fortsetter fra den nye vinkelen etter et lite øyeblikk.
+    private func slippEtterHvert() {
+        slipp?.cancel()
+        slipp = Task {
+            try? await Task.sleep(for: .milliseconds(800))
+            guard !Task.isCancelled else { return }
+            holdt = false
+        }
     }
 }
 
