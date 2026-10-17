@@ -118,12 +118,18 @@
     const leser = strøm.getReader();
     const deler = [];
     let total = 0;
-    for (;;) {
-      const { done, value } = await leser.read();
-      if (done) break;
-      total += value.length;
-      if (total >= MAKS_UTPAKKET) { leser.cancel(); throw new Error("for stor"); }
-      deler.push(value);
+    try {
+      for (;;) {
+        const { done, value } = await leser.read();
+        if (done) break;
+        total += value.length;
+        if (total >= MAKS_UTPAKKET) { leser.cancel(); throw new Error("for stor"); }
+        deler.push(value);
+      }
+    } catch (e) {
+      // Som appen: mangler bare slutten av strømmen (et tegn eller to falt bort da lenken ble kopiert), brukes det som
+      // ble pakket ut – JSON-tolkningen og kontrollen etterpå avviser innhold som faktisk er ufullstendig.
+      if (e.message === "for stor" || total === 0) throw e;
     }
     const alt = new Uint8Array(total);
     let i = 0;
